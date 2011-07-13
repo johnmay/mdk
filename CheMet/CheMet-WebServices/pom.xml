@@ -63,21 +63,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>KEGG</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>gov.nih.nlm.ncbi.pubchem</groupId>
-            <artifactId>PubChem</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>ae3.service.webservices</groupId>
-            <artifactId>ArrayExpress</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>uk.ac.ebi.pride</groupId>
             <artifactId>ols-client</artifactId>
             <version>1.15</version>
@@ -102,8 +87,26 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>ChemMet-Core</artifactId>
+            <artifactId>CheMet-Core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ae3.service.webservices</groupId>
+            <artifactId>arrayexpress-ws</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>gov.nih.nlm.ncbi.pubchem</groupId>
+            <artifactId>pubchem-ws</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>jp.genome</groupId>
+            <artifactId>keggapi</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
+
+   
+
 </project>

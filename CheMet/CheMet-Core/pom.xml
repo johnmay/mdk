@@ -23,11 +23,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>gov.nih.nlm.ncbi.pubchem</groupId>
-            <artifactId>PubChem</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.biojava</groupId>
             <artifactId>biojava3-core</artifactId>
             <version>3.0</version>

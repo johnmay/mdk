@@ -8,8 +8,8 @@
   <name>CheMet</name>
     <modules>
         <module>CheMet-IO</module>
-        <module>ChemMet-Core</module>
-        <module>ChemMet-WebServices</module>
+        <module>CheMet-Core</module>
+        <module>CheMet-WebServices</module>
         <module>CheMet-Visualisation</module>
     </modules>
 </project>
