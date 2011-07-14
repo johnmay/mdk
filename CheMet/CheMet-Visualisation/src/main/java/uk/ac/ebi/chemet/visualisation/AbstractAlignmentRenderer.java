@@ -1,6 +1,5 @@
 package uk.ac.ebi.chemet.visualisation;
 
-
 /**
  * AbstractAlignmentRenderer.java
  *
@@ -53,7 +52,7 @@ public class AbstractAlignmentRenderer {
         this.color = colour;
         // set the inner bounds
         this.innerBounds = new Rectangle( outerBounds.x + padding , outerBounds.y + padding ,
-                                          outerBounds.width - padding , outerBounds.height - padding );
+                                          outerBounds.width - ( 2 * padding ) , outerBounds.height - ( 2 * padding ) );
 
 
     }
