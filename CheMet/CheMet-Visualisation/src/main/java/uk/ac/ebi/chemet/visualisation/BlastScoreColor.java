@@ -1,4 +1,4 @@
-package uk.ac.ebi.chemet.homology;
+package uk.ac.ebi.chemet.visualisation;
 
 /*
  * To change this template, choose Tools | Templates
