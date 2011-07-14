@@ -10,4 +10,7 @@ Without this configuration present, some functionality in the IDE may be limited
         <word>colouring</word>
         <word>Construtor</word>
     </spellchecker-wordlist>
+    <config-data xmlns="http://www.netbeans.org/ns/maven-config-data/1">
+        <configurations/>
+    </config-data>
 </project-shared-configuration>
