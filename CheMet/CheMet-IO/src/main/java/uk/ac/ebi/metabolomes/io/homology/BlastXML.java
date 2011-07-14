@@ -86,7 +86,7 @@ public class BlastXML extends XMLHelper {
                         currentProduct = new GeneProteinProduct( new GenericIdentifier( node.getTextContent() ) );
                         Boolean added = products.addProduct( currentProduct );
                         if (added == Boolean.FALSE){
-                            logger.error("Gene Product was not added to collection as the intial collection provided was empty, this is likely a duplicate set of results");
+                            logger.error("Gene Product was not added to collection as the intial collection provided was empty and this is likely a duplicate set of results");
                         }
                     }
                     else {
@@ -101,6 +101,7 @@ public class BlastXML extends XMLHelper {
                         Node hitsChild = hitsNode.getFirstChild();
                         if ( hitsChild != null ) {
                             BlastHit blasthit = new BlastHit( hitsChild );
+                            blasthit.setProduct( currentProduct);
                             blasthit.setParameters( params );
                             if ( blasthit.getBestExpectedValue() < expectValueThreshold ) {
                                 currentProduct.addObservation( blasthit );
