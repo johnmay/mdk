@@ -35,7 +35,7 @@ public class JobParameters
 
     public JobParameters() {
         put( JobParamType.DATE , Calendar.getInstance().getTime() );
-        put( JobParamType.JOBID, get( "date" ).toString() );
+        put( JobParamType.JOBID, get( JobParamType.DATE ).toString() );
     }
 
     public JobParameters( String jobid ) {

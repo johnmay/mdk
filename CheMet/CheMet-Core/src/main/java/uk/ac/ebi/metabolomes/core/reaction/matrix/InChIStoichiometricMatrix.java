@@ -21,7 +21,8 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
 public class InChIStoichiometricMatrix
         extends StoichiometricMatrix<InChI , ECNumber> {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( InChIStoichiometricMatrix.class );
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
+            InChIStoichiometricMatrix.class );
 
     public InChIStoichiometricMatrix() {
     }
@@ -30,11 +31,11 @@ public class InChIStoichiometricMatrix
         super( n , m );
     }
 
-    public void addReaction( ECNumber ecNumber , BiochemicalReaction reaction ) {
+    public boolean addReaction( ECNumber ecNumber , BiochemicalReaction reaction ) {
 
         if ( reaction == null ) {
             logger.error( "Skipping reaction for: " + ecNumber + " as reaction is null" );
-            return;
+            return false;
         }
 
         ArrayList<InChI> reactantInChIs = reaction.getInchiReactants();
@@ -46,7 +47,7 @@ public class InChIStoichiometricMatrix
         allCompounds.addAll( productInChIs );
 
         if ( allCompounds.size() == 0 ) {
-            return;
+            return false;
         }
 
         ArrayList<Double> reactantCoefficients = reaction.getInChIReactantCoefficients();
@@ -69,7 +70,7 @@ public class InChIStoichiometricMatrix
 
         // add to the matrix
         addReaction( ecNumber , allCompounds.toArray( new InChI[ 0 ] ) , coefficients );
-
+        return true;
 
     }
 
@@ -104,7 +105,4 @@ public class InChIStoichiometricMatrix
         }
         return productionReactions;
     }
-
-
-
 }
