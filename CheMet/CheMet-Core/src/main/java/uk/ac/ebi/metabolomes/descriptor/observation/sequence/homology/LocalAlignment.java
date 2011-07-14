@@ -29,7 +29,6 @@ import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.metabolomes.identifier.IdentifierFactory;
 import uk.ac.ebi.metabolomes.identifier.UniProtIdentifier;
 import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
-import uk.ac.ebi.metabolomes.resource.BlastScoreColor;
 
 /**
  * LocalAlignment.java
@@ -202,7 +201,15 @@ public abstract class LocalAlignment extends AbstractObservation {
         this.sequence = sequence;
     }
 
+    /**
+     *
+     * @param width
+     * @param height
+     * @return
+     * @deprecated See new CheMet-visualisation class AlignmentRenderer
+     */
     @Override
+    @Deprecated
     public BufferedImage getObservationImage( int width , int height ) {
 
         BufferedImage img = new BufferedImage( width , height , BufferedImage.TYPE_4BYTE_ABGR );

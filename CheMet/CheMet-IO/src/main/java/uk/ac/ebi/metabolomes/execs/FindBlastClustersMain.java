@@ -4,7 +4,12 @@
  */
 package uk.ac.ebi.metabolomes.execs;
 
+import au.com.bytecode.opencsv.CSVReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -14,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.commons.cli.Option;
+import uk.ac.ebi.chemet.io.mapping.UniProtECMapper;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
@@ -33,17 +39,38 @@ import uk.ac.ebi.metabolomes.io.homology.BlastXML;
 public class FindBlastClustersMain
         extends CommandLineMain {
 
-    IntEnzXML iexml = IntEnzXML.getLoadedInstance();
+    private Map<UniProtIdentifier , Set<ECNumber>> uniProtECMap;
 
     /**
      * @param args the command line arguments
      */
     public static void main( String[] args ) {
+
         new FindBlastClustersMain( args ).process();
     }
 
     public FindBlastClustersMain( String[] args ) {
         super( args );
+        Reader r = null;
+
+        // getting the hash map
+        try {
+            r = new FileReader(
+                    "/Volumes/johnmay/runspace/ec/uniprot_all_ec.tsv" );
+            CSVReader cSVReader = new CSVReader( r , '\t' );
+            uniProtECMap = new UniProtECMapper( cSVReader , 0 , 1 ).getHashMap( false );
+        } catch ( FileNotFoundException ex ) {
+            ex.printStackTrace();
+        } catch ( IOException ex ) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                r.close();
+            } catch ( IOException ex ) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     @Override
@@ -70,7 +97,6 @@ public class FindBlastClustersMain
 
         for ( Double sequenceSensitivity :
               new Double[]{ 0.0 , 0.1 , 0.2 , 0.3 , 0.4 , 0.5 , 0.6 , 0.7 , 0.8 , 0.9 , 1.0 } ) {
-
             double tp = 0d;
             double fp = 0d;
             double fn = 0d;
@@ -116,10 +142,13 @@ public class FindBlastClustersMain
                 }
 
                 for ( ECNumber assignedECNumber : ecs ) {
-                    if ( topScoringBin.contains( assignedECNumber ) ) {
-                        tp++;
-                    } else {
-                        fn++;
+                    // false
+                    if ( assignedECNumber.toString().contains( "-" ) == false ) {
+                        if ( topScoringBin.contains( assignedECNumber ) ) {
+                            tp++;
+                        } else {
+                            fn++;
+                        }
                     }
                 }
 
@@ -130,8 +159,7 @@ public class FindBlastClustersMain
                         fp++;
                     }
                 }
-                // System.out.print( ecs + "\t" + topScoringBin + "\t" );
-                // System.out.println( tp + "\t" + fp + "\t" + fn);
+                System.out.print( ecs + "\t" + topScoringBin + "\n" );
             }
 
             double ppv = tp / ( tp + fp );
@@ -167,7 +195,7 @@ public class FindBlastClustersMain
                         }
                     }
                 }
-                List<ECNumber> ecs = iexml.getECNumbers( upid );
+                List<ECNumber> ecs = getECNumbers( upid );
                 Double bitScore = homologyHit.getBitScore();
 
                 for ( ECNumber ec : ecs ) {
@@ -180,5 +208,22 @@ public class FindBlastClustersMain
             }
         }
         return bitScoreRanges;
+    }
+
+    private List<ECNumber> getECNumbers( UniProtIdentifier upid ) {
+        Set<ECNumber> ecSet = uniProtECMap.get( upid );
+        if ( ecSet == null ) {
+            return new ArrayList<ECNumber>();
+        }
+
+        Set<ECNumber> forRemoval = new HashSet<ECNumber>();
+        for ( ECNumber ec : ecSet ) {
+            if ( ec.toString().contains( "-" ) ) {
+                forRemoval.add( ec );
+            }
+        }
+        ecSet.removeAll( forRemoval );
+
+        return new ArrayList<ECNumber>( ecSet );
     }
 }

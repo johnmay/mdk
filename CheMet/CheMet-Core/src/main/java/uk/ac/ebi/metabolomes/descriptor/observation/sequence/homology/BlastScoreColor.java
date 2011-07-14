@@ -1,8 +1,10 @@
+package uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.metabolomes.resource;
+
 
 import java.awt.Color;
 
@@ -13,6 +15,8 @@ import java.awt.Color;
  * @author johnmay
  * @date May 5, 2011
  */
+// use the new visualisation package
+@Deprecated
 public enum BlastScoreColor {
 
     VERY_LOW( 0 , 40 , new Color( Integer.parseInt( "111111" , 16 ) ) ),
@@ -34,7 +38,7 @@ public enum BlastScoreColor {
     /**
      * Returns the required object given a bit score
      * @param bitScore
-     * @return 
+     * @return
      */
     public static BlastScoreColor getColorForScore( int bitScore ) {
         for ( BlastScoreColor blastScoreColor : values() ) {
@@ -46,8 +50,8 @@ public enum BlastScoreColor {
     }
 
     /**
-     * Set the color of the 
-     * @param color 
+     * Set the color of the
+     * @param color
      */
     public Color getColor() {
         return color;
@@ -55,7 +59,7 @@ public enum BlastScoreColor {
 
     /**
      * Returns the max value
-     * @return 
+     * @return
      */
     public Integer getMax() {
         return max;
@@ -63,7 +67,7 @@ public enum BlastScoreColor {
 
     /**
      * Returns the min value
-     * @return 
+     * @return
      */
     public Integer getMin() {
         return min;

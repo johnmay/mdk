@@ -92,7 +92,7 @@ public abstract class FileHashMapper<K , V> {
             row = reader.readNext();
         } while ( row != null );
 
-        return new HashMap<K , V>();
+        return map;
     }
 
     /**
@@ -101,7 +101,7 @@ public abstract class FileHashMapper<K , V> {
      * @return
      */
     public abstract K parseKey( String keyString );
-    
+
     /**
      * Parses a string in to the defined object type
      * @param keyString
