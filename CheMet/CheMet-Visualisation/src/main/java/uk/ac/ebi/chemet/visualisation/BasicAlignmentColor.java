@@ -28,8 +28,7 @@ import org.apache.log4j.Logger;
 /**
  * @name    BasicAlignmentColor
  * @date    2011.07.14
- * @date    $LastChangedDate$ (this version)
- * @version $Revision$
+ * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  * @brief   Basic implementation of the AbstractAlignmentColor. This class

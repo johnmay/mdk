@@ -11,7 +11,7 @@ import java.awt.Color;
 /**
  * BlastScoreColor.java
  *
- *
+ * @version $Rev$ : Last Changed $Date$
  * @author johnmay
  * @date May 5, 2011
  */
