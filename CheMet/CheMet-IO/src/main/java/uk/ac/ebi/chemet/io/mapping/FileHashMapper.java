@@ -29,8 +29,7 @@ import org.apache.log4j.Logger;
 /**
  * @name    FileHashMapper
  * @date    2011.07.13
- * @date    $LastChangedDate$ (this version)
- * @version $Revision$
+ * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  * @brief   Generates a HashMap from a delimited file with specified Key and Value classes

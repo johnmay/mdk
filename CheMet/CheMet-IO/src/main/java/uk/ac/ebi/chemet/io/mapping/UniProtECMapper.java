@@ -32,8 +32,7 @@ import uk.ac.ebi.metabolomes.identifier.UniProtIdentifier;
 /**
  * @name    UniProtECMapper
  * @date    2011.07.13
- * @date    $LastChangedDate$ (this version)
- * @version $Revision$
+ * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  * @brief   Provides mapping of UniProtIds to EC Numbers from a given file

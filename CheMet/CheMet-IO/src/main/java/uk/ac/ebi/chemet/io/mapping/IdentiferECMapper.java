@@ -33,8 +33,7 @@ import uk.ac.ebi.metabolomes.identifier.UniProtIdentifier;
 /**
  * @name    IdentiferECMapper
  * @date    2011.07.14
- * @date    $LastChangedDate$ (this version)
- * @version $Revision$
+ * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  * @brief   Basic implementation of FileHashMapper to map GenericIdentifiers to EC Numbers
