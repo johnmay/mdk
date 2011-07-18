@@ -111,7 +111,7 @@ public class LocalAlignmentRenderer
         g2.draw( getTraceLine( outerBounds , innerBounds ) );
 
         // draw the match region
-        g2.setColor( super.color.getMatchColor() );
+        g2.setColor( super.color.getMatchColor( alignment ) );
         float sequenceLength = alignment.getProduct().getSequenceLength();
         // normalise length by the total length of the sequence
         Integer[] homologyRange = alignment.getQueryRange();

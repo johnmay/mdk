@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>Research</artifactId>
-        <groupId>uk.ac.ebi.chemmet</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>CheMet</artifactId>
+        <groupId>uk.ac.ebi.chemet</groupId>
+        <version>1.0</version>
     </parent>
-    <groupId>uk.ac.ebi.chemmet</groupId>
+    <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>CheMet-WebServices</artifactId>
     <version>1.0</version>
     <name>CheMet-WebServices</name>
@@ -32,23 +32,6 @@
             <groupId>net.sf.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.chebi.webapps.chebiWS.client</groupId>
-            <artifactId>chebiWS-client</artifactId>
-            <version>2.0</version>
-            <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jaxws-rt</artifactId>
-                    <groupId>com.sun.xml.ws</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-client</artifactId>
-            <version>1.9-ea01</version>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -86,11 +69,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>CheMet-Core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>ae3.service.webservices</groupId>
             <artifactId>arrayexpress-ws</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -105,8 +83,34 @@
             <artifactId>keggapi</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CheMet-Core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>1.9-ea01</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.chebi.webapps.chebiWS.client</groupId>
+            <artifactId>chebiWS-client</artifactId>
+            <version>2.0</version>
+            <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jaxws-rt</artifactId>
+                    <groupId>com.sun.xml.ws</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>2.2.6-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
-   
 
 </project>

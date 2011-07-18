@@ -56,7 +56,7 @@ public abstract class CommandLineMain
             cmd = parser.parse( options , args );
         } catch ( ParseException ex ) {
             //  printHelp();
-            logger.error( "error!", ex );
+            logger.error( "There was a problem parsing command line options: " + ex.getMessage() );
         }
 
         if ( cmd.getOptions().length == 0

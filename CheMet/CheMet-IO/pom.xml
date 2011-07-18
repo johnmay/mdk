@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>Research</artifactId>
-    <groupId>uk.ac.ebi.chemmet</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>CheMet</artifactId>
+    <groupId>uk.ac.ebi.chemet</groupId>
+    <version>1.0</version>
   </parent>
-  <groupId>uk.ac.ebi.chemmet</groupId>
+  <groupId>uk.ac.ebi.chemet</groupId>
   <artifactId>CheMet-IO</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>CheMet-IO</name>
@@ -38,6 +38,12 @@
       <groupId>org.openscience.cdk</groupId>
       <type>jar</type>
       <version>1.3.8</version>
+    </dependency>
+    <dependency>
+      <artifactId>opencsv</artifactId>
+      <groupId>net.sf.opencsv</groupId>
+      <type>jar</type>
+      <version>2.1</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

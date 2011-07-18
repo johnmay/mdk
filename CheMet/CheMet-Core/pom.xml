@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>Research</artifactId>
-        <groupId>uk.ac.ebi.chemmet</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>CheMet</artifactId>
+        <groupId>uk.ac.ebi.chemet</groupId>
+        <version>1.0</version>
     </parent>
-    <groupId>uk.ac.ebi.chemmet</groupId>
+    <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>CheMet-Core</artifactId>
     <version>1.0</version>
     <name>CheMet-Core</name>

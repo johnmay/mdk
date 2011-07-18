@@ -31,6 +31,7 @@ import org.apache.commons.cli.Option;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.visualisation.AlignmentRendererFactory;
 import uk.ac.ebi.chemet.visualisation.BasicAlignmentColor;
+import uk.ac.ebi.chemet.visualisation.BlastAlignmentColor;
 import uk.ac.ebi.chemet.visualisation.LocalAlignmentRenderer;
 import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
@@ -87,19 +88,17 @@ public class DrawAlignmentsMain
         // build the renderer, could put in the factory
         LocalAlignmentRenderer renderer =
                                new LocalAlignmentRenderer( new Rectangle() ,
-                                                           new BasicAlignmentColor( Color.RED ,
-                                                                                    Color.lightGray ) ,
+                                                           new BlastAlignmentColor() ,
                                                            0 );
-
 
 
         for ( GeneProteinProduct geneProteinProduct : productCollection.getProteinProducts() ) {
 
-            BufferedImage img = new BufferedImage( 800 , 8 * geneProteinProduct.getObservations().getBlastHits().size() ,
+            BufferedImage img = new BufferedImage( 800 , 5 * geneProteinProduct.getObservations().getBlastHits().size() ,
                                                    BufferedImage.TYPE_4BYTE_ABGR );
             Graphics2D g2 = ( Graphics2D ) img.getGraphics();
-            Rectangle outerBounds = new Rectangle( 800 , 8 );
-            Rectangle innerBounds = new Rectangle( 2 , 2 , 796 , 4 );
+            Rectangle outerBounds = new Rectangle( 800 , 5 );
+            Rectangle innerBounds = new Rectangle( 1 , 1 , 798 , 3 );
 
             for ( LocalAlignment hit : geneProteinProduct.getObservations().getBlastHits() ) {
                 renderer.render( hit , g2 , outerBounds , innerBounds );

@@ -9,13 +9,13 @@ package uk.ac.ebi.chemet.visualisation;
 import java.awt.Color;
 
 /**
- * BlastScoreColor.java
+ * BlastScoreColorRange.java
  *
  * @version $Rev$ : Last Changed $Date$
  * @author johnmay
  * @date May 5, 2011
  */
-public enum BlastScoreColor {
+public enum BlastScoreColorRange {
 
     VERY_LOW( 0 , 40 , new Color( Integer.parseInt( "111111" , 16 ) ) ),
     LOW( 40 , 50 , new Color( Integer.parseInt( "3311FF" , 16 ) ) ),
@@ -27,7 +27,7 @@ public enum BlastScoreColor {
     private Integer max;
     private Color color;
 
-    private BlastScoreColor( Integer min , Integer max , Color color ) {
+    private BlastScoreColorRange( Integer min , Integer max , Color color ) {
         this.min = min;
         this.max = max;
         this.color = color;
@@ -38,8 +38,8 @@ public enum BlastScoreColor {
      * @param bitScore
      * @return
      */
-    public static BlastScoreColor getColorForScore( int bitScore ) {
-        for ( BlastScoreColor blastScoreColor : values() ) {
+    public static BlastScoreColorRange getColorForScore( int bitScore ) {
+        for ( BlastScoreColorRange blastScoreColor : values() ) {
             if ( blastScoreColor.isInRange( bitScore ) ) {
                 return blastScoreColor;
             }
