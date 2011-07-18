@@ -41,7 +41,6 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
 public class CDKMoleculeBuilder {
 
     private static final Logger LOGGER = Logger.getLogger( CDKMoleculeBuilder.class );
-    private static IMolecule template = new Molecule();
 
     /**
      * Given and InChI string and a molFile string try and build a IMolecule object
@@ -51,7 +50,7 @@ public class CDKMoleculeBuilder {
      */
     public static IMolecule build( String inchi , String molFile ) {
 
-        // Todo smile
+        // Todo smiles
         IMolecule molecule = null;
         molecule = buildFromMolFileV2000( new MDLV2000Reader( new StringReader( molFile ) ) );
         if ( molecule != null ) {
@@ -71,7 +70,7 @@ public class CDKMoleculeBuilder {
      * @return
      */
     public static IMolecule buildFromInChI( InChI inchi ) {
-        return null;
+        throw new UnsupportedOperationException( "Not supported yet" );
     }
 
     /**
@@ -80,6 +79,9 @@ public class CDKMoleculeBuilder {
      * @return
      */
     public static IMolecule buildFromMolFileV2000( MDLV2000Reader reader ) {
+
+        IMolecule template = new Molecule();
+
         try {
             return reader.read( template );
         } catch ( CDKException ex ) {
@@ -94,6 +96,7 @@ public class CDKMoleculeBuilder {
      * @return
      */
     public static IMolecule buildFromMolFileV3000( MDLV3000Reader reader ) {
+        IMolecule template = new Molecule();
         try {
             return reader.read( template );
         } catch ( CDKException ex ) {
@@ -101,5 +104,4 @@ public class CDKMoleculeBuilder {
         }
         return null;
     }
-
 }
