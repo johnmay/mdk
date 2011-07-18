@@ -1,5 +1,5 @@
 /**
- * MoleculeBuilder.java
+ * CDKMoleculeBuilder.java
  *
  * 2011.07.18
  *
@@ -30,7 +30,7 @@ import org.openscience.cdk.io.MDLV3000Reader;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
- * @name    MoleculeBuilder
+ * @name    CDKMoleculeBuilder
  * @date    2011.07.18
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
@@ -38,9 +38,9 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
  * @brief   ...class description...
  *
  */
-public class MoleculeBuilder {
+public class CDKMoleculeBuilder {
 
-    private static final Logger LOGGER = Logger.getLogger( MoleculeBuilder.class );
+    private static final Logger LOGGER = Logger.getLogger( CDKMoleculeBuilder.class );
     private static IMolecule template = new Molecule();
 
     /**
@@ -101,5 +101,5 @@ public class MoleculeBuilder {
         }
         return null;
     }
-    
+
 }
