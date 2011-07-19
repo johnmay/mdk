@@ -14,18 +14,22 @@
  */
 package uk.ac.ebi.metabolomes.identifier;
 
+import java.io.Serializable;
 import uk.ac.ebi.metabolomes.resource.Resource;
 
 /**
- * Wrapper object for an InChI storing the InChI, InChIKey and AuxInfo
+ * Wrapper object for an InChI storing the InChI, InChIKey and AuxInfo strings. Allows storage and comparisson
  *
  *
  * @author Pablo Moreno
  * @author John May
  * @date   6 Mar 2011
  */
-public class InChI extends AbstractIdentifier {
+public class InChI
+        extends AbstractIdentifier
+        implements Comparable<InChI> , Serializable {
 
+    private static final long serialVersionUID = 8312829501093553787L;
     private String name;
     private String inchi;
     private String inchiKey;
@@ -33,7 +37,7 @@ public class InChI extends AbstractIdentifier {
 
     public InChI() {
         // set resource to general as there isn't a InChI db
- //       setResource( Resource.GENERAL );
+        //       setResource( Resource.GENERAL );
     }
 
     public InChI( String inchi , Boolean check ) {
@@ -124,5 +128,13 @@ public class InChI extends AbstractIdentifier {
     @Override
     public String toString() {
         return inchi;
+    }
+
+    public int compareTo( InChI o ) {
+        int value = inchi.compareTo( o.inchi );
+        if ( value == 0 && auxInfo != null ) {
+            value = auxInfo.compareTo( o.auxInfo );
+        }
+        return value;
     }
 }
