@@ -34,11 +34,11 @@ class ProxyReaction
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ProxyReaction.class );
     private static final long serialVersionUID = 1311431275054437049L;
-    private ArrayList<InChI> inchiReactants = new ArrayList<InChI>();
-    private ArrayList<InChI> inchiProducts = new ArrayList<InChI>();
+    protected  ArrayList<InChI> inchiReactants = new ArrayList<InChI>();
+    protected ArrayList<InChI> inchiProducts = new ArrayList<InChI>();
     // need to store the coefficients also as the CDK reaction ones are linked to the IMolecules (Ithink)
-    private ArrayList<Double> reactantCoefficients = new ArrayList<Double>();
-    private ArrayList<Double> productCoefficients = new ArrayList<Double>();
+    protected ArrayList<Double> reactantCoefficients = new ArrayList<Double>();
+    protected ArrayList<Double> productCoefficients = new ArrayList<Double>();
 
     public ProxyReaction() {
     }

@@ -16,7 +16,9 @@ package uk.ac.ebi.metabolomes.core.reaction;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
@@ -69,6 +71,15 @@ public class BiochemicalReaction
     }
 
     /**
+     * Adds an associated gene product to the reaction
+     * @param geneProduct
+     * @return
+     */
+    public boolean addGeneProduct( GeneProduct geneProduct ) {
+        return geneProducts.add( geneProduct );
+    }
+
+    /**
      * Adds a gene product to the biochemical reaction
      * @param geneProduct
      */
@@ -113,30 +124,46 @@ public class BiochemicalReaction
 
     @Override
     public String toString() {
-        String leftSide = buildList( getReactants() );
-        String rightSide = buildList( getProducts() );
+        String leftSide = buildList( getReactants() , getInchiReactants() );
+        String rightSide = buildList( getProducts() , getInchiProducts() );
         return leftSide + " <?> " + rightSide;
     }
 
-    public String buildList( IMoleculeSet molSet ) {
+    public String buildList( IMoleculeSet molSet , List<InChI> inchis ) {
         List<String> ids = new ArrayList<String>();
         for ( int i = 0; i < molSet.getAtomContainerCount(); i++ ) {
             IMolecule molecule = molSet.getMolecule( i );
             ids.add( molecule.getID() );
+        }
+        if ( ids.isEmpty() ) {
+            for ( int i = 0; i < inchis.size(); i++ ) {
+                ids.add( inchis.get( i ).getName() );
+            }
         }
         return Util.join( ids , " + " );
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
+
+        int hash = 42;
+
         hash = 67 * hash + ( this.geneProducts != null ? this.geneProducts.hashCode() : 0 );
-        for ( InChI inchi : getInchiProducts() ) {
-            hash *= inchi.hashCode();
+
+        // place all in one array
+        InChI[] combinded = new InChI[ inchiReactants.size() + inchiProducts.size() ];
+        System.arraycopy( getInchiReactants().toArray( new InChI[ 0 ] ) , 0 ,
+                          combinded , 0 , inchiReactants.size() );
+        System.arraycopy( getInchiReactants().toArray( new InChI[ 0 ] ) , 0 ,
+                          combinded , inchiReactants.size() , inchiProducts.size() );
+
+        // values are sorted so they're the same order for generating the hash
+        Arrays.sort( combinded );
+
+        for ( InChI inChI : combinded ) {
+            hash = 67 * hash + inChI.hashCode();
         }
-        for ( InChI inchi : getInchiReactants() ) {
-            hash *= inchi.hashCode();
-        }
+
         // todo
         return hash;
     }
@@ -148,23 +175,29 @@ public class BiochemicalReaction
             return false;
         }
         if ( getClass() != obj.getClass() ) {
+            System.out.println( "f2" );
+
             return false;
         }
         final BiochemicalReaction other = ( BiochemicalReaction ) obj;
         if ( this.getProductCount() != other.getProductCount() ) {
+
             return false;
         }
         if ( this.getReactantCount() != other.getReactantCount() ) {
             return false;
         }
 
-        if ( MoleculeSetManipulator.getAtomCount( this.products ) != MoleculeSetManipulator.getAtomCount( other.products ) ) {
+        if ( MoleculeSetManipulator.getAtomCount( this.products ) !=
+             MoleculeSetManipulator.getAtomCount( other.products ) ) {
             return false;
         }
 
-        if ( MoleculeSetManipulator.getAtomCount( this.reactants ) != MoleculeSetManipulator.getAtomCount( other.reactants ) ) {
+        if ( MoleculeSetManipulator.getAtomCount( this.reactants ) != MoleculeSetManipulator.getAtomCount(
+                other.reactants ) ) {
             return false;
         }
+
 
 
         // check the products
@@ -174,9 +207,9 @@ public class BiochemicalReaction
         // there probably is a faster way to do it
         int productCount = 0;
         for ( int i = 0; i < products.getMoleculeCount(); i++ ) {
-            IMolecule query = products.getMolecule( i );
+            IAtomContainer query = products.getAtomContainer( i );
             for ( int j = 0; j < other.products.getMoleculeCount(); j++ ) {
-                IMolecule ref = other.products.getMolecule( j );
+                IAtomContainer ref = other.products.getAtomContainer( j );
                 if ( comparator.compare( query , ref ) == 0 ) {
                     productCount++;
                 }
@@ -190,9 +223,9 @@ public class BiochemicalReaction
         // check reactants
         int reactantCount = 0;
         for ( int i = 0; i < reactants.getMoleculeCount(); i++ ) {
-            IMolecule query = this.reactants.getMolecule( i );
+            IAtomContainer query = this.reactants.getAtomContainer( i );
             for ( int j = 0; j < other.reactants.getMoleculeCount(); j++ ) {
-                IMolecule ref = other.reactants.getMolecule( j );
+                IAtomContainer ref = other.reactants.getAtomContainer( j );
                 if ( comparator.compare( query , ref ) == 0 ) {
                     reactantCount++;
                 }
@@ -204,9 +237,10 @@ public class BiochemicalReaction
         }
 
         // bi directional
-        
+
 
 
         return true;
     }
+    
 }
