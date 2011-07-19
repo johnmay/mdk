@@ -71,15 +71,6 @@ public class BiochemicalReaction
     }
 
     /**
-     * Adds an associated gene product to the reaction
-     * @param geneProduct
-     * @return
-     */
-    public boolean addGeneProduct( GeneProduct geneProduct ) {
-        return geneProducts.add( geneProduct );
-    }
-
-    /**
      * Adds a gene product to the biochemical reaction
      * @param geneProduct
      */
@@ -242,5 +233,5 @@ public class BiochemicalReaction
 
         return true;
     }
-    
+
 }
