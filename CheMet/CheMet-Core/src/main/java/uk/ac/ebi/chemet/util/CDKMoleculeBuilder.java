@@ -21,13 +21,23 @@
 package uk.ac.ebi.chemet.util;
 
 import java.io.StringReader;
+import net.sf.jniinchi.INCHI_RET;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
+import org.openscience.cdk.config.AtomTypeFactory;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
+import org.openscience.cdk.tools.AtomTypeTools;
+import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import uk.ac.ebi.metabolomes.identifier.InChI;
+import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
 
 /**
  * @name    CDKMoleculeBuilder
@@ -41,6 +51,29 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
 public class CDKMoleculeBuilder {
 
     private static final Logger LOGGER = Logger.getLogger( CDKMoleculeBuilder.class );
+    private static IChemObjectBuilder CHEM_OBJECT_BUILDER = DefaultChemObjectBuilder.getInstance();
+    private static InChIGeneratorFactory inChIGeneratorFactory;
+    private static AtomTypeTools typeTools = new AtomTypeTools();
+
+    private CDKMoleculeBuilder() {
+        typeTools = new AtomTypeTools();
+
+        try {
+            inChIGeneratorFactory = InChIGeneratorFactory.getInstance();
+
+        } catch ( CDKException ex ) {
+            ex.printStackTrace();
+        }
+    }
+
+    private static class CDKMoleculeBuilderHolder {
+
+        private static CDKMoleculeBuilder INSTANCE = new CDKMoleculeBuilder();
+    }
+
+    public static CDKMoleculeBuilder getInstance() {
+        return CDKMoleculeBuilderHolder.INSTANCE;
+    }
 
     /**
      * Given and InChI string and a molFile string try and build a IMolecule object
@@ -48,20 +81,39 @@ public class CDKMoleculeBuilder {
      * @param molFile
      * @return
      */
-    public static IMolecule build( String inchi , String molFile ) {
+    public IAtomContainer build( InChI inchi , String molFile ) {
 
         // Todo smiles
         IMolecule molecule = null;
-        molecule = buildFromMolFileV2000( new MDLV2000Reader( new StringReader( molFile ) ) );
-        if ( molecule != null ) {
-            return molecule;
+
+        if ( inchi.getInchi() != null ) {
+            molecule = buildFromInChI( inchi );
+            if ( molecule != null ) {
+                return molecule;
+            }
         }
-        molecule = buildFromMolFileV3000( new MDLV3000Reader( new StringReader( molFile ) ) );
-        if ( molecule != null ) {
-            return molecule;
+
+        if ( molFile.isEmpty() == Boolean.FALSE ) {
+            molecule = buildFromMolFileV2000( new MDLV2000Reader( new StringReader( molFile ) ) );
+            if ( molecule != null ) {
+                try {
+                    typeTools.assignAtomTypePropertiesToAtom( molecule );
+                } catch ( Exception ex ) {
+                }
+                return molecule;
+            }
+
+            molecule = buildFromMolFileV3000( new MDLV3000Reader( new StringReader( molFile ) ) );
+            if ( molecule != null ) {
+                try {
+                    typeTools.assignAtomTypePropertiesToAtom( molecule );
+                } catch ( Exception ex ) {
+                }
+                return molecule;
+            }
         }
-        molecule = buildFromInChI( new InChI( inchi ) );
-        return molecule;
+
+        return null;
     }
 
     /**
@@ -69,8 +121,33 @@ public class CDKMoleculeBuilder {
      * @param inchi
      * @return
      */
-    public static IMolecule buildFromInChI( InChI inchi ) {
-        throw new UnsupportedOperationException( "Not supported yet" );
+    public IMolecule buildFromInChI( InChI inchi ) {
+        try {
+            InChIToStructure inchiToStructure =
+                             inChIGeneratorFactory.getInChIToStructure( inchi.getInchi() ,
+                                                                        CHEM_OBJECT_BUILDER );
+
+
+            String inchiString = inchi.getInchi();
+
+            INCHI_RET ret = inchiToStructure.getReturnStatus();
+            if ( ret == INCHI_RET.WARNING ) {
+                // Structure generated, but with warning message
+                LOGGER.debug( "InChI warning: " + inchiToStructure.getMessage() );
+            } else if ( ret != INCHI_RET.OKAY ) {
+                // Structure generation failed
+                return null;
+            }
+            IAtomContainer result = inchiToStructure.getAtomContainer();
+            IMolecule molecule = new Molecule( result );
+            return molecule;
+
+        } catch ( CDKException ex ) {
+            ex.printStackTrace();
+        }
+
+        return null;
+
     }
 
     /**
@@ -78,14 +155,15 @@ public class CDKMoleculeBuilder {
      * @param reader
      * @return
      */
-    public static IMolecule buildFromMolFileV2000( MDLV2000Reader reader ) {
+    public IMolecule buildFromMolFileV2000( MDLV2000Reader reader ) {
 
-        IMolecule template = new Molecule();
+        Molecule template = new Molecule();
 
         try {
             return reader.read( template );
         } catch ( CDKException ex ) {
             // do nothing
+            LOGGER.error( ex.getMessage() );
         }
         return null;
     }
@@ -95,12 +173,14 @@ public class CDKMoleculeBuilder {
      * @param reader
      * @return
      */
-    public static IMolecule buildFromMolFileV3000( MDLV3000Reader reader ) {
-        IMolecule template = new Molecule();
+    public IMolecule buildFromMolFileV3000( MDLV3000Reader reader ) {
+        Molecule template = new Molecule();
         try {
             return reader.read( template );
         } catch ( CDKException ex ) {
             // do nothing
+            LOGGER.error( ex.getMessage() );
+
         }
         return null;
     }
