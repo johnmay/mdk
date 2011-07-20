@@ -226,4 +226,5 @@ public class FindBlastClustersMain
 
         return new ArrayList<ECNumber>( ecSet );
     }
+
 }

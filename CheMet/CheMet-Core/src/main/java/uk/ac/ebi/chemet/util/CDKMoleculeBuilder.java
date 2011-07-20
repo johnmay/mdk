@@ -122,28 +122,33 @@ public class CDKMoleculeBuilder {
      * @return
      */
     public IMolecule buildFromInChI( InChI inchi ) {
+
         try {
             InChIToStructure inchiToStructure =
                              inChIGeneratorFactory.getInChIToStructure( inchi.getInchi() ,
                                                                         CHEM_OBJECT_BUILDER );
 
-
             String inchiString = inchi.getInchi();
+
+            if ( inchiString.isEmpty() ) {
+                return null;
+            }
 
             INCHI_RET ret = inchiToStructure.getReturnStatus();
             if ( ret == INCHI_RET.WARNING ) {
                 // Structure generated, but with warning message
                 LOGGER.debug( "InChI warning: " + inchiToStructure.getMessage() );
             } else if ( ret != INCHI_RET.OKAY ) {
-                // Structure generation failed
+                LOGGER.warn( "Structure generation failed" );
                 return null;
             }
+
             IAtomContainer result = inchiToStructure.getAtomContainer();
             IMolecule molecule = new Molecule( result );
             return molecule;
 
         } catch ( CDKException ex ) {
-            ex.printStackTrace();
+            LOGGER.error( "Structure generation failed" , ex.getMessage() );
         }
 
         return null;
