@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.openscience.cdk.Reaction;
+import org.openscience.cdk.interfaces.IMapping;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
@@ -34,38 +35,62 @@ class ProxyReaction
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ProxyReaction.class );
     private static final long serialVersionUID = 1311431275054437049L;
-    protected  ArrayList<InChI> inchiReactants = new ArrayList<InChI>();
+    protected ArrayList<InChI> inchiReactants = new ArrayList<InChI>();
+    protected ArrayList<InChI> reactionParticipants = new ArrayList<InChI>();
     protected ArrayList<InChI> inchiProducts = new ArrayList<InChI>();
+    protected boolean needsSorting = false;
     // need to store the coefficients also as the CDK reaction ones are linked to the IMolecules (Ithink)
-    protected ArrayList<Double> reactantCoefficients = new ArrayList<Double>();
-    protected ArrayList<Double> productCoefficients = new ArrayList<Double>();
+    private ArrayList<Double> reactantCoefficients = new ArrayList<Double>();
+    private ArrayList<Double> productCoefficients = new ArrayList<Double>();
 
     public ProxyReaction() {
     }
 
     public ArrayList<InChI> getInchiProducts() {
-        return new ArrayList<InChI>( Collections.unmodifiableList( inchiProducts ) );
+        return new ArrayList<InChI>( Collections.unmodifiableCollection( inchiProducts ) );
     }
 
     public ArrayList<InChI> getInchiReactants() {
-        return new ArrayList<InChI>( Collections.unmodifiableList( inchiReactants ) );
+        return new ArrayList<InChI>( Collections.unmodifiableCollection( inchiReactants ) );
+    }
+
+    @Override
+    public int hashCode() {
+
+        int hash = 52;
+
+        if(needsSorting){ // only sort if the collection has been modified
+            Collections.sort(reactionParticipants);
+            needsSorting = false;
+        }
+
+        for ( InChI inchi: reactionParticipants ) {
+            hash = 67 * hash + inchi.hashCode();
+        }
+
+        return hash;
+
     }
 
     public ArrayList<Double> getInChIProductCoefficients() {
-        return productCoefficients;
+        return new ArrayList<Double>( Collections.unmodifiableCollection( productCoefficients ) );
     }
 
     public ArrayList<Double> getInChIReactantCoefficients() {
-        return reactantCoefficients;
-    }
-
-    public void addInChIProduct( InChI product , double coefficient ) {
-        inchiProducts.add( product );
-        productCoefficients.add( coefficient );
+        return new ArrayList<Double>( Collections.unmodifiableCollection( reactantCoefficients ) );
     }
 
     public void addInChIReactant( InChI reactant , double coefficient ) {
         inchiReactants.add( reactant );
         reactantCoefficients.add( coefficient );
+        needsSorting = reactionParticipants.add( reactant );
+
+    }
+
+    public void addInChIProduct( InChI product , double coefficient ) {
+        inchiProducts.add( product );
+        productCoefficients.add( coefficient );
+        needsSorting = reactionParticipants.add( product );
+
     }
 }

@@ -16,7 +16,7 @@ package uk.ac.ebi.metabolomes.core.reaction;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
@@ -137,25 +137,12 @@ public class BiochemicalReaction
     @Override
     public int hashCode() {
 
-        int hash = 42;
+        // super.hashCode works on InChI reactants and products
+        int hash = super.hashCode();
 
         hash = 67 * hash + ( this.geneProducts != null ? this.geneProducts.hashCode() : 0 );
 
-        // place all in one array
-        InChI[] combinded = new InChI[ inchiReactants.size() + inchiProducts.size() ];
-        System.arraycopy( getInchiReactants().toArray( new InChI[ 0 ] ) , 0 ,
-                          combinded , 0 , inchiReactants.size() );
-        System.arraycopy( getInchiReactants().toArray( new InChI[ 0 ] ) , 0 ,
-                          combinded , inchiReactants.size() , inchiProducts.size() );
-
-        // values are sorted so they're the same order for generating the hash
-        Arrays.sort( combinded );
-
-        for ( InChI inChI : combinded ) {
-            hash = 67 * hash + inChI.hashCode();
-        }
-
-        // todo
+        // todo stoichiometry
         return hash;
     }
 
@@ -166,8 +153,6 @@ public class BiochemicalReaction
             return false;
         }
         if ( getClass() != obj.getClass() ) {
-            System.out.println( "f2" );
-
             return false;
         }
         final BiochemicalReaction other = ( BiochemicalReaction ) obj;
@@ -233,5 +218,4 @@ public class BiochemicalReaction
 
         return true;
     }
-
 }
