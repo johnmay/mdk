@@ -58,10 +58,17 @@
             <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty/</url>
         </repository>
         <repository>
-            <id>rothamsted-bbsrc</id>
-            <name>rothamsted-bbsrc</name>
-            <url>http://ondex.rothamsted.bbsrc.ac.uk/nexus/content/repositories/public/</url>
+            <id>biojava-maven-repo</id>
+            <name>BioJava repository</name>
+            <url>http://www.biojava.org/download/maven/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
+
         <repository>
             <id>paxtools</id>
             <name>BioPAX maven 2 repository</name>
@@ -85,15 +92,9 @@
             </snapshots>
         </repository>
         <repository>
-            <id>biojava-maven-repo</id>
-            <name>BioJava repository</name>
-            <url>http://www.biojava.org/download/maven/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
+            <id>rothamsted-bbsrc</id>
+            <name>rothamsted-bbsrc</name>
+            <url>http://ondex.rothamsted.bbsrc.ac.uk/nexus/content/repositories/public/</url>
         </repository>
     </repositories>
 
