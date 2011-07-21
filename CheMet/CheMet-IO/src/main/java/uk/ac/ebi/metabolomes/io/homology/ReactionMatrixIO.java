@@ -145,7 +145,7 @@ public class ReactionMatrixIO {
                         molValueMap.put( molNames[i] , Double.parseDouble( value ) );
                     }
                 }
-                s.addReaction( reactionNames[j],
+                s.addReaction( reactionNames[j] ,
                                molValueMap.keySet().toArray( new InChI[ 0 ] ) ,
                                molValueMap.values().toArray( new Double[ 0 ] ) );
             }
@@ -172,7 +172,9 @@ public class ReactionMatrixIO {
      */
     public static void writeBasicStoichiometricMatrix( StoichiometricMatrix s , Writer writer , char sep ) {
         CSVWriter csv = new CSVWriter( new BufferedWriter( writer ) , sep );
-        Object[][] fixed = s.getFixedMatrix();
+
+        int n = s.getMoleculeCount();
+        int m = s.getReactionCount();
 
         String[] reactionName = new String[ s.getReactionCount() + 1 ];
         for ( int j = 0; j < s.getReactionCount(); j++ ) {
@@ -180,11 +182,11 @@ public class ReactionMatrixIO {
         }
         csv.writeNext( reactionName );
 
-        for ( int i = 0; i < fixed.length; i++ ) {
-            String[] copy = new String[ fixed[i].length + 1 ];
+        for ( int i = 0; i < n; i++ ) {
+            String[] copy = new String[ m + 1 ];
             copy[0] = s.getMolecule( i ).toString();
-            for ( int j = 0; j < fixed[i].length; j++ ) {
-                copy[j + 1] = fixed[i][j] == null ? "" : fixed[i][j].toString();
+            for ( int j = 0; j < m; j++ ) {
+                copy[j + 1] = s.get( i , j ) == null ? "" : s.get( i , j ).toString();
             }
             csv.writeNext( copy );
         }

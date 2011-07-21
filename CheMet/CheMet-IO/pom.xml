@@ -29,11 +29,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.biojava</groupId>
-            <artifactId>biojava3-core</artifactId>
-            <version>3.0</version>
-        </dependency>
-        <dependency>
             <artifactId>CDK</artifactId>
             <groupId>org.openscience.cdk</groupId>
             <type>jar</type>
@@ -71,6 +66,12 @@
             <groupId>org.biopax.paxtools</groupId>
             <artifactId>paxtools-jena-io</artifactId>
             <version>4.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>biojava3-core</artifactId>
+            <groupId>org.biojava</groupId>
+            <type>jar</type>
+            <version>3.0.1</version>
         </dependency>
     </dependencies>
 </project>
