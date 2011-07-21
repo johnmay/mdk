@@ -148,7 +148,7 @@ public class CDKMoleculeBuilder {
             return molecule;
 
         } catch ( CDKException ex ) {
-            LOGGER.error( "Structure generation failed" , ex.getMessage() );
+            LOGGER.error( "Structure generation failed" + ex.getMessage() );
         }
 
         return null;
