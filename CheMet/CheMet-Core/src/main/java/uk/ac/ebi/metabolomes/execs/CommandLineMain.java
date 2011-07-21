@@ -59,8 +59,7 @@ public abstract class CommandLineMain
             logger.error( "There was a problem parsing command line options: " + ex.getMessage() );
         }
 
-        if ( cmd.getOptions().length == 0
-             || cmd.hasOption( 'h' )
+        if (  cmd.hasOption( 'h' )
              || cmd.hasOption( "help" ) ) {
             printHelp();
         }
