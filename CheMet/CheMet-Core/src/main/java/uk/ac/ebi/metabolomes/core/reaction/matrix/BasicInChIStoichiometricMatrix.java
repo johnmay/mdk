@@ -38,8 +38,8 @@ public class BasicInChIStoichiometricMatrix extends StoichiometricMatrix<InChI ,
 
     private static final Logger LOGGER = Logger.getLogger( BasicInChIStoichiometricMatrix.class );
 
-    public BasicInChIStoichiometricMatrix( int m , int n ) {
-        super( m , n );
+    public BasicInChIStoichiometricMatrix( int n , int m ) {
+        super( n , m );
     }
 
     public boolean addReaction( String reactionName , BiochemicalReaction reaction , boolean reactantSideIsNegative ) {

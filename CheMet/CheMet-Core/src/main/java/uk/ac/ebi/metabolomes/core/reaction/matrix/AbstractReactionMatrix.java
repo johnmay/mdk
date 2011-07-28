@@ -69,14 +69,14 @@ public abstract class AbstractReactionMatrix<T , M , R> {
      * if the final or expected size of the final matrix is known. Specifying the capacity here
      * reduces resize penalty
      * @param n Initial capacity of molecules
-     * @param n Initial capacity of reactions
+     * @param m Initial capacity of reactions
      */
     public AbstractReactionMatrix( int n , int m ) {
         // we store this back to front as there are more reactions then molecules so less resizing this way
-        matrix = ( T[][] ) new Object[ m ][ n ];
+        matrix = ( T[][] ) new Object[ n ][ m ];
         // set the max capacities
-        maxMoleculeCapacity = m;
-        maxReactionCapacity = n;
+        maxMoleculeCapacity = n;
+        maxReactionCapacity = m;
     }
 
     public boolean addReaction( R reaction ,

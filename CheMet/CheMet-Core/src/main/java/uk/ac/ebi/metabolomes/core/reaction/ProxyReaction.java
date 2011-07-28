@@ -93,4 +93,8 @@ class ProxyReaction
         needsSorting = reactionParticipants.add( product );
 
     }
+
+    public List<InChI> getInChIs(){
+        return reactionParticipants;
+    }
 }

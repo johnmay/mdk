@@ -4,10 +4,12 @@
  */
 package uk.ac.ebi.metabolomes.utilities;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,34 +28,42 @@ public class XMLHelper {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( XMLHelper.class );
 
     /**
-     * Builds and XML document hiding all the try/catches from xml dom
-     * @param xmlDocumentFile
+     * Builds and XML document hiding all the try/catches of xml dom
+     * @param document
      * @return
      */
-    public static Document buildDocument( File xmlDocumentFile ) {
+    public static Document buildDocument( File document ) {
+        try {
+            return buildDocument( new BufferedInputStream( new FileInputStream( document ) ) );
+        } catch ( FileNotFoundException ex ) {
+            logger.error( "There was a problem reading the document: " + ex.getMessage() );
+        }
+        return null;
+    }
+
+    public static Document buildDocument( InputStream stream ) {
 
         FileInputStream xmlStream = null;
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            xmlStream = new FileInputStream( xmlDocumentFile );
-            Document doc = builder.parse( xmlStream );
+            Document doc = builder.parse( stream );
             doc.getDocumentElement().normalize();
             return doc;
         } catch ( ParserConfigurationException ex ) {
-            logger.error( "could not load XML document: " + xmlDocumentFile , ex );
+            logger.error( "could not load XML document: " + ex.getMessage() );
         } catch ( FileNotFoundException ex ) {
-            logger.error( "could not load XML document: " + xmlDocumentFile , ex );
+            logger.error( "could not load XML document: " + ex.getMessage() );
         } catch ( IOException ex ) {
-            logger.error( "could not load XML document: " + xmlDocumentFile , ex );
+            logger.error( "could not load XML document: " + ex.getMessage() );
         } catch ( SAXException ex ) {
-            logger.error( "could not load XML document: " + xmlDocumentFile , ex );
+            logger.error( "could not load XML document: " + ex.getMessage() );
         } finally {
             if ( xmlStream != null ) {
                 try {
                     xmlStream.close();
                 } catch ( IOException ex ) {
-                    logger.error( "could not close XML document: " + xmlDocumentFile , ex );
+                    logger.error( "could not close XML document: " + ex.getMessage() );
                 }
             }
         }

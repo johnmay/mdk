@@ -53,15 +53,40 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
 public class ReactionMatrixIO {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ReactionMatrixIO.class );
+    private static char separator = '\t';
+    private static char quoteCharacter = '\0';
+    private static boolean convertDoubleToInChI = true;
+
+    /**
+     * Invoking method informers writer methods to convert double value to integers
+     * @param convertDoubleToInChI
+     */
+    public static void setConvertDoubleToInChI( boolean convertDoubleToInChI ) {
+        ReactionMatrixIO.convertDoubleToInChI = convertDoubleToInChI;
+    }
+
+    /**
+     * @brief Sets the separator character used to delimit fields (default: '\t')
+     * @param separator
+     */
+    public static void setSeparator( char separator ) {
+        ReactionMatrixIO.separator = separator;
+    }
+
+    /**
+     * @brief Sets the quote character for writing (default: '\0')
+     */
+    public static void setQuoteCharacter( char quoteCharacter ) {
+        ReactionMatrixIO.quoteCharacter = quoteCharacter;
+    }
 
     /**
      * Reads a matrix from a file, stream et al.
      * @param reader Reader object to read from
-     * @param sep field separator, ',' and '\t' etc
      * @return
      */
-    public static BasicStoichiometricMatrix readBasicStoichiometricMatrix( Reader reader , char sep ) {
-        CSVReader csv = new CSVReader( reader , sep );
+    public static BasicStoichiometricMatrix readBasicStoichiometricMatrix( Reader reader ) {
+        CSVReader csv = new CSVReader( reader , separator , quoteCharacter );
         BasicStoichiometricMatrix s = null;
         try {
 
@@ -112,8 +137,8 @@ public class ReactionMatrixIO {
         return s;
     }
 
-    public static InChIStoichiometricMatrix readInChIStoichiometricMatrix( Reader reader , char sep ) {
-        CSVReader csv = new CSVReader( reader , sep );
+    public static InChIStoichiometricMatrix readInChIStoichiometricMatrix( Reader reader ) {
+        CSVReader csv = new CSVReader( reader , separator , quoteCharacter );
         InChIStoichiometricMatrix s = null;
         try {
 
@@ -165,13 +190,15 @@ public class ReactionMatrixIO {
     }
 
     /**
-     * Write a matrix 's' to a file, stream et al.
-     * @param s
-     * @param reader Writer object to write to
-     * @param sep field separator, ',' and '\t' etc
+     * @brief Writes a Stoichiometric Matrix (s) using the {@code toString()} method of
+     *        the molecule object to print the row name. Invoking {@see setConvertDoubleToInChI(boolean))
+     *        informs the writer to write doubles as integers. Note: the writer is not closed on completion
+     * @param s – Class extending Stoichiometric matrix to write
+     * @param writer - Where to write the matrix too
      */
-    public static void writeBasicStoichiometricMatrix( StoichiometricMatrix s , Writer writer , char sep ) {
-        CSVWriter csv = new CSVWriter( new BufferedWriter( writer ) , sep );
+    public static void writeBasicStoichiometricMatrix( StoichiometricMatrix s ,
+                                                       Writer writer ) {
+        CSVWriter csv = new CSVWriter( new BufferedWriter( writer ) , separator , quoteCharacter );
 
         int n = s.getMoleculeCount();
         int m = s.getReactionCount();
@@ -186,17 +213,40 @@ public class ReactionMatrixIO {
             String[] copy = new String[ m + 1 ];
             copy[0] = s.getMolecule( i ).toString();
             for ( int j = 0; j < m; j++ ) {
-                copy[j + 1] = s.get( i , j ) == null ? "" : s.get( i , j ).toString();
+                // if the value is null
+                copy[j + 1] = convertDoubleToInChI ?
+                              Integer.toString( s.get( i , j ).intValue() ) :
+                              s.get( i , j ).toString();
             }
             csv.writeNext( copy );
         }
 
-        try {
-            csv.close();
-        } catch ( IOException ex ) {
-            logger.error( "Coule not close CSV stream" );
+    }
+
+    /**
+     * @brief   Writes the InChI additional info, molecule index, inchi, inchikey and auxinfo
+     * @param   s - A stoichiometric matrix
+     * @param   writer
+     */
+    public static void writeInChIAdditionalInfo( StoichiometricMatrix s ,
+                                                 Writer writer ) {
+
+        CSVWriter csv = new CSVWriter( new BufferedWriter( writer ) , separator , quoteCharacter );
+
+        int n = s.getMoleculeCount();
+
+        for ( Integer i = 0; i < n; i++ ) {
+            Object obj = s.getMolecule( i );
+            if ( obj instanceof InChI ) {
+                InChI inchi = ( InChI ) obj;
+                csv.writeNext( new String[]{ i.toString() ,
+                                             inchi.getInchi() ,
+                                             inchi.getInchiKey() ,
+                                             inchi.getAuxInfo() } );
+            } else {
+                logger.error( "Object is not of type and does not inherit from InChI in matrix array" );
+            }
         }
 
-        return;
     }
 }
