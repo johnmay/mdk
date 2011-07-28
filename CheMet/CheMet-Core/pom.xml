@@ -29,15 +29,15 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>lpsolve</groupId>
-            <artifactId>lpsolve</artifactId>
-            <version>5.5</version>
-        </dependency>
-        <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>CDK</artifactId>
             <version>1.3.8</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>sf.net</groupId>
+            <artifactId>lpsolve</artifactId>
+            <version>5.5</version>
         </dependency>
         <dependency>
             <artifactId>biojava3-core</artifactId>
