@@ -22,6 +22,7 @@ package uk.ac.ebi.metabolomes.http;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -95,17 +96,22 @@ public class CactusChemical {
             // if an entity was returned
             if ( entity != null ) {
 
-                Scanner scanner = new Scanner( entity.getContent() );
+                InputStream stream = entity.getContent();
+                Scanner scanner = new Scanner( stream );
                 while ( scanner.hasNext() ) {
 
                     // unescape the response and add the list of returned names
                     names.add( StringEscapeUtils.unescapeHtml( scanner.next() ) );
                 }
+                // trigger connection release
+                stream.close();
+                scanner.close();
             }
 
         } catch ( IOException ex ) {
             LOGGER.error( "Problem reading response: " + ex.getMessage() );
-        } catch ( IllegalStateException ex ) {  // ignore
+        } catch ( IllegalStateException ex ) {
+            LOGGER.error( "IllegalStateException: " + ex.getMessage() );
         } catch ( URISyntaxException ex ) {
             LOGGER.error( "Invalid URL  made: " + ex.getMessage() );
         }
@@ -118,34 +124,25 @@ public class CactusChemical {
      * @return
      */
     private HttpEntity getPlainTextResponse( URI uri ) {
-
-        HttpResponse response = getResponse( uri );
-        if ( response != null ) {
+        HttpGet request = null;
+        try {
+            request = new HttpGet( uri );
+            HttpResponse response = client.execute( request );
             String contentTypeValue = response.getEntity().getContentType().getValue();
 
             if ( contentTypeValue.equals( "text/plain; charset=UTF-8" ) ) {
                 return response.getEntity();
             } else {
+                request.abort();
                 // no matches found
                 return null;
             }
-        }
-        return null;
-    }
-
-    /**
-     * Executes the requested URI and returns the response
-     * @param uri
-     * @return
-     */
-    public HttpResponse getResponse( URI uri ) {
-        try {
-            HttpRequestBase request = new HttpGet( uri );
-            return client.execute( request );
         } catch ( ClientProtocolException ex ) {
             LOGGER.error( "Could not execute request: " + ex.getMessage() );
         } catch ( IOException ex ) {
             LOGGER.error( "Could not execute request: " + ex.getMessage() );
+        } finally {
+            request.abort();
         }
         return null;
     }
@@ -154,14 +151,21 @@ public class CactusChemical {
      * Queries the supplied name to find the IUPAC name. If the IUPAC name is found
      * the method returns it. An empty string is return if nothing is found
      */
-    public String getIUPACEName( String name ) {
+    public String getIUPACName( String name ) {
         return "IUPAC";
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        client.getConnectionManager().shutdown();
+
     }
 
     public static void main( String[] args ) {
         List<String> names = CactusChemical.getInstance().getNames( "Adenosine Diphosphate" );
         for ( String string : names ) {
-            System.out.println( string  );
+            System.out.println( string );
         }
     }
 }
