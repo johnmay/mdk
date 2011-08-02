@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
@@ -26,7 +25,6 @@ import org.openscience.cdk.tools.manipulator.AtomContainerSetManipulator;
 
 import lpsolve.LpSolve;
 import lpsolve.LpSolveException;
-import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IElement;
 
 /**
