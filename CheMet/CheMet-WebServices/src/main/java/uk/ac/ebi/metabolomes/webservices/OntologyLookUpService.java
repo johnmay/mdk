@@ -39,7 +39,7 @@ public class OntologyLookUpService {
     }
 
     public Set<CandidateEntry> getRankedCandidates(String query, String ontology, Integer maxRes) throws ServiceException, RemoteException {
-        Set<CandidateEntry> res = decider.decideTissueCandidate(query, this.getTermsByName(query, ontology));
+        Set<CandidateEntry> res = decider.decideBestCandidate(query, this.getTermsByName(query, ontology));
         if(maxRes!=null && res.size()>maxRes) {
             int element=1;
             for(CandidateEntry entry : res) {
@@ -52,7 +52,7 @@ public class OntologyLookUpService {
     }
     
     public Set<CandidateEntry> getRankedCandidates(String query, Integer maxRes) throws ServiceException, RemoteException {
-        Set<CandidateEntry> res = decider.decideTissueCandidate(query, this.getTermsPrefixed(query));
+        Set<CandidateEntry> res = decider.decideBestCandidate(query, this.getTermsPrefixed(query));
         if(maxRes!=null && res.size()>maxRes) {
             int element=1;
             for(CandidateEntry entry : res) {

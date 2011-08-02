@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -275,6 +277,25 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
             logger.error("Problems with structure search",ex);
         }
         return res;
+    }
+
+    public Set<String> getNamesAndSynonyms(String chebiID) {
+        try {
+            Set<String> synsAndNames = new HashSet<String>();
+            Entity entity = client.getCompleteEntity(chebiID);
+            List<DataItem> syns = entity.getSynonyms();
+            for (DataItem dataItem : syns) {
+                synsAndNames.add(dataItem.getData());
+            }
+            for (DataItem dataItem : entity.getIupacNames()) {
+                synsAndNames.add(dataItem.getData());
+            }
+            synsAndNames.add(entity.getChebiAsciiName());
+            return synsAndNames;
+        } catch(ChebiWebServiceFault_Exception ex) {
+            logger.error("Problem with chebi search",ex);
+        }
+        return null;
     }
 
 
