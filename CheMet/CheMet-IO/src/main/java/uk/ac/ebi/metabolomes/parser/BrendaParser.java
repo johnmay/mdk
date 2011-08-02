@@ -9,6 +9,9 @@ import uk.ac.ebi.metabolomes.bioObjects.*;
 
 public class BrendaParser {
 
+    // OLD BRENDA PARSER, just left here for copy-paste of some useful regexp,
+    // if any.
+    /*
 	private String organism;
 	private String version;
 	private int taxid;
@@ -621,5 +624,5 @@ public class BrendaParser {
 	}
 	public String getBrendaVersion() {
 		return this.version;
-	}
+	}*/
 }
