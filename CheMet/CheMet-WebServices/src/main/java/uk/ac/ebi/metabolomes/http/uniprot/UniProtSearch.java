@@ -89,8 +89,10 @@ public class UniProtSearch {
     public static void main( String[] args ) throws IOException {
 
         List params = new ArrayList<NameValuePair>();
-    //    UniProtSearchQuery query = new UniProtSearchQuery("");
-        params.add( new BasicNameValuePair( "query" , "" ) );
+
+        UniProtSearchQuery query = new UniProtSearchQuery( "" );
+        query.setAndEnzymeCommissionNumber( "1.1.1.1" );
+        params.add( new BasicNameValuePair( "query" , query.buildQuery() ) );
         params.add( new BasicNameValuePair( "format" , "tab" ) );
         params.add( new BasicNameValuePair( "columns" , "id,ec" ) );
         HttpEntity entity = UniProtSearch.getInstance().search( params );
@@ -98,8 +100,16 @@ public class UniProtSearch {
 
         String[] values = null;
         while ( ( values = reader.readNext() ) != null ) {
-            System.out.println(  Arrays.asList(values) );
+            System.out.println( Arrays.asList( values ) );
         }
 
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        client.getConnectionManager().shutdown();
+    }
+
+
 }
