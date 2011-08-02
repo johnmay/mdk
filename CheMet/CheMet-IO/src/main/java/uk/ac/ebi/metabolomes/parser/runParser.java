@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.ArrayList;
-import com.wcohen.ss.*;
+//import com.wcohen.ss.*;
 import uk.ac.ebi.metabolomes.bioObjects.*;
 /**
  * @author pmoreno
@@ -20,7 +20,7 @@ public class runParser {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) throws IOException {
+	/*public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		String brendaFile = args[0];
 		String org = args[1];
@@ -92,6 +92,6 @@ public class runParser {
 		System.out.println("Number of cits with pubmedId:\t"+hasPubMedID);
 		metabsLogCons.close();
 		protLinksLog.close();
-	}
+	}*/
 
 }
