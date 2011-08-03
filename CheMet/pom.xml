@@ -13,14 +13,12 @@
         <module>CheMet-WebServices</module>
         <module>CheMet-Visualisation</module>
     </modules>
-
-
     <repositories>
         <repository>
             <id>maven-repo</id>
             <url>http://repo1.maven.org/maven2</url>
         </repository>
-           <repository>
+        <repository>
             <id>java.net</id>
             <url>http://download.java.net/maven/2/</url>
         </repository>
@@ -36,6 +34,11 @@
             <id>ebi-repo</id>
             <name>EBI maven repository</name>
             <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+        </repository>
+        <repository>
+            <id>maven-restlet</id>
+            <name>Public online Restlet repository</name>
+            <url>http://maven.restlet.org</url>
         </repository>
         <repository>
             <releases>
