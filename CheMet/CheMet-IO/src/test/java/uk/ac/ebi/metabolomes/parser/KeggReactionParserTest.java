@@ -37,7 +37,7 @@ public class KeggReactionParserTest {
     @Before
     public void setUp() {
         // stream of file reopened to test the methods on fresh stream
-        stream = ClassLoader.getSystemResourceAsStream( "uk/ac/ebi/metabolomes/parser/KEGGReaction_R00001-R00017.txt" );
+        stream = getClass().getResourceAsStream( "data/KEGGReaction_R00001-R00017.txt" );
         parser = new KeggReactionParser( stream );
     }
 
