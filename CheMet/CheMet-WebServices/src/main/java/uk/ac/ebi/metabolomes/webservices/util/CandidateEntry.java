@@ -16,6 +16,7 @@ package uk.ac.ebi.metabolomes.webservices.util;
         private String id;
         private String desc;
         private Integer distance;
+        private String comment;
 
         /**
          * @return the id
@@ -65,6 +66,17 @@ package uk.ac.ebi.metabolomes.webservices.util;
                 return 0;
             return this.distance.compareTo(o.distance);
         }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    /**
+     * @return the comment
+     */
+    public String getComment() {
+        return comment;
+    }
 
 
     }
