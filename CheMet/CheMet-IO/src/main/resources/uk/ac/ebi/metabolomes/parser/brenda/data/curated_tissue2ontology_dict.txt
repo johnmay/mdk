@@ -1,0 +1,1282 @@
+# This file includes the links from free text to ontology terms
+# for the tissues and cell types used in brenda.
+# Whenever possible, a brenda id is assigned.
+# This is mainly for human. Other tissues should be added
+# There can be more than one Ontology ID per term.
+# This should go in the CrossReferences in BWH.
+# ID            Tissue/Cell     Source  LevDist HowWasObtained
+BTO:0002947	1102 cell	***	***	SourceOntology
+BTO:0002964	1182 cell	***	***	SourceOntology
+BTO:0002220	15pc3 cell	***	***	SourceOntology
+BTO:0002802	1f6 cell	***	***	SourceOntology
+BTO:0002636	1haeo cell	***	***	SourceOntology
+BTO:0004035	222 cell	***	***	SourceOntology
+BTO:0002999	22rv1 cell	***	***	SourceOntology
+BTO:0000007	293 cell	***	0	OLS_dist
+BTO:0004321	2bn cell	***	***	SourceOntology
+BTO:0003137	5637 cell	***	***	SourceOntology
+BTO:0001969	697 cell	***	***	SourceOntology
+BTO:0000016	a-172 cell	***	***	SourceOntology
+BTO:0002549	a-2780 cell	***	***	SourceOntology
+BTO:0004246	a-364 cell	***	***	SourceOntology
+BTO:0003770	a-427 cell	***	***	SourceOntology
+BTO:0000017	a-431 cell	***	***	SourceOntology
+BTO:0003769	a-498 cell	***	***	SourceOntology
+BTO:0000018	a-549 cell	***	***	SourceOntology
+BTO:0003768	a-673 cell	***	***	SourceOntology
+BTO:0000020	abdomen	***	***	SourceOntology
+BTO:0003421	ach-3p cell	***	***	SourceOntology
+BTO:0003846	achn cell	***	***	SourceOntology
+BTO:0001545	acute myeloid leukemia cell	***	***	SourceOntology
+BTO:0004037	ad-10 cell	***	***	SourceOntology
+BTO:0000604	adenocarcinoma cell	***	***	SourceOntology
+BTO:0000167	adenocarcinoma cell line	***	***	SourceOntology
+BTO:0000040	adenohypophysis	***	***	SourceOntology
+BTO:0000178	adenoma cell	***	***	SourceOntology
+BTO:0003849	adenosquamous carcinoma cell	***	***	SourceOntology
+BTO:0004326	adf cell	***	***	SourceOntology
+BTO:0000443	adipocyte	***	***	SourceOntology
+BTO:0000441	adipose	***	0	OLS_dist
+BTO:0001487	adipose tissue	***	***	SourceOntology
+BTO:0000045	adrenal cortex	***	***	SourceOntology
+BTO:0000047	adrenal gland	***	***	SourceOntology
+BTO:0000049	adrenal medulla	***	***	SourceOntology
+BTO:0002666	adult stem cell	***	***	SourceOntology
+BTO:0001007	ags cell	***	***	SourceOntology
+BTO:0003606	airway fluid	***	***	SourceOntology
+BTO:0001660	airway smooth muscle	***	0	OLS_dist
+BTO:0002006	alva-41 cell	***	***	SourceOntology
+BTO:0000395	alveolar cell	***	***	SourceOntology
+BTO:0000538	alveolar cell type ii	***	***	SourceOntology
+BTO:0003511	alveolar epithelium	***	***	SourceOntology
+BTO:0000802	alveolar macrophage	***	***	SourceOntology
+BTO:0004046	alveolar mucosa	***	***	SourceOntology
+BTO:0002543	alveolar wall	***	***	SourceOntology
+BTO:0000060	alveolus	***	***	SourceOntology
+BTO:0000590	alzheimer specific cell type	***	***	SourceOntology
+BTO:0001663	ameloblast	***	***	SourceOntology
+BTO:0000066	amniocyte	***	***	SourceOntology
+BTO:0000065	amnion	***	***	SourceOntology
+BTO:0000068	amniotic fluid	***	***	SourceOntology
+BTO:0001042	amygdala	***	***	SourceOntology
+BTO:0002374	anaplastic astrocytoma cell	***	***	SourceOntology
+BTO:0002983	anaplastic oligodendroglioma cell	***	***	SourceOntology
+BTO:0000040	anterior pituitary gland	***	0	OLS_dist
+BTO:0000135	aorta	***	***	SourceOntology
+BTO:0000394	aorta endothelium	***	***	SourceOntology
+BTO:0001159	aorta thoracica smooth muscle	***	***	SourceOntology
+BTO:0003245	aortic endothelial cell	***	***	SourceOntology
+BTO:0001685	aortic smooth muscle	***	***	SourceOntology
+BTO:0004577	aortic smooth muscle cell	***	***	SourceOntology
+BTO:0001162	apocrine gland	***	***	SourceOntology
+BTO:0001928	ar4-2j cell	***	***	SourceOntology
+BTO:0003357	arpe cell	***	***	SourceOntology
+BTO:0002335	arpe-19 cell	***	***	SourceOntology
+BTO:0001997	arteriole	***	***	SourceOntology
+BTO:0000573	artery	***	***	SourceOntology
+BTO:0002009	artery wall	***	***	SourceOntology
+BTO:0001572	articular cartilage	***	***	SourceOntology
+BTO:0000091	ascites	***	***	SourceOntology
+BTO:0000091	ascites fluid	***	0	OLS_dist
+BTO:0000094	ascites tumor cell	***	***	SourceOntology
+BTO:0001864	aspc-1 cell	***	***	SourceOntology
+BTO:0000099	astrocyte	***	***	SourceOntology
+BTO:0000100	astrocytoma cell	***	***	SourceOntology
+BTO:0000903	atrium	***	***	SourceOntology
+BTO:0003696	atrkd cell	***	***	SourceOntology
+BTO:0000576	b-16 cell	***	***	SourceOntology
+BTO:0001528	b-lymphoblast	***	***	SourceOntology
+BTO:0002878	b-lymphoblastoid cell	***	***	SourceOntology
+BTO:0002062	b-lymphoblastoid cell line	***	***	SourceOntology
+BTO:0000776	b-lymphocyte	***	***	SourceOntology
+BTO:0003247	baec cell	***	***	SourceOntology
+BTO:0001148	ball-1 cell	***	***	SourceOntology
+BTO:0001298	basal cell carcinoma cell	***	***	SourceOntology
+BTO:0000129	basophil	***	***	SourceOntology
+BTO:0002720	bc-1 cell	***	***	SourceOntology
+BTO:0002722	bc-3 cell	***	***	SourceOntology
+BTO:0002727	bcbl-1 cell	***	***	SourceOntology
+BTO:0002923	beas-2b cell	***	***	SourceOntology
+BTO:0004050	bel-7402 cell	***	***	SourceOntology
+BTO:0000798	bewo cell	***	***	SourceOntology
+BTO:0000177	bg-1 cell	***	***	SourceOntology
+BTO:0001131	bhk cell	***	***	SourceOntology
+BTO:0003429	bic-1 cell	***	***	SourceOntology
+BTO:0000121	bile	***	***	SourceOntology
+BTO:0000122	bile duct	***	***	SourceOntology
+BTO:0000417	bile duct epithelium	***	***	SourceOntology
+BTO:0000122	biliary duct	***	0	OLS_dist
+BTO:0001931	bjab cell	***	***	SourceOntology
+BTO:0001934	bl-60 cell	***	***	SourceOntology
+BTO:0000123	bladder	***	***	SourceOntology
+BTO:0000123	bladder carcinoma cell	***	0	OLS_dist
+BTO:0002816	bladder transitional cell carcinoma cell	***	***	SourceOntology
+BTO:0000125	blast cell	***	***	SourceOntology
+BTO:0000089	blood	***	***	SourceOntology
+BTO:0000574	blood cell	***	0	OLS_dist
+BTO:0000102	blood clot	***	***	SourceOntology
+BTO:0000131	blood plasma	***	***	SourceOntology
+BTO:0000132	blood platelet	***	***	SourceOntology
+BTO:0000133	blood serum	***	***	SourceOntology
+BTO:0001102	blood vessel	***	***	SourceOntology
+BTO:0000766	blood vessel endothelium	***	***	SourceOntology
+BTO:0003620	bmmc cell	***	***	SourceOntology
+BTO:0003351	bn17 cell	***	***	SourceOntology
+BTO:0000140	bone	***	***	SourceOntology
+BTO:0000372	bone cancer cell	***	***	SourceOntology
+BTO:0000374	bone cell line	***	***	SourceOntology
+BTO:0000141	bone marrow	***	***	SourceOntology
+BTO:0001323	bph-1 cell	***	***	SourceOntology
+BTO:0000142	brain	***	***	SourceOntology
+BTO:0001573	brain cancer cell	***	***	SourceOntology
+BTO:0000233	brain cortex	***	0	OLS_dist
+BTO:0000146	brain stem	***	***	SourceOntology
+BTO:0001573	brain tumor cell	***	0	OLS_dist
+BTO:0003754	bre-169 cell	***	***	SourceOntology
+BTO:0000149	breast	***	***	SourceOntology
+BTO:0000150	breast adenocarcinoma cell	***	0	OLS_dist
+BTO:0001912	breast adenocarcinoma cell line	***	***	SourceOntology
+BTO:0000150	breast cancer cell	***	***	SourceOntology
+BTO:0000356	breast cancer cell line	***	***	SourceOntology
+BTO:0000150	breast carcinoma cell	***	0	OLS_dist
+BTO:0000816	breast cell line	***	***	SourceOntology
+BTO:0002844	breast invasive ductal carcinoma cell	***	***	SourceOntology
+BTO:0001405	bronchial cancer cell	***	***	SourceOntology
+BTO:0002922	bronchial epithelial cell	***	***	SourceOntology
+BTO:0002022	bronchial epithelial cell line	***	***	SourceOntology
+BTO:0001845	bronchial epithelium	***	***	SourceOntology
+BTO:0001846	bronchial mucosa	***	***	SourceOntology
+BTO:0001340	bronchus	***	***	SourceOntology
+BTO:0001932	bt-474 cell	***	***	SourceOntology
+BTO:0002548	bt-549 cell	***	***	SourceOntology
+BTO:0003833	buccal mucosa	***	***	SourceOntology
+BTO:0000164	burkitt lymphoma cell	***	***	SourceOntology
+BTO:0001861	bxpc-3 cell	***	***	SourceOntology
+BTO:0003567	c-3842 cell	***	***	SourceOntology
+BTO:0003700	c1r-b27 cell	***	***	SourceOntology
+BTO:0000165	c2c12 cell	***	***	SourceOntology
+BTO:0003451	c8pa cell	***	***	SourceOntology
+BTO:0003464	ca-hpv-10 cell	***	***	SourceOntology
+BTO:0000195	caco-2 cell	***	***	SourceOntology
+BTO:0003204	caki-1 cell	***	***	SourceOntology
+BTO:0000921	cal-27 cell	***	***	SourceOntology
+BTO:0000945	cal-51 cell	***	***	SourceOntology
+BTO:0002235	calu-6 cell	***	***	SourceOntology
+BTO:0004254	cancer stem cell	***	***	SourceOntology
+BTO:0000814	caov-3 cell	***	***	SourceOntology
+BTO:0002744	capan-1 cell	***	***	SourceOntology
+BTO:0002745	capan-2 cell	***	***	SourceOntology
+BTO:0000176	carcinoma cell	***	***	SourceOntology
+BTO:0000199	cardiac muscle	***	***	SourceOntology
+BTO:0001539	cardiac myocyte	***	***	SourceOntology
+BTO:0001539	cardiomyocyte	***	0	OLS_dist
+BTO:0000088	cardiovascular system	***	***	SourceOntology
+BTO:0000168	carotid artery	***	***	SourceOntology
+BTO:0000206	cartilage	***	***	SourceOntology
+BTO:0003109	caski cell	***	***	SourceOntology
+BTO:0000211	caudate nucleus	***	***	SourceOntology
+BTO:0000212	caudate putamen	***	***	SourceOntology
+BTO:0003251	ccd-841 cell	***	***	SourceOntology
+BTO:0000736	ccrf-cem cell	***	***	SourceOntology
+BTO:0000214	cell culture	***	***	SourceOntology
+BTO:0000221	cell suspension culture	***	***	SourceOntology
+BTO:0000225	cem cell	***	***	SourceOntology
+BTO:0002142	cem-vlb100 cell	***	***	SourceOntology
+BTO:0000227	central nervous system	***	***	SourceOntology
+BTO:0000232	cerebellum	***	***	SourceOntology
+BTO:0000233	cerebral cortex	***	***	SourceOntology
+BTO:0000236	cerebral white matter	***	***	SourceOntology
+BTO:0000237	cerebrospinal fluid	***	***	SourceOntology
+BTO:0000239	cerebrum	***	0	OLS_dist
+BTO:0003165	cervical adenocarcinoma cell	***	***	SourceOntology
+BTO:0001967	cervical cancer cell line	***	***	SourceOntology
+BTO:0000180	cervical carcinoma cell	***	***	SourceOntology
+BTO:0000241	cervical epithelium	***	***	SourceOntology
+BTO:0000242	cervical mucus	***	***	SourceOntology
+BTO:0004223	cervical squamous cell carcinoma cell	***	***	SourceOntology
+BTO:0002212	cervical squamous cell carcinoma cell line	***	***	SourceOntology
+BTO:0003632	cervicovaginal fluid	***	***	SourceOntology
+BTO:0004738	cfpac-1 cell	***	***	SourceOntology
+BTO:0002049	chang cell	***	***	SourceOntology
+BTO:0001068	chief cell	***	0	OLS_dist
+BTO:0004061	chl-1 cell	***	***	SourceOntology
+BTO:0000246	cho cell	***	***	SourceOntology
+BTO:0000457	cho-k1 cell	***	***	SourceOntology
+BTO:0001326	cholangiocarcinoma cell	***	***	SourceOntology
+BTO:0000248	chondroclast	***	***	SourceOntology
+BTO:0000249	chondrocyte	***	***	SourceOntology
+BTO:0000250	chondrosarcoma cell	***	***	SourceOntology
+BTO:0001574	chondrosarcoma cell line	***	***	SourceOntology
+BTO:0001576	choriocarcinoma cell	***	***	SourceOntology
+BTO:0000252	chorion	***	***	SourceOntology
+BTO:0001161	chorionic villus	***	***	SourceOntology
+BTO:0000258	choroid plexus	***	***	SourceOntology
+BTO:0002989	chp-134 cell	***	***	SourceOntology
+BTO:0001544	chronic myeloid leukemia cell	***	***	SourceOntology
+BTO:0000260	ciliary body	***	***	SourceOntology
+BTO:0003340	cl-3 cell	***	***	SourceOntology
+BTO:0002787	clear cell adenocarcinoma cell	***	***	SourceOntology
+BTO:0002020	clitoris	***	***	SourceOntology
+BTO:0000267	cochlea	***	***	SourceOntology
+BTO:0000761	collecting duct	***	***	SourceOntology
+BTO:0002568	colo-201 cell	***	***	SourceOntology
+BTO:0000179	colo-205 cell	***	***	SourceOntology
+BTO:0002047	colo-320 cell	***	***	SourceOntology
+BTO:0003440	colo-357 cell	***	***	SourceOntology
+BTO:0000269	colon	***	***	SourceOntology
+BTO:0003633	colon adenoma cell	***	***	SourceOntology
+BTO:0000586	colon cancer cell	***	0	OLS_dist
+BTO:0000586	colon carcinoma cell	***	0	OLS_dist
+BTO:0000272	colon transversum	***	***	SourceOntology
+BTO:0000032	colonic adenocarcinoma cell	***	***	SourceOntology
+BTO:0000586	colonic cancer cell	***	***	SourceOntology
+BTO:0000797	colonic cancer cell line	***	***	SourceOntology
+BTO:0000586	colonic carcinoma cell	***	0	OLS_dist
+BTO:0004297	colonic epithelial cell	***	***	SourceOntology
+BTO:0001709	colonic epithelium	***	***	SourceOntology
+BTO:0000271	colonic mucosa	***	***	SourceOntology
+BTO:0000275	colonocyte	***	***	SourceOntology
+BTO:0000035	colorectal adenocarcinoma cell	***	***	SourceOntology
+BTO:0001914	colorectal adenocarcinoma cell line	***	***	SourceOntology
+BTO:0001612	colorectal adenoma cell	***	***	SourceOntology
+BTO:0001615	colorectal cancer cell	***	***	SourceOntology
+BTO:0001616	colorectal cancer cell line	***	***	SourceOntology
+BTO:0002435	colorectal mucosa	***	***	SourceOntology
+BTO:0000276	colostrum	***	***	SourceOntology
+BTO:0000278	commercial preparation	***	***	SourceOntology
+BTO:0000286	cornea	***	***	SourceOntology
+BTO:0004298	corneal epithelial cell	***	***	SourceOntology
+BTO:0000287	corneal epithelium	***	***	SourceOntology
+BTO:0001943	corneocyte	***	***	SourceOntology
+BTO:0000288	corona	***	***	SourceOntology
+BTO:0005101	coronary artery smooth muscle cell	***	***	SourceOntology
+BTO:0000615	corpus callosum	***	***	SourceOntology
+BTO:0002017	corpus cavernosum	***	0	OLS_dist
+BTO:0002018	corpus cavernosum clitoridis	***	***	SourceOntology
+BTO:0000292	corpus luteum	***	***	SourceOntology
+BTO:0004055	cos cell	***	***	SourceOntology
+BTO:0001538	cos-1 cell	***	***	SourceOntology
+BTO:0000298	cos-7 cell	***	***	SourceOntology
+BTO:0000316	culture medium	***	***	SourceOntology
+BTO:0002217	culture supernatant	***	***	SourceOntology
+BTO:0000318	cv-1 cell	***	***	SourceOntology
+BTO:0000320	cyst	***	***	SourceOntology
+BTO:0000308	cytotoxic t-lymphocyte cell line	***	***	SourceOntology
+BTO:0000322	cytotrophoblast	***	***	SourceOntology
+BTO:0002367	cytotrophoblastic cell	***	***	SourceOntology
+BTO:0004075	d1-hek-293 cell	***	***	SourceOntology
+BTO:0001550	dami cell	***	***	SourceOntology
+BTO:0001561	daudi cell	***	***	SourceOntology
+BTO:0002830	db-1 cell	***	***	SourceOntology
+BTO:0002394	dc-3f cell	***	***	SourceOntology
+BTO:0002395	dc-3f/adx cell	***	***	SourceOntology
+BTO:0001360	decidua	***	***	SourceOntology
+BTO:0000334	decidua parietalis	***	***	SourceOntology
+BTO:0002042	dendritic cell	***	***	SourceOntology
+BTO:0000339	dental pulp	***	***	SourceOntology
+BTO:0002496	dentate gyrus	***	***	SourceOntology
+BTO:0003453	dentin	***	***	SourceOntology
+BTO:0000294	dermis	***	***	SourceOntology
+BTO:0000058	digestive tract	***	0	OLS_dist
+BTO:0000391	dld-1 cell	***	***	SourceOntology
+BTO:0004333	do11.10 cell	***	***	SourceOntology
+BTO:0003638	dov-13 cell	***	***	SourceOntology
+BTO:0001332	du-145 cell	***	***	SourceOntology
+BTO:0000365	duodenum	***	***	SourceOntology
+BTO:0000396	eahy 926 cell	***	***	SourceOntology
+BTO:0002043	ecv-304 cell	***	***	SourceOntology
+BTO:0002033	efo-27 cell	***	***	SourceOntology
+BTO:0000373	ehrlich ascites carcinoma cell	***	***	SourceOntology
+BTO:0004265	ej cell	***	***	SourceOntology
+BTO:0002618	ejaculatory duct epithelium	***	***	SourceOntology
+BTO:0004077	ekvx cell	***	***	SourceOntology
+BTO:0000379	embryo	***	***	SourceOntology
+BTO:0002733	embryonic kidney cell line	***	***	SourceOntology
+BTO:0001488	endocrine gland	***	***	SourceOntology
+BTO:0004092	endogenous progenitor cell	***	***	SourceOntology
+BTO:0000658	endometrial adenocarcinoma cell	***	0	OLS_dist
+BTO:0000658	endometrial carcinoma cell	***	0	OLS_dist
+BTO:0001996	endometrial cell line	***	***	SourceOntology
+BTO:0000194	endometrioid carcinoma cell	***	***	SourceOntology
+BTO:0001176	endothelial cell	***	***	SourceOntology
+BTO:0001519	endothelial cell line	***	***	SourceOntology
+BTO:0000393	endothelium	***	***	SourceOntology
+BTO:0000398	enterocyte	***	***	SourceOntology
+BTO:0002405	eol-1 cell	***	***	SourceOntology
+BTO:0004095	eont cell	***	***	SourceOntology
+BTO:0000399	eosinophil	***	***	SourceOntology
+BTO:0003454	eosinophilic myelocyte	***	***	SourceOntology
+BTO:0001724	ependymal cell	***	0	OLS_dist
+BTO:0001470	epidermal cell	***	***	SourceOntology
+BTO:0000404	epidermis	***	***	SourceOntology
+BTO:0001289	epidermoid carcinoma cell	***	0	OLS_dist
+BTO:0000408	epididymis	***	***	SourceOntology
+BTO:0000176	epithelial cancer cell	***	0	OLS_dist
+BTO:0000414	epithelial cell	***	***	SourceOntology
+BTO:0000416	epithelium	***	***	SourceOntology
+BTO:0001571	erythroblast	***	***	SourceOntology
+BTO:0000424	erythrocyte	***	***	SourceOntology
+BTO:0002731	erythroid cell	***	***	SourceOntology
+BTO:0000426	erythroleukemia cell	***	***	SourceOntology
+BTO:0001577	esophageal cancer cell	***	***	SourceOntology
+BTO:0002859	esophageal mucosa	***	***	SourceOntology
+BTO:0002861	esophageal squamous cell carcinoma cell	***	***	SourceOntology
+BTO:0000959	esophagus	***	***	SourceOntology
+BTO:0004255	ewing's family tumor cell	***	***	SourceOntology
+BTO:0000765	exocrine gland	***	***	SourceOntology
+BTO:0002366	extravillous trophoblast	***	***	SourceOntology
+BTO:0000439	eye	***	***	SourceOntology
+BTO:0003233	fadu cell	***	***	SourceOntology
+BTO:0002242	fallopian tube	***	0	OLS_dist
+BTO:0000440	feces	***	***	SourceOntology
+BTO:0000083	female reproductive system	***	***	SourceOntology
+BTO:0001284	femur	***	***	SourceOntology
+BTO:0000449	fetus	***	***	SourceOntology
+BTO:0000676	fibroadenoma cell	***	***	SourceOntology
+BTO:0000452	fibroblast	***	***	SourceOntology
+BTO:0000453	fibroblast cell line	***	***	SourceOntology
+BTO:0004060	fibroblast-like synoviocyte	***	***	SourceOntology
+BTO:0000459	fibrosarcoma cell	***	***	SourceOntology
+BTO:0000460	fibrosarcoma cell line	***	***	SourceOntology
+BTO:0003130	fl cell	***	***	SourceOntology
+BTO:0002518	fl-18 cell	***	***	SourceOntology
+BTO:0002943	fo-1 cell	***	***	SourceOntology
+BTO:0001888	follicular thyroid cancer cell	***	***	SourceOntology
+BTO:0001113	foreskin	***	0	OLS_dist
+BTO:0002245	foreskin fibroblast cell line	***	***	SourceOntology
+BTO:0001263	friend erythroleukemia cell line	***	***	SourceOntology
+BTO:0000484	frontal cortex	***	0	OLS_dist
+BTO:0000484	frontal lobe	***	***	SourceOntology
+BTO:0003877	g-292 cell	***	***	SourceOntology
+BTO:0001584	g-361 cell	***	***	SourceOntology
+BTO:0002586	g-401 cell	***	***	SourceOntology
+BTO:0000678	g-402 cell	***	***	SourceOntology
+BTO:0000493	gall bladder	***	***	SourceOntology
+BTO:0001449	gall bladder epithelium	***	***	SourceOntology
+BTO:0000497	ganglion	***	***	SourceOntology
+BTO:0000036	gastric adenocarcinoma cell	***	***	SourceOntology
+BTO:0000498	gastric cancer cell	***	***	SourceOntology
+BTO:0000787	gastric cancer cell line	***	***	SourceOntology
+BTO:0000036	gastric carcinoma cell	***	0	OLS_dist
+BTO:0000500	gastric epithelium	***	***	SourceOntology
+BTO:0000502	gastric fundus	***	***	SourceOntology
+BTO:0000503	gastric gland	***	***	SourceOntology
+BTO:0000501	gastric juice	***	***	SourceOntology
+BTO:0001308	gastric mucosa	***	***	SourceOntology
+BTO:0001329	gastrinoma cell	***	***	SourceOntology
+BTO:0001533	gastrointestinal cancer cell	***	***	SourceOntology
+BTO:0004111	gastrointestinal stromal tumor cell	***	***	SourceOntology
+BTO:0000511	gastrointestinal tract	***	***	SourceOntology
+BTO:0000535	germ cell	***	***	SourceOntology
+BTO:0000809	germ cell cancer cell	***	***	SourceOntology
+BTO:0003671	germinal center	***	***	SourceOntology
+BTO:0000969	giant cell tumor cell of bone	***	0	OLS_dist
+BTO:0002991	glandular epithelium	***	***	SourceOntology
+BTO:0002385	glc-4 cell	***	***	SourceOntology
+BTO:0002386	glc-4/adr cell	***	***	SourceOntology
+BTO:0004113	glc-82 cell	***	***	SourceOntology
+BTO:0002606	glial cell	***	***	SourceOntology
+BTO:0000527	glioblastoma cell	***	***	SourceOntology
+BTO:0001530	glioblastoma cell line	***	***	SourceOntology
+BTO:0000526	glioma cell	***	***	SourceOntology
+BTO:0000711	glioma cell line	***	***	SourceOntology
+BTO:0003592	gm00037 cell	***	***	SourceOntology
+BTO:0003591	gm00637 cell	***	***	SourceOntology
+BTO:0000534	gonad	***	***	SourceOntology
+BTO:0000539	granulocyte	***	***	SourceOntology
+BTO:0000542	granulosa cell	***	***	SourceOntology
+BTO:0002708	gt1-7 cell	***	***	SourceOntology
+BTO:0000545	gut	***	***	SourceOntology
+BTO:0000956	gut epithelium	***	***	SourceOntology
+BTO:0002589	h-7721 cell	***	***	SourceOntology
+BTO:0000429	h69ar cell	***	***	SourceOntology
+BTO:0001944	h9 cell	***	***	SourceOntology
+BTO:0002429	ha22t/vgh cell	***	***	SourceOntology
+BTO:0004115	hac cell	***	***	SourceOntology
+BTO:0003895	haca-4 cell	***	***	SourceOntology
+BTO:0000552	hacat cell	***	***	SourceOntology
+BTO:0000554	hair follicle	***	***	SourceOntology
+BTO:0000557	harderian gland	***	***	SourceOntology
+BTO:0002522	hbl-1 cell	***	***	SourceOntology
+BTO:0002531	hbl-10 cell	***	***	SourceOntology
+BTO:0002533	hbl-11 cell	***	***	SourceOntology
+BTO:0002527	hbl-5 cell	***	***	SourceOntology
+BTO:0002723	hbl-6 cell	***	***	SourceOntology
+BTO:0002529	hbl-8 cell	***	***	SourceOntology
+BTO:0003031	hca-7 cell	***	***	SourceOntology
+BTO:0003323	hcc-1937 cell	***	***	SourceOntology
+BTO:0003322	hcc-2998 cell	***	***	SourceOntology
+BTO:0002818	hce-7 cell	***	***	SourceOntology
+BTO:0004017	hcfmk-1 cell	***	***	SourceOntology
+BTO:0003261	hcn-1a cell	***	***	SourceOntology
+BTO:0002254	hct-116 cell	***	***	SourceOntology
+BTO:0002201	hct-15 cell	***	***	SourceOntology
+BTO:0002255	hct-8 cell	***	***	SourceOntology
+BTO:0000282	head	***	***	SourceOntology
+BTO:0000562	heart	***	***	SourceOntology
+BTO:0000862	heart ventricle	***	***	SourceOntology
+BTO:0000007	hek-293 cell	***	***	SourceOntology
+BTO:0002974	hek-293-ebna cell	***	***	SourceOntology
+BTO:0002524	hek-293a cell	***	***	SourceOntology
+BTO:0003468	hek-293b2 cell	***	***	SourceOntology
+BTO:0003032	hek-293f cell	***	***	SourceOntology
+BTO:0002181	hek-293t cell	***	***	SourceOntology
+BTO:0003263	hek-ad293 cell	***	***	SourceOntology
+BTO:0000565	hel cell	***	***	SourceOntology
+BTO:0000567	hela cell	***	***	SourceOntology
+BTO:0003602	hela gfp-histone h2b cell	***	***	SourceOntology
+BTO:0003588	hela-magi cell	***	***	SourceOntology
+BTO:0000568	hela-s3 cell	***	***	SourceOntology
+BTO:0000574	hematopoietic cell	***	***	SourceOntology
+BTO:0000725	hematopoietic stem cell	***	***	SourceOntology
+BTO:0000976	hep-2 cell	***	***	SourceOntology
+BTO:0000972	hep-3b cell	***	***	SourceOntology
+BTO:0000599	hep-g2 cell	***	***	SourceOntology
+BTO:0003586	hep-g2/c3a cell	***	***	SourceOntology
+BTO:0002894	hepa-1c1c7 cell	***	***	SourceOntology
+BTO:0002741	hepatic stellate cell	***	***	SourceOntology
+BTO:0003897	hepatobiliary carcinoma cell	***	***	SourceOntology
+BTO:0000608	hepatocarcinoma cell	***	0	OLS_dist
+BTO:0000608	hepatocellular carcinoma cell	***	0	OLS_dist
+BTO:0000575	hepatocyte	***	***	SourceOntology
+BTO:0000608	hepatoma cell	***	***	SourceOntology
+BTO:0000578	hepatoma cell line	***	***	SourceOntology
+BTO:0002590	hey cell	***	***	SourceOntology
+BTO:0002582	hfl-1 cell	***	***	SourceOntology
+BTO:0003580	hgec cell	***	***	SourceOntology
+BTO:0000601	hippocampus	***	***	SourceOntology
+BTO:0003575	hk-2 cell	***	***	SourceOntology
+BTO:0000738	hl-60 cell	***	***	SourceOntology
+BTO:0001669	hmc-1 cell	***	***	SourceOntology
+BTO:0001998	hmcb cell	***	***	SourceOntology
+BTO:0002769	hme cell	***	***	SourceOntology
+BTO:0002828	hmec-1 cell	***	***	SourceOntology
+BTO:0002178	hmepc cell	***	***	SourceOntology
+BTO:0003884	hmt-3522 cell	***	***	SourceOntology
+BTO:0002821	hog cell	***	***	SourceOntology
+BTO:0003904	hos cell	***	***	SourceOntology
+BTO:0002555	hose cell	***	***	SourceOntology
+BTO:0004121	hpac cell	***	***	SourceOntology
+BTO:0003151	hpaec cell	***	***	SourceOntology
+BTO:0003905	hpenc cell	***	***	SourceOntology
+BTO:0004123	hs-5 cell	***	***	SourceOntology
+BTO:0002260	hs-68 cell	***	***	SourceOntology
+BTO:0002139	hs-683 cell	***	***	SourceOntology
+BTO:0002749	hs-74 cell	***	***	SourceOntology
+BTO:0003267	hs-766t cell	***	***	SourceOntology
+BTO:0003514	hsc 180 cell	***	***	SourceOntology
+BTO:0002026	hsc-4 cell	***	***	SourceOntology
+BTO:0003275	hsvec cell	***	***	SourceOntology
+BTO:0001282	ht-1080 cell	***	***	SourceOntology
+BTO:0003460	ht-115 cell	***	***	SourceOntology
+BTO:0003461	ht-1376 cell	***	***	SourceOntology
+BTO:0004010	ht-2 cell	***	***	SourceOntology
+BTO:0003037	ht-22 cell	***	***	SourceOntology
+BTO:0000182	ht-29 cell	***	***	SourceOntology
+BTO:0002268	htb-82 cell	***	***	SourceOntology
+BTO:0001109	htc-116 cell	***	***	SourceOntology
+BTO:0003574	htc-4 cell	***	***	SourceOntology
+BTO:0004125	htr-8/svneo cell	***	***	SourceOntology
+BTO:0003564	huaec cell	***	***	SourceOntology
+BTO:0001950	huh-7 cell	***	***	SourceOntology
+BTO:0003129	human brain microvascular endothelial cell	***	***	SourceOntology
+BTO:0003599	human lung microvascular endothelial cell	***	***	SourceOntology
+BTO:0001949	human umbilical vein endothelial cell	***	0	OLS_dist
+BTO:0001945	hut-78 cell	***	***	SourceOntology
+BTO:0001949	huvec cell	***	***	SourceOntology
+BTO:0001073	hypophysis	***	***	SourceOntology
+BTO:0000614	hypothalamus	***	***	SourceOntology
+BTO:0001896	idh4 cell	***	***	SourceOntology
+BTO:0002575	igrov-1 cell	***	***	SourceOntology
+BTO:0000618	ileal lavage	***	0	OLS_dist
+BTO:0000619	ileal mucosa	***	***	SourceOntology
+BTO:0002273	ileocecum	***	***	SourceOntology
+BTO:0000620	ileum	***	***	SourceOntology
+BTO:0002897	im-9 cell	***	***	SourceOntology
+BTO:0001229	imr-90 cell	***	***	SourceOntology
+BTO:0002558	iner-37 cell	***	***	SourceOntology
+BTO:0003861	inflammatory cell	***	***	SourceOntology
+BTO:0002135	ins-1 cell	***	***	SourceOntology
+BTO:0000632	insulinoma cell	***	***	SourceOntology
+BTO:0003672	interdigitating reticulum cell	***	***	SourceOntology
+BTO:0003625	intervertebral disc	***	***	SourceOntology
+BTO:0000781	intestinal epithelium	***	***	SourceOntology
+BTO:0000642	intestinal mucosa	***	***	SourceOntology
+BTO:0000647	intestinal wall	***	***	SourceOntology
+BTO:0000648	intestine	***	***	SourceOntology
+BTO:0000633	intestine 407 cell	***	0	OLS_dist
+BTO:0004135	iose-398 cell	***	***	SourceOntology
+BTO:0002969	ir-8 cell	***	***	SourceOntology
+BTO:0000653	iris	***	***	SourceOntology
+BTO:0003041	ishikawa cell	***	***	SourceOntology
+BTO:0001671	j-82 cell	***	***	SourceOntology
+BTO:0001585	jar cell	***	***	SourceOntology
+BTO:0002269	jeg-3 cell	***	***	SourceOntology
+BTO:0000657	jejunum	***	***	SourceOntology
+BTO:0003043	jj012-ts4 cell	***	***	SourceOntology
+BTO:0000661	jurkat cell	***	***	SourceOntology
+BTO:0000663	juxtaglomerular tumor cell	***	***	SourceOntology
+BTO:0000664	k-562 cell	***	***	SourceOntology
+BTO:0002554	k-562adr cell	***	***	SourceOntology
+BTO:0002208	k6h6/b5 cell	***	***	SourceOntology
+BTO:0002071	kaposi's sarcoma cell	***	***	SourceOntology
+BTO:0002829	karpas-299 cell	***	***	SourceOntology
+BTO:0001092	kato-iii cell	***	***	SourceOntology
+BTO:0000665	kb cell	***	***	SourceOntology
+BTO:0002546	kbm-5 cell	***	***	SourceOntology
+BTO:0004137	kcl-22 cell	***	***	SourceOntology
+BTO:0002547	ke-37 cell	***	***	SourceOntology
+BTO:0003669	keloid	***	***	SourceOntology
+BTO:0000667	keratinocyte	***	***	SourceOntology
+BTO:0000375	keratinocyte cell line	***	***	SourceOntology
+BTO:0000670	kg-1 cell	***	***	SourceOntology
+BTO:0000671	kidney	***	***	SourceOntology
+BTO:0000067	kidney cell line	***	***	SourceOntology
+BTO:0000680	kidney tumor cell	***	0	OLS_dist
+BTO:0003552	kk-47 cell	***	***	SourceOntology
+BTO:0003172	km-12 cell	***	***	SourceOntology
+BTO:0003312	km-12c cell	***	***	SourceOntology
+BTO:0000681	km-3 cell	***	***	SourceOntology
+BTO:0003309	kmbc cell	***	***	SourceOntology
+BTO:0002039	kmst-6 cell	***	***	SourceOntology
+BTO:0003549	kp-1n cell	***	***	SourceOntology
+BTO:0003544	ku-7 cell	***	***	SourceOntology
+BTO:0000732	ku-812 cell	***	***	SourceOntology
+BTO:0000685	kupffer cell	***	***	SourceOntology
+BTO:0002427	kyse-150 cell	***	***	SourceOntology
+BTO:0003543	l-02 cell	***	***	SourceOntology
+BTO:0003308	l-363 cell	***	***	SourceOntology
+BTO:0000406	l-428 cell	***	***	SourceOntology
+BTO:0000171	l-cell	***	***	SourceOntology
+BTO:0003441	l3.6pl cell	***	***	SourceOntology
+BTO:0003307	l6e9 cell	***	***	SourceOntology
+BTO:0000705	langerhans cell	***	***	SourceOntology
+BTO:0002997	lapc4 cell	***	***	SourceOntology
+BTO:0002205	large cell carcinoma cell line	***	0	OLS_dist
+BTO:0004833	large cell neuroendocrine carcinoma cell	***	***	SourceOntology
+BTO:0000706	large intestine	***	***	SourceOntology
+BTO:0003660	laryngeal cartilage	***	***	SourceOntology
+BTO:0001208	larynx	***	***	SourceOntology
+BTO:0001631	leiomyosarcoma cell	***	***	SourceOntology
+BTO:0000723	lens	***	***	SourceOntology
+BTO:0000724	lens fiber	***	***	SourceOntology
+BTO:0001271	leukemia cell	***	***	SourceOntology
+BTO:0000737	leukemia cell line	***	***	SourceOntology
+BTO:0000751	leukocyte	***	***	SourceOntology
+BTO:0000755	leydig cell	***	***	SourceOntology
+BTO:0001918	lim1863 cell	***	***	SourceOntology
+BTO:0000759	liver	***	***	SourceOntology
+BTO:0000594	liver cancer cell	***	***	SourceOntology
+BTO:0002004	ln-229 cell	***	***	SourceOntology
+BTO:0002215	ln-319 cell	***	***	SourceOntology
+BTO:0002216	ln-428 cell	***	***	SourceOntology
+BTO:0001321	lncap cell	***	***	SourceOntology
+BTO:0004460	lnz-308 cell	***	***	SourceOntology
+BTO:0001408	locus ceruleus	***	***	SourceOntology
+BTO:0000666	lovo cell	***	***	SourceOntology
+BTO:0004143	lovo-175x2 cell	***	***	SourceOntology
+BTO:0004145	lovo-li cell	***	***	SourceOntology
+BTO:0002170	lox cell	***	***	SourceOntology
+BTO:0001609	ls-180 cell	***	***	SourceOntology
+BTO:0004147	lumbar spine	***	***	SourceOntology
+BTO:0000763	lung	***	***	SourceOntology
+BTO:0002057	lung adenocarcinoma cell	***	***	SourceOntology
+BTO:0001911	lung adenocarcinoma cell line	***	***	SourceOntology
+BTO:0000551	lung cancer cell	***	***	SourceOntology
+BTO:0000762	lung cancer cell line	***	***	SourceOntology
+BTO:0000551	lung carcinoma cell	***	0	OLS_dist
+BTO:0000353	lung cell line	***	***	SourceOntology
+BTO:0004299	lung epithelial cell	***	***	SourceOntology
+BTO:0001653	lung epithelium	***	***	SourceOntology
+BTO:0003213	lung epithelium cell line	***	***	SourceOntology
+BTO:0000764	lung fibroblast	***	***	SourceOntology
+BTO:0000161	lung fibroblast cell line	***	***	SourceOntology
+BTO:0003613	lung squamous cell carcinoma cell	***	***	SourceOntology
+BTO:0000855	lymph	***	***	SourceOntology
+BTO:0000784	lymph node	***	***	SourceOntology
+BTO:0000772	lymphoblast	***	***	SourceOntology
+BTO:0003676	lymphoblastic leukemia cell	***	***	SourceOntology
+BTO:0000739	lymphoblastic leukemia cell line	***	***	SourceOntology
+BTO:0000773	lymphoblastoid cell line	***	***	SourceOntology
+BTO:0000774	lymphoblastoma cell	***	***	SourceOntology
+BTO:0000775	lymphocyte	***	***	SourceOntology
+BTO:0000744	lymphocytic leukemia cell	***	***	SourceOntology
+BTO:0001096	lymphoid cell	***	***	SourceOntology
+BTO:0001586	lymphoid cell line	***	***	SourceOntology
+BTO:0000753	lymphoid tissue	***	***	SourceOntology
+BTO:0000785	lymphoma cell	***	***	SourceOntology
+BTO:0000104	lymphoma cell line	***	***	SourceOntology
+BTO:0003600	m cell	***	***	SourceOntology
+BTO:0003999	m-14-k cell	***	***	SourceOntology
+BTO:0004000	m-28-k cell	***	***	SourceOntology
+BTO:0002805	m14 cell	***	***	SourceOntology
+BTO:0003050	ma-10 cell	***	***	SourceOntology
+BTO:0004155	ma-25 cell	***	***	SourceOntology
+BTO:0004159	ma-53 cell	***	***	SourceOntology
+BTO:0000801	macrophage	***	***	SourceOntology
+BTO:0004162	malme-3m cell	***	***	SourceOntology
+BTO:0000150	mammary carcinoma cell	***	0	OLS_dist
+BTO:0004300	mammary epithelial cell	***	***	SourceOntology
+BTO:0001430	mammary epithelium	***	***	SourceOntology
+BTO:0000817	mammary gland	***	***	SourceOntology
+BTO:0002311	mammary myoepithelial cell	***	***	SourceOntology
+BTO:0000150	mammary tumor cell	***	0	OLS_dist
+BTO:0000829	marrow	***	***	SourceOntology
+BTO:0001441	marrow cell	***	***	SourceOntology
+BTO:0000830	mast cell	***	***	SourceOntology
+BTO:0003562	mb-49 cell	***	***	SourceOntology
+BTO:0001957	mc3t3-e1 cell	***	***	SourceOntology
+BTO:0001939	mcf-10a cell	***	***	SourceOntology
+BTO:0002544	mcf-12a cell	***	***	SourceOntology
+BTO:0000093	mcf-7 cell	***	***	SourceOntology
+BTO:0002716	mda-1186 cell	***	***	SourceOntology
+BTO:0003304	mda-1483 cell	***	***	SourceOntology
+BTO:0003052	mda-686ln cell	***	***	SourceOntology
+BTO:0003471	mda-mb-175-vii cell	***	***	SourceOntology
+BTO:0000815	mda-mb-231 cell	***	***	SourceOntology
+BTO:0001569	mda-mb-361 cell	***	***	SourceOntology
+BTO:0001567	mda-mb-435 cell	***	***	SourceOntology
+BTO:0001908	mda-mb-453 cell	***	***	SourceOntology
+BTO:0001570	mda-mb-468 cell	***	***	SourceOntology
+BTO:0003303	mda-panc-28 cell	***	***	SourceOntology
+BTO:0003302	mda-panc-3 cell	***	***	SourceOntology
+BTO:0000837	mdck cell	***	***	SourceOntology
+BTO:0003270	me665/2 cell	***	***	SourceOntology
+BTO:0000838	meconium	***	***	SourceOntology
+BTO:0000041	medulla oblongata	***	***	SourceOntology
+BTO:0001757	medulloblastoma cell	***	***	SourceOntology
+BTO:0001359	medulloblastoma cell line	***	***	SourceOntology
+BTO:0002581	meg-01 cell	***	***	SourceOntology
+BTO:0000843	megakaryocyte	***	***	SourceOntology
+BTO:0000844	megakaryotic cell line	***	***	SourceOntology
+BTO:0001673	mel ju cell	***	***	SourceOntology
+BTO:0001675	mel wei cell	***	***	SourceOntology
+BTO:0001587	mel-ho cell	***	***	SourceOntology
+BTO:0002952	mel249 cell	***	***	SourceOntology
+BTO:0000847	melanocyte	***	***	SourceOntology
+BTO:0000848	melanoma cell	***	***	SourceOntology
+BTO:0000849	melanoma cell line	***	***	SourceOntology
+BTO:0001756	meningioma cell	***	***	SourceOntology
+BTO:0001592	meniscus	***	***	SourceOntology
+BTO:0000853	mesangial cell	***	***	SourceOntology
+BTO:0002075	mesenchymal epithelium	***	***	SourceOntology
+BTO:0003298	mesenchymal stem cell	***	***	SourceOntology
+BTO:0001393	mesenchyme	***	***	SourceOntology
+BTO:0000779	mesenteric artery	***	***	SourceOntology
+BTO:0002423	mesothelioma cell	***	***	SourceOntology
+BTO:0002424	mesothelioma cell line	***	***	SourceOntology
+BTO:0003644	metanephric adenoma cell	***	***	SourceOntology
+BTO:0003397	mevo cell	***	***	SourceOntology
+BTO:0001596	mg-63 cell	***	***	SourceOntology
+BTO:0004170	mhcc97-l cell	***	***	SourceOntology
+BTO:0002137	miapaca-2 cell	***	***	SourceOntology
+BTO:0000078	microglia	***	***	SourceOntology
+BTO:0000103	microglial cell	***	0	OLS_dist
+BTO:0000138	midbrain	***	***	SourceOntology
+BTO:0000868	milk	***	***	SourceOntology
+BTO:0002284	min-6 cell	***	***	SourceOntology
+BTO:0002381	mkn-28 cell	***	***	SourceOntology
+BTO:0001225	mkn-45 cell	***	***	SourceOntology
+BTO:0002383	mkn-74 cell	***	***	SourceOntology
+BTO:0001884	ml-1 cell	***	***	SourceOntology
+BTO:0001014	mo-t cell	***	***	SourceOntology
+BTO:0000873	molt-4 cell	***	***	SourceOntology
+BTO:0001151	molt-4f cell	***	***	SourceOntology
+BTO:0002333	mono-mac-6 cell	***	***	SourceOntology
+BTO:0000876	monocyte	***	***	SourceOntology
+BTO:0002900	monocyte-derived dendritic cell	***	***	SourceOntology
+BTO:0002420	monocytic leukemia cell	***	***	SourceOntology
+BTO:0000878	mononuclear cell	***	***	SourceOntology
+BTO:0003203	moroff cell	***	***	SourceOntology
+BTO:0000577	morris hepatoma 3924a cell	***	***	SourceOntology
+BTO:0001090	mouth	***	***	SourceOntology
+BTO:0001590	mrc-5 cell	***	***	SourceOntology
+BTO:0003679	mrk-nu-1 cell	***	***	SourceOntology
+BTO:0002945	mrn-1 cell	***	***	SourceOntology
+BTO:0002425	msto-211h cell	***	***	SourceOntology
+BTO:0002301	mucinous cystadenoma cell	***	***	SourceOntology
+BTO:0000886	mucosa	***	***	SourceOntology
+BTO:0002101	multiple myeloma cell	***	***	SourceOntology
+BTO:0000887	muscle	***	***	SourceOntology
+BTO:0000888	muscle fibre	***	***	SourceOntology
+BTO:0001436	mycelium	***	***	SourceOntology
+BTO:0001056	myelocytic leukemia cell	***	0	OLS_dist
+BTO:0001056	myeloid leukemia cell	***	***	SourceOntology
+BTO:0000898	myeloma cell	***	***	SourceOntology
+BTO:0000899	myeloma cell line	***	***	SourceOntology
+BTO:0002510	myelomonocytic leukemia cell	***	***	SourceOntology
+BTO:0000222	myoblast	***	***	SourceOntology
+BTO:0000256	myoblast cell line	***	***	SourceOntology
+BTO:0000901	myocardium	***	***	SourceOntology
+BTO:0000902	myocyte	***	***	SourceOntology
+BTO:0002309	myoepithelial cell	***	***	SourceOntology
+BTO:0002308	myoepithelium	***	***	SourceOntology
+BTO:0001946	myofibroblast	***	***	SourceOntology
+BTO:0002029	myoma cell	***	***	SourceOntology
+BTO:0000907	myometrium	***	***	SourceOntology
+BTO:0001760	myotube	***	***	SourceOntology
+BTO:0004003	na cell	***	***	SourceOntology
+BTO:0003288	nalm-6 cell	***	***	SourceOntology
+BTO:0003289	namalwa cell	***	***	SourceOntology
+BTO:0000912	nasal mucosa	***	***	SourceOntology
+BTO:0000913	nasal polyp	***	***	SourceOntology
+BTO:0000192	nasopharyngeal carcinoma cell	***	***	SourceOntology
+BTO:0000192	nasopharynx carcinoma cell	***	0	OLS_dist
+BTO:0000914	natural killer cell	***	***	SourceOntology
+BTO:0002136	nb-4 cell	***	***	SourceOntology
+BTO:0003439	nb7 cell	***	***	SourceOntology
+BTO:0004180	nccit cell	***	***	SourceOntology
+BTO:0003764	nci cell	***	***	SourceOntology
+BTO:0002552	nci-h1299 cell	***	***	SourceOntology
+BTO:0002283	nci-h157 cell	***	***	SourceOntology
+BTO:0003243	nci-h1684 cell	***	***	SourceOntology
+BTO:0003241	nci-h2087 cell	***	***	SourceOntology
+BTO:0003008	nci-h226 cell	***	***	SourceOntology
+BTO:0003238	nci-h23 cell	***	***	SourceOntology
+BTO:0002418	nci-h292 cell	***	***	SourceOntology
+BTO:0002587	nci-h295 cell	***	***	SourceOntology
+BTO:0002588	nci-h295r cell	***	***	SourceOntology
+BTO:0004182	nci-h322m cell	***	***	SourceOntology
+BTO:0001910	nci-h441 cell	***	***	SourceOntology
+BTO:0002207	nci-h460 cell	***	***	SourceOntology
+BTO:0003536	nci-h522 cell	***	***	SourceOntology
+BTO:0003026	nci-h82 cell	***	***	SourceOntology
+BTO:0002416	nci-h929 cell	***	***	SourceOntology
+BTO:0003053	nci-n87 cell	***	***	SourceOntology
+BTO:0004181	nci/adr-res cell	***	***	SourceOntology
+BTO:0004306	ncm-460 cell	***	***	SourceOntology
+BTO:0001052	nd-1 cell	***	***	SourceOntology
+BTO:0000924	nephron	***	***	SourceOntology
+BTO:0000925	nerve	***	***	SourceOntology
+BTO:0000927	nerve trunk	***	***	SourceOntology
+BTO:0001484	nervous system	***	***	SourceOntology
+BTO:0001057	neural tube	***	***	SourceOntology
+BTO:0001976	neuro-2a cell	***	***	SourceOntology
+BTO:0000931	neuroblastoma cell	***	***	SourceOntology
+BTO:0000932	neuroblastoma cell line	***	***	SourceOntology
+BTO:0002691	neuroendocrine cell	***	***	SourceOntology
+BTO:0001407	neuroendocrine tumor cell	***	***	SourceOntology
+BTO:0002372	neuroepithelioma cell	***	***	SourceOntology
+BTO:0000314	neuroepithelium	***	***	SourceOntology
+BTO:0000936	neurofibrillary tangle	***	***	SourceOntology
+BTO:0000936	neurofibrillary tangles	***	0	OLS_dist
+BTO:0000526	neuroglioma cell	***	0	OLS_dist
+BTO:0000938	neuron	***	***	SourceOntology
+BTO:0000938	neuronal cell	***	0	OLS_dist
+BTO:0000947	neuronal cell line	***	***	SourceOntology
+BTO:0000130	neutrophil	***	***	SourceOntology
+BTO:0000942	ng-108-15 cell	***	***	SourceOntology
+BTO:0002924	nhbe cell	***	***	SourceOntology
+BTO:0003184	nhem cell	***	***	SourceOntology
+BTO:0000944	nih-3t3 cell	***	***	SourceOntology
+BTO:0003534	nmb-7 cell	***	***	SourceOntology
+BTO:0002058	non-small cell lung cancer cell	***	***	SourceOntology
+BTO:0002553	non-small cell lung cancer cell line	***	***	SourceOntology
+BTO:0000840	nose	***	***	SourceOntology
+BTO:0000950	novikoff hepatoma cell	***	***	SourceOntology
+BTO:0003961	npc-tw02 cell	***	***	SourceOntology
+BTO:0000951	nrk cell	***	***	SourceOntology
+BTO:0002639	ns20y cell	***	***	SourceOntology
+BTO:0002574	nt2-n cell	***	***	SourceOntology
+BTO:0000946	nt2/d1 cell	***	***	SourceOntology
+BTO:0000891	ntera-2 cell	***	***	SourceOntology
+BTO:0000952	nuchal ligament	***	***	SourceOntology
+BTO:0002597	nugc-3 cell	***	***	SourceOntology
+BTO:0000293	occipital lobe	***	***	SourceOntology
+BTO:0001868	occipital pole	***	***	SourceOntology
+BTO:0003964	oecm-1 cell	***	***	SourceOntology
+BTO:0000959	oesophagus	***	0	OLS_dist
+BTO:0000108	olfactory epithelium	***	***	SourceOntology
+BTO:0000962	oligodendrocyte	***	***	SourceOntology
+BTO:0000770	oligodendroglia	***	***	SourceOntology
+BTO:0000962	oligodendroglial cell	***	0	OLS_dist
+BTO:0000963	oligodendroglioma cell	***	***	SourceOntology
+BTO:0002299	oliva	***	***	SourceOntology
+BTO:0000964	oocyte	***	***	SourceOntology
+BTO:0000966	optic nerve	***	***	SourceOntology
+BTO:0002860	oral mucosa	***	***	SourceOntology
+BTO:0003614	oral squamous cell carcinoma cell	***	***	SourceOntology
+BTO:0002211	oral squamous cell carcinoma cell line	***	***	SourceOntology
+BTO:0002403	os-rc-2 cell	***	***	SourceOntology
+BTO:0001593	osteoblast	***	***	SourceOntology
+BTO:0002361	osteochondroma cell	***	***	SourceOntology
+BTO:0000968	osteoclast	***	***	SourceOntology
+BTO:0000970	osteosarcoma cell	***	***	SourceOntology
+BTO:0000407	osteosarcoma cell line	***	***	SourceOntology
+BTO:0003968	ous-11 cell	***	***	SourceOntology
+BTO:0003792	ov-2008 cell	***	***	SourceOntology
+BTO:0001023	ovarian cancer cell	***	0	OLS_dist
+BTO:0000811	ovarian cancer cell line	***	0	OLS_dist
+BTO:0001023	ovarian carcinoma cell	***	0	OLS_dist
+BTO:0002236	ovarian cumulus cell	***	***	SourceOntology
+BTO:0000475	ovarian follicle	***	***	SourceOntology
+BTO:0003804	ovarian serous adenocarcinoma cell line	***	***	SourceOntology
+BTO:0002729	ovarian serous carcinoma cell	***	***	SourceOntology
+BTO:0000975	ovary	***	***	SourceOntology
+BTO:0001023	ovary cancer cell	***	***	SourceOntology
+BTO:0000811	ovary cancer cell line	***	***	SourceOntology
+BTO:0000977	ovary cell line	***	***	SourceOntology
+BTO:0002563	ovca-420 cell	***	***	SourceOntology
+BTO:0002565	ovca-432 cell	***	***	SourceOntology
+BTO:0002560	ovcar-2 cell	***	***	SourceOntology
+BTO:0000812	ovcar-3 cell	***	***	SourceOntology
+BTO:0004187	ovcar-429 cell	***	***	SourceOntology
+BTO:0001870	ovcar-5 cell	***	***	SourceOntology
+BTO:0003054	ovcar-8 cell	***	***	SourceOntology
+BTO:0000980	oviduct	***	***	SourceOntology
+BTO:0003498	ovise cell	***	***	SourceOntology
+BTO:0000748	p-388 cell	***	***	SourceOntology
+BTO:0001118	p3x63ag8 cell	***	***	SourceOntology
+BTO:0001591	pa-1 cell	***	***	SourceOntology
+BTO:0000304	panc-1 cell	***	***	SourceOntology
+BTO:0000988	pancreas	***	***	SourceOntology
+BTO:0000028	pancreatic acinar cell	***	***	SourceOntology
+BTO:0000584	pancreatic adenocarcinoma cell	***	0	OLS_dist
+BTO:0001521	pancreatic adenocarcinoma cell line	***	***	SourceOntology
+BTO:0000990	pancreatic alpha cell	***	***	SourceOntology
+BTO:0000783	pancreatic beta cell	***	***	SourceOntology
+BTO:0000584	pancreatic cancer cell	***	***	SourceOntology
+BTO:0000794	pancreatic cancer cell line	***	***	SourceOntology
+BTO:0003081	pancreatic ductal adenocarcinoma cell	***	***	SourceOntology
+BTO:0002363	pancreatic ductal carcinoma cell	***	***	SourceOntology
+BTO:0000991	pancreatic islet	***	***	SourceOntology
+BTO:0000504	pancreatic juice	***	***	SourceOntology
+BTO:0003152	papillary thyroid cancer cell	***	***	SourceOntology
+BTO:0000997	parathyroid gland	***	***	SourceOntology
+BTO:0000999	parenchyma	***	***	SourceOntology
+BTO:0001001	parietal cortex	***	0	OLS_dist
+BTO:0001001	parietal lobe	***	***	SourceOntology
+BTO:0001004	parotid gland	***	***	SourceOntology
+BTO:0003749	pars compacta	***	***	SourceOntology
+BTO:0001009	pc-12 cell	***	***	SourceOntology
+BTO:0001061	pc-3 cell	***	***	SourceOntology
+BTO:0002831	pc-346c cell	***	***	SourceOntology
+BTO:0001983	peptic chief cell	***	***	SourceOntology
+BTO:0001016	pericardial fluid	***	***	SourceOntology
+BTO:0000717	pericardium	***	***	SourceOntology
+BTO:0003153	perineurium	***	***	SourceOntology
+BTO:0001020	periodontal ligament	***	***	SourceOntology
+BTO:0001021	periodontium	***	***	SourceOntology
+BTO:0000553	peripheral blood	***	***	SourceOntology
+BTO:0001025	peripheral blood mononuclear cell	***	***	SourceOntology
+BTO:0002669	peripheral blood stem cell	***	***	SourceOntology
+BTO:0001027	peripheral nerve	***	***	SourceOntology
+BTO:0003616	peritoneal dialysis fluid	***	***	SourceOntology
+BTO:0001472	peritoneum	***	***	SourceOntology
+BTO:0002415	pg-lh7 cell	***	***	SourceOntology
+BTO:0001044	phagocyte	***	***	SourceOntology
+BTO:0001049	pharynx	***	***	SourceOntology
+BTO:0001054	pheochromocytoma cell	***	***	SourceOntology
+BTO:0001060	photoreceptor	***	***	SourceOntology
+BTO:0002378	pilocytic astrocytoma cell	***	***	SourceOntology
+BTO:0001067	pineal gland	***	***	SourceOntology
+BTO:0001073	pituitary gland	***	0	OLS_dist
+BTO:0001076	pituitary gland tumor cell	***	***	SourceOntology
+BTO:0001078	placenta	***	***	SourceOntology
+BTO:0003678	placental disc	***	***	SourceOntology
+BTO:0000392	plasma cell	***	***	SourceOntology
+BTO:0003492	plc-prf-5 cell	***	***	SourceOntology
+BTO:0003646	pleomorphic adenoma cell	***	***	SourceOntology
+BTO:0001791	pleura	***	***	SourceOntology
+BTO:0003080	pleural fluid	***	***	SourceOntology
+BTO:0000395	pneumocyte	***	0	OLS_dist
+BTO:0003539	pnt2-c2 cell	***	***	SourceOntology
+BTO:0002295	podocyte	***	***	SourceOntology
+BTO:0000751	polymorphonuclear cell	***	0	OLS_dist
+BTO:0001026	polymorphonuclear leukocyte	***	***	SourceOntology
+BTO:0001101	pons	***	***	SourceOntology
+BTO:0001062	ppc-1 cell	***	***	SourceOntology
+BTO:0001113	prepuce	***	***	SourceOntology
+BTO:0002489	promyelocytic leukemia cell line	***	***	SourceOntology
+BTO:0001541	pronephros	***	***	SourceOntology
+BTO:0001128	prostasome	***	***	SourceOntology
+BTO:0002021	prostate adenocarcinoma cell	***	***	SourceOntology
+BTO:0001130	prostate cancer cell	***	0	OLS_dist
+BTO:0001033	prostate cancer cell line	***	***	SourceOntology
+BTO:0001130	prostate carcinoma cell	***	0	OLS_dist
+BTO:0001019	prostate cell line	***	0	OLS_dist
+BTO:0002397	prostate epithelium	***	0	OLS_dist
+BTO:0002398	prostate epithelium cell line	***	***	SourceOntology
+BTO:0001232	prostate fluid	***	0	OLS_dist
+BTO:0001129	prostate gland	***	***	SourceOntology
+BTO:0001130	prostate tumor cell	***	0	OLS_dist
+BTO:0001130	prostate tumour cell	***	0	OLS_dist
+BTO:0003692	prostatic intraepithelial neoplasia cell	***	***	SourceOntology
+BTO:0001498	proximal tubule	***	0	OLS_dist
+BTO:0003162	prsc cell	***	***	SourceOntology
+BTO:0002282	pt-k2 cell	***	***	SourceOntology
+BTO:0000778	pulmonary artery	***	***	SourceOntology
+BTO:0003102	pyramidal neuron	***	***	SourceOntology
+BTO:0003762	pz-hpv-7 cell	***	***	SourceOntology
+BTO:0001154	raji cell	***	***	SourceOntology
+BTO:0003076	ramos cell	***	***	SourceOntology
+BTO:0000833	rbl-2h3 cell	***	***	SourceOntology
+BTO:0003781	rcc 786-o cell	***	***	SourceOntology
+BTO:0003731	rcc-10rgb cell	***	***	SourceOntology
+BTO:0003376	rch-acv cell	***	***	SourceOntology
+BTO:0003782	rectal adenocarcinoma cell	***	***	SourceOntology
+BTO:0000193	rectal cancer cell	***	***	SourceOntology
+BTO:0000193	rectal carcinoma cell	***	0	OLS_dist
+BTO:0001158	rectum	***	***	SourceOntology
+BTO:0001163	reh cell	***	***	SourceOntology
+BTO:0001165	renal artery	***	***	SourceOntology
+BTO:0000037	renal cell carcinoma cell	***	***	SourceOntology
+BTO:0001166	renal cortex	***	***	SourceOntology
+BTO:0000530	renal glomerulus	***	***	SourceOntology
+BTO:0001498	renal proximal tubule	***	***	SourceOntology
+BTO:0000343	renal tubule	***	***	SourceOntology
+BTO:0000081	reproductive system	***	***	SourceOntology
+BTO:0000419	respiratory epithelium	***	***	SourceOntology
+BTO:0000203	respiratory system	***	***	SourceOntology
+EFO:0000804	respiratory tract	***	0	OLS_dist
+BTO:0001173	reticulocyte	***	***	SourceOntology
+BTO:0001174	reticuloendothelial system	***	***	SourceOntology
+BTO:0001605	reticulum trabeculare	***	***	SourceOntology
+BTO:0001175	retina	***	***	SourceOntology
+BTO:0001036	retinal cone	***	***	SourceOntology
+BTO:0004910	retinal pigment epithelial cell	***	***	SourceOntology
+BTO:0001177	retinal pigment epithelium	***	***	SourceOntology
+BTO:0001024	retinal rod	***	***	SourceOntology
+BTO:0001178	retinoblastoma cell	***	***	SourceOntology
+BTO:0002292	reuber h-35 cell	***	***	SourceOntology
+BTO:0001890	rko cell	***	***	SourceOntology
+BTO:0003230	rl cell	***	***	SourceOntology
+BTO:0003508	rpmi-7951 cell	***	***	SourceOntology
+BTO:0000726	rpmi-8226 cell	***	***	SourceOntology
+BTO:0004206	rpmi-8866 cell	***	***	SourceOntology
+BTO:0001202	saliva	***	***	SourceOntology
+BTO:0001203	salivary gland	***	***	SourceOntology
+BTO:0003205	salivary gland cell line	***	***	SourceOntology
+BTO:0000971	saos-2 cell	***	***	SourceOntology
+BTO:0001207	sarcoma cell	***	***	SourceOntology
+BTO:0000400	sarcoma cell line	***	***	SourceOntology
+BTO:0003981	sas cell	***	***	SourceOntology
+BTO:0003283	sc-m1 cell	***	***	SourceOntology
+BTO:0003777	scaber cell	***	***	SourceOntology
+BTO:0001220	schwann cell	***	***	SourceOntology
+BTO:0001221	sciatic nerve	***	***	SourceOntology
+BTO:0002979	secretion	***	***	SourceOntology
+BTO:0001226	seed	***	***	SourceOntology
+BTO:0001228	seedling	***	***	SourceOntology
+BTO:0003430	seg-1 cell	***	***	SourceOntology
+BTO:0001230	semen	***	***	SourceOntology
+BTO:0001230	seminal fluid	***	0	OLS_dist
+BTO:0001232	seminal plasma	***	***	SourceOntology
+BTO:0001234	seminal vesicle	***	***	SourceOntology
+BTO:0002053	seminal vesicle fluid	***	***	SourceOntology
+BTO:0004210	seminoma cell	***	***	SourceOntology
+BTO:0001238	sertoli cell	***	***	SourceOntology
+BTO:0001239	serum	***	***	SourceOntology
+BTO:0002824	sf-188 cell	***	***	SourceOntology
+BTO:0001196	sf-21 cell	***	***	SourceOntology
+BTO:0003772	sf-268 cell	***	***	SourceOntology
+BTO:0004214	sf-539 cell	***	***	SourceOntology
+BTO:0001557	sf-767 cell	***	***	SourceOntology
+BTO:0001240	sf-9 cell	***	***	SourceOntology
+BTO:0002392	sgc-7901 cell	***	***	SourceOntology
+BTO:0000793	sh-sy5y cell	***	***	SourceOntology
+BTO:0003726	shp-77 cell	***	***	SourceOntology
+BTO:0002210	siha cell	***	***	SourceOntology
+BTO:0004216	sjsa-1 cell	***	***	SourceOntology
+BTO:0002419	sk-br-3 cell	***	***	SourceOntology
+BTO:0003477	sk-hep-1 cell	***	***	SourceOntology
+BTO:0003228	sk-lc-8 cell	***	***	SourceOntology
+BTO:0003476	sk-mel-2 cell	***	***	SourceOntology
+BTO:0002134	sk-mel-5 cell	***	***	SourceOntology
+BTO:0002203	sk-mes-1 cell	***	***	SourceOntology
+BTO:0002827	sk-n-as cell	***	***	SourceOntology
+BTO:0002696	sk-n-be(2) cell	***	***	SourceOntology
+BTO:0004218	sk-n-fi cell	***	***	SourceOntology
+BTO:0002914	sk-n-mc cell	***	***	SourceOntology
+BTO:0001620	sk-n-sh cell	***	***	SourceOntology
+BTO:0002823	sk-pc-1 cell	***	***	SourceOntology
+BTO:0002034	sk-ut-1 cell	***	***	SourceOntology
+BTO:0001103	skeletal muscle	***	***	SourceOntology
+BTO:0002319	skeletal muscle fiber	***	***	SourceOntology
+BTO:0001253	skin	***	***	SourceOntology
+BTO:0001286	skin cancer cell	***	***	SourceOntology
+BTO:0001255	skin fibroblast	***	***	SourceOntology
+BTO:0001619	skin fibroblast cell line	***	***	SourceOntology
+BTO:0000948	skov-3 cell	***	***	SourceOntology
+BTO:0000189	small cell lung cancer cell	***	***	SourceOntology
+BTO:0002206	small cell lung cancer cell line	***	***	SourceOntology
+BTO:0000651	small intestine	***	***	SourceOntology
+BTO:0001259	small intestine mucosa	***	***	SourceOntology
+BTO:0003227	smmc-7721 cell	***	***	SourceOntology
+BTO:0001260	smooth muscle	***	***	SourceOntology
+BTO:0004576	smooth muscle cell	***	***	SourceOntology
+BTO:0004221	sn-12c cell	***	***	SourceOntology
+BTO:0004222	snb-75 cell	***	***	SourceOntology
+BTO:0003760	snu-182 cell	***	***	SourceOntology
+BTO:0003169	snu-368 cell	***	***	SourceOntology
+BTO:0003187	snu-423 cell	***	***	SourceOntology
+BTO:0003759	snuot-rb1 cell	***	***	SourceOntology
+BTO:0001268	somatic cell	***	***	SourceOntology
+BTO:0001277	sperm cell	***	0	OLS_dist
+BTO:0001274	spermatid	***	***	SourceOntology
+BTO:0001275	spermatocyte	***	***	SourceOntology
+BTO:0001277	spermatozoon	***	***	SourceOntology
+BTO:0001279	spinal cord	***	***	SourceOntology
+BTO:0001281	spleen	***	***	SourceOntology
+BTO:0001598	splenocyte	***	***	SourceOntology
+BTO:0001289	squamous cell carcinoma cell	***	***	SourceOntology
+BTO:0002024	squamous cell carcinoma cell line	***	***	SourceOntology
+BTO:0003756	stav-fcs cell	***	***	SourceOntology
+BTO:0001307	stomach	***	***	SourceOntology
+BTO:0000498	stomach cancer cell	***	0	OLS_dist
+BTO:0000344	stratum corneum	***	***	SourceOntology
+BTO:0000361	stratum granulosum	***	***	SourceOntology
+BTO:0000435	stratum spinosum	***	***	SourceOntology
+BTO:0000418	striatum	***	0	OLS_dist
+BTO:0002064	stromal cell	***	***	SourceOntology
+BTO:0003226	sts-26t cell	***	***	SourceOntology
+BTO:0001904	su.86.86 cell	***	***	SourceOntology
+BTO:0003087	subiculum	***	***	SourceOntology
+BTO:0001316	submandibular gland	***	***	SourceOntology
+BTO:0001316	submaxillary gland	***	0	OLS_dist
+BTO:0000143	substantia nigra	***	***	SourceOntology
+BTO:0003493	suit-2 cell	***	***	SourceOntology
+BTO:0004390	sv7tert cell	***	***	SourceOntology
+BTO:0001599	sw-1116 cell	***	***	SourceOntology
+BTO:0002003	sw-1353 cell	***	***	SourceOntology
+BTO:0003746	sw-1398 cell	***	***	SourceOntology
+BTO:0003016	sw-1573 cell	***	***	SourceOntology
+BTO:0001611	sw-1736 cell	***	***	SourceOntology
+BTO:0000033	sw-403 cell	***	***	SourceOntology
+BTO:0001535	sw-48 cell	***	***	SourceOntology
+BTO:0000038	sw-480 cell	***	***	SourceOntology
+BTO:0000675	sw-620 cell	***	***	SourceOntology
+BTO:0002825	sw-742 cell	***	***	SourceOntology
+BTO:0001534	sw-948 cell	***	***	SourceOntology
+BTO:0001254	sweat	***	***	SourceOntology
+BTO:0001331	sweat gland	***	***	SourceOntology
+BTO:0001834	sympathetic trunk	***	0	OLS_dist
+BTO:0001335	syncytiotrophoblast	***	***	SourceOntology
+BTO:0001339	synovia	***	***	SourceOntology
+BTO:0003652	synovial cell	***	***	SourceOntology
+BTO:0001336	synovial fibroblast	***	***	SourceOntology
+BTO:0001339	synovial fluid	***	0	OLS_dist
+BTO:0001338	synovial tissue	***	***	SourceOntology
+BTO:0003742	synoviocyte	***	***	SourceOntology
+BTO:0001823	synovium	***	***	SourceOntology
+BTO:0001345	t-24 cell	***	***	SourceOntology
+BTO:0003741	t-47 cell	***	***	SourceOntology
+BTO:0001248	t-47d cell	***	***	SourceOntology
+BTO:0002032	t-84 cell	***	***	SourceOntology
+BTO:0001583	t-98g cell	***	***	SourceOntology
+BTO:0001106	t-cell acute lymphoblastic leukemia cell	***	***	SourceOntology
+BTO:0001825	t-cell lymphoma cell	***	***	SourceOntology
+BTO:0002504	t-lymphoblastic leukemia cell line	***	***	SourceOntology
+BTO:0002629	t-lymphoblastoid cell line	***	***	SourceOntology
+BTO:0000782	t-lymphocyte	***	***	SourceOntology
+BTO:0001045	t-lymphocyte cell line	***	***	SourceOntology
+BTO:0003740	tall-104 cell	***	***	SourceOntology
+BTO:0004227	tc-32 cell	***	***	SourceOntology
+BTO:0002604	tc-71 cell	***	***	SourceOntology
+BTO:0002866	te-2 cell	***	***	SourceOntology
+BTO:0001499	tear	***	***	SourceOntology
+BTO:0000239	telencephalon	***	***	SourceOntology
+BTO:0001355	temporal cortex	***	0	OLS_dist
+BTO:0001355	temporal lobe	***	***	SourceOntology
+BTO:0000223	teratocarcinoma cell	***	***	SourceOntology
+BTO:0001560	testicular cancer cell line	***	***	SourceOntology
+BTO:0001363	testis	***	***	SourceOntology
+BTO:0003282	tet-inos-293 cell	***	***	SourceOntology
+BTO:0001678	th1-cell	***	***	SourceOntology
+BTO:0001365	thalamus	***	***	SourceOntology
+BTO:0001370	thp-1 cell	***	***	SourceOntology
+BTO:0000102	thrombus	***	0	OLS_dist
+BTO:0001372	thymocyte	***	***	SourceOntology
+BTO:0001374	thymus	***	***	SourceOntology
+EFO:0003076	thyrocyte	***	0	OLS_dist
+BTO:0000196	thyroid cancer cell	***	***	SourceOntology
+BTO:0001610	thyroid cancer cell line	***	***	SourceOntology
+BTO:0000196	thyroid carcinoma cell	***	0	OLS_dist
+BTO:0003655	thyroid cartilage	***	***	SourceOntology
+BTO:0001876	thyroid cell line	***	***	SourceOntology
+BTO:0001379	thyroid gland	***	***	SourceOntology
+BTO:0002617	thyroid nodule	***	***	SourceOntology
+BTO:0000207	tibial cartilage	***	***	SourceOntology
+BTO:0001381	tibial chondrocyte	***	***	SourceOntology
+BTO:0001384	tissue culture	***	***	SourceOntology
+BTO:0004283	tk-10 cell	***	***	SourceOntology
+BTO:0003707	tk-6 cell	***	***	SourceOntology
+BTO:0003219	tmk-1 cell	***	***	SourceOntology
+BTO:0001385	tongue	***	***	SourceOntology
+BTO:0001387	tonsil	***	***	SourceOntology
+BTO:0000397	tooth	***	***	SourceOntology
+BTO:0002718	tr-146 cell	***	***	SourceOntology
+BTO:0001605	trabecular meshwork	***	0	OLS_dist
+BTO:0001388	trachea	***	***	SourceOntology
+BTO:0002927	tracheobronchial epithelial cell	***	***	SourceOntology
+BTO:0001079	trophoblast	***	***	SourceOntology
+BTO:0004282	tsa cell	***	***	SourceOntology
+BTO:0004232	tsa-201 cell	***	***	SourceOntology
+BTO:0001065	tsu-pr1 cell	***	***	SourceOntology
+BTO:0003732	tuhr-10tkb cell	***	***	SourceOntology
+BTO:0002127	u-138mg cell	***	***	SourceOntology
+BTO:0002035	u-251 mg cell	***	***	SourceOntology
+BTO:0001594	u-266 cell	***	***	SourceOntology
+BTO:0002126	u-373mg cell	***	***	SourceOntology
+BTO:0002036	u-87mg cell	***	***	SourceOntology
+BTO:0001412	u-937 cell	***	***	SourceOntology
+BTO:0001938	u2-os cell	***	***	SourceOntology
+BTO:0003443	uacc-893 cell	***	***	SourceOntology
+BTO:0002630	uci-101 cell	***	***	SourceOntology
+BTO:0003315	um-scc-2 cell	***	***	SourceOntology
+BTO:0002714	um-scc-22a cell	***	***	SourceOntology
+BTO:0004023	um-scc-5 cell	***	***	SourceOntology
+BTO:0004290	umbilical artery smooth muscle	***	***	SourceOntology
+BTO:0001415	umbilical cord	***	***	SourceOntology
+BTO:0001509	umbilical vein	***	***	SourceOntology
+BTO:0004296	umbilical vein endothelial cell	***	***	SourceOntology
+BTO:0001520	umbilical vein endothelial cell line	***	***	SourceOntology
+BTO:0001416	umbilical vein endothelium	***	***	SourceOntology
+BTO:0001426	urethra	***	***	SourceOntology
+BTO:0001418	urinary bladder	***	***	SourceOntology
+BTO:0000362	urinary bladder cancer cell	***	***	SourceOntology
+BTO:0001419	urine	***	***	SourceOntology
+BTO:0001267	urothelial cell line	***	0	OLS_dist
+BTO:0001245	urothelium	***	0	OLS_dist
+BTO:0000658	uterine adenocarcinoma cell	***	***	SourceOntology
+BTO:0000257	uterine cancer cell	***	***	SourceOntology
+BTO:0001421	uterine cervix	***	***	SourceOntology
+BTO:0001422	uterine endometrium	***	***	SourceOntology
+BTO:0001423	uterine lavage	***	***	SourceOntology
+BTO:0002695	uterine leiomyoma cell	***	***	SourceOntology
+BTO:0003596	uterine sarcoma cell	***	***	SourceOntology
+BTO:0001424	uterus	***	***	SourceOntology
+BTO:0001425	v-79 cell	***	***	SourceOntology
+BTO:0002739	vaco cell	***	***	SourceOntology
+BTO:0000243	vagina	***	***	SourceOntology
+BTO:0001854	vascular endothelial cell	***	***	SourceOntology
+BTO:0001853	vascular endothelium	***	***	SourceOntology
+BTO:0001431	vascular smooth muscle	***	***	SourceOntology
+BTO:0004578	vascular smooth muscle cell	***	***	SourceOntology
+BTO:0001085	vascular system	***	***	SourceOntology
+BTO:0000234	vein	***	***	SourceOntology
+BTO:0000084	vermiform appendix	***	***	SourceOntology
+BTO:0003714	vmrc-rcw cell	***	***	SourceOntology
+BTO:0002585	we-480 cell	***	***	SourceOntology
+BTO:0001927	wegli18 cell	***	***	SourceOntology
+BTO:0001456	white adipose tissue	***	***	SourceOntology
+BTO:0000458	wi-38 cell	***	***	SourceOntology
+BTO:0001483	widr cell	***	***	SourceOntology
+BTO:0000069	wish cell	***	***	SourceOntology
+BTO:0001595	wm-266-4 cell	***	***	SourceOntology
+BTO:0003438	wm-9 cell	***	***	SourceOntology
+BTO:0003708	wpmy-1 cell	***	***	SourceOntology
+BTO:0003414	xf-498 cell	***	***	SourceOntology
+BTO:0002404	ymb-1 cell	***	***	SourceOntology
+BTO:0002583	ymb-1-e cell	***	***	SourceOntology
+BTO:0000050	zona fasciculata	***	***	SourceOntology
+BTO:0003135	zona pellucida	***	***	SourceOntology
+BTO:0003136	zr-75-1 cell	***	***	SourceOntology
+BTO:0002181	293t cell	293T cell	1	OLS_dist
+BTO:0000944	3t3 cell	3T3 cell	1	OLS_dist
+BTO:0000018	a549 cell	A549 cell	1	OLS_dist
+BTO:0000731	all cell	ALL cell	3	OLS_dist
+BTO:0000538	alveolar type ii cell	alveolar cell type II	11	OLS_dist
+BTO:0002008	antigen-presenting cell	culture condition:antigen-presenting cell	18	OLS_dist
+MP:0005338	atherosclerotic lesion	MP:atherosclerotic lesions	4	OLS_dist
+BTO:0000776	b-cell	B-cell	1	OLS_dist
+EFO:0000280	barrett's epithelium	Epithelium  Barrett	18	OLS_dist
+BTO:0001298	basal cell carcinoma	basal cell carcinoma cell	5	OLS_dist
+BTO:0000362	bladder cancer cell	urinary bladder cancer cell	8	OLS_dist
+DOID:4006	bladder transitional cell carcinoma	DOID:bladder transitional cell carcinoma	5	OLS_dist
+MP:0009551	bladder transitional cell carcinoma	MP:urinary bladder transitional cell carcinoma	11	OLS_dist
+HP:0006740	bladder transitional cell carcinoma	HP:Transitional cell carcinoma of the bladder	24	OLS_dist
+BTO:0000356	breast cancer cell line |	breast cancer cell line	2	OLS_dist
+DOID:10350	breast cyst	DOID:breast cyst	5	OLS_dist
+EFO:0000186	breast invasive ductal carcinoma	Invasive Ductal Breast Carcinoma	17	OLS_dist
+BTO:0001466	bt20 cell	BT20 cell	2	OLS_dist
+CL:0002336	buccal mucosa cell	CL:buccal mucosa cell	3	OLS_dist
+BTO:0001861	bxpc3 cell	BxPC3 cell	3	OLS_dist
+BTO:0000529	c6 cell	C6 cell	1	OLS_dist
+FMA:62910	canalicular membrane	FMA:Canalicular part of plasma membrane of hepatocyte	34	OLS_dist
+CL:0000676	cap cell	CL:cap cell	3	OLS_dist
+BTO:0001967	cervical cancer cell	cervical cancer cell line	5	OLS_dist
+BTO:0001421	cervix	uterine cervix	8	OLS_dist
+EFO:0000350	clear cell renal cell carcinoma cell	clear cell renal cell carcinoma	5	OLS_dist
+EFO:0000349	clear cell renal cell carcinoma cell	clear cell renal carcinoma	10	OLS_dist
+EFO:0002890	clear cell renal cell carcinoma cell	Clear Cell Renal Carcinoma	14	OLS_dist
+BTO:0001546	cll cell	CLL cell	3	OLS_dist
+BTO:0000035	colorectal adenocarcinoma	colorectal adenocarcinoma cell	5	OLS_dist
+BTO:0001615	colorectal cancer	colorectal cancer cell	5	OLS_dist
+FMA:64798	columnar ciliated epithelium	FMA:Ciliated columnar epithelium	17	OLS_dist
+CL:0000849	crypt cell	CL:crypt cell	3	OLS_dist
+ZFA:0009360	crypt cell	ZFA:crypt cell	4	OLS_dist
+BTO:0000289	cytotoxic t-cell	cytotoxic T-cell	1	OLS_dist
+BTO:0001637	dura	dura mater	6	OLS_dist
+BTO:0001211	ecv304 cell	ECV304 cell	3	OLS_dist
+BTO:0001422	endometrium	uterine endometrium	8	OLS_dist
+BTO:0002245	foreskin fibroblast	foreskin fibroblast cell line	10	OLS_dist
+BTO:0000527	glioblastoma	glioblastoma cell	5	OLS_dist
+BTO:0002373	glioblastoma multiforme	glioblastoma multiforme cell	5	OLS_dist
+BTO:0000526	glioma	glioma cell	5	OLS_dist
+BTO:0000552	hacat	HaCaT cell	8	OLS_dist
+BTO:0002168	hairy-cell leukemia cell	hairy cell leukemia cell	1	OLS_dist
+EFO:0002933	hapmap cell	HapMap cell lines	8	OLS_dist
+BTO:0000007	hek-293	HEK-293 cell	8	OLS_dist
+BTO:0000568	hela s3 cell	HeLa S3 cell	3	OLS_dist
+BTO:0000599	hepg2	HepG2 cell	7	OLS_dist
+BTO:0000599	hepg2 cell	HepG2 cell	2	OLS_dist
+BTO:0002221	hle b-3 cell	HLE B-3 cell	4	OLS_dist
+BTO:0002331	hle cell	HLE cell	3	OLS_dist
+BTO:0001871	hs776t cell	HS776T cell	3	OLS_dist
+BTO:0001948	jurkat e-61 cell	JURKAT E-61 cell	7	OLS_dist
+BTO:0000664	k562 cell	K562 cell	1	OLS_dist
+GO:0042599	lamellar granule	GO:lamellar granule	3	OLS_dist
+CCO:C0001664	lamellar granule	CCO:lamellar granule	4	OLS_dist
+FMA:70592	lamellar granule	FMA:Lamellar granule	5	OLS_dist
+BTO:0000935	lan5 cell	LAN5 cell	3	OLS_dist
+BTO:0000606	lk63 cell	LK63 cell	2	OLS_dist
+BTO:0001553	ls174t cell	LS174T cell	3	OLS_dist
+BTO:0000773	lymphoblastoid cell	lymphoblastoid cell line	5	OLS_dist
+EFO:0002438	memory t-cell	memory T-cell	1	OLS_dist
+BTO:0002137	mia paca-2 cell	MIA PaCa-2 cell	5	OLS_dist
+EFO:0002831	mkn28 cell	MKN28 cell	3	OLS_dist
+BTO:0001225	mkn45 cell	MKN45 cell	3	OLS_dist
+EFO:0002835	mrc5 cell	MRC5 cell	3	OLS_dist
+BTO:0000256	myoblast cell	myoblast cell line	5	OLS_dist
+BTO:0002208	nci-h661cell	NCI-H661cell	4	OLS_dist
+EFO:0000311	neoplasia	malignant neoplasia	10	OLS_dist
+BTO:0000931	neuroblastoma	neuroblastoma cell	5	OLS_dist
+BTO:0000944	nih 3t3 cell	NIH 3T3 cell	4	OLS_dist
+EFO:0000096	non-hodgkin's lymphoma cell	B-Cell Non-Hodgkin Lymphoma	17	OLS_dist
+BTO:0002058	non-small-cell lung cancer cell	non-small cell lung cancer cell	1	OLS_dist
+BTO:0002211	oral squamous cell carcinoma	oral squamous cell carcinoma cell line	10	OLS_dist
+BTO:0000783	pancreatic beta-cell	pancreatic beta cell	1	OLS_dist
+EFO:0000549	pancreatic tumor cell	Pancreatic Beta Cell Tumor	13	OLS_dist
+BTO:0001025	pbmc	PBMC	4	OLS_dist
+BTO:0000132	platelet	blood platelet	6	OLS_dist
+BTO:0002046	plc/prf/5 cell	PLC/PRF/5 cell	6	OLS_dist
+BTO:0001130	prostate carcinoma	prostate carcinoma cell	5	OLS_dist
+BTO:0002398	prostate epithelium cell	prostate epithelium cell line	5	OLS_dist
+EFO:0002621	prostatic intraepithelial neoplasia	PIN - Prostatic Intraepithelial Neoplasia	9	OLS_dist
+BTO:0001965	raw 264.7 cell	RAW 264.7 cell	3	OLS_dist
+BTO:0001965	raw264.7 cell	RAW264.7 cell	3	OLS_dist
+EFO:0002890	renal cancer cell	Renal Cell Cancer	11	OLS_dist
+EFO:0000681	renal cancer cell	Cancer  Renal Cell	12	OLS_dist
+BTO:0000037	renal cell carcinoma	renal cell carcinoma cell	5	OLS_dist
+BTO:0000383	renal cell carcinoma	renal cell carcinoma cell line	10	OLS_dist
+BTO:0001203	salivary	salivary gland	6	OLS_dist
+BTO:0000189	sclc cell	SCLC cell	4	OLS_dist
+BTO:0000948	sk-ov-3 cell	SK-OV-3 cell	4	OLS_dist
+BTO:0000948	skov3 cell	SKOV3 cell	4	OLS_dist
+BTO:0001289	squamous cell carcinoma	squamous cell carcinoma cell	5	OLS_dist
+FMA:70952	sweat gland cell	FMA:Epithelial cell of sweat gland	27	OLS_dist
+BTO:0001345	t24 cell	T24 cell	1	OLS_dist
+BTO:0001248	t47-d cell	T47-D cell	2	OLS_dist
+BTO:0001248	t47d cell	T47D cell	2	OLS_dist
+BTO:0002032	t84 cell	T84 cell	1	OLS_dist
+BTO:0001370	thp-1	THP-1 cell	8	OLS_dist
+BTO:0001370	thp1 cell	THP1 cell	3	OLS_dist
+BTO:0002034	u-251 cell	U-251 cell	1	OLS_dist
+BTO:0002035	u-251mg cell	U-251MG cell	3	OLS_dist
+BTO:0002036	u-87 cell	U-87 cell	1	OLS_dist
+BTO:0002036	u-87 mg cell	U-87 MG cell	3	OLS_dist
+BTO:0001594	u266 cell	U266 cell	1	OLS_dist
+BTO:0001412	u937 cell	U937 cell	1	OLS_dist
+BTO:0002087	vitreous chamber	vitreous chamber of the eye	11	OLS_dist
+BTO:0000236	white matter	cerebral white matter	9	OLS_dist
