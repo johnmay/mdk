@@ -16,7 +16,6 @@
  */
 package uk.ac.ebi.metabolomes.core;
 
-import java.util.Collections;
 import uk.ac.ebi.metabolomes.descriptor.annotation.AbstractAnnotation;
 import uk.ac.ebi.metabolomes.descriptor.annotation.AnnotationCollection;
 import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
@@ -35,7 +34,7 @@ public abstract class ObjectDescriptor
     private ObservationCollection observations = new ObservationCollection();
 
     public AnnotationCollection getAnnotations() {
-        return ( AnnotationCollection ) Collections.unmodifiableList( annotations );
+        return annotations;
     }
 
     public boolean addAnnotation( AbstractAnnotation annotation ) {

@@ -21,9 +21,12 @@ public abstract class GeneProduct
         extends ObjectDescriptor
         implements Serializable {
 
-    private transient static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( GeneProduct.class );
+    private static final long serialVersionUID = -4745549528955688150L;
+    private transient static final org.apache.log4j.Logger logger =
+                                                           org.apache.log4j.Logger.getLogger( GeneProduct.class );
+
     private ProductType type;
-    private ReactionCollection reactions;
+    private ReactionCollection reactions = new ReactionCollection();
     private String sequence; // have to store as simple string as BioJava3 ProteinSequence is not serializable and we want to store the object it to disk :-)
     private Integer sequenceLength;
 
@@ -83,7 +86,7 @@ public abstract class GeneProduct
      * @return
      */
     public ReactionCollection getReactions() {
-        return ( ReactionCollection ) Collections.unmodifiableList( reactions );
+        return reactions;
     }
     // metabolies?
     // parent gene
