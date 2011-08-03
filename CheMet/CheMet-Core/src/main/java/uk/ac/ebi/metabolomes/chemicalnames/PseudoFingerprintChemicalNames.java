@@ -5,6 +5,7 @@
 package uk.ac.ebi.metabolomes.chemicalnames;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -28,21 +29,40 @@ import org.apache.commons.lang.StringUtils;
 public class PseudoFingerprintChemicalNames {
    
     static final Pattern alphanum = Pattern.compile("\\p{Punct}|\\p{Cntrl}");
+    static final Pattern plural = Pattern.compile("s$");
+    static final Pattern definedHtmlTags = Pattern.compile("</{0,1}(i|sub|sup)>");
+    static final Pattern digit = Pattern.compile("\\d");
     
     public String key(String s) {
         s = s.trim(); // first off, remove whitespace around the string
         s = s.toLowerCase(); // then lowercase it
+        s = definedHtmlTags.matcher(s).replaceAll(""); // replace <i> </i>, <sub> </sub>, <sup> </sup>
         s = alphanum.matcher(s).replaceAll(""); // then remove all punctuation and control chars
         String[] frags = StringUtils.split(s); // split by whitespace
         List<String> listOfTokens = new ArrayList<String>();
-        for (String ss : frags) {
-            listOfTokens.add(ss); 
+        List<String> numericTokens = new ArrayList<String>();
+        for (String frag : frags) {
+            if(digit.matcher(frag).find())
+                numericTokens.add(frag);
+            else listOfTokens.add(frag);
         }
-        Collections.sort(listOfTokens);
+        Collections.sort(listOfTokens); 
+        /*
+         * Sort them. Probably we should have an exception here for numbers,
+         * so that they are left in the same order they appeared in the name.
+         * Originally the refine implementation (for 'normal words') makes a 
+         * unique set of characters and sort them. I thought that for chemical 
+         * names it would be useful to keep the number of appearances.
+         * 
+         */
         StringBuilder b = new StringBuilder();
+        for (String number : numericTokens) {
+            b.append(number);
+            //b.append(' ');
+        }
         for (String token : listOfTokens) {
             b.append(token);
-            b.append(' ');
+            //b.append(' ');
         }
         return asciify(b.toString()); // find ASCII equivalent to characters 
     }
