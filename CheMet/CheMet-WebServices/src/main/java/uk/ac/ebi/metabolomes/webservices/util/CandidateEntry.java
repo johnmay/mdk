@@ -96,4 +96,47 @@ public class CandidateEntry implements Comparable<CandidateEntry> {
     public String getComment() {
         return comment;
     }
+
+
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + ( this.id != null ? this.id.hashCode() : 0 );
+        hash = 53 * hash + ( this.desc != null ? this.desc.hashCode() : 0 );
+        hash = 53 * hash + ( this.distance != null ? this.distance.hashCode() : 0 );
+        hash = 53 * hash + ( this.comment != null ? this.comment.hashCode() : 0 );
+        return hash;
+    }
+
+    @Override
+    public boolean equals( Object obj ) {
+        if ( obj == null ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+        final CandidateEntry other = ( CandidateEntry ) obj;
+        if ( ( this.id == null ) ? ( other.id != null ) : !this.id.equals( other.id ) ) {
+            return false;
+        }
+        if ( ( this.desc == null ) ? ( other.desc != null ) : !this.desc.equals( other.desc ) ) {
+            return false;
+        }
+        if ( this.distance != other.distance && ( this.distance == null || !this.distance.equals( other.distance ) ) ) {
+            return false;
+        }
+        if ( ( this.comment == null ) ? ( other.comment != null ) : !this.comment.equals( other.comment ) ) {
+            return false;
+        }
+        return true;
+    }
+
+
+
+    @Override
+    public String toString () {
+        return getId() + ": " + getDesc() + " d=" + getDistance();
+    }
 }
