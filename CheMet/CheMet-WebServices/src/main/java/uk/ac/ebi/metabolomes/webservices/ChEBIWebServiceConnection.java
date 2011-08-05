@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -31,8 +30,9 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
      */
     private ChebiWebServiceClient client;
     private String serviceProviderName = "ChEBI";
-    private Logger logger;
+    private static final  Logger logger = Logger.getLogger( ChEBIWebServiceConnection.class );
     private int maxResultsSearch;
+    private StarsCategory starsCategory;
 
     public static void main( String[] args ) throws Exception {
         // TODO Auto-generated method stub
@@ -56,19 +56,32 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         }
     }
 
-    private void init() {
-        client = new ChebiWebServiceClient();
-        maxResultsSearch = 200;
-        logger = Logger.getLogger( ChEBIWebServiceConnection.class.getName() );
+    /**
+     * Default constructor instantiates the Connection to search for
+     * StarsCategory.ALL and 200 max results
+     */
+    public ChEBIWebServiceConnection() {
+        this( StarsCategory.ALL , 200 );
     }
 
-    public ChEBIWebServiceConnection() {
-        this.init();
+    /**
+     * Constructor to specify the star rating of results and number of results
+     * @param starsCategory
+     */
+    public ChEBIWebServiceConnection( StarsCategory starsCategory , Integer maxResult ) {
+        client = new ChebiWebServiceClient();
+        this.maxResultsSearch = maxResult;
+        this.starsCategory = starsCategory;
     }
 
     public void setMaxResults( int maxRes ) {
         this.maxResultsSearch = maxRes;
     }
+
+    public void setStarsCategory( StarsCategory starsCategory ) {
+        this.starsCategory = starsCategory;
+    }
+
 
     @Override
     public HashMap<String , String> getInChIs( String[] ids ) {
@@ -162,7 +175,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         try {
             for ( String chebiId : chebiIds ) {
                 LiteEntityList entities = client.getLiteEntity( chebiId ,
-                                                                SearchCategory.CHEBI_ID , 1 , StarsCategory.ALL );
+                                                                SearchCategory.CHEBI_ID , 1 , this.starsCategory );
                 List<LiteEntity> resultList = entities.getListElement();
                 if ( resultList != null ) {
                     res.put( chebiId , resultList );
@@ -229,7 +242,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     private HashMap<String , String> searchBy( String name , SearchCategory a ) {
         HashMap<String , String> res = new HashMap<String , String>();
         try {
-            LiteEntityList ents = client.getLiteEntity( name , a , 200 , StarsCategory.ALL );
+            LiteEntityList ents = client.getLiteEntity( name , a , this.maxResultsSearch , this.starsCategory );
             List<LiteEntity> listMols = ents.getListElement();
             for ( LiteEntity leMol : listMols ) {
                 res.put( leMol.getChebiId() , leMol.getChebiAsciiName() );
@@ -245,7 +258,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     private HashMap<String , Float> searchBestBy( String name , SearchCategory a ) {
         HashMap<String , Float> res = new HashMap<String , Float>();
         try {
-            LiteEntityList ents = client.getLiteEntity( name , a , 1 , StarsCategory.ALL );
+            LiteEntityList ents = client.getLiteEntity( name , a , 1 , starsCategory );
             List<LiteEntity> listMols = ents.getListElement();
             for ( LiteEntity leMol : listMols ) {
                 res.put( leMol.getChebiId() , leMol.getSearchScore() );
