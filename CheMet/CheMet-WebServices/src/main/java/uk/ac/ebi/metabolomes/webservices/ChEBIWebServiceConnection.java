@@ -156,7 +156,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return res;
     }
 
-    public Map<String, List<LiteEntity>> getLiteEntity(String[] chebiIds) {
+    public HashMap<String, List<LiteEntity>> getLiteEntity(String[] chebiIds) {
         HashMap<String, List<LiteEntity>> res = new HashMap<String, List<LiteEntity>>();
         try {
             for (String chebiId : chebiIds) {
@@ -175,7 +175,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         }
     }
 
-    public List<Entity> getCompleteEntities(List<String> chebiIds) {
+    public ArrayList<Entity> getCompleteEntities(List<String> chebiIds) {
         ArrayList<Entity> res = new ArrayList<Entity>();
         try {
             for (String id : chebiIds) {
@@ -200,27 +200,27 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return this.searchBy(inchi, SearchCategory.INCHI_INCHI_KEY);
     }
 
-    public Map<String, String> searchByName(String name) {
+    public HashMap<String, String> searchByName(String name) {
         return this.searchBy(name, SearchCategory.CHEBI_NAME);
     }
 
-    public Map<String, String> search(String search) {
+    public HashMap<String, String> search(String search) {
         return this.searchBy(search, SearchCategory.ALL);
     }
 
-    public Map<String, String> searchBySynonym(String syn) {
+    public HashMap<String, String> searchBySynonym(String syn) {
         return this.searchBy(syn, SearchCategory.ALL_NAMES);
     }
 
-    public Map<String, Float> searchBySmiles(String syn) {
+    public HashMap<String, Float> searchBySmiles(String syn) {
         return this.searchBestBy(syn, SearchCategory.SMILES);
     }
 
-    public Map<String, String> searchByIupacName(String iupacName) {
+    public HashMap<String, String> searchByIupacName(String iupacName) {
         return this.searchBy(iupacName, SearchCategory.IUPAC_NAME);
     }
 
-    private Map<String, String> searchBy(String name, SearchCategory a) {
+    private HashMap<String, String> searchBy(String name, SearchCategory a) {
         HashMap<String, String> res = new HashMap<String, String>();
         try {
             LiteEntityList ents = client.getLiteEntity(name, a, 200,StarsCategory.ALL);
@@ -236,7 +236,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return res;
     }
 
-    private Map<String, Float> searchBestBy(String name, SearchCategory a) {
+    private HashMap<String, Float> searchBestBy(String name, SearchCategory a) {
         HashMap<String, Float> res = new HashMap<String, Float>();
         try {
             LiteEntityList ents = client.getLiteEntity(name, a, 1,StarsCategory.ALL);
@@ -252,7 +252,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return res;
     }
 
-    public Map<String, Float> similaritySearch(String mol, Float tanimotoCutOff) {
+    public HashMap<String, Float> similaritySearch(String mol, Float tanimotoCutOff) {
         HashMap<String,Float> res = new HashMap<String, Float>();
         try {
             LiteEntityList ents = client.getStructureSearch(mol, StructureType.MOLFILE, StructureSearchCategory.SIMILARITY, this.maxResultsSearch, tanimotoCutOff);
@@ -266,7 +266,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return res;
     }
 
-    public Map<String, Float> identitySearch(String mol, Float tanimotoCutOff) {
+    public HashMap<String, Float> identitySearch(String mol, Float tanimotoCutOff) {
         HashMap<String,Float> res = new HashMap<String, Float>();
         try {
             LiteEntityList ents = client.getStructureSearch(mol, StructureType.MOLFILE, StructureSearchCategory.IDENTITY, this.maxResultsSearch, tanimotoCutOff);
