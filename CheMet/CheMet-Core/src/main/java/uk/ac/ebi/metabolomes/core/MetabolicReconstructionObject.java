@@ -23,10 +23,10 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public class MetabolicReconstructionObject {
+public class MetabolicReconstructionObject  {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( MetabolicReconstructionObject.class );
-
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger( MetabolicReconstructionObject.class );
     private AbstractIdentifier identifier;
 
     public AbstractIdentifier getIdentifier() {
@@ -37,4 +37,8 @@ public class MetabolicReconstructionObject {
         this.identifier = id;
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
