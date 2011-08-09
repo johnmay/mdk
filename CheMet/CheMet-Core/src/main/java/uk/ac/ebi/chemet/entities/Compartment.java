@@ -33,12 +33,10 @@ import org.apache.log4j.Logger;
  */
 public enum Compartment {
 
-
     // Organelles (prokaryotes)
     CYTOPLASM( "c" , "Cytoplasm" ),
     PERIPLASM( "p" , "Periplasm" ),
     EXTRACELLULA( "e" , "Extracellular" ),
-
     // Organelles (eukaryotes) and tissues/organs
     FLAGELLUM( "f" , "Flagellum" ),
     GOLGI( "g" , "Golgi" ),
@@ -56,7 +54,6 @@ public enum Compartment {
     GLYOXYSOME( "w" , "Glyoxysome" ),
     PEROXISOME( "x" , "Peroxisome" ),
     GLYCOSOME( "y" , "Glycosome" ),
-
     // Membranes
     GOLGI_MEMBRANE( "gm" , "Golgi Membrane" ),
     MITOCHONDRIAL_MEMBRANe( "mm" , "Mitochondrial Membrane" ),
@@ -65,7 +62,6 @@ public enum Compartment {
     ENDOPLASMIC_RETICULUM_MEMBRANE( "rm" , "Endoplasmic Reticulum Membrane" ),
     VACUOLAR_MEMBRANE( "vm" , "Vacuolar Membrane" ),
     PEROXISOMAL_MEMBRANE( "xm" , "Peroxisomal Membrane" );
-
     // store the abbreviation 1/2 leter code and the textual description
     private String abbreviation;
     private String description;
@@ -83,6 +79,4 @@ public enum Compartment {
     public String getDescription() {
         return description;
     }
-
-
 }

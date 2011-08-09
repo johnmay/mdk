@@ -25,10 +25,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.core.MetabolicReconstructionObject;
+import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
 
 /**
  * @name    GenericReaction
@@ -48,7 +50,7 @@ import uk.ac.ebi.metabolomes.core.MetabolicReconstructionObject;
  *
  */
 public class GenericReaction<M , S extends Comparable , C extends Comparable>
-        extends MetabolicReconstructionObject {
+        extends ObjectDescriptor {
 
     private static final Logger LOGGER = Logger.getLogger( GenericReaction.class );
     protected List<M> reactants;
@@ -78,7 +80,6 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
         productStoichiometries = new ArrayList<S>();
         reactantCompartments = new ArrayList<C>();
         productCompartments = new ArrayList<C>();
-
     }
 
     public void setReversibility( ReactionReversibility reversibility ) {
@@ -110,7 +111,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
         sorted = false;
     }
 
-    public Collection<M> getReactants() {
+    public Collection<M> getReactantMolecules() {
         return Collections.unmodifiableList( reactants );
     }
 
@@ -153,7 +154,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
 
     }
 
-    public Collection<M> getProducts() {
+    public Collection<M> getProductMolecules() {
         return Collections.unmodifiableList( products );
     }
 
@@ -174,10 +175,16 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
         this.addProductStoichiometry( stoichiometry );
     }
 
-    @Override
-    public boolean equals( Object obj ) {
-        // todo
-        return super.equals( obj );
+    public int getMoleculeHashCode( M molecule ) {
+        return molecule.hashCode();
+    }
+
+    private int generateMoleculeHash( List<M> molecules ) {
+        int hash = 5;
+        for ( M molecule : molecules ) {
+            hash = 31 * hash + getMoleculeHashCode( molecule );
+        }
+        return hash;
     }
 
     @Override
@@ -192,15 +199,130 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
             sorted = true;
         }
 
-        hash = 59 * hash + ( this.reactantStoichiometries != null ? this.reactantStoichiometries.hashCode() : 0 );
-        hash = 59 * hash + ( this.reactionParticipants != null ? this.reactionParticipants.hashCode() : 0 );
-        hash =
-        59 * hash +
-        ( this.reactionParticipantStoichiometries != null ? this.reactionParticipantStoichiometries.hashCode() : 0 );
-        hash =
-        59 * hash +
-        ( this.reactionParticipantCompartments != null ? this.reactionParticipantCompartments.hashCode() : 0 );
+        hash = 59 * hash + ( this.reactionParticipants != null ? generateMoleculeHash( reactionParticipants ) : 0 );
+        hash = 59 * hash + ( this.reactionParticipantStoichiometries != null ? this.reactionParticipantStoichiometries.
+                hashCode() : 0 );
+        hash = 59 * hash + ( this.reactionParticipantCompartments != null ? this.reactionParticipantCompartments.
+                hashCode() : 0 );
+
         return hash;
+    }
+
+    @Override
+    public boolean equals( Object obj ) {
+        if ( obj == null ) {
+            return false;
+        }
+        if ( getClass() != obj.getClass() ) {
+            return false;
+        }
+
+
+        final GenericReaction<M , S , C> other =
+                                         ( GenericReaction<M , S , C> ) obj;
+
+        // just need shallow copies
+        // this compounds
+        List thisReactantCopy = new ArrayList( this.reactants );
+        List thisProductCopy = new ArrayList( this.products );
+        Collections.sort( thisReactantCopy , moleculeComparator );
+        Collections.sort( thisProductCopy , moleculeComparator );
+        // this coefs
+        List thisReStCopy = new ArrayList( this.reactantStoichiometries );
+        List thisPrStCopy = new ArrayList( this.productStoichiometries );
+        Collections.sort( thisReStCopy );
+        Collections.sort( thisPrStCopy );
+
+        //other compounds
+        List otherReactantCopy = new ArrayList( other.reactants );
+        List otherProductCopy = new ArrayList( other.products );
+        Collections.sort( otherReactantCopy , moleculeComparator );
+        Collections.sort( otherProductCopy , moleculeComparator );
+        //other coefs
+        List otherReStCopy = new ArrayList( other.reactantStoichiometries );
+        List otherPrStCopy = new ArrayList( other.productStoichiometries );
+        Collections.sort( otherReStCopy );
+        Collections.sort( otherPrStCopy );
+
+        Integer[] thisMolHashes =
+                  new Integer[]{ generateMoleculeHash( thisReactantCopy ) + ( thisReStCopy != null ? thisReStCopy.
+            hashCode() : 0 ) ,
+                                 generateMoleculeHash( thisProductCopy ) + ( thisPrStCopy != null ? thisPrStCopy.
+            hashCode() : 0 )
+        };
+
+        Integer[] otherMolHashes =
+                  new Integer[]{ generateMoleculeHash( otherReactantCopy ) + ( otherReStCopy != null ? otherReStCopy.
+            hashCode() : 0 ) ,
+                                 generateMoleculeHash( otherProductCopy ) + ( otherPrStCopy != null ? otherPrStCopy.
+            hashCode() : 0 )
+        };
+
+        HashSet<Integer> collapsed = new HashSet<Integer>();
+        collapsed.add( thisMolHashes[0] );
+        collapsed.add( thisMolHashes[1] );
+        collapsed.add( otherMolHashes[0] );
+        collapsed.add( otherMolHashes[1] );
+
+        // there are more then 2 sides
+        if ( collapsed.size() > 2 ) {
+            System.out.println( thisMolHashes[1] + " " + otherMolHashes[0] );
+            return false;
+        } else if ( collapsed.size() == 1 ) {
+            // left and right side are the same? in both...
+            throw new UnsupportedOperationException( "Reaction sides are the same!, this is not handled yet" );
+        }
+
+
+        try {
+
+            // probably only need to check that [0] == [0] once but just be safe we check all
+            // check for actual mathces
+            // this.reactants == other.reactants
+            if ( thisMolHashes[0].equals( otherMolHashes[0] ) ) {
+                return checkMolecules( thisReactantCopy , otherReactantCopy ) && checkMolecules( thisProductCopy ,
+                                                                                                 otherProductCopy );
+            } // this.reactants == other.products and other.reactants == this.products
+            else if ( thisMolHashes[0].equals( otherMolHashes[1] ) ) {
+
+                return checkMolecules( thisReactantCopy , otherProductCopy ) && checkMolecules( thisProductCopy ,
+                                                                                                otherReactantCopy );
+            } else {
+                LOGGER.error( "There was a problem! when checking equality" );
+            }
+
+        } catch ( Exception ex ) {
+            LOGGER.error( "There was a problem check individual molecule equality – assumbing reactions are different" );
+            return false;
+        }
+
+
+        return true;
+    }
+
+    private boolean checkMolecules( List<M> side1 ,
+                                    List<M> side2 ) throws Exception {
+
+        if ( side1.size() != side2.size() ) {
+            return false;
+        }
+
+        int count = 0;
+
+        // these are sorted prior to callage
+        for ( int i = 0; i < side1.size(); i++ ) {
+            if ( // moleculeComparator.compare( side1.get( i ) , side2.get( i ) ) == 0 && // this seems to slow it down..
+                    checkMoleculeEquality( side1.get( i ) , side2.get( i ) ) ) {
+                count++;
+            }
+        }
+
+        return count == side1.size();
+    }
+// called if the comparator == 0
+
+    public boolean checkMoleculeEquality( M m1 , M m2 ) throws Exception {
+        return m1.equals( m2 );
     }
 
     @Override
@@ -257,9 +379,9 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
 
         r.addReactant( "A" , 1 , "e" );
         r.addReactant( "B" , 1 , "c" );
-        r.addProduct( "A" , 1 , "c" );
         r.addProduct( "C" , 1 , "c" );
+        r.addProduct( "A" , 1 , "c" );
 
-        System.out.println( r );
+        System.out.println( r.equals( r ) );
     }
 }

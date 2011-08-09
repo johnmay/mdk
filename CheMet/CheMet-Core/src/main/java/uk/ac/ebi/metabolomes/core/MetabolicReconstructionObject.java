@@ -23,7 +23,7 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public class MetabolicReconstructionObject  {
+public class MetabolicReconstructionObject implements Cloneable {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger( MetabolicReconstructionObject.class );

@@ -41,6 +41,7 @@ import uk.ac.ebi.metabolomes.utilities.Util;
  * @author johnmay
  * @date Apr 6, 2011
  */
+@Deprecated
 public class BiochemicalReaction
         extends ProxyReaction
         implements Serializable {

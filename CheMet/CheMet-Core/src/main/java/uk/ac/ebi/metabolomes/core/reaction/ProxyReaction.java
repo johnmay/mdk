@@ -29,6 +29,7 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
  * @author johnmay
  * @date Apr 18, 2011
  */
+@Deprecated
 class ProxyReaction
         extends Reaction
         implements Serializable {
@@ -59,12 +60,12 @@ class ProxyReaction
 
         int hash = 52;
 
-        if(needsSorting){ // only sort if the collection has been modified
-            Collections.sort(reactionParticipants);
+        if ( needsSorting ) { // only sort if the collection has been modified
+            Collections.sort( reactionParticipants );
             needsSorting = false;
         }
 
-        for ( InChI inchi: reactionParticipants ) {
+        for ( InChI inchi : reactionParticipants ) {
             hash = 67 * hash + inchi.hashCode();
         }
 
@@ -94,7 +95,7 @@ class ProxyReaction
 
     }
 
-    public List<InChI> getInChIs(){
+    public List<InChI> getInChIs() {
         return reactionParticipants;
     }
 }
