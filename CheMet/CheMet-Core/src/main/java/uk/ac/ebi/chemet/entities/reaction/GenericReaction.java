@@ -21,7 +21,6 @@
 package uk.ac.ebi.chemet.entities.reaction;
 
 import java.io.Serializable;
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -276,7 +275,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
      */
     @Override
     public int hashCode() {
-        
+
         int hash = 5;
 
         // (re)calculate the hash if needed (i.e. there has been a state-change)

@@ -63,7 +63,7 @@ public class AtomContainerReaction
     }
 
     @Override
-    public int getMoleculeHashCode( IAtomContainer mol ) {
+    public int moleculeHashCode( IAtomContainer mol ) {
         int hash = 7;
 
         hash = 67 * hash + mol.getBondCount();
@@ -81,7 +81,7 @@ public class AtomContainerReaction
     }
 
     @Override
-    public boolean checkMoleculeEquality( IAtomContainer m1 , IAtomContainer m2 ) throws Exception {
+    public boolean moleculeEqual( IAtomContainer m1 , IAtomContainer m2 ) throws Exception {
         Isomorphism isoChecker = new Isomorphism( Algorithm.DEFAULT , true );
         isoChecker.init( m1 , m2 , true , true );
         return isoChecker.getTanimotoSimilarity() == 1;

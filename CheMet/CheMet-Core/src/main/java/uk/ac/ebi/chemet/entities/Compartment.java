@@ -79,4 +79,8 @@ public enum Compartment {
     public String getDescription() {
         return description;
     }
+
+    public String toString(){
+        return abbreviation;
+    }
 }
