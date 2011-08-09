@@ -20,22 +20,12 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IChemObjectChangeEvent;
-import org.openscience.cdk.interfaces.IChemObjectListener;
-import org.openscience.cdk.interfaces.IMapping;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.cdk.interfaces.*;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
@@ -54,9 +44,10 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
  */
 public class AtomContainerReaction
         extends GenericReaction<IAtomContainer , Double , Compartment>
-        implements IReaction {
+        implements IReaction, Serializable {
 
     private static final Logger LOGGER = Logger.getLogger( AtomContainerReaction.class );
+    private static final long serialVersionUID = -3032876353022267689L;
 
     public AtomContainerReaction() {
         super( new AtomContainerComparator() );
@@ -367,4 +358,5 @@ public class AtomContainerReaction
     public IChemObjectBuilder getBuilder() {
         throw new UnsupportedOperationException( "Not supported yet." );
     }
+
 }

@@ -295,9 +295,9 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
             the molecule has a specialise hashCode that allows it to be overridden
             in sub classes */
 
-            hash = 59 * hash + ( reacMols != null ? hashCode( reacMols ) : 0 );
-            hash = 59 * hash + ( reacCoef != null ? reacCoef.hashCode() : 0 );
-            hash = 59 * hash + ( reacComp != null ? reacComp.hashCode() : 0 );
+            hash = 59 * hash + ( !reacMols.isEmpty() ? hashCode( reacMols ) : 0 );
+            hash = 59 * hash + ( !reacCoef.isEmpty() ? reacCoef.hashCode() : 0 );
+            hash = 59 * hash + ( !reacComp.isEmpty() ? reacComp.hashCode() : 0 );
 
             // TODO: reduce collisions by calculating per-side then add then ordering the two hashes by size
 
