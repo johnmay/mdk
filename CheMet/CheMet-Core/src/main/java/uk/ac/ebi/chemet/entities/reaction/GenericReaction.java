@@ -22,12 +22,14 @@ package uk.ac.ebi.chemet.entities.reaction;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
 
@@ -297,6 +299,8 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
             hash = 59 * hash + ( reacCoef != null ? reacCoef.hashCode() : 0 );
             hash = 59 * hash + ( reacComp != null ? reacComp.hashCode() : 0 );
 
+            // TODO: reduce collisions by calculating per-side then add then ordering the two hashes by size
+
             this.cachedHash = hash;
 
         }
@@ -305,115 +309,167 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
 
     }
 
+    /**
+     * Check equality of reactions based on state. Reactions are considered equal if their reactants and products
+     * (coefficients and compartments) are equal regardless of the side they reside on. For example A + B <-> C + D is
+     * considered equal to C + D <-> A + B. The participant stoichiometric coefficients and compartments are also checked.
+     *
+     * To accomplish this the reactionParticipants and copied, sorted and then a hash for each side (four total) is made.
+     * Duplicate hashes are then removed via the {@See Set} interface and the query (this) and the other (obj) sides are
+     * tested for coefficient, compartment and finally molecule similarity
+     *
+     * @param obj The other object to test equality with
+     * @return Whether the objects are considered equal
+     */
     @Override
     public boolean equals( Object obj ) {
+
         if ( obj == null ) {
             return false;
         }
         if ( getClass() != obj.getClass() ) {
             return false;
         }
-
-
         final GenericReaction<M , S , C> other =
                                          ( GenericReaction<M , S , C> ) obj;
 
-        // just need shallow copies
-        // this compounds
-        List thisReactantCopy = new ArrayList( this.reactants );
-        List thisProductCopy = new ArrayList( this.products );
-        Collections.sort( thisReactantCopy , moleculeComparator );
-        Collections.sort( thisProductCopy , moleculeComparator );
-        // this coefs
-        List thisReStCopy = new ArrayList( this.reactantStoichiometries );
-        List thisPrStCopy = new ArrayList( this.productStoichiometries );
-        Collections.sort( thisReStCopy );
-        Collections.sort( thisPrStCopy );
 
-        //other compounds
-        List otherReactantCopy = new ArrayList( other.reactants );
-        List otherProductCopy = new ArrayList( other.products );
-        Collections.sort( otherReactantCopy , moleculeComparator );
-        Collections.sort( otherProductCopy , moleculeComparator );
-        //other coefs
-        List otherReStCopy = new ArrayList( other.reactantStoichiometries );
-        List otherPrStCopy = new ArrayList( other.productStoichiometries );
-        Collections.sort( otherReStCopy );
-        Collections.sort( otherPrStCopy );
+        /* Make shallow copies of compounds, coeffcients and compartments and sort */
+        // query compounds
+        List queryReactants = new ArrayList( this.reactants );
+        List queryProducts = new ArrayList( this.products );
+        Collections.sort( queryReactants , moleculeComparator );
+        Collections.sort( queryProducts , moleculeComparator );
+        // query coefs
+        List queryReacCoef = new ArrayList( this.reactantStoichiometries );
+        List queryProdCoef = new ArrayList( this.productStoichiometries );
+        Collections.sort( queryReacCoef );
+        Collections.sort( queryProdCoef );
+        // query compartments
+        List queryReacComp = new ArrayList( this.reactantCompartments );
+        List queryProdComp = new ArrayList( this.productCompartments );
+        Collections.sort( queryReacComp );
+        Collections.sort( queryProdComp );
 
-        Integer[] thisMolHashes =
-                  new Integer[]{ hashCode( thisReactantCopy ) + ( thisReStCopy != null ?
-                                                                  thisReStCopy.hashCode() : 0 ) ,
-                                 hashCode( thisProductCopy ) + ( thisPrStCopy != null ?
-                                                                 thisPrStCopy.hashCode() : 0 )
-        };
+        // other compounds
+        List otherReactants = new ArrayList( other.reactants );
+        List otherProducts = new ArrayList( other.products );
+        Collections.sort( otherReactants , moleculeComparator );
+        Collections.sort( otherProducts , moleculeComparator );
+        // other coefs
+        List otherReacCoef = new ArrayList( other.reactantStoichiometries );
+        List otherProdCoef = new ArrayList( other.productStoichiometries );
+        Collections.sort( otherReacCoef );
+        Collections.sort( otherProdCoef );
+        // other compartments
+        List otherReacComp = new ArrayList( other.reactantCompartments );
+        List otherProdComp = new ArrayList( other.productCompartments );
+        Collections.sort( otherReacComp );
+        Collections.sort( otherProdComp );
 
-        Integer[] otherMolHashes =
-                  new Integer[]{ hashCode( otherReactantCopy ) +
-                                 ( otherReStCopy != null ? otherReStCopy.hashCode() : 0 ) ,
-                                 hashCode( otherProductCopy ) + ( otherPrStCopy != null ?
-                                                                  otherPrStCopy.hashCode() : 0 )
-        };
+        /* calculate the hashes for these all the reaction sides and flattern into a hashset to test the length */
+        Integer queryReactantHash = hashCode( queryReactants ) + queryReacCoef.hashCode() + queryReacComp.hashCode();
+        Integer queryProductHash = hashCode( queryProducts ) + queryProdCoef.hashCode() + queryProdComp.hashCode();
+        Integer otherReactantHash = hashCode( otherReactants ) + otherReacCoef.hashCode() + otherReacComp.hashCode();
+        Integer otherProductHash = hashCode( otherProducts ) + otherProdCoef.hashCode() + otherProdComp.hashCode();
 
-        HashSet<Integer> collapsed = new HashSet<Integer>();
-        collapsed.add( thisMolHashes[0] );
-        collapsed.add( thisMolHashes[1] );
-        collapsed.add( otherMolHashes[0] );
-        collapsed.add( otherMolHashes[1] );
+        Set hashes = new HashSet<Integer>( Arrays.asList( queryReactantHash , queryProductHash ,
+                                                          otherReactantHash , otherProductHash ) );
 
-        // there are more then 2 sides
-        if ( collapsed.size() > 2 ) {
-            System.out.println( thisMolHashes[1] + " " + otherMolHashes[0] );
+        /* Check the correct number of side */
+        if ( hashes.size() != 2 ) {
+            // not handling cases where reactants and products are the same.. could just be same hashcode
+            if ( hashes.size() == 1 ) {
+                throw new UnsupportedOperationException( "this.reactants == this.products " +
+                                                         "&& other.reactants == other.products " +
+                                                         "&& this.reactants == other.reactants" );
+            }
             return false;
-        } else if ( collapsed.size() == 1 ) {
-            // left and right side are the same? in both...
-            throw new UnsupportedOperationException( "Reaction sides are the same!, this is not handled yet" );
         }
 
 
+        /* check the sides match */
         try {
-
-            // probably only need to check that [0] == [0] once but just be safe we check all
-            // check for actual mathces
             // this.reactants == other.reactants
-            if ( thisMolHashes[0].equals( otherMolHashes[0] ) ) {
-                return checkMolecules( thisReactantCopy , otherReactantCopy ) && checkMolecules( thisProductCopy ,
-                                                                                                 otherProductCopy );
-            } // this.reactants == other.products and other.reactants == this.products
-            else if ( thisMolHashes[0].equals( otherMolHashes[1] ) ) {
+            if ( queryReactantHash.equals( otherReactantHash ) ) {
 
-                return checkMolecules( thisReactantCopy , otherProductCopy ) && checkMolecules( thisProductCopy ,
-                                                                                                otherReactantCopy );
+                // checks the coef and compartments
+                if ( queryReacCoef.retainAll( otherReacCoef ) ) {
+                    return false;
+                }
+                if ( queryProdCoef.retainAll( otherProdCoef ) ) {
+                    return false;
+                }
+                if ( queryReacComp.retainAll( otherReacComp ) ) {
+                    return false;
+                }
+                if ( queryProdComp.retainAll( otherProdComp ) ) {
+                    return false;
+                }
+
+                // checks the molecules
+                return checkMolecules( queryReactants , otherReactants ) && checkMolecules( queryProducts ,
+                                                                                            otherProducts );
+            } // this.reactants == other.products and other.reactants == this.products
+            else if ( queryReactantHash.equals( otherProductHash ) ) {
+
+                // checks the coef and compartments
+                if ( queryReacCoef.retainAll( otherProdCoef ) ) {
+                    return false;
+                }
+                if ( queryProdCoef.retainAll( otherReacCoef ) ) {
+                    return false;
+                }
+                if ( queryReacComp.retainAll( otherProdComp ) ) {
+                    return false;
+                }
+                if ( queryProdComp.retainAll( otherReacComp ) ) {
+                    return false;
+                }
+
+                // checks the molecules
+                return checkMolecules( queryReactants , otherProducts ) && checkMolecules( queryProducts ,
+                                                                                           otherReactants );
             } else {
-                LOGGER.error( "There was a problem! when checking equality" );
+                // shouldn't happen qReactants != oReactants && qReactants != oProducts... then hashes.size() > 2
+                // can only be when qReactants == qProducts && oReactants == oProducts
+                throw new UnsupportedOperationException(
+                        "queryReactants != otherReactants && queryReactants != otherProducts ?" );
             }
 
         } catch ( Exception ex ) {
-            LOGGER.error( "There was a problem check individual molecule equality – assumbing reactions are different" );
+            LOGGER.error( "There was a problem checking individual molecule equality – assumbing reactions are different : " +
+                          ex.getMessage() );
             return false;
         }
 
-
-        return true;
     }
 
-    private boolean checkMolecules( List<M> side1 ,
-                                    List<M> side2 ) throws Exception {
+    /**
+     * Determines whether all the reference participants and equal to the query participants. This method iterates over
+     * the sort participants and uses {@see moleculeEqual(M, M)} to determine equality.
+     * @param queryParticipants
+     * @param otherParticipants
+     * @return Whether the participants are equal or not
+     * @throws Exception
+     */
+    private boolean checkMolecules( List<M> queryParticipants ,
+                                    List<M> otherParticipants ) throws Exception {
 
-        if ( side1.size() != side2.size() ) {
+        if ( queryParticipants.size() != otherParticipants.size() ) {
             return false;
         }
 
-        int count = 0;
+        // these are sorted prior to call
+        for ( int i = 0; i < queryParticipants.size(); i++ ) {
 
-        // these are sorted prior to callage
-        for ( int i = 0; i < side1.size(); i++ ) {
-            if ( moleculeEqual( side1.get( i ) , side2.get( i ) ) ) {
-                count++;
+            // so if there is one not equal then we can return false
+            if ( !moleculeEqual( queryParticipants.get( i ) , otherParticipants.get( i ) ) ) {
+                return false;
             }
         }
 
-        return count == side1.size();
+        return true;
     }
 
     public boolean moleculeEqual( M query , M reference ) throws Exception {
