@@ -43,18 +43,28 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
  *
  */
 public class AtomContainerReaction
-        extends GenericReaction<IAtomContainer , Double , Compartment>
-        implements IReaction, Serializable {
+        extends GenericReaction<IMolecule , Double , Compartment>
+        implements IReaction , Serializable {
 
     private static final Logger LOGGER = Logger.getLogger( AtomContainerReaction.class );
     private static final long serialVersionUID = -3032876353022267689L;
 
     public AtomContainerReaction() {
-        super( new AtomContainerComparator() );
+        super(new MoleculeComparator());
+    }
+
+    private static class MoleculeComparator
+            implements Comparator<IMolecule> {
+
+        private AtomContainerComparator comparator = new AtomContainerComparator();
+
+        public int compare( IMolecule o1 , IMolecule o2 ) {
+            return comparator.compare( o1 , o2 );
+        }
     }
 
     @Override
-    public int moleculeHashCode( IAtomContainer mol ) {
+    public int moleculeHashCode( IMolecule mol ) {
         int hash = 7;
 
         hash = 67 * hash + mol.getBondCount();
@@ -72,56 +82,10 @@ public class AtomContainerReaction
     }
 
     @Override
-    public boolean moleculeEqual( IAtomContainer m1 , IAtomContainer m2 ) throws Exception {
+    public boolean moleculeEqual( IMolecule m1 , IMolecule m2 ) throws Exception {
         Isomorphism isoChecker = new Isomorphism( Algorithm.DEFAULT , true );
         isoChecker.init( m1 , m2 , true , true );
         return isoChecker.getTanimotoSimilarity() == 1;
-    }
-
-    public static void main( String[] args ) {
-
-        String atp =
-               "InChI=1S/C10H16N5O13P3/c11-8-5-9(13-2-12-8)15(3-14-5)10-7(17)6(16)4(26-10)1-25-30(21,22)28-31(23,24)27-29(18,19)20/h2-4,6-7,10,16-17H,1H2,(H,21,22)(H,23,24)(H2,11,12,13)(H2,18,19,20)/t4-,6-,7-,10-/m1/s1";
-        String adp =
-               "InChI=1S/C10H15N5O10P2/c11-8-5-9(13-2-12-8)15(3-14-5)10-7(17)6(16)4(24-10)1-23-27(21,22)25-26(18,19)20/h2-4,6-7,10,16-17H,1H2,(H,21,22)(H2,11,12,13)(H2,18,19,20)/t4-,6-,7-,10-/m1/s1";
-        String water = "InChI=1S/H2O/h1H2";
-        String nad =
-               "InChI=1S/C21H27N7O14P2/c22-17-12-19(25-7-24-17)28(8-26-12)21-16(32)14(30)11(41-21)6-39-44(36,37)42-43(34,35)38-5-10-13(29)15(31)20(40-10)27-3-1-2-9(4-27)18(23)33/h1-4,7-8,10-11,13-16,20-21,29-32H,5-6H2,(H5-,22,23,24,25,33,34,35,36,37)/p+1/t10-,11-,13-,14-,15-,16-,20-,21-/m1/s1";
-
-        String butan1ol = "InChI=1S/C4H10O/c1-2-3-4-5/h5H,2-4H2,1H3";
-        String butan2ol = "InChI=1S/C4H10O/c1-3-4(2)5/h4-5H,3H2,1-2H3";
-
-        IMolecule mol_atp = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( atp ) );
-        IMolecule mol_adp = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( adp ) );
-        IMolecule mol_h2o = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( water ) );
-        IMolecule mol_nad = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( nad ) );
-
-        IMolecule mol_atp2 = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( atp ) );
-        IMolecule mol_adp2 = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( adp ) );
-        IMolecule mol_h2o2 = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( water ) );
-        IMolecule mol_nad2 = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( nad ) );
-
-        IMolecule mol_but1ol = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( butan1ol ) );
-        IMolecule mol_but1ol_1 = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( butan1ol ) );
-        IMolecule mol_but2ol = CDKMoleculeBuilder.getInstance().buildFromInChI( new InChI( butan2ol ) );
-
-        AtomContainerReaction r1 = new AtomContainerReaction();
-        r1.addReactant( mol_adp , 1d , Compartment.EXTRACELLULA );
-        r1.addReactant( mol_atp , 2d , Compartment.CYTOPLASM );
-        r1.addProduct( mol_h2o , 2d , Compartment.CYTOPLASM );
-        r1.addProduct( mol_nad , 1d , Compartment.CYTOPLASM );
-        r1.addProduct( mol_but1ol , 1d , Compartment.CYTOPLASM );
-
-        AtomContainerReaction r2 = new AtomContainerReaction();
-        r2.addProduct( mol_adp2 , 1d , Compartment.EXTRACELLULA );
-        r2.addProduct( mol_atp2 , 2d , Compartment.CYTOPLASM );
-        r2.addReactant( mol_h2o2 , 2d , Compartment.CYTOPLASM );
-        r2.addReactant( mol_nad2 , 1d , Compartment.CYTOPLASM );
-        r2.addReactant( mol_but1ol_1 , 1d , Compartment.CYTOPLASM );
-
-        //System.out.println( r1.equals( r2 ) );
-        // System.out.println( r1.hashCode() );
-
     }
 
     /**
@@ -134,7 +98,7 @@ public class AtomContainerReaction
         IReaction reaction = DefaultChemObjectBuilder.getInstance().newInstance( IReaction.class );
 
         // add the reactants
-        Iterator<IAtomContainer> reIt = reactants.iterator();
+        Iterator<IMolecule> reIt = reactants.iterator();
         Iterator<Double> rsIt = reactantStoichiometries.iterator();
         while ( reIt.hasNext() ) {
             if ( rsIt.hasNext() ) {
@@ -144,7 +108,7 @@ public class AtomContainerReaction
             }
         }
         // add the product
-        Iterator<IAtomContainer> prIt = products.iterator();
+        Iterator<IMolecule> prIt = products.iterator();
         Iterator<Double> psIt = productStoichiometries.iterator();
         while ( reIt.hasNext() ) {
             if ( rsIt.hasNext() ) {
@@ -157,17 +121,9 @@ public class AtomContainerReaction
     }
 
     /* IMPLEMENTATION OF IREACTION INTERFACE */
-    public int getReactantCount() {
-        return super.getReactantMolecules().size();
-    }
-
-    public int getProductCount() {
-        return super.getProductMolecules().size();
-    }
-
     public IMoleculeSet getReactants() {
         IMoleculeSet molSet = DefaultChemObjectBuilder.getInstance().newInstance( IMoleculeSet.class );
-        Iterator<IAtomContainer> reIt = super.reactants.iterator();
+        Iterator<IMolecule> reIt = super.reactants.iterator();
         while ( reIt.hasNext() ) {
             molSet.addAtomContainer( new Molecule( reIt.next() ) );
         }
@@ -176,13 +132,13 @@ public class AtomContainerReaction
 
     public void setReactants( IMoleculeSet ims ) {
         for ( int i = 0; i < ims.getAtomContainerCount(); i++ ) {
-            super.addReactant( ims.getAtomContainer( i ) );
+            super.addReactant( ims.getMolecule( i ) );
         }
     }
 
     public IMoleculeSet getProducts() {
         IMoleculeSet molSet = DefaultChemObjectBuilder.getInstance().newInstance( IMoleculeSet.class );
-        Iterator<IAtomContainer> reIt = super.products.iterator();
+        Iterator<IMolecule> reIt = super.products.iterator();
         while ( reIt.hasNext() ) {
             molSet.addAtomContainer( new Molecule( reIt.next() ) );
         }
@@ -191,7 +147,7 @@ public class AtomContainerReaction
 
     public void setProducts( IMoleculeSet ims ) {
         for ( int i = 0; i < ims.getAtomContainerCount(); i++ ) {
-            super.addProduct( ims.getAtomContainer( i ) );
+            super.addProduct( ims.getMolecule( i ) );
         }
     }
 
@@ -201,34 +157,6 @@ public class AtomContainerReaction
 
     public Iterable<IMapping> mappings() {
         throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
-    public void addReactant( IMolecule im ) {
-        super.addReactant( im );
-    }
-
-    public void addAgent( IMolecule im ) {
-        throw new UnsupportedOperationException( "Not supported yet." );
-    }
-
-    public void addReactant( IMolecule im , Double d ) {
-        super.addReactant( im , d );
-    }
-
-    public void addProduct( IMolecule im ) {
-        super.addProduct( im );
-    }
-
-    public void addProduct( IMolecule im , Double d ) {
-        super.addProduct( im , d );
-    }
-
-    public Double getReactantCoefficient( IMolecule im ) {
-        return super.reactantStoichiometries.get( super.reactants.indexOf( im ) );
-    }
-
-    public Double getProductCoefficient( IMolecule im ) {
-        return super.productStoichiometries.get( super.products.indexOf( im ) );
     }
 
     public boolean setReactantCoefficient( IMolecule im , Double d ) {
@@ -359,4 +287,7 @@ public class AtomContainerReaction
         throw new UnsupportedOperationException( "Not supported yet." );
     }
 
+    public void addAgent( IMolecule im ) {
+        throw new UnsupportedOperationException( "Not supported yet." );
+    }
 }

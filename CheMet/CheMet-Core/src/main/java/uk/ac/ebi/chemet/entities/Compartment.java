@@ -20,7 +20,8 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import org.apache.log4j.Logger;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @name    Compartment
@@ -56,15 +57,18 @@ public enum Compartment {
     GLYCOSOME( "y" , "Glycosome" ),
     // Membranes
     GOLGI_MEMBRANE( "gm" , "Golgi Membrane" ),
-    MITOCHONDRIAL_MEMBRANe( "mm" , "Mitochondrial Membrane" ),
+    MITOCHONDRIAL_MEMBRANE( "mm" , "Mitochondrial Membrane" ),
     NUCLEAR_MEMBRANE( "nm" , "Nuclear Membrane" ),
     PLASMA_MEMBRANE( "pm" , "Plasma Membrane" ),
     ENDOPLASMIC_RETICULUM_MEMBRANE( "rm" , "Endoplasmic Reticulum Membrane" ),
     VACUOLAR_MEMBRANE( "vm" , "Vacuolar Membrane" ),
-    PEROXISOMAL_MEMBRANE( "xm" , "Peroxisomal Membrane" );
+    PEROXISOMAL_MEMBRANE( "xm" , "Peroxisomal Membrane" ),
+    // indicates compartment is unknown
+    UNKNOWN("xx", "Unknown Compartment");
     // store the abbreviation 1/2 leter code and the textual description
     private String abbreviation;
     private String description;
+    private static final Map<String,Compartment> abbreviationMap = buildAbbreviationMap();
 
     private Compartment( String abbreviation ,
                          String description ) {
@@ -78,6 +82,22 @@ public enum Compartment {
 
     public String getDescription() {
         return description;
+    }
+
+    public static Compartment getCompartment(String abbreviation){
+        if(abbreviationMap.containsKey( abbreviation) ) {
+            return abbreviationMap.get(abbreviation);
+        }
+        return Compartment.UNKNOWN;
+    }
+
+    private static Map buildAbbreviationMap(){
+        Map<String,Compartment> map = new HashMap<String,Compartment>();
+        for( Compartment c : values() ) {
+            map.put("[" + c.getAbbreviation() + "]", c);
+            map.put( c.getAbbreviation(), c);
+        }
+        return map;
     }
 
     public String toString(){

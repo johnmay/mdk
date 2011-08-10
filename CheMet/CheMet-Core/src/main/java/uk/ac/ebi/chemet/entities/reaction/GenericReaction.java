@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.interfaces.IMolecule;
 import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
 
 /**
@@ -266,6 +267,22 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
         return allMolecules;
     }
 
+    public int getReactantCount() {
+        return getReactantMolecules().size();
+    }
+
+    public int getProductCount() {
+        return getProductMolecules().size();
+    }
+
+    public S getReactantCoefficient( M m ) {
+        return reactantStoichiometries.get( reactants.indexOf( m ) );
+    }
+
+    public S getProductCoefficient( M m ) {
+        return productStoichiometries.get( products.indexOf( m ) );
+    }
+
     /**
      * Calculates the hash code for the reaction in it's current state. As the molecules need to be sorted
      * this operation is more expensive and thus non-optimal. The hash is therefore cached in a the variable
@@ -380,6 +397,10 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
         if ( hashes.size() != 2 ) {
             // not handling cases where reactants and products are the same.. could just be same hashcode
             if ( hashes.size() == 1 ) {
+                for ( C c : this.getAllReactionCompartments() ) {
+                        System.out.println( c + ":" + c.hashCode() );
+                }
+
                 throw new UnsupportedOperationException( "this.reactants == this.products " +
                                                          "&& other.reactants == other.products " +
                                                          "&& this.reactants == other.reactants" );
