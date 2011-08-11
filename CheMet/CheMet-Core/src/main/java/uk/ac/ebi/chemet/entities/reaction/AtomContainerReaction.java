@@ -29,8 +29,7 @@ import org.openscience.cdk.interfaces.*;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
-import uk.ac.ebi.chemet.util.CDKMoleculeBuilder;
-import uk.ac.ebi.metabolomes.identifier.InChI;
+import uk.ac.ebi.chemet.entities.Compartment;
 
 /**
  * @name    AtomContainerReaction

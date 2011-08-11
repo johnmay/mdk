@@ -111,7 +111,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
      * Accessor for all the reactant compartments of the reaction
      * @return Unmodifiable collection of reactant compartments
      */
-    public Collection<C> getReactantCompartments() {
+    public List<C> getReactantCompartments() {
         return Collections.unmodifiableList( reactantCompartments );
     }
 
@@ -124,7 +124,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
      * Accessor for all the reactant coefficients of the reaction
      * @return Unmodifiable collection of reactant coefficients
      */
-    public Collection<S> getReactantStoichiometries() {
+    public List<S> getReactantStoichiometries() {
         return Collections.unmodifiableList( reactantStoichiometries );
     }
 
@@ -137,7 +137,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
      * Accessor for all the reactants of the reaction
      * @return Unmodifiable collection of reactants of class 'M'
      */
-    public Collection<M> getReactantMolecules() {
+    public List<M> getReactantMolecules() {
         return Collections.unmodifiableList( reactants );
     }
 
@@ -176,7 +176,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
      * Accessor for all the product compartments of the reaction
      * @return Unmodifiable collection of compartments
      */
-    public Collection<C> getProductCompartments() {
+    public List<C> getProductCompartments() {
         return Collections.unmodifiableList( productCompartments );
     }
 
@@ -189,7 +189,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
      * Accessor for all the product coefficients of the reaction
      * @return Unmodifiable collection of coefficients
      */
-    public Collection<S> getProductStoichiometries() {
+    public List<S> getProductStoichiometries() {
         return Collections.unmodifiableList( productStoichiometries );
     }
 
@@ -202,7 +202,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
      * Accessor for all the products of the reaction
      * @return Unmodifiable collection of products of class 'M'
      */
-    public Collection<M> getProductMolecules() {
+    public List<M> getProductMolecules() {
         return Collections.unmodifiableList( products );
     }
 
@@ -358,15 +358,33 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
         Collections.sort( queryReactants , moleculeComparator );
         Collections.sort( queryProducts , moleculeComparator );
         // query coefs
-        List queryReacCoef = new ArrayList( this.reactantStoichiometries );
-        List queryProdCoef = new ArrayList( this.productStoichiometries );
-        Collections.sort( queryReacCoef );
-        Collections.sort( queryProdCoef );
+        List queryReacCoef = new ArrayList();
+        List queryProdCoef = new ArrayList();
+        if ( this.reactants.size() == this.reactantStoichiometries.size() ) {
+            for ( Object m : queryReactants ) {
+                queryReacCoef.add( this.reactantStoichiometries.get( this.reactants.indexOf( m ) ) );
+            }
+        }
+        if ( this.products.size() == this.productStoichiometries.size() ) {
+            for ( Object m : queryProducts ) {
+                queryProdCoef.add( this.productStoichiometries.get( this.products.indexOf( m ) ) );
+            }
+        }
+
         // query compartments
-        List queryReacComp = new ArrayList( this.reactantCompartments );
-        List queryProdComp = new ArrayList( this.productCompartments );
-        Collections.sort( queryReacComp );
-        Collections.sort( queryProdComp );
+        List queryReacComp = new ArrayList();
+        List queryProdComp = new ArrayList();
+        if ( this.reactants.size() == this.reactantCompartments.size() ) {
+            for ( Object m : queryReactants ) {
+                queryReacComp.add( this.reactantCompartments.get( this.reactants.indexOf( m ) ) );
+            }
+        }
+        if ( this.products.size() == this.productCompartments.size() ) {
+            for ( Object m : queryProducts ) {
+                queryProdComp.add( this.productCompartments.get( this.products.indexOf( m ) ) );
+            }
+        }
+
 
         // other compounds
         List otherReactants = new ArrayList( other.reactants );
@@ -374,15 +392,31 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
         Collections.sort( otherReactants , moleculeComparator );
         Collections.sort( otherProducts , moleculeComparator );
         // other coefs
-        List otherReacCoef = new ArrayList( other.reactantStoichiometries );
-        List otherProdCoef = new ArrayList( other.productStoichiometries );
-        Collections.sort( otherReacCoef );
-        Collections.sort( otherProdCoef );
+        List otherReacCoef = new ArrayList();
+        List otherProdCoef = new ArrayList();
+        if ( other.reactants.size() == other.reactantStoichiometries.size() ) {
+            for ( Object m : otherReactants ) {
+                otherReacCoef.add( other.reactantStoichiometries.get( other.reactants.indexOf( m ) ) );
+            }
+        }
+        if ( other.products.size() == other.productStoichiometries.size() ) {
+            for ( Object m : otherProducts ) {
+                otherProdCoef.add( other.productStoichiometries.get( other.products.indexOf( m ) ) );
+            }
+        }
         // other compartments
-        List otherReacComp = new ArrayList( other.reactantCompartments );
-        List otherProdComp = new ArrayList( other.productCompartments );
-        Collections.sort( otherReacComp );
-        Collections.sort( otherProdComp );
+        List otherReacComp = new ArrayList();
+        List otherProdComp = new ArrayList();
+        if ( other.reactants.size() == other.reactantCompartments.size() ) {
+            for ( Object m : otherReactants ) {
+                otherReacComp.add( other.reactantCompartments.get( other.reactants.indexOf( m ) ) );
+            }
+        }
+        if ( other.products.size() == other.productCompartments.size() ) {
+            for ( Object m : otherProducts ) {
+                otherProdComp.add( other.productCompartments.get( other.products.indexOf( m ) ) );
+            }
+        }
 
         /* calculate the hashes for these all the reaction sides and flattern into a hashset to test the length */
         Integer queryReactantHash = hashCode( queryReactants ) + queryReacCoef.hashCode() + queryReacComp.hashCode();
@@ -393,14 +427,19 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
         Set hashes = new HashSet<Integer>( Arrays.asList( queryReactantHash , queryProductHash ,
                                                           otherReactantHash , otherProductHash ) );
 
+        // debugging
+//        System.out.println( queryReactants + " : " + queryReacComp + " : " + queryReactantHash );
+//        System.out.println( queryProducts + " : " + queryProdComp + " : " + queryProductHash );
+//        System.out.println( otherReactants + " : " + otherReacComp + " : " + otherReactantHash );
+//        System.out.println( otherProducts + " : " + otherProdComp + " : " + otherProductHash );
+
         /* Check the correct number of side */
         if ( hashes.size() != 2 ) {
             // not handling cases where reactants and products are the same.. could just be same hashcode
             if ( hashes.size() == 1 ) {
-                for ( C c : this.getAllReactionCompartments() ) {
-                        System.out.println( c + ":" + c.hashCode() );
-                }
-
+                System.out.println( this );
+                System.out.println( other );
+                // need to check everything
                 throw new UnsupportedOperationException( "this.reactants == this.products " +
                                                          "&& other.reactants == other.products " +
                                                          "&& this.reactants == other.reactants" );
@@ -456,6 +495,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
                 // can only be when qReactants == qProducts && oReactants == oProducts
                 throw new UnsupportedOperationException(
                         "queryReactants != otherReactants && queryReactants != otherProducts ?" );
+
             }
 
         } catch ( Exception ex ) {

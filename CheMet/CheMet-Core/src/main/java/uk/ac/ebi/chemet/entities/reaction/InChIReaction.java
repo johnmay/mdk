@@ -22,6 +22,7 @@ package uk.ac.ebi.chemet.entities.reaction;
 
 import java.util.Comparator;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
@@ -33,16 +34,17 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
  * @brief   Implementation of GenericReaction using InChI to represent the reaction participants
  *
  */
-public class InChIReaction extends GenericReaction<InChI , Double , Compartment> {
+public class InChIReaction
+        extends GenericReaction<InChI , Double , Compartment> {
 
     private static final Logger LOGGER = Logger.getLogger( InChIReaction.class );
 
     public InChIReaction() {
-        super(new Comparator<InChI> () {
+        super( new Comparator<InChI>() {
+
             public int compare( InChI o1 , InChI o2 ) {
                 return o1.compareTo( o2 );
             }
-        });
+        } );
     }
-
 }
