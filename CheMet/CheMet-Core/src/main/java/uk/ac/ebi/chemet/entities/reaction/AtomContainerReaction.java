@@ -42,7 +42,7 @@ import uk.ac.ebi.chemet.entities.Compartment;
  *
  */
 public class AtomContainerReaction
-        extends GenericReaction<IMolecule , Double , Compartment>
+        extends Reaction<IMolecule , Double , Compartment>
         implements IReaction , Serializable {
 
     private static final Logger LOGGER = Logger.getLogger( AtomContainerReaction.class );

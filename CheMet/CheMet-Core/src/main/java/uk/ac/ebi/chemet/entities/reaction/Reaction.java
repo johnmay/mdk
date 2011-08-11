@@ -1,5 +1,5 @@
 /**
- * GenericReaction.java
+ * Reaction.java
  *
  * 2011.08.08
  *
@@ -35,7 +35,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
 
 /**
- * @name    GenericReaction
+ * @name    Reaction
  *          2011.08.08
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
@@ -51,10 +51,10 @@ import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
  * we can add annotations/observations to the reaction
  *
  */
-public class GenericReaction<M , S extends Comparable , C extends Comparable>
+public class Reaction<M , S extends Comparable , C extends Comparable>
         extends ObjectDescriptor implements Serializable {
 
-    private static final Logger LOGGER = Logger.getLogger( GenericReaction.class );
+    private static final Logger LOGGER = Logger.getLogger( Reaction.class );
     private static final long serialVersionUID = 8309040049214143031L;
     protected List<M> reactants;
     protected List<M> products;
@@ -79,7 +79,7 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
      * class of molecule used in the generic reaction. Ideally this should be a singleton class.
      * @param moleculeComparator
      */
-    public GenericReaction( Comparator<M> moleculeComparator ) {
+    public Reaction( Comparator<M> moleculeComparator ) {
         this.moleculeComparator = moleculeComparator;
         reactants = new ArrayList<M>();
         products = new ArrayList<M>();
@@ -347,8 +347,8 @@ public class GenericReaction<M , S extends Comparable , C extends Comparable>
         if ( getClass() != obj.getClass() ) {
             return false;
         }
-        final GenericReaction<M , S , C> other =
-                                         ( GenericReaction<M , S , C> ) obj;
+        final Reaction<M , S , C> other =
+                                         ( Reaction<M , S , C> ) obj;
 
 
         /* Make shallow copies of compounds, coeffcients and compartments and sort */

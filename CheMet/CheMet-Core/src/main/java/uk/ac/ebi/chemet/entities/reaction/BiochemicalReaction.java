@@ -1,5 +1,5 @@
 /**
- * GenericBiochemicalReaction.java
+ * BiochemicalReaction.java
  *
  * 2011.08.08
  *
@@ -28,25 +28,25 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 
 /**
- * @name    GenericBiochemicalReaction
+ * @name    BiochemicalReaction
  * @date    2011.08.08
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
- * @brief   Class extends GenericReaction but adds the option to add a modifier (i.e. enzyme)
+ * @brief   Class extends Reaction but adds the option to add a modifier (i.e. enzyme)
  *
  */
-public class GenericBiochemicalReaction<M , S extends Comparable , C extends Comparable>
-        extends GenericReaction<M , S , C> {
+public class BiochemicalReaction<M , S extends Comparable , C extends Comparable>
+        extends Reaction<M , S , C> {
 
-    private static final Logger LOGGER = Logger.getLogger( GenericBiochemicalReaction.class );
+    private static final Logger LOGGER = Logger.getLogger( BiochemicalReaction.class );
     private List<GeneProduct> modifiers;
 
-    public GenericBiochemicalReaction( Comparator<M> moleculeComparator ) {
+    public BiochemicalReaction( Comparator<M> moleculeComparator ) {
         this( moleculeComparator , new ArrayList<GeneProduct>() );
     }
 
-    public GenericBiochemicalReaction( Comparator<M> moleculeComparator , List<GeneProduct> modifiers ) {
+    public BiochemicalReaction( Comparator<M> moleculeComparator , List<GeneProduct> modifiers ) {
         super( moleculeComparator );
         this.modifiers = modifiers;
     }

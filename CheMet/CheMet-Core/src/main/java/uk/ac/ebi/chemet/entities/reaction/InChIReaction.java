@@ -31,11 +31,11 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
- * @brief   Implementation of GenericReaction using InChI to represent the reaction participants
+ * @brief   Implementation of Reaction using InChI to represent the reaction participants
  *
  */
 public class InChIReaction
-        extends GenericReaction<InChI , Double , Compartment> {
+        extends Reaction<InChI , Double , Compartment> {
 
     private static final Logger LOGGER = Logger.getLogger( InChIReaction.class );
 
