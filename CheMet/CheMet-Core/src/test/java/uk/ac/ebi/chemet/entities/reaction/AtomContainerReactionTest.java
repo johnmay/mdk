@@ -4,12 +4,11 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
+import uk.ac.ebi.chemet.entities.Compartment;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.iupac.parser.MoleculeBuilder;
 import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.chemet.util.CDKMoleculeBuilder;
 import uk.ac.ebi.metabolomes.identifier.InChI;
@@ -47,11 +46,11 @@ public class AtomContainerReactionTest {
     public void testSomeMethod() {
     }
 
-    public static IAtomContainer getButan1ol() {
+    public static IMolecule getButan1ol() {
         return CDKMoleculeBuilder.getInstance().buildFromInChI( butan1olInChI );
     }
 
-    public static IAtomContainer getButan2ol() {
+    public static IMolecule getButan2ol() {
         return CDKMoleculeBuilder.getInstance().buildFromInChI( butan2olInChI );
     }
 

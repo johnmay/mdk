@@ -83,7 +83,7 @@ public class AtomContainerReaction
     @Override
     public boolean moleculeEqual( IMolecule m1 , IMolecule m2 ) throws Exception {
         Isomorphism isoChecker = new Isomorphism( Algorithm.DEFAULT , true );
-        isoChecker.init( m1 , m2 , true , true );
+        isoChecker.init( m1 , m2 , false , true );
         return isoChecker.getTanimotoSimilarity() == 1;
     }
 

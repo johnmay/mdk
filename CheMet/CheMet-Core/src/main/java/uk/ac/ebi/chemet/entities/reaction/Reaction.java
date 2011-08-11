@@ -267,18 +267,34 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
         return allMolecules;
     }
 
+    /**
+     * Accessor for the number of reactants
+     * @return
+     */
     public int getReactantCount() {
         return getReactantMolecules().size();
     }
 
+    /**
+     * Accessor for the number of products
+     * @return
+     */
     public int getProductCount() {
         return getProductMolecules().size();
     }
 
+    /**
+     * Accessor for the coefficient of a specified reactant
+     * @return
+     */
     public S getReactantCoefficient( M m ) {
         return reactantStoichiometries.get( reactants.indexOf( m ) );
     }
 
+    /**
+     * Accessor for the coefficient of a specified product
+     * @return
+     */
     public S getProductCoefficient( M m ) {
         return productStoichiometries.get( products.indexOf( m ) );
     }
@@ -313,8 +329,8 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
             in sub classes */
 
             hash = 59 * hash + ( !reacMols.isEmpty() ? hashCode( reacMols ) : 0 );
-            hash = 59 * hash + ( !reacCoef.isEmpty() ? reacCoef.hashCode() : 0 );
-            hash = 59 * hash + ( !reacComp.isEmpty() ? reacComp.hashCode() : 0 );
+            hash = 59 * hash + ( !reacCoef.isEmpty() ? reacCoef.hashCode()  : 0 );
+            hash = 59 * hash + ( !reacComp.isEmpty() ? reacComp.hashCode()  : 0 );
 
             // TODO: reduce collisions by calculating per-side then add then ordering the two hashes by size
 
@@ -348,7 +364,7 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
             return false;
         }
         final Reaction<M , S , C> other =
-                                         ( Reaction<M , S , C> ) obj;
+                                  ( Reaction<M , S , C> ) obj;
 
 
         /* Make shallow copies of compounds, coeffcients and compartments and sort */

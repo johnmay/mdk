@@ -24,7 +24,9 @@ import java.util.List;
  *
  * @author johnmay
  * @date May 11, 2011
+ * @deprecated use StringUtil from Apache lang
  */
+@Deprecated
 public class Util {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( Util.class );
