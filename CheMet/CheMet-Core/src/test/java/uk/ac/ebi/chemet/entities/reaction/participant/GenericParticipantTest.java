@@ -36,6 +36,12 @@ public class GenericParticipantTest {
         assertEquals( true , primaryAlochol.equals( alcoholImpl ) );
         assertEquals( true , alcoholImpl.equals( primaryAlochol ) );
 
+        Participant primaryAlocholR = new GenericParticipant( primary_alcohol() );
+
+        assertEquals( true , primaryAlochol.equals( alcoholImpl ) );
+        assertEquals( true , primaryAlocholR.equals( alcoholImpl ) );
+        assertEquals( true , alcoholImpl.equals( primaryAlochol ) );
+
     }
 
     @Test

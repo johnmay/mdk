@@ -294,19 +294,19 @@ public class AtomContainerReactionTest {
         /** only with products no coef or compartments **/
         // query
         AtomContainerReaction generic = new AtomContainerReaction();
-        generic.addReactant( new GenericParticipant( primary_alcohol_no_r() ) );
-        generic.addReactant( nad_plus() , null , null );
-        generic.addProduct( new GenericParticipant( aldehyde_no_r() ) );
-        generic.addProduct( hydron() , null , null );
-        generic.addProduct( nadh() , null , null );
+        generic.addReactant( primary_alcohol() );
+        generic.addReactant( nad_plus() );
+        generic.addProduct( aldehyde() );
+        generic.addProduct( hydron() );
+        generic.addProduct( nadh() );
 
         // different sides
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant( _5bcholestane3a7a26triol() , null , null );
-        r.addReactant( nad_plus() , null , null );
-        r.addProduct( _3a7adihydroxy5Bcholestan26al() , null , null );
-        r.addProduct( hydron() , null , null );
-        r.addProduct( nadh() , null , null );
+        r.addReactant( _5bcholestane3a7a26triol() );
+        r.addReactant( nad_plus() );
+        r.addProduct( _3a7adihydroxy5Bcholestan26al() );
+        r.addProduct( hydron() );
+        r.addProduct( nadh() );
 
         System.out.printf( "\t\tq: %10s %s\n" , generic.hashCode() , generic );
         System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
