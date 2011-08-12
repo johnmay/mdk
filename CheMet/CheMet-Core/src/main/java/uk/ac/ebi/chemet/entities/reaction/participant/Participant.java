@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.Class;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 /**
@@ -128,9 +129,9 @@ public class Participant<M , S , C>
             return false;
         }
         final Participant<M , S , C> other =
-                                             ( Participant<M , S , C> ) obj;
+                                     ( Participant<M , S , C> ) obj;
 
-        return equal( other );
+        return equals( other );
     }
 
     /**
@@ -149,7 +150,7 @@ public class Participant<M , S , C>
         return hash;
     }
 
-    public boolean equal( Participant<M , S , C> other ) {
+    public boolean equals( Participant<M , S , C> other ) {
         if ( this.molecule != other.molecule && ( this.molecule == null || !this.molecule.equals( other.molecule ) ) ) {
             return false;
         }
@@ -162,6 +163,15 @@ public class Participant<M , S , C>
             return false;
         }
         return true;
+    }
+
+    public Participant<M , S , C> getMatching( List<Participant<M , S , C>> o ) {
+        for ( Participant otherParticipant : o ) {
+            if ( this.equals( otherParticipant ) ) {
+                return otherParticipant;
+            }
+        }
+        return null;
     }
 
     public int compareTo( Participant<M , S , C> o ) {

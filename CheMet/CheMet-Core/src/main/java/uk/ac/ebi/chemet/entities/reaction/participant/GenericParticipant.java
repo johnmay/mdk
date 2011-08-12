@@ -20,11 +20,10 @@
  */
 package uk.ac.ebi.chemet.entities.reaction.participant;
 
-import java.io.IOException;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
@@ -39,28 +38,28 @@ import uk.ac.ebi.chemet.entities.Compartment;
  * @brief   ...class description...
  *
  */
-public class AtomContainerParticipant extends Participant<IAtomContainer , Double , Compartment> {
+public class GenericParticipant extends AtomContainerParticipant {
 
-    private static final Logger LOGGER = Logger.getLogger( AtomContainerParticipant.class );
+    private static final Logger LOGGER = Logger.getLogger( GenericParticipant.class );
     private static AtomContainerComparator comparator = new AtomContainerComparator();
 
-    public AtomContainerParticipant( IAtomContainer molecule , Double coefficient , Compartment compartment ) {
+    public GenericParticipant( IAtomContainer molecule , Double coefficient , Compartment compartment ) {
         super( molecule , coefficient , compartment );
     }
 
-    public AtomContainerParticipant( IAtomContainer molecule , Double coefficient ) {
+    public GenericParticipant( IAtomContainer molecule , Double coefficient ) {
         super( molecule , coefficient );
     }
 
-    public AtomContainerParticipant( IAtomContainer molecule ) {
+    public GenericParticipant( IAtomContainer molecule ) {
         super( molecule );
     }
 
-    public AtomContainerParticipant( Participant<IAtomContainer , Double , Compartment> participant ) {
+    public GenericParticipant( Participant<IAtomContainer , Double , Compartment> participant ) {
         super( participant );
     }
 
-    public AtomContainerParticipant() {
+    public GenericParticipant() {
     }
 
     @Override
@@ -88,37 +87,31 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
     @Override
     public boolean equals( Participant<IAtomContainer , Double , Compartment> other ) {
 
-        // if the other participant is Generic (has R-group) call their equals instead
-        // we also need to check that participant isn't generic otherwise we'd get into
-        // and infinate loop of parsing to different equals methods
-        if ( other instanceof GenericParticipant && this.getClass() == AtomContainerParticipant.class ) {
-            return other.equals( this );
+        // other is also of Generic.. so we check raw
+        // similarity instead of checking substructure
+        if ( other instanceof GenericParticipant ) {
+            return super.equals( other );
         }
-
-        try {
-
-            if ( this.coefficient != other.coefficient &&
-                 ( this.coefficient == null || !this.coefficient.equals( other.coefficient ) ) ) {
-                return false;
-            }
-            if ( this.compartment != other.compartment &&
-                 ( this.compartment == null || !this.compartment.equals( other.compartment ) ) ) {
-                return false;
-            }
-
-            if ( this.molecule != other.molecule ) {
-                Isomorphism isoChecker = new Isomorphism( Algorithm.DEFAULT , true );
-                isoChecker.init( this.molecule , other.molecule , false , true );
-
-                return isoChecker.getTanimotoSimilarity() == 1;
-            }
-
+        if ( this.coefficient != other.coefficient &&
+             ( this.coefficient == null || !this.coefficient.equals( other.coefficient ) ) ) {
             return false;
-
-        } catch ( Exception ex ) {
-            LOGGER.error( "Could not compare ReactionParticipants" );
         }
-        return false;
+        if ( this.compartment != other.compartment &&
+             ( this.compartment == null || !this.compartment.equals( other.coefficient ) ) ) {
+            return false;
+        }
+        try {
+            if ( this.molecule != other.molecule ) {
+                Isomorphism comparison = new Isomorphism( Algorithm.DEFAULT , true );
+                comparison.init( this.molecule , other.molecule , false , true );
+                comparison.setChemFilters( false , true , false );
+                return comparison.isSubgraph();
+            }
+        } catch ( Exception ex ) {
+            LOGGER.error( "Unable to compare generic reaction participants: " + ex.getMessage() );
+            return false;
+        }
+        return true;
     }
 
     @Override

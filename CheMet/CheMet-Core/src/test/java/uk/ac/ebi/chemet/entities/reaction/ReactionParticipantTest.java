@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
+import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,7 +36,7 @@ public class ReactionParticipantTest {
     @Test
     public void testSomeMethod() {
         try {
-            ReactionParticipant rp = new ReactionParticipant<String , Integer , String>();
+            Participant rp = new Participant<String , Integer , String>();
             rp.setMolecule( "A Molecule" );
             rp.setCompartment( "[a]" );
             File tmpFile = File.createTempFile( "ReactionParticipant" , ".javaobject" );
@@ -45,7 +46,7 @@ public class ReactionParticipantTest {
             oos.close();
 
             ObjectInputStream ois = new ObjectInputStream( new FileInputStream( tmpFile ) );
-            ReactionParticipant rp2 = ( ReactionParticipant ) ois.readObject();
+            Participant rp2 = ( Participant ) ois.readObject();
             ois.close();
 
             System.out.println( rp2 );

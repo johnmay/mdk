@@ -25,14 +25,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
 import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
 
 /**
@@ -63,18 +64,13 @@ public class Reaction<M , S , C>
     transient protected List<S> productStoichiometries = new ArrayList<S>();
     transient protected List<C> reactantCompartments = new ArrayList<C>();
     transient protected List<C> productCompartments = new ArrayList<C>();
+    // flags whether the reaction is generic or not
+    transient protected Boolean generic = false;
     // new class
     protected List<Participant<M , S , C>> reactants;
     protected List<Participant<M , S , C>> products;
     // revesibility
     protected Reversibility reversibility = Reversibility.UNKNOWN;
-    // comparator used to compare
-    //private boolean sorted = false;
-    // flatterned arrays of all components
-//    protected List<M> reactionParticipants;
-//    protected List<S> reactionParticipantStoichiometries;
-//    protected List<C> reactionParticipantCompartments;
-    // should not persit between VM instances
     transient private Integer cachedHash = null;
 
     /**
@@ -179,13 +175,23 @@ public class Reaction<M , S , C>
     }
 
     /**
-     * Accessor to all the reaction participants (molecules)
+     * Accessor to all the reaction molecules
      * @return shallow copy combined list of all products (ordered reactant, product)
      */
-    public M[] getAllReactionParticipants() {
+    public M[] getAllReactionMolecules() {
         List<M> allMolecules = new ArrayList<M>( Arrays.asList( getReactantMolecules() ) );
         allMolecules.addAll( Arrays.asList( getProductMolecules() ) );
         return ( M[] ) allMolecules.toArray( new Object[ 0 ] );
+    }
+
+    /**
+     * Accessor to all the reaction participants
+     * @return shallow copy combined list of all products (ordered reactant, product)
+     */
+    public List<Participant> getAllReactionParticipants() {
+        List<Participant> participants = new ArrayList<Participant>( reactants );
+        participants.addAll( products );
+        return participants;
     }
 
     /**
@@ -240,6 +246,14 @@ public class Reaction<M , S , C>
         return productStoichiometries.get( products.indexOf( m ) );
     }
 
+    public Boolean isGeneric() {
+        return generic;
+    }
+
+    public void setGeneric( Boolean generic ) {
+        this.generic = generic;
+    }
+
     /**
      * Calculates the hash code for the reaction in it's current state. As the molecules need to be sorted
      * this operation is more expensive and thus non-optimal. The hash is therefore cached in a the variable
@@ -281,16 +295,16 @@ public class Reaction<M , S , C>
     }
 
     /**
-     * Check equality of reactions based on state. Reactions are considered equal if their reactants and products
-     * (coefficients and compartments) are equal regardless of the side they reside on. For example A + B <-> C + D is
-     * considered equal to C + D <-> A + B. The participant stoichiometric coefficients and compartments are also checked.
+     * Check equality of reactions based on state. Reactions are considered equals if their reactants and products
+     * (coefficients and compartments) are equals regardless of the side they reside on. For example A + B <-> C + D is
+     * considered equals to C + D <-> A + B. The participant stoichiometric coefficients and compartments are also checked.
      *
      * To accomplish this the reactionParticipants and copied, sorted and then a hash for each side (four total) is made.
      * Duplicate hashes are then removed via the {@See Set} interface and the query (this) and the other (obj) sides are
      * tested for coefficient, compartment and finally molecule similarity
      *
      * @param obj The other object to test equality with
-     * @return Whether the objects are considered equal
+     * @return Whether the objects are considered equals
      */
     @Override
     public boolean equals( Object obj ) {
@@ -301,78 +315,76 @@ public class Reaction<M , S , C>
         if ( getClass() != obj.getClass() ) {
             return false;
         }
-        final Reaction<M , S , C> other =
-                                  ( Reaction<M , S , C> ) obj;
-
+        final Reaction<M , S , C> other = ( Reaction<M , S , C> ) obj;
 
         /* Make shallow copies of compounds, coeffcients and compartments and sort */
         // query compounds
-        List queryReactants = new ArrayList( this.reactants );
-        List queryProducts = new ArrayList( this.products );
+        List<Participant<M , S , C>> queryReactants = new ArrayList( this.reactants );
+        List<Participant<M , S , C>> queryProducts = new ArrayList( this.products );
         Collections.sort( queryReactants );
         Collections.sort( queryProducts );
 
-
         // other compounds
-        List otherReactants = new ArrayList( other.reactants );
-        List otherProducts = new ArrayList( other.products );
+        List<Participant<M , S , C>> otherReactants = new ArrayList( other.reactants );
+        List<Participant<M , S , C>> otherProducts = new ArrayList( other.products );
         Collections.sort( otherReactants );
         Collections.sort( otherProducts );
 
+        if ( this.generic == false && other.generic == false ) {
 
-        /* calculate the hashes for these all the reaction sides and flattern into a hashset to test the length */
-        Integer queryReactantHash = queryReactants.hashCode();
-        Integer queryProductHash = queryProducts.hashCode();
-        Integer otherReactantHash = otherReactants.hashCode();
-        Integer otherProductHash = otherProducts.hashCode();
+            /* calculate the hashes for these all the reaction sides and flattern into a hashset to test the length */
+            Set hashes = new HashSet<Integer>( Arrays.asList( queryReactants.hashCode() , queryProducts.hashCode() ,
+                                                              otherReactants.hashCode() , otherProducts.hashCode() ) );
 
-        Set hashes = new HashSet<Integer>( Arrays.asList( queryReactantHash , queryProductHash ,
-                                                          otherReactantHash , otherProductHash ) );
-
-        // debugging
-//        System.out.println( queryReactants + " : " + queryReacComp + " : " + queryReactantHash );
-//        System.out.println( queryProducts + " : " + queryProdComp + " : " + queryProductHash );
-//        System.out.println( otherReactants + " : " + otherReacComp + " : " + otherReactantHash );
-//        System.out.println( otherProducts + " : " + otherProdComp + " : " + otherProductHash );
-
-        /* Check the correct number of side */
-        if ( hashes.size() != 2 ) {
-            // not handling cases where reactants and products are the same.. could just be same hashcode
-            if ( hashes.size() == 1 ) {
-                System.out.println( this );
-                System.out.println( other );
-                // need to check everything
-                throw new UnsupportedOperationException( "this.reactants == this.products " +
-                                                         "&& other.reactants == other.products " +
-                                                         "&& this.reactants == other.reactants" );
+            /* Check the correct number of side */
+            if ( hashes.size() != 2 ) {
+                // not handling cases where reactants and products are the same.. could just be same hashcode
+                if ( hashes.size() == 1 ) {
+                    throw new UnsupportedOperationException( "Reaction.equals(): Unresolvable reaction comparision [1]" );
+                }
+                return false;
             }
-            return false;
-        }
 
-
-        /* check the sides match */
-        try {
-            // this.reactants == other.reactants
-            if ( queryReactantHash.equals( otherReactantHash ) ) {
-
-                // checks the molecules
+            // these are sorted so can do direct equals on the sets
+            if ( queryReactants.hashCode() == otherReactants.hashCode() ) {
                 return queryReactants.equals( otherReactants ) && queryProducts.equals( otherProducts );
-            } // this.reactants == other.products and other.reactants == this.products
-            else if ( queryReactantHash.equals( otherProductHash ) ) {
+            } else if ( queryReactants.hashCode() == otherProducts.hashCode() ) {
                 return queryReactants.equals( otherProducts ) && queryProducts.equals( otherReactants );
             } else {
-                // shouldn't happen qReactants != oReactants && qReactants != oProducts... then hashes.size() > 2
-                // can only be when qReactants == qProducts && oReactants == oProducts
-                throw new UnsupportedOperationException(
-                        "queryReactants != otherReactants && queryReactants != otherProducts ?" );
-
+                return false; // this.reac == this.prod and other.reac == other.prod... and so must be false (2x hashe values)
             }
 
-        } catch ( Exception ex ) {
-            LOGGER.error( "There was a problem checking individual molecule equality – assumbing reactions are different : " +
-                          ex.getMessage() );
+        } else {
+            System.out.println( "Testing r = r" );
+            if ( equals( queryReactants , otherReactants ) && equals( queryProducts , otherProducts ) ) {
+                return true;
+            }
+            System.out.println( "Testing r = p" );
+            if ( equals( queryReactants , otherProducts ) && equals( queryReactants , otherReactants ) ) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    private boolean equals( List<Participant<M , S , C>> q , List<Participant<M , S , C>> o ) {
+
+        if ( q.size() != o.size() ) {
             return false;
         }
+
+        Set<Participant<M , S , C>> matchedSet = new HashSet<Participant<M , S , C>>();
+        for ( Participant queryParticipant : q ) {
+            Participant<M , S , C> matched = queryParticipant.getMatching( o );
+            if ( matched == null ) {
+                return false;
+            }
+            matchedSet.add( matched );
+        }
+
+        return o.size() == matchedSet.size();
 
     }
 

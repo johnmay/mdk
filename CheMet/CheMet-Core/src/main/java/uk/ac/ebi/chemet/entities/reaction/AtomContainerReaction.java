@@ -31,7 +31,9 @@ import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
+import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 /**
  * @name    AtomContainerReaction
@@ -57,6 +59,22 @@ public class AtomContainerReaction
         super.addProduct( new AtomContainerParticipant( molecule , coef ,
                                                         compartment ) );
     }
+
+    public void addReactant( AtomContainerParticipant p ) {
+        if ( p instanceof GenericParticipant ) {
+            this.generic = true;
+        }
+        super.addReactant( p );
+    }
+
+    public void addProduct( AtomContainerParticipant p ) {
+        if ( p instanceof GenericParticipant ) {
+            this.generic = true;
+        }
+        super.addProduct( p );
+    }
+
+    
 //    /**
 //     * Create an instance IReaction object for use with CDK
 //     * TODO: Write unit test...
@@ -120,4 +138,8 @@ public class AtomContainerReaction
 //            super.addProduct( ims.getMolecule( i ) );
 //        }
 //    }
+    @Override
+    public void addReactant( Participant<IAtomContainer , Double , Compartment> participant ) {
+        super.addReactant( participant );
+    }
 }
