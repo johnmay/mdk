@@ -8,7 +8,7 @@ package uk.ac.ebi.chemet.entities.reaction;
  * Enumeration class for storing reaction reversibility
  * @author johnmay
  */
-public enum ReactionReversibility {
+public enum Reversibility {
 
     REVERSIBLE( "<===>" ),
     IRREVERSIBLE( "<=!=>" ),
@@ -17,7 +17,7 @@ public enum ReactionReversibility {
 
     private String symbol;
 
-    private ReactionReversibility( String symbol ) {
+    private Reversibility( String symbol ) {
         this.symbol = symbol;
     }
 

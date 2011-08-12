@@ -20,18 +20,19 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
+import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.interfaces.IMolecule;
 import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
 
 /**
@@ -51,21 +52,23 @@ import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
  * we can add annotations/observations to the reaction
  *
  */
-public class Reaction<M , S extends Comparable , C extends Comparable>
+public class Reaction<M , S , C>
         extends ObjectDescriptor implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger( Reaction.class );
     private static final long serialVersionUID = 8309040049214143031L;
-    protected List<M> reactants;
-    protected List<M> products;
-    protected List<S> reactantStoichiometries;
-    protected List<S> productStoichiometries;
-    protected List<C> reactantCompartments;
-    protected List<C> productCompartments;
+    transient protected List<M> reactantsMolecules = new ArrayList<M>();
+    transient protected List<M> productsMolecules = new ArrayList<M>();
+    transient protected List<S> reactantStoichiometries = new ArrayList<S>();
+    transient protected List<S> productStoichiometries = new ArrayList<S>();
+    transient protected List<C> reactantCompartments = new ArrayList<C>();
+    transient protected List<C> productCompartments = new ArrayList<C>();
+    // new class
+    protected List<Participant<M , S , C>> reactants;
+    protected List<Participant<M , S , C>> products;
     // revesibility
-    protected ReactionReversibility reversibility = ReactionReversibility.UNKNOWN;
+    protected Reversibility reversibility = Reversibility.UNKNOWN;
     // comparator used to compare
-    private Comparator<M> moleculeComparator;
     //private boolean sorted = false;
     // flatterned arrays of all components
 //    protected List<M> reactionParticipants;
@@ -79,14 +82,9 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
      * class of molecule used in the generic reaction. Ideally this should be a singleton class.
      * @param moleculeComparator
      */
-    public Reaction( Comparator<M> moleculeComparator ) {
-        this.moleculeComparator = moleculeComparator;
-        reactants = new ArrayList<M>();
-        products = new ArrayList<M>();
-        reactantStoichiometries = new ArrayList<S>();
-        productStoichiometries = new ArrayList<S>();
-        reactantCompartments = new ArrayList<C>();
-        productCompartments = new ArrayList<C>();
+    public Reaction() {
+        reactants = new LinkedList<Participant<M , S , C>>();
+        products = new LinkedList<Participant<M , S , C>>();
     }
 
     /**
@@ -95,7 +93,7 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
      * with same products (coefficients and compartments), different sides as being the same.
      * @param reversibility The reaction reversibility
      */
-    public void setReversibility( ReactionReversibility reversibility ) {
+    public void setReversibility( Reversibility reversibility ) {
         this.reversibility = reversibility;
     }
 
@@ -103,168 +101,111 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
      * Accessor for the reversibility of the reaction
      * @return Reaction reversibility enumeration
      */
-    public ReactionReversibility getReversibility() {
+    public Reversibility getReversibility() {
         return reversibility;
     }
 
     /**
      * Accessor for all the reactant compartments of the reaction
-     * @return Unmodifiable collection of reactant compartments
+     * @return Fixed size array of reactant compartments
      */
-    public List<C> getReactantCompartments() {
-        return Collections.unmodifiableList( reactantCompartments );
-    }
-
-    protected void addReactantCompartment( C reactantCompartment ) {
-        this.reactantCompartments.add( reactantCompartment );
-        this.cachedHash = null;
+    public C[] getReactantCompartments() {
+        return ( C[] ) reactantCompartments.toArray( new Object[ 0 ] );
     }
 
     /**
      * Accessor for all the reactant coefficients of the reaction
-     * @return Unmodifiable collection of reactant coefficients
+     * @return Fixed size array of reactant coefficients
      */
-    public List<S> getReactantStoichiometries() {
-        return Collections.unmodifiableList( reactantStoichiometries );
-    }
-
-    protected void addReactantStoichiometry( S reactantStoichiometry ) {
-        this.reactantStoichiometries.add( reactantStoichiometry );
-        this.cachedHash = null;
+    public S[] getReactantStoichiometries() {
+        return ( S[] ) reactantStoichiometries.toArray( new Object[ 0 ] );
     }
 
     /**
      * Accessor for all the reactants of the reaction
-     * @return Unmodifiable collection of reactants of class 'M'
+     * @return Fixed size array of reactants of class 'M'
      */
-    public List<M> getReactantMolecules() {
-        return Collections.unmodifiableList( reactants );
+    public M[] getReactantMolecules() {
+        return ( M[] ) reactants.toArray( new Object[ 0 ] );
     }
 
     /**
      * Add a reactant (left side) to the reaction
      * @param product The reactant to add
      */
-    public void addReactant( M reactant ) {
-        this.reactants.add( reactant );
+    public void addReactant( Participant<M , S , C> participant ) {
+        this.reactants.add( participant );
+        this.reactantsMolecules.add( participant.getMolecule() );
+        this.reactantCompartments.add( participant.getCompartment() );
+        this.reactantStoichiometries.add( participant.getCoefficient() );
         this.cachedHash = null;
-    }
-
-    /**
-     * Add a reactant (left side) and compartment to the reaction
-     * @param product The reactant to add
-     * @param coefficient The stoichiometric coefficient of the molecule
-     */
-    public void addReactant( M reactant , S stoichiometry ) {
-        this.addReactant( reactant );
-        this.addReactantStoichiometry( stoichiometry );
-    }
-
-    /**
-     * Add a reactant (left side), stoichiometry and compartment to the reaction
-     * @param product The reactant to add
-     * @param coefficient The stoichiometric coefficient of the molecule
-     * @param compartment The compart the molecule resides in
-     */
-    public void addReactant( M reactant , S stoichiometry , C compartment ) {
-        this.addReactant( reactant );
-        this.addReactantStoichiometry( stoichiometry );
-        this.addReactantCompartment( compartment );
     }
 
     /**
      * Accessor for all the product compartments of the reaction
-     * @return Unmodifiable collection of compartments
+     * @return Fixed size array of compartments
      */
-    public List<C> getProductCompartments() {
-        return Collections.unmodifiableList( productCompartments );
-    }
-
-    protected void addProductCompartment( C productCompartment ) {
-        this.productCompartments.add( productCompartment );
-        this.cachedHash = null;
+    public C[] getProductCompartments() {
+        return ( C[] ) productCompartments.toArray( new Object[ 0 ] );
     }
 
     /**
      * Accessor for all the product coefficients of the reaction
-     * @return Unmodifiable collection of coefficients
+     * @return Fixed size array of coefficients
      */
-    public List<S> getProductStoichiometries() {
-        return Collections.unmodifiableList( productStoichiometries );
-    }
-
-    protected void addProductStoichiometry( S productStoichiometry ) {
-        this.productStoichiometries.add( productStoichiometry );
-        this.cachedHash = null;
+    public S[] getProductStoichiometries() {
+        return ( S[] ) productStoichiometries.toArray( new Object[ 0 ] );
     }
 
     /**
      * Accessor for all the products of the reaction
-     * @return Unmodifiable collection of products of class 'M'
+     * @return Fixed size array of products of class 'M'
      */
-    public List<M> getProductMolecules() {
-        return Collections.unmodifiableList( products );
+    public M[] getProductMolecules() {
+        return ( M[] ) productsMolecules.toArray( new Object[ 0 ] );
     }
 
     /**
      * Add a product (right side) to the reaction
      * @param product The product to add
      */
-    public void addProduct( M product ) {
-        this.products.add( product );
+    public void addProduct( Participant<M , S , C> participant ) {
+//        participants.add( new Participant<M , S , C>( product ) );
+        this.products.add( participant );
+        this.productsMolecules.add( participant.getMolecule() );
+        this.productCompartments.add( participant.getCompartment() );
+        this.productStoichiometries.add( participant.getCoefficient() );
         this.cachedHash = null;
-    }
-
-    /**
-     * Add a product (right side) and it's stoichiometry to the reaction
-     * @param product The product to add
-     * @param coefficient The stoichiometric coefficient of the molecule
-     */
-    public void addProduct( M product , S coefficient ) {
-        this.addProduct( product );
-        this.addProductStoichiometry( coefficient );
-    }
-
-    /**
-     * Add a product (right side), stoichiometry and compartment to the reaction
-     * @param product The product to add
-     * @param coefficient The stoichiometric coefficient of the molecule
-     * @param compartment The compart the molecule resides in
-     */
-    public void addProduct( M product , S coefficient , C compartment ) {
-        this.addProduct( product );
-        this.addProductCompartment( compartment );
-        this.addProductStoichiometry( coefficient );
     }
 
     /**
      * Accessor to all the reaction participants (molecules)
      * @return shallow copy combined list of all products (ordered reactant, product)
      */
-    public List<M> getAllReactionParticipants() {
-        List<M> allMolecules = new ArrayList<M>( getReactantMolecules() );
-        allMolecules.addAll( getProductMolecules() );
-        return allMolecules;
+    public M[] getAllReactionParticipants() {
+        List<M> allMolecules = new ArrayList<M>( Arrays.asList( getReactantMolecules() ) );
+        allMolecules.addAll( Arrays.asList( getProductMolecules() ) );
+        return ( M[] ) allMolecules.toArray( new Object[ 0 ] );
     }
 
     /**
      * Accessor to all the reaction compartments
      * @return shallow copy combined list of all coefficients (ordered reactant, product)
      */
-    public List<S> getAllReactionCoefficients() {
-        List<S> allMolecules = new ArrayList<S>( getReactantStoichiometries() );
-        allMolecules.addAll( getProductStoichiometries() );
-        return allMolecules;
+    public S[] getAllReactionCoefficients() {
+        List<S> allMolecules = new ArrayList<S>( Arrays.asList( getReactantStoichiometries() ) );
+        allMolecules.addAll( Arrays.asList( getProductStoichiometries() ) );
+        return ( S[] ) allMolecules.toArray( new Object[ 0 ] );
     }
 
     /**
      * Accessor to all the reaction compartments
      * @return shallow copy combined list of all compartments (ordered reactant, product)
      */
-    public List<C> getAllReactionCompartments() {
-        List<C> allMolecules = new ArrayList<C>( getReactantCompartments() );
-        allMolecules.addAll( getProductCompartments() );
-        return allMolecules;
+    public C[] getAllReactionCompartments() {
+        List<C> allMolecules = new ArrayList<C>( Arrays.asList( getReactantCompartments() ) );
+        allMolecules.addAll( Arrays.asList( getProductCompartments() ) );
+        return ( C[] ) allMolecules.toArray( new Object[ 0 ] );
     }
 
     /**
@@ -272,7 +213,7 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
      * @return
      */
     public int getReactantCount() {
-        return getReactantMolecules().size();
+        return reactants.size();
     }
 
     /**
@@ -280,7 +221,7 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
      * @return
      */
     public int getProductCount() {
-        return getProductMolecules().size();
+        return products.size();
     }
 
     /**
@@ -316,23 +257,20 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
         // (re)calculate the hash if needed (i.e. there has been a state-change)
         if ( this.cachedHash == null ) {
 
-            List<M> reacMols = getAllReactionParticipants();
-            List<S> reacCoef = getAllReactionCoefficients();
-            List<C> reacComp = getAllReactionCompartments();
+            List<Participant<M , S , C>> reac = new ArrayList<Participant<M , S , C>>( this.reactants );
+            List<Participant<M , S , C>> prod = new ArrayList<Participant<M , S , C>>( this.products );
 
-            Collections.sort( reacMols , moleculeComparator );
-            Collections.sort( reacCoef );
-            Collections.sort( reacComp );
+            // sort before calculating the hashCode()
+            Collections.sort( reac );
+            Collections.sort( prod );
 
-            /* default hashCode method is used the Coefficents and Compartments but
-            the molecule has a specialise hashCode that allows it to be overridden
-            in sub classes */
+            Integer[] hashes = new Integer[]{ reac.hashCode() ,
+                                              prod.hashCode() };
 
-            hash = 59 * hash + ( !reacMols.isEmpty() ? hashCode( reacMols ) : 0 );
-            hash = 59 * hash + ( !reacCoef.isEmpty() ? reacCoef.hashCode()  : 0 );
-            hash = 59 * hash + ( !reacComp.isEmpty() ? reacComp.hashCode()  : 0 );
-
-            // TODO: reduce collisions by calculating per-side then add then ordering the two hashes by size
+            // sort them to be the same
+            Arrays.sort( hashes );
+            hash = 59 * hash + hashes[0];
+            hash = 59 * hash + hashes[1];
 
             this.cachedHash = hash;
 
@@ -371,74 +309,22 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
         // query compounds
         List queryReactants = new ArrayList( this.reactants );
         List queryProducts = new ArrayList( this.products );
-        Collections.sort( queryReactants , moleculeComparator );
-        Collections.sort( queryProducts , moleculeComparator );
-        // query coefs
-        List queryReacCoef = new ArrayList();
-        List queryProdCoef = new ArrayList();
-        if ( this.reactants.size() == this.reactantStoichiometries.size() ) {
-            for ( Object m : queryReactants ) {
-                queryReacCoef.add( this.reactantStoichiometries.get( this.reactants.indexOf( m ) ) );
-            }
-        }
-        if ( this.products.size() == this.productStoichiometries.size() ) {
-            for ( Object m : queryProducts ) {
-                queryProdCoef.add( this.productStoichiometries.get( this.products.indexOf( m ) ) );
-            }
-        }
-
-        // query compartments
-        List queryReacComp = new ArrayList();
-        List queryProdComp = new ArrayList();
-        if ( this.reactants.size() == this.reactantCompartments.size() ) {
-            for ( Object m : queryReactants ) {
-                queryReacComp.add( this.reactantCompartments.get( this.reactants.indexOf( m ) ) );
-            }
-        }
-        if ( this.products.size() == this.productCompartments.size() ) {
-            for ( Object m : queryProducts ) {
-                queryProdComp.add( this.productCompartments.get( this.products.indexOf( m ) ) );
-            }
-        }
+        Collections.sort( queryReactants );
+        Collections.sort( queryProducts );
 
 
         // other compounds
         List otherReactants = new ArrayList( other.reactants );
         List otherProducts = new ArrayList( other.products );
-        Collections.sort( otherReactants , moleculeComparator );
-        Collections.sort( otherProducts , moleculeComparator );
-        // other coefs
-        List otherReacCoef = new ArrayList();
-        List otherProdCoef = new ArrayList();
-        if ( other.reactants.size() == other.reactantStoichiometries.size() ) {
-            for ( Object m : otherReactants ) {
-                otherReacCoef.add( other.reactantStoichiometries.get( other.reactants.indexOf( m ) ) );
-            }
-        }
-        if ( other.products.size() == other.productStoichiometries.size() ) {
-            for ( Object m : otherProducts ) {
-                otherProdCoef.add( other.productStoichiometries.get( other.products.indexOf( m ) ) );
-            }
-        }
-        // other compartments
-        List otherReacComp = new ArrayList();
-        List otherProdComp = new ArrayList();
-        if ( other.reactants.size() == other.reactantCompartments.size() ) {
-            for ( Object m : otherReactants ) {
-                otherReacComp.add( other.reactantCompartments.get( other.reactants.indexOf( m ) ) );
-            }
-        }
-        if ( other.products.size() == other.productCompartments.size() ) {
-            for ( Object m : otherProducts ) {
-                otherProdComp.add( other.productCompartments.get( other.products.indexOf( m ) ) );
-            }
-        }
+        Collections.sort( otherReactants );
+        Collections.sort( otherProducts );
+
 
         /* calculate the hashes for these all the reaction sides and flattern into a hashset to test the length */
-        Integer queryReactantHash = hashCode( queryReactants ) + queryReacCoef.hashCode() + queryReacComp.hashCode();
-        Integer queryProductHash = hashCode( queryProducts ) + queryProdCoef.hashCode() + queryProdComp.hashCode();
-        Integer otherReactantHash = hashCode( otherReactants ) + otherReacCoef.hashCode() + otherReacComp.hashCode();
-        Integer otherProductHash = hashCode( otherProducts ) + otherProdCoef.hashCode() + otherProdComp.hashCode();
+        Integer queryReactantHash = queryReactants.hashCode();
+        Integer queryProductHash = queryProducts.hashCode();
+        Integer otherReactantHash = otherReactants.hashCode();
+        Integer otherProductHash = otherProducts.hashCode();
 
         Set hashes = new HashSet<Integer>( Arrays.asList( queryReactantHash , queryProductHash ,
                                                           otherReactantHash , otherProductHash ) );
@@ -469,43 +355,11 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
             // this.reactants == other.reactants
             if ( queryReactantHash.equals( otherReactantHash ) ) {
 
-                // checks the coef and compartments
-                if ( queryReacCoef.retainAll( otherReacCoef ) ) {
-                    return false;
-                }
-                if ( queryProdCoef.retainAll( otherProdCoef ) ) {
-                    return false;
-                }
-                if ( queryReacComp.retainAll( otherReacComp ) ) {
-                    return false;
-                }
-                if ( queryProdComp.retainAll( otherProdComp ) ) {
-                    return false;
-                }
-
                 // checks the molecules
-                return checkMolecules( queryReactants , otherReactants ) && checkMolecules( queryProducts ,
-                                                                                            otherProducts );
+                return queryReactants.equals( otherReactants ) && queryProducts.equals( otherProducts );
             } // this.reactants == other.products and other.reactants == this.products
             else if ( queryReactantHash.equals( otherProductHash ) ) {
-
-                // checks the coef and compartments
-                if ( queryReacCoef.retainAll( otherProdCoef ) ) {
-                    return false;
-                }
-                if ( queryProdCoef.retainAll( otherReacCoef ) ) {
-                    return false;
-                }
-                if ( queryReacComp.retainAll( otherProdComp ) ) {
-                    return false;
-                }
-                if ( queryProdComp.retainAll( otherReacComp ) ) {
-                    return false;
-                }
-
-                // checks the molecules
-                return checkMolecules( queryReactants , otherProducts ) && checkMolecules( queryProducts ,
-                                                                                           otherReactants );
+                return queryReactants.equals( otherProducts ) && queryProducts.equals( otherReactants );
             } else {
                 // shouldn't happen qReactants != oReactants && qReactants != oProducts... then hashes.size() > 2
                 // can only be when qReactants == qProducts && oReactants == oProducts
@@ -523,65 +377,9 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
     }
 
     /**
-     * Determines whether all the reference participants and equal to the query participants. This method iterates over
-     * the sort participants and uses {@see moleculeEqual(M, M)} to determine equality.
-     * @param queryParticipants
-     * @param otherParticipants
-     * @return Whether the participants are equal or not
-     * @throws Exception
-     */
-    private boolean checkMolecules( List<M> queryParticipants ,
-                                    List<M> otherParticipants ) throws Exception {
-
-        if ( queryParticipants.size() != otherParticipants.size() ) {
-            return false;
-        }
-
-        // these are sorted prior to call
-        for ( int i = 0; i < queryParticipants.size(); i++ ) {
-
-            // so if there is one not equal then we can return false
-            if ( !moleculeEqual( queryParticipants.get( i ) , otherParticipants.get( i ) ) ) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean moleculeEqual( M query , M reference ) throws Exception {
-        return query.equals( reference );
-    }
-
-    /**
-     * Calculates the hash code for a molecule. By default this molecule calls the provided
-     * molecules {@code hashCode()} method. This method is intended to be overridden by sub
-     * classes that use an 'M' object that do not override the default {@code hashCode}
-     * (e.g. CDK AtomContainer).
-     * @param  molecule The molecule to calculate the hashCode for
-     * @return hash code for the provided molecule
-     */
-    public int moleculeHashCode( M molecule ) {
-        return molecule.hashCode();
-    }
-
-    /**
-     * Private method that calls the {@see moleculeHashCode} on all molecules provided
-     * @param molecules Molecules to calculate the hash code for
-     * @return the combined hash
-     */
-    private int hashCode( List<M> molecules ) {
-        int hash = 5;
-        for ( M molecule : molecules ) {
-            hash = 31 * hash + moleculeHashCode( molecule );
-        }
-        return hash;
-    }
-
-    /**
      * Displays the objects stored in the reaction in string form prefixed with the stoichiometric
      * coefficients and post fixed with compartments if either exists. The reaction reversibility is determined
-     * by the enumeration value {@see ReactionReversibility} enumeration. Example representation:
+     * by the enumeration value {@see Reversibility} enumeration. Example representation:
      * <code>(1)A [e] + (1)B [c] <=?=> (1)C [c] + (1)A [c]</code>
      *
      *
@@ -591,41 +389,9 @@ public class Reaction<M , S extends Comparable , C extends Comparable>
     public String toString() {
         StringBuilder sb = new StringBuilder( 40 );
 
-        Iterator reit = reactants.iterator();
-        Iterator rsit = reactantStoichiometries.iterator();
-        Iterator rcit = reactantCompartments.iterator();
+        sb.append( StringUtils.join( reactants , " + " ) ).append( ' ' ).append( reversibility ).append( ' ' ).append( StringUtils.
+                join( products , " + " ) );
 
-        while ( reit.hasNext() ) {
-            if ( rsit.hasNext() ) {
-                sb.append( '(' ).append( rsit.next() ).append( ')' );
-            }
-            sb.append( reit.next() );
-            if ( rcit.hasNext() ) {
-                sb.append( " [" ).append( rcit.next() ).append( "]" );
-            }
-            if ( reit.hasNext() ) {
-                sb.append( " + " );
-            }
-        }
-
-        sb.append( ' ' ).append( reversibility ).append( ' ' );
-
-        Iterator prit = products.iterator();
-        Iterator psit = productStoichiometries.iterator();
-        Iterator pcit = productCompartments.iterator();
-
-        while ( prit.hasNext() ) {
-            if ( psit.hasNext() ) {
-                sb.append( '(' ).append( psit.next() ).append( ')' );
-            }
-            sb.append( prit.next() );
-            if ( pcit.hasNext() ) {
-                sb.append( " [" ).append( pcit.next() ).append( "]" );
-            }
-            if ( prit.hasNext() ) {
-                sb.append( " + " );
-            }
-        }
 
         return sb.toString();
     }

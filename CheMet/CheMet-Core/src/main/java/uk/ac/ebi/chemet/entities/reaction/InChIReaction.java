@@ -23,6 +23,7 @@ package uk.ac.ebi.chemet.entities.reaction;
 import java.util.Comparator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.Compartment;
+import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
@@ -40,11 +41,13 @@ public class InChIReaction
     private static final Logger LOGGER = Logger.getLogger( InChIReaction.class );
 
     public InChIReaction() {
-        super( new Comparator<InChI>() {
+    }
 
-            public int compare( InChI o1 , InChI o2 ) {
-                return o1.compareTo( o2 );
-            }
-        } );
+    public void addReactant( InChI inChI , Double d , Compartment compartment ) {
+        super.addReactant( new Participant<InChI , Double , Compartment>( inChI , d , compartment ) );
+    }
+
+    public void addProduct( InChI inChI , Double d , Compartment compartment ) {
+        super.addProduct( new Participant<InChI , Double , Compartment>( inChI , d , compartment ) );
     }
 }
