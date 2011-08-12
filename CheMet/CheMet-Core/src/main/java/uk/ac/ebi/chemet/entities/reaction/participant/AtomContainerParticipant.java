@@ -22,12 +22,15 @@ package uk.ac.ebi.chemet.entities.reaction.participant;
 
 import java.io.IOException;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.chemet.entities.Compartment;
 
 /**
@@ -95,6 +98,10 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
             return other.equals( this );
         }
 
+        if ( this.hashCode() != other.hashCode() ) {
+            return false;
+        }
+
         try {
 
             if ( this.coefficient != other.coefficient &&
@@ -105,20 +112,24 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
                  ( this.compartment == null || !this.compartment.equals( other.compartment ) ) ) {
                 return false;
             }
-
-            if ( this.molecule != other.molecule ) {
-                Isomorphism isoChecker = new Isomorphism( Algorithm.DEFAULT , true );
-                isoChecker.init( this.molecule , other.molecule , true , true );
-
-                return isoChecker.getTanimotoSimilarity() == 1;
+            if ( this.molecule == other.molecule ) {
+                return true;
             }
+            Isomorphism isoChecker = new Isomorphism( Algorithm.DEFAULT , true );
+            isoChecker.init( this.molecule,
+                             other.molecule,
+                             true ,
+                             true );
+            isoChecker.setChemFilters( false, false, false);
 
-            return false;
+            return isoChecker.getTanimotoSimilarity() == 1;
 
         } catch ( Exception ex ) {
-            LOGGER.error( "Could not compare ReactionParticipants" );
+            LOGGER.error( "Could not compare molecule: " + ex.getMessage() );
         }
+
         return false;
+
     }
 
     @Override

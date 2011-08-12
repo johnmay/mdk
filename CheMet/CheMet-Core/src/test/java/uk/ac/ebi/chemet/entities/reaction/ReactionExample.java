@@ -76,8 +76,8 @@ public class ReactionExample {
 
         /* Transposed r2 */
         AtomContainerReaction r3 = new AtomContainerReaction();
-        r3.addReactant( _3a7adihydroxy5Bcholestan26al() );
-        r3.addProduct( _5bcholestane3a7a26triol() );
+        r3.addProduct( _3a7adihydroxy5Bcholestan26al() );
+        r3.addReactant( _5bcholestane3a7a26triol() );
 
         /* WARNING! When using the generics the hash codes will not be the same */
         System.out.println( r.hashCode() == r2.hashCode() );       // false
@@ -85,5 +85,9 @@ public class ReactionExample {
 
         System.out.println( r2.hashCode() == r3.hashCode() );      // true
         System.out.println( r2.equals( r3 ) );                     // true
+
+        System.out.println( r.hashCode() == r3.hashCode() );       // false
+        System.out.println( r.equals( r3 ) );                      // true
+
     }
 }
