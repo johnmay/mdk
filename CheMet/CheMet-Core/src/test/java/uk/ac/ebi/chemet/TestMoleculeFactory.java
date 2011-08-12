@@ -1,3 +1,5 @@
+package uk.ac.ebi.chemet;
+
 /**
  * TestMoleculeFactory.java
  *
@@ -18,7 +20,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.chemet;
+
 
 import java.io.InputStream;
 import org.apache.log4j.Logger;
@@ -118,7 +120,7 @@ public class TestMoleculeFactory {
     }
 
     public static IAtomContainer seconday_alcohol() {
-        return loadMol( "ChEBI_35681.mol" , "secondary alcohol" , false );
+        return loadMol( "ChEBI_35681.mol" , "secondary alcohol" , true );
     }
 
     public static IAtomContainer hydron() {
@@ -130,7 +132,7 @@ public class TestMoleculeFactory {
     }
 
     public static IAtomContainer aldehyde() {
-        return loadMol( "ChEBI_17478.mol" , "aldehyde" , false );
+        return loadMol( "ChEBI_17478.mol" , "aldehyde" , true );
     }
 
     public static IAtomContainer ketone() {

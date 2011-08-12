@@ -56,7 +56,7 @@ public class FindBlastClustersMain
         // getting the hash map
         try {
             r = new FileReader(
-                    "/Volumes/johnmay/runspace/ec/uniprot_all_ec.tsv" );
+                    "/nfs/nobackup/research/steinbeck/databases/uniprot/uniprot_all_ec.tsv" );
             CSVReader cSVReader = new CSVReader( r , '\t' );
             uniProtECMap = new UniProtECMapper( cSVReader , 0 , 1 ).getHashMap( false );
         } catch ( FileNotFoundException ex ) {
@@ -166,7 +166,7 @@ public class FindBlastClustersMain
             double tpr = tp / ( tp + fn );
             double fdr = fp / ( fp + tp );
 
-            System.out.printf( "%.1f – PPV: %.2f TPR: %.2f FDR %.2f\n" , sequenceSensitivity , ppv , tpr , fdr );
+         //   System.out.printf( "%.1f – PPV: %.2f TPR: %.2f FDR %.2f\n" , sequenceSensitivity , ppv , tpr , fdr );
         }
     }
 
