@@ -98,7 +98,8 @@ public class StdInChIGenerator {
         try {
             p.waitFor();
         } catch ( InterruptedException ex ) {
-            Logger.getLogger( StdInChIGenerator.class.getName() ).log( Level.SEVERE , null , ex );
+            LOGGER.error( "Error: " + ex.getMessage() );
+            // Logger.getLogger( StdInChIGenerator.class.getName() ).log( Level.SEVERE , null , ex );
         }
         BufferedReader r = new BufferedReader( new FileReader( tmpFileName + "_Out.txt" ) );
         String line = r.readLine();
