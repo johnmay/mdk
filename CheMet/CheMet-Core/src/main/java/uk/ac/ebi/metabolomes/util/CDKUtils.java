@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.metabolomes.util;
 
 import java.io.IOException;
 import java.io.StringReader;
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.PseudoAtom;
@@ -31,10 +31,11 @@ public class CDKUtils {
      * @param mol to check whether it is generic or not.
      * @return true is molecule has a PseudoAtom
      */
-    public static boolean isMoleculeGeneric(IAtomContainer mol) {
-        for(IAtom atom : mol.atoms()) {
-                    if(atom instanceof PseudoAtom)
-                        return true;
+    public static boolean isMoleculeGeneric( IAtomContainer mol ) {
+        for ( IAtom atom : mol.atoms() ) {
+            if ( atom instanceof PseudoAtom ) {
+                return true;
+            }
         }
         return false;
     }
@@ -45,16 +46,18 @@ public class CDKUtils {
      * @param rxn
      * @return
      */
-    public static boolean isRxnGeneric(IReaction rxn) {
-            IMoleculeSet mols = rxn.getProducts();
-            if(moleculeSetContainsGenericMol(mols))
-                return true;
+    public static boolean isRxnGeneric( IReaction rxn ) {
+        IMoleculeSet mols = rxn.getProducts();
+        if ( moleculeSetContainsGenericMol( mols ) ) {
+            return true;
+        }
 
-            mols = rxn.getReactants();
-            if(moleculeSetContainsGenericMol(mols))
-                return true;
+        mols = rxn.getReactants();
+        if ( moleculeSetContainsGenericMol( mols ) ) {
+            return true;
+        }
 
-            return false;
+        return false;
     }
 
     /**
@@ -63,21 +66,37 @@ public class CDKUtils {
      * @param mols
      * @return
      */
-    public static boolean moleculeSetContainsGenericMol(IMoleculeSet mols) {
-        for(IAtomContainer mol : mols.molecules()) {
-                if(isMoleculeGeneric(mol))
-                    return true;
+    public static boolean moleculeSetContainsGenericMol( IMoleculeSet mols ) {
+        for ( IAtomContainer mol : mols.molecules() ) {
+            if ( isMoleculeGeneric( mol ) ) {
+                return true;
+            }
         }
         return false;
     }
 
-    public static IAtomContainer mdlMolV2000Txt2CDKObject(String mol) throws CDKException, IOException {
+    /*
+     * Creates a shallow copy and removes pseudo atoms from the provided molecule
+     */
+    public static IAtomContainer removePseudoAtoms( IAtomContainer molecule ) {
+
+        // first make a shallow copy
+        IAtomContainer copiedAtomContainer = DefaultChemObjectBuilder.getInstance().newInstance( AtomContainer.class ,
+                                                                                             molecule );
+        for ( int i = 0; i < copiedAtomContainer.getAtomCount(); i++ ) {
+            if ( copiedAtomContainer.getAtom( i ) instanceof PseudoAtom ) {
+                copiedAtomContainer.removeAtomAndConnectedElectronContainers( copiedAtomContainer.getAtom( i ) );
+            }
+        }
+        return copiedAtomContainer;
+    }
+
+    public static IAtomContainer mdlMolV2000Txt2CDKObject( String mol ) throws CDKException , IOException {
         IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
-        StringReader sr = new StringReader(mol);
-        MDLV2000Reader reader = new MDLV2000Reader(sr);//(MDLV2000Reader) readerFactory.createReader(new FileReader(input));
-        IAtomContainer auxMol = (IAtomContainer) reader.read(builder.newInstance(Molecule.class));
+        StringReader sr = new StringReader( mol );
+        MDLV2000Reader reader = new MDLV2000Reader( sr );//(MDLV2000Reader) readerFactory.createReader(new FileReader(input));
+        IAtomContainer auxMol = ( IAtomContainer ) reader.read( builder.newInstance( Molecule.class ) );
         reader.close();
         return auxMol;
     }
-
 }

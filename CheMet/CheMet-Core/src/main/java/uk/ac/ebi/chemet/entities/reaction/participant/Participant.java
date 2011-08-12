@@ -111,7 +111,7 @@ public class Participant<M , S , C>
     public String toString() {
         StringBuilder sb = new StringBuilder( 4 );
         if ( this.coefficient != null ) {
-            sb.append( this.coefficient.toString() );
+            sb.append( this.coefficient.toString() ).append( ' ' );
         }
         sb.append( this.molecule );
         if ( this.compartment != null ) {

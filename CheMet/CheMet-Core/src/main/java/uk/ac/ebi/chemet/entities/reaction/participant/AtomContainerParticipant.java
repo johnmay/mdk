@@ -108,7 +108,7 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
 
             if ( this.molecule != other.molecule ) {
                 Isomorphism isoChecker = new Isomorphism( Algorithm.DEFAULT , true );
-                isoChecker.init( this.molecule , other.molecule , false , true );
+                isoChecker.init( this.molecule , other.molecule , true , true );
 
                 return isoChecker.getTanimotoSimilarity() == 1;
             }

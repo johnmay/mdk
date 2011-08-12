@@ -269,29 +269,28 @@ public class Reaction<M , S , C>
         int hash = 5;
 
         // (re)calculate the hash if needed (i.e. there has been a state-change)
-        if ( this.cachedHash == null ) {
+        // Can't do this anymore as the internal workings of the Participants may change
+        //   if ( this.cachedHash == null ) {
 
-            List<Participant<M , S , C>> reac = new ArrayList<Participant<M , S , C>>( this.reactants );
-            List<Participant<M , S , C>> prod = new ArrayList<Participant<M , S , C>>( this.products );
+        List<Participant<M , S , C>> reac = new ArrayList<Participant<M , S , C>>( this.reactants );
+        List<Participant<M , S , C>> prod = new ArrayList<Participant<M , S , C>>( this.products );
 
-            // sort before calculating the hashCode()
-            Collections.sort( reac );
-            Collections.sort( prod );
+        // sort before calculating the hashCode()
+        Collections.sort( reac );
+        Collections.sort( prod );
 
-            Integer[] hashes = new Integer[]{ reac.hashCode() ,
-                                              prod.hashCode() };
+        Integer[] hashes = new Integer[]{ reac.hashCode() ,
+                                          prod.hashCode() };
 
-            // sort them to be the same
-            Arrays.sort( hashes );
-            hash = 59 * hash + hashes[0];
-            hash = 59 * hash + hashes[1];
+        // sort them to be the same
+        Arrays.sort( hashes );
+        hash = 59 * hash + hashes[0];
+        hash = 59 * hash + hashes[1];
 
-            this.cachedHash = hash;
-
-        }
+        this.cachedHash = hash;
+        // }
 
         return this.cachedHash;
-
     }
 
     /**
@@ -336,6 +335,7 @@ public class Reaction<M , S , C>
             Set hashes = new HashSet<Integer>( Arrays.asList( queryReactants.hashCode() , queryProducts.hashCode() ,
                                                               otherReactants.hashCode() , otherProducts.hashCode() ) );
 
+
             /* Check the correct number of side */
             if ( hashes.size() != 2 ) {
                 // not handling cases where reactants and products are the same.. could just be same hashcode
@@ -355,11 +355,9 @@ public class Reaction<M , S , C>
             }
 
         } else {
-            System.out.println( "Testing r = r" );
             if ( equals( queryReactants , otherReactants ) && equals( queryProducts , otherProducts ) ) {
                 return true;
             }
-            System.out.println( "Testing r = p" );
             if ( equals( queryReactants , otherProducts ) && equals( queryReactants , otherReactants ) ) {
                 return true;
             }

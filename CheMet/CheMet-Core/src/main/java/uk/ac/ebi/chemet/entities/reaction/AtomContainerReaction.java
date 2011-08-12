@@ -51,13 +51,35 @@ public class AtomContainerReaction
     private static final Logger LOGGER = Logger.getLogger( AtomContainerReaction.class );
 
     public void addReactant( IAtomContainer molecule , Double coef , Compartment compartment ) {
-        super.addReactant( new AtomContainerParticipant( molecule , coef ,
-                                                         compartment ) );
+        if ( CDKUtils.isMoleculeGeneric( molecule ) ) {
+            addReactant( new GenericParticipant( molecule , coef , compartment ) );
+        } else {
+            addReactant( new AtomContainerParticipant( molecule , coef , compartment ) );
+        }
     }
 
     public void addProduct( IAtomContainer molecule , Double coef , Compartment compartment ) {
-        super.addProduct( new AtomContainerParticipant( molecule , coef ,
-                                                        compartment ) );
+        if ( CDKUtils.isMoleculeGeneric( molecule ) ) {
+            addProduct( new GenericParticipant( molecule , coef , compartment ) );
+        } else {
+            addProduct( new AtomContainerParticipant( molecule , coef , compartment ) );
+        }
+    }
+
+    public void addReactant( IAtomContainer molecule , Double coef ) {
+        addReactant( molecule , coef , null );
+    }
+
+    public void addProduct( IAtomContainer molecule , Double coef ) {
+        addProduct( molecule , coef , null );
+    }
+
+    public void addReactant( IAtomContainer molecule ) {
+        addReactant( molecule , null , null );
+    }
+
+    public void addProduct( IAtomContainer molecule ) {
+        addProduct( molecule , null , null );
     }
 
     public void addReactant( AtomContainerParticipant p ) {
@@ -74,7 +96,6 @@ public class AtomContainerReaction
         super.addProduct( p );
     }
 
-    
 //    /**
 //     * Create an instance IReaction object for use with CDK
 //     * TODO: Write unit test...
