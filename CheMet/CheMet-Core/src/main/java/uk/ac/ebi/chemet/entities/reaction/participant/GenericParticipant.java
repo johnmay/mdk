@@ -94,6 +94,11 @@ public class GenericParticipant extends AtomContainerParticipant {
             return false;
         }
         try {
+            // the trimmed molecule should be a fragment
+            if (this.trimmedMolecule.getAtomCount() >= other.molecule.getAtomCount() ) {
+                return false;
+            }
+
             if ( this.trimmedMolecule != other.molecule ) {
                 Isomorphism comparison = new Isomorphism( Algorithm.DEFAULT , true );
                 comparison.init( this.trimmedMolecule , other.molecule , false , true );

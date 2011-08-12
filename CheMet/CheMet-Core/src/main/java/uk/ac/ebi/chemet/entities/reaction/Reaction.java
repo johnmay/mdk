@@ -178,10 +178,10 @@ public class Reaction<M , S , C>
      * Accessor to all the reaction molecules
      * @return shallow copy combined list of all products (ordered reactant, product)
      */
-    public M[] getAllReactionMolecules() {
-        List<M> allMolecules = new ArrayList<M>( Arrays.asList( getReactantMolecules() ) );
-        allMolecules.addAll( Arrays.asList( getProductMolecules() ) );
-        return ( M[] ) allMolecules.toArray( new Object[ 0 ] );
+    public List<M> getAllReactionMolecules() {
+        List<M> allMolecules = new ArrayList<M>( reactantsMolecules );
+        allMolecules.addAll( productsMolecules );
+        return allMolecules;
     }
 
     /**

@@ -102,30 +102,58 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
             return false;
         }
 
+
+        if ( this.coefficient != other.coefficient &&
+             ( this.coefficient == null || !this.coefficient.equals( other.coefficient ) ) ) {
+            return false;
+        }
+        if ( this.compartment != other.compartment &&
+             ( this.compartment == null || !this.compartment.equals( other.compartment ) ) ) {
+            return false;
+        }
+        if ( this.molecule == other.molecule ) {
+            return true;
+        }
         try {
 
-            if ( this.coefficient != other.coefficient &&
-                 ( this.coefficient == null || !this.coefficient.equals( other.coefficient ) ) ) {
+            if ( this.molecule.getAtomCount() != other.molecule.getAtomCount() ) {
                 return false;
             }
-            if ( this.compartment != other.compartment &&
-                 ( this.compartment == null || !this.compartment.equals( other.compartment ) ) ) {
+            if ( this.molecule.getBondCount() != other.molecule.getBondCount() ) {
                 return false;
             }
-            if ( this.molecule == other.molecule ) {
+
+            // for single atom cases
+            if ( this.molecule.getAtomCount() == 1 ) {
+                IAtom queryAtom = this.molecule.getAtom( 0 );
+                IAtom otherAtom = other.molecule.getAtom( 0 );
+
+                if ( queryAtom.getSymbol() != otherAtom.getSymbol() && ( queryAtom.getSymbol() != null || !queryAtom.
+                        getSymbol().equals( otherAtom.getSymbol() ) ) ) {
+                    return false;
+                }
+                if ( queryAtom.getCharge() != otherAtom.getCharge() && ( queryAtom.getCharge() != null || !queryAtom.
+                        getCharge().equals( otherAtom.getCharge() ) ) ) {
+                    return false;
+                }
                 return true;
             }
+
+
             Isomorphism isoChecker = new Isomorphism( Algorithm.DEFAULT , true );
-            isoChecker.init( this.molecule,
-                             other.molecule,
+            isoChecker.init( this.molecule ,
+                             other.molecule ,
                              true ,
                              true );
-            isoChecker.setChemFilters( false, false, false);
+            isoChecker.setChemFilters( false , false , false );
 
             return isoChecker.getTanimotoSimilarity() == 1;
 
         } catch ( Exception ex ) {
+            System.out.println( this.molecule.getID() );
+            System.out.println( other.molecule.getID() );
             LOGGER.error( "Could not compare molecule: " + ex.getMessage() );
+            ex.printStackTrace();
         }
 
         return false;
