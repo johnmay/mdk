@@ -358,7 +358,7 @@ public class Reaction<M , S , C>
             if ( equals( queryReactants , otherReactants ) && equals( queryProducts , otherProducts ) ) {
                 return true;
             }
-            if ( equals( queryReactants , otherProducts ) && equals( queryReactants , otherReactants ) ) {
+            if ( equals( queryReactants , otherProducts ) && equals( queryProducts , otherReactants ) ) {
                 return true;
             }
         }
