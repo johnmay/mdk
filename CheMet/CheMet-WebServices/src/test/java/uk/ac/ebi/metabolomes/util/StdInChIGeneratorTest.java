@@ -39,7 +39,7 @@ public class StdInChIGeneratorTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        
+
     }
 
     @AfterClass

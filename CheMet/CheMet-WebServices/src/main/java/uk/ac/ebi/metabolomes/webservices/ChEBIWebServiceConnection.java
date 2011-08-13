@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
      */
     private ChebiWebServiceClient client;
     private String serviceProviderName = "ChEBI";
-    private static final  Logger logger = Logger.getLogger( ChEBIWebServiceConnection.class );
+    private static final Logger logger = Logger.getLogger( ChEBIWebServiceConnection.class );
     private int maxResultsSearch;
     private StarsCategory starsCategory;
 
@@ -81,7 +82,6 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     public void setStarsCategory( StarsCategory starsCategory ) {
         this.starsCategory = starsCategory;
     }
-
 
     @Override
     public HashMap<String , String> getInChIs( String[] ids ) {
@@ -139,10 +139,11 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         }
         return true;
     }
+    private IChemObjectBuilder CHEM_OBJECT_BUILDER = DefaultChemObjectBuilder.getInstance();
 
     public ArrayList<IAtomContainer> downloadMolsToCDKObject( String[] ids ) {
         ArrayList<IAtomContainer> res = new ArrayList<IAtomContainer>();
-        IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+
         try {
             for ( String id : ids ) {
                 Entity entity = this.client.getCompleteEntity( "CHEBI:" + id );
@@ -152,7 +153,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
                     MDLV2000Reader r = new MDLV2000Reader( new StringReader( st.getStructure() ) );
                     //System.out.println("Before reading mol file");
                     //System.out.println(st.getStructure());
-                    IAtomContainer mol = ( IMolecule ) r.read( builder.newInstance( IMolecule.class ) );
+                    IAtomContainer mol = ( IMolecule ) r.read( CHEM_OBJECT_BUILDER.newInstance( IMolecule.class ) );
                     r.close();
                     //System.out.println("CHEBI:"+id);
                     mol.setID( id );
@@ -168,6 +169,30 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
             logger.error( "Problems closing MDLReader" , e );
         }
         return res;
+    }
+
+    public IAtomContainer getAtomContainer( Integer id ) throws ChebiWebServiceFault_Exception , CDKException ,
+                                                                IOException {
+        return getAtomContainer( "CHEBI:" + id );
+    }
+
+    public IAtomContainer getAtomContainer( String id ) throws ChebiWebServiceFault_Exception , CDKException ,
+                                                               IOException {
+        Entity entity = this.client.getCompleteEntity( id );
+        List<IAtomContainer> structures = new ArrayList<IAtomContainer>();
+
+        for ( StructureDataItem s : entity.getChemicalStructures() ) {
+            // just get the first one
+            if ( s.getType().equals( "mol" ) ) {
+                MDLV2000Reader r = new MDLV2000Reader( new StringReader( s.getStructure() ) );
+                IAtomContainer molecule = r.read( CHEM_OBJECT_BUILDER.newInstance( IMolecule.class ) );
+                molecule.setID( id );
+                return molecule;
+            }
+        }
+
+        return null;
+
     }
 
     public HashMap<String , List<LiteEntity>> getLiteEntity( String[] chebiIds ) {
