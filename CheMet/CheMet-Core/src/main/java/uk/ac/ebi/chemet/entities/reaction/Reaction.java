@@ -20,6 +20,10 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -54,10 +58,9 @@ import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
  *
  */
 public class Reaction<M , S , C>
-        extends ObjectDescriptor implements Serializable {
+        extends ObjectDescriptor implements Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger( Reaction.class );
-    private static final long serialVersionUID = 8309040049214143031L;
     transient protected List<M> reactantsMolecules = new ArrayList<M>();
     transient protected List<M> productsMolecules = new ArrayList<M>();
     transient protected List<S> reactantStoichiometries = new ArrayList<S>();
@@ -69,8 +72,9 @@ public class Reaction<M , S , C>
     // new class
     protected List<Participant<M , S , C>> reactants;
     protected List<Participant<M , S , C>> products;
-    // revesibility
+    // whether the reaction is reversible
     protected Reversibility reversibility = Reversibility.UNKNOWN;
+    @Deprecated
     transient private Integer cachedHash = null;
 
     /**
@@ -105,24 +109,24 @@ public class Reaction<M , S , C>
      * Accessor for all the reactant compartments of the reaction
      * @return Fixed size array of reactant compartments
      */
-    public C[] getReactantCompartments() {
-        return ( C[] ) reactantCompartments.toArray( new Object[ 0 ] );
+    public List<C> getReactantCompartments() {
+        return Collections.unmodifiableList( reactantCompartments );
     }
 
     /**
      * Accessor for all the reactant coefficients of the reaction
      * @return Fixed size array of reactant coefficients
      */
-    public S[] getReactantStoichiometries() {
-        return ( S[] ) reactantStoichiometries.toArray( new Object[ 0 ] );
+    public List<S> getReactantStoichiometries() {
+        return Collections.unmodifiableList( reactantStoichiometries );
     }
 
     /**
      * Accessor for all the reactants of the reaction
      * @return Fixed size array of reactants of class 'M'
      */
-    public M[] getReactantMolecules() {
-        return ( M[] ) reactants.toArray( new Object[ 0 ] );
+    public List<M> getReactantMolecules() {
+        return Collections.unmodifiableList( reactantsMolecules );
     }
 
     /**
@@ -141,24 +145,24 @@ public class Reaction<M , S , C>
      * Accessor for all the product compartments of the reaction
      * @return Fixed size array of compartments
      */
-    public C[] getProductCompartments() {
-        return ( C[] ) productCompartments.toArray( new Object[ 0 ] );
+    public List<C> getProductCompartments() {
+        return Collections.unmodifiableList( productCompartments );
     }
 
     /**
      * Accessor for all the product coefficients of the reaction
      * @return Fixed size array of coefficients
      */
-    public S[] getProductStoichiometries() {
-        return ( S[] ) productStoichiometries.toArray( new Object[ 0 ] );
+    public List<S> getProductStoichiometries() {
+        return Collections.unmodifiableList( productStoichiometries );
     }
 
     /**
      * Accessor for all the products of the reaction
      * @return Fixed size array of products of class 'M'
      */
-    public M[] getProductMolecules() {
-        return ( M[] ) productsMolecules.toArray( new Object[ 0 ] );
+    public List<M> getProductMolecules() {
+        return Collections.unmodifiableList( productsMolecules );
     }
 
     /**
@@ -166,7 +170,6 @@ public class Reaction<M , S , C>
      * @param product The product to add
      */
     public void addProduct( Participant<M , S , C> participant ) {
-//        participants.add( new Participant<M , S , C>( product ) );
         this.products.add( participant );
         this.productsMolecules.add( participant.getMolecule() );
         this.productCompartments.add( participant.getCompartment() );
@@ -198,20 +201,20 @@ public class Reaction<M , S , C>
      * Accessor to all the reaction compartments
      * @return shallow copy combined list of all coefficients (ordered reactant, product)
      */
-    public S[] getAllReactionCoefficients() {
-        List<S> allMolecules = new ArrayList<S>( Arrays.asList( getReactantStoichiometries() ) );
-        allMolecules.addAll( Arrays.asList( getProductStoichiometries() ) );
-        return ( S[] ) allMolecules.toArray( new Object[ 0 ] );
+    public List<S> getAllReactionCoefficients() {
+        List<S> allMolecules = new ArrayList<S>( reactantStoichiometries );
+        allMolecules.addAll( productStoichiometries );
+        return allMolecules;
     }
 
     /**
      * Accessor to all the reaction compartments
      * @return shallow copy combined list of all compartments (ordered reactant, product)
      */
-    public C[] getAllReactionCompartments() {
-        List<C> allMolecules = new ArrayList<C>( Arrays.asList( getReactantCompartments() ) );
-        allMolecules.addAll( Arrays.asList( getProductCompartments() ) );
-        return ( C[] ) allMolecules.toArray( new Object[ 0 ] );
+    public List<C> getAllReactionCompartments() {
+        List<C> allMolecules = new ArrayList<C>( reactantCompartments );
+        allMolecules.addAll( productCompartments );
+        return allMolecules;
     }
 
     /**
@@ -246,12 +249,38 @@ public class Reaction<M , S , C>
         return productStoichiometries.get( products.indexOf( m ) );
     }
 
+    /**
+     * Accessor to query whether the reaction is generic
+     * @return t/f
+     */
     public Boolean isGeneric() {
         return generic;
     }
 
+    /**
+     * Indicate that this reaction contains GenericMolecules. This influences the
+     * {@see equals(Object obj)} method into taking longer
+     * @param generic
+     */
     public void setGeneric( Boolean generic ) {
         this.generic = generic;
+    }
+
+    /**
+     * Transposes the sides of the reaction. The method switches the reactants
+     * for products and the products for reactants
+     */
+    public void transpose() {
+        // transpose all the lists
+        for ( List[] l : Arrays.asList( new List[]{ reactants , products } ,
+                                        new List[]{ reactantsMolecules , productsMolecules } ,
+                                        new List[]{ reactantStoichiometries , productStoichiometries } ,
+                                        new List[]{ reactantCompartments , productCompartments } ) ) {
+            List tmp = l[0];
+            l[0] = l[1];
+            l[1] = tmp;
+        }
+
     }
 
     /**
@@ -355,10 +384,11 @@ public class Reaction<M , S , C>
             }
 
         } else {
-            if ( equals( queryReactants , otherReactants ) && equals( queryProducts , otherProducts ) ) {
+            // XXX May be a quicker way but for not this works
+            if ( genericEquals( queryReactants , otherReactants ) && genericEquals( queryProducts , otherProducts ) ) {
                 return true;
             }
-            if ( equals( queryReactants , otherProducts ) && equals( queryProducts , otherReactants ) ) {
+            if ( genericEquals( queryReactants , otherProducts ) && genericEquals( queryProducts , otherReactants ) ) {
                 return true;
             }
         }
@@ -367,7 +397,7 @@ public class Reaction<M , S , C>
 
     }
 
-    private boolean equals( List<Participant<M , S , C>> q , List<Participant<M , S , C>> o ) {
+    private boolean genericEquals( List<Participant<M , S , C>> q , List<Participant<M , S , C>> o ) {
 
         if ( q.size() != o.size() ) {
             return false;
@@ -404,5 +434,24 @@ public class Reaction<M , S , C>
 
 
         return sb.toString();
+    }
+
+    /**
+     * Writes the reaction to an object output stream
+     * @param out
+     * @throws IOException
+     */
+    public void writeExternal( ObjectOutput out ) throws IOException {
+        throw new UnsupportedOperationException( "Not supported yet." );
+    }
+
+    /**
+     * Reads the reaction from an object input stream
+     * @param in
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public void readExternal( ObjectInput in ) throws IOException , ClassNotFoundException {
+        throw new UnsupportedOperationException( "Not supported yet." );
     }
 }

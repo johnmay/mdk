@@ -1,9 +1,9 @@
 /* $Revision$ $Author$ $Date$
  *
  * Copyright (C) 1997-2007  The Chemistry Development Kit (CDK) project
- * 
+ *
  * Contact: cdk-devel@lists.sourceforge.net
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
  * as published by the Free Software Foundation; either version 2.1
@@ -12,12 +12,12 @@
  * - but is not limited to - adding the above copyright notice to the beginning
  * of your source code files, and to any copyright notice that you may distribute
  * with programs based on this work.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
@@ -93,23 +93,23 @@ import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
  */
 @TestClass("org.openscience.cdk.io.PDBReaderV2Test")
 public class PDBReaderV2 extends DefaultChemObjectReader {
-	
+
 	private LoggingTool logger;
 	private BufferedReader _oInput; // The internal used BufferedReader
 	private BooleanIOSetting useRebondTool;
 	private BooleanIOSetting readConnect;
-	
+
 	private Map atomNumberMap;
-	
+
 	/*
 	 * This is a temporary store for bonds from CONNECT records.
 	 * As CONNECT is deliberately fully redundant (a->b and b->a)
 	 * we need to use this to weed out the duplicates.
 	 */
 	private ArrayList bondsFromConnectRecords;
-	
+
 	private static AtomTypeFactory pdbFactory;
-	
+
 	/**
 	 *
 	 * Contructs a new PDBReaderV2 that can read Molecules from a given
@@ -121,7 +121,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 	public PDBReaderV2(InputStream oIn) {
 		this(new InputStreamReader(oIn));
 	}
-	
+
 	/**
 	 *
 	 * Contructs a new PDBReaderV2 that can read Molecules from a given
@@ -136,16 +136,16 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 		initIOSettings();
 		pdbFactory = null;
 	}
-	
+
 	public PDBReaderV2() {
 		this(new StringReader(""));
 	}
-	
+
 	@TestMethod("testGetFormat")
     public IResourceFormat getFormat() {
 		return PDBFormat.getInstance();
 	}
-	
+
 	@TestMethod("testSetReader_Reader")
     public void setReader(Reader input) throws CDKException {
 		if (input instanceof BufferedReader) {
@@ -154,12 +154,12 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 			this._oInput = new BufferedReader(input);
 		}
 	}
-	
+
 	@TestMethod("testSetReader_InputStream")
     public void setReader(InputStream input) throws CDKException {
 		setReader(new InputStreamReader(input));
 	}
-	
+
 	@TestMethod("testAccepts")
     public boolean accepts(Class classObject) {
 		Class[] interfaces = classObject.getInterfaces();
@@ -179,15 +179,15 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 	 * an Exception.
 	 *
 	 * @param oObj  The object that subclasses IChemObject
-	 * @return      The IChemObject read  
-	 * @exception   CDKException  
+	 * @return      The IChemObject read
+	 * @exception   CDKException
 	 *
 	 */
 	public IChemObject read(IChemObject oObj) throws CDKException {
 		if (oObj instanceof IChemFile) {
 			if (pdbFactory == null) {
 				try {
-					pdbFactory = AtomTypeFactory.getInstance("org/openscience/cdk/config/data/pdb_atomtypes.xml", 
+					pdbFactory = AtomTypeFactory.getInstance("org/openscience/cdk/config/data/pdb_atomtypes.xml",
 				    	  ((IChemFile)oObj).getBuilder());
 				} catch (Exception exception) {
 					logger.debug(exception);
@@ -199,7 +199,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 			throw new CDKException("Only supported is reading of ChemFile objects.");
 		}
 	}
-	
+
 	/**
 	 * Read a <code>ChemFile</code> from a file in PDB format. The molecules
 	 * in the file are stored as <code>BioPolymer</code>s in the
@@ -217,7 +217,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 		IChemSequence oSeq = oFile.getBuilder().newInstance(ChemSequence.class);//.newChemSequence();
 		IChemModel oModel = oFile.getBuilder().newInstance(ChemModel.class);//.newChemModel();
 		IMoleculeSet oSet = oFile.getBuilder().newInstance(MoleculeSet.class);//.newMoleculeSet();
-		
+
 		// some variables needed
 		String cCol;
 		PDBAtom oAtom;
@@ -230,26 +230,26 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 		char chain = 'A';	// To ensure stringent name giving of monomers
 		IStrand oStrand;
 		int lineLength = 0;
-		
+
 		boolean isProteinStructure = false;
-		
+
 		atomNumberMap = new Hashtable();
 		if (readConnect.isSet()) {
 		    bondsFromConnectRecords = new ArrayList();
 		}
-		
-		// do the reading of the Input		
+
+		// do the reading of the Input
 		try {
 			do {
 				cRead = _oInput.readLine();
 				logger.debug("Read line: ", cRead);
-				if (cRead != null) {	
+				if (cRead != null) {
 					lineLength = cRead.length();
-					
+
 					//if (lineLength < 80) {
 					//	logger.warn("Line is not of the expected length 80!");
 					//}
-					
+
 					// make sure the record name is 6 characters long
 					if (lineLength < 6) {
 						cRead = cRead + "      ";
@@ -261,7 +261,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 					} else if ("ATOM  ".equalsIgnoreCase(cCol)) {
 						// read an atom record
 						oAtom = readAtom(cRead, lineLength);
-						
+
 						if (isProteinStructure) {
 							// construct a string describing the residue
 							cResidue = new StringBuffer(8);
@@ -312,7 +312,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 							molecularStructure.addAtom(oAtom);
 						}
 						logger.debug("Added ATOM: ", oAtom);
-						
+
 						/** As HETATMs cannot be considered to either belong to a certain monomer or strand,
 						 * they are dealt with seperately.*/
 					} else if("HETATM".equalsIgnoreCase(cCol))	{
@@ -325,7 +325,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 						}
 						logger.debug("Added HETATM: ", oAtom);
 					} else if ("TER   ".equalsIgnoreCase(cCol)) {
-						// start new strand						
+						// start new strand
 						chain++;
 						oStrand = new PDBStrand();
 						oStrand.setStrandName(String.valueOf(chain));
@@ -342,8 +342,8 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 								try {
 									if(!createBondsWithRebondTool(oBP))	{
 										// Get rid of all potentially created bonds.
-										logger.info("Bonds could not be created using the RebondTool when PDB file was read.");								
-										oBP.removeAllBonds();								
+										logger.info("Bonds could not be created using the RebondTool when PDB file was read.");
+										oBP.removeAllBonds();
 									}
 								} catch (Exception exception) {
 									logger.info("Bonds could not be created when PDB file was read.");
@@ -379,7 +379,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 								oSet = oFile.getBuilder().newInstance(MoleculeSet.class);//newMoleculeSet();
 							}
 						}
-					} else if ("REMARK".equalsIgnoreCase(cCol)) {						
+					} else if ("REMARK".equalsIgnoreCase(cCol)) {
 						Object comment = oFile.getProperty(CDKConstants.COMMENT);
                         if (comment == null) {
                         	comment = "";
@@ -390,11 +390,11 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
                         } else {
                         	logger.warn("REMARK line found without any comment!");
                         }
-					} else if ("COMPND".equalsIgnoreCase(cCol)) {						
+					} else if ("COMPND".equalsIgnoreCase(cCol)) {
                         String title = cRead.substring(10).trim();
                         oFile.setProperty(CDKConstants.TITLE, title);
-					} 
-					
+					}
+
 					/*************************************************************
 					 * Read connectivity information from CONECT records.
 					 * Only covalent bonds are dealt with. Perhaps salt bridges
@@ -405,50 +405,50 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 						if (cRead.length() < 16) {
 							logger.debug("Skipping unexpected empty CONECT line! : ", cRead);
 						} else {
-						
+
 							String bondAtom = cRead.substring(7, 11).trim();
 							int bondAtomNo = Integer.parseInt(bondAtom);
 							String bondedAtom = cRead.substring(12, 16).trim();
 							int bondedAtomNo = -1;
-							
+
 							try	{bondedAtomNo = Integer.parseInt(bondedAtom);}
 							catch(Exception e)	{bondedAtomNo = -1;}
-							
+
 							if(bondedAtomNo != -1)	{
 								addBond(oBP, bondAtomNo, bondedAtomNo);
 								logger.warn("Bonded " + bondAtomNo + " with " + bondedAtomNo);
 							}
-							
+
 							if(cRead.length() > 17)	{
 								bondedAtom = cRead.substring(17, 21);
 								bondedAtom = bondedAtom.trim();
 								try	{bondedAtomNo = Integer.parseInt(bondedAtom);}
 								catch(Exception e)	{bondedAtomNo = -1;}
-								
+
 								if(bondedAtomNo != -1)	{
 									addBond(oBP, bondAtomNo, bondedAtomNo);
 									logger.warn("Bonded " + bondAtomNo + " with " + bondedAtomNo);
 								}
 							}
-							
+
 							if(cRead.length() > 22)	{
 								bondedAtom = cRead.substring(22, 26);
 								bondedAtom = bondedAtom.trim();
 								try	{bondedAtomNo = Integer.parseInt(bondedAtom);}
 								catch(Exception e)	{bondedAtomNo = -1;}
-								
+
 								if(bondedAtomNo != -1)	{
 									addBond(oBP, bondAtomNo, bondedAtomNo);
 									logger.warn("Bonded " + bondAtomNo + " with " + bondedAtomNo);
 								}
 							}
-							
+
 							if(cRead.length() > 27)	{
 								bondedAtom = cRead.substring(27, 31);
 								bondedAtom = bondedAtom.trim();
 								try	{bondedAtomNo = Integer.parseInt(bondedAtom);}
 								catch(Exception e)	{bondedAtomNo = -1;}
-								
+
 								if(bondedAtomNo != -1)	{
 									addBond(oBP, bondAtomNo, bondedAtomNo);
 									logger.warn("Bonded " + bondAtomNo + " with " + bondedAtomNo);
@@ -457,7 +457,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 						}
 					}
 					/*************************************************************/
-					
+
 					else if ("HELIX ".equalsIgnoreCase(cCol)) {
 //						HELIX    1 H1A CYS A   11  LYS A   18  1 RESIDUE 18 HAS POSITIVE PHI    1D66  72
 //						          1         2         3         4         5         6         7
@@ -502,22 +502,22 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 			logger.error("  error: " + e.getMessage());
 			logger.debug(e);
 		}
-		
+
 		// try to close the Input
 		try {
 			_oInput.close();
 		} catch (Exception e) {
 			logger.debug(e);
 		}
-		
+
 		// Set all the dependencies
 		oModel.setMoleculeSet(oSet);
 		oSeq.addChemModel(oModel);
 		oFile.addChemSequence(oSeq);
-		
+
 		return oFile;
 	}
-	
+
 	private void addBond(PDBPolymer obp, int bondAtomNo, int bondedAtomNo) {
 		IAtom firstAtom = (PDBAtom)atomNumberMap.get(new Integer(bondAtomNo));
 		IAtom secondAtom = (PDBAtom)atomNumberMap.get(new Integer(bondedAtomNo));
@@ -533,7 +533,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
                 bond.setAtom(secondAtom, bond.getAtomCount());
                 bond.setOrder(IBond.Order.SINGLE);
 		for (int i = 0; i < bondsFromConnectRecords.size(); i++) {
-		    IBond existingBond = 
+		    IBond existingBond =
 		        (IBond) bondsFromConnectRecords.get(i);
 		    IAtom a = existingBond.getAtom(0);
 		    IAtom b = existingBond.getAtom(1);
@@ -546,12 +546,12 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 		bondsFromConnectRecords.add(bond);
 		obp.addBond(bond);
 	}
-	
+
 	private boolean createBondsWithRebondTool(IBioPolymer pol){
 		RebondTool tool = new RebondTool(2.0, 0.5, 0.5);
 		try {
 //			 configure atoms
-		      AtomTypeFactory factory = AtomTypeFactory.getInstance("org/openscience/cdk/config/data/jmol_atomtypes.txt", 
+		      AtomTypeFactory factory = AtomTypeFactory.getInstance("org/openscience/cdk/config/data/jmol_atomtypes.txt",
 		    	  pol.getBuilder());
 		      java.util.Iterator atoms = pol.atoms().iterator();
 		      while (atoms.hasNext()) {
@@ -597,7 +597,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 		//	throw new RuntimeException("PDBReaderV2 error during readAtom(): line too short");
 		//}
 		String elementSymbol = cLine.substring(12, 14).trim();
-		
+
 		if (elementSymbol.length() == 2) {
 			// ensure that the second char is lower case
 			elementSymbol = elementSymbol.charAt(0) + elementSymbol.substring(1).toLowerCase();
@@ -610,7 +610,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 		} catch (NoSuchAtomTypeException e) {
 			logger.error("Did not recognize PDB atom type: " + resName+"."+rawAtomName);
 		}*/
-		PDBAtom oAtom = new PDBAtom(elementSymbol, 
+		PDBAtom oAtom = new PDBAtom(elementSymbol,
 			new Point3d(Double.parseDouble(cLine.substring(30, 38)),
 			            Double.parseDouble(cLine.substring(38, 46)),
 			            Double.parseDouble(cLine.substring(46, 54))
@@ -619,7 +619,7 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 		IAtom atom = new Atom("Co", new Point3d(Double.parseDouble(cLine.substring(30, 38)),
 	            Double.parseDouble(cLine.substring(38, 46)),
 	            Double.parseDouble(cLine.substring(46, 54)) ));
-		
+
         oAtom.setRecord(cLine);
         oAtom.setSerial(Integer.parseInt(cLine.substring(6, 11).trim()));
         oAtom.setName(rawAtomName.trim());
@@ -653,14 +653,14 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
                 oAtom.setCharge(Double.parseDouble(frag));
             }
 		}
-		
+
 		/*************************************************************************************
 		 * It sets a flag in the property content of an atom,
 		 * which is used when bonds are created to check if the atom is an OXT-record => needs
 		 * special treatment.
 		 */
 		String oxt = cLine.substring(13, 16).trim();
-		
+
 		if(oxt.equals("OXT"))	{
 			oAtom.setOxt(true);
 		}
@@ -668,10 +668,10 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 			oAtom.setOxt(false);
 		}
 		/*************************************************************************************/
-		
+
 		return oAtom;
 	}
-	
+
 	@TestMethod("testClose")
   public void close() throws IOException {
 		_oInput.close();
@@ -679,13 +679,13 @@ public class PDBReaderV2 extends DefaultChemObjectReader {
 
     private void initIOSettings() {
     	useRebondTool = new BooleanIOSetting("UseRebondTool", IOSetting.LOW,
-          "Should the PDBReaderV2 deduce bonding patterns?", 
+          "Should the PDBReaderV2 deduce bonding patterns?",
           "false");
         readConnect = new BooleanIOSetting("ReadConnectSection", IOSetting.LOW,
           "Should the CONECT be read?",
           "true");
     }
-    
+
     public void customizeJob() {
         fireIOSettingQuestion(useRebondTool);
         fireIOSettingQuestion(readConnect);

@@ -20,15 +20,8 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import java.io.Serializable;
-import java.util.*;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.*;
-import org.openscience.cdk.smsd.Isomorphism;
-import org.openscience.cdk.smsd.interfaces.Algorithm;
-import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;

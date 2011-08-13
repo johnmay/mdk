@@ -70,20 +70,27 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
     public int hashCode() {
         int hash = 7;
 
-        hash = 67 * hash + super.molecule.getBondCount();
-        hash = 67 * hash + super.molecule.getAtomCount();
-        // hash atoms
+        hash = 257 * hash + super.molecule.getBondCount();
+        hash = 257 * hash + super.molecule.getAtomCount();
+
+        // hash atoms..
+        // Todo: sort atoms?
         for ( int i = 0; i < super.molecule.getAtomCount(); i++ ) {
+
             IAtom atom = super.molecule.getAtom( i );
-            hash = 67 * hash + ( atom.getCharge() != null ? atom.getCharge().hashCode() : 0 );
-            hash = 67 * hash + ( atom.getAtomicNumber() != null ? atom.getAtomicNumber().hashCode() : 0 );
-            hash = 67 * hash + ( atom.getMassNumber() != null ? atom.getMassNumber().hashCode() : 0 );
-            hash = 67 * hash + ( atom.getExactMass() != null ? atom.getExactMass().hashCode() : 0 );
+            // Todo: may want to delete charge
+            hash = 257 * hash + ( atom.getCharge() != null ? atom.getCharge().hashCode() : 0 );
+            hash = 257 * hash + ( atom.getAtomicNumber() != null ? atom.getAtomicNumber().hashCode() : 0 );
+            hash = 257 * hash + ( atom.getMassNumber() != null ? atom.getMassNumber().hashCode() : 0 );
+            hash = 257 * hash + ( atom.getExactMass() != null ? atom.getExactMass().hashCode() : 0 );
+            hash = 257 * hash +
+                   ( ( Double ) AtomContainerManipulator.getBondOrderSum( this.molecule , atom) ).hashCode();
         }
         // don't check the bonds this is simply for a quicker hashCode
 
-        hash = 67 * hash + ( super.coefficient != null ? super.coefficient.hashCode() : 0 );
-        hash = 67 * hash + ( super.compartment != null ? super.compartment.hashCode() : 0 );
+        hash = 257 * hash + ( super.coefficient != null ? super.coefficient.hashCode() : 0 );
+        hash = 257 * hash + ( super.compartment != null ? super.compartment.hashCode() : 0 );
+
         return hash;
 
     }

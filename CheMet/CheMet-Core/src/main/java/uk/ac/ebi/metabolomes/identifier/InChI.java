@@ -21,6 +21,8 @@
 package uk.ac.ebi.metabolomes.identifier;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
+import org.openscience.cdk.formula.MolecularFormula;
 
 /**
  * @brief   Wrapper object for an InChI storing the InChI, InChIKey and AuxInfo
@@ -38,12 +40,19 @@ public class InChI
         implements Comparable<InChI> , Serializable {
 
     private static final long serialVersionUID = 8312829501093553787L;
-    private boolean isStandardInChI = false; // field to specify standard inchi
     private String name = "";
     private String inchi = "";
-    private String inchiKey = "";
+    private String key = "";
     private String auxInfo = "";
-
+    transient private boolean standard = false;
+    // main layer
+    transient private MolecularFormula formula;
+    transient private String connectivity;
+    transient private String hydrogens;
+    // charge layer
+    transient private String charges;
+    // matchers
+    transient private Pattern standardInChIMatcher = Pattern.compile( "InChI=1S" );
 
     /**
      * @brief   Construtor for instantiating with just the InChI string
@@ -56,52 +65,52 @@ public class InChI
     /**
      * @brief Constructor for setting the InChi, InChIKey and AuxInfo
      * @param inchi
-     * @param inchiKey
+     * @param key
      * @param auxInfo
      */
     public InChI(
             String inchi ,
-            String inchiKey ,
+            String key ,
             String auxInfo ) {
-        this( "" , inchi , inchiKey , auxInfo );
+        this( "" , inchi , key , auxInfo );
     }
 
     /**
-     * @brief Constructor for setting the Molecule name, InChI, InChIKey and AuxInfo
+     * @brief Constructor for setting the Molecule name, InChI, InChI-Key and AuxInfo.
+     *        the InChI layers are split and stored
      * @param name
      * @param inchi
-     * @param inchiKey
+     * @param key
      * @param auxInfo
      */
     public InChI( String name ,
                   String inchi ,
-                  String inchiKey ,
+                  String key ,
                   String auxInfo ) {
 
         // make sure there are no null values and only empty strings
         this.name = name != null ? name : "";
         this.inchi = inchi != null ? inchi : "";
-        this.inchiKey = inchiKey != null ? inchiKey : "";
+        this.key = key != null ? key : "";
         this.auxInfo = auxInfo != null ? auxInfo : "";
 
         // use the main inchi as the identifier
         setIdentifierString( inchi );
-    }
 
-    /**
-     * @brief  Accessor for whether the InChI is a Standard InChI
-     * @return true/false depending on if the InChI is standard
-     */
-    public Boolean isStandardInChI() {
-        return isStandardInChI;
-    }
+        String[] layers = this.inchi.split( "/" );
+        if ( standardInChIMatcher.matcher( layers[0] ).find() ) {
+            standard = true;
+        }
 
-    /**
-     * @brief Sets that this is a standard InChI
-     * @param isStandardInChI – true/false
-     */
-    public void setStandardInChI( final Boolean isStandardInChI ) {
-        this.isStandardInChI = isStandardInChI;
+        // no to test if the part exists
+//        this.formula = new MolecularFormula();
+//        this.connectivity = layers[2];
+//        this.hydrogens = layers[3];
+//
+//        if ( layers.length > 4 ) {
+//            this.charges = layers[4];
+//        }
+
     }
 
     /**
@@ -133,7 +142,7 @@ public class InChI
      * @return 27 character InChIKey
      */
     public String getInchiKey() {
-        return inchiKey;
+        return key;
     }
 
     /**
@@ -141,7 +150,7 @@ public class InChI
      * @param inchiKey
      */
     public void setInchiKey( String inchiKey ) {
-        this.inchiKey = inchiKey;
+        this.key = inchiKey;
     }
 
     /**
@@ -160,9 +169,20 @@ public class InChI
         this.auxInfo = auxInfo;
     }
 
-    @Override
-    public final String parse( String identifier ) {
-        throw new UnsupportedOperationException( "unsupported" );
+    public boolean isStandard() {
+        return standard;
+    }
+
+    public MolecularFormula getFormula() {
+        return formula;
+    }
+
+    public String getConnectivity() {
+        return connectivity;
+    }
+
+    public String getHydrogens() {
+        return hydrogens;
     }
 
     /**
@@ -187,7 +207,7 @@ public class InChI
             return false;
         }
         // if either of the InChIKeys are empty don't check these
-        if ( this.inchiKey.isEmpty() || other.inchiKey.isEmpty() ? false : !this.inchiKey.equals( other.inchiKey ) ) {
+        if ( this.key.isEmpty() || other.key.isEmpty() ? false : !this.key.equals( other.key ) ) {
             return false;
         }
         // if either of the AuxInfos are empty don't check these
@@ -233,6 +253,11 @@ public class InChI
      */
     @Override
     public InChI clone() {
-        return new InChI( name , inchi , inchiKey , auxInfo );
+        return new InChI( name , inchi , key , auxInfo );
+    }
+
+    @Override
+    public String parse( String identifier ) {
+        throw new UnsupportedOperationException( "Not supported yet." );
     }
 }

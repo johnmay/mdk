@@ -86,7 +86,7 @@ public class InChIProducerBinary102beta extends InChIProducer {
             return null;
         }
 
-        
+
     }
 
     private boolean runProcess(String command) {
