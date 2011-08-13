@@ -19,6 +19,11 @@
             <url>http://repo1.maven.org/maven2</url>
         </repository>
         <repository>
+            <id>jni-inchi</id>
+            <name>JNI-InChI Maven Repository</name>
+            <url>http://jni-inchi.sourceforge.net/m2repo</url>
+        </repository>
+        <repository>
             <id>java.net</id>
             <url>http://download.java.net/maven/2/</url>
         </repository>
