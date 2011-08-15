@@ -5,7 +5,6 @@
 package uk.ac.ebi.metabolomes.chemicalnames;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -28,16 +27,20 @@ import org.apache.commons.lang.StringUtils;
  */
 public class PseudoFingerprintChemicalNames {
    
-    static final Pattern alphanum = Pattern.compile("\\p{Punct}|\\p{Cntrl}");
-    static final Pattern plural = Pattern.compile("s$");
-    static final Pattern definedHtmlTags = Pattern.compile("</{0,1}(i|sub|sup)>");
-    static final Pattern digit = Pattern.compile("\\d");
+    private static final Pattern alphanum = Pattern.compile("\\p{Punct}|\\p{Cntrl}");
+    private static final Pattern plural = Pattern.compile("s$");
+    private static final Pattern definedHtmlTags = Pattern.compile("</{0,1}(i|sub|sup)>");
+    private static final Pattern digit = Pattern.compile("\\d");
+    
+    
     
     public String key(String s) {
         s = s.trim(); // first off, remove whitespace around the string
         s = s.toLowerCase(); // then lowercase it
         s = definedHtmlTags.matcher(s).replaceAll(""); // replace <i> </i>, <sub> </sub>, <sup> </sup>
         s = alphanum.matcher(s).replaceAll(""); // then remove all punctuation and control chars
+        s = s.replaceAll("-", ""); // removes - 
+        s = s.replaceAll(" ", ""); // removes whitespace
         String[] frags = StringUtils.split(s); // split by whitespace
         List<String> listOfTokens = new ArrayList<String>();
         List<String> numericTokens = new ArrayList<String>();
@@ -69,7 +72,7 @@ public class PseudoFingerprintChemicalNames {
     
     protected String asciify(String s) {
         char[] c = s.toCharArray();
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         for (int i = 0; i < c.length; i++) {
             b.append(translate(c[i]));
         }
@@ -291,5 +294,13 @@ public class PseudoFingerprintChemicalNames {
         String keyB = this.key(b);
         
         return StringUtils.getLevenshteinDistance(keyA, keyB);
+    }
+    
+    private static PseudoFingerprintChemicalNames instance;
+    
+    public static PseudoFingerprintChemicalNames getInstance() {
+        if(instance==null)
+            instance = new PseudoFingerprintChemicalNames();
+        return instance;
     }
 }
