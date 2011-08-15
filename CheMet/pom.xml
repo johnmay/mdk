@@ -80,7 +80,6 @@
                 <enabled>true</enabled>
             </releases>
         </repository>
-
         <repository>
             <id>paxtools</id>
             <name>BioPAX maven 2 repository</name>

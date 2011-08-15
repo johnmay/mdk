@@ -219,11 +219,13 @@ public class AtomContainerReactionTest {
         r.addProduct( adenine() , null , Compartment.EXTRACELLULA );
         r.addProduct( butan1ol() , null , Compartment.CYTOPLASM );
 
-        System.out.printf( "\t\treactans: %10s %s\n" , r.reactants.hashCode() , StringUtils.join( r.reactants , " + " ) );
-        System.out.printf( "\t\tproducts: %10s %s\n" , r.products.hashCode() , StringUtils.join( r.products , " + " ) );
+        System.out.printf( "\t\treactans: %10s %s\n" , r.getReactantParticipants().hashCode() , StringUtils.join( r.
+                getReactantParticipants() , " + " ) );
+        System.out.printf( "\t\tproducts: %10s %s\n" , r.getProductParticipants().hashCode() , StringUtils.join( r.
+                getProductParticipants() , " + " ) );
 
         // Make sure the hashCode for reactants and products is different
-        assertEquals( false , r.reactants.hashCode() == r.products.hashCode() );
+        assertEquals( false , r.getReactantParticipants().hashCode() == r.getProductParticipants().hashCode() );
 
         System.out.println( "    Test Passed!\n" );
 

@@ -77,14 +77,14 @@ public class AtomContainerReaction
 
     public void addReactant( AtomContainerParticipant p ) {
         if ( p instanceof GenericParticipant ) {
-            this.generic = true;
+            super.setGeneric( Boolean.TRUE );
         }
         super.addReactant( p );
     }
 
     public void addProduct( AtomContainerParticipant p ) {
         if ( p instanceof GenericParticipant ) {
-            this.generic = true;
+            super.setGeneric( Boolean.TRUE );
         }
         super.addProduct( p );
     }

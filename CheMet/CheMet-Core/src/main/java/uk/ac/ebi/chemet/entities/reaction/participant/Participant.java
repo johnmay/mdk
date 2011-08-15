@@ -145,8 +145,8 @@ public class Participant<M , S , C>
     public int hashCode() {
         int hash = 5;
         hash = 67 * hash + molecule.hashCode();
-        hash = 67 * hash + coefficient.hashCode();
-        hash = 67 * hash + compartment.hashCode();
+        hash = 67 * hash + ( coefficient != null ? coefficient.hashCode() : 0 );
+        hash = 67 * hash + ( compartment != null ? compartment.hashCode() : 0 );
         return hash;
     }
 
@@ -165,13 +165,14 @@ public class Participant<M , S , C>
         return true;
     }
 
-    public Participant<M , S , C> getMatching( List<Participant<M , S , C>> o ) {
-        for ( Participant otherParticipant : o ) {
-            if ( this.equals( otherParticipant ) ) {
-                return otherParticipant;
+    public Boolean containedIn( List<Participant<M , S , C>> list ) {
+        for ( Participant<M , S , C> participant : list ) {
+            if ( participant.equals( this ) ) {
+                return true;
             }
         }
-        return null;
+        // return list.contains(this); // this doens't work for some reason
+        return false;
     }
 
     public int compareTo( Participant<M , S , C> o ) {
