@@ -32,10 +32,6 @@
             <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
         </repository>
         <repository>
-            <releases/>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
             <id>ebi-repo</id>
             <name>EBI maven repository</name>
             <url>http://www.ebi.ac.uk/~maven/m2repo</url>
@@ -46,10 +42,6 @@
             <url>http://maven.restlet.org</url>
         </repository>
         <repository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots/>
             <id>ebi-repo-snapshots</id>
             <name>EBI maven snapshots repository</name>
             <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
