@@ -37,6 +37,7 @@ import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.metabolomes.io.xml.MIRIAMResourceLoader;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
+import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 
 /**
  * ReactionLoader – 2011.08.15
@@ -63,6 +64,7 @@ public class ReactionLoader {
     private static final Logger LOGGER = Logger.getLogger( ReactionLoader.class );
     private final SBMLReader reader = new SBMLReader();
     private final ChEBIWebServiceConnection chebiWS = new ChEBIWebServiceConnection();
+    private final KeggCompoundWebServiceConnection keggWS = new KeggCompoundWebServiceConnection();
 
     private ReactionLoader() {
     }
@@ -101,13 +103,13 @@ public class ReactionLoader {
                 loadedReactions.add( getReaction( sbmlReaction ) );
 
             } catch ( UnknownCompartmentException ex ) {
-                LOGGER.error( model.getReaction( i ).getId() + ": " +
+                LOGGER.warn( model.getReaction( i ).getId() + ": " +
                               ex.getMessage() );
             } catch ( AbsentAnnotationException ex ) {
-                LOGGER.error( model.getReaction( i ).getId() + ": " + ex.getMessage() );
+                LOGGER.warn( model.getReaction( i ).getId() + ": " + ex.getMessage() );
 
             } catch ( MissingStructureException ex ) {
-                LOGGER.error( model.getReaction( i ).getId() + ": " + ex.getMessage() );
+                LOGGER.warn( model.getReaction( i ).getId() + ": " + ex.getMessage() );
             }
         }
 
@@ -233,7 +235,17 @@ public class ReactionLoader {
                     try {
                         return chebiWS.getAtomContainer( id );
                     } catch ( Exception ex ) {
-                        LOGGER.error( "There was a problem loading: " + id + " : " + ex.getMessage() );
+                        LOGGER.debug( "There was a problem loading: " + id + " : " + ex.getMessage() );
+                    }
+
+                } else if ( id.startsWith( "C" ) ) {
+
+                    List<IAtomContainer> mols = keggWS.downloadMolsToCDKObject( new String[]{ id } );
+
+                    if ( mols != null && mols.isEmpty() == false ) {
+                        return mols.get( 0 );
+                    } else {
+                        LOGGER.debug( "There was a problem loading: " + id );
                     }
                 }
             }
