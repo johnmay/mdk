@@ -42,8 +42,18 @@ import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 
 /**
  * ReactionLoader – 2011.08.15
- * 
+ *
  * Loads the reactions from an SBML document in to various types of reactions
+ *
+ * <pre>
+ * InputStream sbmlStream = getClass().getResourceAsStream( "streptomyces-coelicolor-6.2005.xml" );
+ * ReactionLoader loader = new ReactionLoader();
+ * List<AtomContainerReaction> reactions = loader.getReactions( sbmlStream );
+ * 
+ * for ( AtomContainerReaction r : reactions ) {
+ *     System.out.println( r );
+ * }
+ * </pre>
  *
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
