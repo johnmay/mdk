@@ -10,7 +10,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
-import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
 import static uk.ac.ebi.chemet.TestMoleculeFactory.*;
 import static org.junit.Assert.*;
 

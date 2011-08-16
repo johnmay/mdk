@@ -21,15 +21,10 @@
 package uk.ac.ebi.chemet.entities.reaction.participant;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.PseudoAtom;
-import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 

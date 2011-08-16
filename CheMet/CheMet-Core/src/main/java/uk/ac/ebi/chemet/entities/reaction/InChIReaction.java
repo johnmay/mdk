@@ -20,7 +20,6 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import java.util.Comparator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.chemet.entities.reaction.filter.InChIFilter;

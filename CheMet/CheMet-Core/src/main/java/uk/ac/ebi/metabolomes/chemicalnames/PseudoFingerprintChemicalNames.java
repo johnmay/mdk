@@ -7,6 +7,7 @@ package uk.ac.ebi.metabolomes.chemicalnames;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
@@ -294,6 +295,26 @@ public class PseudoFingerprintChemicalNames {
         String keyB = this.key(b);
         
         return StringUtils.getLevenshteinDistance(keyA, keyB);
+    }
+    
+    /**
+     * Given a set of possible strings that could explain the differences between 
+     * a and b, gives true if the results of key comparison changes to 0 after
+     * replacing all the candidates by nothing.
+     */
+    public boolean explainsTheDifference(String a, String b, List<String> candidateDifferences) {
+        int dist = this.lenvenshteinComparisonKeyed(a, b);
+        a = a.toLowerCase(Locale.ENGLISH);
+        b = b.toLowerCase(Locale.ENGLISH);
+        for (String cand : candidateDifferences) {
+            a = a.replaceAll(cand.toLowerCase(Locale.ENGLISH), "");
+            b = b.replaceAll(cand.toLowerCase(Locale.ENGLISH), "");
+        }
+        int dist2 = this.lenvenshteinComparisonKeyed(a, b);
+        
+        if(dist2 ==  0 && dist > dist2)
+            return true;
+        return false;
     }
     
     private static PseudoFingerprintChemicalNames instance;

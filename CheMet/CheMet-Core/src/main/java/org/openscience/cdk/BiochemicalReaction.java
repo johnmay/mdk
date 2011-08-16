@@ -11,6 +11,7 @@ import org.openscience.cdk.interfaces.IAtom;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IReaction;
 import uk.ac.ebi.metabolomes.bioObjects.Enzyme;
 
 /**
@@ -95,14 +96,18 @@ public class BiochemicalReaction extends Reaction {
         }
 
         public boolean isGeneric() {
-            IMoleculeSet mols = this.getProducts();
+            return isGeneric(this);
+        }
+        
+        public static boolean isGeneric(IReaction rxn) {
+            IMoleculeSet mols = rxn.getProducts();
             for(IAtomContainer mol : mols.molecules()) {
                 for(IAtom atom : mol.atoms()) {
                     if(atom instanceof PseudoAtom)
                         return true;
                 }
             }
-            mols = this.getReactants();
+            mols = rxn.getReactants();
             for(IAtomContainer mol : mols.molecules()) {
                 for(IAtom atom : mol.atoms()) {
                     if(atom instanceof PseudoAtom)
@@ -110,6 +115,15 @@ public class BiochemicalReaction extends Reaction {
                 }
             }
             return false;
+        }
+        
+        public static List<IAtomContainer> getGenericMols(IMoleculeSet mols) {
+            List<IAtomContainer> genericMols = new ArrayList<IAtomContainer>();
+            for(IAtomContainer mol : mols.molecules())
+                for(IAtom atom : mol.atoms())
+                    if(atom instanceof PseudoAtom)
+                        genericMols.add(mol);
+            return genericMols;    
         }
 //        public boolean compareByRXNTopology(BiochemicalReaction n) {
 //            this.getProductCount()
