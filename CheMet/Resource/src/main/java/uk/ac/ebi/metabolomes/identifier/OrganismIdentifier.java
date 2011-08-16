@@ -3,20 +3,17 @@
  *  it under the terms of the Lesser GNU General Public License as published
  *  by the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
- *  
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *  
+ *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package uk.ac.ebi.metabolomes.identifier;
-
-import uk.ac.ebi.metabolomes.core.Organism;
-import uk.ac.ebi.metabolomes.core.Organism.Kingdom;
 
 /**
  * ProjectIdentifier.java
@@ -28,20 +25,18 @@ import uk.ac.ebi.metabolomes.core.Organism.Kingdom;
 public class OrganismIdentifier extends AbstractIdentifier {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( OrganismIdentifier.class );
-    
+
     // AADNV V 648330: N=Aedes albopictus densovirus (isolate Boublik/1994)
     //                 C=AalDNV
 
     private int taxon;
     private String code;
-    private Organism.Kingdom kingdom;
+    private Kingdom kingdom;
     private String officialName;
     private String commonName;
 
     public OrganismIdentifier() {
     }
-
-
 
     public OrganismIdentifier( int taxon , String code , Kingdom kingdom , String officialName , String commonName ) {
         this.taxon = taxon;
@@ -101,8 +96,8 @@ public class OrganismIdentifier extends AbstractIdentifier {
 
 
 
-    
 
-    
+
+
 
 }

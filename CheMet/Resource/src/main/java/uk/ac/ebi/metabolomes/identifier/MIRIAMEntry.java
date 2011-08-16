@@ -16,9 +16,7 @@
  */
 package uk.ac.ebi.metabolomes.identifier;
 
-import java.net.URI;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.utilities.Util;
 
 /**
  * MIRIAMEntry.java – MetabolicDevelopmentKit – Jun 25, 2011

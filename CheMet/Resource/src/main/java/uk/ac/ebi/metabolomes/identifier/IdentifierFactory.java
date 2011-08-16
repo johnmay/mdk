@@ -20,11 +20,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
-import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.metabolomes.resource.Resource;
 
 /**
@@ -81,21 +78,21 @@ public class IdentifierFactory {
         }
         return new GenericIdentifier( accession );
     }
-
-    public static void main( String[] args ) {
-
-        GeneProduct product = new GeneProteinProduct();
-        UniProtIdentifier id = ( UniProtIdentifier ) IdentifierFactory.getIdentifier( Resource.UNIPROT , "QYEUEE.1" );
-        System.out.println( "Created Id:" + id );
-
-        // multiple id parsing
-        String ids = "gi|254777906|sp|B9E8Z7.1|DNAA_MACCJ";
-        List idList = IdentifierFactory.getIdentifiers( ids );
-        for ( Object object : idList ) {
-            System.out.println( object.getClass() + " " + object );
-        }
-
-    }
+//
+//    public static void main( String[] args ) {
+//
+//        GeneProduct product = new GeneProteinProduct();
+//        UniProtIdentifier id = ( UniProtIdentifier ) IdentifierFactory.getIdentifier( Resource.UNIPROT , "QYEUEE.1" );
+//        System.out.println( "Created Id:" + id );
+//
+//        // multiple id parsing
+//        String ids = "gi|254777906|sp|B9E8Z7.1|DNAA_MACCJ";
+//        List idList = IdentifierFactory.getIdentifiers( ids );
+//        for ( Object object : idList ) {
+//            System.out.println( object.getClass() + " " + object );
+//        }
+//
+//    }
 
     /**
      * Builds a list of identifiers from a string that may

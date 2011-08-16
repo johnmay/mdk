@@ -22,7 +22,6 @@ package uk.ac.ebi.metabolomes.identifier;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
-import org.openscience.cdk.formula.MolecularFormula;
 
 /**
  * @brief   Wrapper object for an InChI storing the InChI, InChIKey and AuxInfo
@@ -46,7 +45,7 @@ public class InChI
     private String auxInfo = "";
     transient private boolean standard = false;
     // main layer
-    transient private MolecularFormula formula;
+//    transient private MolecularFormula formula;
     transient private String connectivity;
     transient private String hydrogens;
     // charge layer
@@ -173,9 +172,9 @@ public class InChI
         return standard;
     }
 
-    public MolecularFormula getFormula() {
-        return formula;
-    }
+//    public MolecularFormula getFormula() {
+//        return formula;
+//    }
 
     public String getConnectivity() {
         return connectivity;

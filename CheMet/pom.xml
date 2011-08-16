@@ -12,6 +12,7 @@
         <module>CheMet-Core</module>
         <module>CheMet-WebServices</module>
         <module>CheMet-Visualisation</module>
+        <module>Resource</module>
     </modules>
     <repositories>
         <repository>
