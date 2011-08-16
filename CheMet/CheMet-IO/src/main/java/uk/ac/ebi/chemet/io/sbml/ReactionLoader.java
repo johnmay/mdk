@@ -25,9 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.iupac.parser.MoleculeBuilder;
 import org.sbml.jsbml.*;
 import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
@@ -66,18 +64,19 @@ public class ReactionLoader {
     private final SBMLReader reader = new SBMLReader();
     private final ChEBIWebServiceConnection chebiWS = new ChEBIWebServiceConnection();
 
-    private ReactionLoader(){
+    private ReactionLoader() {
     }
 
     /**
      * Singleton accessor method
      * @return
      */
-    public static ReactionLoader getInstance(){
+    public static ReactionLoader getInstance() {
         return ReactionLoaderHolder.INSTANCE;
     }
 
     public static class ReactionLoaderHolder {
+
         private static ReactionLoader INSTANCE = new ReactionLoader();
     }
 
@@ -184,8 +183,12 @@ public class ReactionLoader {
      * @throws MissingStructureException
      *
      */
-    public AtomContainerParticipant getParticipant( SpeciesReference speciesReference ) throws
-            UnknownCompartmentException , AbsentAnnotationException , MissingStructureException {
+    public AtomContainerParticipant getParticipant( SpeciesReference speciesReference )
+            throws
+            UnknownCompartmentException ,
+            AbsentAnnotationException ,
+            MissingStructureException {
+
         Species species = speciesReference.getSpeciesInstance();
         Compartment compartment = Compartment.getCompartment( species.getCompartmentInstance().getId() );
 
@@ -228,10 +231,8 @@ public class ReactionLoader {
                 if ( id.startsWith( "CHEBI" ) ) {
 
                     try {
-
                         return chebiWS.getAtomContainer( id );
                     } catch ( Exception ex ) {
-
                         LOGGER.error( "There was a problem loading: " + id + " : " + ex.getMessage() );
                     }
                 }
