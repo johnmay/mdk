@@ -33,7 +33,7 @@ import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
-import uk.ac.ebi.chemet.exceptions.MissingAnnotationException;
+import uk.ac.ebi.chemet.exceptions.AbsentAnnotationException;
 import uk.ac.ebi.chemet.exceptions.MissingStructureException;
 import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.metabolomes.io.xml.MIRIAMResourceLoader;
@@ -89,7 +89,7 @@ public class ReactionLoader {
             } catch ( UnknownCompartmentException ex ) {
                 LOGGER.error( model.getReaction( i ).getId() + ": " +
                               ex.getMessage() );
-            } catch ( MissingAnnotationException ex ) {
+            } catch ( AbsentAnnotationException ex ) {
                 LOGGER.error( model.getReaction( i ).getId() + ": " + ex.getMessage() );
 
             } catch ( MissingStructureException ex ) {
@@ -134,7 +134,7 @@ public class ReactionLoader {
      *
      */
     public AtomContainerReaction getReaction( Reaction sbmlReaction ) throws UnknownCompartmentException ,
-                                                                             MissingAnnotationException ,
+                                                                             AbsentAnnotationException ,
                                                                              MissingStructureException {
         AtomContainerReaction reaction = new AtomContainerReaction();
 
@@ -170,7 +170,7 @@ public class ReactionLoader {
      *
      */
     public AtomContainerParticipant getParticipant( SpeciesReference speciesReference ) throws
-            UnknownCompartmentException , MissingAnnotationException , MissingStructureException {
+            UnknownCompartmentException , AbsentAnnotationException , MissingStructureException {
         Species species = speciesReference.getSpeciesInstance();
         Compartment compartment = Compartment.getCompartment( species.getCompartmentInstance().getId() );
 
@@ -180,8 +180,8 @@ public class ReactionLoader {
         }
 
         if ( species.getNumCVTerms() == 0 ) {
-            throw new MissingAnnotationException( "Species " + species.getId() +
-                                                  " did not have any associated Controlled Vocabulary terms" );
+            throw new AbsentAnnotationException( "Species " + species.getId() +
+                                                 " did not have any associated Controlled Vocabulary terms" );
         }
 
         IAtomContainer molecule = getAtomContainer( species );
