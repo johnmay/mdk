@@ -37,7 +37,7 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
             return this.prefix;
         }
     }
-    
+
     public static void main(String args[]) {
     	//KeggCompoundWebServiceConnection keggConn = new KeggCompoundWebServiceConnection();
         ChemicalDBWebService keggConn = new KeggCompoundWebServiceConnection();
@@ -153,7 +153,7 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
         }
         return res;
     }
-	
+
 	private void init() {
 		KEGGLocator locator = new KEGGLocator();
 		try {
@@ -163,7 +163,7 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public ArrayList<IAtomContainer> downloadMolsToCDKObject(String[] ids) {
 		// TODO Auto-generated method stub

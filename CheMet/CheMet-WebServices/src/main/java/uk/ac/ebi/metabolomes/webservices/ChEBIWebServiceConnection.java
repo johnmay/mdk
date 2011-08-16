@@ -172,12 +172,13 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     }
 
     public IAtomContainer getAtomContainer( Integer id ) throws ChebiWebServiceFault_Exception , CDKException ,
-                                                                IOException {
+                                                                IOException, Exception {
         return getAtomContainer( "CHEBI:" + id );
     }
 
     public IAtomContainer getAtomContainer( String id ) throws ChebiWebServiceFault_Exception , CDKException ,
-                                                               IOException {
+                                                               IOException,
+                                                               Exception {
         Entity entity = this.client.getCompleteEntity( id );
         List<IAtomContainer> structures = new ArrayList<IAtomContainer>();
 
@@ -191,7 +192,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
             }
         }
 
-        return null;
+        throw new Exception( "Not structure available for: " + id );
 
     }
 

@@ -16,9 +16,6 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.nonotify.NoNotificationChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesParser;
-import org.openscience.cdk.smsd.labelling.CanonicalLabellingAdaptor;
-import org.openscience.cdk.smsd.labelling.ICanonicalMoleculeLabeller;
-import org.openscience.cdk.smsd.tools.MoleculeSanityCheck;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.Entity;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.PubChemWebServiceConnection;
@@ -75,7 +72,7 @@ public class SmilesChEBIQuerier {
                 ArrayList<IAtomContainer> mols=pcwsc.downloadMolsToCDKObject(pchmids);
                 if(mols.size()>0) {
                 atomContainer = mols.get(0);
-                
+
                 InChIGenerator generator = icigf.getInChIGenerator(atomContainer);
                 if (!generator.getReturnStatus().equals(INCHI_RET.ERROR)) {
                     inchi = generator.getInchi();
@@ -111,7 +108,7 @@ public class SmilesChEBIQuerier {
                         }
                     }
                 }
-                
+
 
 
                 }

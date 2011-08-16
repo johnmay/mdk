@@ -54,13 +54,9 @@ public class ChEBIWebServiceConnectionTest {
             ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
             IAtomContainer structure = chebi.getAtomContainer( chebiId );
             System.out.println( structure );
-        } catch ( ChebiWebServiceFault_Exception ex ) {
+        } catch ( Exception ex ) {
             ex.printStackTrace();
-        } catch ( CDKException ex ) {
-            ex.printStackTrace();
-        } catch ( IOException ex ) {
-            ex.printStackTrace();
-        }
+        } 
     }
 
     /**
