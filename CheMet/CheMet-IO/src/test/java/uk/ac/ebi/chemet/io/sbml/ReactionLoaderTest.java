@@ -34,7 +34,7 @@ public class ReactionLoaderTest {
     public void testSBMLLoader() {
         try {
             InputStream sbmlStream = getClass().getResourceAsStream( "streptomyces-coelicolor-6.2005.xml" );
-            ReactionLoader loader = new ReactionLoader();
+            ReactionLoader loader = ReactionLoader.getInstance();
             List<AtomContainerReaction> reactions = loader.getReactions( sbmlStream );
             for ( AtomContainerReaction r : reactions ) {
                 System.out.println( r );
