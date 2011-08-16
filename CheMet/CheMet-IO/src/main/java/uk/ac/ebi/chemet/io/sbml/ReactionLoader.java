@@ -49,7 +49,7 @@ import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
  * InputStream sbmlStream = getClass().getResourceAsStream( "streptomyces-coelicolor-6.2005.xml" );
  * ReactionLoader loader = new ReactionLoader();
  * List<AtomContainerReaction> reactions = loader.getReactions( sbmlStream );
- * 
+ *
  * for ( AtomContainerReaction r : reactions ) {
  *     System.out.println( r );
  * }

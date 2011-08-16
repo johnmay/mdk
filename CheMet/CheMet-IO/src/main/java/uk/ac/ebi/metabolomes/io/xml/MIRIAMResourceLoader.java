@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
 import uk.ac.ebi.metabolomes.utilities.XMLHelper;
 
@@ -32,9 +33,11 @@ import uk.ac.ebi.metabolomes.utilities.XMLHelper;
  */
 public class MIRIAMResourceLoader {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( MIRIAMResourceLoader.class );
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger( MIRIAMResourceLoader.class );
     private final File file = DatabaseProperties.getInstance().getDatabasePath( "miriam.xml" );
-    private Map<String , MIRIAMEntry> nameToEntryMap = new HashMap<String , MIRIAMEntry>( 50 );
+    private Map<String , MIRIAMEntry> nameEntryMap = new HashMap<String , MIRIAMEntry>( 50 );
+    private Map<String , MIRIAMEntry> urnEntryMap = new HashMap<String , MIRIAMEntry>( 50 );
 
     /**
      * Singleton Accessor
@@ -86,8 +89,10 @@ public class MIRIAMResourceLoader {
                     datatypeChild = datatypeChild.getNextSibling();
                 }
                 // add to the map
-                nameToEntryMap.put( name.toLowerCase() ,
-                                    new MIRIAMEntry( id , pattern , name , definition , urn ) );
+                MIRIAMEntry entry = new MIRIAMEntry( id , pattern , name , definition , urn );
+                nameEntryMap.put( name.toLowerCase() ,
+                                  entry );
+                urnEntryMap.put( entry.getBaseURN() , entry );
             }
             datatypeNode = datatypeNode.getNextSibling();
         }
@@ -99,11 +104,19 @@ public class MIRIAMResourceLoader {
      * @return The MIRIAM entry associated with that name
      */
     public MIRIAMEntry getEntry( String name ) {
-        if ( nameToEntryMap.containsKey( name ) ) {
-            return nameToEntryMap.get( name );
+        if ( nameEntryMap.containsKey( name ) ) {
+            return nameEntryMap.get( name );
         }
-        logger.error("No MIRIAM entry found for name '" + name +"'");
+        logger.error( "No MIRIAM entry found for name '" + name + "'" );
         return null;
     }
 
+    /**
+     * Converts a provided URN into a string identifier
+     * @param urn such as urn:miriam:obo.chebi:CHEBI%3A17196
+     * @return the identifier i.e. "CHEBI:17196" in the above example
+     */
+    public static String getIdentifier( String urn ) {
+        return urn.substring( urn.lastIndexOf(":") + 1 ).replace("%3A", ":");
+    }
 }
