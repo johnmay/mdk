@@ -20,24 +20,18 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.logging.Filter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
+import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
 
 /**
@@ -73,6 +67,7 @@ public class Reaction<M , S , C>
     private List<Participant<M , S , C>> products;
     // whether the reaction is reversible
     private Reversibility reversibility = Reversibility.UNKNOWN;
+    private AbstractParticipantFilter filter = null;
 
     /**
      * Constructor for a generic reaction. The constructor must provide a comparator for
@@ -84,6 +79,17 @@ public class Reaction<M , S , C>
     public Reaction() {
         reactants = new LinkedList<Participant<M , S , C>>();
         products = new LinkedList<Participant<M , S , C>>();
+    }
+
+    /**
+     * Constructor to build a reaction and use the provided filter to trim down included molecules.
+     * Note – the reaction doesn't need a new instance of the filter every-time and it is better to
+     * provide all required reactions with the same filter
+     * @param filter The filter to use
+     */
+    public Reaction( AbstractParticipantFilter filter ) {
+        this();
+        this.filter = filter;
     }
 
     /**
@@ -142,6 +148,9 @@ public class Reaction<M , S , C>
      * @param product The reactant to add
      */
     public void addReactant( Participant<M , S , C> participant ) {
+        if ( filter != null && filter.reject( participant ) ) {
+            return;
+        }
         this.reactants.add( participant );
         this.reactantsMolecules.add( participant.getMolecule() );
         this.reactantCompartments.add( participant.getCompartment() );
@@ -181,6 +190,9 @@ public class Reaction<M , S , C>
      * @param product The product to add
      */
     public void addProduct( Participant<M , S , C> participant ) {
+        if ( filter != null && filter.reject( participant ) ) {
+              return;
+        }
         this.products.add( participant );
         this.productsMolecules.add( participant.getMolecule() );
         this.productCompartments.add( participant.getCompartment() );
@@ -372,7 +384,12 @@ public class Reaction<M , S , C>
             if ( hashes.size() != 2 ) {
                 // not handling cases where reactants and products are the same.. could just be same hashcode
                 if ( hashes.size() == 1 ) {
-                    throw new UnsupportedOperationException( "Reaction.equals(): Unresolvable reaction comparision [1]" );
+                    if ( queryReactants.equals( otherReactants ) && queryReactants.equals( otherReactants ) &&
+                         queryProducts.equals( otherProducts ) ) {
+                        return true;
+                    }
+                    throw new UnsupportedOperationException( "Reaction.equals(): Unresolvable reaction comparision [1]\n\t" +
+                                                             this + "\n\t" + other );
                 }
                 return false;
             }

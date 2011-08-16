@@ -24,9 +24,7 @@ import java.util.List;
  *
  * @author johnmay
  * @date May 11, 2011
- * @deprecated use StringUtil from Apache lang
  */
-@Deprecated
 public class Util {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( Util.class );
@@ -85,5 +83,18 @@ public class Util {
 
     public static String join( List objects ) {
         return join( objects , ',' );
+    }
+
+    public static String encodeURN( String s ) {
+        StringBuilder sb = new StringBuilder( s.length() );
+        for ( int i = 0; i < s.length(); i++ ) {
+            char c = s.charAt( i );
+            if ( c > 127 || c == '"' || c == '<' || c == '>' ) {
+                sb.append( "&#" ).append( ( int ) c );
+            } else {
+                sb.append( c );
+            }
+        }
+        return sb.toString();
     }
 }

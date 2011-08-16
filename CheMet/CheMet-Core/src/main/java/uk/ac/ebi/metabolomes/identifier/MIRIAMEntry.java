@@ -16,18 +16,30 @@
  */
 package uk.ac.ebi.metabolomes.identifier;
 
+import java.net.URI;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
+import uk.ac.ebi.metabolomes.utilities.Util;
 
 /**
  * MIRIAMEntry.java – MetabolicDevelopmentKit – Jun 25, 2011
  *
+ * A Miaram Registry entry (http://www.ebi.ac.uk/miriam/main/) that stores various data about
+ * base urn/definition/name etc. The main use is in generating URN annotation for identifiers
+ * which is of particular use in SBML Resource Description
+ * <pre>
+ * <code> MIRIAMEntry chebiRDF = MIRIAMResource.CHEBI.getEntry(); // CheMet-IO (atm) </code>
+ * <code> chebiRDF.getBaseURN()                                   // urn:miriam:obo.chebi </code>
+ * <code> chebiRDF.getURN("CHEBI:15442")                          // urn:miriam:obo.chebi:CHEBI%A315442 </code>
+ * </pre>
+ *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
+ *
+ *
+ *
  */
 public class MIRIAMEntry {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( MIRIAMEntry.class );
-
     private String id;
     private String pattern;
     private String resouceName;
@@ -35,7 +47,7 @@ public class MIRIAMEntry {
     private String urn;
     private Class identifierClass = GenericIdentifier.class;
 
-    public  MIRIAMEntry( String id , String pattern , String resouceName , String definition , String urn ) {
+    public MIRIAMEntry( String id , String pattern , String resouceName , String definition , String urn ) {
         this.id = id;
         this.pattern = pattern;
         this.resouceName = resouceName;
@@ -63,16 +75,22 @@ public class MIRIAMEntry {
         return resouceName;
     }
 
-    public String getUrn() {
+    public String getBaseURN() {
         return urn;
+    }
+
+    public String getURN( String identifier ) {
+        StringBuilder sb = new StringBuilder( urn.length() );
+
+        sb.append( urn ).append( ':' ).append( identifier.replace( ":", "%3A")  );
+        return sb.toString();
     }
 
     /**
      * Allows the entry class to be set by the MIRIAMResouce enumeration for common encoded types
      * @param identifierClass
      */
-    public  void setIdentifierClass( Class identifierClass ) {
+    public void setIdentifierClass( Class identifierClass ) {
         this.identifierClass = identifierClass;
     }
-
 }

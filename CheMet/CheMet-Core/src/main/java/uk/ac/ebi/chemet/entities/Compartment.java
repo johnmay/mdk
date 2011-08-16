@@ -64,11 +64,11 @@ public enum Compartment {
     VACUOLAR_MEMBRANE( "vm" , "Vacuolar Membrane" ),
     PEROXISOMAL_MEMBRANE( "xm" , "Peroxisomal Membrane" ),
     // indicates compartment is unknown
-    UNKNOWN("xx", "Unknown Compartment");
+    UNKNOWN( "xx" , "Unknown Compartment" );
     // store the abbreviation 1/2 leter code and the textual description
     private String abbreviation;
     private String description;
-    private static final Map<String,Compartment> abbreviationMap = buildAbbreviationMap();
+    private static final Map<String , Compartment> abbreviationMap = buildAbbreviationMap();
 
     private Compartment( String abbreviation ,
                          String description ) {
@@ -84,23 +84,26 @@ public enum Compartment {
         return description;
     }
 
-    public static Compartment getCompartment(String abbreviation){
-        if(abbreviationMap.containsKey( abbreviation) ) {
-            return abbreviationMap.get(abbreviation);
+    public static Compartment getCompartment( String description ) {
+        if ( abbreviationMap.containsKey( description ) ) {
+            return abbreviationMap.get( description );
         }
         return Compartment.UNKNOWN;
     }
 
-    private static Map buildAbbreviationMap(){
-        Map<String,Compartment> map = new HashMap<String,Compartment>();
-        for( Compartment c : values() ) {
-            map.put("[" + c.getAbbreviation() + "]", c);
-            map.put( c.getAbbreviation(), c);
+    private static Map buildAbbreviationMap() {
+        Map<String , Compartment> map = new HashMap<String , Compartment>();
+        for ( Compartment c : values() ) {
+            map.put( "[" + c.getAbbreviation() + "]" , c );
+            map.put( c.getAbbreviation() , c );
+            map.put( c.getDescription() , c );
+            map.put( c.getDescription().replace( " " , "" ) , c );
         }
         return map;
     }
 
-    public String toString(){
-        return abbreviation;
+    @Override
+    public String toString() {
+        return "[" + abbreviation + "]";
     }
 }

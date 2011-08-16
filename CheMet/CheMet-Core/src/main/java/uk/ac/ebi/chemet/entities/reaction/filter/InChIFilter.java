@@ -29,8 +29,7 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
  * InChIFilter – 2011.08.14
- * Filters an InChIParticpant for those which are not H2O, H+, O2, CO2. The class is singleton and should
- * be instantiated with the {@see getInstance()} method. The default rejections can be removed by using the
+ * Filters an InChIParticpant for those which are not H2O, H+, O2, CO2. The default rejections can be removed by using the
  * {@see removeRejection(InChI)} method and using the public InChI attributes InChIFilter.HYDRON, InChIFilter.WATER,
  * InChIFilter.CARBON_DIOXIDE and InChIFilter.DIOXYGEN
  *
@@ -47,34 +46,19 @@ public class InChIFilter extends AbstractParticipantFilter {
     public static final InChI CARBON_DIOXIDE = new InChI( "InChI=1S/CO2/c2-1-3" );
     public static final InChI DIOXYGEN = new InChI( "InChI=1S/O2/c1-2" );
 
-    private InChIFilter() {
+    public  InChIFilter() {
         rejections.add( HYDRON );
         rejections.add( WATER );
         rejections.add( CARBON_DIOXIDE );
         rejections.add( DIOXYGEN );
     }
 
-    private static class InChIFilterHolder {
-
-        private static final InChIFilter INSTANCE = new InChIFilter();
-    }
-
-    /**
-     * Accessor to singleton instance of the InChIFilter. By default four common molecules
-     * are 'rejected'. These are H+, O2, CO2 and H2O
-     * @return Instance of the filter
-     */
-    public InChIFilter getInstance() {
-        return InChIFilterHolder.INSTANCE;
-    }
-
-
     @Override
     public boolean reject( Participant p ) {
         if ( p instanceof InChIParticipant ) {
             return reject( ( InChIParticipant ) p );
         }
-        return true; // reject if not inchi
+        return true;
     }
 
     /**

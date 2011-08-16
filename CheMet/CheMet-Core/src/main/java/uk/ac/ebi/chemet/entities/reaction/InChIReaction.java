@@ -23,6 +23,8 @@ package uk.ac.ebi.chemet.entities.reaction;
 import java.util.Comparator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.Compartment;
+import uk.ac.ebi.chemet.entities.reaction.filter.InChIFilter;
+import uk.ac.ebi.chemet.entities.reaction.participant.InChIParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
@@ -42,12 +44,15 @@ public class InChIReaction
 
     public InChIReaction() {
     }
+    public InChIReaction(InChIFilter filter) {
+        super(filter);
+    }
 
     public void addReactant( InChI inChI , Double d , Compartment compartment ) {
-        super.addReactant( new Participant<InChI , Double , Compartment>( inChI , d , compartment ) );
+        super.addReactant( new InChIParticipant( inChI , d , compartment ) );
     }
 
     public void addProduct( InChI inChI , Double d , Compartment compartment ) {
-        super.addProduct( new Participant<InChI , Double , Compartment>( inChI , d , compartment ) );
+        super.addProduct( new InChIParticipant( inChI , d , compartment ) );
     }
 }

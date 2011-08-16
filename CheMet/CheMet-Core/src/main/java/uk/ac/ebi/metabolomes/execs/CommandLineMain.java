@@ -16,6 +16,8 @@
  */
 package uk.ac.ebi.metabolomes.execs;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -37,7 +39,7 @@ public abstract class CommandLineMain
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( CommandLineMain.class );
     private Options options = new Options();
     private CommandLineParser parser = new PosixParser();
-    private CommandLine cmd = null;
+    private CommandLine cmdLine = null;
 
     public abstract void setupOptions();
 
@@ -53,26 +55,58 @@ public abstract class CommandLineMain
 
 
         try {
-            cmd = parser.parse( options , args );
+            cmdLine = parser.parse( options , args );
         } catch ( ParseException ex ) {
             //  printHelp();
             logger.error( "There was a problem parsing command line options: " + ex.getMessage() );
         }
 
-        if (  cmd.hasOption( 'h' )
-             || cmd.hasOption( "help" ) ) {
+        if ( cmdLine.hasOption( 'h' ) ||
+             cmdLine.hasOption( "help" ) ) {
             printHelp();
         }
     }
 
+    /**
+     *
+     * @return
+     * @deprecated renamed {@see getCommandLine()} for neatness
+     */
+    @Deprecated
     public CommandLine getCmd() {
-        return cmd;
+        return cmdLine;
+    }
+
+    public CommandLine getCommandLine() {
+        return cmdLine;
+    }
+
+    /**
+     * Convenience method for accessing a file from the parsed options. Note the method does not check if
+     * the file exists
+     *
+     * @param option
+     * @return
+     * @throws IllegalArgumentException
+     */
+    public File getFileOption( String option ) throws IllegalArgumentException {
+
+        if ( getCommandLine().hasOption( option ) ) {
+
+            return new File( getCommandLine().getOptionValue( option ) );
+
+        } else {
+
+            throw new IllegalArgumentException();
+        }
+
     }
 
     public void printHelp() {
         for ( Object obj : options.getOptions().toArray( new Option[ 0 ] ) ) {
             Option opt = ( Option ) obj;
-            System.out.println( String.format( "  -%s|--%-30s " , opt.getOpt() , opt.getLongOpt() ) + opt.getDescription() );
+            System.out.println( String.format( "  -%s|--%-30s " , opt.getOpt() , opt.getLongOpt() ) +
+                                opt.getDescription() );
         }
         System.exit( 0 );
     }
