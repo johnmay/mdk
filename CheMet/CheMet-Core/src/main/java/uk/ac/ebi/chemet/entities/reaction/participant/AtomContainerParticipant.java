@@ -1,4 +1,5 @@
 /**
+ *
  * AtomContainerParticipant.java
  *
  * 2011.08.12
@@ -17,6 +18,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 package uk.ac.ebi.chemet.entities.reaction.participant;
 
@@ -24,10 +26,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.*;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
@@ -36,12 +35,17 @@ import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 /**
- * @name    AtomContainerParticipant
- * @date    2011.08.12
+ *
+ * <h3>AtomContainerParticipant</h3>
+ * <b>Created:</b> 2011.08.12 <br>
+ *
+ * A reaction participant that acts as a container for a CDK IAtomContainer object
+ *
  * @version $Rev$ : Last Changed $Date$
+ *
  * @author  johnmay
  * @author  $Author$ (this version)
- * @brief   ...class description...
+ *
  *
  */
 public class AtomContainerParticipant extends Participant<IAtomContainer , Double , Compartment> {
@@ -182,7 +186,15 @@ public int hashCode() {
 }
 
 
-
+/**
+ *
+ * Determines whether this participant is equal to the other. TODO(write doc)
+ *
+ *
+ * @param other
+ * @return
+ *
+ */
 public boolean equals( Participant<IAtomContainer , Double , Compartment> other ) {
 
     if ( other instanceof AtomContainerParticipant == false ) {
