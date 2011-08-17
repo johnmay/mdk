@@ -433,7 +433,7 @@ public class Reaction<M , S , C>
         for ( Participant participant : query ) {
 
             if ( participant.containedIn( other ) == Boolean.FALSE ) {
-                System.out.println( "No match for: " + participant + " in " + other );
+                // System.out.println( "No match for: " + participant + " in " + other );
                 return false;
             }
 
