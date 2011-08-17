@@ -17,6 +17,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 /**
  *
@@ -89,6 +90,14 @@ public class CDKUtils {
             }
         }
         return copiedAtomContainer;
+    }
+
+
+    public static IAtomContainer setBondOrderSums(IAtomContainer atomContainer) {
+        for (IAtom atom : AtomContainerManipulator.getAtomArray( atomContainer ) ){
+            atom.setBondOrderSum(AtomContainerManipulator.getBondOrderSum( atomContainer , atom ) );
+        }
+        return atomContainer;
     }
 
     public static IAtomContainer mdlMolV2000Txt2CDKObject( String mol ) throws CDKException , IOException {
