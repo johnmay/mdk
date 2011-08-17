@@ -10,16 +10,23 @@ package uk.ac.ebi.chemet.entities.reaction;
  */
 public enum Reversibility {
 
+
     REVERSIBLE( "<===>" ),
     IRREVERSIBLE( "<=!=>" ),
     UNKNOWN( "<=?=>" );
-
-
     private String symbol;
+
+
+
+
 
     private Reversibility( String symbol ) {
         this.symbol = symbol;
     }
+
+
+
+
 
     @Override
     public String toString() {
