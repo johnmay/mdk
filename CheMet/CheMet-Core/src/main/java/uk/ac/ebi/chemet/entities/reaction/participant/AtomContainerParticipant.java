@@ -20,18 +20,20 @@
  */
 package uk.ac.ebi.chemet.entities.reaction.participant;
 
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.chemet.entities.Compartment;
+import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 /**
  * @name    AtomContainerParticipant
@@ -44,160 +46,306 @@ import uk.ac.ebi.chemet.entities.Compartment;
  */
 public class AtomContainerParticipant extends Participant<IAtomContainer , Double , Compartment> {
 
-    private static final Logger LOGGER = Logger.getLogger( AtomContainerParticipant.class );
-    private static AtomContainerComparator comparator = new AtomContainerComparator();
 
-    public AtomContainerParticipant( IAtomContainer molecule , Double coefficient , Compartment compartment ) {
-        super( molecule , coefficient , compartment );
+private static final Logger LOGGER = Logger.getLogger( AtomContainerParticipant.class );
+private static AtomContainerComparator comparator = new AtomContainerComparator();
+transient private IAtom[] atoms;
+transient private IBond[] bonds;
+transient private IAtomContainer skeleton;
+
+
+
+public AtomContainerParticipant( IAtomContainer molecule , Double coefficient ,
+                                 Compartment compartment ) {
+
+    super( molecule , coefficient , compartment );
+    skeleton = AtomContainerManipulator.removeHydrogens( molecule );
+    setAtoms( molecule );
+
+}
+
+
+
+public AtomContainerParticipant( IAtomContainer molecule , Double coefficient ) {
+    super( molecule , coefficient );
+    skeleton = AtomContainerManipulator.removeHydrogens( molecule );
+    setAtoms( molecule );
+
+}
+
+
+
+public AtomContainerParticipant( IAtomContainer molecule ) {
+    super( molecule );
+    skeleton = AtomContainerManipulator.removeHydrogens( molecule );
+    setAtoms( molecule );
+
+}
+
+
+
+/**
+ *
+ * Copy constructor makes a shallow copy of the participant
+ *
+ * @param participant
+ *
+ */
+public AtomContainerParticipant( AtomContainerParticipant participant ) {
+    super( participant );
+    this.skeleton = participant.skeleton;
+}
+
+
+
+public AtomContainerParticipant() {
+}
+
+
+
+@Override
+public void setMolecule( IAtomContainer molecule ) {
+    super.setMolecule( molecule );
+    setAtoms( molecule );
+    skeleton = AtomContainerManipulator.removeHydrogens( molecule );
+}
+
+
+
+private void setAtoms( IAtomContainer atomContainer ) {
+
+    IAtomContainer trimmedMoleucle = AtomContainerManipulator.removeHydrogens( atomContainer );
+    atoms = AtomContainerManipulator.getAtomArray( CDKUtils.setBondOrderSums( trimmedMoleucle ) );
+    bonds = AtomContainerManipulator.getBondArray( trimmedMoleucle );
+
+    Arrays.sort( atoms , new Comparator<IAtom>() {
+
+
+    public int compare( IAtom o1 , IAtom o2 ) {
+        // I wish symbol were an enumeration
+        int val = o1.getSymbol().compareTo( o2.getSymbol() );
+        if ( val != 0 ) {
+            return val;
+        }
+        Double bondOrder1 = o1.getBondOrderSum();
+        Double bondOrder2 = o2.getBondOrderSum();
+        return bondOrder1.compareTo( bondOrder2 );
+    }
+    } );
+}
+
+
+
+/**
+ * Accessor for the skeleton molecule. This molecule is the input molecule with the hydrogens
+ * removed using the CDK AtomContainerManipulator.removeHydrogens() method.
+ */
+public IAtomContainer getSkelton() {
+    return skeleton;
+}
+
+
+
+/**
+ *
+ * Calculate the hash value for a reactant participant. The method uses the default hashCode()
+ * methods of {@see Double} and {@see Compartment}. The CDK {@see AtomContainer} object does not
+ * override the hashCode method therfore this is calculated. The hash is calculated by using the
+ * skeleton molecule (@see getSkeleton()) atom count and bond count. The atoms from the skeleton
+ * are sorted and the symbol, atomic number, exact mass and bond order sum is used
+ *
+ * @return Non-unique integer for this participant
+ *
+ */
+@Override
+public int hashCode() {
+
+    int hash = 7;
+
+    hash = 257 * hash + ( ( Double ) Math.pow( this.skeleton.getAtomCount() ,
+                                               this.skeleton.getBondCount() ) ).hashCode();
+    for ( IAtom atom : atoms ) {
+        hash = 257 * hash + ( atom.getSymbol() != null ? atom.getSymbol().hashCode() : 0 );
+        hash = 257 * hash +
+               ( atom.getAtomicNumber() != null ? atom.getAtomicNumber().hashCode() : 0 );
+        hash = 257 * hash + ( atom.getExactMass() != null ? atom.getExactMass().hashCode() : 0 );
+        hash = 257 * hash +
+               ( ( Double ) AtomContainerManipulator.getBondOrderSum( this.skeleton , atom ) ).
+            hashCode(); // can't use this
     }
 
-    public AtomContainerParticipant( IAtomContainer molecule , Double coefficient ) {
-        super( molecule , coefficient );
+    hash = 257 * hash + ( super.coefficient != null ? super.coefficient.hashCode() : 0 );
+    hash = 257 * hash + ( super.compartment != null ? super.compartment.hashCode() : 0 );
+
+    return hash;
+
+}
+
+
+
+public boolean equals( Participant<IAtomContainer , Double , Compartment> other ) {
+
+    if ( other instanceof AtomContainerParticipant == false ) {
+        return false;
     }
 
-    public AtomContainerParticipant( IAtomContainer molecule ) {
-        super( molecule );
+    // if the other participant is Generic (has R-group) call their equals instead
+    // we also need to check that participant isn't generic otherwise we'd get into
+    // and infinate loop of parsing to different equals methods
+    if ( other instanceof GenericParticipant && this.getClass() == AtomContainerParticipant.class ) {
+        LOGGER.debug( "Using Generic Comparisson" );
+        return other.equals( this );
     }
 
-    public AtomContainerParticipant( Participant<IAtomContainer , Double , Compartment> participant ) {
-        super( participant );
+    if ( this.hashCode() != other.hashCode() ) {
+        LOGGER.debug( "Hash codes are not equal" );
+        return false;
     }
 
-    public AtomContainerParticipant() {
-    }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-
-        hash = 257 * hash + super.molecule.getBondCount();
-        hash = 257 * hash + super.molecule.getAtomCount();
-
-        // hash atoms..
-        // Todo: sort atoms?
-        for ( int i = 0; i < super.molecule.getAtomCount(); i++ ) {
-
-            IAtom atom = super.molecule.getAtom( i );
-            // Todo: may want to delete charge
-            hash = 257 * hash + ( atom.getCharge() != null ? atom.getCharge().hashCode() : 0 );
-            hash = 257 * hash + ( atom.getAtomicNumber() != null ? atom.getAtomicNumber().hashCode() : 0 );
-            hash = 257 * hash + ( atom.getMassNumber() != null ? atom.getMassNumber().hashCode() : 0 );
-            hash = 257 * hash + ( atom.getExactMass() != null ? atom.getExactMass().hashCode() : 0 );
-            hash = 257 * hash +
-                   ( ( Double ) AtomContainerManipulator.getBondOrderSum( this.molecule , atom) ).hashCode();
-        }
-        // don't check the bonds this is simply for a quicker hashCode
-
-        hash = 257 * hash + ( super.coefficient != null ? super.coefficient.hashCode() : 0 );
-        hash = 257 * hash + ( super.compartment != null ? super.compartment.hashCode() : 0 );
-
-        return hash;
-
-    }
-
-    @Override
-    public boolean equals( Participant<IAtomContainer , Double , Compartment> other ) {
-
-        // if the other participant is Generic (has R-group) call their equals instead
-        // we also need to check that participant isn't generic otherwise we'd get into
-        // and infinate loop of parsing to different equals methods
-        if ( other instanceof GenericParticipant && this.getClass() == AtomContainerParticipant.class ) {
-            return other.equals( this );
-        }
-
-        if ( this.hashCode() != other.hashCode() ) {
-            return false;
-        }
-
-
-        if ( this.coefficient != other.coefficient &&
-             ( this.coefficient == null || !this.coefficient.equals( other.coefficient ) ) ) {
-            return false;
-        }
-        if ( this.compartment != other.compartment &&
-             ( this.compartment == null || !this.compartment.equals( other.compartment ) ) ) {
-            return false;
-        }
-        if ( this.molecule == other.molecule ) {
-            return true;
-        }
-        try {
-
-            if ( this.molecule.getAtomCount() != other.molecule.getAtomCount() ) {
-                return false;
-            }
-            if ( this.molecule.getBondCount() != other.molecule.getBondCount() ) {
-                return false;
-            }
-
-            // for single atom cases
-            if ( this.molecule.getAtomCount() == 1 ) {
-                IAtom queryAtom = this.molecule.getAtom( 0 );
-                IAtom otherAtom = other.molecule.getAtom( 0 );
-
-                if ( queryAtom.getSymbol() != otherAtom.getSymbol() && ( queryAtom.getSymbol() != null || !queryAtom.
-                        getSymbol().equals( otherAtom.getSymbol() ) ) ) {
-                    return false;
-                }
-                if ( queryAtom.getCharge() != otherAtom.getCharge() && ( queryAtom.getCharge() != null || !queryAtom.
-                        getCharge().equals( otherAtom.getCharge() ) ) ) {
-                    return false;
-                }
-                return true;
-            }
-
-
-            Isomorphism isoChecker = new Isomorphism( Algorithm.DEFAULT , true );
-            isoChecker.init( this.molecule ,
-                             other.molecule ,
-                             true ,
-                             true );
-            isoChecker.setChemFilters( false , false , false );
-
-            return isoChecker.getTanimotoSimilarity() == 1;
-
-        } catch ( Exception ex ) {
-            System.out.println( this.molecule.getID() );
-            System.out.println( other.molecule.getID() );
-            LOGGER.error( "Could not compare molecule: " + ex.getMessage() );
-            ex.printStackTrace();
-        }
+    if ( this.coefficient != other.coefficient &&
+         ( this.coefficient == null || !this.coefficient.equals( other.coefficient ) ) ) {
+        LOGGER.debug( "Coefficients are not equal" );
 
         return false;
-
+    }
+    if ( this.compartment != other.compartment &&
+         ( this.compartment == null || !this.compartment.equals( other.compartment ) ) ) {
+        LOGGER.debug( "Compartments are not equal" );
+        return false;
+    }
+    if ( this.molecule == other.molecule ) {
+        return true;
     }
 
-    @Override
-    public int compareTo( Participant<IAtomContainer , Double , Compartment> o ) {
-        if ( this.coefficient != null && o.coefficient != null ) {
-            int coefComparison = this.coefficient.compareTo( o.coefficient );
-            if ( coefComparison != 0 ) {
-                return coefComparison;
+    try {
+
+        if ( this.skeleton.getAtomCount() != ( ( AtomContainerParticipant ) other ).skeleton.
+            getAtomCount() ) {
+            LOGGER.debug( "Atom counts are not equal" );
+            return false;
+        }
+        if ( this.skeleton.getBondCount() != ( ( AtomContainerParticipant ) other ).skeleton.
+            getBondCount() ) {
+            LOGGER.debug( "Bond counts are not equal" );
+            return false;
+        }
+
+        // for single atom cases
+        if ( this.molecule.getAtomCount() == 1 ) {
+            IAtom queryAtom = this.molecule.getAtom( 0 );
+            IAtom otherAtom = other.molecule.getAtom( 0 );
+
+            if ( queryAtom.getSymbol() != otherAtom.getSymbol() && ( queryAtom.getSymbol() != null ||
+                                                                     !queryAtom.getSymbol().equals( otherAtom.
+                getSymbol() ) ) ) {
+                return false;
             }
-        }
-        if ( this.compartment != null && o.compartment != null ) {
-            int compComparison = this.compartment.compareTo( o.compartment );
-            if ( compComparison != 0 ) {
-                return compComparison;
+            if ( queryAtom.getCharge() != otherAtom.getCharge() && ( queryAtom.getCharge() != null ||
+                                                                     !queryAtom.getCharge().equals( otherAtom.
+                getCharge() ) ) ) {
+                return false;
             }
-        }
-        if ( this.molecule != null && o.molecule != null ) {
-            return comparator.compare( this.molecule , o.molecule );
+            return true;
         }
 
-        return 0;
+
+        Isomorphism isoChecker = new Isomorphism( Algorithm.DEFAULT , true );
+        isoChecker.init( this.molecule ,
+                         other.molecule ,
+                         true ,
+                         true );
+        isoChecker.setChemFilters( false , false , false );
+
+        return isoChecker.getTanimotoSimilarity() == 1;
+
+    } catch ( Exception ex ) {
+        System.out.println( this.molecule.getID() );
+        System.out.println( other.molecule.getID() );
+        LOGGER.error( "Could not compare molecule: " + ex.getMessage() );
+        ex.printStackTrace();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        if ( this.coefficient != null ) {
-            sb.append( coefficient ).append( " " );
+    return false;
+
+}
+
+
+
+/**
+ *
+ * Overridden compare to method used to sort the participants. This method first uses the default comparators
+ * of Compartment and Double and then the AtomContainerComparator of CDK to sort based on the molecule. If all
+ * these methods are 0 then
+ *
+ * @param  o The other participant to compare to
+ *
+ * @return -1, 1 (Note: 0 will throw an exception at the moment as we want to use a TreeSet
+ *                      to store the participants)
+ *
+ * @throws UnsupportedOperationException The method will throw and UnsupportedOperationException if the molecules
+ *         are equal. This is unlikely to happen but is there as a precaution to warn the user.
+ *
+ */
+@Override
+public int compareTo( Participant<IAtomContainer , Double , Compartment> o ) {
+
+    if ( this.coefficient != null && o.coefficient != null ) {
+        int coefComparison = this.coefficient.compareTo( o.coefficient );
+        if ( coefComparison != 0 ) {
+            return coefComparison;
         }
-        sb.append( molecule.getID() );
-        if ( this.compartment != null ) {
-            sb.append( " [" ).append( compartment ).append( "]" );
-        }
-        return sb.toString();
     }
+    if ( this.compartment != null && o.compartment != null ) {
+        int compComparison = this.compartment.compareTo( o.compartment );
+        if ( compComparison != 0 ) {
+            return compComparison;
+        }
+    }
+    if ( this.molecule != null && o.molecule != null ) {
+        return comparator.compare( this.molecule , o.molecule );
+    }
+
+    throw new UnsupportedOperationException(
+        "Possible addition of duplicate molecules to a reaction" );
+
+}
+
+
+
+/**
+ *
+ * Displays the participant as a string. The participant name tries the getID() method
+ * from AtomContainer if the getID() is null it then tries uses the properties labeled
+ * "Name" or "name" if they do not exists the AtomContainer toString() method is used.
+ * The molecule name is prefixed with the stoichiometric coefficient and postfixed with
+ * the compartment in square brackets (e.g. "2 ATP [e]")
+ *
+ * @return String-ified representation of the participant
+ *
+ */
+@Override
+public String toString() {
+
+    StringBuilder sb = new StringBuilder( 10 );
+
+    if ( this.coefficient != null ) {
+        sb.append( coefficient ).append( " " );
+    }
+
+    Map properites = molecule.getProperties();
+    String name = molecule.getID() != null ? molecule.getID() :
+                  properites.containsKey( "Name" ) ? properites.get( "Name" ).toString() :
+                  properites.containsKey( "name" ) ? properites.get( "name" ).toString() :
+                  molecule.toString();
+
+    sb.append( name );
+
+    if ( this.compartment != null ) {
+        sb.append( " [" ).append( compartment ).append( "]" );
+    }
+
+    return sb.toString();
+
+}
 }
