@@ -4,7 +4,6 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import org.apache.commons.lang.StringUtils;
 import uk.ac.ebi.chemet.entities.Compartment;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -48,50 +47,50 @@ public class AtomContainerReactionTest {
     public void testEqualsDifferentSides() {
 // TODO
         // different sides
-        System.out.println( "[" + i++ + "] Testing Transposed Reaction Sides" );
+        System.out.printf( "%-120s" , "[TEST] Reaction with transposed direction" );
 
-        AtomContainerReaction r2 = new AtomContainerReaction();
-        r2.addReactant( benzene() , 2d , Compartment.MITOCHONDRIAL_MEMBRANE );
-        r2.addReactant( cyclohexane() , 1d , Compartment.CYTOPLASM );
-        r2.addReactant( butan1ol() , 2d , Compartment.CYTOPLASM );
-        r2.addProduct( _123Triazole() , 1d , Compartment.EXTRACELLULA );
-        r2.addProduct( adenine() , 2d , Compartment.CYTOPLASM );
+        AtomContainerReaction r = new AtomContainerReaction();
+        r.addReactant( benzene() , 2d , Compartment.MITOCHONDRIAL_MEMBRANE );
+        r.addReactant( cyclohexane() , 1d , Compartment.CYTOPLASM );
+        r.addReactant( butan1ol() , 2d , Compartment.CYTOPLASM );
+        r.addProduct( _123Triazole() , 1d , Compartment.EXTRACELLULA );
+        r.addProduct( adenine() , 2d , Compartment.CYTOPLASM );
 
-        System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
-        System.out.printf( "\t\tr: %10s %s\n" , r2.hashCode() , r2 );
+        // System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
+        // System.out.printf( "\t\tr: %10s %s\n" , r2.hashCode() , r2 );
 
-        assertEquals( q1.hashCode() , r2.hashCode() );
-        assertEquals( true , q1.equals( r2 ) );
+        assertEquals( q1.hashCode() , r.hashCode() );
+        assertEquals( q1 , r );
 
-        System.out.println( "    Test passed!" );
+        System.out.println( "PASSED" );
     }
 
     @Test
     public void testEqualsDifferentOrganisation() {
 
-        System.out.println( "[" + i++ + "] Testing Different Organisation" );
+        System.out.printf( "%-120s" , "[TEST] Different participant organisation" );
 
         // same total molecules but on different sides
-        AtomContainerReaction r3 = new AtomContainerReaction();
-        r3.addReactant( benzene() , 2d , Compartment.MITOCHONDRIAL_MEMBRANE );
-        r3.addProduct( cyclohexane() , 1d , Compartment.CYTOPLASM );
-        r3.addReactant( _123Triazole() , 1d , Compartment.EXTRACELLULA );
-        r3.addProduct( adenine() , 2d , Compartment.CYTOPLASM );
-        r3.addProduct( butan1ol() , 2d , Compartment.CYTOPLASM );
+        AtomContainerReaction r = new AtomContainerReaction();
+        r.addReactant( benzene() , 2d , Compartment.MITOCHONDRIAL_MEMBRANE );
+        r.addProduct( cyclohexane() , 1d , Compartment.CYTOPLASM );
+        r.addReactant( _123Triazole() , 1d , Compartment.EXTRACELLULA );
+        r.addProduct( adenine() , 2d , Compartment.CYTOPLASM );
+        r.addProduct( butan1ol() , 2d , Compartment.CYTOPLASM );
 
-        System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
-        System.out.printf( "\t\tr: %10s %s\n" , r3.hashCode() , r3 );
+        //  System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
+        //  System.out.printf( "\t\tr: %10s %s\n" , r3.hashCode() , r3 );
 
-        assertEquals( false , q1.equals( r3 ) );
+        assertNotSame( q1 , r );
 
-        System.out.println( "    Test passed!\n" );
+        System.out.println( "PASSED" );
 
     }
 
     @Test
     public void testEqualsDifferentOrg2() {
 
-        System.out.println( "[" + i++ + "] Testing Different Organisation 2" );
+        System.out.printf( "%-120s" , "[TEST] Different participant organisation" );
 
         // different sides one molecule stays the same side
         AtomContainerReaction r = new AtomContainerReaction();
@@ -101,14 +100,14 @@ public class AtomContainerReactionTest {
         r.addProduct( adenine() , 2d , Compartment.CYTOPLASM );
         r.addProduct( butan1ol() , 2d , Compartment.CYTOPLASM ); // stays same but others move
 
-        System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
-        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
+        // System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
+        // System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
 
 
         // hash code doesn't need to be the same
-        assertEquals( false , q1.equals( r ) );
+        assertNotSame( q1 , r );
 
-        System.out.println( "    Test Passed!\n" );
+        System.out.println( "PASSED" );
 
 
 
@@ -117,7 +116,7 @@ public class AtomContainerReactionTest {
     @Test
     public void testEqualsOneDifferentMol() {
 
-        System.out.println( "[" + i++ + "] Testing One Molecule Different" );
+        System.out.printf( "%-120s" , "[TEST] Different participants" );
 
         // one different mol
         AtomContainerReaction r = new AtomContainerReaction();
@@ -127,21 +126,21 @@ public class AtomContainerReactionTest {
         r.addReactant( _124Triazole() , 1d , Compartment.EXTRACELLULA ); // difference
         r.addReactant( adenine() , 2d , Compartment.CYTOPLASM );
 
-        System.out.printf( "\tvq: %10s %s\n" , q1.hashCode() , q1 );
-        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
+//        System.out.printf( "\tvq: %10s %s\n" , q1.hashCode() , q1 );
+//        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
 
 
         // different sides one molecule stays the same side
-        assertEquals( false , q1.equals( r ) );
+        assertNotSame( q1 , r );
 
-        System.out.println( "    Test Passed!\n" );
+        System.out.println( "PASSED" );
 
     }
 
     @Test
     public void testEqualsOneDiffIsomer() {
 
-        System.out.println( "[" + i++ + "] Testing One Molecule Different (Isomer)" );
+        System.out.printf( "%-120s" , "[TEST] Different participants (Isomer butan-1-ol ≠ butan-2ol)" );
 
         // one different mol (isomer)
         AtomContainerReaction r = new AtomContainerReaction();
@@ -151,21 +150,21 @@ public class AtomContainerReactionTest {
         r.addProduct( cyclohexane() , 1d , Compartment.CYTOPLASM );
         r.addProduct( butan2ol() , 2d , Compartment.CYTOPLASM ); // butan-2-ol ≠ butan-1-ol
 
-        System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
-        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
+//        System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
+//        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
 
 
         // hash code doesn't need to be the same
-        assertEquals( false , q1.equals( r ) );
+        assertNotSame( q1 , r );
 
-        System.out.println( "    Test Passed!\n" );
+        System.out.println( "PASSED" );
 
     }
 
     @Test
     public void testEqualsDiffCoef() {
 
-        System.out.println( "[" + i++ + "] Testing Different Coefficients" );
+        System.out.printf( "%-120s" , "[TEST] Different participants (coefficients)" );
 
         // one molecule with different stoichiometry
         AtomContainerReaction r = new AtomContainerReaction();
@@ -175,19 +174,19 @@ public class AtomContainerReactionTest {
         r.addProduct( MoleculeFactory.makeCyclohexane() , 1d , Compartment.CYTOPLASM );
         r.addProduct( butan1ol() , 2d , Compartment.CYTOPLASM );
 
-        System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
-        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
+//        System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
+//        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
 
         // hash code doesn't need to be the same
-        assertEquals( false , q1.equals( r ) );
+        assertNotSame( q1 , r );
 
-        System.out.println( "    Test Passed!\n" );
+        System.out.println( "PASSED" );
     }
 
     @Test
     public void testEqualsDiffComp() {
 
-        System.out.println( "[" + i++ + "] Testing Different Compartments" );
+        System.out.printf( "%-120s" , "[TEST] Different participants (compartments)" );
 
         // one molecule with different compartment
         AtomContainerReaction r = new AtomContainerReaction();
@@ -197,20 +196,20 @@ public class AtomContainerReactionTest {
         r.addProduct( cyclohexane() , 1d , Compartment.CYTOPLASM );
         r.addProduct( butan1ol() , 2d , Compartment.CYTOPLASM );
 
-        System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
-        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
+        //  System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
+        //  System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
 
         // hash code doesn't need to be the same
-        assertEquals( false , q1.equals( r ) );
+        assertNotSame( q1 , r );
 
-        System.out.println( "    Test Passed!\n" );
+        System.out.println( "PASSED" );
 
     }
 
     @Test
     public void testEqualsTransComp() {
 
-        System.out.println( "[" + i++ + "] Testing Transposed Compartments" );
+        System.out.printf( "%-120s" , "[TEST] Transposed compartments" );
 
         AtomContainerReaction r = new AtomContainerReaction();
         r.addReactant( adenine() , null , Compartment.CYTOPLASM );
@@ -218,21 +217,21 @@ public class AtomContainerReactionTest {
         r.addProduct( adenine() , null , Compartment.EXTRACELLULA );
         r.addProduct( butan1ol() , null , Compartment.CYTOPLASM );
 
-        System.out.printf( "\t\treactans: %10s %s\n" , r.getReactantParticipants().hashCode() , StringUtils.join( r.
-                getReactantParticipants() , " + " ) );
-        System.out.printf( "\t\tproducts: %10s %s\n" , r.getProductParticipants().hashCode() , StringUtils.join( r.
-                getProductParticipants() , " + " ) );
+//        System.out.printf( "\t\treactans: %10s %s\n" , r.getReactantParticipants().hashCode() , StringUtils.join( r.
+//                getReactantParticipants() , " + " ) );
+//        System.out.printf( "\t\tproducts: %10s %s\n" , r.getProductParticipants().hashCode() , StringUtils.join( r.
+//                getProductParticipants() , " + " ) );
 
         // Make sure the hashCode for reactants and products is different
-        assertEquals( false , r.getReactantParticipants().hashCode() == r.getProductParticipants().hashCode() );
+        assertNotSame( r.getReactantParticipants().hashCode() , r.getProductParticipants().hashCode() );
 
-        System.out.println( "    Test Passed!\n" );
+        System.out.println( "PASSED" );
 
     }
 
     @Test
     public void testEqualsMissingCoefComp() {
-        System.out.println( "[" + i++ + "] Testing Null Coef + Compartments" );
+         System.out.printf( "%-120s" , "[TEST] Testing absent coefficients/compartments" );
 
         /** only with products no coef or compartments **/
         // query
@@ -251,19 +250,20 @@ public class AtomContainerReactionTest {
         r.addProduct( _123Triazole() , null , null );
         r.addProduct( adenine() , null , null );
 
-        System.out.printf( "\t\tq: %10s %s\n" , q2.hashCode() , q2 );
-        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
+        //     System.out.printf( "\t\tq: %10s %s\n" , q2.hashCode() , q2 );
+        //     System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
 
 
         assertEquals( q2.hashCode() , r.hashCode() );
-        assertEquals( true , q2.equals( r ) );
+        assertEquals( q2 , r );
 
-        System.out.println( "    Test Passed!\n" );
+        System.out.println( "PASSED" );
     }
 
     @Test
     public void testEqualsDiffBonds() {
-        System.out.println( "[" + i++ + "] Testing same connection diff bonds" );
+
+        System.out.printf( "%-120s" , "[TEST] Testing same connectivity diff bonds (but-1-ene ≠ butane)" );
 
         /** only with products no coef or compartments **/
         // query
@@ -280,17 +280,17 @@ public class AtomContainerReactionTest {
         r.addReactant( benzene() , null , null );
         r.addProduct( cyclohexane() , null , null );
 
-        System.out.printf( "\t\tq: %10s %s\n" , q2.hashCode() , q2 );
-        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
+        //   System.out.printf( "\t\tq: %10s %s\n" , q2.hashCode() , q2 );
+        //   System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
 
-        assertEquals( false , q2.equals( r ) );
+        assertNotSame( q2 , r );
 
-        System.out.println( "     Test Passed!\n" );
+        System.out.println( "PASSED" );
     }
 
     @Test
     public void testGenericADH() {
-        System.out.println( "[" + i++ + "] Testing Generic" );
+        System.out.printf( "%-120s" , "[TEST] Testing generic reaction Alcohol Dehydrogenase" );
 
         /** only with products no coef or compartments **/
         // query
@@ -309,11 +309,11 @@ public class AtomContainerReactionTest {
         r.addProduct( hydron() );
         r.addProduct( nadh() );
 
-        System.out.printf( "\t\tq: %10s %s\n" , generic.hashCode() , generic );
-        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
+//        System.out.printf( "\t\tq: %10s %s\n" , generic.hashCode() , generic );
+//        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
 
-        assertEquals( true , generic.equals( r ) );
+        assertEquals( "FAILED", generic , r );
 
-        System.out.println( "     Test Passed!\n" );
+        System.out.println( "PASSED" );
     }
 }

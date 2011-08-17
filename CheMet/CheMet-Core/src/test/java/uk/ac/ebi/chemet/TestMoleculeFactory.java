@@ -20,8 +20,6 @@ package uk.ac.ebi.chemet;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-
 import java.io.InputStream;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -56,12 +54,15 @@ public class TestMoleculeFactory {
     public static IAtomContainer butane() {
         IMolecule mol = CDKMoleculeBuilder.getInstance().buildFromInChI( butane );
         mol.setID( "Butane" );
+        CDKAtomTyper.typeAtoms( mol );
         return mol;
     }
 
     public static IAtomContainer but1ene() {
         IMolecule mol = CDKMoleculeBuilder.getInstance().buildFromInChI( but1ene );
         mol.setID( "But-1-ene" );
+        CDKAtomTyper.typeAtoms( mol );
+
         return mol;
     }
 
@@ -92,12 +93,15 @@ public class TestMoleculeFactory {
     public static IAtomContainer butan1ol() {
         IMolecule mol = CDKMoleculeBuilder.getInstance().buildFromInChI( butan1olInChI );
         mol.setID( "Butan-1-ol" );
+        CDKAtomTyper.typeAtoms( mol );
         return mol;
     }
 
     public static IAtomContainer butan2ol() {
         IMolecule mol = CDKMoleculeBuilder.getInstance().buildFromInChI( butan2olInChI );
         mol.setID( "Butan-2-ol" );
+        CDKAtomTyper.typeAtoms( mol );
+
         return mol;
     }
 
@@ -162,7 +166,7 @@ public class TestMoleculeFactory {
         IMolecule molecule = DefaultChemObjectBuilder.getInstance().newInstance( IMolecule.class );
         try {
             mol2Reader.read( molecule );
-            molecule.setID(  name );
+            molecule.setID( name );
             CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance( DefaultChemObjectBuilder.getInstance() );
             if ( addH ) {
                 CDKAtomTyper.typeAtoms( molecule );
