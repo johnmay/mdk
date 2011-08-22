@@ -172,5 +172,33 @@ public class BasicFilter extends AbstractParticipantFilter {
     }
 
 
+    /**
+     *
+     * Adds a rejection to the underlying rejection set
+     *
+     * @param molecule
+     *
+     * @return Whether the collection was modified
+     *
+     */
+    public boolean addRejection( IAtomContainer molecule ) {
+        return rejections.add( new AtomContainerParticipant( molecule ) );
+    }
+
+
+    /**
+     *
+     * Remove a rejection to the underlying rejection set
+     *
+     * @param molecule
+     *
+     * @return Whether the collection was modified
+     *
+     */
+    public boolean removeRejection( IAtomContainer molecule ) {
+        return rejections.remove( new AtomContainerParticipant( molecule ) );
+    }
+
+
 }
 
