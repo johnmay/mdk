@@ -11,4 +11,7 @@ Without this configuration present, some functionality in the IDE may be limited
             <configuration id="FetchMetabolicModels" profiles=""/>
         </configurations>
     </config-data>
+    <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+        <word>garanteed</word>
+    </spellchecker-wordlist>
 </project-shared-configuration>

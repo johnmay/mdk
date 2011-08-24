@@ -124,4 +124,10 @@ public class BioCycFolderService extends ChemicalDBWebService {
         throw new UnsupportedOperationException( "Not supported yet." );
     }
 
+
+    @Override
+    public String getName( String id ) throws MissingRecordException {
+        throw new UnsupportedOperationException( "Not supported yet." );
+    }
+
 }

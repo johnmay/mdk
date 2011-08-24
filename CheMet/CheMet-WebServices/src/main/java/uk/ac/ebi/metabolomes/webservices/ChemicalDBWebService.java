@@ -170,7 +170,7 @@ public abstract class ChemicalDBWebService {
      * Abstract method that should return the MDL/MOL/SDF string for the given id
      *
      * @param id The identifier of the entity to be retrieved
-     * 
+     *
      * @return String of the MDL file (the version cannot be garanteed)
      *
      * @throws MissingRecordException    Thrown if a record cannot be retrieved for the given
@@ -181,6 +181,9 @@ public abstract class ChemicalDBWebService {
      */
     public abstract String getMDLString( String id ) throws MissingRecordException ,
                                                             MissingStructureException;
+
+
+    public abstract String getName( String id ) throws MissingRecordException;
 
 
 }

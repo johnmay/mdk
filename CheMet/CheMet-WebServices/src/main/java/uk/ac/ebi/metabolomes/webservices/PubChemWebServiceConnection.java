@@ -364,4 +364,10 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
     }
 
 
+    @Override
+    public String getName( String id ) throws MissingRecordException {
+        throw new UnsupportedOperationException( "Not supported yet." );
+    }
+
+
 }

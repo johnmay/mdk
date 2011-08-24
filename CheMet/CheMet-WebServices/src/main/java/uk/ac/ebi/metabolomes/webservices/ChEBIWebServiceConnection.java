@@ -457,5 +457,15 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     }
 
 
+    @Override
+    public String getName( String id ) throws MissingRecordException {
+        try {
+            return client.getCompleteEntity( id ).getChebiAsciiName();
+        } catch ( ChebiWebServiceFault_Exception ex ) {
+            throw new MissingRecordException();
+        }
+    }
+
+
 }
 

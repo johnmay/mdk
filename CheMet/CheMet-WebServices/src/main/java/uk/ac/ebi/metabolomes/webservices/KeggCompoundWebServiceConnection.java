@@ -49,6 +49,12 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
     }
 
 
+    @Override
+    public String getName( String id ) throws MissingRecordException {
+        return id;
+    }
+
+
     private enum KeggDBs {
 
         COMPOUND( "cpd" ), DRUG( "dr" ), GLYCAN( "gl" );

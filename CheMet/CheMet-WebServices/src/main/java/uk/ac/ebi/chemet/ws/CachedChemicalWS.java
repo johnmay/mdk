@@ -73,6 +73,7 @@ public class CachedChemicalWS {
     // cache id
     private static final String CDK_ATOMCONTAINER = ".cdk-atomcontainer";
     private static final String MDL_STRING = ".mdl-string";
+    private static final String NAME_STRING = ".name-string";
 
 
     /**
@@ -87,7 +88,8 @@ public class CachedChemicalWS {
      *                      removed from the disk
      *
      */
-    public CachedChemicalWS( ChemicalDBWebService client , Integer memoryQueueSize , Integer diskQueueSize ,
+    public CachedChemicalWS( ChemicalDBWebService client , Integer memoryQueueSize ,
+                             Integer diskQueueSize ,
                              Integer cacheExpiry ) {
 
         this.client = client;
@@ -130,7 +132,8 @@ public class CachedChemicalWS {
      * @param diskQueueSize The size of the disk queue
      *
      */
-    public CachedChemicalWS( ChemicalDBWebService client , Integer memoryQueueSize , Integer diskQueueSize ) {
+    public CachedChemicalWS( ChemicalDBWebService client , Integer memoryQueueSize ,
+                             Integer diskQueueSize ) {
         this( client , memoryQueueSize , diskQueueSize , DEFAULT_DISK_CACHE_EXPIRY );
     }
 
@@ -198,6 +201,7 @@ public class CachedChemicalWS {
         File cachedFile = new File( cacheDir , id + MDL_STRING );
 
         if ( cachedFile.exists() ) {
+            cachedFile.setLastModified( System.currentTimeMillis() );
             return ( String ) read( cachedFile );
         }
 
@@ -205,14 +209,6 @@ public class CachedChemicalWS {
         String mdlString = client.getMDLString( id );
 
         write( cachedFile , mdlString );
-
-        // empty the queue if there are less then 10 slots left
-        if ( diskQueue.remainingCapacity() < 10 ) {
-            // empty until there are more then 100 deleteing stored files as we go
-            while ( diskQueue.remainingCapacity() < 100 ) {
-                diskQueue.poll().delete();
-            }
-        }
 
         return mdlString;
     }
@@ -240,11 +236,8 @@ public class CachedChemicalWS {
 
         if ( objectCache.containsKey( objectId ) ) {
 
-            try {
-                objectQueue.put( objectQueue.poll() );
-            } catch ( InterruptedException ex ) {
-                ex.printStackTrace();
-            }
+            objectQueue.remove( objectId ); // move to front
+            objectQueue.add( objectId );
 
             return ( IAtomContainer ) objectCache.get( objectId );
         }
@@ -267,6 +260,9 @@ public class CachedChemicalWS {
             throw new MissingStructureException( id );
         }
 
+        molecule.setProperty( "Name" , getName( id ) );
+
+
         // store for to avoid IO overhead recall
         objectCache.put( objectId , molecule );
 
@@ -278,14 +274,51 @@ public class CachedChemicalWS {
             }
         }
 
-        try {
-            objectQueue.put( objectId );
-        } catch ( InterruptedException ex ) {
-            ex.printStackTrace();
-        }
+        objectQueue.add( objectId );
 
         return ( AtomContainer ) molecule;
 
+    }
+
+
+    public String getName( String id ) throws MissingRecordException {
+
+        String objectId = id + NAME_STRING;
+
+        if ( objectCache.containsKey( objectId ) ) {
+
+            objectQueue.remove( objectId ); // move to front
+            objectQueue.add( objectId );
+
+            return ( String ) objectCache.get( objectId );
+        }
+
+        File cachedFile = new File( cacheDir , objectId );
+
+        if ( cachedFile.exists() ) {
+            cachedFile.setLastModified( System.currentTimeMillis() );
+            return ( String ) read( cachedFile );
+        }
+
+
+        // fetcg from client
+        String name = client.getName( id );
+
+        write( cachedFile , name );
+
+        // store for to avoid IO overhead recall
+        objectCache.put( objectId , name );
+
+        // empty the queue if there are less then 10 slots left
+        if ( objectQueue.remainingCapacity() < 10 ) {
+            // empty until there are more then 100
+            while ( objectQueue.remainingCapacity() < 100 ) {
+                objectCache.remove( objectQueue.poll() );
+            }
+        }
+
+        objectQueue.add( objectId );
+        return name;
     }
 
 
@@ -337,6 +370,16 @@ public class CachedChemicalWS {
             } catch ( IOException ex ) {
 
                 LOGGER.error( "Could not closed cached stream" );
+            }
+        }
+
+        diskQueue.add( cachedFile );
+
+        // empty the queue if there are less then 10 slots left
+        if ( diskQueue.remainingCapacity() < 10 ) {
+            // empty until there are more then 100 deleteing stored files as we go
+            while ( diskQueue.remainingCapacity() < 100 ) {
+                diskQueue.poll().delete();
             }
         }
 
