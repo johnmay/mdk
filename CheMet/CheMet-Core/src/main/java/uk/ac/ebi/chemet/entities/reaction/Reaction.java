@@ -32,6 +32,7 @@ import java.util.logging.Filter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
+import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
 import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
 
 /**
@@ -67,7 +68,7 @@ public class Reaction<M , S , C>
     private List<Participant<M , S , C>> products;
     // whether the reaction is reversible
     private Reversibility reversibility = Reversibility.UNKNOWN;
-    private AbstractParticipantFilter filter = null;
+    private AbstractParticipantFilter filter = new AcceptAllFilter(); // accepts all
 
     /**
      * Constructor for a generic reaction. The constructor must provide a comparator for
@@ -148,7 +149,7 @@ public class Reaction<M , S , C>
      * @param product The reactant to add
      */
     public void addReactant( Participant<M , S , C> participant ) {
-        if ( filter != null && filter.reject( participant ) ) {
+        if ( filter.reject( participant ) ) {
             return;
         }
         this.reactants.add( participant );
@@ -190,7 +191,7 @@ public class Reaction<M , S , C>
      * @param product The product to add
      */
     public void addProduct( Participant<M , S , C> participant ) {
-        if ( filter != null && filter.reject( participant ) ) {
+        if ( filter.reject( participant ) ) {
               return;
         }
         this.products.add( participant );

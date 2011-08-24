@@ -43,6 +43,9 @@ public abstract class CommandLineMain
 
     public abstract void setupOptions();
 
+    /**
+     * Main processing method
+     */
     public abstract void process();
 
     public CommandLineMain( String[] args ) {

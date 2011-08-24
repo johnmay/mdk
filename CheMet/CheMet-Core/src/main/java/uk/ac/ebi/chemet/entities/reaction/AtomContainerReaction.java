@@ -1,3 +1,4 @@
+
 /**
  * AtomContainerReaction.java
  *
@@ -20,14 +21,18 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
+import java.util.Iterator;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.*;
-import uk.ac.ebi.chemet.entities.Compartment;
+import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
+
 
 /**
  * @name    AtomContainerReaction
@@ -40,9 +45,22 @@ import uk.ac.ebi.metabolomes.util.CDKUtils;
  *
  */
 public class AtomContainerReaction
-        extends Reaction<IAtomContainer , Double , Compartment> {
+  extends Reaction<IAtomContainer , Double , Compartment> {
+
+
+    public AtomContainerReaction() {
+    }
+
+
+    
+
+    public AtomContainerReaction( AbstractParticipantFilter filter ) {
+        super( filter );
+    }
+
 
     private static final Logger LOGGER = Logger.getLogger( AtomContainerReaction.class );
+
 
     public void addReactant( IAtomContainer molecule , Double coef , Compartment compartment ) {
         if ( CDKUtils.isMoleculeGeneric( molecule ) ) {
@@ -52,6 +70,7 @@ public class AtomContainerReaction
         }
     }
 
+
     public void addProduct( IAtomContainer molecule , Double coef , Compartment compartment ) {
         if ( CDKUtils.isMoleculeGeneric( molecule ) ) {
             addProduct( new GenericParticipant( molecule , coef , compartment ) );
@@ -60,21 +79,26 @@ public class AtomContainerReaction
         }
     }
 
+
     public void addReactant( IAtomContainer molecule , Double coef ) {
         addReactant( molecule , coef , null );
     }
+
 
     public void addProduct( IAtomContainer molecule , Double coef ) {
         addProduct( molecule , coef , null );
     }
 
+
     public void addReactant( IAtomContainer molecule ) {
         addReactant( molecule , null , null );
     }
 
+
     public void addProduct( IAtomContainer molecule ) {
         addProduct( molecule , null , null );
     }
+
 
     public void addReactant( AtomContainerParticipant p ) {
         if ( p instanceof GenericParticipant ) {
@@ -83,6 +107,7 @@ public class AtomContainerReaction
         super.addReactant( p );
     }
 
+
     public void addProduct( AtomContainerParticipant p ) {
         if ( p instanceof GenericParticipant ) {
             super.setGeneric( Boolean.TRUE );
@@ -90,37 +115,36 @@ public class AtomContainerReaction
         super.addProduct( p );
     }
 
-//    /**
-//     * Create an instance IReaction object for use with CDK
-//     * TODO: Write unit test...
-//     * @return IReaction
-//     */
-//    public IReaction getCDKReaction() {
-//
-//        IReaction reaction = DefaultChemObjectBuilder.getInstance().newInstance( IReaction.class );
-//
-//        // add the reactants
-//        Iterator<IMolecule> reIt = reactants.iterator();
-//        Iterator<Double> rsIt = reactantStoichiometries.iterator();
-//        while ( reIt.hasNext() ) {
-//            if ( rsIt.hasNext() ) {
-//                reaction.addReactant( new Molecule( reIt.next() ) , rsIt.next() );
-//            } else {
-//                reaction.addReactant( new Molecule( reIt.next() ) );
-//            }
-//        }
-//        // add the product
-//        Iterator<IMolecule> prIt = products.iterator();
-//        Iterator<Double> psIt = productStoichiometries.iterator();
-//        while ( reIt.hasNext() ) {
-//            if ( rsIt.hasNext() ) {
-//                reaction.addProduct( new Molecule( reIt.next() ) , rsIt.next() );
-//            } else {
-//                reaction.addProduct( new Molecule( reIt.next() ) );
-//            }
-//        }
-//        return reaction;
-//    }
+
+    /**
+     * Create an instance IReaction object for use with CDK
+     * TODO: Write unit test...
+     * @return IReaction
+     */
+    public IReaction getCDKReaction() {
+
+        IReaction reaction = DefaultChemObjectBuilder.getInstance().newInstance( IReaction.class );
+
+        // add the reactants
+        Iterator<Participant<IAtomContainer , Double , Compartment>> reIt =
+                                                                     getReactantParticipants().
+          iterator();
+        while ( reIt.hasNext() ) {
+            AtomContainerParticipant p = ( AtomContainerParticipant ) reIt.next();
+            reaction.addReactant( new Molecule( p.getMolecule() ) );
+        }
+
+        // add the producta
+        Iterator<Participant<IAtomContainer , Double , Compartment>> prIt = getProductParticipants().
+          iterator();
+        while ( prIt.hasNext() ) {
+            AtomContainerParticipant p = ( AtomContainerParticipant ) prIt.next();
+            reaction.addProduct( new Molecule( p.getMolecule() ) );
+        }
+
+        return reaction;
+
+    }
 
     /* IMPLEMENTATION OF IREACTION INTERFACE */
 //    public IMoleculeSet getReactants() {
@@ -153,8 +177,12 @@ public class AtomContainerReaction
 //            super.addProduct( ims.getMolecule( i ) );
 //        }
 //    }
+
     @Override
     public void addReactant( Participant<IAtomContainer , Double , Compartment> participant ) {
         super.addReactant( participant );
     }
+
+
 }
+
