@@ -33,6 +33,8 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.iterator.IteratingPCCompoundXMLReader;
 import org.xmlpull.v1.XmlPullParserException;
+import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
+import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 
 
 public class PubChemWebServiceConnection extends ChemicalDBWebService{
@@ -49,7 +51,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 	private final String propertyCID = "PubChem CID";
 	private final String propertyInchiKey = "InChIKey (Standard)";
 	private final String serviceProviderName = "PubChem";
-	
+
 	public static void main(String[] args) {
 		Properties p = System.getProperties();
 //		System.out.println("os.name\t"+p.getProperty("os.name"));
@@ -89,14 +91,14 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
                     logger.error("Error with connection to pubchem web service", e);
                 }
 	}
-	
+
 	public ArrayList<IAtomContainer> downloadMolsToCDKObject(String[] ids) {
 		int[] idsInt = new int[ids.length];
 		for(int i=0;i<ids.length;i++)
 			idsInt[i] = Integer.parseInt(ids[i]);
 		return this.downloadMolsToCDKObject(idsInt);
 	}
-	
+
 	public ArrayList<IAtomContainer> downloadMolsToCDKObject(int[] ids) {
 		String listKey;
 		String downloadKey;
@@ -118,7 +120,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 				// get input stream from URL
 				URLConnection fetch = url.openConnection();
 				InputStream input = fetch.getInputStream();
-				
+
 			    ArrayList<IAtomContainer> v = new ArrayList<IAtomContainer>();
 			    IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
 
@@ -130,7 +132,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 			    			mol.setID((String) mol.getProperty(this.propertyCID));
 			            	v.add(mol);
 			    }
-			    
+
 			    return v;
 
 			}
@@ -224,7 +226,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 			idsInt[i] = Integer.parseInt(ids[i]);
 		return getInChIs(idsInt);
 	}
-	
+
 	public HashMap<String, String> getInChIKeys(int[] ids) {
 		HashMap<String, String> inchiKeyRes = new HashMap<String, String>();
 
@@ -237,14 +239,14 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 
 		return inchiKeyRes;
 	}
-	
+
 	public HashMap<String, String> getInChIKeys(String[] ids) {
 		int[] idsInt = new int[ids.length];
-		for(int i=0;i<ids.length;i++) 
+		for(int i=0;i<ids.length;i++)
 			idsInt[i] = Integer.parseInt(ids[i]);
 		return getInChIKeys(idsInt);
 	}
-	
+
 	public HashMap<String, String> getInChIs(int[] ids) {
 		// TODO Auto-generated method stub
 		HashMap<String, String> res = new HashMap<String, String>();
@@ -268,7 +270,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 
 		return res;
 	}
-	
+
 	private HashMap<String, String> getInChiDictionary(int[] ids) {
 		HashMap<String, String> orig = this.getInChIs(ids);
 		HashMap<String, String> dic = new HashMap<String, String>();
@@ -298,7 +300,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
                 }
 		return true;
 	}
-	
+
 	// This method shouldn't really belong to this class
 	protected IAtomContainer[] loadMoleculesFromFile(String filename) {
 	    Vector<IAtomContainer> v = new Vector<IAtomContainer>();
@@ -315,11 +317,11 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 	            	//Map props = n.getProperties();//PubChem CID
 	            	v.add((IAtomContainer) readerXML.next());
 	            }
-	            
+
 	            //IChemFile content = (IChemFile) reader.read(builder.newChemFile());
 	            //IMoleculeSet content = (IMoleculeSet) readerXML.read(builder.newMoleculeSet());
 //	            List c;
-//	            
+//
 //	            if (content != null) {
 //	            	//c = ChemFileManipulator.getAllAtomContainers(content);
 //	            	c = (List) content.molecules();
@@ -344,7 +346,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 	    }
 	    return retValues;
 	}
-	
+
 	public String getServiceProviderName() {
 		return this.serviceProviderName;
 	}
@@ -354,5 +356,12 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-	
+
+    @Override
+    public String getMDLString( String id ) throws MissingRecordException ,
+                                                   MissingStructureException {
+        throw new UnsupportedOperationException( "Not supported yet." );
+    }
+
+
 }

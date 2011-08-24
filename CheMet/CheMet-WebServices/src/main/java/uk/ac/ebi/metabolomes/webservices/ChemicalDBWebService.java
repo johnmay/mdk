@@ -1,3 +1,4 @@
+
 package uk.ac.ebi.metabolomes.webservices;
 
 import java.io.FileOutputStream;
@@ -12,6 +13,9 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
+import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
+import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+
 
 /**
  * This abstract class encompasses web services that connect to chemical databases.
@@ -25,111 +29,159 @@ import org.openscience.cdk.io.MDLV2000Writer;
  */
 public abstract class ChemicalDBWebService {
 
-        protected Logger logger;
-	
-	public boolean downloadStructureFiles(String[] ids, String path) throws IOException {
-		ArrayList<IAtomContainer> mols = this.downloadMolsToCDKObject(ids);
-		MDLV2000Writer out;
-		for(IAtomContainer mol : mols) {
-			out = new MDLV2000Writer(new FileOutputStream(path+mol.getID()+".mol"));
-			try {
-				out.write(mol);
-			} catch (CDKException e) {
-				logger.error("Could not open mol file for writing with MDLWriter", e);
-			}
-			out.close();
-		}
-		return true;
-	}
+    protected Logger logger;
 
-        // TODO This abstract class shouldn't calculate inchis, only retrieve them if it corresponds.
-	public HashMap<String, String> getInChIKeys(String[] ids) {
-		HashMap<String, InChIGenerator> generators = this.getInChIGeneratorsLoaded(ids);
-		HashMap<String, String> inchiKeys = new HashMap<String, String>();
-                for(String key : generators.keySet()) {
-                    try {
-                        inchiKeys.put(key, generators.get(key).getInchiKey());
-                    } catch (CDKException e) {
-                        logger.error("Could not load inchi generator, or an error was produced when trying to generate and inchi",e);
-                    }
+
+    public boolean downloadStructureFiles( String[] ids , String path ) throws IOException {
+        ArrayList<IAtomContainer> mols = this.downloadMolsToCDKObject( ids );
+        MDLV2000Writer out;
+        for ( IAtomContainer mol : mols ) {
+            out = new MDLV2000Writer( new FileOutputStream( path + mol.getID() + ".mol" ) );
+            try {
+                out.write( mol );
+            } catch ( CDKException e ) {
+                logger.error( "Could not open mol file for writing with MDLWriter" , e );
+            }
+            out.close();
+        }
+        return true;
+    }
+
+    // TODO This abstract class shouldn't calculate inchis, only retrieve them if it corresponds.
+
+    public HashMap<String , String> getInChIKeys( String[] ids ) {
+        HashMap<String , InChIGenerator> generators = this.getInChIGeneratorsLoaded( ids );
+        HashMap<String , String> inchiKeys = new HashMap<String , String>();
+        for ( String key : generators.keySet() ) {
+            try {
+                inchiKeys.put( key , generators.get( key ).getInchiKey() );
+            } catch ( CDKException e ) {
+                logger.error(
+                  "Could not load inchi generator, or an error was produced when trying to generate and inchi" ,
+                  e );
+            }
+        }
+        return inchiKeys;
+    }
+
+
+    public HashMap<String , InChIGenerator> getInChIGeneratorsLoaded( String[] ids ) {
+        ArrayList<IAtomContainer> mols = this.downloadMolsToCDKObject( ids );
+        HashMap<String , InChIGenerator> inchiGen = new HashMap<String , InChIGenerator>();
+        try {
+            InChIGeneratorFactory factory = InChIGeneratorFactory.getInstance();
+            for ( IAtomContainer mol : mols ) {
+                //System.out.println("Provider:"+this.getServiceProviderName()+"\t"+mol.getID());
+                if ( !this.checkMoleculeForInChI( mol ) ) {
+                    continue; // avoid calculations if molecule doesn't pass
                 }
-		return inchiKeys;
-	}
-
-        public HashMap<String, InChIGenerator> getInChIGeneratorsLoaded(String[] ids) {
-                ArrayList<IAtomContainer> mols = this.downloadMolsToCDKObject(ids);
-		HashMap<String, InChIGenerator> inchiGen = new HashMap<String, InChIGenerator>();
-		try {
-			InChIGeneratorFactory factory = InChIGeneratorFactory.getInstance();
-			for(IAtomContainer mol : mols) {
-				//System.out.println("Provider:"+this.getServiceProviderName()+"\t"+mol.getID());
-				if(!this.checkMoleculeForInChI(mol)) continue; // avoid calculations if molecule doesn't pass
-				InChIGenerator gen = factory.getInChIGenerator(mol);
-				inchiGen.put(mol.getID(), gen);
-			}
-		} catch (CDKException e) {
-                    logger.error("Could not load inchi generator, or an error was produced when trying to generate and inchi",e);
-		}
-		return inchiGen;
+                InChIGenerator gen = factory.getInChIGenerator( mol );
+                inchiGen.put( mol.getID() , gen );
+            }
+        } catch ( CDKException e ) {
+            logger.error(
+              "Could not load inchi generator, or an error was produced when trying to generate and inchi" ,
+              e );
         }
+        return inchiGen;
+    }
 
-        public HashMap<String, InChIGenerator> getInChIGeneratorsLoaded(ArrayList<String> ids) {
-            return this.getInChIGeneratorsLoaded(this.arrayList2StringArray(ids));
+
+    public HashMap<String , InChIGenerator> getInChIGeneratorsLoaded( ArrayList<String> ids ) {
+        return this.getInChIGeneratorsLoaded( this.arrayList2StringArray( ids ) );
+    }
+
+
+    public HashMap<String , String> getInChIKeysLocalCalc( ArrayList<String> ids ) throws Exception {
+        return getInChIKeys( ids );
+    }
+
+
+    public HashMap<String , String> getInChIsLocalCalc( ArrayList<String> ids ) throws Exception {
+        return getInChIs( ids );
+    }
+
+
+    public abstract HashMap<String , String> searchByInChI( String inchi );
+
+
+    public HashMap<String , String> getInChIKeys( ArrayList<String> ids ) throws Exception {
+        return getInChIKeys( this.arrayList2StringArray( ids ) );
+    }
+
+
+    public ArrayList<IAtomContainer> downloadMolsToCDKObject( ArrayList<String> ids ) {
+        return this.downloadMolsToCDKObject( this.arrayList2StringArray( ids ) );
+    }
+
+
+    public abstract ArrayList<IAtomContainer> downloadMolsToCDKObject( String[] ids );
+
+
+    public HashMap<String , String> getInChIs( String[] ids ) throws Exception {
+        HashMap<String , InChIGenerator> generators = this.getInChIGeneratorsLoaded( ids );
+        HashMap<String , String> inchi = new HashMap<String , String>();
+        for ( String key : generators.keySet() ) {
+            inchi.put( key , generators.get( key ).getInchi() );
         }
+        return inchi;
+    }
 
-        public HashMap<String, String> getInChIKeysLocalCalc(ArrayList<String> ids) throws Exception {
-            return getInChIKeys(ids);
+
+    public HashMap<String , String> getInChIs( ArrayList<String> ids ) throws Exception {
+        String[] idsStr = new String[ ids.size() ];
+        for ( int i = 0 ; i < idsStr.length ; i++ ) // this really shouldn't be here
+        {
+            idsStr[i] = ids.get( i ).replaceFirst( "CHEBI:" , "" );
         }
+        return getInChIs( idsStr );
+    }
 
-        public HashMap<String, String> getInChIsLocalCalc(ArrayList<String> ids) throws Exception {
-            return getInChIs(ids);
+
+    private String[] arrayList2StringArray( ArrayList<String> ids ) {
+        String[] idsArray = new String[ ids.size() ];
+        for ( int i = 0 ; i < ids.size() ; i++ ) {
+            idsArray[i] = ids.get( i );
         }
+        return idsArray;
+    }
 
-        public abstract HashMap<String, String> searchByInChI(String inchi);
-	
-	public HashMap<String, String> getInChIKeys(ArrayList<String> ids) throws Exception {
-		return getInChIKeys(this.arrayList2StringArray(ids));
-	}
-	
-	public ArrayList<IAtomContainer> downloadMolsToCDKObject(ArrayList<String> ids) {
-		return this.downloadMolsToCDKObject(this.arrayList2StringArray(ids));
-	}
-	
-	public abstract ArrayList<IAtomContainer> downloadMolsToCDKObject(String[] ids);
 
-	public HashMap<String, String> getInChIs(String[] ids) throws Exception {
-		HashMap<String, InChIGenerator> generators = this.getInChIGeneratorsLoaded(ids);
-		HashMap<String, String> inchi = new HashMap<String, String>();
-                for(String key : generators.keySet()) {
-                        inchi.put(key, generators.get(key).getInchi());
-                }
-		return inchi;
-	}
-	
-	public HashMap<String, String> getInChIs(ArrayList<String> ids) throws Exception {
-		String[] idsStr = new String[ids.size()];
-		for(int i=0;i<idsStr.length;i++)
-			// this really shouldn't be here
-			idsStr[i] = ids.get(i).replaceFirst("CHEBI:", "");
-		return getInChIs(idsStr);
-	}	
-	
-	private String[] arrayList2StringArray(ArrayList<String> ids) {
-		String[] idsArray = new String[ids.size()];
-		for(int i=0;i<ids.size();i++)
-			idsArray[i] = ids.get(i);
-		return idsArray;		
-	}
-	
-	public abstract String getServiceProviderName();
-	
-	private boolean checkMoleculeForInChI(IAtomContainer mol) {
-		// Has pseudoatoms?
-		if(mol.getAtomCount() == 0) return false;
-		for(IAtom a : mol.atoms()) {
-			String className = a.getClass().getName();
-			if( className.equalsIgnoreCase("org.openscience.cdk.PseudoAtom")) return false;
-		}
-		return true;
-	}
+    public abstract String getServiceProviderName();
+
+
+    private boolean checkMoleculeForInChI( IAtomContainer mol ) {
+        // Has pseudoatoms?
+        if ( mol.getAtomCount() == 0 ) {
+            return false;
+        }
+        for ( IAtom a : mol.atoms() ) {
+            String className = a.getClass().getName();
+            if ( className.equalsIgnoreCase( "org.openscience.cdk.PseudoAtom" ) ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
+     *
+     * Abstract method that should return the MDL/MOL/SDF string for the given id
+     *
+     * @param id The identifier of the entity to be retrieved
+     * 
+     * @return String of the MDL file (the version cannot be garanteed)
+     *
+     * @throws MissingRecordException    Thrown if a record cannot be retrieved for the given
+     *                                   identifier
+     * @throws MissingStructureException Thrown if a record was retrieved but a structure
+     *                                   could not be provided
+     *
+     */
+    public abstract String getMDLString( String id ) throws MissingRecordException ,
+                                                            MissingStructureException;
+
+
 }
+

@@ -1,3 +1,4 @@
+
 package uk.ac.ebi.metabolomes.webservices;
 
 import java.io.BufferedWriter;
@@ -23,6 +24,9 @@ import org.openscience.cdk.io.MDLV2000Writer;
 
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.*;
+import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
+import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+
 
 public class ChEBIWebServiceConnection extends ChemicalDBWebService {
 
@@ -35,6 +39,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     private int maxResultsSearch;
     private StarsCategory starsCategory;
 
+
     public static void main( String[] args ) throws Exception {
         // TODO Auto-generated method stub
         ChEBIWebServiceConnection c = new ChEBIWebServiceConnection();
@@ -46,16 +51,21 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         String defaultPath = "/Users/pmoreno/structures/";
         c.downloadStructureFiles( args , defaultPath );
 
-        String[] idsKegg = { "C06561" , "C12087" , "C14458" , "C00509" , "C16232" , "C09826" , "C09751" , "C09047" ,
-                             "C01592" , "C08578" , "C01263" , "C17673" , "C15567" , "C09614" , "C03567" };
+        String[] idsKegg = { "C06561" , "C12087" , "C14458" , "C00509" , "C16232" , "C09826" ,
+                             "C09751" , "C09047" ,
+                             "C01592" , "C08578" , "C01263" , "C17673" , "C15567" , "C09614" ,
+                             "C03567" };
 
         for ( String kegg : idsKegg ) {
-            HashMap<String , String> res = c.searchBy( kegg , SearchCategory.DATABASE_LINK_REGISTRY_NUMBER_CITATION );
+            HashMap<String , String> res =
+                                     c.searchBy( kegg ,
+                                                 SearchCategory.DATABASE_LINK_REGISTRY_NUMBER_CITATION );
             for ( String key : res.keySet() ) {
                 System.out.println( kegg + "\t" + key + "\t" + res.get( key ) );
             }
         }
     }
+
 
     /**
      * Default constructor instantiates the Connection to search for
@@ -64,6 +74,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     public ChEBIWebServiceConnection() {
         this( StarsCategory.ALL , 200 );
     }
+
 
     /**
      * Constructor to specify the star rating of results and number of results
@@ -75,13 +86,16 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         this.starsCategory = starsCategory;
     }
 
+
     public void setMaxResults( int maxRes ) {
         this.maxResultsSearch = maxRes;
     }
 
+
     public void setStarsCategory( StarsCategory starsCategory ) {
         this.starsCategory = starsCategory;
     }
+
 
     @Override
     public HashMap<String , String> getInChIs( String[] ids ) {
@@ -117,6 +131,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
 //		}
 //		return inchiKeys;
 //	}
+
     @Override
     public boolean downloadStructureFiles( String[] ids , String path ) {
         BufferedWriter struc = null;
@@ -139,7 +154,10 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         }
         return true;
     }
+
+
     private IChemObjectBuilder CHEM_OBJECT_BUILDER = DefaultChemObjectBuilder.getInstance();
+
 
     public ArrayList<IAtomContainer> downloadMolsToCDKObject( String[] ids ) {
         ArrayList<IAtomContainer> res = new ArrayList<IAtomContainer>();
@@ -153,7 +171,9 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
                     MDLV2000Reader r = new MDLV2000Reader( new StringReader( st.getStructure() ) );
                     //System.out.println("Before reading mol file");
                     //System.out.println(st.getStructure());
-                    IAtomContainer mol = ( IMolecule ) r.read( CHEM_OBJECT_BUILDER.newInstance( IMolecule.class ) );
+                    IAtomContainer mol =
+                                   ( IMolecule ) r.read( CHEM_OBJECT_BUILDER.newInstance(
+                      IMolecule.class ) );
                     r.close();
                     //System.out.println("CHEBI:"+id);
                     mol.setID( id );
@@ -171,13 +191,17 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return res;
     }
 
-    public IAtomContainer getAtomContainer( Integer id ) throws ChebiWebServiceFault_Exception , CDKException ,
-                                                                IOException, Exception {
+
+    public IAtomContainer getAtomContainer( Integer id ) throws ChebiWebServiceFault_Exception ,
+                                                                CDKException ,
+                                                                IOException , Exception {
         return getAtomContainer( "CHEBI:" + id );
     }
 
-    public IAtomContainer getAtomContainer( String id ) throws ChebiWebServiceFault_Exception , CDKException ,
-                                                               IOException,
+
+    public IAtomContainer getAtomContainer( String id ) throws ChebiWebServiceFault_Exception ,
+                                                               CDKException ,
+                                                               IOException ,
                                                                Exception {
         Entity entity = this.client.getCompleteEntity( id );
         List<IAtomContainer> structures = new ArrayList<IAtomContainer>();
@@ -186,7 +210,8 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
             // just get the first one
             if ( s.getType().equals( "mol" ) ) {
                 MDLV2000Reader r = new MDLV2000Reader( new StringReader( s.getStructure() ) );
-                IAtomContainer molecule = r.read( CHEM_OBJECT_BUILDER.newInstance( IMolecule.class ) );
+                IAtomContainer molecule =
+                               r.read( CHEM_OBJECT_BUILDER.newInstance( IMolecule.class ) );
                 molecule.setID( id );
                 return molecule;
             }
@@ -196,12 +221,14 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
 
     }
 
+
     public HashMap<String , List<LiteEntity>> getLiteEntity( String[] chebiIds ) {
         HashMap<String , List<LiteEntity>> res = new HashMap<String , List<LiteEntity>>();
         try {
             for ( String chebiId : chebiIds ) {
                 LiteEntityList entities = client.getLiteEntity( chebiId ,
-                                                                SearchCategory.CHEBI_ID , 1 , this.starsCategory );
+                                                                SearchCategory.CHEBI_ID , 1 ,
+                                                                this.starsCategory );
                 List<LiteEntity> resultList = entities.getListElement();
                 if ( resultList != null ) {
                     res.put( chebiId , resultList );
@@ -214,6 +241,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
             return null;
         }
     }
+
 
     public ArrayList<Entity> getCompleteEntities( List<String> chebiIds ) {
         ArrayList<Entity> res = new ArrayList<Entity>();
@@ -232,43 +260,53 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return res;
     }
 
+
     public String getServiceProviderName() {
         return this.serviceProviderName;
     }
+
 
     @Override
     public HashMap<String , String> searchByInChI( String inchi ) {
         return this.searchBy( inchi , SearchCategory.INCHI_INCHI_KEY );
     }
 
+
     public HashMap<String , String> searchByName( String name ) {
         return this.searchBy( name , SearchCategory.CHEBI_NAME );
     }
+
 
     public HashMap<String , String> search( String search ) {
         return this.searchBy( search , SearchCategory.ALL );
     }
 
+
     public HashMap<String , String> searchBySynonym( String syn ) {
         return this.searchBy( syn , SearchCategory.ALL_NAMES );
     }
+
 
     public HashMap<String , Float> searchBySmiles( String syn ) {
         return this.searchBestBy( syn , SearchCategory.SMILES );
     }
 
+
     public HashMap<String , String> searchByIupacName( String iupacName ) {
         return this.searchBy( iupacName , SearchCategory.IUPAC_NAME );
     }
+
 
     public HashMap<String , String> searchByFormula( String formula ) {
         return this.searchBy( formula , SearchCategory.FORMULA );
     }
 
+
     private HashMap<String , String> searchBy( String name , SearchCategory a ) {
         HashMap<String , String> res = new HashMap<String , String>();
         try {
-            LiteEntityList ents = client.getLiteEntity( name , a , this.maxResultsSearch , this.starsCategory );
+            LiteEntityList ents = client.getLiteEntity( name , a , this.maxResultsSearch ,
+                                                        this.starsCategory );
             List<LiteEntity> listMols = ents.getListElement();
             for ( LiteEntity leMol : listMols ) {
                 res.put( leMol.getChebiId() , leMol.getChebiAsciiName() );
@@ -280,6 +318,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         }
         return res;
     }
+
 
     private HashMap<String , Float> searchBestBy( String name , SearchCategory a ) {
         HashMap<String , Float> res = new HashMap<String , Float>();
@@ -297,11 +336,13 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return res;
     }
 
+
     public HashMap<String , Float> similaritySearch( String mol , Float tanimotoCutOff ) {
         HashMap<String , Float> res = new HashMap<String , Float>();
         try {
             LiteEntityList ents = client.getStructureSearch( mol , StructureType.MOLFILE ,
-                                                             StructureSearchCategory.SIMILARITY , this.maxResultsSearch ,
+                                                             StructureSearchCategory.SIMILARITY ,
+                                                             this.maxResultsSearch ,
                                                              tanimotoCutOff );
             List<LiteEntity> listMols = ents.getListElement();
             for ( LiteEntity leMol : listMols ) {
@@ -313,11 +354,13 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return res;
     }
 
+
     public HashMap<String , Float> identitySearch( String mol , Float tanimotoCutOff ) {
         HashMap<String , Float> res = new HashMap<String , Float>();
         try {
             LiteEntityList ents = client.getStructureSearch( mol , StructureType.MOLFILE ,
-                                                             StructureSearchCategory.IDENTITY , this.maxResultsSearch ,
+                                                             StructureSearchCategory.IDENTITY ,
+                                                             this.maxResultsSearch ,
                                                              tanimotoCutOff );
             List<LiteEntity> listMols = ents.getListElement();
             for ( LiteEntity leMol : listMols ) {
@@ -328,6 +371,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         }
         return res;
     }
+
 
     public Set<String> getNamesAndSynonyms( String chebiID ) {
         try {
@@ -369,6 +413,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return this.similaritySearch( baos.toString() , tanimotoCutOff );
     }
 
+
     public HashMap<String , Float> identitySearch( IAtomContainer mol , Float tanimotoCutOff ) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         MDLV2000Writer writer = new MDLV2000Writer( baos );
@@ -384,4 +429,33 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         }
         return this.identitySearch( baos.toString() , tanimotoCutOff );
     }
+
+
+    @Override
+    public String getMDLString( String id ) throws MissingRecordException ,
+                                                   MissingStructureException {
+
+        try {
+            Entity entity = this.client.getCompleteEntity( id );
+
+
+            List<IAtomContainer> structures = new ArrayList<IAtomContainer>();
+
+            for ( StructureDataItem s : entity.getChemicalStructures() ) {
+                // just get the first one
+                if ( s.getType().equals( "mol" ) ) {
+                    return s.getStructure();
+                }
+            }
+
+        } catch ( ChebiWebServiceFault_Exception ex ) {
+            throw new MissingRecordException();
+        }
+
+        throw new MissingStructureException( id );
+
+    }
+
+
 }
+

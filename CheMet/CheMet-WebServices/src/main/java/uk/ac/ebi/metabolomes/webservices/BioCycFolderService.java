@@ -16,6 +16,8 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.ReaderFactory;
+import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
+import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 
 public class BioCycFolderService extends ChemicalDBWebService {
 
@@ -26,7 +28,7 @@ public class BioCycFolderService extends ChemicalDBWebService {
 	private String pathToFiles;
 	private String suffix = ".mol";
         private HashMap<String, String> dbid2num;
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String path = "/Users/pmoreno/structures/biocyc";
@@ -49,7 +51,7 @@ public class BioCycFolderService extends ChemicalDBWebService {
 		}
 
 	}
-	
+
 	public BioCycFolderService(String folderPath) {
 		this.setPathToFile(folderPath);
                 this.setDbId2NumForMols();
@@ -76,7 +78,7 @@ public class BioCycFolderService extends ChemicalDBWebService {
 	public void setPathToFile(String path) {
 		this.pathToFiles = path;
 	}
-	
+
 	@Override
 	public ArrayList<IAtomContainer> downloadMolsToCDKObject(String[] ids) {
 		// TODO Auto-generated method stub
@@ -100,7 +102,7 @@ public class BioCycFolderService extends ChemicalDBWebService {
 			} catch (CDKException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}	
+			}
 		}
 		return mols;
 	}
@@ -113,6 +115,13 @@ public class BioCycFolderService extends ChemicalDBWebService {
     @Override
     public HashMap<String, String> searchByInChI(String inchi) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    @Override
+    public String getMDLString( String id ) throws MissingRecordException ,
+                                                   MissingStructureException {
+        throw new UnsupportedOperationException( "Not supported yet." );
     }
 
 }
