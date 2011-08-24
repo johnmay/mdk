@@ -14,6 +14,7 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.metabolomes.execs;
 
 import au.com.bytecode.opencsv.CSVWriter;
@@ -38,13 +39,17 @@ import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
 import uk.ac.ebi.metabolomes.utilities.Util;
 
+
 /**
  *
  * @author johnmay
  */
 public class ParseMultipleECBlastMain {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ParseMultipleECBlastMain.class );
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(
+      ParseMultipleECBlastMain.class );
+
 
     /**
      * @param args the command line arguments
@@ -52,12 +57,12 @@ public class ParseMultipleECBlastMain {
     public static void main( String[] args ) throws IOException {
 
         IntEnzXML iex = IntEnzXML.getLoadedInstance();
-        List upids = iex.getUniprotIdentifiers(new ECNumber("4.2.1.9"));
+        List upids = iex.getUniprotIdentifiers( new ECNumber( "4.2.1.9" ) );
         for ( Object object : upids ) {
             System.out.println( object );
         }
 
-        System.exit(0);
+        System.exit( 0 );
 
         double evalue = 1E-30D;
         double positiveThreshold = 0.0D;
@@ -65,7 +70,8 @@ public class ParseMultipleECBlastMain {
         String eString = String.format( "%.2e" , evalue );
 
         // output files
-        File analysisRoot = new File( "/Users/johnmay/EBI/Project/runspace/EcoCycECAnalysis/analysis/" + eString );
+        File analysisRoot =
+             new File( "/Users/johnmay/EBI/Project/runspace/EcoCycECAnalysis/analysis/" + eString );
         if ( analysisRoot.exists() ) {
             analysisRoot.delete();
         }
@@ -73,7 +79,8 @@ public class ParseMultipleECBlastMain {
         FileWriter hitFreqWriter = new FileWriter( new File( analysisRoot , "../selfhitfreq.tsv" ) );
 
         // make sub directories
-        for ( String subsubDir : new String[]{ "0.0" , "1.0+" , "0.0+" , "0.1+" , "0.2+" , "0.3+" , "0.4+" , "0.5+" , "0.6+" , "0.7+" , "0.8+" , "0.9+" } ) {
+        for ( String subsubDir : new String[]{ "0.0" , "1.0+" , "0.0+" , "0.1+" , "0.2+" , "0.3+" ,
+                                               "0.4+" , "0.5+" , "0.6+" , "0.7+" , "0.8+" , "0.9+" } ) {
             File subFile = new File( analysisRoot , subsubDir );
             subFile.mkdir();
         }
@@ -87,6 +94,8 @@ public class ParseMultipleECBlastMain {
             public boolean accept( File dir , String name ) {
                 return name.endsWith( "xml" );
             }
+
+
         } );
 
         GeneProductCollection productCollection = new GeneProductCollection();
@@ -94,7 +103,8 @@ public class ParseMultipleECBlastMain {
         for ( File file : xmlFiles ) {
             logger.info( "loading xml file: " + file );
             BlastXML xml = new BlastXML( file );
-            xml.loadProteinHomologyObservations( productCollection , evalue , new JobParameters( file.toString() ) );
+            xml.loadProteinHomologyObservations( productCollection , evalue ,
+                                                 new JobParameters( file.toString() ) );
         }
 
         logger.info( "loaded " + productCollection.numberOfProteinProducts() + " products" );
@@ -143,7 +153,8 @@ public class ParseMultipleECBlastMain {
                 if ( ( int ) blastHit.getHitLength() != ( int ) blastHit.getPositive() ) {
 
                     for ( ECNumber ec : ecs ) {
-                        if ( ( ( double ) blastHit.getPositive() / ( double ) blastHit.getHitLength() > positiveThreshold ) ) {
+                        if ( ( ( double ) blastHit.getPositive() /
+                               ( double ) blastHit.getHitLength() > positiveThreshold ) ) {
 
 
                             if ( resultCount.containsKey( ec ) ) {
@@ -153,22 +164,22 @@ public class ParseMultipleECBlastMain {
                             }
 
                             rows.add( new String[]{
-                                        Integer.toString( hitIndex++ ) ,
-                                        upid.toString() ,
-                                        ec.toString() ,
-                                        ecs.size() > 1 ? "1" : "0" ,
-                                        Integer.toString( geneProteinProduct.getSequence().length() ) ,
-                                        blastHit.getHitLength().toString() ,
-                                        Double.toString( blastHit.getBestExpectedValue() ) ,
-                                        Double.toString( blastHit.getBestBitScore() ) ,
-                                        Integer.toString( hitRange[0] ) ,
-                                        Integer.toString( hitRange[1] ) ,
-                                        Integer.toString( queryRange[0] ) ,
-                                        Integer.toString( queryRange[1] ) ,
-                                        Integer.toString( blastHit.getAlignmentLength() ) ,
-                                        Integer.toString( blastHit.getPositive() ) ,
-                                        Integer.toString( blastHit.getIdentity() )
-                                    } );
+                                  Integer.toString( hitIndex++ ) ,
+                                  upid.toString() ,
+                                  ec.toString() ,
+                                  ecs.size() > 1 ? "1" : "0" ,
+                                  Integer.toString( geneProteinProduct.getSequence().length() ) ,
+                                  blastHit.getHitLength().toString() ,
+                                  Double.toString( blastHit.getBestExpectedValue() ) ,
+                                  Double.toString( blastHit.getBestBitScore() ) ,
+                                  Integer.toString( hitRange[0] ) ,
+                                  Integer.toString( hitRange[1] ) ,
+                                  Integer.toString( queryRange[0] ) ,
+                                  Integer.toString( queryRange[1] ) ,
+                                  Integer.toString( blastHit.getAlignmentLength() ) ,
+                                  Integer.toString( blastHit.getPositive() ) ,
+                                  Integer.toString( blastHit.getIdentity() )
+                              } );
                         }
 
                     }
@@ -185,9 +196,11 @@ public class ParseMultipleECBlastMain {
             if ( resultCount.containsKey( assignedECNumber ) ) {
                 Double frequency = resultCount.get( assignedECNumber ) / ( double ) rows.size();
                 String folder = String.format( "%.1f+" , frequency );
-                hitFile = new File( new File( analysisRoot , folder ) , assignedECNumber.toString() + ".hits" );
+                hitFile = new File( new File( analysisRoot , folder ) , assignedECNumber.toString() +
+                                                                        ".hits" );
             } else {
-                hitFile = new File( new File( analysisRoot , "0.0" ) , assignedECNumber.toString() + ".hits" );
+                hitFile = new File( new File( analysisRoot , "0.0" ) , assignedECNumber.toString() +
+                                                                       ".hits" );
             }
             CSVWriter csv = new CSVWriter( new FileWriter( hitFile ) , '\t' );
             csv.writeNext( headers );
@@ -221,10 +234,11 @@ public class ParseMultipleECBlastMain {
         hitFreqWriter.close();
     }
 
+
     private static Set converge( List<Double> bitScores ,
                                  List classes ) {
 
-        HashSet unique = new HashSet(classes);
+        HashSet unique = new HashSet( classes );
 
         if ( unique.size() == 1 ) {
             return unique;
@@ -232,16 +246,16 @@ public class ParseMultipleECBlastMain {
             return unique;
         }
 
-        Double avgScore = mean( bitScores );
+        Double avgScore  = mean( bitScores );
         List<Double> newBitScore = new ArrayList<Double>();
         List newClasses = new ArrayList();
 
-        for ( int i = 0; i < bitScores.size(); i++ ) {
+        for ( int i = 0 ; i < bitScores.size() ; i++ ) {
             Double adj = ( bitScores.get( i ) - avgScore );
 
             if ( adj > 0 ) {
                 newBitScore.add( bitScores.get( i ) );
-                newClasses.add( classes.get( i) );
+                newClasses.add( classes.get( i ) );
             }
         }
 
@@ -249,15 +263,19 @@ public class ParseMultipleECBlastMain {
         return converge( newBitScore , newClasses );
     }
 
+
     private static Double mean( List<Double> values ) {
         Double total = 0d;
         if ( values == null || values.isEmpty() ) {
             return total;
         }
-        for ( Iterator<Double> it = values.iterator(); it.hasNext(); ) {
+        for ( Iterator<Double> it = values.iterator() ; it.hasNext() ; ) {
             Double value = it.next();
             total += value;
         }
         return total / values.size();
     }
+
+
 }
+

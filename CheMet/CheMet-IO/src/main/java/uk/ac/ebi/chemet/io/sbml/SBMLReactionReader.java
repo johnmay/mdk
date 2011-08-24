@@ -1,5 +1,6 @@
+
 /**
- * ReactionLoader.java
+ * SBMLReactionReader.java
  *
  * 2011.08.15
  *
@@ -29,24 +30,30 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.sbml.jsbml.*;
 import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
+import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
+import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
 import uk.ac.ebi.chemet.exceptions.AbsentAnnotationException;
-import uk.ac.ebi.chemet.exceptions.MissingStructureException;
 import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
+import uk.ac.ebi.chemet.ws.CachedChemicalWS;
+import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
+import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.metabolomes.io.xml.MIRIAMResourceLoader;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 
+
 /**
- * ReactionLoader – 2011.08.15
+ * SBMLReactionReader – 2011.08.15
  *
  * Loads the reactions from an SBML document in to various types of reactions
  *
  * <pre>
  * InputStream sbmlStream                = getClass().getResourceAsStream( "streptomyces-coelicolor-6.2005.xml" );
- * ReactionLoader loader                 = ReactionLoader.getInstance();
+ * SBMLReactionReader loader                 = SBMLReactionReader.getInstance();
  * List<AtomContainerReaction> reactions = loader.getReactions( sbmlStream );
  *
  * for ( AtomContainerReaction r : reactions ) {
@@ -59,28 +66,66 @@ import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
  * @author  $Author$ (this version)
  *
  */
-public class ReactionLoader {
+public class SBMLReactionReader {
 
-    private static final Logger LOGGER = Logger.getLogger( ReactionLoader.class );
-    private final SBMLReader reader = new SBMLReader();
-    private final ChEBIWebServiceConnection chebiWS = new ChEBIWebServiceConnection();
-    private final KeggCompoundWebServiceConnection keggWS = new KeggCompoundWebServiceConnection();
+    private static final Logger LOGGER = Logger.getLogger( SBMLReactionReader.class );
+    private static final SBMLReader reader = new SBMLReader();
+    // web service clients
+    private final CachedChemicalWS chebiWS = new CachedChemicalWS( new ChEBIWebServiceConnection() );
+    private final CachedChemicalWS keggWS = new CachedChemicalWS( new KeggCompoundWebServiceConnection() );
+    // sbml storage
+    private final SBMLDocument document;
+    private final Model model;
+    // iterator location and max
+    private Integer reactionIndex = -1;
+    private final Integer reactionCount;
+    private AbstractParticipantFilter filter;
 
-    private ReactionLoader() {
-    }
 
     /**
-     * Singleton accessor method
-     * @return
+     * Construct an SBML reaction reader using an input stream. This constructor
+     * uses an empty {@see AcceptAllFilter} filter on reaction participants
+     *
+     * @param stream
+     * @throws XMLStreamException
      */
-    public static ReactionLoader getInstance() {
-        return ReactionLoaderHolder.INSTANCE;
+    public SBMLReactionReader( InputStream stream ) throws XMLStreamException {
+        this( reader.readSBMLFromStream( stream ) );
     }
 
-    public static class ReactionLoaderHolder {
 
-        private static ReactionLoader INSTANCE = new ReactionLoader();
+    /**
+     * Construct an SBML reaction reader using an input stream using a specified participant
+     * filter
+     * @param stream
+     * @param filter
+     * @throws XMLStreamException
+     */
+    public SBMLReactionReader( InputStream stream , AbstractParticipantFilter filter ) throws
+      XMLStreamException {
+        this( reader.readSBMLFromStream( stream ) , filter );
     }
+
+
+    /**
+     *
+     * This constructor uses an empty {@see AcceptAllFilter} (i.e. accept all participants)
+     *
+     * @param document
+     */
+    public SBMLReactionReader( SBMLDocument document ) {
+        // default filter is an empty instantiation of BasicFilter (accepts all)
+        this( document , new AcceptAllFilter() );
+    }
+
+
+    public SBMLReactionReader( SBMLDocument document , AbstractParticipantFilter filter ) {
+        this.document = document;
+        this.model = document.getModel();
+        this.reactionCount = model.getNumReactions();
+        this.filter = filter;
+    }
+
 
     /**
      *
@@ -91,25 +136,21 @@ public class ReactionLoader {
      * @return A collection of fully structured reactions
      *
      */
-    public List<AtomContainerReaction> getReactions( Model model ) {
+    public List<AtomContainerReaction> getReactions() {
 
-        List<AtomContainerReaction> loadedReactions = new ArrayList<AtomContainerReaction>( model.getNumReactions() );
+        List<AtomContainerReaction> loadedReactions = new ArrayList<AtomContainerReaction>(
+          reactionCount );
 
-        for ( int i = 0; i < model.getNumReactions(); i++ ) {
-
+        while ( hasNext() ) {
             try {
-
-                Reaction sbmlReaction = model.getReaction( i );
-                loadedReactions.add( getReaction( sbmlReaction ) );
-
+                AtomContainerReaction reaction = next();
+                loadedReactions.add( reaction );
             } catch ( UnknownCompartmentException ex ) {
-                LOGGER.warn( model.getReaction( i ).getId() + ": " +
-                              ex.getMessage() );
+                LOGGER.warn( ex.getMessage() );
             } catch ( AbsentAnnotationException ex ) {
-                LOGGER.warn( model.getReaction( i ).getId() + ": " + ex.getMessage() );
-
+                LOGGER.warn( ex.getMessage() );
             } catch ( MissingStructureException ex ) {
-                LOGGER.warn( model.getReaction( i ).getId() + ": " + ex.getMessage() );
+                LOGGER.warn( ex.getMessage() );
             }
         }
 
@@ -117,24 +158,6 @@ public class ReactionLoader {
 
     }
 
-    /**
-     *
-     * Convenience method for loading model from an input stream
-     *
-     * @param stream SBML XML input stream
-     * @return Collection of {@see AtomContainerReaction}s
-     *
-     * @throws XMLStreamException Thrown if there was a problem reading the SBML document
-     *
-     */
-    public List<AtomContainerReaction> getReactions( InputStream stream ) throws XMLStreamException {
-
-        SBMLDocument document = reader.readSBMLFromStream( stream );
-        Model model = document.getModel();
-
-        return getReactions( model );
-
-    }
 
     /**
      *
@@ -144,30 +167,34 @@ public class ReactionLoader {
      * @param sbmlReaction Instance of a loaded SBML reaction
      * @return Instance of {@see AtomContainerReaction}
      *
-     * @throws UnknownCompartmentException Thrown if a compartment cannot be found
-     * @throws MissingAnnotationException Thrown if a reaction is missing annotations
-     * @throws MissingStructureException Thrown if a structure for the molecule could not be loaded
+     * @throws UnknownCompartmentException Thrown if a compartment name cannot be matched
+     * @throws AbsentAnnotationException  Thrown if a reaction is missing RDF CV terms
+     * @throws MissingStructureException  Thrown if a structure for the molecule could not be loaded
      *
      */
-    public AtomContainerReaction getReaction( Reaction sbmlReaction ) throws UnknownCompartmentException ,
-                                                                             AbsentAnnotationException ,
-                                                                             MissingStructureException {
-        AtomContainerReaction reaction = new AtomContainerReaction();
+    public AtomContainerReaction getReaction( Reaction sbmlReaction ) throws
+      UnknownCompartmentException ,
+      AbsentAnnotationException ,
+      MissingStructureException {
+        AtomContainerReaction reaction = new AtomContainerReaction( filter );
 
-        for ( int i = 0; i < sbmlReaction.getNumReactants(); i++ ) {
+        for ( int i = 0 ; i < sbmlReaction.getNumReactants() ; i++ ) {
 
             reaction.addReactant( getParticipant( sbmlReaction.getReactant( i ) ) );
         }
 
-        for ( int i = 0; i < sbmlReaction.getNumProducts(); i++ ) {
+        for ( int i = 0 ; i < sbmlReaction.getNumProducts() ; i++ ) {
 
-            reaction.addReactant( getParticipant( sbmlReaction.getProduct( i ) ) );
+            reaction.addProduct( getParticipant( sbmlReaction.getProduct( i ) ) );
         }
+
+        reaction.setIdentifier( new GenericIdentifier( sbmlReaction.getId() ) );
 
         // TODO(johnmay): Add Enzyme annotations and modifiers
 
         return reaction;
     }
+
 
     /**
      *
@@ -186,22 +213,25 @@ public class ReactionLoader {
      *
      */
     public AtomContainerParticipant getParticipant( SpeciesReference speciesReference )
-            throws
-            UnknownCompartmentException ,
-            AbsentAnnotationException ,
-            MissingStructureException {
+      throws
+      UnknownCompartmentException ,
+      AbsentAnnotationException ,
+      MissingStructureException {
 
         Species species = speciesReference.getSpeciesInstance();
-        Compartment compartment = Compartment.getCompartment( species.getCompartmentInstance().getId() );
+        Compartment compartment = Compartment.getCompartment(
+          species.getCompartmentInstance().getId() );
 
         if ( compartment == Compartment.UNKNOWN ) {
-            throw new UnknownCompartmentException( "Compartment " + species.getCompartmentInstance().getId() +
+            throw new UnknownCompartmentException( "Compartment " + species.getCompartmentInstance().
+              getId() +
                                                    " was not identifiable" );
         }
 
         if ( species.getNumCVTerms() == 0 ) {
-            throw new AbsentAnnotationException( "Species " + species.getId() +
-                                                 " did not have any associated Controlled Vocabulary terms" );
+            throw new AbsentAnnotationException(
+              "Species " + species.getId() +
+              " did not have any associated Controlled Vocabulary terms" );
         }
 
         IAtomContainer molecule = getAtomContainer( species );
@@ -212,6 +242,7 @@ public class ReactionLoader {
                new AtomContainerParticipant( molecule , coefficient , compartment );
 
     }
+
 
     /**
      *
@@ -226,7 +257,7 @@ public class ReactionLoader {
      */
     public IAtomContainer getAtomContainer( Species species ) throws MissingStructureException {
 
-        for ( int i = 0; i < species.getNumCVTerms(); i++ ) {
+        for ( int i = 0 ; i < species.getNumCVTerms() ; i++ ) {
             for ( String resource : species.getCVTerm( i ).getResources() ) {
 
                 String id = MIRIAMResourceLoader.getIdentifier( resource );
@@ -234,24 +265,45 @@ public class ReactionLoader {
 
                     try {
                         return chebiWS.getAtomContainer( id );
-                    } catch ( Exception ex ) {
+                    } catch ( MissingRecordException ex ) {
                         LOGGER.debug( "There was a problem loading: " + id + " : " + ex.getMessage() );
                     }
 
                 } else if ( id.startsWith( "C" ) ) {
 
-                    List<IAtomContainer> mols = keggWS.downloadMolsToCDKObject( new String[]{ id } );
-
-                    if ( mols != null && mols.isEmpty() == false ) {
-                        return mols.get( 0 );
-                    } else {
-                        LOGGER.debug( "There was a problem loading: " + id );
+                    try {
+                        return keggWS.getAtomContainer( id );
+                    } catch ( MissingRecordException ex ) {
+                        LOGGER.debug( "There was a problem loading: " + id + " : " + ex.getMessage() );
                     }
+
                 }
             }
         }
 
-        throw new MissingStructureException( "Could not load structure for: " + species.getId() );
+        throw new MissingStructureException( species.getId() );
 
     }
+
+
+    public boolean hasNext() {
+        return reactionIndex + 1 < reactionCount;
+    }
+
+
+    public AtomContainerReaction next() throws UnknownCompartmentException ,
+                                               AbsentAnnotationException ,
+                                               MissingStructureException {
+
+        reactionIndex++;
+        Reaction sbmlReaction = model.getReaction( reactionIndex );
+
+        AtomContainerReaction reaction = getReaction( sbmlReaction );
+
+        return reaction;
+
+    }
+
+
 }
+
