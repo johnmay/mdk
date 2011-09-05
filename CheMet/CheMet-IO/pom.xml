@@ -62,6 +62,11 @@
             <artifactId>Resource</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.explodingpixels</groupId>
+            <artifactId>mac_widgets</artifactId>
+            <version>0.9.6-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
