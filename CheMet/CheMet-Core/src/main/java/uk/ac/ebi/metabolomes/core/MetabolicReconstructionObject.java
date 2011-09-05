@@ -14,31 +14,56 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.metabolomes.core;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.lang.reflect.InvocationTargetException;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
+
 
 /**
  * MetabolicReconstructionObject.java – MetabolicDevelopmentKit – Jun 23, 2011
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public class MetabolicReconstructionObject implements Cloneable {
+public class MetabolicReconstructionObject implements Cloneable, Externalizable {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger( MetabolicReconstructionObject.class );
+                                                 org.apache.log4j.Logger.getLogger(
+      MetabolicReconstructionObject.class);
     private AbstractIdentifier identifier;
+
 
     public AbstractIdentifier getIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier( AbstractIdentifier id ) {
+
+    public void setIdentifier(AbstractIdentifier id) {
         this.identifier = id;
     }
+
 
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+       out.writeObject(identifier);
+    }
+
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        identifier = (AbstractIdentifier) in.readObject();
+    }
+
+
 }
+

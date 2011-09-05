@@ -15,6 +15,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
+
 /**
  *
  * @author pmoreno
@@ -22,17 +23,24 @@ import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 public class CDKAtomTyper {
 
     public static void typeAtoms(IAtomContainer mol) {
-       CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(mol.getBuilder());
-       Iterator<IAtom> atoms = mol.atoms().iterator();
-       while (atoms.hasNext()) {
-        IAtom atom = (IAtom) atoms.next();
-        IAtomType type = null;
+        CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(mol.getBuilder());
+        Iterator<IAtom> atoms = mol.atoms().iterator();
+        while( atoms.hasNext() ) {
+            IAtom atom = (IAtom) atoms.next();
+            IAtomType type = null;
             try {
                 type = matcher.findMatchingAtomType(mol, atom);
-            } catch (CDKException ex) {
+            } catch( CDKException ex ) {
                 Logger.getLogger(CDKAtomTyper.class.getName()).log(Level.FATAL, null, ex);
             }
-        AtomTypeManipulator.configure(atom, type);
-       }
+            try {
+                AtomTypeManipulator.configure(atom, type);
+            } catch( IllegalArgumentException ex ) {
+                Logger.getLogger(CDKAtomTyper.class.getName()).log(Level.FATAL, null, ex);
+            }
+        }
     }
+
+
 }
+

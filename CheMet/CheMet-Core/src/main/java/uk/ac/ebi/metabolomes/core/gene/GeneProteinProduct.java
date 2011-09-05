@@ -12,11 +12,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package uk.ac.ebi.metabolomes.core.gene;
 
+import java.io.Externalizable;
 import java.io.Serializable;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
+
 
 /**
  * GeneProteinProduct.java
@@ -26,26 +29,29 @@ import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
  * @date Apr 4, 2011
  */
 public class GeneProteinProduct
-    extends GeneProduct
-    implements Serializable {
+  extends GeneProduct
+  implements Externalizable {
 
-    private static final long serialVersionUID = 6910081716668652508L;
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( GeneProteinProduct.class );
+    private transient static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.
+      getLogger(GeneProteinProduct.class);
+
 
     /**
      * Creates and empty gene protein product with a new random identifier and an empty sequence
      */
     public GeneProteinProduct() {
-        this( UniqueIdentifier.createUniqueIdentifer() , "" );
+        this(UniqueIdentifier.createUniqueIdentifer(), "");
     }
+
 
     /**
      * Creates a gene protein product with the specified identifier but an empty sequence
      * @param identifier AbstractIdentifier for the sequence
      */
-    public GeneProteinProduct( AbstractIdentifier identifier ) {
-        this( identifier , "" );
+    public GeneProteinProduct(AbstractIdentifier identifier) {
+        this(identifier, "");
     }
+
 
     /**
      * //</editor-fold>
@@ -53,21 +59,21 @@ public class GeneProteinProduct
      * @param identifier AbstractIdentifier for the product
      * @param sequence ProteinSequence for the product
      */
-    public GeneProteinProduct( AbstractIdentifier identifier , String sequence ) {
-        this( identifier, sequence, "" );
+    public GeneProteinProduct(AbstractIdentifier identifier, String sequence) {
+        this(identifier, sequence, "");
     }
 
-    public GeneProteinProduct( AbstractIdentifier identifier ,
-                               String sequence,
-                               String description ) {
-        setIdentifier( identifier );
-        setType( ProductType.PROTEIN );
-        setSequence(sequence );
+
+    public GeneProteinProduct(AbstractIdentifier identifier,
+                              String sequence,
+                              String description) {
+        setIdentifier(identifier);
+        setType(ProductType.PROTEIN);
+        setSequence(sequence);
+        setSequenceLength(sequence.length());
         // TODO put description in the details setDescription( description );
     }
 
 
-
-
-
 }
+

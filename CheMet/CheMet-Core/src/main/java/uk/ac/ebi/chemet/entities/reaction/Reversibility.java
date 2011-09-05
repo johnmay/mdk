@@ -2,7 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package uk.ac.ebi.chemet.entities.reaction;
+
 
 /**
  * Enumeration class for storing reaction reversibility
@@ -10,14 +12,11 @@ package uk.ac.ebi.chemet.entities.reaction;
  */
 public enum Reversibility {
 
-
-    REVERSIBLE( "<===>" ),
-    IRREVERSIBLE( "<=!=>" ),
-    UNKNOWN( "<=?=>" );
+    REVERSIBLE( "<==>" ),
+    IRREVERSIBLE_LEFT_TO_RIGHT( "-->" ),
+    IRREVERSIBLE_RIGHT_TO_LEFT( "<--" ),
+    UNKNOWN( "<?>" );
     private String symbol;
-
-
-
 
 
     private Reversibility( String symbol ) {
@@ -25,11 +24,11 @@ public enum Reversibility {
     }
 
 
-
-
-
     @Override
     public String toString() {
         return this.symbol;
     }
+
+
 }
+

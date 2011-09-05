@@ -51,13 +51,13 @@ public class XMLHelper {
             doc.getDocumentElement().normalize();
             return doc;
         } catch ( ParserConfigurationException ex ) {
-            logger.error( "could not load XML document: " + ex.getMessage() );
+            logger.error( "could not load XML document: " + ex );
         } catch ( FileNotFoundException ex ) {
-            logger.error( "could not load XML document: " + ex.getMessage() );
+            logger.error( "could not load XML document: " + ex );
         } catch ( IOException ex ) {
-            logger.error( "could not load XML document: " + ex.getMessage() );
+            logger.error( "could not load XML document: " + ex );
         } catch ( SAXException ex ) {
-            logger.error( "could not load XML document: " + ex.getMessage() );
+            logger.error( "could not load XML document: " + ex );
         } finally {
             if ( xmlStream != null ) {
                 try {
