@@ -12,8 +12,13 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package uk.ac.ebi.metabolomes.identifier;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.io.Serializable;
 
 
@@ -24,21 +29,37 @@ import java.io.Serializable;
  * @author johnmay
  * @date Apr 4, 2011
  */
-public class GenericIdentifier extends AbstractIdentifier implements Serializable {
-    
-    private static final long serialVersionUID = 4880986600655871834L;    
-    
+public class GenericIdentifier
+  extends AbstractIdentifier
+  implements Externalizable {
+
+    public  GenericIdentifier() {
+        setIdentifierString("");
+    }
+
+
     public GenericIdentifier(String identifier) {
-        setIdentifierString( identifier );
-    }    
+        setIdentifierString(identifier);
+    }
+
 
     @Override
-    public final String parse( String identifier ) {
-         throw new UnsupportedOperationException("unsupported");
-     }
+    public final String parse(String identifier) {
+        throw new UnsupportedOperationException("unsupported");
+    }
 
-    
 
-    
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+    }
+
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+    }
+
 
 }
+

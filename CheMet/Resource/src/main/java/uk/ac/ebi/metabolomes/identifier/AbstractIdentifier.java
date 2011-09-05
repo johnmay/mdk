@@ -12,8 +12,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package uk.ac.ebi.metabolomes.identifier;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.io.Serializable;
 
 
@@ -31,60 +36,76 @@ import java.io.Serializable;
  * @date   6 Apr 2011
  */
 public abstract class AbstractIdentifier
-    implements Serializable {
-
-    private static final long serialVersionUID = -6760145150282722072L;
+  implements Externalizable {
 
     private String identifier;
     private MIRIAMEntry resource = null;
 
-    public abstract String parse( String identifier );
+
+    public abstract String parse(String identifier);
+
 
     public String getIdentifierString() {
         return identifier;
     }
 
-    public void setIdentifierString( String identifier ) {
+
+    public void setIdentifierString(String identifier) {
         this.identifier = identifier;
     }
+
 
     public MIRIAMEntry getResource() {
         return resource;
     }
 
-    public void setResource( MIRIAMEntry resource ) {
+
+    public void setResource(MIRIAMEntry resource) {
         this.resource = resource;
     }
+
 
     @Override
     public String toString() {
         return identifier;
     }
 
+
     @Override
-    public boolean equals( Object obj ) {
-        if ( obj == null ) {
+    public boolean equals(Object obj) {
+        if( obj == null ) {
             return false;
         }
-        if ( getClass() != obj.getClass() ) {
+        if( getClass() != obj.getClass() ) {
             return false;
         }
-        final AbstractIdentifier other = ( AbstractIdentifier ) obj;
-        if ( ( this.identifier == null ) ? ( other.identifier != null ) : !this.identifier.equals( other.identifier ) ) {
+        final AbstractIdentifier other = (AbstractIdentifier) obj;
+        if( (this.identifier == null) ? (other.identifier != null) : !this.identifier.equals(
+          other.identifier) ) {
             return false;
         }
         return true;
     }
 
+
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 37 * hash + ( this.identifier != null ? this.identifier.hashCode() : 0 );
+        hash = 37 * hash + (this.identifier != null ? this.identifier.hashCode() : 0);
         return hash;
     }
 
 
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeUTF(identifier);
+        // might not need to write MIRIAM identifier
+    }
 
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        this.identifier = in.readUTF();
+    }
 
 
 }
+
