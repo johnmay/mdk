@@ -28,5 +28,7 @@ public enum AnnotationType {
     FUNCTIONAL_ANNOTATION,
     TRANSPORTER_FUNCTION,
     LINKED_ANNOTATION, // annotation is pressent due to a link with another one
-    USER;
+    USER,
+    META, // adds additional information (e.g. ChemicalStructure is a meta annotation of an entity)
+    UNKNOWN;
 }

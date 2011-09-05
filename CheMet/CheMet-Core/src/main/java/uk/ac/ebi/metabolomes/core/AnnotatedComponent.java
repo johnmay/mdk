@@ -21,26 +21,30 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.List;
 import uk.ac.ebi.metabolomes.descriptor.annotation.AbstractAnnotation;
 import uk.ac.ebi.metabolomes.descriptor.annotation.AnnotationCollection;
 import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
 import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 
 /**
- * ObjectDescriptor.java – MetabolicDevelopmentKit – Jun 23, 2011
- * ObjectDescriptor contains collections of annotations and observations on objects
+ * AnnotatedComponent.java – MetabolicDevelopmentKit – Jun 23, 2011
+ * AnnotatedComponent contains collections of annotations and observations on objects
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public abstract class ObjectDescriptor
+public abstract class AnnotatedComponent
   extends MetabolicReconstructionObject
   implements Externalizable {
 
     private transient static final org.apache.log4j.Logger logger =
                                                            org.apache.log4j.Logger.getLogger(
-      ObjectDescriptor.class);
+      AnnotatedComponent.class);
     private AnnotationCollection annotations = new AnnotationCollection();
     private ObservationCollection observations = new ObservationCollection();
+    private List<AbstractIdentifier> crossReferences = new ArrayList<AbstractIdentifier>();
 
 
     public AnnotationCollection getAnnotations() {
@@ -99,6 +103,26 @@ public abstract class ObjectDescriptor
         return observations.remove(observation);
     }
 
+
+    /**
+     *
+     * Adds an identifier to the cross-reference collection
+     *
+     */
+    public boolean addCrossReference( AbstractIdentifier id ){
+        return crossReferences.add(id);
+    }
+
+    /**
+     *
+     * Removes an identifier from the cross-reference collection
+     *
+     * @param id
+     * @return
+     */
+    public boolean removeCrossReference( AbstractIdentifier id ){
+        return crossReferences.remove(id);
+    }
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);

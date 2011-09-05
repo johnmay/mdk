@@ -16,14 +16,13 @@
  */
 package uk.ac.ebi.metabolomes.descriptor.annotation;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
-import java.io.Serializable;
 import java.util.Arrays;
-import java.util.List;
-import uk.ac.ebi.metabolomes.descriptor.annotation.AbstractAnnotation;
-import uk.ac.ebi.metabolomes.descriptor.annotation.AnnotationType;
 import uk.ac.ebi.metabolomes.identifier.ECNumber;
-import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.LocalAlignment;
 
 /**
@@ -35,9 +34,8 @@ import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.LocalAlign
  */
 public class ECAnnotation
         extends AbstractAnnotation
-        implements Serializable {
+        implements Externalizable {
 
-    private static final long serialVersionUID = 3663765378841758878L;
     private int nObservations;
     private double meanExpectedValue;
     private double medianExpectedValue;
@@ -92,4 +90,21 @@ public class ECAnnotation
     public String toString() {
         return getAnnotation().toString();
     }
+
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+    }
+
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+    }
+
+
+    
+
+
 }

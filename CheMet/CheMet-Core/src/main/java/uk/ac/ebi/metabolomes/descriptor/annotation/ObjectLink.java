@@ -16,12 +16,18 @@
  */
 package uk.ac.ebi.metabolomes.descriptor.annotation;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 /**
  * ObjectLink.java – MetabolicDevelopmentKit – Jun 23, 2011
  * Class defines a link between two objects
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public class ObjectLink {
+public class ObjectLink
+    implements Externalizable{
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ObjectLink.class );
 
@@ -42,5 +48,20 @@ public class ObjectLink {
     public Object getIremTwo() {
         return itemTwo;
     }
+
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        itemOne = in.readObject();
+        itemTwo = in.readObject();
+    }
+
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeObject(itemOne);
+        out.writeObject(itemTwo);
+    }
+
+
+
 
 }

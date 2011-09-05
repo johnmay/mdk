@@ -24,7 +24,7 @@ import org.w3c.dom.Node;
  * @author johnmay
  * @date Apr 7, 2011
  */
-class BlastHSP extends LocalAlignment {
+public class BlastHSP extends LocalAlignment {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( BlastHSP.class );
     private static final String HSP_E_NODE_NAME = "Hsp_evalue";

@@ -12,7 +12,7 @@ import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.Collections;
 import org.openscience.cdk.Reaction;
-import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
+import uk.ac.ebi.metabolomes.core.AnnotatedComponent;
 import uk.ac.ebi.metabolomes.core.reaction.ReactionCollection;
 
 
@@ -24,7 +24,7 @@ import uk.ac.ebi.metabolomes.core.reaction.ReactionCollection;
  * @date Apr 4, 2011
  */
 public abstract class GeneProduct
-  extends ObjectDescriptor
+  extends AnnotatedComponent
   implements Externalizable {
 
     private transient static final org.apache.log4j.Logger logger =

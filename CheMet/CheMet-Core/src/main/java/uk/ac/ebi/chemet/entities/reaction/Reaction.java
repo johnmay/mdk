@@ -33,7 +33,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
-import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
+import uk.ac.ebi.metabolomes.core.AnnotatedComponent;
 
 /**
  * Reaction –  2011.08.08
@@ -52,7 +52,7 @@ import uk.ac.ebi.metabolomes.core.ObjectDescriptor;
  * @param   <C> The compartment class type (can be a string e.g. [e] or Enumeration) overide hashCode/equals
  */
 public class Reaction<M , S , C>
-        extends ObjectDescriptor {
+        extends AnnotatedComponent {
 
     private static final Logger LOGGER = Logger.getLogger( Reaction.class );
     transient private List<M> reactantsMolecules = new ArrayList<M>();

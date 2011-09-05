@@ -14,11 +14,13 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.metabolomes.descriptor.annotation;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 
 /**
  * GeneralAccessList.java
@@ -28,30 +30,49 @@ import java.util.List;
  * @date May 9, 2011
  */
 public class GeneralAccessList<E>
-        extends ArrayList<E> {
+  extends ArrayList<E> {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( GeneralAccessList.class );
-    private static final long serialVersionUID = -3850963570371286021L;
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(
+      GeneralAccessList.class);
+
 
     /**
      * Access all items in list of a certain class type <br>
      * <h4>Example:</h4>
      * {@code List<EnzymeAnnotation> enzAnnotations = collection.get(EnzymeAnnotation.class)] }
      * @param <T> The class type (see. example)
-     * @param classType The class type (see. example)
+     * @param clazz The class type (see. example)
      * @return List of only that class type
      */
-    public <T> List<T> get(Class<T> classType){
+    public <T> List<T> get(Class<T> clazz) {
         List<T> subset = new ArrayList<T>();
 
         // could store in hashmap Class -> Index/Object and provide acces this way
-        for ( Iterator<E> it = iterator(); it.hasNext(); ) {
+        for( Iterator<E> it = iterator() ; it.hasNext() ; ) {
             Object object = it.next();
-            if (object.getClass() == classType){
-                subset.add( (T) object );
+            if( object.getClass() == clazz ) {
+                subset.add((T) object);
             }
         }
         return subset;
     }
 
+
+    public boolean has(Class clazz) {
+
+        // could store in hashmap Class -> Index/Object and provide acces this way
+        for( Iterator<E> it = iterator() ; it.hasNext() ; ) {
+            Object object = it.next();
+            if( object.getClass() == clazz ) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+
 }
+

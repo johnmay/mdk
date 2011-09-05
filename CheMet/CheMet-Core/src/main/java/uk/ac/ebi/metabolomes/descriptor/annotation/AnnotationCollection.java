@@ -14,11 +14,12 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.metabolomes.descriptor.annotation;
 
-import java.util.Collections;
 import java.util.List;
-import uk.ac.ebi.metabolomes.core.reaction.ReactionCollection;
+import mnb.annotation.entity.ChemicalStructureAnnotation;
+
 
 /**
  * AnnotationCollection.java
@@ -28,28 +29,44 @@ import uk.ac.ebi.metabolomes.core.reaction.ReactionCollection;
  * @date May 9, 2011
  */
 public class AnnotationCollection
-        extends GeneralAccessList<AbstractAnnotation> {
+  extends GeneralAccessList<AbstractAnnotation> {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( AnnotationCollection.class );
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(
+      AnnotationCollection.class);
     private static final long serialVersionUID = -3850963570371286021L;
+
 
     public AnnotationCollection() {
     }
+
 
     /**
      * Access the contained enzyme annotations
      * @return List of ECAnnotation objects
      */
     public List<ECAnnotation> getEnzymeAnnotations() {
-        return super.get( ECAnnotation.class );
+        return super.get(ECAnnotation.class);
     }
+
 
     /**
      * Access the contained user annotations
      * @return List of UserAnnotation objects
      */
     public List<UserAnnotation> getUserAnnotations() {
-        return super.get( UserAnnotation.class );
+        return super.get(UserAnnotation.class);
     }
 
+
+    /**
+     * Access the contained chemical structure annotations
+     * @return List of ChemicalStructureAnnotation objects
+     */
+    public List<ChemicalStructureAnnotation> getChemicalStructureAnnotations() {
+        return super.get(ChemicalStructureAnnotation.class);
+    }
+
+
 }
+
