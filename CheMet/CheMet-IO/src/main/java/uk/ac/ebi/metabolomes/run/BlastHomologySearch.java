@@ -111,8 +111,10 @@ public class BlastHomologySearch extends RunnableTask {
         commandBuilder.append(parameters.getAsArgument(BlastParamType.INPUT_FILE));
         commandBuilder.append(parameters.getAsArgument(BlastParamType.OUTPUT_FILE));
         commandBuilder.append(parameters.getAsArgument(BlastParamType.OUTPUT_MODE));
+        commandBuilder.append(parameters.getAsArgument(BlastParamType.NUMBER_CPU));
 
         command = commandBuilder.toString();
+        logger.info("running:" + command);
 
     }
 
@@ -131,7 +133,6 @@ public class BlastHomologySearch extends RunnableTask {
             logger.debug("command: " + command);
             process = Runtime.getRuntime().exec(command);
             setRunningStatus();
-            System.out.println("set run status!" + getStatus());
             process.waitFor();
             setCompletedStatus();
         } catch( InterruptedException ex ) {

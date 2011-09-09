@@ -1,43 +1,81 @@
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>uk.ac.ebi.chemet</groupId>
-  <artifactId>CheMet-Visualisation</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+    <groupId>uk.ac.ebi.chemet</groupId>
+    <artifactId>CheMet-Visualisation</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
-  <name>CheMet-Visualisation</name>
-  <url>http://maven.apache.org</url>
+    <name>CheMet-Visualisation</name>
+    <url>http://maven.apache.org</url>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <repositories>
+        <repository>
+            <id>rothamsted-bbsrc</id>
+            <name>rothamsted-bbsrc</name>
+            <url>http://ondex.rothamsted.bbsrc.ac.uk/nexus/content/repositories/public/</url>
+        </repository>
+        <repository>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI maven snapshots repository</name>
+            <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
+        </repository>
+    </repositories>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>CheMet-IO</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>CheMet-Core</artifactId>
-      <version>1.0</version>
-    </dependency>
-  </dependencies>
-  <build>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CheMet-IO</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CheMet-Core</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <artifactId>cdk-render</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <type>jar</type>
+            <version>1.4.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>cdk-sdg</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <type>jar</type>
+            <version>1.4.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>cdk-renderawt</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <type>jar</type>
+            <version>1.4.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>cdk-renderbasic</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <type>jar</type>
+            <version>1.4.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
         <plugins>
             <plugin>
         <!-- NOTE: We don't need a groupId specification because the group is
