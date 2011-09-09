@@ -42,8 +42,15 @@ public class ECAnnotation
     private double meanBitScore;
     private double medianBitScore;
 
+
+    public ECAnnotation() {
+        super(AnnotationType.ENZYME_FUNCTION, "EC Number");
+    }
+
+
+
     public ECAnnotation(ECNumber ec) {
-        super( ec , AnnotationType.ENZYME_FUNCTION, "", null);
+        super( ec , AnnotationType.ENZYME_FUNCTION, "EC Number", null);
     }
 
     public ECAnnotation( ECNumber ec ,
@@ -104,7 +111,7 @@ public class ECAnnotation
     }
 
 
-    
+
 
 
 }

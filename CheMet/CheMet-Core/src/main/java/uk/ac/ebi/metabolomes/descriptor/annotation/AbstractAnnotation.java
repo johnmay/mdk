@@ -50,7 +50,7 @@ public class AbstractAnnotation
 
 
     public AbstractAnnotation(AnnotationType type, String desc) {
-        this(null, type, desc, new ObservationCollection());
+        this(null, type, desc, null);
     }
 
 
@@ -100,19 +100,7 @@ public class AbstractAnnotation
     }
 
 
-    public ObservationCollection getEvidence() {
-        return evidence;
-    }
 
-
-    public void setProduct(GeneProduct product) {
-        this.product = product;
-    }
-
-
-    public GeneProduct getProduct() {
-        return product;
-    }
 
 
     public void setFlag(AnnotationFlag flag) {
@@ -125,15 +113,23 @@ public class AbstractAnnotation
     }
 
 
+    public void setProduct(GeneProduct product){
+        this.product = product;
+    }
+
+    public GeneProduct getProduct(){
+        return this.product;
+    }
+
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         annotation = in.readObject();
         type = (AnnotationType) in.readObject();
         flag = (AnnotationFlag) in.readObject();
         description = in.readUTF();
-        evidence = (ObservationCollection) in.readObject();
-        Object obj = in.readObject();
-        if( obj instanceof GeneProduct ) {
-            product = (GeneProduct) obj;
+        //evidence = (ObservationCollection) in.readObject(); // todo: need way of handling circular references
+        boolean hasProduct = in.readBoolean();
+        if( hasProduct ) {
+            product = (GeneProduct) in.readObject();
         }
     }
 
@@ -143,7 +139,8 @@ public class AbstractAnnotation
         out.writeObject(type);
         out.writeObject(flag);
         out.writeUTF(description);
-        out.writeObject(evidence);
+        // out.writeObject(evidence); // todo: need way of handling circular references
+        out.writeBoolean(product != null);
         if( product != null ) {
             out.writeObject(product);
         }
