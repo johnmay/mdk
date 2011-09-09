@@ -18,7 +18,6 @@ package uk.ac.ebi.metabolomes.core.gene;
 import java.io.Externalizable;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,7 +25,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
@@ -196,32 +194,18 @@ public class GeneProductCollection
 
 
     public static GeneProductCollection readCollection(File file) {
-        FileInputStream fis = null;
-        ObjectInputStream ois = null;
+        ObjectInput ois = null;
         try {
-            fis = new FileInputStream(file);
-            ois = new ObjectInputStream(fis);
-            Object obj = ois.readObject();
+            ois = new ObjectInputStream(new FileInputStream(file));
+            GeneProductCollection collection = new GeneProductCollection();
+            collection.readExternal(ois);
+            collection.reloadProjectObservations();
             ois.close();
-            fis.close();
-            if( obj instanceof GeneProductCollection ) {
-                GeneProductCollection collection = (GeneProductCollection) obj;
-                collection.reloadProjectObservations();
-                return collection;
-            }
+            return collection;
         } catch( IOException ex ) {
             logger.error(ex);
-        } catch( ClassNotFoundException ex ) {
+        } catch( Exception ex ) {
             logger.error(ex);
-        } finally {
-            try {
-                fis.close();
-            } catch( IOException ex ) {
-            }
-            try {
-                ois.close();
-            } catch( IOException ex ) {
-            }
         }
 
         return new GeneProductCollection();
@@ -230,11 +214,9 @@ public class GeneProductCollection
 
     public static void write(File file, GeneProductCollection collection) throws
       FileNotFoundException, IOException {
-        FileOutputStream fos = new FileOutputStream(file);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        oos.writeObject(collection);
+        ObjectOutput oos = new ObjectOutputStream(new FileOutputStream(file));
+        collection.writeExternal(oos);
         oos.close();
-        fos.close();
     }
 
 
@@ -244,7 +226,7 @@ public class GeneProductCollection
 
 
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.write(geneProducts.size());
+        out.writeInt(geneProducts.size());
         for( GeneProduct geneProduct : geneProducts ) {
             geneProduct.writeExternal(out);
         }
@@ -253,7 +235,7 @@ public class GeneProductCollection
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
-        int size = in.read();
+        int size = in.readInt();
 
         for( int i = 0 ; i < size ; i++ ) {
 

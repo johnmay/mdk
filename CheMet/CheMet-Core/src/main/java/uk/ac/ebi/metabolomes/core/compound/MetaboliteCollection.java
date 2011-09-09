@@ -14,6 +14,7 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.metabolomes.core.compound;
 
 import java.io.Serializable;
@@ -21,7 +22,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import org.openscience.cdk.interfaces.IMolecule;
+import uk.ac.ebi.metabolomes.core.metabolite.MetabolicEntity;
 import uk.ac.ebi.metabolomes.descriptor.annotation.GeneralAccessList;
+
 
 /**
  *
@@ -29,32 +32,31 @@ import uk.ac.ebi.metabolomes.descriptor.annotation.GeneralAccessList;
  * @date May 15, 2011
  */
 public class MetaboliteCollection
-        extends GeneralAccessList<IMolecule>
-        implements Serializable {
+  extends GeneralAccessList<MetabolicEntity>
+  implements Serializable {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( MetaboliteCollection.class );
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(
+      MetaboliteCollection.class);
     private static final long serialVersionUID = -694434528337274752L;
+    HashSet<MetabolicEntity> unique = new HashSet<MetabolicEntity>();
 
-    HashSet<IMolecule> unique = new HashSet<IMolecule>();
 
     @Override
-    public boolean add( IMolecule e ) {
-        if ( unique.contains( e ) ){
+    public boolean add(MetabolicEntity e) {
+        if( unique.contains(e) ) {
             return false;
         }
-        unique.add( e );
-        return super.add( e );
+        unique.add(e);
+        return super.add(e);
     }
 
+
     @Override
-    public boolean addAll( Collection<? extends IMolecule> c ) {
+    public boolean addAll(Collection<? extends MetabolicEntity> c) {
         throw new UnsupportedOperationException();
     }
 
 
-
-
-
-
-
 }
+

@@ -1,6 +1,6 @@
 
 /**
- * Entity.java
+ * MetabolicEntity.java
  *
  * 2011.09.05
  *
@@ -32,19 +32,22 @@ import uk.ac.ebi.metabolomes.core.AnnotatedComponent;
 
 
 /**
- *          Entity – 2011.09.05 <br>
+ *          MetabolicEntity – 2011.09.05 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class Entity
+public class MetabolicEntity
   extends AnnotatedComponent
   implements Externalizable {
 
-    private static final Logger LOGGER = Logger.getLogger(Entity.class);
+    private static final Logger LOGGER = Logger.getLogger(MetabolicEntity.class);
     private boolean generic = false;
     private MetaboliteClass metaboliteClass = MetaboliteClass.UNKNOWN;
+    private String name;
+
+    // attributes to control link to reactions
 
     /**
      *
@@ -77,6 +80,17 @@ public class Entity
                new ChemicalStructureAnnotation();
     }
 
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
