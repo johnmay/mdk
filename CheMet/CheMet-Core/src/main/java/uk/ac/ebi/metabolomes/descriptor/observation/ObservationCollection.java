@@ -16,6 +16,10 @@
  */
 package uk.ac.ebi.metabolomes.descriptor.observation;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,8 +43,7 @@ public class ObservationCollection
         extends GeneralAccessList<AbstractObservation> {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ObservationCollection.class );
-    private static final long serialVersionUID = -8540384507621712015L;
-    private Map<JobParameters , List<AbstractObservation>> parametersToObservationMap;
+    private transient Map<JobParameters , List<AbstractObservation>> parametersToObservationMap;
 
     public ObservationCollection() {
         parametersToObservationMap = new HashMap<JobParameters , List<AbstractObservation>>( 3 );
@@ -148,4 +151,6 @@ public class ObservationCollection
     public List<BlastHit> getBlastHits() {
         return get( BlastHit.class );
     }
+
+
 }

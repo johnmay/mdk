@@ -91,15 +91,16 @@ public abstract class AbstractObservation
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         parameters = (JobParameters) in.readObject();
-        Object obj = in.readObject();
-        if( obj instanceof GeneProduct ) {
-            product = (GeneProduct) obj;
+        boolean hasProduct = in.readBoolean();
+        if( hasProduct ) {
+            product = (GeneProduct) in.readObject();
         }
     }
 
 
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(parameters);
+        out.writeBoolean(product != null);
         if( product != null ) {
             out.writeObject(product);
         }

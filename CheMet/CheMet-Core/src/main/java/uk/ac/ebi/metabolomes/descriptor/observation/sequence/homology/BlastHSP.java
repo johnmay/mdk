@@ -12,10 +12,16 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology;
 
 import java.awt.Dimension;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import org.w3c.dom.Node;
+
 
 /**
  * BlastHSP.java
@@ -24,9 +30,10 @@ import org.w3c.dom.Node;
  * @author johnmay
  * @date Apr 7, 2011
  */
-public class BlastHSP extends LocalAlignment {
+public class BlastHSP extends LocalAlignment implements Externalizable {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( BlastHSP.class );
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(BlastHSP.class);
     private static final String HSP_E_NODE_NAME = "Hsp_evalue";
     private static final String HSP_BIT_NODE_NAME = "Hsp_bit-score";
     private static final String HSP_NODE_NAME = "Hsp";
@@ -39,65 +46,73 @@ public class BlastHSP extends LocalAlignment {
     private static final String HSP_HIT_TO = "Hsp_hit-to";
     private static final long serialVersionUID = -5692094407895765912L;
     private boolean parseHSPSequence;
-    private BlastHit hit;
+    private BlastHit parent;
 
 //    private String query;
 //    private String alignment;
 //    private String target;
+
+    public BlastHSP() {
+    }
+
+
     /**
      * Create a new Blast High-scoring Sequence Pair (Local alignment)
      * @param n
      * @param parent
      * @param parseSequence
      */
-    public BlastHSP( Node n , BlastHit parent , boolean parseSequence ) {
+    public BlastHSP(Node n, BlastHit parent, boolean parseSequence) {
 
         parseHSPSequence = parseSequence;
+        this.parent = parent;
 
         // parse the values from the node
 
         // Structure: <Hit_hsps><Hsp><Hsps_evalue> etc.. so need to drill down one more teir
-        Node node = getHspNode( n );
+        Node node = getHspNode(n);
 
-        Integer[] queryRange = new Integer[ 2 ];
-        Integer[] hitRange = new Integer[ 2 ];
+        Integer[] queryRange = new Integer[2];
+        Integer[] hitRange = new Integer[2];
 
-        while ( node != null ) {
+        while( node != null ) {
             String nodeName = node.getNodeName();
 
-            if ( nodeName.equals( HSP_BIT_NODE_NAME ) ) {
-                setBitScore( Double.parseDouble( node.getTextContent() ) );
-            } else if ( nodeName.equals( HSP_E_NODE_NAME ) ) {
-                setExpectedValue( Double.parseDouble( node.getTextContent() ) );
-            } else if ( nodeName.equals( HSP_QUERY_FROM ) ) {
-                queryRange[0] = Integer.parseInt( node.getTextContent() );
-            } else if ( nodeName.equals( HSP_QUERY_TO ) ) {
-                queryRange[1] = Integer.parseInt( node.getTextContent() );
-            } else if ( nodeName.equals( HSP_HIT_FROM ) ) {
-                hitRange[0] = Integer.parseInt( node.getTextContent() );
-            } else if ( nodeName.equals( HSP_HIT_TO ) ) {
-                hitRange[1] = Integer.parseInt( node.getTextContent() );
-            } else if ( nodeName.equals( HSP_POSITIVE ) ) {
-                setPositive( Integer.parseInt( node.getTextContent() ) );
-            } else if ( nodeName.equals( HSP_IDENTITY ) ) {
-                setIdentity( Integer.parseInt( node.getTextContent() ) );
-            } else if ( nodeName.equals( HSP_ALIGN_LENGTH ) ) {
-                setAlignmentLength( Integer.parseInt( node.getTextContent() ) );
-            } else if ( parseHSPSequence ) {
-                throw new UnsupportedOperationException( "Parsing of blast HSP sequences is not yet supported" );
+            if( nodeName.equals(HSP_BIT_NODE_NAME) ) {
+                setBitScore(Double.parseDouble(node.getTextContent()));
+            } else if( nodeName.equals(HSP_E_NODE_NAME) ) {
+                setExpectedValue(Double.parseDouble(node.getTextContent()));
+            } else if( nodeName.equals(HSP_QUERY_FROM) ) {
+                queryRange[0] = Integer.parseInt(node.getTextContent());
+            } else if( nodeName.equals(HSP_QUERY_TO) ) {
+                queryRange[1] = Integer.parseInt(node.getTextContent());
+            } else if( nodeName.equals(HSP_HIT_FROM) ) {
+                hitRange[0] = Integer.parseInt(node.getTextContent());
+            } else if( nodeName.equals(HSP_HIT_TO) ) {
+                hitRange[1] = Integer.parseInt(node.getTextContent());
+            } else if( nodeName.equals(HSP_POSITIVE) ) {
+                setPositive(Integer.parseInt(node.getTextContent()));
+            } else if( nodeName.equals(HSP_IDENTITY) ) {
+                setIdentity(Integer.parseInt(node.getTextContent()));
+            } else if( nodeName.equals(HSP_ALIGN_LENGTH) ) {
+                setAlignmentLength(Integer.parseInt(node.getTextContent()));
+            } else if( parseHSPSequence ) {
+                throw new UnsupportedOperationException(
+                  "Parsing of blast HSP sequences is not yet supported");
             }
             node = node.getNextSibling();
         }
-        setQueryRange( queryRange );
-        setHitRange( hitRange );
+        setQueryRange(queryRange);
+        setHitRange(hitRange);
     }
 
-    private Node getHspNode( Node n ) {
+
+    private Node getHspNode(Node n) {
         Node node = n.getFirstChild();
 
         // find hsp node and return it's first child
-        while ( node != null ) {
-            if ( node.getNodeName().equals( HSP_NODE_NAME ) ) {
+        while( node != null ) {
+            if( node.getNodeName().equals(HSP_NODE_NAME) ) {
                 return node.getFirstChild();
             }
             node = node.getNextSibling();
@@ -107,11 +122,32 @@ public class BlastHSP extends LocalAlignment {
         return node;
     }
 
+
     /**
      * Returns the hit (parent)
      * @return
      */
-    public BlastHit getHit() {
-        return hit;
+    public BlastHit getParentHit() {
+        return parent;
     }
+
+
+    public void setParentHit(BlastHit hit) {
+        this.parent = hit;
+    }
+
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+    }
+
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+    }
+
+
 }
+

@@ -50,22 +50,21 @@ public abstract class LocalAlignment
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
       LocalAlignment.class);
-    private static final long serialVersionUID = -6587018434706846674L;
     // Hit_id and Hit_def
-    private String hitId;
-    private List<AbstractIdentifier> hitIdentifiers;
-    private String hitDefinition;
-    private String alignment;
-    private String sequence;
+    private String hitId = "";
+    private List<AbstractIdentifier> hitIdentifiers = null;
+    private String hitDefinition = "";
+    private String alignment = "";
+    private String sequence = "";
     // e value and bit score
-    private Double expectedValue;
-    private Double bitScore;
-    private Integer[] queryRange;
-    private Integer[] hitRange;
-    private Integer hitLength;
-    private Integer positive;
-    private Integer identity;
-    private Integer alignLength;
+    private Double expectedValue = 10d;
+    private Double bitScore = 0d;
+    private Integer[] queryRange = new Integer[]{ 0, 0 };
+    private Integer[] hitRange = new Integer[]{ 0, 0 };
+    private Integer hitLength = 0;
+    private Integer positive = 0;
+    private Integer identity = 0;
+    private Integer alignLength = 0;
 
 
     public Integer getHitLength() {
@@ -180,9 +179,10 @@ public abstract class LocalAlignment
         if( hitIdentifiers == null ) {
             getIdentifiers();
         }
-        for( AbstractIdentifier abstractIdentifier : hitIdentifiers ) {
-            if( abstractIdentifier instanceof UniProtIdentifier ) {
-                return (UniProtIdentifier) abstractIdentifier;
+        for( AbstractIdentifier id : hitIdentifiers ) {
+            System.out.println(id.getClass() + ":" + id.toString());
+            if( id instanceof UniProtIdentifier ) {
+                return (UniProtIdentifier) id;
             }
         }
         return null;
@@ -309,12 +309,40 @@ public abstract class LocalAlignment
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
+        hitId = in.readUTF();
+        hitDefinition = in.readUTF();
+        alignment = in.readUTF();
+        sequence = in.readUTF();
+        expectedValue = in.readDouble();
+        bitScore = in.readDouble();
+        queryRange[0] = in.readInt();
+        queryRange[1] = in.readInt();
+        hitRange[0] = in.readInt();
+        hitRange[1] = in.readInt();
+        hitLength = in.readInt();
+        positive = in.readInt();
+        identity = in.readInt();
+        alignLength = in.readInt();
     }
 
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
+        out.writeUTF(hitId);
+        out.writeUTF(hitDefinition);
+        out.writeUTF(alignment);
+        out.writeUTF(sequence);
+        out.writeDouble(expectedValue);
+        out.writeDouble(bitScore);
+        out.writeInt(queryRange[0]);
+        out.writeInt(queryRange[1]);
+        out.writeInt(hitRange[0]);
+        out.writeInt(hitRange[1]);
+        out.writeInt(hitLength);
+        out.writeInt(positive);
+        out.writeInt(identity);
+        out.writeInt(alignLength);
     }
 
 
