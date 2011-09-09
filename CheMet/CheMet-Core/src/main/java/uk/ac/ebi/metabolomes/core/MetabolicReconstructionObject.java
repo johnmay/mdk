@@ -56,12 +56,18 @@ public class MetabolicReconstructionObject implements Cloneable, Externalizable 
 
 
     public void writeExternal(ObjectOutput out) throws IOException {
-       out.writeObject(identifier);
+        out.writeObject(identifier);
     }
 
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         identifier = (AbstractIdentifier) in.readObject();
+    }
+
+
+    @Override
+    public String toString() {
+        return identifier.toString();
     }
 
 

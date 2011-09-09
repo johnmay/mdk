@@ -109,9 +109,10 @@ public abstract class AnnotatedComponent
      * Adds an identifier to the cross-reference collection
      *
      */
-    public boolean addCrossReference( AbstractIdentifier id ){
+    public boolean addCrossReference(AbstractIdentifier id) {
         return crossReferences.add(id);
     }
+
 
     /**
      *
@@ -120,20 +121,43 @@ public abstract class AnnotatedComponent
      * @param id
      * @return
      */
-    public boolean removeCrossReference( AbstractIdentifier id ){
+    public boolean removeCrossReference(AbstractIdentifier id) {
         return crossReferences.remove(id);
     }
 
+
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
         super.readExternal(in);
-        logger.warn("No reading annotations/observations");
+
+        int nObservations = in.readInt();
+        int nAnnotations = in.readInt();
+
+        for( int i = 0 ; i < nObservations ; i++ ) {
+            observations.add((AbstractObservation) in.readObject());
+        }
+        for( int i = 0 ; i < nAnnotations ; i++ ) {
+            annotations.add((AbstractAnnotation) in.readObject());
+        }
+
     }
 
 
     public void writeExternal(ObjectOutput out) throws IOException {
+
         super.writeExternal(out);
 
-        logger.warn("No wirting annotations/observations");
+        out.writeInt(observations.size());
+        out.writeInt(annotations.size());
+
+        for( AbstractObservation observation : observations ) {
+            out.writeObject(observation);
+        }
+
+        for( AbstractAnnotation annotation : annotations ) {
+            out.writeObject(annotation);
+        }
+
     }
 
 
