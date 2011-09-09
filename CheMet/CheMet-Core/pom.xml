@@ -103,6 +103,12 @@
             <artifactId>Resource</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>jboss</groupId>
+            <artifactId>jboss-serialization</artifactId>
+            <version>4.2.2.GA</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
