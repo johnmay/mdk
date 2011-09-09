@@ -38,7 +38,7 @@ import java.io.Serializable;
 public abstract class AbstractIdentifier
   implements Externalizable {
 
-    private String identifier;
+    private String identifier = "";
     private MIRIAMEntry resource = null;
 
 

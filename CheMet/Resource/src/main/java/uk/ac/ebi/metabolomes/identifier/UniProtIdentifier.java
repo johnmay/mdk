@@ -12,9 +12,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package uk.ac.ebi.metabolomes.identifier;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import uk.ac.ebi.metabolomes.resource.Resource;
+
 
 /**
  * UniProtIdentifier.java
@@ -24,79 +30,108 @@ import uk.ac.ebi.metabolomes.resource.Resource;
  * @date Mar 21, 2011
  */
 public class UniProtIdentifier
-        extends AbstractIdentifier {
+  extends AbstractIdentifier
+  implements Externalizable {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( UniProtIdentifier.class );
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(
+      UniProtIdentifier.class);
     private static final String UNIPROT_ACCESSION_SCHEMA = "[A-Z][A-Z0-9]{5}";
-    private static final String UNIPROT_WITH_SPECIES_ACCESSION_SCHEMA = UNIPROT_ACCESSION_SCHEMA + "_[A-Z]{5}";
+    private static final String UNIPROT_WITH_SPECIES_ACCESSION_SCHEMA = UNIPROT_ACCESSION_SCHEMA +
+                                                                        "_[A-Z]{5}";
+
 
     public UniProtIdentifier() {
-      //  setResource( Resource.UNIPROT );
+        //  setResource( Resource.UNIPROT );
     }
 
-    public UniProtIdentifier( String identifier , Boolean check ) {
+
+    public UniProtIdentifier(String identifier, Boolean check) {
         this();
 
-        if ( check ) {
-            setIdentifierString( parse( identifier ) );
+        if( check ) {
+            setIdentifierString(parse(identifier));
         } else {
-            setIdentifierString( identifier );
+            setIdentifierString(identifier);
         }
     }
 
-    public UniProtIdentifier( String identifier ) {
-        this( identifier , Boolean.TRUE );
+
+    public UniProtIdentifier(String identifier) {
+        this(identifier, Boolean.TRUE);
     }
 
-    public final String parse( String identifier ) {
+
+    public final String parse(String identifier) {
         String parsedIdentifier = identifier;
 
         // first trim spaces
         parsedIdentifier.trim();
 
         // remove the version
-        if ( parsedIdentifier.contains( "." ) ) {
+        if( parsedIdentifier.contains(".") ) {
             // could store if needed
-            parsedIdentifier = parsedIdentifier.substring( 0 , parsedIdentifier.indexOf( "." ) );
+            parsedIdentifier = parsedIdentifier.substring(0, parsedIdentifier.indexOf("."));
         }
 
         // if not matching schema warn
-        if ( parsedIdentifier.matches( UNIPROT_ACCESSION_SCHEMA ) ) {
+        if( parsedIdentifier.matches(UNIPROT_ACCESSION_SCHEMA) ) {
             return parsedIdentifier;
         }
-        if ( parsedIdentifier.matches( UNIPROT_WITH_SPECIES_ACCESSION_SCHEMA ) ) {
+        if( parsedIdentifier.matches(UNIPROT_WITH_SPECIES_ACCESSION_SCHEMA) ) {
             return parsedIdentifier;
         }
 
-        logger.warn( getResource() + " accession '" + identifier + "' doesn't look like a valid uniprot identifier" );
+        logger.warn(getResource() + " accession '" + identifier +
+                    "' doesn't look like a valid uniprot identifier");
 
         return parsedIdentifier;
 
     }
+
 
     @Override
     public int hashCode() {
         return getIdentifierString().hashCode();
     }
 
+
     @Override
-    public boolean equals( Object o ) {
-        if ( o != null && o.getClass().equals( UniProtIdentifier.class ) ) {
-            return equals( ( UniProtIdentifier ) o );
+    public boolean equals(Object o) {
+        if( o != null && o.getClass().equals(UniProtIdentifier.class) ) {
+            return equals((UniProtIdentifier) o);
         }
         return false;
     }
 
-    public boolean equals( UniProtIdentifier queryAccession ) {
-        return getIdentifierString().equals( queryAccession.toString() );
+
+    public boolean equals(UniProtIdentifier queryAccession) {
+        return getIdentifierString().equals(queryAccession.toString());
     }
 
-    public boolean equals( String queryAccession ) {
-        return getIdentifierString().equals( queryAccession );
+
+    public boolean equals(String queryAccession) {
+        return getIdentifierString().equals(queryAccession);
     }
+
 
     @Override
     public String toString() {
         return getIdentifierString();
     }
+
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+    }
+
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+    }
+
+
 }
+
