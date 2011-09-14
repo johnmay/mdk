@@ -110,12 +110,6 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>ops4j</id>
-            <url>http://maven.glassfish.org/content/repositories/ops4j/</url>
-        </repository>
-    </repositories>
     <build>
         <plugins>
             <plugin>

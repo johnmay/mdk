@@ -12,9 +12,10 @@
         <module>CheMet-WebServices</module>
         <module>CheMet-Visualisation</module>
         <module>Resource</module>
-    <module>Annotation</module>
-    <module>Interfaces</module>
-  </modules>
+        <module>Annotation</module>
+        <module>Interface</module>
+        <module>Observation</module>
+    </modules>
     <repositories>
         <repository>
             <id>maven-repo</id>
@@ -47,6 +48,10 @@
             <id>ebi-repo-snapshots</id>
             <name>EBI maven snapshots repository</name>
             <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
+        </repository>
+        <repository>
+            <id>ops4j</id>
+            <url>http://maven.glassfish.org/content/repositories/ops4j/</url>
         </repository>
         <repository>
             <id>biobabel-repo</id>
