@@ -7,7 +7,7 @@ package uk.ac.ebi.resource;
 
 import junit.framework.TestCase;
 import org.junit.Test;
-import uk.ac.ebi.chemet.interfaces.entities.Identifier;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 

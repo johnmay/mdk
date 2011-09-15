@@ -5,11 +5,11 @@
     <parent>
         <artifactId>CheMet</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
     <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>CheMet-IO</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1</version>
     <name>CheMet-IO</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -31,12 +31,17 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>CheMet-Core</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>CheMet-WebServices</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi</groupId>
+            <artifactId>chemet-resource</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
 		<!--
@@ -62,11 +67,7 @@
             <artifactId>mac_widgets</artifactId>
             <version>0.9.6-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi</groupId>
-            <artifactId>chemet-resource</artifactId>
-            <version>1.0</version>
-        </dependency>
+
     </dependencies>
     <build>
         <plugins>

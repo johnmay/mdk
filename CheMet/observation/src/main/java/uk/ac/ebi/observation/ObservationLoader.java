@@ -1,10 +1,8 @@
 
-package uk.ac.ebi.core;
-
 /**
- * AbstractDescriptor.java
+ * AnnotationLoader.java
  *
- * 2011.09.14
+ * 2011.09.08
  *
  * This file is part of the CheMet library
  *
@@ -21,52 +19,43 @@ package uk.ac.ebi.core;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
+package uk.ac.ebi.observation;
+
+import java.io.IOException;
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.DescriptionLoader;
-import uk.ac.ebi.interfaces.Descriptor;
+import uk.ac.ebi.resource.AbstractLoader;
 
 
 /**
- *          AbstractDescriptor – 2011.09.14 <br>
- *          Class description
+ *          AnnotationLoader – 2011.09.08 <br>
+ *          Class loads annotation descriptions from a resource properties file
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class AbstractDescriptor
-  implements Descriptor {
+public class ObservationLoader
+  extends AbstractLoader
+  implements DescriptionLoader {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractDescriptor.class);
-    // short/long description and index are loaded from a properties file
-    transient private DescriptionLoader loader;
+    private static final Logger LOGGER = Logger.getLogger(ObservationLoader.class);
+    private static final String RESOURCE_NAME = "ObservationDescription.properties";
 
 
-    public AbstractDescriptor(DescriptionLoader loader) {
-        this.loader = loader;
+    private ObservationLoader() {
+        super(ObservationLoader.class.getResourceAsStream(RESOURCE_NAME));
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    public String getShortDescription() {
-        return loader.getShortDescription(getClass());
+    private static class ObservationDescriptionHolder {
+
+        private static ObservationLoader INSTANCE = new ObservationLoader();
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    public String getLongDescription() {
-        return loader.getShortDescription(getClass());
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    public Byte getIndex() {
-        return loader.getIndex(getClass());
+    public static ObservationLoader getInstance() {
+        return ObservationDescriptionHolder.INSTANCE;
     }
 
 

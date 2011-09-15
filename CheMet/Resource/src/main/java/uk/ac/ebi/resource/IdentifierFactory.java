@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.interfaces.entities.Identifier;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;

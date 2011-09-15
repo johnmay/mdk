@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.resource;
 
-import uk.ac.ebi.chemet.interfaces.entities.DescriptionLoader;
+import uk.ac.ebi.interfaces.DescriptionLoader;
 import uk.ac.ebi.chemet.resource.MIRIAMResourceLoader;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;

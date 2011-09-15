@@ -1,8 +1,8 @@
 
 /**
- * BasicChemicalIdentifier.java
+ * Alignment.java
  *
- * 2011.09.14
+ * 2011.09.12
  *
  * This file is part of the CheMet library
  *
@@ -19,43 +19,22 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.chemical;
+package uk.ac.ebi.observation.sequence;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.observation.AbstractObservation;
 
 
 /**
- *          BasicChemicalIdentifier – 2011.09.14 <br>
+ *          Alignment – 2011.09.12 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class BasicChemicalIdentifier
-  extends ChemicalIdentifier {
+public abstract class Alignment
+  extends AbstractObservation {
 
-    private static final Logger LOGGER = Logger.getLogger(BasicChemicalIdentifier.class);
-
-
-    public BasicChemicalIdentifier() {
-        super();
-    }
-
-
-    public BasicChemicalIdentifier(String accession) {
-        super(accession);
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public BasicChemicalIdentifier newInstance() {
-        return new BasicChemicalIdentifier();
-    }
-
-
+    private static final Logger LOGGER = Logger.getLogger(Alignment.class);
 }
 

@@ -18,7 +18,6 @@
 package uk.ac.ebi.metabolomes.core;
 
 import com.google.common.collect.HashMultimap;
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLBoundOperation.ANONYMOUS;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -29,9 +28,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AnnotationFactory;
-import uk.ac.ebi.annotation.AnnotationLoader;
-import uk.ac.ebi.chemet.interfaces.entities.Annotation;
+import uk.ac.ebi.annotation.util.AnnotationFactory;
+import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
 import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;

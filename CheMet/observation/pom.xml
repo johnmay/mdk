@@ -7,10 +7,10 @@
         <groupId>uk.ac.ebi.chemet</groupId>
         <version>1.1</version>
     </parent>
-    <groupId>uk.ac.ebi</groupId>
-    <artifactId>chemet-resource</artifactId>
+    <groupId>uk.ac.ebi.chemet</groupId>
+    <artifactId>chemet-bservation</artifactId>
     <version>1.1</version>
-    <name>Resource</name>
+    <name>Observation</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,18 +19,18 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.2</version>
+            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>chemet-interface</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
+            <groupId>uk.ac.ebi</groupId>
+            <artifactId>chemet-resource</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

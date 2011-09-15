@@ -15,7 +15,7 @@
 
 package uk.ac.ebi.resource.organism;
 
-import uk.ac.ebi.chemet.interfaces.entities.Identifier;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.organism.Kingdom;
 

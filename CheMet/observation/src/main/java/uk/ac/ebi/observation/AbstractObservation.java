@@ -1,6 +1,6 @@
 
 /**
- * BasicChemicalIdentifier.java
+ * AbstractObservation.java
  *
  * 2011.09.14
  *
@@ -19,43 +19,41 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.chemical;
+package uk.ac.ebi.observation;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.core.AbstractDescriptor;
 
 
 /**
- *          BasicChemicalIdentifier – 2011.09.14 <br>
- *          Class description
+ *          AbstractObservation – 2011.09.14 <br>
+ *          Base class for all observations
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class BasicChemicalIdentifier
-  extends ChemicalIdentifier {
+public class AbstractObservation
+  extends AbstractDescriptor
+  implements Externalizable {
 
-    private static final Logger LOGGER = Logger.getLogger(BasicChemicalIdentifier.class);
+    private static final Logger LOGGER = Logger.getLogger(AbstractObservation.class);
 
 
-    public BasicChemicalIdentifier() {
-        super();
+    public AbstractObservation() {
+        super(ObservationLoader.getInstance());
     }
 
 
-    public BasicChemicalIdentifier(String accession) {
-        super(accession);
+    public void writeExternal(ObjectOutput out) throws IOException {
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public BasicChemicalIdentifier newInstance() {
-        return new BasicChemicalIdentifier();
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     }
-
 
 }
 

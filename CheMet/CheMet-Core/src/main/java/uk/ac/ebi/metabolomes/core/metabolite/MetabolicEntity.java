@@ -26,12 +26,11 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainer;
-import uk.ac.ebi.annotation.meta.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.metabolomes.core.AnnotatedComponent;
 
 

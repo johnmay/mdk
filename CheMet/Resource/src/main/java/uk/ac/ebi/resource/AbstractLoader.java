@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.interfaces.entities.DescriptionLoader;
+import uk.ac.ebi.interfaces.DescriptionLoader;
 import uk.ac.ebi.core.Description;
 
 

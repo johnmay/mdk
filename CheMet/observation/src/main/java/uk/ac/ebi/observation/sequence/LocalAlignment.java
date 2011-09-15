@@ -1,8 +1,8 @@
 
 /**
- * BasicChemicalIdentifier.java
+ * LocalAlignment.java
  *
- * 2011.09.14
+ * 2011.09.12
  *
  * This file is part of the CheMet library
  *
@@ -19,41 +19,47 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.chemical;
+package uk.ac.ebi.observation.sequence;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Identifier;
 
 
 /**
- *          BasicChemicalIdentifier – 2011.09.14 <br>
- *          Class description
+ *          LocalAlignment – 2011.09.12 <br>
+ *          A basic annotation of a local alignment
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class BasicChemicalIdentifier
-  extends ChemicalIdentifier {
+public class LocalAlignment
+  extends Alignment {
 
-    private static final Logger LOGGER = Logger.getLogger(BasicChemicalIdentifier.class);
-
-
-    public BasicChemicalIdentifier() {
-        super();
-    }
+    private static final Logger LOGGER = Logger.getLogger(LocalAlignment.class);
+    // mandatory fields
+    private Double expected;
+    private Double bitScore;
 
 
-    public BasicChemicalIdentifier(String accession) {
-        super(accession);
-    }
-
-
-    /**
-     * @inheritDoc
-     */
     @Override
-    public BasicChemicalIdentifier newInstance() {
-        return new BasicChemicalIdentifier();
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
+        super.readExternal(in);
+        expected = in.readDouble();
+        bitScore = in.readDouble();
+
+    }
+
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+
+        super.writeExternal(out);
+        out.writeDouble(expected);
+        out.writeDouble(bitScore);
+
     }
 
 
