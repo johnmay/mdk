@@ -5,11 +5,11 @@
     <parent>
         <artifactId>CheMet</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
-        <version>1.1</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>CheMet-IO</artifactId>
-    <version>1.1</version>
+    <version>1.2-SNAPSHOT</version>
     <name>CheMet-IO</name>
     <url>http://maven.apache.org</url>
     <properties>
