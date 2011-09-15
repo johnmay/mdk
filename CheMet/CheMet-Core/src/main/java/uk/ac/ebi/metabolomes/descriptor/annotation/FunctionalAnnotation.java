@@ -14,10 +14,12 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.metabolomes.descriptor.annotation;
 
 import java.io.Serializable;
 import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
+
 
 /**
  * FunctionalAnnotation.java
@@ -26,17 +28,24 @@ import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
  * @author johnmay
  * @date May 10, 2011
  */
+@Deprecated
 public class FunctionalAnnotation
-        extends AbstractAnnotation
-        implements Serializable {
+  extends AbstractAnnotation
+  implements Serializable {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( FunctionalAnnotation.class );
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(
+      FunctionalAnnotation.class);
     private static final long serialVersionUID = 3608450883831985800L;
 
-    public FunctionalAnnotation( String function ) {
-        super( function ,
-               AnnotationType.FUNCTIONAL_ANNOTATION ,
-               "Functional annotation" ,
-               new ObservationCollection() );
+
+    public FunctionalAnnotation(String function) {
+        super(function,
+              AnnotationType.FUNCTIONAL_ANNOTATION,
+              "Functional annotation",
+              new ObservationCollection());
     }
+
+
 }
+

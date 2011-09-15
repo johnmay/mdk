@@ -14,22 +14,31 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.metabolomes.descriptor.annotation;
+
 
 /**
  * LinkedAnnotation.java – MetabolicDevelopmentKit – Jun 23, 2011
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
+@Deprecated
 public class LinkedAnnotation
-        extends AbstractAnnotation {
+  extends AbstractAnnotation {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( LinkedAnnotation.class );
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(
+      LinkedAnnotation.class);
 
-    public LinkedAnnotation( Object one , Object two ) {
-        super( new ObjectLink( one , two ) ,
-               AnnotationType.LINKED_ANNOTATION ,
-               "Linked between two object" ,
-               null );
+
+    public LinkedAnnotation(Object one, Object two) {
+        super(new ObjectLink(one, two),
+              AnnotationType.LINKED_ANNOTATION,
+              "Linked between two object",
+              null);
     }
+
+
 }
+

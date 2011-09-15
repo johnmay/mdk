@@ -17,7 +17,7 @@ package uk.ac.ebi.metabolomes.core.reaction;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.InChIStoichiometricMatrix;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import uk.ac.ebi.metabolomes.identifier.ECNumber;
+import uk.ac.ebi.resource.classification.ECNumber;
 
 /**
  * PathwayReaction.java

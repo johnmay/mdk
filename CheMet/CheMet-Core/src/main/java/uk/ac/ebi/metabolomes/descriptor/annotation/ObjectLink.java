@@ -14,6 +14,7 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.metabolomes.descriptor.annotation;
 
 import java.io.Externalizable;
@@ -21,29 +22,33 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+
 /**
  * ObjectLink.java – MetabolicDevelopmentKit – Jun 23, 2011
  * Class defines a link between two objects
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
+@Deprecated
 public class ObjectLink
-    implements Externalizable{
+  implements Externalizable {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ObjectLink.class );
-
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(ObjectLink.class);
     private Object itemOne;
     private Object itemTwo;
 
     // todo indicate relationship
 
-    public ObjectLink( Object itemOne , Object itemTwo ) {
+    public ObjectLink(Object itemOne, Object itemTwo) {
         this.itemOne = itemOne;
         this.itemTwo = itemTwo;
     }
 
+
     public Object getItemOne() {
         return itemOne;
     }
+
 
     public Object getIremTwo() {
         return itemTwo;
@@ -62,6 +67,5 @@ public class ObjectLink
     }
 
 
-
-
 }
+

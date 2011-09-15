@@ -14,7 +14,9 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.metabolomes.descriptor.annotation;
+
 
 /**
  * UserAnnotation.java
@@ -23,19 +25,22 @@ package uk.ac.ebi.metabolomes.descriptor.annotation;
  * @author johnmay
  * @date May 9, 2011
  */
+@Deprecated
 public class UserAnnotation
-    extends AbstractAnnotation {
+  extends AbstractAnnotation {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( UserAnnotation.class );
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(
+      UserAnnotation.class);
+
 
     public UserAnnotation() {
-        super( "User annotation placeholder" ,
-               AnnotationType.USER ,
-               "",
-               null );
+        super("User annotation placeholder",
+              AnnotationType.USER,
+              "",
+              null);
     }
 
 
-
-
 }
+

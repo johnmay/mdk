@@ -17,14 +17,21 @@
 
 package uk.ac.ebi.metabolomes.core;
 
+import com.google.common.collect.HashMultimap;
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLBoundOperation.ANONYMOUS;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import uk.ac.ebi.metabolomes.descriptor.annotation.AbstractAnnotation;
-import uk.ac.ebi.metabolomes.descriptor.annotation.AnnotationCollection;
+import java.util.Set;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.AnnotationFactory;
+import uk.ac.ebi.annotation.AnnotationLoader;
+import uk.ac.ebi.chemet.interfaces.entities.Annotation;
 import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
 import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
@@ -39,38 +46,100 @@ public abstract class AnnotatedComponent
   extends MetabolicReconstructionObject
   implements Externalizable {
 
-    private transient static final org.apache.log4j.Logger logger =
-                                                           org.apache.log4j.Logger.getLogger(
-      AnnotatedComponent.class);
-    private AnnotationCollection annotations = new AnnotationCollection();
+    private transient static final Logger logger = Logger.getLogger(AnnotatedComponent.class);
+    private HashMultimap<Byte, Annotation> annotations = HashMultimap.create();
     private ObservationCollection observations = new ObservationCollection();
     private List<AbstractIdentifier> crossReferences = new ArrayList<AbstractIdentifier>();
 
 
-    public AnnotationCollection getAnnotations() {
-        return annotations;
-    }
-
-
-    public boolean addAnnotation(AbstractAnnotation annotation) {
-        logger.debug("Adding annotation: " + annotation.toString() + " to object: " +
-                     this.toString());
-        return annotations.add(annotation);
+    /**
+     *
+     * Add an annotation to the reconstruction object
+     *
+     * @param annotation The new annotation
+     *
+     */
+    public void addAnnotation(Annotation annotation) {
+        annotations.put(annotation.getIndex(), annotation);
     }
 
 
     /**
-     * Removes an annotation to the descriptor
-     * @param observation The observation to remove
-     * @return whether the underlying collection was modified
+     *
+     * Accessor to all the annotations currently stored
+     *
+     * @return A collection of all annotations held within the object
+     *
      */
-    public boolean removeAnnotation(AbstractAnnotation annotation) {
-        logger.debug("Removing annotation: " + annotation.toString() + " from object: " + this.
-          toString());
-        return annotations.remove(annotation);
+    public Collection<Annotation> getAnnotations() {
+        return annotations.values();
     }
 
 
+    /**
+     *
+     * Accessor to all annotations of a given type
+     *
+     * @param type
+     * @return
+     *
+     */
+    public <T> Collection<T> getAnnotations(final Class<T> type) {
+        return (Collection<T>) annotations.get(AnnotationLoader.getInstance().getIndex(type));
+    }
+
+
+    /**
+     *
+     * Accessor to all annotations extending a given type. For example if you provide a CrossReference
+     * class all Classification annotations will also be returned this is because Classification is
+     * a sub-class of CrossReference
+     *
+     * @param type
+     * @return
+     */
+    public Set<Annotation> getAnnotationsExtending(final Annotation base) {
+        Set<Annotation> annotationSubset = new HashSet<Annotation>();
+        for( Annotation annotation : getAnnotations() ) {
+            if( base.getClass().isInstance(annotation) ) {
+                annotationSubset.add(annotation);
+            }
+        }
+        return annotationSubset;
+    }
+
+
+    /**
+     *
+     * {@see getAnnotationsExtending(Annotation)}
+     *
+     * @param type
+     * @return
+     *
+     */
+    public Set<Annotation> getAnnotationsExtending(final Class<? extends Annotation> type) {
+        Annotation base = AnnotationFactory.getInstance().ofClass(type);
+        return getAnnotationsExtending(base);
+    }
+
+
+//    public boolean addAnnotation(AbstractAnnotation annotation) {
+//        logger.debug("Adding annotation: " + annotation.toString() + " to object: " +
+//                     this.toString());
+//        return annotations.add(annotation);
+//    }
+//
+//
+//    /**
+//     * Removes an annotation to the descriptor
+//     * @param observation The observation to remove
+//     * @return whether the underlying collection was modified
+//     */
+//    public boolean removeAnnotation(AbstractAnnotation annotation) {
+//        logger.debug("Removing annotation: " + annotation.toString() + " from object: " + this.
+//          toString());
+//        return annotations.remove(annotation);
+//    }
     /**
      * Accessor to the stored observations
      * @return unmodifiable ObservationCollection
@@ -126,38 +195,55 @@ public abstract class AnnotatedComponent
     }
 
 
+    @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
         super.readExternal(in);
 
         int nObservations = in.readInt();
-        int nAnnotations = in.readInt();
+
 
         for( int i = 0 ; i < nObservations ; i++ ) {
             observations.add((AbstractObservation) in.readObject());
         }
-        for( int i = 0 ; i < nAnnotations ; i++ ) {
-            annotations.add((AbstractAnnotation) in.readObject());
+
+        int totalAnnotations = in.readInt();
+
+        AnnotationFactory annotationFactory = AnnotationFactory.getInstance();
+
+        while( totalAnnotations > annotations.values().size() ) {
+            int n = in.readInt();
+            Byte index = in.readByte();
+            for( int j = 0 ; j < n ; j++ ) {
+                annotations.put(index, annotationFactory.readExternal(index, in));
+            }
         }
 
     }
 
 
+    @Override
     public void writeExternal(ObjectOutput out) throws IOException {
 
         super.writeExternal(out);
 
         out.writeInt(observations.size());
-        out.writeInt(annotations.size());
 
         for( AbstractObservation observation : observations ) {
             out.writeObject(observation);
         }
 
-        for( AbstractAnnotation annotation : annotations ) {
-            out.writeObject(annotation);
-        }
+        // total number of annotations
+        out.writeInt(annotations.values().size());
 
+        // write by index
+        for( Byte index : annotations.keySet() ) {
+            out.writeInt(annotations.get(index).size());
+            out.writeByte(index);
+            for( Annotation annotation : annotations.get(index) ) {
+                annotation.writeExternal(out);
+            }
+        }
     }
 
 

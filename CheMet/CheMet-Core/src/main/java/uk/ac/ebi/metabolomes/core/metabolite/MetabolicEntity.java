@@ -25,9 +25,13 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import mnb.annotation.entity.ChemicalStructureAnnotation;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.AtomContainer;
+import uk.ac.ebi.annotation.meta.ChemicalStructure;
 import uk.ac.ebi.metabolomes.core.AnnotatedComponent;
 
 
@@ -66,18 +70,19 @@ public class MetabolicEntity
 
 
     public boolean hasStructureAssociated() {
-        return super.getAnnotations().has(ChemicalStructureAnnotation.class);
+        return true;
     }
 
 
-    public List<ChemicalStructureAnnotation> getChemicalStructures() {
-        return super.getAnnotations().getChemicalStructureAnnotations();
+    public Collection<ChemicalStructure> getChemicalStructures() {
+        return super.getAnnotations(ChemicalStructure.class);
     }
 
 
-    public ChemicalStructureAnnotation getFirstChemicalStructureAnnotation() {
-        return hasStructureAssociated() ? getChemicalStructures().get(0) :
-               new ChemicalStructureAnnotation();
+    public ChemicalStructure getFirstChemicalStructureAnnotation() {
+        List<ChemicalStructure> structures = new ArrayList<ChemicalStructure>(
+          getChemicalStructures());
+        return structures.isEmpty() ? new ChemicalStructure(new AtomContainer()) : structures.get(0);
     }
 
 
@@ -90,7 +95,6 @@ public class MetabolicEntity
         return name;
     }
 
-    
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {

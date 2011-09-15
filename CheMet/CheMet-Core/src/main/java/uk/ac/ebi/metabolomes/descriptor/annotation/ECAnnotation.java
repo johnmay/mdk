@@ -22,7 +22,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
 import java.util.Arrays;
-import uk.ac.ebi.metabolomes.identifier.ECNumber;
+import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.LocalAlignment;
 
 /**
@@ -32,6 +32,7 @@ import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.LocalAlign
  * @author johnmay
  * @date May 7, 2011
  */
+@Deprecated
 public class ECAnnotation
         extends AbstractAnnotation
         implements Externalizable {

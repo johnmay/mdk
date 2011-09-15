@@ -31,8 +31,8 @@ import java.util.List;
 import javax.swing.text.Highlighter.Highlight;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
-import uk.ac.ebi.metabolomes.identifier.IdentifierFactory;
-import uk.ac.ebi.metabolomes.identifier.UniProtIdentifier;
+import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
 
 

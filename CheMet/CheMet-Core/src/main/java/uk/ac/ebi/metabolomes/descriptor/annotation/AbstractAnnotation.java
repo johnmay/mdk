@@ -35,6 +35,7 @@ import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
  * @author johnmay
  * @date May 7, 2011
  */
+@Deprecated
 public class AbstractAnnotation
   implements Externalizable {
 
@@ -100,9 +101,6 @@ public class AbstractAnnotation
     }
 
 
-
-
-
     public void setFlag(AnnotationFlag flag) {
         this.flag = flag;
     }
@@ -113,13 +111,15 @@ public class AbstractAnnotation
     }
 
 
-    public void setProduct(GeneProduct product){
+    public void setProduct(GeneProduct product) {
         this.product = product;
     }
 
-    public GeneProduct getProduct(){
+
+    public GeneProduct getProduct() {
         return this.product;
     }
+
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         annotation = in.readObject();

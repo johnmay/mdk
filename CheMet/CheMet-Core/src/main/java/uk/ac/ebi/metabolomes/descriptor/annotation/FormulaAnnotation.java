@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Deprecated
 public class FormulaAnnotation extends AbstractAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(FormulaAnnotation.class);

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 import uk.ac.ebi.metabolomes.core.reaction.BiochemicalReaction;
-import uk.ac.ebi.metabolomes.identifier.ECNumber;
+import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**

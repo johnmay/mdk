@@ -49,10 +49,10 @@ public class MetabolicReconstructionObject implements Cloneable, Externalizable 
     }
 
 
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
+//    @Override
+//    public Object clone() throws CloneNotSupportedException {
+//        return super.clone();
+//    }
 
 
     public void writeExternal(ObjectOutput out) throws IOException {
