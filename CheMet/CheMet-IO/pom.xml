@@ -62,11 +62,6 @@
             <artifactId>JSBML</artifactId>
             <version>0.8-b2</version>
         </dependency>
-        <dependency>
-            <groupId>com.explodingpixels</groupId>
-            <artifactId>mac_widgets</artifactId>
-            <version>0.9.6-SNAPSHOT</version>
-        </dependency>
 
     </dependencies>
     <build>

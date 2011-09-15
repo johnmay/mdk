@@ -95,5 +95,12 @@ public class PubChemSubstanceIdentifier
     }
 
 
+
+    public static void main(String[] args) {
+        System.out.println(new PubChemSubstanceIdentifier("123").equals(new PubChemSubstanceIdentifier("123")));
+    }
+
+
+
 }
 

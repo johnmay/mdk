@@ -54,7 +54,7 @@ public abstract class AbstractIdentifier
 
 
     public AbstractIdentifier(String accession) {
-        super(IdentifierLoader.getInstance());
+        this();
         this.accession = accession;
     }
 
@@ -105,13 +105,15 @@ public abstract class AbstractIdentifier
     }
 
 
-    public String getURN(){
+    public String getURN() {
         return getResource().getURN(accession);
     }
 
-    public URL getURL(){
+
+    public URL getURL() {
         return getResource().getURL(getAccession());
     }
+
 
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeUTF(accession);

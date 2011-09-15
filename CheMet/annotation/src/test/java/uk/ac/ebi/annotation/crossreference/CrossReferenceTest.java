@@ -45,8 +45,9 @@ public class CrossReferenceTest {
         try {
             File tmp = File.createTempFile("test", ".externalized");
 
-            ChEBICrossReference chebiXRef = new ChEBICrossReference(new ChEBIIdentifier(
-              "ChEBI:13242"));
+            ChEBICrossReference chebiXRef = new ChEBICrossReference(new ChEBIIdentifier("ChEBI:13242"));
+
+
 
             ObjectOutput out = new ObjectOutputStream(new FileOutputStream(tmp));
             out.writeByte(chebiXRef.getIndex());

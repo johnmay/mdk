@@ -35,6 +35,7 @@ import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.metabolomes.resource.Resource;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
@@ -60,6 +61,7 @@ public class IdentifierFactory {
       new TrEMBLIdentifier(),
       new SwissProtIdentifier(),
       new Taxonomy(),
+      new ECNumber(),
       new InChI()));
 
 
@@ -234,9 +236,9 @@ public class IdentifierFactory {
      * Utility method for reading an identifier to an ObjectOutput
      *
      */
-    public Identifier read(ObjectInput oi) throws IOException, ClassNotFoundException {
-        Identifier identifier = ofIndex(oi.readByte());
-        identifier.readExternal(oi);
+    public Identifier read(ObjectInput in) throws IOException, ClassNotFoundException {
+        Identifier identifier = ofIndex(in.readByte());
+        identifier.readExternal(in);
         return identifier;
     }
 
@@ -246,9 +248,9 @@ public class IdentifierFactory {
      * Utility method for writing an identifier to an ObjectOutput
      *
      */
-    public void write(ObjectOutput oo, Identifier identifier) throws IOException {
-        oo.writeByte(identifier.getIndex());
-        identifier.writeExternal(oo);
+    public void write(ObjectOutput out, Identifier identifier) throws IOException {
+        out.writeByte(identifier.getIndex());
+        identifier.writeExternal(out);
     }
 
 

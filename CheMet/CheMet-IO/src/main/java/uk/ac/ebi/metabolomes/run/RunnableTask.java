@@ -5,7 +5,6 @@
 
 package uk.ac.ebi.metabolomes.run;
 
-import com.explodingpixels.macwidgets.SourceListItem;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 
 
