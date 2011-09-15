@@ -32,12 +32,13 @@ public class PseudoFingerprintChemicalNames {
     private static final Pattern plural = Pattern.compile("s$");
     private static final Pattern definedHtmlTags = Pattern.compile("</{0,1}(i|sub|sup)>");
     private static final Pattern digit = Pattern.compile("\\d");
-    
+    private static final Pattern a_genericBeginning = Pattern.compile("^an{0,1} ");
     
     
     public String key(String s) {
         s = s.trim(); // first off, remove whitespace around the string
         s = s.toLowerCase(); // then lowercase it
+        s = a_genericBeginning.matcher(s).replaceFirst("");
         s = definedHtmlTags.matcher(s).replaceAll(""); // replace <i> </i>, <sub> </sub>, <sup> </sup>
         s = alphanum.matcher(s).replaceAll(""); // then remove all punctuation and control chars
         s = s.replaceAll("-", ""); // removes - 

@@ -28,7 +28,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Filter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
@@ -444,7 +443,7 @@ public class Reaction<M , S , C>
         return true;
 
     }
-
+    
     /**
      *
      * Displays the objects stored in the reaction in string form prefixed with the stoichiometric
