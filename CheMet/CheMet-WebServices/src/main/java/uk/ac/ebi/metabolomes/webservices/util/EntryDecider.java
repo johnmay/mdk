@@ -43,6 +43,28 @@ public class EntryDecider {
 
         return orderedCand;
     }
+    
+    public List<CandidateEntry> getOrderedCandidates( String query , Map<String , String> candidates ) {
+
+        List<CandidateEntry> orderedCand = new ArrayList<CandidateEntry>();
+        for ( String identifier : candidates.keySet() ) {
+            CandidateEntry candidateT = new CandidateEntry();
+            candidateT.setId( identifier );
+            candidateT.setDesc( candidates.get( identifier ) );
+            String prefix = this.identiferPrefix( identifier );
+            if ( prefix != null && candidateT.getDesc().contains( prefix ) ) {
+                candidateT.setDesc( candidateT.getDesc().replace( prefix , "" ) );
+            }
+            candidateT.setDistance( StringUtils.getLevenshteinDistance( query.toLowerCase().trim() ,
+                                                                        candidateT.getDesc().toLowerCase().trim() ) );
+
+            orderedCand.add( candidateT );
+        }
+        
+        Collections.sort( orderedCand );
+
+        return orderedCand;
+    }
 
     /**
      *
