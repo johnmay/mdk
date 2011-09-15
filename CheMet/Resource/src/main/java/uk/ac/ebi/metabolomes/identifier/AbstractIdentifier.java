@@ -20,9 +20,13 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
+import uk.ac.ebi.chemet.interfaces.entities.Identifier;
+import uk.ac.ebi.core.AbstractDescriptor;
+import uk.ac.ebi.resource.IdentifierLoader;
 
 
 /**
+ *
  * Abstract class for that all identifiers should extend.
  * If the sub-class has more then one component (e.g. InChI)
  * the developer should decide which is or what should the
@@ -34,24 +38,35 @@ import java.io.Serializable;
  *
  * @author johnmay
  * @date   6 Apr 2011
+ *
  */
 public abstract class AbstractIdentifier
-  implements Externalizable {
+  extends AbstractDescriptor
+  implements Identifier, Externalizable {
 
-    private String identifier = "";
-    private MIRIAMEntry resource = null;
-
-
-    public abstract String parse(String identifier);
+    private String accession;
+    private MIRIAMEntry resource;
 
 
-    public String getIdentifierString() {
-        return identifier;
+    public AbstractIdentifier() {
+        super(IdentifierLoader.getInstance());
     }
 
 
-    public void setIdentifierString(String identifier) {
-        this.identifier = identifier;
+    public AbstractIdentifier(String accession) {
+        super(IdentifierLoader.getInstance());
+        this.accession = accession;
+        this.resource = resource;
+    }
+
+
+    public String getAccession() {
+        return accession;
+    }
+
+
+    public void setAccession(String identifier) {
+        this.accession = identifier;
     }
 
 
@@ -67,7 +82,7 @@ public abstract class AbstractIdentifier
 
     @Override
     public String toString() {
-        return identifier;
+        return accession;
     }
 
 
@@ -80,8 +95,8 @@ public abstract class AbstractIdentifier
             return false;
         }
         final AbstractIdentifier other = (AbstractIdentifier) obj;
-        if( (this.identifier == null) ? (other.identifier != null) : !this.identifier.equals(
-          other.identifier) ) {
+        if( (this.accession == null) ? (other.accession != null) : !this.accession.equals(
+          other.accession) ) {
             return false;
         }
         return true;
@@ -91,19 +106,19 @@ public abstract class AbstractIdentifier
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 37 * hash + (this.identifier != null ? this.identifier.hashCode() : 0);
+        hash = 37 * hash + (this.accession != null ? this.accession.hashCode() : 0);
         return hash;
     }
 
 
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeUTF(identifier);
+        out.writeUTF(accession);
         // might not need to write MIRIAM identifier
     }
 
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        this.identifier = in.readUTF();
+        this.accession = in.readUTF();
     }
 
 

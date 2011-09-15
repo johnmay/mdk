@@ -1,6 +1,6 @@
 
 /**
- * GenericIdentifier.java
+ * TrEMBLIdentifier.java
  *
  * 2011.09.14
  *
@@ -19,38 +19,40 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.metabolomes.identifier;
+package uk.ac.ebi.resource.protein;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.interfaces.entities.Identifier;
 
 
 /**
- *          GenericIdentifier – 2011.09.14 <br>
+ *          TrEMBLIdentifier – 2011.09.14 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class GenericIdentifier extends AbstractIdentifier {
+public class TrEMBLIdentifier
+  extends UniProtIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(GenericIdentifier.class);
+    private static final Logger LOGGER = Logger.getLogger(TrEMBLIdentifier.class);
 
 
-    public GenericIdentifier() {
+    public TrEMBLIdentifier() {
     }
 
 
-    public GenericIdentifier(String accession) {
-        super(accession);
+    public TrEMBLIdentifier(String identifier) {
+        super(identifier);
     }
 
 
-    public Identifier newInstance() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public TrEMBLIdentifier newInstance() {
+        return new TrEMBLIdentifier();
     }
-
-
 
 
 }

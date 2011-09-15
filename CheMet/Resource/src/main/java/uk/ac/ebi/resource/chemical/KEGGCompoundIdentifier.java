@@ -1,8 +1,8 @@
 
 /**
- * GenericIdentifier.java
+ * KEGGCompoundIdentifier.java
  *
- * 2011.09.14
+ * 2011.08.16
  *
  * This file is part of the CheMet library
  *
@@ -19,39 +19,43 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.metabolomes.identifier;
+package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.interfaces.entities.Identifier;
 
 
 /**
- *          GenericIdentifier – 2011.09.14 <br>
- *          Class description
+ *
+ * @name    KEGGCompoundIdentifier – 2011.08.16
+ *          An identifier for KEGG Compound
+ *
  * @version $Rev$ : Last Changed $Date$
+ *
  * @author  johnmay
  * @author  $Author$ (this version)
+ *
  */
-public class GenericIdentifier extends AbstractIdentifier {
+public class KEGGCompoundIdentifier
+  extends ChemicalIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(GenericIdentifier.class);
+    private static final Logger LOGGER = Logger.getLogger(KEGGCompoundIdentifier.class);
 
 
-    public GenericIdentifier() {
+    public KEGGCompoundIdentifier() {
     }
 
 
-    public GenericIdentifier(String accession) {
+    public KEGGCompoundIdentifier(String accession) {
         super(accession);
     }
 
-
-    public Identifier newInstance() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public KEGGCompoundIdentifier newInstance() {
+        return new KEGGCompoundIdentifier();
     }
-
-
-
 
 }
 

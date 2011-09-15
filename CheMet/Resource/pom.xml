@@ -8,7 +8,7 @@
     <version>1.0</version>
   </parent>
   <groupId>uk.ac.ebi</groupId>
-  <artifactId>Resource</artifactId>
+  <artifactId>chemet-resource</artifactId>
   <version>1.0</version>
   <name>Resource</name>
   <url>http://maven.apache.org</url>
@@ -26,6 +26,11 @@
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.16</version>
+    </dependency>
+    <dependency>
+      <groupId>uk.ac.ebi.chemet</groupId>
+      <artifactId>chemet-interface</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>

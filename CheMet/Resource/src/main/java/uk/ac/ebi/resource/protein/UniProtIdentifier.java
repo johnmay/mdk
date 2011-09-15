@@ -13,13 +13,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package uk.ac.ebi.metabolomes.identifier;
+package uk.ac.ebi.resource.protein;
 
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import uk.ac.ebi.core.Description;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.resource.Resource;
+import uk.ac.ebi.resource.IdentifierLoader;
 
 
 /**
@@ -30,11 +33,13 @@ import uk.ac.ebi.metabolomes.resource.Resource;
  * @date Mar 21, 2011
  */
 public class UniProtIdentifier
-  extends AbstractIdentifier
+  extends ProteinIdentifier
   implements Externalizable {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
+      UniProtIdentifier.class);
+    private static final Description description = IdentifierLoader.getInstance().get(
       UniProtIdentifier.class);
     private static final String UNIPROT_ACCESSION_SCHEMA = "[A-Z][A-Z0-9]{5}";
     private static final String UNIPROT_WITH_SPECIES_ACCESSION_SCHEMA = UNIPROT_ACCESSION_SCHEMA +
@@ -50,9 +55,9 @@ public class UniProtIdentifier
         this();
 
         if( check ) {
-            setIdentifierString(parse(identifier));
+            setAccession(parse(identifier));
         } else {
-            setIdentifierString(identifier);
+            setAccession(identifier);
         }
     }
 
@@ -91,37 +96,6 @@ public class UniProtIdentifier
 
 
     @Override
-    public int hashCode() {
-        return getIdentifierString().hashCode();
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if( o != null && o.getClass().equals(UniProtIdentifier.class) ) {
-            return equals((UniProtIdentifier) o);
-        }
-        return false;
-    }
-
-
-    public boolean equals(UniProtIdentifier queryAccession) {
-        return getIdentifierString().equals(queryAccession.toString());
-    }
-
-
-    public boolean equals(String queryAccession) {
-        return getIdentifierString().equals(queryAccession);
-    }
-
-
-    @Override
-    public String toString() {
-        return getIdentifierString();
-    }
-
-
-    @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
     }
@@ -130,6 +104,41 @@ public class UniProtIdentifier
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public UniProtIdentifier newInstance() {
+        return new UniProtIdentifier();
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getShortDescription() {
+        return description.shortDescription;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getLongDescription() {
+        return description.longDescription;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Byte getIndex() {
+        return description.index;
     }
 
 

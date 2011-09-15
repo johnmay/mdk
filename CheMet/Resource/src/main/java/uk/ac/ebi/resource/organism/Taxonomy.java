@@ -13,7 +13,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package uk.ac.ebi.metabolomes.identifier;
+package uk.ac.ebi.resource.organism;
+
+import uk.ac.ebi.chemet.interfaces.entities.Identifier;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.resource.organism.Kingdom;
+
 
 /**
  * ProjectIdentifier.java
@@ -22,82 +27,91 @@ package uk.ac.ebi.metabolomes.identifier;
  * @author johnmay
  * @date Apr 14, 2011
  */
-public class OrganismIdentifier extends AbstractIdentifier {
+public class Taxonomy extends AbstractIdentifier {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( OrganismIdentifier.class );
-
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(Taxonomy.class);
     // AADNV V 648330: N=Aedes albopictus densovirus (isolate Boublik/1994)
     //                 C=AalDNV
-
     private int taxon;
     private String code;
     private Kingdom kingdom;
     private String officialName;
     private String commonName;
 
-    public OrganismIdentifier() {
+
+    public Taxonomy() {
     }
 
-    public OrganismIdentifier( int taxon , String code , Kingdom kingdom , String officialName , String commonName ) {
+
+    public Taxonomy(int taxon, String code, Kingdom kingdom, String officialName, String commonName) {
         this.taxon = taxon;
         this.code = code;
         this.kingdom = kingdom;
         this.officialName = officialName;
         this.commonName = commonName;
-        setIdentifierString(officialName);
+        setAccession(officialName);
     }
+
 
     public String getCode() {
         return code;
     }
 
-    public void setCode( String code ) {
+
+    public void setCode(String code) {
         this.code = code;
     }
+
 
     public String getCommonName() {
         return commonName;
     }
 
-    public void setCommonName( String commonName ) {
+
+    public void setCommonName(String commonName) {
         this.commonName = commonName;
     }
+
 
     public Kingdom getKingdom() {
         return kingdom;
     }
 
-    public void setKingdom( Kingdom kingdom ) {
+
+    public void setKingdom(Kingdom kingdom) {
         this.kingdom = kingdom;
     }
+
 
     public String getOfficialName() {
         return officialName;
     }
 
-    public void setOfficialName( String officialName ) {
+
+    public void setOfficialName(String officialName) {
         this.officialName = officialName;
     }
+
 
     public int getTaxon() {
         return taxon;
     }
 
-    public void setTaxon( int taxon ) {
+
+    public void setTaxon(int taxon) {
         this.taxon = taxon;
     }
 
+
+    /**
+     * @inheritDoc
+     */
     @Override
-    public String parse( String identifier ) {
-        throw new UnsupportedOperationException( "Not supported yet." );
+    public Taxonomy newInstance() {
+        return new Taxonomy();
     }
 
 
-
-
-
-
-
-
-
 }
+

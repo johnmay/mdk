@@ -1,6 +1,6 @@
 
 /**
- * GenericIdentifier.java
+ * ProteinIdentifier.java
  *
  * 2011.09.14
  *
@@ -19,35 +19,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.metabolomes.identifier;
+package uk.ac.ebi.resource.protein;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.interfaces.entities.Identifier;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 
 /**
- *          GenericIdentifier – 2011.09.14 <br>
+ *          ProteinIdentifier – 2011.09.14 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class GenericIdentifier extends AbstractIdentifier {
+public abstract class ProteinIdentifier
+  extends AbstractIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(GenericIdentifier.class);
+    private static final Logger LOGGER = Logger.getLogger(ProteinIdentifier.class);
 
 
-    public GenericIdentifier() {
+    public ProteinIdentifier() {
     }
 
 
-    public GenericIdentifier(String accession) {
+    public ProteinIdentifier(String accession) {
         super(accession);
-    }
-
-
-    public Identifier newInstance() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 

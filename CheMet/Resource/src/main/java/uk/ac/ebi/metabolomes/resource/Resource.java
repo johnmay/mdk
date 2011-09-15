@@ -18,9 +18,9 @@ import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.metabolomes.identifier.ECNumber;
+import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
-import uk.ac.ebi.metabolomes.identifier.UniProtIdentifier;
+import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 /**
  * An Enumeration class to store description and links resources

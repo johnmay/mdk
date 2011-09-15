@@ -1,7 +1,8 @@
+
 /**
- * ChEBIIdentifier.java
+ * ChEBIIdentifer.java
  *
- * 2011.08.05
+ * 2011.08.16
  *
  * This file is part of the CheMet library
  *
@@ -18,32 +19,45 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.metabolomes.identifier;
+package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.interfaces.entities.Identifier;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+
 
 /**
- * @name    ChEBIIdentifier
- * @date    2011.08.05
+ *
+ * @name    ChEBIIdentifer – 2011.08.16
+ *          Class description
+ *
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
- * @brief   ...class description...
  *
  */
-public class ChEBIIdentifier extends AbstractIdentifier{
+public class ChEBIIdentifer
+  extends ChemicalIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger( ChEBIIdentifier.class );
+    private static final Logger LOGGER = Logger.getLogger(ChEBIIdentifer.class);
 
-    protected ChEBIIdentifier(String identifier ) {
 
+    public ChEBIIdentifer() {
     }
 
+
+    public ChEBIIdentifer(String accession) {
+        super(accession);
+    }
+
+    /**
+     * @inheritDoc
+     */
     @Override
-    public String parse( String identifier ) {
-        throw new UnsupportedOperationException( "Not supported yet." );
+    public ChEBIIdentifer newInstance() {
+        return new ChEBIIdentifer();
     }
-
 
 
 }
+

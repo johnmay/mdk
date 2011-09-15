@@ -12,7 +12,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
 package uk.ac.ebi.metabolomes.identifier;
+
+import uk.ac.ebi.chemet.interfaces.entities.Identifier;
+
 
 /**
  * UniqueIdentifier.java
@@ -25,31 +29,35 @@ package uk.ac.ebi.metabolomes.identifier;
  * @date Apr 4, 2011
  */
 public class UniqueIdentifier
-    extends AbstractIdentifier {
+  extends AbstractIdentifier {
 
     private static int ticker = 0;
-    private static String prefix = "MMDKID";
+    private static String prefix = "UID";
     private static int padlength = 6;
 
-    private UniqueIdentifier( int tick ) {
-        setIdentifierString( String.format( prefix + "%0" + padlength + "d" , tick ) );
+
+    private UniqueIdentifier(int tick) {
+        setAccession(String.format(prefix + "%0" + padlength + "d", tick));
     }
+
 
     /**
      * Create a new unique (for this run) identifier
      * @return a unique identifier
      */
     public static UniqueIdentifier createUniqueIdentifer() {
-        return new UniqueIdentifier( ++ticker );
+        return new UniqueIdentifier(++ticker);
     }
+
 
     /**
      * Sets the prefix for the unique identifier
      * @param prefix
      */
-    public static void setPrefix( String prefix ) {
+    public static void setPrefix(String prefix) {
         UniqueIdentifier.prefix = prefix;
     }
+
 
     /**
      * Accessor for the current prefix
@@ -58,6 +66,7 @@ public class UniqueIdentifier
     public static String getPrefix() {
         return prefix;
     }
+
 
     /**
      * Get the length of the padding for the identifier.
@@ -69,16 +78,20 @@ public class UniqueIdentifier
         return padlength;
     }
 
+
     /**
      * Mutator for pad length
      * @param padlength
      */
-    public static void setPadlength( int padlength ) {
+    public static void setPadlength(int padlength) {
         UniqueIdentifier.padlength = padlength;
     }
 
-    @Override
-    public final String parse( String identifier ) {
-        throw new UnsupportedOperationException( "Unsupported" );
+
+    public Identifier newInstance() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
+
+
 }
+

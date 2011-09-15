@@ -1,9 +1,8 @@
-package uk.ac.ebi.chemet.resource;
 
 /**
- * ChemicalIdentifier.java
+ * TransportClassificationNumber.java
  *
- * 2011.08.16
+ * 2011.09.14
  *
  * This file is part of the CheMet library
  *
@@ -20,18 +19,41 @@ package uk.ac.ebi.chemet.resource;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
+package uk.ac.ebi.resource.classification;
+
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+
 
 /**
- * @name    ChemicalIdentifier – 2011.08.16
- *          An identifier for use with Chemicals
+ *          TransportClassificationNumber – 2011.09.14 <br>
+ *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class ChemicalIdentifier
-        extends AbstractIdentifier {
+public class TransportClassificationNumber
+  extends ClassificationIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger( ChemicalIdentifier.class );
+    private static final Logger LOGGER = Logger.getLogger(TransportClassificationNumber.class);
+
+
+    public TransportClassificationNumber() {
+    }
+
+
+    public TransportClassificationNumber(String accession) {
+        super(accession);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public TransportClassificationNumber newInstance() {
+        return new TransportClassificationNumber();
+    }
+
+
 }
+

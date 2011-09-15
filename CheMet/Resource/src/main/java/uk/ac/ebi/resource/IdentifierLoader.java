@@ -1,8 +1,8 @@
 
 /**
- * GenericIdentifier.java
+ * IdentifierLoader.java
  *
- * 2011.09.14
+ * 2011.09.15
  *
  * This file is part of the CheMet library
  *
@@ -19,38 +19,40 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.metabolomes.identifier;
+package uk.ac.ebi.resource;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.interfaces.entities.Identifier;
+import uk.ac.ebi.chemet.interfaces.entities.DescriptionLoader;
 
 
 /**
- *          GenericIdentifier – 2011.09.14 <br>
+ *          IdentifierLoader – 2011.09.15 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class GenericIdentifier extends AbstractIdentifier {
+public class IdentifierLoader
+  extends AbstractLoader
+  implements DescriptionLoader {
 
-    private static final Logger LOGGER = Logger.getLogger(GenericIdentifier.class);
+    private static final String RESOURCE_NAME = "IdentifierDescription.properties";
 
 
-    public GenericIdentifier() {
+    private IdentifierLoader() {
+        super(IdentifierLoader.class.getResourceAsStream(RESOURCE_NAME));
     }
 
 
-    public GenericIdentifier(String accession) {
-        super(accession);
+    private static class IdentifierLoaderHolder {
+
+        private static IdentifierLoader INSTANCE = new IdentifierLoader();
     }
 
 
-    public Identifier newInstance() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public static IdentifierLoader getInstance() {
+        return IdentifierLoaderHolder.INSTANCE;
     }
-
-
 
 
 }
