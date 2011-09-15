@@ -129,7 +129,12 @@ public class ECNumber
         this.enzymeSubSubClass = ident.length > 2 ? StringToIdent(ident[2]) : 0;
         this.enzymeEntry = ident.length > 3 ? StringToIdent(ident[3]) : 0;
 
+
+        setAccession(toString());
+
     }
+
+
 
 
     public ECNumber(String ecNumber) {
