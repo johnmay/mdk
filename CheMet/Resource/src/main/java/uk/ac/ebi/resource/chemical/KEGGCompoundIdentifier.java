@@ -22,6 +22,8 @@
 package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
+import uk.ac.ebi.resource.IdentifierDescription;
 
 
 /**
@@ -39,6 +41,8 @@ public class KEGGCompoundIdentifier
   extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundIdentifier.class);
+    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.get(
+      KEGGCompoundIdentifier.class);
 
 
     public KEGGCompoundIdentifier() {
@@ -49,6 +53,7 @@ public class KEGGCompoundIdentifier
         super(accession);
     }
 
+
     /**
      * @inheritDoc
      */
@@ -56,6 +61,43 @@ public class KEGGCompoundIdentifier
     public KEGGCompoundIdentifier newInstance() {
         return new KEGGCompoundIdentifier();
     }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Byte getIndex() {
+        return DESCRIPTION.index;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getShortDescription() {
+        return DESCRIPTION.shortDescription;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getLongDescription() {
+        return DESCRIPTION.longDescription;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public MIRIAMEntry getResource() {
+        return DESCRIPTION.resource;
+    }
+
 
 }
 

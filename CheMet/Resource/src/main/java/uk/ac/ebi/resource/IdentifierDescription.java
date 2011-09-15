@@ -1,8 +1,8 @@
 
 /**
- * TrEMBLIdentifier.java
+ * IdentifierDescription.java
  *
- * 2011.09.14
+ * 2011.09.15
  *
  * This file is part of the CheMet library
  *
@@ -19,52 +19,34 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.protein;
+package uk.ac.ebi.resource;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.core.Description;
+import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 
 
 /**
- *          TrEMBLIdentifier – 2011.09.14 <br>
+ *          IdentifierDescription – 2011.09.15 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class TrEMBLIdentifier
-  extends UniProtIdentifier {
+public class IdentifierDescription
+  extends Description {
 
-    private static final Logger LOGGER = Logger.getLogger(TrEMBLIdentifier.class);
-    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.get(
-      TrEMBLIdentifier.class);
+    public static MIRIAMEntry resource;
 
 
-    public TrEMBLIdentifier() {
-    }
-
-
-    public TrEMBLIdentifier(String identifier) {
-        super(identifier);
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public TrEMBLIdentifier newInstance() {
-        return new TrEMBLIdentifier();
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return DESCRIPTION.index;
+    public IdentifierDescription(MIRIAMEntry miriam,
+                                 String shortDescription,
+                                 String longDescription,
+                                 Byte index) {
+        super(shortDescription, longDescription, index);
+        this.resource = miriam;
     }
 
 
 }
+

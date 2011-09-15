@@ -22,7 +22,6 @@
 package uk.ac.ebi.core;
 
 
-
 /**
  *          Description – 2011.09.14 <br>
  *          Holds the description of an object. Mainly used for the user interface
@@ -35,6 +34,7 @@ public class Description {
     public final String shortDescription;
     public final String longDescription;
     public final Byte index;
+
 
     public Description(String shortDescription, String longDescription, Byte index) {
         this.shortDescription = shortDescription;

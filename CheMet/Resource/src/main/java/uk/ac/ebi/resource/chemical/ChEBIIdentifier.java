@@ -1,6 +1,6 @@
 
 /**
- * ChEBIIdentifer.java
+ * ChEBIIdentifier.java
  *
  * 2011.08.16
  *
@@ -24,11 +24,13 @@ package uk.ac.ebi.resource.chemical;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.interfaces.entities.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
+import uk.ac.ebi.resource.IdentifierDescription;
 
 
 /**
  *
- * @name    ChEBIIdentifer – 2011.08.16
+ * @name    ChEBIIdentifier – 2011.08.16
  *          Class description
  *
  * @version $Rev$ : Last Changed $Date$
@@ -36,26 +38,65 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author  $Author$ (this version)
  *
  */
-public class ChEBIIdentifer
+public class ChEBIIdentifier
   extends ChemicalIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(ChEBIIdentifer.class);
+    private static final Logger LOGGER = Logger.getLogger(ChEBIIdentifier.class);
+    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.get(
+      ChEBIIdentifier.class);
 
 
-    public ChEBIIdentifer() {
+    public ChEBIIdentifier() {
     }
 
 
-    public ChEBIIdentifer(String accession) {
+    public ChEBIIdentifier(String accession) {
         super(accession);
     }
+
 
     /**
      * @inheritDoc
      */
     @Override
-    public ChEBIIdentifer newInstance() {
-        return new ChEBIIdentifer();
+    public ChEBIIdentifier newInstance() {
+        return new ChEBIIdentifier();
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Byte getIndex() {
+        return DESCRIPTION.index;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getShortDescription() {
+        return DESCRIPTION.shortDescription;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getLongDescription() {
+        return DESCRIPTION.longDescription;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public MIRIAMEntry getResource() {
+        return DESCRIPTION.resource;
     }
 
 

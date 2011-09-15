@@ -19,7 +19,7 @@ package uk.ac.ebi.chemet.resource;
 
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifer;
+import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
@@ -34,7 +34,7 @@ public enum MIRIAMResource {
     /**
      * Chemical Entities of Biological Interest
      */
-    CHEBI("chebi", ChEBIIdentifer.class),
+    CHEBI("chebi", ChEBIIdentifier.class),
     /**
      * KEGG: Kyoto Encyclopedia of Genes and Genomes – Compound resource
      */

@@ -41,6 +41,9 @@ public abstract class AbstractLoader
   implements DescriptionLoader {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractLoader.class);
+    public static final String SHORT_DESCRIPTION = ".ShortDescription";
+    public static final String LONG_DESCRIPTION = ".LongDescription";
+    public static final String INDEX = ".Index";
 
 
     public AbstractLoader(InputStream stream) {
@@ -53,12 +56,12 @@ public abstract class AbstractLoader
 
 
     public String getShortDescription(Class clazz) {
-        return getProperty(clazz.getSimpleName() + ".ShortDescription");
+        return getProperty(clazz.getSimpleName() + SHORT_DESCRIPTION);
     }
 
 
     public String getLongDescription(Class clazz) {
-        return getProperty(clazz.getSimpleName() + ".LongDescription");
+        return getProperty(clazz.getSimpleName() + LONG_DESCRIPTION);
     }
 
 
@@ -68,7 +71,7 @@ public abstract class AbstractLoader
      * @return
      */
     public Byte getIndex(Class clazz) {
-        return Byte.parseByte(getProperty(clazz.getSimpleName() + ".Index"));
+        return Byte.parseByte(getProperty(clazz.getSimpleName() + INDEX));
     }
 
 
@@ -78,7 +81,7 @@ public abstract class AbstractLoader
      *
      * @param clazz
      * @return
-     * 
+     *
      */
     public Description get(Class clazz) {
         return new Description(getShortDescription(clazz),

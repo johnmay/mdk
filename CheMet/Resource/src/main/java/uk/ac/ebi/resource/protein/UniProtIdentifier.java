@@ -21,7 +21,9 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.metabolomes.resource.Resource;
+import uk.ac.ebi.resource.IdentifierDescription;
 import uk.ac.ebi.resource.IdentifierLoader;
 
 
@@ -39,7 +41,7 @@ public class UniProtIdentifier
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
       UniProtIdentifier.class);
-    private static final Description description = IdentifierLoader.getInstance().get(
+    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.get(
       UniProtIdentifier.class);
     private static final String UNIPROT_ACCESSION_SCHEMA = "[A-Z][A-Z0-9]{5}";
     private static final String UNIPROT_WITH_SPECIES_ACCESSION_SCHEMA = UNIPROT_ACCESSION_SCHEMA +
@@ -121,7 +123,7 @@ public class UniProtIdentifier
      */
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return DESCRIPTION.shortDescription;
     }
 
 
@@ -130,15 +132,25 @@ public class UniProtIdentifier
      */
     @Override
     public String getLongDescription() {
-        return description.longDescription;
+        return DESCRIPTION.longDescription;
     }
+
 
     /**
      * @inheritDoc
      */
     @Override
     public Byte getIndex() {
-        return description.index;
+        return DESCRIPTION.index;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public MIRIAMEntry getResource() {
+        return DESCRIPTION.resource;
     }
 
 

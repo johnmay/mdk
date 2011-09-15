@@ -22,6 +22,7 @@
 package uk.ac.ebi.resource.protein;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.resource.IdentifierDescription;
 
 
 /**
@@ -35,6 +36,8 @@ public class SwissProtIdentifier
   extends UniProtIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(SwissProtIdentifier.class);
+    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.get(
+      SwissProtIdentifier.class);
 
 
     public SwissProtIdentifier() {
@@ -52,6 +55,14 @@ public class SwissProtIdentifier
     @Override
     public SwissProtIdentifier newInstance() {
         return new SwissProtIdentifier();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Byte getIndex() {
+        return DESCRIPTION.index;
     }
 
 

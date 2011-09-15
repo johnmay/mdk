@@ -23,7 +23,9 @@ package uk.ac.ebi.metabolomes.identifier;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
+import uk.ac.ebi.resource.IdentifierDescription;
 import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
+import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 
 /**
@@ -55,6 +57,8 @@ public class InChI
     transient private String charges;
     // matchers
     transient private Pattern standardInChIMatcher = Pattern.compile("InChI=1S");
+    private static final IdentifierDescription DESCRIPTION =
+                                               IDENTIFIER_LOADER.get(InChI.class);
 
 
     public InChI() {
@@ -291,6 +295,42 @@ public class InChI
     @Override
     public InChI newInstance() {
         return new InChI();
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getShortDescription() {
+        return DESCRIPTION.shortDescription;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getLongDescription() {
+        return DESCRIPTION.longDescription;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Byte getIndex() {
+        return DESCRIPTION.index;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public MIRIAMEntry getResource() {
+        return DESCRIPTION.resource;
     }
 
 

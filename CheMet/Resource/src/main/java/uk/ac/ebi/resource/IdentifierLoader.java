@@ -21,8 +21,11 @@
  */
 package uk.ac.ebi.resource;
 
-import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.interfaces.entities.DescriptionLoader;
+import uk.ac.ebi.chemet.resource.MIRIAMResourceLoader;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
+import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 
 /**
@@ -37,6 +40,8 @@ public class IdentifierLoader
   implements DescriptionLoader {
 
     private static final String RESOURCE_NAME = "IdentifierDescription.properties";
+    private static final String MIR_EXTENSION = ".MIR";
+    private static final MIRIAMResourceLoader miriam = MIRIAMResourceLoader.getInstance();
 
 
     private IdentifierLoader() {
@@ -52,6 +57,91 @@ public class IdentifierLoader
 
     public static IdentifierLoader getInstance() {
         return IdentifierLoaderHolder.INSTANCE;
+    }
+
+
+    /**
+     *
+     * Returns the MIR Identifier
+     *
+     * @param type
+     * @return
+     */
+    public Short getMIR(Class<? extends AbstractIdentifier> type) {
+        return Short.parseShort(super.getProperty(type.getSimpleName() + MIR_EXTENSION));
+    }
+
+
+    /**
+     *
+     * Returns the miriam entry for this identifier class
+     *
+     * @param type
+     * @return
+     */
+    public MIRIAMEntry getEntry(Class<? extends AbstractIdentifier> type) {
+        Short mir = getMIR(type);
+        if( mir != 0 ) {
+            return miriam.getEntry(mir);
+        }
+        return null;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getShortDescription(Class type) {
+
+        String key = type.getSimpleName() + SHORT_DESCRIPTION;
+
+
+        if( super.containsKey(key) ) {
+            return super.getShortDescription(type);
+        }
+
+        Short mir = getMIR(type);
+
+        if( mir != 0 ) {
+            MIRIAMEntry entry = miriam.getEntry(mir);
+            return entry.getResourceName();
+        }
+
+        return "";
+
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getLongDescription(Class type) {
+
+        String name = type.getSimpleName();
+
+        if( super.containsKey(name) ) {
+            return super.getLongDescription(type);
+        }
+
+        Short mir = getMIR(type);
+
+        if( mir != 0 ) {
+            MIRIAMEntry entry = miriam.getEntry(mir);
+            return entry.getDefinition();
+        }
+
+        return "";
+
+    }
+
+
+    public IdentifierDescription get(Class type) {
+        return new IdentifierDescription(getEntry(type),
+                                         getShortDescription(type),
+                                         getLongDescription(type),
+                                         getIndex(type));
     }
 
 

@@ -45,7 +45,7 @@ public abstract class AbstractIdentifier
   implements Identifier, Externalizable {
 
     private String accession;
-    private MIRIAMEntry resource;
+    public static final IdentifierLoader IDENTIFIER_LOADER = IdentifierLoader.getInstance();
 
 
     public AbstractIdentifier() {
@@ -56,7 +56,6 @@ public abstract class AbstractIdentifier
     public AbstractIdentifier(String accession) {
         super(IdentifierLoader.getInstance());
         this.accession = accession;
-        this.resource = resource;
     }
 
 
@@ -71,12 +70,7 @@ public abstract class AbstractIdentifier
 
 
     public MIRIAMEntry getResource() {
-        return resource;
-    }
-
-
-    public void setResource(MIRIAMEntry resource) {
-        this.resource = resource;
+        return IDENTIFIER_LOADER.getEntry(getClass());
     }
 
 

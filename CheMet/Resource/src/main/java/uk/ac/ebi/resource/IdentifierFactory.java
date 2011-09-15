@@ -24,11 +24,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.interfaces.entities.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
+import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.metabolomes.resource.Resource;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifer;
+import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.resource.protein.SwissProtIdentifier;
+import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
+import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 
 /**
@@ -42,9 +49,37 @@ public class IdentifierFactory {
 
     private static final Logger logger = Logger.getLogger(IdentifierFactory.class);
     private static final String IDENTIFIER_MAPPING_FILE = "IdentifierResourceMapping.properties";
+    private static final Identifier[] identifiers = new Identifier[Byte.MAX_VALUE];
+    private List<Identifier> supportedIdentifiers = new ArrayList<Identifier>(Arrays.asList(
+      new ChEBIIdentifier(),
+      new KEGGCompoundIdentifier(),
+      new UniProtIdentifier(),
+      new TrEMBLIdentifier(),
+      new SwissProtIdentifier(),
+      new Taxonomy(),
+      new InChI()));
 
 
-    public IdentifierFactory() {
+    public List<Identifier> getSupportedIdentifiers() {
+        return supportedIdentifiers;
+    }
+
+
+    private IdentifierFactory() {
+        for( Identifier identifier : supportedIdentifiers ) {
+            identifiers[identifier.getIndex()] = identifier;
+        }
+    }
+
+
+    public static class IdentifierFactoryHolder {
+
+        public static IdentifierFactory INSTANCE = new IdentifierFactory();
+    }
+
+
+    public static IdentifierFactory getInstance() {
+        return IdentifierFactoryHolder.INSTANCE;
     }
 
 
@@ -166,11 +201,30 @@ public class IdentifierFactory {
      * @return
      */
     public static MIRIAMEntry getResouce(Class<? extends AbstractIdentifier> idClass) {
-//        if(idClass == ChEBIIdentifer.class){
+//        if(idClass == ChEBIIdentifier.class){
 //            return MIRIAMEntry
 //        }
         return null;
     }
+
+
+    /**
+     *
+     * Returns and identifier
+     *
+     * @param <T>
+     * @param type
+     * @return
+     */
+    public Identifier ofClass(Class<? extends Identifier> type) {
+        return ofIndex(IdentifierLoader.getInstance().getIndex(type));
+    }
+
+
+    public Identifier ofIndex(Byte index) {
+        return identifiers[index].newInstance();
+    }
+
 
 
     private static final String ID_SEPERATOR = "|";

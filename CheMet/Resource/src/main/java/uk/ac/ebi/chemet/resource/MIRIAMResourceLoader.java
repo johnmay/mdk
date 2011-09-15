@@ -40,6 +40,7 @@ public class MIRIAMResourceLoader {
     private final File file = DatabaseProperties.getInstance().getDatabasePath("miriam.xml");
     private Map<String, MIRIAMEntry> nameEntryMap = new HashMap<String, MIRIAMEntry>(50);
     private Map<String, MIRIAMEntry> urnEntryMap = new HashMap<String, MIRIAMEntry>(50);
+    private MIRIAMEntry[] mirs = new MIRIAMEntry[200];
 
 
     /**
@@ -82,6 +83,7 @@ public class MIRIAMResourceLoader {
                   definition = null;
 
                 String id = datatypeNode.getAttributes().getNamedItem("id").getNodeValue();
+                Short mir = Short.parseShort(id.substring(4));
                 String pattern = datatypeNode.getAttributes().getNamedItem("pattern").getNodeValue();
 
                 while( datatypeChild != null ) {
@@ -96,6 +98,7 @@ public class MIRIAMResourceLoader {
                 }
                 // add to the map
                 MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn);
+                mirs[mir] = entry;
                 nameEntryMap.put(name.toLowerCase(),
                                  entry);
                 urnEntryMap.put(entry.getBaseURN(), entry);
@@ -116,6 +119,11 @@ public class MIRIAMResourceLoader {
         }
         logger.error("No MIRIAM entry found for name '" + name + "'");
         return null;
+    }
+
+
+    public MIRIAMEntry getEntry(Short mir) {
+        return mirs[mir];
     }
 
 
