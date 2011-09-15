@@ -33,7 +33,7 @@ import org.w3c.dom.NodeList;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
 import uk.ac.ebi.metabolomes.utilities.Util;
-import uk.ac.ebi.metabolomes.utilities.XMLHelper;
+import uk.ac.ebi.chemet.resource.XMLHelper;
 
 /**
  * ParseIPRScanXMLMain.java – MetabolicDevelopmentKit – Jun 3, 2011

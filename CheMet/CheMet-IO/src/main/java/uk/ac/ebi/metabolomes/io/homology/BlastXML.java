@@ -23,7 +23,7 @@ import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
-import uk.ac.ebi.metabolomes.utilities.XMLHelper;
+import uk.ac.ebi.chemet.resource.XMLHelper;
 
 /**
  * BlastXML.java
