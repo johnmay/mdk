@@ -21,6 +21,7 @@ import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import javax.print.DocFlavor.URL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
@@ -72,6 +73,14 @@ public class MIRIAMResourceLoader {
             return;
         }
 
+        // default entry
+        mirs[0] = new MIRIAMEntry("MIR:00000000",
+                                  "N/A",
+                                  "N/A",
+                                  "None MIRIAM Entry",
+                                  "",
+                                  "http://www.google.com/search?q=$id");
+
         Node datatypeNode = xmlDocument.getLastChild().getFirstChild();
 
         while( datatypeNode != null ) {
@@ -80,7 +89,7 @@ public class MIRIAMResourceLoader {
 
                 String name = null,
                   urn = null,
-                  definition = null;
+                  definition = null, url = null;
 
                 String id = datatypeNode.getAttributes().getNamedItem("id").getNodeValue();
                 Short mir = Short.parseShort(id.substring(4));
@@ -93,11 +102,14 @@ public class MIRIAMResourceLoader {
                         definition = datatypeChild.getTextContent();
                     } else if( datatypeChild.getNodeName().equals("uris") ) {
                         urn = datatypeChild.getChildNodes().item(1).getTextContent();
+                    } else if( datatypeChild.getNodeName().equals("resources") ) {
+                        url = getURL(datatypeChild.getChildNodes().item(1));
                     }
                     datatypeChild = datatypeChild.getNextSibling();
                 }
+
                 // add to the map
-                MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn);
+                MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn, url);
                 mirs[mir] = entry;
                 nameEntryMap.put(name.toLowerCase(),
                                  entry);
@@ -107,6 +119,12 @@ public class MIRIAMResourceLoader {
         }
     }
 
+    private String getURL(Node node){
+        if(node.getNodeName().equals("resource") == false){
+            return "";
+        }
+        return node.getChildNodes().item(5).getTextContent();
+    }
 
     /**
      * Access a MIRIAM resource entry by it's name, such as, 'chebi'.

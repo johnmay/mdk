@@ -14,9 +14,13 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.metabolomes.identifier;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.apache.log4j.Logger;
+
 
 /**
  * MIRIAMEntry.java – MetabolicDevelopmentKit – Jun 25, 2011
@@ -37,58 +41,90 @@ import org.apache.log4j.Logger;
  */
 public class MIRIAMEntry {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( MIRIAMEntry.class );
+    private static final org.apache.log4j.Logger logger =
+                                                 org.apache.log4j.Logger.getLogger(MIRIAMEntry.class);
     private String id;
     private String pattern;
     private String resouceName;
     private String definition;
     private String urn;
+    private String url;
     private Class identifierClass = GenericIdentifier.class;
 
-    public MIRIAMEntry( String id , String pattern , String resouceName , String definition , String urn ) {
+
+    public MIRIAMEntry(String id, String pattern, String resouceName, String definition, String urn,
+                       String url) {
         this.id = id;
         this.pattern = pattern;
         this.resouceName = resouceName;
         this.definition = definition;
         this.urn = urn;
+        this.url = url;
     }
+
 
     public String getDefinition() {
         return definition;
     }
 
+
     public String getId() {
         return id;
     }
+
 
     public static Logger getLogger() {
         return logger;
     }
 
+
     public String getPattern() {
         return pattern;
     }
+
 
     public String getResourceName() {
         return resouceName;
     }
 
+
     public String getBaseURN() {
         return urn;
     }
 
-    public String getURN( String identifier ) {
-        StringBuilder sb = new StringBuilder( urn.length() );
 
-        sb.append( urn ).append( ':' ).append( identifier.replace( ":", "%3A")  );
+    public String getURN(String accession) {
+        StringBuilder sb = new StringBuilder(urn.length());
+
+        sb.append(urn).append(':').append(accession.replace(":", "%3A"));
         return sb.toString();
     }
+
 
     /**
      * Allows the entry class to be set by the MIRIAMResouce enumeration for common encoded types
      * @param identifierClass
      */
-    public void setIdentifierClass( Class identifierClass ) {
+    public void setIdentifierClass(Class identifierClass) {
         this.identifierClass = identifierClass;
     }
+
+
+    public String getBaseURL() {
+        return this.url;
+    }
+
+
+    public URL getURL(String accession) {
+        try {
+            String url = this.url;
+            return new URL(url.replaceAll("\\$id", accession));
+        } catch( MalformedURLException ex ) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+
 }
+

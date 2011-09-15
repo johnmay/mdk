@@ -100,5 +100,13 @@ public class ChEBIIdentifier
     }
 
 
+    public static void main(String[] args) {
+        KEGGCompoundIdentifier id = new KEGGCompoundIdentifier("C00002");
+        System.out.println(id.getShortDescription());
+        System.out.println(id.getLongDescription());
+        System.out.println(id.getURN());
+        System.out.println(id.getURL());
+    }
+
 }
 

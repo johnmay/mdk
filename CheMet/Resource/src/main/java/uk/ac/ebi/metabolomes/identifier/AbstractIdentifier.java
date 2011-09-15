@@ -19,7 +19,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.io.Serializable;
+import java.net.URL;
 import uk.ac.ebi.chemet.interfaces.entities.Identifier;
 import uk.ac.ebi.core.AbstractDescriptor;
 import uk.ac.ebi.resource.IdentifierLoader;
@@ -105,9 +105,16 @@ public abstract class AbstractIdentifier
     }
 
 
+    public String getURN(){
+        return getResource().getURN(accession);
+    }
+
+    public URL getURL(){
+        return getResource().getURL(getAccession());
+    }
+
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeUTF(accession);
-        // might not need to write MIRIAM identifier
     }
 
 

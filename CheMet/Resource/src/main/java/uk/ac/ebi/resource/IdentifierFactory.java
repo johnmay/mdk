@@ -17,6 +17,9 @@
 
 package uk.ac.ebi.resource;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -225,6 +228,28 @@ public class IdentifierFactory {
         return identifiers[index].newInstance();
     }
 
+
+    /**
+     *
+     * Utility method for reading an identifier to an ObjectOutput
+     *
+     */
+    public Identifier read(ObjectInput oi) throws IOException, ClassNotFoundException {
+        Identifier identifier = ofIndex(oi.readByte());
+        identifier.readExternal(oi);
+        return identifier;
+    }
+
+
+    /**
+     *
+     * Utility method for writing an identifier to an ObjectOutput
+     *
+     */
+    public void write(ObjectOutput oo, Identifier identifier) throws IOException {
+        oo.writeByte(identifier.getIndex());
+        identifier.writeExternal(oo);
+    }
 
 
     private static final String ID_SEPERATOR = "|";
