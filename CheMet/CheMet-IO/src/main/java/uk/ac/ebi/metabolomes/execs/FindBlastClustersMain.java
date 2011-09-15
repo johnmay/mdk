@@ -26,9 +26,9 @@ import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
 import uk.ac.ebi.metabolomes.http.uniprot.UniProtIdentifierMapper;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.metabolomes.identifier.ECNumber;
-import uk.ac.ebi.metabolomes.identifier.IdentifierFactory;
-import uk.ac.ebi.metabolomes.identifier.UniProtIdentifier;
+import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.metabolomes.io.flatfile.IntEnzXML;
 import uk.ac.ebi.metabolomes.io.homology.BlastXML;
 

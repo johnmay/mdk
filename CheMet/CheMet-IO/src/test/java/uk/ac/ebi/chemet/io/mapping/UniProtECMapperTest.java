@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import junit.framework.TestCase;
-import uk.ac.ebi.metabolomes.identifier.ECNumber;
-import uk.ac.ebi.metabolomes.identifier.UniProtIdentifier;
+import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 /**
  *
@@ -28,14 +28,14 @@ public class UniProtECMapperTest extends TestCase {
         UniProtECMapper mapper = new UniProtECMapper( null , 0 , 1 );
 
         UniProtIdentifier upid_q6gzx4 = mapper.parseKey( "Q6GZX4" );
-        assertEquals( "Q6GZX4" , upid_q6gzx4.getIdentifierString() );
+        assertEquals( "Q6GZX4" , upid_q6gzx4.getAccession() );
         // swissprot prefix
         UniProtIdentifier upid_sp_q6gzx4 = mapper.parseKey( "sp|Q6GZX4" );
-        assertEquals( "Q6GZX4" , upid_sp_q6gzx4.getIdentifierString() );
+        assertEquals( "Q6GZX4" , upid_sp_q6gzx4.getAccession() );
 
         // trembl prefix
         UniProtIdentifier upid_tr_q6gzx4 = mapper.parseKey( "tr|Q6GZX4" );
-        assertEquals( "Q6GZX4" , upid_tr_q6gzx4.getIdentifierString() );
+        assertEquals( "Q6GZX4" , upid_tr_q6gzx4.getAccession() );
     }
 
     /**

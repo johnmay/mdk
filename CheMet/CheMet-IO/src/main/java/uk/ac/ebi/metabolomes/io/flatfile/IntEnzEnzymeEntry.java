@@ -28,9 +28,9 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.metabolomes.identifier.ECNumber;
-import uk.ac.ebi.metabolomes.identifier.IdentifierFactory;
-import uk.ac.ebi.metabolomes.identifier.UniProtIdentifier;
+import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.metabolomes.resource.Resource;
 
 /**

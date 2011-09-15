@@ -58,14 +58,14 @@
             <version>0.8-b2</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi</groupId>
-            <artifactId>Resource</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.explodingpixels</groupId>
             <artifactId>mac_widgets</artifactId>
             <version>0.9.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi</groupId>
+            <artifactId>chemet-resource</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
     <build>

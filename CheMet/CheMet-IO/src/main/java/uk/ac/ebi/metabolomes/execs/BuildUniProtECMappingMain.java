@@ -30,7 +30,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import uk.ac.ebi.metabolomes.http.uniprot.UniProtSearch;
-import uk.ac.ebi.metabolomes.identifier.ECNumber;
+import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.io.flatfile.IntEnzXML;
 
 /**

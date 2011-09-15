@@ -25,10 +25,10 @@ import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.metabolomes.identifier.ECNumber;
+import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
-import uk.ac.ebi.metabolomes.identifier.IdentifierFactory;
-import uk.ac.ebi.metabolomes.identifier.UniProtIdentifier;
+import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 /**
  * @name    IdentiferECMapper

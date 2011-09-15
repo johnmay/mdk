@@ -27,7 +27,7 @@ import java.util.List;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.InChIStoichiometricMatrix;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
-import uk.ac.ebi.metabolomes.identifier.ECNumber;
+import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**

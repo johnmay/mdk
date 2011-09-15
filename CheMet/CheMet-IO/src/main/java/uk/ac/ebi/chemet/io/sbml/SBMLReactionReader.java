@@ -40,7 +40,7 @@ import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
-import uk.ac.ebi.metabolomes.io.xml.MIRIAMResourceLoader;
+import uk.ac.ebi.chemet.resource.MIRIAMResourceLoader;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
