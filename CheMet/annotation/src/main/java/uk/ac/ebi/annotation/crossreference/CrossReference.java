@@ -44,7 +44,7 @@ public class CrossReference<E extends Identifier>
 
     private static final Logger LOGGER = Logger.getLogger(CrossReference.class);
     private E identifier;
-    private static Description description = AnnotationLoader.getInstance().get(
+    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
       CrossReference.class);
 
 

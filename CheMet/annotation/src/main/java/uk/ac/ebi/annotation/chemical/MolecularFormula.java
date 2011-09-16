@@ -47,7 +47,7 @@ public class MolecularFormula
     private static final Logger LOGGER = Logger.getLogger(MolecularFormula.class);
     private IMolecularFormula formula;
     private String stringFormula;
-    private static Description description = AnnotationLoader.getInstance().get(
+    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
       MolecularFormula.class);
 
 

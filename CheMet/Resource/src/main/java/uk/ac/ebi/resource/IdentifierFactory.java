@@ -221,7 +221,7 @@ public class IdentifierFactory {
      * @param type
      * @return
      */
-    public Identifier ofClass(Class<? extends Identifier> type) {
+    public Identifier ofClass(Class type) {
         return ofIndex(IdentifierLoader.getInstance().getIndex(type));
     }
 

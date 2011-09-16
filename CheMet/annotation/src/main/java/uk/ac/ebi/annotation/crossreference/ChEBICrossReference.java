@@ -39,7 +39,7 @@ public class ChEBICrossReference
   extends CrossReference<ChEBIIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBICrossReference.class);
-    private static Description description = AnnotationLoader.getInstance().get(
+    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
       ChEBICrossReference.class);
 
 

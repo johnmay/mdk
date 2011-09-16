@@ -83,7 +83,7 @@ public abstract class AbstractLoader
      * @return
      *
      */
-    public Description get(Class clazz) {
+    public Description getMetaInfo(Class clazz) {
         return new Description(getShortDescription(clazz),
                                getLongDescription(clazz),
                                getIndex(clazz));

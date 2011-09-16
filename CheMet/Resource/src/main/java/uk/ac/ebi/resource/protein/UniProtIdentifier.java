@@ -41,7 +41,7 @@ public class UniProtIdentifier
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
       UniProtIdentifier.class);
-    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.get(
+    private static final IdentifierDescription META_INFO = IDENTIFIER_LOADER.getMetaInfo(
       UniProtIdentifier.class);
     private static final String UNIPROT_ACCESSION_SCHEMA = "[A-Z][A-Z0-9]{5}";
     private static final String UNIPROT_WITH_SPECIES_ACCESSION_SCHEMA = UNIPROT_ACCESSION_SCHEMA +
@@ -123,7 +123,7 @@ public class UniProtIdentifier
      */
     @Override
     public String getShortDescription() {
-        return DESCRIPTION.shortDescription;
+        return META_INFO.shortDescription;
     }
 
 
@@ -132,7 +132,7 @@ public class UniProtIdentifier
      */
     @Override
     public String getLongDescription() {
-        return DESCRIPTION.longDescription;
+        return META_INFO.longDescription;
     }
 
 
@@ -141,7 +141,7 @@ public class UniProtIdentifier
      */
     @Override
     public Byte getIndex() {
-        return DESCRIPTION.index;
+        return META_INFO.index;
     }
 
 
@@ -150,7 +150,7 @@ public class UniProtIdentifier
      */
     @Override
     public MIRIAMEntry getResource() {
-        return DESCRIPTION.resource;
+        return META_INFO.resource;
     }
 
 

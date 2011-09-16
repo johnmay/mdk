@@ -20,6 +20,7 @@ package uk.ac.ebi.metabolomes.identifier;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.Resource;
 
 
 /**
@@ -39,7 +40,8 @@ import org.apache.log4j.Logger;
  *
  *
  */
-public class MIRIAMEntry {
+public class MIRIAMEntry
+  implements Resource {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(MIRIAMEntry.class);

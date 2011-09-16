@@ -36,8 +36,7 @@ import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 public class IdentifierDescription
   extends Description {
 
-    public static MIRIAMEntry resource;
-
+    public final MIRIAMEntry resource;
 
     public IdentifierDescription(MIRIAMEntry miriam,
                                  String shortDescription,

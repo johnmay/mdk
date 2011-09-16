@@ -42,7 +42,7 @@ public class AuthorAnnotation
     private static final Logger LOGGER = Logger.getLogger(AuthorAnnotation.class);
     private String author;
     private String annotation;
-    private static Description description = AnnotationLoader.getInstance().get(
+    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
       AuthorAnnotation.class);
 
 

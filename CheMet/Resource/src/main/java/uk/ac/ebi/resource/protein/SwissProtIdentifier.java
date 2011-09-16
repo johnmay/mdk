@@ -36,7 +36,7 @@ public class SwissProtIdentifier
   extends UniProtIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(SwissProtIdentifier.class);
-    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.get(
+    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
       SwissProtIdentifier.class);
 
 

@@ -38,7 +38,7 @@ public class PubChemSubstanceIdentifier
   extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(PubChemSubstanceIdentifier.class);
-    private static final IdentifierDescription DESCRIPTION = IdentifierLoader.getInstance().get(
+    private static final IdentifierDescription DESCRIPTION = IdentifierLoader.getInstance().getMetaInfo(
       PubChemSubstanceIdentifier.class);
 
 

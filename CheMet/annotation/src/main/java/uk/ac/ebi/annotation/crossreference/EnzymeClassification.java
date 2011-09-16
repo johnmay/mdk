@@ -39,7 +39,7 @@ public class EnzymeClassification
   extends Classification<ECNumber> {
 
     private static final Logger LOGGER = Logger.getLogger(EnzymeClassification.class);
-    private static Description description = AnnotationLoader.getInstance().get(
+    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
       EnzymeClassification.class);
 
 

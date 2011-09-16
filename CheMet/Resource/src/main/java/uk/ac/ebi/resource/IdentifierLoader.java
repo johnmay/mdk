@@ -79,7 +79,7 @@ public class IdentifierLoader
      * @param type
      * @return
      */
-    public MIRIAMEntry getEntry(Class<? extends AbstractIdentifier> type) {
+    public MIRIAMEntry getEntry(Class type) {
         Short mir = getMIR(type);
         if( mir != 0 ) {
             return miriam.getEntry(mir);
@@ -137,7 +137,7 @@ public class IdentifierLoader
     }
 
 
-    public IdentifierDescription get(Class type) {
+    public IdentifierDescription getMetaInfo(Class type) {
         return new IdentifierDescription(getEntry(type),
                                          getShortDescription(type),
                                          getLongDescription(type),

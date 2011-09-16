@@ -58,7 +58,7 @@ public class InChI
     // matchers
     transient private Pattern standardInChIMatcher = Pattern.compile("InChI=1S");
     private static final IdentifierDescription DESCRIPTION =
-                                               IDENTIFIER_LOADER.get(InChI.class);
+                                               IDENTIFIER_LOADER.getMetaInfo(InChI.class);
 
 
     public InChI() {

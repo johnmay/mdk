@@ -22,9 +22,7 @@
 package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Identifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
+import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.resource.IdentifierDescription;
 
 
@@ -42,7 +40,7 @@ public class ChEBIIdentifier
   extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIIdentifier.class);
-    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.get(
+    private static final IdentifierDescription META_DATA = IDENTIFIER_LOADER.getMetaInfo(
       ChEBIIdentifier.class);
 
 
@@ -50,8 +48,27 @@ public class ChEBIIdentifier
     }
 
 
+    /**
+     *
+     * Constructor a ChEBI identifier with a given accession
+     *
+     * @param accession
+     *
+     */
     public ChEBIIdentifier(String accession) {
         super(accession);
+    }
+
+
+    /**
+     *
+     * Convenience constructor using only the integer accession of a ChEBI accession
+     *
+     * @param accession Integer part of a ChEBI accession
+     *
+     */
+    public ChEBIIdentifier(Integer accession) {
+        super("ChEBI:" + accession);
     }
 
 
@@ -69,7 +86,7 @@ public class ChEBIIdentifier
      */
     @Override
     public Byte getIndex() {
-        return DESCRIPTION.index;
+        return META_DATA.index;
     }
 
 
@@ -78,7 +95,7 @@ public class ChEBIIdentifier
      */
     @Override
     public String getShortDescription() {
-        return DESCRIPTION.shortDescription;
+        return META_DATA.shortDescription;
     }
 
 
@@ -87,7 +104,7 @@ public class ChEBIIdentifier
      */
     @Override
     public String getLongDescription() {
-        return DESCRIPTION.longDescription;
+        return META_DATA.longDescription;
     }
 
 
@@ -95,8 +112,8 @@ public class ChEBIIdentifier
      * @inheritDoc
      */
     @Override
-    public MIRIAMEntry getResource() {
-        return DESCRIPTION.resource;
+    public Resource getResource() {
+        return META_DATA.resource;
     }
 
 
@@ -107,6 +124,7 @@ public class ChEBIIdentifier
         System.out.println(id.getURN());
         System.out.println(id.getURL());
     }
+
 
 }
 

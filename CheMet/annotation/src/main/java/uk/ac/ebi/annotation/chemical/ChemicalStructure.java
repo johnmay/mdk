@@ -50,7 +50,7 @@ public class ChemicalStructure
     private static final Logger LOGGER = Logger.getLogger(ChemicalStructure.class);
     private IAtomContainer molecule;
     // todo:
-    private static Description description = AnnotationLoader.getInstance().get(
+    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
       ChemicalStructure.class);
 
 

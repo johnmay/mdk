@@ -38,7 +38,7 @@ public abstract class AbstractDescriptor
 
     private static final Logger LOGGER = Logger.getLogger(AbstractDescriptor.class);
     // short/long description and index are loaded from a properties file
-    transient private DescriptionLoader loader;
+    private DescriptionLoader loader;
 
 
     public AbstractDescriptor(DescriptionLoader loader) {

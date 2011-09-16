@@ -39,7 +39,7 @@ public class Classification<E extends AbstractIdentifier>
   extends CrossReference<E> {
 
     private static final Logger LOGGER = Logger.getLogger(Classification.class);
-    private static Description description = AnnotationLoader.getInstance().get(
+    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
       Classification.class);
 
 

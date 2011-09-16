@@ -21,6 +21,8 @@
  */
 package uk.ac.ebi.interfaces;
 
+import java.net.URL;
+
 
 /**
  *          Identifier – 2011.09.15 <br>
@@ -30,6 +32,17 @@ package uk.ac.ebi.interfaces;
  * @author  $Author$ (this version)
  */
 public interface Identifier extends Descriptor {
+
+
+    /**
+     *
+     * Access the stored accession
+     *
+     * @param accession
+     *
+     */
+    public void setAccession(String accession);
+
 
     /**
      *
@@ -49,6 +62,26 @@ public interface Identifier extends Descriptor {
      *
      */
     public Identifier newInstance();
+
+
+    /**
+     *
+     * Return the URL of the database item
+     *
+     */
+    public URL getURL();
+
+
+    /**
+     *
+     * Return the URN for use in Systems Biology Markup Language
+     *
+     */
+    public String getURN();
+
+
+    public Resource getResource();
+
 
 }
 

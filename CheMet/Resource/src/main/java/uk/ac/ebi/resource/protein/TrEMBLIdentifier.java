@@ -36,7 +36,7 @@ public class TrEMBLIdentifier
   extends UniProtIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(TrEMBLIdentifier.class);
-    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.get(
+    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
       TrEMBLIdentifier.class);
 
 

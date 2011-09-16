@@ -41,7 +41,7 @@ public class KEGGCompoundIdentifier
   extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundIdentifier.class);
-    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.get(
+    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
       KEGGCompoundIdentifier.class);
 
 

@@ -22,6 +22,7 @@ import java.io.ObjectOutput;
 import java.net.URL;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.core.AbstractDescriptor;
+import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.resource.IdentifierLoader;
 
 
@@ -44,8 +45,8 @@ public abstract class AbstractIdentifier
   extends AbstractDescriptor
   implements Identifier, Externalizable {
 
-    private String accession;
     public static final IdentifierLoader IDENTIFIER_LOADER = IdentifierLoader.getInstance();
+    private String accession;
 
 
     public AbstractIdentifier() {
@@ -54,32 +55,50 @@ public abstract class AbstractIdentifier
 
 
     public AbstractIdentifier(String accession) {
-        this();
+        super(IdentifierLoader.getInstance());
         this.accession = accession;
     }
 
 
+    /**
+     * @inheritDoc
+     */
     public String getAccession() {
         return accession;
     }
 
 
-    public void setAccession(String identifier) {
-        this.accession = identifier;
+    /**
+     * @param accession
+     * @inheritDoc
+     */
+    public void setAccession(String accession) {
+        this.accession = accession;
     }
 
 
-    public MIRIAMEntry getResource() {
+    /**
+     *
+     * @return
+     */
+    public Resource getResource() {
+        System.out.println("fetching entry");
         return IDENTIFIER_LOADER.getEntry(getClass());
     }
 
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public String toString() {
         return accession;
     }
 
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public boolean equals(Object obj) {
         if( obj == null ) {
@@ -97,6 +116,9 @@ public abstract class AbstractIdentifier
     }
 
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -105,11 +127,17 @@ public abstract class AbstractIdentifier
     }
 
 
+    /**
+     * @inheritDoc
+     */
     public String getURN() {
         return getResource().getURN(accession);
     }
 
 
+    /**
+     * @inheritDoc
+     */
     public URL getURL() {
         return getResource().getURL(getAccession());
     }
