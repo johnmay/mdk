@@ -24,7 +24,9 @@ package uk.ac.ebi.observation.sequence;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Set;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.Identifier;
 
 
 /**
@@ -38,9 +40,12 @@ public class LocalAlignment
   extends Alignment {
 
     private static final Logger LOGGER = Logger.getLogger(LocalAlignment.class);
+
     // mandatory fields
     private Double expected;
     private Double bitScore;
+    // optional fields
+    private Set<Identifier> identifiers;
 
 
     @Override

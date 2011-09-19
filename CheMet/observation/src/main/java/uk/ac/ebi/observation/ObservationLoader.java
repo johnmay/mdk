@@ -21,8 +21,6 @@
  */
 package uk.ac.ebi.observation;
 
-import java.io.IOException;
-import java.util.Properties;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.DescriptionLoader;
 import uk.ac.ebi.resource.AbstractLoader;

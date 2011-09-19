@@ -21,9 +21,8 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.lang.reflect.InvocationTargetException;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 
 
 /**
@@ -36,10 +35,10 @@ public class MetabolicReconstructionObject implements Cloneable, Externalizable 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
       MetabolicReconstructionObject.class);
-    private AbstractIdentifier identifier;
+    private Identifier identifier;
 
 
-    public AbstractIdentifier getIdentifier() {
+    public Identifier getIdentifier() {
         return identifier;
     }
 

@@ -27,6 +27,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 
@@ -44,8 +45,8 @@ public class GeneProductCollection
       getLogger(GeneProductCollection.class);
     private ArrayList<GeneProduct> geneProducts;
     private ArrayList<GeneProteinProduct> proteinProducts;
-    private HashMap<AbstractIdentifier, GeneProteinProduct> proteinProductIdentifierMap;
-    private HashMap<AbstractIdentifier, GeneProduct> productIdentifierMap;
+    private HashMap<Identifier, GeneProteinProduct> proteinProductIdentifierMap;
+    private HashMap<Identifier, GeneProduct> productIdentifierMap;
 
 
     /**
@@ -54,8 +55,8 @@ public class GeneProductCollection
     public GeneProductCollection() {
         geneProducts = new ArrayList<GeneProduct>();
         proteinProducts = new ArrayList<GeneProteinProduct>();
-        proteinProductIdentifierMap = new HashMap<AbstractIdentifier, GeneProteinProduct>();
-        productIdentifierMap = new HashMap<AbstractIdentifier, GeneProduct>();
+        proteinProductIdentifierMap = new HashMap<Identifier, GeneProteinProduct>();
+        productIdentifierMap = new HashMap<Identifier, GeneProduct>();
     }
 
 
@@ -74,7 +75,7 @@ public class GeneProductCollection
      */
     public AbstractIdentifier[] addAll(GeneProduct[] geneProducts) {
 
-        ArrayList<AbstractIdentifier> clashingIdentifiers = new ArrayList<AbstractIdentifier>();
+        ArrayList<Identifier> clashingIdentifiers = new ArrayList<Identifier>();
 
         for( GeneProduct geneProduct : geneProducts ) {
             if( addProduct(geneProduct) == Boolean.FALSE ) {
@@ -90,7 +91,7 @@ public class GeneProductCollection
      * @param geneProducts
      */
     public AbstractIdentifier[] addAll(GeneProteinProduct[] proteinProducts) {
-        ArrayList<AbstractIdentifier> clashingIdentifiers = new ArrayList<AbstractIdentifier>();
+        ArrayList<Identifier> clashingIdentifiers = new ArrayList<Identifier>();
         for( GeneProduct proteinProduct : proteinProducts ) {
             if( addProduct(proteinProduct) == Boolean.FALSE ) {
                 clashingIdentifiers.add(proteinProduct.getIdentifier());
