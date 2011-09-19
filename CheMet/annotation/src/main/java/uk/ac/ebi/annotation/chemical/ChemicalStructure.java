@@ -63,6 +63,11 @@ public class ChemicalStructure
     }
 
 
+    public IAtomContainer getMolecule() {
+        return molecule;
+    }
+
+
     public static void main(String[] args) {
 
 //      System.out.println(new ChemicalStructure().getShortDescription());
