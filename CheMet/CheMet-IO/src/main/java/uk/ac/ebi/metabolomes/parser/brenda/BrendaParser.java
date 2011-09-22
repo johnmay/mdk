@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import uk.ac.ebi.metabolomes.bioObjects.BrendaEntryEnzyme;
@@ -144,7 +145,7 @@ public class BrendaParser {
             } else {
                 //System.out.println("\t|" + tissue + "|");
                 try {
-                    Set<CandidateEntry> olsRes = lookUpService.getRankedCandidates(tissue, "BTO", 5);
+                    List<CandidateEntry> olsRes = lookUpService.getRankedCandidates(tissue, "BTO", 5);
                     if (olsRes != null && olsRes.size() > 0) {
                         foundInMwtOnt++;
                         for (CandidateEntry ce : olsRes) {

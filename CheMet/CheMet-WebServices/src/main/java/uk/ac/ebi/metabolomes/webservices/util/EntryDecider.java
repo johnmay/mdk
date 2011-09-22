@@ -24,6 +24,14 @@ public class EntryDecider {
 
     private Pattern prefixPattern;
 
+    /**
+     * 
+     * @param query
+     * @param candidates
+     * @return
+     * @deprecated {@see getOrderedCandidates(String, Map<String , String> candidates)} This uses a list and thus does not colapse entries with duplicate
+     */
+    @Deprecated
     public Set<CandidateEntry> decideBestCandidate( String query , Map<String , String> candidates ) {
 
         Set<CandidateEntry> orderedCand = new TreeSet<CandidateEntry>();
