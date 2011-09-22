@@ -21,8 +21,7 @@
  */
 package uk.ac.ebi.metabolomes.webservices.util;
 
-import static com.google.common.base.Objects.hashCode;
-import static com.google.common.base.Objects.equal;
+import com.google.common.base.Objects;
 
 
 /**
@@ -136,7 +135,7 @@ public class CandidateEntry
      */
     @Override
     public int hashCode() {
-        return hashCode(id, description, distance, comment);
+        return Objects.hashCode(id, description, distance, comment);
     }
 
 
@@ -153,16 +152,16 @@ public class CandidateEntry
         }
         final CandidateEntry other = (CandidateEntry) obj;
 
-        if( !equal(this.id, other.id) ) {
+        if( !Objects.equal(this.id, other.id) ) {
             return false;
         }
-        if( !equal(this.description, other.description) ) {
+        if( !Objects.equal(this.description, other.description) ) {
             return false;
         }
-        if( !equal(this.distance, other.distance) ) {
+        if( !Objects.equal(this.distance, other.distance) ) {
             return false;
         }
-        if( !equal(this.comment, other.comment) ) {
+        if( !Objects.equal(this.comment, other.comment) ) {
             return false;
         }
         return true;
