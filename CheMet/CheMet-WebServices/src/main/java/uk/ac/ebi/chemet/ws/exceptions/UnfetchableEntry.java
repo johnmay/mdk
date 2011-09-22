@@ -1,6 +1,6 @@
 
 /**
- * MissingRecordException.java
+ * UnfetchableEntry.java
  *
  * 2011.08.23
  *
@@ -22,19 +22,35 @@
 package uk.ac.ebi.chemet.ws.exceptions;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 
 
 /**
- *          MissingRecordException – 2011.08.23 <br>
+ *          UnfetchableEntry – 2011.08.23 <br>
  *          Class should be thrown if a web service could not retrieve a record for the given id
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MissingRecordException extends Exception {
+public class UnfetchableEntry extends RuntimeException {
 
-    private static final Logger LOGGER = Logger.getLogger( MissingRecordException.class );
+    private static final Logger LOGGER = Logger.getLogger(UnfetchableEntry.class);
+    public static final String NO_MATCH_FOUND = "no match was found";
+    public static final String CLIENT_EXCEPTION = "the client threw an exception";
 
+
+    public UnfetchableEntry() {
+    }
+
+
+    public UnfetchableEntry(String accession, String ws, String reason) {
+       super( new StringBuilder(60).append("Unable to fetch ").append(accession).
+          append(" from ").append(ws).
+          append(" because ").append(reason).toString());
+    }
+
+    
 
 
 }

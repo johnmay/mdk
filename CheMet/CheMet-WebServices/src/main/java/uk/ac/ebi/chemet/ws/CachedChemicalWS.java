@@ -40,7 +40,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
-import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
+import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 
@@ -191,11 +191,11 @@ public class CachedChemicalWS {
      * @param id
      * @return
      *
-     * @throws MissingRecordException
+     * @throws UnfetchableEntry
      * @throws MissingStructureException
      *
      */
-    public String getMDLString( String id ) throws MissingRecordException ,
+    public String getMDLString( String id ) throws UnfetchableEntry ,
                                                    MissingStructureException {
 
         File cachedFile = new File( cacheDir , id + MDL_STRING );
@@ -225,11 +225,11 @@ public class CachedChemicalWS {
      * @param id
      * @return
      *
-     * @throws MissingRecordException
+     * @throws UnfetchableEntry
      * @throws MissingStructureException
      *
      */
-    public IAtomContainer getAtomContainer( String id ) throws MissingRecordException ,
+    public IAtomContainer getAtomContainer( String id ) throws UnfetchableEntry ,
                                                                MissingStructureException {
 
         String objectId = id + CDK_ATOMCONTAINER;
@@ -281,7 +281,7 @@ public class CachedChemicalWS {
     }
 
 
-    public String getName( String id ) throws MissingRecordException {
+    public String getName( String id ) throws UnfetchableEntry {
 
         String objectId = id + NAME_STRING;
 

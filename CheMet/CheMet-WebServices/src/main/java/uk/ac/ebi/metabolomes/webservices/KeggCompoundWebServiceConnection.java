@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import java.util.Collection;
 import java.util.HashMap;
 import javax.xml.rpc.ServiceException;
 
@@ -18,7 +19,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
-import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
+import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 
 
@@ -34,7 +35,7 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
      * @inheritDoc
      */
     @Override
-    public String getMDLString( String id ) throws MissingRecordException ,
+    public String getMDLString( String id ) throws UnfetchableEntry ,
                                                    MissingStructureException {
         try {
             String mdlString = serv.bget( "-f m " + this.resolveDBPrefix( id ) + ":" + id );
@@ -43,15 +44,21 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
             }
             return mdlString;
         } catch ( RemoteException e ) {
-            throw new MissingRecordException();
+            throw new UnfetchableEntry();
         }
 
     }
 
 
     @Override
-    public String getName( String id ) throws MissingRecordException {
+    public String getName( String id ) throws UnfetchableEntry {
         return id;
+    }
+
+
+    @Override
+    public Collection<String> getSynonyms(String accession) throws UnfetchableEntry {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 

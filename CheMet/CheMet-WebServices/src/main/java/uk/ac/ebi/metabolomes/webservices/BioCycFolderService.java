@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import org.apache.log4j.Logger;
 
@@ -16,7 +17,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.ReaderFactory;
-import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
+import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 
 public class BioCycFolderService extends ChemicalDBWebService {
@@ -119,15 +120,21 @@ public class BioCycFolderService extends ChemicalDBWebService {
 
 
     @Override
-    public String getMDLString( String id ) throws MissingRecordException ,
+    public String getMDLString( String id ) throws UnfetchableEntry ,
                                                    MissingStructureException {
         throw new UnsupportedOperationException( "Not supported yet." );
     }
 
 
     @Override
-    public String getName( String id ) throws MissingRecordException {
+    public String getName( String id ) throws UnfetchableEntry {
         throw new UnsupportedOperationException( "Not supported yet." );
+    }
+
+
+    @Override
+    public Collection<String> getSynonyms(String accession) throws UnfetchableEntry {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

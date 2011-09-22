@@ -37,10 +37,10 @@ import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
 import uk.ac.ebi.chemet.exceptions.AbsentAnnotationException;
 import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
-import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.chemet.resource.MIRIAMResourceLoader;
+import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
@@ -265,7 +265,7 @@ public class SBMLReactionReader {
 
                     try {
                         return chebiWS.getAtomContainer( id );
-                    } catch ( MissingRecordException ex ) {
+                    } catch ( UnfetchableEntry ex ) {
                         LOGGER.debug( "There was a problem loading: " + id + " : " + ex.getMessage() );
                     }
 
@@ -273,7 +273,7 @@ public class SBMLReactionReader {
 
                     try {
                         return keggWS.getAtomContainer( id );
-                    } catch ( MissingRecordException ex ) {
+                    } catch ( UnfetchableEntry ex ) {
                         LOGGER.debug( "There was a problem loading: " + id + " : " + ex.getMessage() );
                     }
 

@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -33,7 +34,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.iterator.IteratingPCCompoundXMLReader;
 import org.xmlpull.v1.XmlPullParserException;
-import uk.ac.ebi.chemet.ws.exceptions.MissingRecordException;
+import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 
 
@@ -358,15 +359,21 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 
 
     @Override
-    public String getMDLString( String id ) throws MissingRecordException ,
+    public String getMDLString( String id ) throws UnfetchableEntry ,
                                                    MissingStructureException {
         throw new UnsupportedOperationException( "Not supported yet." );
     }
 
 
     @Override
-    public String getName( String id ) throws MissingRecordException {
+    public String getName( String id ) throws UnfetchableEntry {
         throw new UnsupportedOperationException( "Not supported yet." );
+    }
+
+
+    @Override
+    public Collection<String> getSynonyms(String accession) throws UnfetchableEntry {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
