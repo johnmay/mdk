@@ -16,8 +16,8 @@ package uk.ac.ebi.metabolomes.core.reaction;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
@@ -25,7 +25,6 @@ import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.metabolomes.identifier.InChI;
-import uk.ac.ebi.metabolomes.utilities.Util;
 
 /**
  * BiochemicalReaction.java
@@ -132,7 +131,7 @@ public class BiochemicalReaction
                 ids.add( inchis.get( i ).getName() );
             }
         }
-        return Util.join( ids , " + " );
+        return StringUtils.join( ids , " + " );
     }
 
     @Override

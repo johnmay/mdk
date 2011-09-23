@@ -29,61 +29,6 @@ public class Util {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( Util.class );
 
-    public static String join( List objects , char seperator ) {
-        return join( objects , seperator , true );
-    }
-
-    /**
-     * Joins a list of objects using the specified 'seperator'. The boolean 'space' variable indicates
-     * whether to add a space when concatenating or not.
-     * @param objects
-     * @param seperator
-     * @param space
-     * @return
-     */
-    public static String join( List objects , char seperator , boolean space ) {
-
-        if ( objects == null || objects.isEmpty() ) {
-            return "";
-        }
-
-        StringBuilder sb = new StringBuilder( objects.size() * 5 );
-        Object last = objects.get( objects.size() - 1 );
-        for ( Object object : objects ) {
-            sb.append( object.toString() );
-            if ( object != last ) {
-                sb.append( seperator );
-                if ( space ) {
-                    sb.append( " " );
-                }
-
-            }
-        }
-
-        return sb.toString();
-    }
-
-    public static String join( List objects , String seperator ) {
-
-        if ( objects == null || objects.isEmpty() ) {
-            return "";
-        }
-
-        StringBuilder sb = new StringBuilder( objects.size() * 5 );
-        Object last = objects.get( objects.size() - 1 );
-        for ( Object object : objects ) {
-            sb.append( object.toString() );
-            if ( object != last ) {
-                sb.append( seperator );
-            }
-        }
-
-        return sb.toString();
-    }
-
-    public static String join( List objects ) {
-        return join( objects , ',' );
-    }
 
     public static String encodeURN( String s ) {
         StringBuilder sb = new StringBuilder( s.length() );
