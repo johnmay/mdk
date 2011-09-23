@@ -29,8 +29,9 @@ public class IdentifierFactoryTest extends TestCase {
         System.out.println("Testing factory load times using index (10,000 objects);");
         for( Identifier id : factory.getSupportedIdentifiers() ) {
             long start = System.currentTimeMillis();
+            Byte index = id.getIndex();
             for( int j = 0 ; j < 10000 ; j++ ) {
-                factory.ofIndex(id.getIndex());
+                factory.ofIndex(index);
             }
             long end = System.currentTimeMillis();
             long time = end - start;
@@ -51,9 +52,9 @@ public class IdentifierFactoryTest extends TestCase {
         System.out.println("Testing factory load times using Class (10,000 objects);");
         for( Identifier id : factory.getSupportedIdentifiers() ) {
             long start = System.currentTimeMillis();
-
+            Class clazz = id.getClass();
             for( int j = 0 ; j < 10000 ; j++ ) {
-                factory.ofClass(id.getClass());
+                factory.ofClass(clazz);
             }
             long end = System.currentTimeMillis();
             long time = end - start;
