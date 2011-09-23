@@ -22,22 +22,16 @@
 package uk.ac.ebi.core;
 
 import com.google.common.collect.HashMultimap;
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.IdentifierLoader;
+import uk.ac.ebi.resource.*;
 
 
 /**
  *          IdentifierSet – 2011.09.18 <br>
- *          Class description
+ *          A class for handling multiple identifiers providing efficient read/write externalization
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -99,13 +93,14 @@ public class IdentifierSet
 
     /**
      *
-     * Accessor to all identifiers extending a given type. For example if you provide a ChemicalIdentifier
-     * class all chemical identifiers will also be returned this is because
+     * Accessor to all identifiers extending a given type. For example if you provide a
+     * ChemicalIdentifier class all chemical identifiers held within the set will also be
+     * returned (e.g. {@see ChEBIIdentifier} and {@see KEGGCompoundIdentifier})
      *
      * @param type
      * @return
      */
-    public Set<Identifier> getSubIdentifiers(final Identifier base) {
+    public Collection<Identifier> getSubIdentifiers(final Identifier base) {
         return getSubIdentifiers(base.getClass());
     }
 
@@ -129,6 +124,9 @@ public class IdentifierSet
     }
 
 
+    /**
+     * @inheritDoc
+     */
     public void writeExternal(ObjectOutput out) throws IOException {
 
         Set<Byte> keys = identifiers.keySet();
@@ -150,6 +148,9 @@ public class IdentifierSet
     }
 
 
+    /**
+     * @inheritDoc
+     */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
         IdentifierFactory factory = IdentifierFactory.getInstance();

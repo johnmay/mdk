@@ -69,8 +69,8 @@ public class InChI
      * @brief   Construtor for instantiating with just the InChI string
      * @param   inchi
      */
-    public InChI(String inchi) {
-        this("", inchi, "", "");
+    public InChI(String accession) {
+        this("", accession, "", "");
     }
 
 
@@ -110,14 +110,14 @@ public class InChI
         // use the main inchi as the identifier
         setAccession(inchi);
 
-        String[] layers = this.inchi.split("/");
-        if( standardInChIMatcher.matcher(layers[0]).find() ) {
-            standard = true;
-        }
-
-
-        for( String inchiLayer : layers ) {
-        }
+//        String[] layers = this.inchi.split("/");
+//        if( standardInChIMatcher.matcher(layers[0]).find() ) {
+//            standard = true;
+//        }
+//
+//
+//        for( String inchiLayer : layers ) {
+//        }
 
         // no to test if the part exists
 //        this.formula = new MolecularFormula();
