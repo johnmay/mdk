@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import org.apache.commons.cli.Option;
+import org.apache.commons.lang.StringUtils;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
@@ -137,12 +138,12 @@ public class FilterBlastMain
                     hitEcs.addAll( intenz.getECNumbers( id ) );
                     if ( first == null
                          && intenz.getECNumbers( id ).isEmpty() == false ) {
-                         first = Util.join( intenz.getECNumbers( id ) , ';' , false );
+                         first = StringUtils.join( intenz.getECNumbers( id ) , ';' );
                     }
                     hitsTable.writeNext(
                             new String[]{
                                 id.toString() ,
-                                Util.join( intenz.getECNumbers( id ) , ';' , false ) ,
+                                StringUtils.join( intenz.getECNumbers( id ) , ';') ,
                                 Double.toString( blastHit.getBestExpectedValue() ) ,
                                 Double.toString( blastHit.getBestBitScore() ) ,
                                 Double.toString( blastHit.getPositive() ) ,
@@ -155,7 +156,7 @@ public class FilterBlastMain
             allTsv.writeNext(
                     new String[]{
                         idString ,
-                        Util.join( new ArrayList( hitEcs ) , ';' , false ) } );
+                        StringUtils.join( new ArrayList( hitEcs ) , ';' ) } );
             firstTsv.writeNext(
                     new String[]{
                         idString ,

@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.cli.Option;
+import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -94,7 +95,7 @@ public class ParseIPRScanXMLMain
                 if ( eccodes.isEmpty() ) {
                     System.out.println( queryId.getTextContent() + "\t" + "NA" );
                 } else {
-                    System.out.println( queryId.getTextContent() + "\t" + Util.join( new ArrayList( eccodes ) , ';' , false ) );
+                    System.out.println( queryId.getTextContent() + "\t" + StringUtils.join( new ArrayList( eccodes ) , ';' ) );
                 }
             }
 
