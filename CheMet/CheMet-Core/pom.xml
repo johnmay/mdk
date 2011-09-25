@@ -113,12 +113,12 @@
             <artifactId>commons-cli</artifactId>
             <version>1.2</version>
         </dependency>
-<!--        <dependency>
+        <dependency>
             <groupId>jboss</groupId>
             <artifactId>jboss-serialization</artifactId>
             <version>4.2.2.GA</version>
             <type>jar</type>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

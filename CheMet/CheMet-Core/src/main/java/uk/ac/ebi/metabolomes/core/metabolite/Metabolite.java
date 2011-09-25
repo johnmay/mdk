@@ -1,6 +1,6 @@
 
 /**
- * MetabolicEntity.java
+ * Metabolite.java
  *
  * 2011.09.05
  *
@@ -35,17 +35,17 @@ import uk.ac.ebi.metabolomes.core.AnnotatedComponent;
 
 
 /**
- *          MetabolicEntity – 2011.09.05 <br>
+ *          Metabolite – 2011.09.05 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetabolicEntity
+public class Metabolite
   extends AnnotatedComponent
   implements Externalizable {
 
-    private static final Logger LOGGER = Logger.getLogger(MetabolicEntity.class);
+    private static final Logger LOGGER = Logger.getLogger(Metabolite.class);
     private boolean generic = false;
     private MetaboliteClass metaboliteClass = MetaboliteClass.UNKNOWN;
     private String name;
