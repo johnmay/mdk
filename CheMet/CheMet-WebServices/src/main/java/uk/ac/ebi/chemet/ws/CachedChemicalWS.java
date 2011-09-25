@@ -28,9 +28,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import org.apache.log4j.Logger;
@@ -47,30 +50,34 @@ import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 
 /**
  *          CachedChemicalWS – 2011.08.23 <br>
- *          Takes as input a ChemicalDBWebservice
+ *          Provides a cache buffer to speed up some web services. The class takes as input a
+ *          ChemicalDBWebservice
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class CachedChemicalWS {
+public class CachedChemicalWS
+  extends ChemicalDBWebService {
 
-    private static final Logger LOGGER = Logger.getLogger( CachedChemicalWS.class );
-    private final ChemicalDBWebService client;
-    private static final String DEFAULT_CACHE_ROOT = System.getProperty( "user.home" ) +
+    private static final Logger LOGGER = Logger.getLogger(CachedChemicalWS.class);
+    private final ChemicalDBWebService base;
+    private static final String DEFAULT_CACHE_ROOT = System.getProperty("user.home") +
                                                      File.separator +
-                                                     ".ebi-chemet" +
+                                                     ".uk.ac.ebi" +
                                                      File.separator +
-                                                     ".cache";
-    private File cacheDir = new File( DEFAULT_CACHE_ROOT );
-    private Map<String , Object> objectCache = new HashMap<String , Object>( 400 , 0.9f );
+                                                     "cache";
+    private File cacheDir = new File(DEFAULT_CACHE_ROOT);
+    private Map<String, Object> objectCache = new HashMap<String, Object>(400, 0.9f);
     // default cache sizes
-    private static final int DEFAULT_MEMORY_CACHE_SIZE = 300;
-    private static final int DEFAULT_DISK_CACHE_SIZE = 1500; // keeps 1500 items in disk folder
+    private static final int DEFAULT_MEMORY_CACHE_SIZE = 600;
+    private static final int DEFAULT_DISK_CACHE_SIZE = 4000; // keeps 4000 items in disk folder
     private static final int DEFAULT_DISK_CACHE_EXPIRY = 5;  // remove items older then 5 days
     //
     private ArrayBlockingQueue objectQueue;
     private PriorityBlockingQueue<File> diskQueue;
     // cache id
+    private static final String SEARCH_RESULTS = ".search";
+    private static final String SYNONYMS = ".synonyms";
     private static final String CDK_ATOMCONTAINER = ".cdk-atomcontainer";
     private static final String MDL_STRING = ".mdl-string";
     private static final String NAME_STRING = ".name-string";
@@ -81,42 +88,43 @@ public class CachedChemicalWS {
      * Constructor takes a class extending the abstract ChemicalDBWebService and uses
      * this as a client to fetch structural info
      *
-     * @param client
+     * @param webservice
      * @param memoryQueueSize Size of the memory queue
      * @param cacheExpiry Number of days to consider an item expired
      * @param diskQueueSize Size of the disk queue, when the max size is reached the oldest items are
      *                      removed from the disk
      *
      */
-    public CachedChemicalWS( ChemicalDBWebService client , Integer memoryQueueSize ,
-                             Integer diskQueueSize ,
-                             Integer cacheExpiry ) {
+    public CachedChemicalWS(ChemicalDBWebService webservice,
+                            Integer memoryQueueSize,
+                            Integer diskQueueSize,
+                            Integer cacheExpiry) {
 
-        this.client = client;
+        this.base = webservice;
 
-        cacheDir = new File( cacheDir , "." + client.getClass().getSimpleName() );
+        cacheDir = new File(cacheDir, "." + webservice.getServiceProviderName());
         cacheDir.mkdirs();
 
-        LOGGER.debug( "Using " + cacheDir + " as cache location" );
+        LOGGER.debug("Using " + cacheDir + " as cache location");
 
         // instantiate the two queues... one in memory one on disk
-        objectQueue = new ArrayBlockingQueue<String>( memoryQueueSize );
+        objectQueue = new ArrayBlockingQueue<String>(memoryQueueSize);
 
         Comparator<File> fileModifiedComparator = new Comparator<File>() {
 
-            public int compare( File o1 , File o2 ) {
+            public int compare(File o1, File o2) {
                 Long o1Time = o1.lastModified();
                 Long o2Time = o2.lastModified();
-                return o1Time.compareTo( o2Time );
+                return o1Time.compareTo(o2Time);
             }
 
 
         };
 
-        diskQueue = new PriorityBlockingQueue<File>( diskQueueSize , fileModifiedComparator );
+        diskQueue = new PriorityBlockingQueue<File>(diskQueueSize, fileModifiedComparator);
 
         // remove old items
-        removeExpiredEntries( cacheExpiry );
+        removeExpiredEntries(cacheExpiry);
 
 
     }
@@ -132,9 +140,9 @@ public class CachedChemicalWS {
      * @param diskQueueSize The size of the disk queue
      *
      */
-    public CachedChemicalWS( ChemicalDBWebService client , Integer memoryQueueSize ,
-                             Integer diskQueueSize ) {
-        this( client , memoryQueueSize , diskQueueSize , DEFAULT_DISK_CACHE_EXPIRY );
+    public CachedChemicalWS(ChemicalDBWebService client, Integer memoryQueueSize,
+                            Integer diskQueueSize) {
+        this(client, memoryQueueSize, diskQueueSize, DEFAULT_DISK_CACHE_EXPIRY);
     }
 
 
@@ -147,13 +155,13 @@ public class CachedChemicalWS {
      * @param memoryQueueSize
      *
      */
-    public CachedChemicalWS( ChemicalDBWebService client , Integer memoryQueueSize ) {
-        this( client , memoryQueueSize , DEFAULT_DISK_CACHE_SIZE , DEFAULT_DISK_CACHE_EXPIRY );
+    public CachedChemicalWS(ChemicalDBWebService client, Integer memoryQueueSize) {
+        this(client, memoryQueueSize, DEFAULT_DISK_CACHE_SIZE, DEFAULT_DISK_CACHE_EXPIRY);
     }
 
 
-    public CachedChemicalWS( ChemicalDBWebService client ) {
-        this( client , DEFAULT_MEMORY_CACHE_SIZE );
+    public CachedChemicalWS(ChemicalDBWebService client) {
+        this(client, DEFAULT_MEMORY_CACHE_SIZE);
     }
 
 
@@ -164,19 +172,19 @@ public class CachedChemicalWS {
      * @param days Number of days at which an item is considered expired
      *
      */
-    private void removeExpiredEntries( Integer days ) {
+    private void removeExpiredEntries(Integer days) {
 
         long currentTime = System.currentTimeMillis();
         long expireTime = 86400000 * days;
 
-        for ( File cachedFile : cacheDir.listFiles() ) {
+        for( File cachedFile : cacheDir.listFiles() ) {
 
-            if ( ( currentTime - cachedFile.lastModified() ) > expireTime ) {
+            if( (currentTime - cachedFile.lastModified()) > expireTime ) {
                 cachedFile.delete();
             }
 
             // todo: add to queue (sorted by last modified time)
-            diskQueue.add( cachedFile );
+            diskQueue.add(cachedFile);
 
         }
     }
@@ -195,20 +203,21 @@ public class CachedChemicalWS {
      * @throws MissingStructureException
      *
      */
-    public String getMDLString( String id ) throws UnfetchableEntry ,
-                                                   MissingStructureException {
+    @Override
+    public String getMDLString(String id) throws UnfetchableEntry,
+                                                 MissingStructureException {
 
-        File cachedFile = new File( cacheDir , id + MDL_STRING );
+        File cachedFile = new File(cacheDir, id + MDL_STRING);
 
-        if ( cachedFile.exists() ) {
-            cachedFile.setLastModified( System.currentTimeMillis() );
-            return ( String ) read( cachedFile );
+        if( cachedFile.exists() ) {
+            cachedFile.setLastModified(System.currentTimeMillis());
+            return (String) fetch(cachedFile);
         }
 
         // fetcg from client
-        String mdlString = client.getMDLString( id );
+        String mdlString = base.getMDLString(id);
 
-        write( cachedFile , mdlString );
+        store(cachedFile, mdlString);
 
         return mdlString;
     }
@@ -229,119 +238,196 @@ public class CachedChemicalWS {
      * @throws MissingStructureException
      *
      */
-    public IAtomContainer getAtomContainer( String id ) throws UnfetchableEntry ,
-                                                               MissingStructureException {
+    public IAtomContainer getAtomContainer(String id) throws UnfetchableEntry,
+                                                             MissingStructureException {
 
         String objectId = id + CDK_ATOMCONTAINER;
 
-        if ( objectCache.containsKey( objectId ) ) {
+        if( objectCache.containsKey(objectId) ) {
 
-            objectQueue.remove( objectId ); // move to front
-            objectQueue.add( objectId );
+            objectQueue.remove(objectId); // move to front
+            objectQueue.add(objectId);
 
-            return ( IAtomContainer ) objectCache.get( objectId );
+            return (IAtomContainer) objectCache.get(objectId);
         }
 
-        String mdlString = this.getMDLString( id );
+        String mdlString = this.getMDLString(id);
 
-        MDLV2000Reader reader = new MDLV2000Reader( new StringReader( mdlString ) );
-        IMolecule molecule = DefaultChemObjectBuilder.getInstance().newInstance( IMolecule.class );
+        MDLV2000Reader reader = new MDLV2000Reader(new StringReader(mdlString));
+        IMolecule molecule = DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class);
 
         try {
-            molecule = reader.read( molecule );
+            molecule = reader.read(molecule);
             reader.close();
-        } catch ( IOException ex ) {
-            throw new MissingStructureException( id );
-        } catch ( CDKException ex ) {
-            throw new MissingStructureException( id );
+        } catch( IOException ex ) {
+            throw new MissingStructureException(id);
+        } catch( CDKException ex ) {
+            throw new MissingStructureException(id);
         }
 
-        if ( molecule == null ) {
-            throw new MissingStructureException( id );
+        if( molecule == null ) {
+            throw new MissingStructureException(id);
         }
 
-        molecule.setProperty( "Name" , getName( id ) );
+        molecule.setProperty("Name", getName(id));
 
 
         // store for to avoid IO overhead recall
-        objectCache.put( objectId , molecule );
+        objectCache.put(objectId, molecule);
 
         // empty the queue if there are less then 10 slots left
-        if ( objectQueue.remainingCapacity() < 10 ) {
+        if( objectQueue.remainingCapacity() < 10 ) {
             // empty until there are more then 100
-            while ( objectQueue.remainingCapacity() < 100 ) {
-                objectCache.remove( objectQueue.poll() );
+            while( objectQueue.remainingCapacity() < 100 ) {
+                objectCache.remove(objectQueue.poll());
             }
         }
 
-        objectQueue.add( objectId );
+        objectQueue.add(objectId);
 
-        return ( AtomContainer ) molecule;
+        return (AtomContainer) molecule;
 
     }
 
 
-    public String getName( String id ) throws UnfetchableEntry {
+    @Override
+    public String getName(String id) throws UnfetchableEntry {
 
         String objectId = id + NAME_STRING;
 
-        if ( objectCache.containsKey( objectId ) ) {
+        if( objectCache.containsKey(objectId) ) {
 
-            objectQueue.remove( objectId ); // move to front
-            objectQueue.add( objectId );
+            objectQueue.remove(objectId); // move to front
+            objectQueue.add(objectId);
 
-            return ( String ) objectCache.get( objectId );
+            return (String) objectCache.get(objectId);
         }
 
-        File cachedFile = new File( cacheDir , objectId );
+        File cachedFile = new File(cacheDir, objectId);
 
-        if ( cachedFile.exists() ) {
-            cachedFile.setLastModified( System.currentTimeMillis() );
-            return ( String ) read( cachedFile );
+        if( cachedFile.exists() ) {
+            cachedFile.setLastModified(System.currentTimeMillis());
+            return (String) fetch(cachedFile);
         }
 
 
         // fetcg from client
-        String name = client.getName( id );
+        String name = base.getName(id);
 
-        write( cachedFile , name );
+        store(cachedFile, name);
 
         // store for to avoid IO overhead recall
-        objectCache.put( objectId , name );
+        objectCache.put(objectId, name);
 
-        // empty the queue if there are less then 10 slots left
-        if ( objectQueue.remainingCapacity() < 10 ) {
-            // empty until there are more then 100
-            while ( objectQueue.remainingCapacity() < 100 ) {
-                objectCache.remove( objectQueue.poll() );
-            }
-        }
+        checkQueue();
 
-        objectQueue.add( objectId );
+        objectQueue.add(objectId);
         return name;
     }
 
 
-    private Object read( File cachedFile ) {
+    private void checkQueue() {
+        // empty the queue if there are less then 10 slots left
+        if( objectQueue.remainingCapacity() < 10 ) {
+            // empty until there are more then 100
+            while( objectQueue.remainingCapacity() < 100 ) {
+                objectCache.remove(objectQueue.poll());
+            }
+        }
+    }
+
+
+    @Override
+    public HashMap<String, String> searchByInChI(String inchi) {
+        throw new UnsupportedOperationException("Not supported yet....");
+    }
+
+
+    @Override
+    public ArrayList<IAtomContainer> downloadMolsToCDKObject(String[] ids) {
+        throw new UnsupportedOperationException("Not supported yet....");
+    }
+
+
+    @Override
+    public String getServiceProviderName() {
+        return base.getServiceProviderName();
+    }
+
+
+    @Override
+    public Set<String> searchWithName(String name) {
+        return base.searchWithName(name);
+    }
+
+
+    @Override
+    public Map<String, String> search(String query) {
+        return base.search(query);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Collection<String> getSynonyms(String accession) {
+
+        String key = accession + SYNONYMS;
+
+        // try the in memory cache
+        if( objectCache.containsKey(key) ) {
+            objectQueue.remove(key); // move to front
+            objectQueue.add(key);
+            return (Collection<String>) objectCache.get(key);
+        }
+
+        File cachedFile = new File(cacheDir, key);
+
+        // no in memory cache so fest from file
+        if( cachedFile.exists() ) {
+            Collection<String> synonyms = (Collection<String>) fetch(cachedFile);
+            objectCache.put(key, synonyms);
+            objectQueue.add(key);
+
+            checkQueue();
+
+            return synonyms;
+        }
+
+        // no file so fetch from the base
+        Collection<String> synonyms = base.getSynonyms(accession);
+        store(cachedFile, synonyms);
+        objectCache.put(key, synonyms);
+        objectQueue.add(key);
+
+        checkQueue();
+
+        return synonyms;
+
+    }
+
+
+    private Object fetch(File cachedFile) {
         ObjectInputStream ois = null;
         Object obj = null;
 
         try {
 
-            ois = new ObjectInputStream( new FileInputStream( cachedFile ) );
+            ois = new ObjectInputStream(new FileInputStream(cachedFile));
             obj = ois.readObject();
-        } catch ( Exception ex ) {
+        } catch( Exception ex ) {
 
-            LOGGER.error( "There was a problem reading the cached file" );
+            LOGGER.error("There was a problem reading the cached file");
         } finally {
 
             try {
-                if ( ois != null ) {
+                if( ois != null ) {
                     ois.close();
                 }
-            } catch ( IOException ex ) {
+            } catch( IOException ex ) {
 
-                LOGGER.error( "Could not closed cached stream" );
+                LOGGER.error("Could not closed cached stream");
             }
         }
 
@@ -350,35 +436,35 @@ public class CachedChemicalWS {
     }
 
 
-    private void write( File cachedFile , Object obj ) {
+    private void store(File cachedFile, Object obj) {
         ObjectOutputStream oos = null;
 
         try {
 
-            oos = new ObjectOutputStream( new FileOutputStream( cachedFile ) );
-            oos.writeObject( obj );
+            oos = new ObjectOutputStream(new FileOutputStream(cachedFile));
+            oos.writeObject(obj);
 
-        } catch ( Exception ex ) {
+        } catch( Exception ex ) {
 
-            LOGGER.error( "There was a problem reading the cached file" );
+            LOGGER.error("There was a problem reading the cached file");
         } finally {
 
             try {
-                if ( oos != null ) {
+                if( oos != null ) {
                     oos.close();
                 }
-            } catch ( IOException ex ) {
+            } catch( IOException ex ) {
 
-                LOGGER.error( "Could not closed cached stream" );
+                LOGGER.error("Could not closed cached stream");
             }
         }
 
-        diskQueue.add( cachedFile );
+        diskQueue.add(cachedFile);
 
         // empty the queue if there are less then 10 slots left
-        if ( diskQueue.remainingCapacity() < 10 ) {
+        if( diskQueue.remainingCapacity() < 10 ) {
             // empty until there are more then 100 deleteing stored files as we go
-            while ( diskQueue.remainingCapacity() < 100 ) {
+            while( diskQueue.remainingCapacity() < 100 ) {
                 diskQueue.poll().delete();
             }
         }

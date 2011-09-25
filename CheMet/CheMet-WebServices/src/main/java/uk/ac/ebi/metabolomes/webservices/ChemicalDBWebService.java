@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import java.util.Map;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
@@ -17,7 +18,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
 
 
 /**
@@ -169,6 +170,21 @@ public abstract class ChemicalDBWebService {
 
 
     /**
+     * Returns a set of identifiers found by searching with the given name
+     * @param name
+     * @return
+     */
+    public abstract Set<String> searchWithName(String name);
+    
+    /**
+     * Returns a map of identifiers and compound names found by searching with the given query
+     * @param query
+     * @return
+     */
+    public abstract Map<String,String> search(String query);
+
+
+    /**
      *
      * Abstract method that should return the MDL/MOL/SDF string for the given id
      *
@@ -182,8 +198,8 @@ public abstract class ChemicalDBWebService {
      *                                   could not be provided
      *
      */
-    public abstract String getMDLString(String id) throws UnfetchableEntry,
-                                                          MissingStructureException;
+    public abstract String getMDLString(String accession) throws UnfetchableEntry,
+                                                                 MissingStructureException;
 
 
     /**

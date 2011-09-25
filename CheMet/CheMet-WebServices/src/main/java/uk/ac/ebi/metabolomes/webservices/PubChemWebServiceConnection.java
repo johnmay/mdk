@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.xml.rpc.ServiceException;
@@ -373,6 +374,18 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 
     @Override
     public Collection<String> getSynonyms(String accession) throws UnfetchableEntry {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    @Override
+    public Set<String> searchWithName(String name) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    @Override
+    public Map<String, String> search(String name) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

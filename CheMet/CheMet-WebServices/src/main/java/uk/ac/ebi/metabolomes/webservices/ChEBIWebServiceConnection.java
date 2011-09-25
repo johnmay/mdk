@@ -35,7 +35,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
      * @param args
      */
     private ChebiWebServiceClient client;
-    private String serviceProviderName = "ChEBI";
+    private static String serviceProviderName = "ChEBI";
     private static final Logger logger = Logger.getLogger(ChEBIWebServiceConnection.class);
     private int maxResultsSearch;
     private StarsCategory starsCategory;
@@ -272,12 +272,14 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         return this.searchBy(inchi, SearchCategory.INCHI_INCHI_KEY);
     }
 
-
     public HashMap<String, String> searchByName(String name) {
         return this.searchBy(name, SearchCategory.CHEBI_NAME);
     }
 
-
+    /**
+     * @inheritDoc
+     */
+    @Override
     public HashMap<String, String> search(String search) {
         return this.searchBy(search, SearchCategory.ALL);
     }
@@ -529,6 +531,13 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         }
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Set<String> searchWithName(String name) {
+        return searchByName(name).keySet();
+    }
 
 }
 
