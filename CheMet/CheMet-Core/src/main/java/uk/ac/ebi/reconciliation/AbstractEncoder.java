@@ -46,6 +46,12 @@ public abstract class AbstractEncoder
     private static final Pattern GENERIC_BEGINNING = Pattern.compile("\\Aan{0,1}\\s+");
     private static final Pattern WHITE_SPACE = Pattern.compile("\\s");
     private static final Pattern DASHES = Pattern.compile("-|\u2012|\u2013|\u2014|\u2015");
+    private static final Pattern BRACKETED_PHRASE = Pattern.compile("\\(\\d\\-\\)");
+
+    
+    public String removeChargeBrace(String string) {
+        return BRACKETED_PHRASE.matcher(string).replaceAll("");
+    }
 
 
     public String removeWhiteSpace(String string) {
@@ -67,6 +73,7 @@ public abstract class AbstractEncoder
     public String addSpaceWhereDashesAre(String string) {
         return DASHES.matcher(string).replaceAll(" ");
     }
+
 
     /**
      * splits on white-space and sorts fragments alphabetically (fragments should be unique). Numbers

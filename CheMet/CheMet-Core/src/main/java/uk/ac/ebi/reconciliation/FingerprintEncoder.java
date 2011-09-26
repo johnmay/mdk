@@ -40,6 +40,8 @@ public class FingerprintEncoder extends AbstractEncoder {
 
         String clean = string.trim();
         clean = string.toLowerCase();
+        String preClean = clean;
+        clean = removeChargeBrace(clean);
         clean = addSpaceWhereDashesAre(clean);
         clean = removeControlCharacters(clean);
         clean = removeHTMLTags(clean);
@@ -47,7 +49,7 @@ public class FingerprintEncoder extends AbstractEncoder {
         clean = reorderFragments(clean);
 
         return asciify(clean);
-        
+
     }
 
 
