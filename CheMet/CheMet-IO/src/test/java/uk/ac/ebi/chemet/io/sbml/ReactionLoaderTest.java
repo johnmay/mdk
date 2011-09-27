@@ -5,13 +5,11 @@
 
 package uk.ac.ebi.chemet.io.sbml;
 
-import java.util.List;
+import uk.ac.ebi.core.Compartment;
 import java.io.InputStream;
-import javax.xml.stream.XMLStreamException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.chemet.entities.Compartment;
 import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
 import static org.junit.Assert.*;
 

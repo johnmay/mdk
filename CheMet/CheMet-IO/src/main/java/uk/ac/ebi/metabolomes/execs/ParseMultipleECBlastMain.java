@@ -38,7 +38,6 @@ import uk.ac.ebi.metabolomes.io.flatfile.IntEnzXML;
 import uk.ac.ebi.metabolomes.io.homology.BlastXML;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
-import uk.ac.ebi.metabolomes.utilities.Util;
 
 
 /**
