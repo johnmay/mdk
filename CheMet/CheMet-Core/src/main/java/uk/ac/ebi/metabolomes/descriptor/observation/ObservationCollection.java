@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import uk.ac.ebi.metabolomes.descriptor.annotation.GeneralAccessList;
+import uk.ac.ebi.core.EntityList;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
 
@@ -40,7 +40,7 @@ import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
  * @date May 9, 2011
  */
 public class ObservationCollection
-        extends GeneralAccessList<AbstractObservation> {
+        extends EntityList<AbstractObservation> {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ObservationCollection.class );
     private transient Map<JobParameters , List<AbstractObservation>> parametersToObservationMap;

@@ -9,11 +9,10 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.io.Serializable;
-import java.util.Collections;
-import org.openscience.cdk.Reaction;
-import uk.ac.ebi.metabolomes.core.AnnotatedComponent;
-import uk.ac.ebi.metabolomes.core.reaction.ReactionCollection;
+import java.util.ArrayList;
+import java.util.List;
+import uk.ac.ebi.chemet.entities.reaction.Reaction;
+import uk.ac.ebi.core.AnnotatedEntity;
 
 
 /**
@@ -24,14 +23,14 @@ import uk.ac.ebi.metabolomes.core.reaction.ReactionCollection;
  * @date Apr 4, 2011
  */
 public abstract class GeneProduct
-  extends AnnotatedComponent
+  extends AnnotatedEntity
   implements Externalizable {
 
     private transient static final org.apache.log4j.Logger logger =
                                                            org.apache.log4j.Logger.getLogger(
       GeneProduct.class);
     private ProductType type;
-    private ReactionCollection reactions = new ReactionCollection();
+   private List<Reaction> reactions = new ArrayList();
     private String sequence; // have to store as simple string as BioJava3 ProteinSequence is not serializable and we want to store the object it to disk :-)
     private Integer sequenceLength;
 
@@ -100,7 +99,7 @@ public abstract class GeneProduct
      * Returns reactions associated with this gene product
      * @return
      */
-    public ReactionCollection getReactions() {
+    public List<Reaction> getReactions() {
         return reactions;
     }
     // metabolies?

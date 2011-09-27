@@ -30,7 +30,7 @@ import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.chemet.entities.Compartment;
+import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 

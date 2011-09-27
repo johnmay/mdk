@@ -4,7 +4,7 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import uk.ac.ebi.chemet.entities.Compartment;
+import uk.ac.ebi.core.Compartment;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

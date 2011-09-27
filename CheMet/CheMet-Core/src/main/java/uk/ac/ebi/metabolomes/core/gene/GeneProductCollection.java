@@ -199,7 +199,7 @@ public class GeneProductCollection
     public static GeneProductCollection readCollection(File file) {
         ObjectInput ois = null;
         try {
-            ois = new JBossObjectInputStream(new FileInputStream(file));
+            ois = new ObjectInputStream(new FileInputStream(file));
             GeneProductCollection collection = new GeneProductCollection();
             collection.readExternal(ois);
             collection.reloadProjectObservations();
@@ -217,7 +217,7 @@ public class GeneProductCollection
 
     public static void write(File file, GeneProductCollection collection) throws
       FileNotFoundException, IOException {
-        ObjectOutput oos = new JBossObjectOutputStream(new FileOutputStream(file));
+        ObjectOutput oos = new ObjectOutputStream(new FileOutputStream(file));
         collection.writeExternal(oos);
         oos.close();
     }

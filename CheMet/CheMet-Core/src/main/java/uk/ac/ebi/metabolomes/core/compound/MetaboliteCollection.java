@@ -20,10 +20,8 @@ package uk.ac.ebi.metabolomes.core.compound;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
-import org.openscience.cdk.interfaces.IMolecule;
-import uk.ac.ebi.metabolomes.core.metabolite.Metabolite;
-import uk.ac.ebi.metabolomes.descriptor.annotation.GeneralAccessList;
+import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.EntityList;
 
 
 /**
@@ -32,7 +30,7 @@ import uk.ac.ebi.metabolomes.descriptor.annotation.GeneralAccessList;
  * @date May 15, 2011
  */
 public class MetaboliteCollection
-  extends GeneralAccessList<Metabolite>
+  extends EntityList<Metabolite>
   implements Serializable {
 
     private static final org.apache.log4j.Logger logger =
@@ -54,7 +52,10 @@ public class MetaboliteCollection
 
     @Override
     public boolean addAll(Collection<? extends Metabolite> c) {
-        throw new UnsupportedOperationException();
+        for( Metabolite metabolite : c ) {
+            boolean results = add(metabolite);
+        }
+        return true;
     }
 
 

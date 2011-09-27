@@ -15,7 +15,7 @@
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.metabolomes.core;
+package uk.ac.ebi.core;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -23,6 +23,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.resource.IdentifierFactory;
 
 
 /**
@@ -55,12 +56,12 @@ public class MetabolicReconstructionObject implements Cloneable, Externalizable 
 
 
     public void writeExternal(ObjectOutput out) throws IOException {
-        out.writeObject(identifier);
+        IdentifierFactory.getInstance().write(out, identifier);
     }
 
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        identifier = (AbstractIdentifier) in.readObject();
+        identifier = IdentifierFactory.getInstance().read(in);
     }
 
 

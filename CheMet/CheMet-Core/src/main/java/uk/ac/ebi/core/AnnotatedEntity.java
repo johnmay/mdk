@@ -15,8 +15,9 @@
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.metabolomes.core;
+package uk.ac.ebi.core;
 
+import uk.ac.ebi.core.MetabolicReconstructionObject;
 import com.google.common.collect.HashMultimap;
 import java.io.Externalizable;
 import java.io.IOException;
@@ -37,15 +38,15 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 
 /**
- * AnnotatedComponent.java – MetabolicDevelopmentKit – Jun 23, 2011
- * AnnotatedComponent contains collections of annotations and observations on objects
+ * AnnotatedEntity.java – MetabolicDevelopmentKit – Jun 23, 2011
+ * AnnotatedEntity contains collections of annotations and observations on objects
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public abstract class AnnotatedComponent
+public abstract class AnnotatedEntity
   extends MetabolicReconstructionObject
   implements Externalizable {
 
-    private transient static final Logger logger = Logger.getLogger(AnnotatedComponent.class);
+    private transient static final Logger logger = Logger.getLogger(AnnotatedEntity.class);
     private HashMultimap<Byte, Annotation> annotations = HashMultimap.create();
     private ObservationCollection observations = new ObservationCollection();
     private List<AbstractIdentifier> crossReferences = new ArrayList<AbstractIdentifier>();

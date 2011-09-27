@@ -32,7 +32,7 @@ import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.chemet.entities.Compartment;
+import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 

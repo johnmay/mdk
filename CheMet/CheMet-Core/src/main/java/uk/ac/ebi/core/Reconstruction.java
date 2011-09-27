@@ -5,25 +5,31 @@ package uk.ac.ebi.core;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
-
+import java.io.Externalizable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.swing.JOptionPane;
-import javax.swing.tree.DefaultMutableTreeNode;
-import org.openscience.cdk.Reaction;
+import org.jboss.serial.io.JBossObjectInputStream;
+import org.jboss.serial.io.JBossObjectOutputStream;
+import uk.ac.ebi.chemet.entities.reaction.Reaction;
+import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.reconstruction.ReconstructionContents;
 import uk.ac.ebi.core.reconstruction.ReconstructionProperites;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
 import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
-import uk.ac.ebi.metabolomes.core.metabolite.Metabolite;
-import uk.ac.ebi.metabolomes.core.reaction.ReactionCollection;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
@@ -35,7 +41,8 @@ import uk.ac.ebi.resource.organism.Taxonomy;
  * @author johnmay
  * @date Apr 13, 2011
  */
-public class Reconstruction {
+public class Reconstruction
+  implements Externalizable {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
       Reconstruction.class);
@@ -49,11 +56,9 @@ public class Reconstruction {
     private ReconstructionProperites properties;
     private GenericIdentifier identifier;
     private Taxonomy organismIdentifier; // could be under a generic ReconstructionContents class but this is already used as an enum
-    // DefaultMutable Children
-    DefaultMutableTreeNode[] subContainers;
-    // all collections
+    // component collections
     private GeneProductCollection products;
-    private ReactionCollection reactions;
+    private List<MetabolicReaction> reactions;
     private MetaboliteCollection metabolites;
 
 
@@ -66,37 +71,17 @@ public class Reconstruction {
         identifier = id;
         organismIdentifier = org;
         products = new GeneProductCollection();
-        reactions = new ReactionCollection();
+        reactions = new ArrayList();
         metabolites = new MetaboliteCollection();
         contents = new HashSet<ReconstructionContents>();
- 
+        properties = new ReconstructionProperites();
     }
 
-
-    /**
-     * Constructor mainly used for reloading the data from a project folder
-     * @param projectFolder The .mnb project folder
+    /*
+     * Default constructor
      */
-    public Reconstruction(File projectFolder) {
 
-        container = projectFolder;
-        properties = new ReconstructionProperites(projectFolder);
-        identifier = properties.getProjectName();
-        organismIdentifier = properties.getOrgranismIdentifier();
-        contents = properties.getProjectContents();
-
-        // read products from file
-        products = GeneProductCollection.readCollection(new File(getDataDirectory(),
-                                                                 GENE_PRODUCTS_FILE_NAME));
-
-        if( products.numberOfProducts() == 0 ) {
-            logger.info("Project gene products where not loaded successfully!");
-            // MainView.getInstance().showErrorDialog( "Reconstruction gene products where not loaded successfully!" );
-        }
-     
-        reactions = new ReactionCollection();
-        metabolites = new MetaboliteCollection();
-
+    private Reconstruction() {
     }
 
 
@@ -135,14 +120,21 @@ public class Reconstruction {
     }
 
 
-    public ReactionCollection getReactions() {
+    public List<MetabolicReaction> getReactions() {
         return reactions;
     }
 
 
-    public void addReaction(Reaction r) {
+    public void addReaction(MetabolicReaction r) {
         reactions.add(r);
         contents.add(ReconstructionContents.REACTIONS);
+
+        for( Participant<Metabolite, ?, ?> p : r.getAllReactionParticipants() ) {
+            if( metabolites.contains(p.getMolecule()) == false ) {
+                addMetabolite(p.getMolecule());
+            }
+        }
+
     }
 
 
@@ -159,9 +151,6 @@ public class Reconstruction {
 
     public void setContainer(File container) {
         this.container = container;
-        if( properties != null ) {
-            properties.setContainer(container);
-        }
     }
 
 
@@ -184,23 +173,30 @@ public class Reconstruction {
 
 
     /**
+     * Loads a reconstruction from a given container
+     */
+    public static Reconstruction load(File container) throws IOException, ClassNotFoundException {
+
+        File file = new File(container, "recon.extern");
+        ObjectInput in = new ObjectInputStream(new FileInputStream(file));
+        Reconstruction reconstruction = new Reconstruction();
+        reconstruction.readExternal(in);
+
+        return reconstruction;
+
+    }
+
+
+    /**
      * Saves the project and it's data
      */
     public void save() {
         if( container != null ) {
             try {
-                if( properties == null ) {
-                    properties = new ReconstructionProperites(container);
-                }
-                properties.setProjectName(identifier);
-                properties.setOrganismIdentifier(organismIdentifier);
-                properties.putProjectContents(contents);
-                properties.store();
-                System.out.println("writing project genes");
-                products.write(new File(getDataDirectory(), GENE_PRODUCTS_FILE_NAME));
-
-                // TODO store from action
-                // ProjectManager.getInstance().storeProjects();
+                ObjectOutput out = new ObjectOutputStream(new FileOutputStream(
+                  new File(container, "recon.extern")));
+                this.writeExternal(out);
+                out.close();
             } catch( FileNotFoundException ex ) {
                 logger.error("error saving project", ex);
             } catch( IOException ex ) {
@@ -255,6 +251,79 @@ public class Reconstruction {
 
     private File getDataDirectory() {
         return new File(container, DATA_FOLDER_NAME);
+    }
+
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+
+        out.writeUTF(container.getAbsolutePath());
+
+        identifier.writeExternal(out);
+        organismIdentifier.writeExternal(out);
+
+        properties.writeExternal(out);
+
+        // products
+        products.writeExternal(out);
+
+        // metabolites
+        out.writeInt(metabolites.size());
+        for( Metabolite metabolite : metabolites ) {
+            metabolite.writeExternal(out);
+        }
+        
+        // reactions
+        out.writeInt(reactions.size());
+        for( MetabolicReaction reaction : reactions ) {
+            reaction.writeExternal(out, metabolites);
+            // already writen so don't need to write
+        }
+
+
+
+    }
+
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
+        container = new File(in.readUTF());
+
+        // ids
+        identifier = new GenericIdentifier();
+        identifier.readExternal(in);
+        organismIdentifier = new Taxonomy();
+        organismIdentifier.readExternal(in);
+
+        // properties
+        properties = new ReconstructionProperites();
+        properties.readExternal(in);
+        contents = properties.getProjectContents();
+
+        // products
+        products = new GeneProductCollection();
+        products.readExternal(in);
+
+
+
+        // metabolites
+        metabolites = new MetaboliteCollection();
+        int nMets = in.readInt();
+        for( int i = 0 ; i < nMets ; i++ ) {
+            Metabolite m = new Metabolite();
+            m.readExternal(in);
+            metabolites.add(m);
+        }
+
+        // reactions
+        reactions = new ArrayList();
+
+        int nRxns = in.readInt();
+        for( int i = 0 ; i < nRxns ; i++ ) {
+            MetabolicReaction r = new MetabolicReaction();
+            r.readExternal(in, metabolites);
+            reactions.add(r);
+        }
+
     }
 
 

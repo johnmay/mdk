@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.chemet.util;
 
+import uk.ac.ebi.core.util.CDKMoleculeBuilder;
 import junit.framework.TestCase;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
