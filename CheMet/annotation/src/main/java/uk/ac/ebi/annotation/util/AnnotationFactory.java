@@ -29,6 +29,7 @@ import java.util.Arrays;
 import uk.ac.ebi.interfaces.Annotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AuthorAnnotation;
+import uk.ac.ebi.annotation.Subsystem;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
@@ -77,7 +78,8 @@ public class AnnotationFactory {
                                                        AUTHOR_ANNOTATION,
                                                        CROSS_REFERENCE,
                                                        CLASSIFICATION,
-                                                       ENZYME_CLASSIFICATION, CHEBI_CROSS_REFERENCE) ) {
+                                                       ENZYME_CLASSIFICATION, CHEBI_CROSS_REFERENCE,
+                                                       new Subsystem()) ) {
 
                 constructors[annotation.getIndex()] = annotation.getClass().getConstructor();
                 instances[annotation.getIndex()] = annotation;

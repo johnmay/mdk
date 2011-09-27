@@ -55,8 +55,8 @@ public abstract class AbstractAnnotation
      * @param visitor The visitor to accept
      *
      */
-    public void accept(AnnotationVisitor visitor) {
-        visitor.visit(this);
+    public Object accept(AnnotationVisitor visitor) {
+        return visitor.visit(this);
     }
 
 

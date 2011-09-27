@@ -29,6 +29,7 @@ import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
 import uk.ac.ebi.resource.IdentifierFactory;
 
 
@@ -121,6 +122,15 @@ public class CrossReference<E extends Identifier>
         super.writeExternal(out);
         IdentifierFactory.getInstance().write(out, identifier);
     }
+
+
+    @Override
+    public Object accept(AnnotationVisitor visitor) {
+        return visitor.visit(this);
+    }
+
+
+
 
 
 }

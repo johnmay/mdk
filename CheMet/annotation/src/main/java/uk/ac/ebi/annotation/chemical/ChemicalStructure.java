@@ -28,6 +28,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
@@ -111,7 +112,7 @@ public class ChemicalStructure
 
         } catch( Exception ex ) {
 
-            throw new IOException("Unable to write IAtomContainer");
+            throw new IOException("Unable to write IAtomContainer: " + ex.getMessage());
         }
 
     }
@@ -124,13 +125,13 @@ public class ChemicalStructure
 
             super.readExternal(in);
             MDLV2000Reader reader = new MDLV2000Reader(new StringReader(in.readUTF()));
-            molecule = new AtomContainer();
+            molecule = new Molecule();
             reader.read(molecule);
             reader.close();
 
         } catch( CDKException ex ) {
 
-            throw new IOException("Unable to read IAtomContainer");
+            throw new IOException("Unable to read IAtomContainer: " + ex.getMessage());
         }
 
     }
