@@ -85,18 +85,6 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
     }
 
 
-    /**
-     *
-     * Copy constructor makes a shallow copy of the participant
-     *
-     * @param participant
-     *
-     */
-    public AtomContainerParticipant( AtomContainerParticipant participant ) {
-        super( participant );
-        this.skeleton = participant.skeleton;
-    }
-
 
     public AtomContainerParticipant() {
     }

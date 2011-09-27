@@ -53,9 +53,6 @@ public class InChIParticipant extends Participant<InChI , Double , Compartment> 
         super( new InChI( inchi ) );
     }
 
-    public InChIParticipant( InChIParticipant participant ) {
-        super( participant );
-    }
 
     /**
      * Override to avoid checking if classes are comparable

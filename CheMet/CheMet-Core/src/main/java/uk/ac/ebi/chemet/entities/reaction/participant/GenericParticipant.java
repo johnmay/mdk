@@ -58,10 +58,6 @@ public class GenericParticipant extends AtomContainerParticipant {
         trimmedMolecule = CDKUtils.removePseudoAtoms( molecule );
     }
 
-    public GenericParticipant( GenericParticipant participant ) {
-        super( participant );
-        this.trimmedMolecule = participant.trimmedMolecule;
-    }
 
     public GenericParticipant() {
     }

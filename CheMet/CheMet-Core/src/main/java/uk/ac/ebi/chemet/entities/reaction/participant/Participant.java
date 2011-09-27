@@ -75,15 +75,6 @@ public Participant( M molecule , S coefficient , C compartment ) {
 }
 
 
-
-public Participant( Participant<M , S , C> participant ) {
-    this.molecule = participant.molecule;
-    this.coefficient = participant.coefficient;
-    this.compartment = participant.compartment;
-}
-
-
-
 public S getCoefficient() {
     return coefficient;
 }
