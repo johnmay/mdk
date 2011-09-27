@@ -28,7 +28,7 @@ import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
 
     private KEGGPortType serv;
-    private static  String serviceProviderName = "BioCyc";
+    private static String serviceProviderName = "BioCyc";
     private Logger logger = Logger.getLogger(KeggCompoundWebServiceConnection.class.getName());
     private final int bgetMaxQueries = 100;
 
@@ -234,11 +234,40 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
     }
 
 
+    /**
+     *
+     * @param accession
+     * @return
+     * @throws UnfetchableEntry
+     * @throws MissingStructureException
+     */
+    public IAtomContainer getAtomContainer(String accession)
+      throws UnfetchableEntry, MissingStructureException {
+        try {
+            String mldString = getMDLString(accession);
+            MDLV2000Reader reader = new MDLV2000Reader(new StringReader(mldString));
+            IAtomContainer mol = (IAtomContainer) reader.read(builder.newInstance(IMolecule.class));
+
+            if(mol == null){
+                throw new UnfetchableEntry();
+            }
+
+            return mol;
+
+        } catch( CDKException ex ) {
+            throw new UnfetchableEntry();
+        }
+
+    }
+
+
+    private IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+
+
     @Override
     public ArrayList<IAtomContainer> downloadMolsToCDKObject(String[] ids) {
         // TODO Auto-generated method stub
         ArrayList<IAtomContainer> mols = new ArrayList<IAtomContainer>();
-        IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
         for( String id : ids ) {
             try {
                 String molTxt = this.downloadMolToString(id);
