@@ -122,20 +122,7 @@ public class WaitIndicatorDemo {
             }
         });
         final JButton full = new JButton("Frame");
-        full.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                final WaitIndicator waiter = createWaiter(frame);
-                new Thread() {
-                    public void run() {
-                        try { sleep(5000); }
-                        catch(Exception e) { }
-                        SwingUtilities.invokeLater(new Runnable() { 
-                            public void run() { waiter.dispose(); }
-                        });
-                    }
-                }.start();
-            }
-        });
+        
         JCheckBox fancyCheck = new JCheckBox("Show Spinner", fancy);
         fancyCheck.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -160,6 +147,24 @@ public class WaitIndicatorDemo {
         frame.pack();
         frame.setSize(new Dimension(500, 300));
         frame.setVisible(true);
+
+        WaitIndicator waiter = new SpinningDialWaitIndicator(frame);
+
+        full.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                final WaitIndicator waiter = createWaiter(frame);
+                new Thread() {
+                    public void run() {
+                        try { sleep(5000); }
+                        catch(Exception e) { }
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() { waiter.dispose(); }
+                        });
+                    }
+                }.start();
+            }
+        });
+
         split.setDividerLocation(0.5);
     }
 }

@@ -21,10 +21,9 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Rectangle2D;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.Timer;
 
@@ -45,6 +44,10 @@ public class SpinningDialWaitIndicator extends WaitIndicator implements ActionLi
     private int verticalOffset;
     private SpinningDial dial;
     private String text;
+
+    public SpinningDialWaitIndicator(JDialog dialog){
+        this(dialog.getLayeredPane());
+    }
 
     public SpinningDialWaitIndicator(JFrame frame) {
         this(frame.getLayeredPane());
