@@ -33,7 +33,7 @@ import uk.ac.ebi.interfaces.Annotation;
  */
 public interface AnnotationVisitor {
 
-    public void visit(Annotation annotation);
+    public Object visit(Annotation annotation);
 
 }
 

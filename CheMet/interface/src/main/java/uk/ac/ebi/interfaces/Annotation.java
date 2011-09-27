@@ -44,7 +44,7 @@ public interface Annotation
      * @param visitor
      *
      */
-    public void accept(AnnotationVisitor visitor);
+    public Object accept(AnnotationVisitor visitor);
 
 
     /**
