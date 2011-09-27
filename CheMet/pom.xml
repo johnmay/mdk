@@ -102,10 +102,15 @@
             </snapshots>
         </repository>
         <repository>
+            <id>ch-cam</id>
+            <name>ch-cam</name>
+            <url>http://maven.ch.cam.ac.uk/m2repo</url>
+        </repository>
+        <!--<repository>
             <id>rothamsted-bbsrc</id>
             <name>rothamsted-bbsrc</name>
             <url>http://ondex.rothamsted.bbsrc.ac.uk/nexus/content/repositories/public/</url>
-        </repository>
+        </repository>-->
     </repositories>
 
 </project>

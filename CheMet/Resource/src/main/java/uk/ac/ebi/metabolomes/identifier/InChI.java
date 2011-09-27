@@ -23,9 +23,9 @@ package uk.ac.ebi.metabolomes.identifier;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.resource.IdentifierDescription;
 import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 
 /**
@@ -41,7 +41,10 @@ import uk.ac.ebi.resource.protein.UniProtIdentifier;
  */
 public class InChI
   extends ChemicalIdentifier
-  implements Comparable<InChI>, Serializable {
+
+    implements
+
+    Serializable {
 
     private static final long serialVersionUID = 8312829501093553787L;
     private String name = "";
@@ -265,16 +268,6 @@ public class InChI
     @Override
     public String toString() {
         return inchi;
-    }
-
-
-    /**
-     * @brief   Comparator method compares on the InChI string alone
-     * @param   o
-     * @return  Either -1, 0 or 1 depending on where to order
-     */
-    public int compareTo(InChI o) {
-        return inchi.compareTo(o.getInchi());
     }
 
 

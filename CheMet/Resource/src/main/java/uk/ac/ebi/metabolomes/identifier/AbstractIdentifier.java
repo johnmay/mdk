@@ -43,7 +43,8 @@ import uk.ac.ebi.resource.IdentifierLoader;
  */
 public abstract class AbstractIdentifier
   extends AbstractDescriptor
-  implements Identifier, Externalizable {
+  implements Identifier, Comparable<Identifier>,
+             Externalizable {
 
     public static final IdentifierLoader IDENTIFIER_LOADER = IdentifierLoader.getInstance();
     private String accession;
@@ -150,6 +151,11 @@ public abstract class AbstractIdentifier
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         this.accession = in.readUTF();
+    }
+
+
+    public int compareTo(Identifier o) {
+        return this.getAccession().compareTo(o.getAccession());
     }
 
 
