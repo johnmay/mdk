@@ -178,9 +178,11 @@ public class ECNumber
 
 
     private String removePrefix(String value, int start) {
+        if(start > value.length() ){
+            return "-.-.-.-";
+        }
         // walk along string until a number is found
-        return value.substring(start).matches("[0-9]+.*") ? value.substring(start) : removePrefix(
-          value, start + 1);
+        return value.substring(start).matches("[0-9]+.*") ? value.substring(start) : removePrefix(value, start + 1);
     }
 
 

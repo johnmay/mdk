@@ -33,6 +33,7 @@ import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.metabolomes.resource.Resource;
+import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
@@ -40,6 +41,7 @@ import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
+import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 
 /**
@@ -62,6 +64,8 @@ public class IdentifierFactory {
       new SwissProtIdentifier(),
       new Taxonomy(),
       new ECNumber(),
+      new BasicChemicalIdentifier(),
+      new BasicReactionIdentifier(),
       new InChI()));
 
 

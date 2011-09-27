@@ -58,7 +58,7 @@ public abstract class AbstractDescriptor
      * @inheritDoc
      */
     public String getLongDescription() {
-        return loader.getShortDescription(getClass());
+        return loader.getLongDescription(getClass());
     }
 
 

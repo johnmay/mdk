@@ -15,6 +15,9 @@
 
 package uk.ac.ebi.resource.organism;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.organism.Kingdom;
@@ -50,7 +53,7 @@ public class Taxonomy extends AbstractIdentifier {
         this.kingdom = kingdom;
         this.officialName = officialName;
         this.commonName = commonName;
-        setAccession(officialName);
+        setAccession(code);
     }
 
 
@@ -110,6 +113,28 @@ public class Taxonomy extends AbstractIdentifier {
     @Override
     public Taxonomy newInstance() {
         return new Taxonomy();
+    }
+
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+        code = in.readUTF();
+        commonName = in.readUTF();
+        officialName = in.readUTF();
+        taxon = in.readInt();
+        kingdom = Kingdom.valueOf(in.readUTF());
+    }
+
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+        out.writeUTF(code);
+        out.writeUTF(commonName);
+        out.writeUTF(officialName);
+        out.writeInt(taxon);
+        out.writeUTF(kingdom.toString());
     }
 
 
