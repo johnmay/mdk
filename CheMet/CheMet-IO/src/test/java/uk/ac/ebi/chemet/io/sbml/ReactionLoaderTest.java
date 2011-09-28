@@ -5,6 +5,7 @@
 
 package uk.ac.ebi.chemet.io.sbml;
 
+import uk.ac.ebi.io.sbml.SBMLReactionReader;
 import uk.ac.ebi.core.Compartment;
 import java.io.InputStream;
 import org.junit.AfterClass;
