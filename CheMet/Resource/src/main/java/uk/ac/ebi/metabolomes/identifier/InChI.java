@@ -41,10 +41,7 @@ import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
  */
 public class InChI
   extends ChemicalIdentifier
-
-    implements
-
-    Serializable {
+  implements Serializable {
 
     private static final long serialVersionUID = 8312829501093553787L;
     private String name = "";

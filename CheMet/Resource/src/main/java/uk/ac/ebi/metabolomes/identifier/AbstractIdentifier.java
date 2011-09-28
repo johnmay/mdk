@@ -43,7 +43,7 @@ import uk.ac.ebi.resource.IdentifierLoader;
  */
 public abstract class AbstractIdentifier
   extends AbstractDescriptor
-  implements Identifier, Comparable<Identifier>,
+  implements Identifier,
              Externalizable {
 
     public static final IdentifierLoader IDENTIFIER_LOADER = IdentifierLoader.getInstance();
@@ -153,10 +153,6 @@ public abstract class AbstractIdentifier
         this.accession = in.readUTF();
     }
 
-
-    public int compareTo(Identifier o) {
-        return this.getAccession().compareTo(o.getAccession());
-    }
 
 
 }
