@@ -17,6 +17,7 @@ package uk.ac.ebi.metabolomes.core.reaction;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.openscience.cdk.Reaction;
 import org.openscience.cdk.interfaces.IMapping;
@@ -61,7 +62,13 @@ class ProxyReaction
         int hash = 52;
 
         if ( needsSorting ) { // only sort if the collection has been modified
-            Collections.sort( reactionParticipants );
+            Collections.sort( reactionParticipants, new Comparator<InChI>() {
+
+
+                public int compare(InChI o1, InChI o2) {
+                    return o1.getInchi().compareTo(o2.getInchi());
+                }
+            } );
             needsSorting = false;
         }
 

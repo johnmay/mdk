@@ -17,18 +17,16 @@
 
 package uk.ac.ebi.core;
 
-import uk.ac.ebi.core.MetabolicReconstructionObject;
 import com.google.common.collect.HashMultimap;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.interfaces.Annotation;
@@ -43,13 +41,12 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
 public abstract class AnnotatedEntity
-  extends MetabolicReconstructionObject
+  extends ReconstructionEntity
   implements Externalizable {
 
     private transient static final Logger logger = Logger.getLogger(AnnotatedEntity.class);
     private HashMultimap<Byte, Annotation> annotations = HashMultimap.create();
     private ObservationCollection observations = new ObservationCollection();
-    private List<AbstractIdentifier> crossReferences = new ArrayList<AbstractIdentifier>();
 
 
     /**
@@ -117,9 +114,9 @@ public abstract class AnnotatedEntity
      * @return
      *
      */
-    public Set<Annotation> getAnnotationsExtending(final Class<? extends Annotation> type) {
+    public <T> Set<T> getAnnotationsExtending(final Class<T> type) {
         Annotation base = AnnotationFactory.getInstance().ofClass(type);
-        return getAnnotationsExtending(base);
+        return (Set<T>) getAnnotationsExtending(base);
     }
 
 
@@ -179,7 +176,8 @@ public abstract class AnnotatedEntity
      *
      */
     public boolean addCrossReference(AbstractIdentifier id) {
-        return crossReferences.add(id);
+        CrossReference xref = new CrossReference(id);
+        return annotations.put(xref.getIndex(), xref);
     }
 
 
@@ -191,7 +189,8 @@ public abstract class AnnotatedEntity
      * @return
      */
     public boolean removeCrossReference(AbstractIdentifier id) {
-        return crossReferences.remove(id);
+        //  return crossReferences.remove(id);
+        throw new UnsupportedOperationException("not supported yet");
     }
 
 
@@ -244,6 +243,42 @@ public abstract class AnnotatedEntity
                 annotation.writeExternal(out);
             }
         }
+    }
+
+
+    @Override
+    public int hashCode() {
+        int hash = super.hashCode();
+        hash = 67 * hash + (this.annotations != null ? this.annotations.hashCode() : 0);
+        hash = 67 * hash + (this.observations != null ? this.observations.hashCode() : 0);
+        return hash;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if( super.equals(obj) == false ) {
+            return false;
+        }
+
+        if( obj == null ) {
+            return false;
+        }
+        if( getClass() != obj.getClass() ) {
+            return false;
+        }
+
+//        final AnnotatedEntity other = (AnnotatedEntity) obj;
+//        if( this.annotations != other.annotations &&
+//            (this.annotations == null || !this.annotations.equals(other.annotations)) ) {
+//            return false;
+//        }
+//        if( this.observations != other.observations &&
+//            (this.observations == null || !this.observations.equals(other.observations)) ) {
+//            return false;
+//        }
+        return true;
     }
 
 

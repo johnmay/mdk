@@ -27,15 +27,15 @@ import uk.ac.ebi.resource.IdentifierFactory;
 
 
 /**
- * MetabolicReconstructionObject.java – MetabolicDevelopmentKit – Jun 23, 2011
+ * ReconstructionEntity.java – MetabolicDevelopmentKit – Jun 23, 2011
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public class MetabolicReconstructionObject implements Cloneable, Externalizable {
+public class ReconstructionEntity implements Cloneable, Externalizable {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
-      MetabolicReconstructionObject.class);
+      ReconstructionEntity.class);
     private Identifier identifier;
 
 
@@ -69,6 +69,34 @@ public class MetabolicReconstructionObject implements Cloneable, Externalizable 
     public String toString() {
         return identifier.toString();
     }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if( obj == null ) {
+            return false;
+        }
+        if( getClass() != obj.getClass() ) {
+            return false;
+        }
+        final ReconstructionEntity other = (ReconstructionEntity) obj;
+        if( this.identifier != other.identifier &&
+            (this.identifier == null || !this.identifier.equals(other.identifier)) ) {
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + (this.identifier != null ? this.identifier.hashCode() : 0);
+        return hash;
+    }
+
+
 
 
 }

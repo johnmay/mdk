@@ -68,7 +68,7 @@ public class GeneProteinProductTest extends TestCase {
         // 3 instances that 'are' sub classes of Crossreference
         assertEquals(4, product.getAnnotationsExtending(CrossReference.class).size());
 
-        Collection<Annotation> annotations = product.getAnnotationsExtending(Classification.class);
+        Collection<Classification> annotations = product.getAnnotationsExtending(Classification.class);
         System.out.println(new ArrayList(annotations));
     }
 

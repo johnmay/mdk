@@ -21,6 +21,7 @@
  */
 package uk.ac.ebi.core;
 
+import com.google.common.base.Objects;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -117,6 +118,47 @@ public class Metabolite
     @Override
     public String toString() {
         return name;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean equals(Object obj) {
+
+        if( obj == null ) {
+            return false;
+        }
+        if( getClass() != obj.getClass() ) {
+            return false;
+        }
+        final Metabolite other = (Metabolite) obj;
+
+        if( super.equals(other) == false ) {
+            return false;
+        }
+
+        if( this.generic != other.generic ) {
+            return false;
+        }
+        if( this.metaboliteClass != other.metaboliteClass ) {
+            return false;
+        }
+        if( (this.name == null) ? (other.name != null) : !this.name.equals(other.name) ) {
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public int hashCode() {
+        int hash = super.hashCode();
+        return 47 * hash + Objects.hashCode(generic, metaboliteClass, name);
     }
 
 
