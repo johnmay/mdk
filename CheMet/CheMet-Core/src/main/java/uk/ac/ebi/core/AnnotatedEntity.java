@@ -17,7 +17,9 @@
 
 package uk.ac.ebi.core;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ListMultimap;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -46,7 +48,7 @@ public abstract class AnnotatedEntity
   implements Externalizable {
 
     private transient static final Logger logger = Logger.getLogger(AnnotatedEntity.class);
-    private HashMultimap<Byte, Annotation> annotations = HashMultimap.create();
+    private ListMultimap<Byte, Annotation> annotations = ArrayListMultimap.create();
     private ObservationCollection observations = new ObservationCollection();
 
 
