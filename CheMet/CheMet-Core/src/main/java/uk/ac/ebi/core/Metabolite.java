@@ -124,7 +124,7 @@ public class Metabolite
      * @return
      * 
      */
-    public ChemicalStructure getFirstChemicalStructureAnnotation() {
+    public ChemicalStructure getFirstChemicalStructure() {
         return getChemicalStructures().iterator().next();
     }
 
