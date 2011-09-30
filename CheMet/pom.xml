@@ -17,57 +17,103 @@
         <module>Observation</module>
     </modules>
     <repositories>
+        
         <repository>
             <id>maven-repo</id>
             <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+        
         <repository>
             <id>jni-inchi</id>
             <name>JNI-InChI Maven Repository</name>
             <url>http://jni-inchi.sourceforge.net/m2repo</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+
         <repository>
             <id>java.net</id>
             <url>http://download.java.net/maven/2/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+
         <repository>
             <id>ibiblio</id>
             <url>http://mirrors.ibiblio.org/pub/mirrors/maven2/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+
         <repository>
             <id>ebi-repo</id>
             <name>EBI maven repository</name>
             <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+        
         <repository>
             <id>maven-restlet</id>
             <name>Public online Restlet repository</name>
             <url>http://maven.restlet.org</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+
         <repository>
             <id>ebi-repo-snapshots</id>
             <name>EBI maven snapshots repository</name>
             <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:10080</updatePolicy> <!-- weekly -->
+            </snapshots>
         </repository>
+        
         <repository>
             <id>ops4j</id>
             <url>http://maven.glassfish.org/content/repositories/ops4j/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+        
         <repository>
             <id>biobabel-repo</id>
             <url>${biobabel.maven.repo.url}</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+        
         <repository>
             <id>dev.java.net.2</id>
             <name>java.net repository for Maven2</name>
             <url>http://download.java.net/maven/2/</url>
             <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+        
         <repository>
             <id>ambit-plovdiv</id>
             <name>ambit-plovdiv</name>
             <url>http://ambit.uni-plovdiv.bg:8083/nexus/content/repositories/thirdparty/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+        
         <repository>
             <id>biojava-maven-repo</id>
             <name>BioJava repository</name>
@@ -77,8 +123,10 @@
             </snapshots>
             <releases>
                 <enabled>true</enabled>
+                <updatePolicy>interval:10080</updatePolicy> <!-- weekly -->
             </releases>
         </repository>
+        
         <repository>
             <id>paxtools</id>
             <name>BioPAX maven 2 repository</name>
@@ -90,6 +138,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        
         <repository>
             <id>paxtools-snapshots</id>
             <name>BioPAX maven 2 snapshots repository</name>
@@ -99,12 +148,18 @@
             </releases>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>interval:10080</updatePolicy> <!-- weekly -->
             </snapshots>
         </repository>
+        
         <repository>
             <id>ch-cam</id>
             <name>ch-cam</name>
             <url>http://maven.ch.cam.ac.uk/m2repo</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:10080</updatePolicy> <!-- weekly -->
+            </snapshots>
         </repository>
         <!--<repository>
             <id>rothamsted-bbsrc</id>
