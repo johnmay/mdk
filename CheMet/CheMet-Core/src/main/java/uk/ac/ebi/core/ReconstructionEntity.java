@@ -37,6 +37,64 @@ public class ReconstructionEntity implements Cloneable, Externalizable {
                                                  org.apache.log4j.Logger.getLogger(
       ReconstructionEntity.class);
     private Identifier identifier;
+    private String abbreviation = "";
+    private String name = "";
+
+
+    public ReconstructionEntity() {
+    }
+
+    /**
+     * Full instantiation constructor
+     *
+     * @param identifier
+     * @param abbreviation
+     * @param name
+     * 
+     */
+    public ReconstructionEntity(Identifier identifier, String abbreviation, String name) {
+        this.identifier = identifier;
+        this.abbreviation = abbreviation;
+        this.name = name;
+    }
+
+    
+
+    /**
+     * Access the abbreviation of the entity. The abbreviation is normally a
+     * couple of letters that give the author a quick reference of what the object
+     * is
+     * @return abbreviation (null) if no abbreviation is present
+     */
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+    /**
+     * Access the name of the entity
+     * @return name of entity (null) if no name is given
+     */
+    public String getName() {
+        return name;
+    }
+
+
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
+    }
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    /**
+     * Return the accession of the entity
+     */
+    public String getAccession() {
+        return getIdentifier().getAccession();
+    }
 
 
     public Identifier getIdentifier() {
@@ -53,15 +111,17 @@ public class ReconstructionEntity implements Cloneable, Externalizable {
 //    public Object clone() throws CloneNotSupportedException {
 //        return super.clone();
 //    }
-
-
     public void writeExternal(ObjectOutput out) throws IOException {
         IdentifierFactory.getInstance().write(out, identifier);
+        out.writeUTF(abbreviation);
+        out.writeUTF(name);
     }
 
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         identifier = IdentifierFactory.getInstance().read(in);
+        abbreviation = in.readUTF();
+        name = in.readUTF();
     }
 
 
@@ -69,7 +129,6 @@ public class ReconstructionEntity implements Cloneable, Externalizable {
     public String toString() {
         return identifier.toString();
     }
-
 
 
     @Override
@@ -97,7 +156,4 @@ public class ReconstructionEntity implements Cloneable, Externalizable {
     }
 
 
-
-
 }
-

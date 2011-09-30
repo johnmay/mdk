@@ -5,6 +5,7 @@
 
 package uk.ac.ebi.metabolomes.run;
 
+import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 
 
@@ -16,6 +17,7 @@ import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
  * @date Apr 28, 2011
  */
 public abstract class RunnableTask
+extends AnnotatedEntity
 implements Runnable {
 
     private JobParameters parameters;

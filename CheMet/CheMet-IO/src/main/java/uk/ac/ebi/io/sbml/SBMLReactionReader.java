@@ -43,7 +43,7 @@ import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
-import uk.ac.ebi.chemet.resource.MIRIAMResourceLoader;
+import uk.ac.ebi.resource.MIRIAMLoader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
@@ -265,7 +265,7 @@ public class SBMLReactionReader {
         for ( int i = 0 ; i < species.getNumCVTerms() ; i++ ) {
             for ( String resource : species.getCVTerm( i ).getResources() ) {
 
-                String id = MIRIAMResourceLoader.getIdentifier( resource );
+                String id = MIRIAMLoader.getIdentifier( resource );
                 if ( id.startsWith( "CHEBI" ) ) {
 
                     try {

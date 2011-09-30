@@ -34,6 +34,9 @@ import org.openscience.cdk.AtomContainer;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
+import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
+import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 
 /**
@@ -49,10 +52,31 @@ public class Metabolite
 
     private static final Logger LOGGER = Logger.getLogger(Metabolite.class);
     private boolean generic = false;
-    private MetaboliteClass metaboliteClass = MetaboliteClass.UNKNOWN;
-    private String name;
+    private MetaboliteClass type = MetaboliteClass.UNKNOWN;
 
-    // attributes to control link to reactions
+
+    public Metabolite() {
+    }
+
+
+    public Metabolite(Identifier identifier, String abbreviation, String name) {
+        super(identifier, abbreviation, name);
+    }
+
+
+    /**
+     *
+     * Convenience constructor wraps accession in a BasicChemicalIdentifier
+     *
+     * @param accession
+     * @param abbreviation
+     * @param name
+     * 
+     */
+    public Metabolite(String accession, String abbreviation, String name) {
+        super(new BasicChemicalIdentifier(accession), abbreviation, name);
+    }
+
 
     /**
      *
@@ -65,13 +89,25 @@ public class Metabolite
     }
 
 
+    /**
+     *
+     * Sets whether the molecule is generic (has -R group)
+     *
+     */
     public void setGeneric(boolean generic) {
         this.generic = generic;
     }
 
 
+    /**
+     *
+     * Queries whether the metabolite entry has any {@see ChemicalStructure} attached
+     *
+     * @return
+     * 
+     */
     public boolean hasStructureAssociated() {
-        return true;
+        return getChemicalStructures().iterator().hasNext();
     }
 
 
@@ -80,44 +116,38 @@ public class Metabolite
     }
 
 
+    /**
+     *
+     * Returns the first chemical structure (note. should be used in conjunction with
+     * {@see hasStructureAssociated()})
+     *
+     * @return
+     * 
+     */
     public ChemicalStructure getFirstChemicalStructureAnnotation() {
-        List<ChemicalStructure> structures = new ArrayList<ChemicalStructure>(
-          getChemicalStructures());
-        return structures.isEmpty() ? new ChemicalStructure(new AtomContainer()) : structures.get(0);
+        return getChemicalStructures().iterator().next();
     }
 
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-
+    /**
+     * @inheritDoc
+     */
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
-        name = in.readUTF();
-        metaboliteClass = MetaboliteClass.valueOf(in.readUTF());
+        type = MetaboliteClass.valueOf(in.readUTF());
         generic = in.readBoolean();
     }
 
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeUTF(name);
-        out.writeUTF(metaboliteClass.name());
+        out.writeUTF(type.name());
         out.writeBoolean(generic);
-    }
-
-
-    @Override
-    public String toString() {
-        return name;
     }
 
 
@@ -142,12 +172,10 @@ public class Metabolite
         if( this.generic != other.generic ) {
             return false;
         }
-        if( this.metaboliteClass != other.metaboliteClass ) {
+        if( this.type != other.type ) {
             return false;
         }
-        if( (this.name == null) ? (other.name != null) : !this.name.equals(other.name) ) {
-            return false;
-        }
+
         return true;
     }
 
@@ -158,7 +186,7 @@ public class Metabolite
     @Override
     public int hashCode() {
         int hash = super.hashCode();
-        return 47 * hash + Objects.hashCode(generic, metaboliteClass, name);
+        return 47 * hash + Objects.hashCode(generic, type);
     }
 
 

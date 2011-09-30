@@ -30,6 +30,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
 import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
@@ -47,6 +48,15 @@ public abstract class AnnotatedEntity
     private transient static final Logger logger = Logger.getLogger(AnnotatedEntity.class);
     private HashMultimap<Byte, Annotation> annotations = HashMultimap.create();
     private ObservationCollection observations = new ObservationCollection();
+
+
+    public AnnotatedEntity() {
+    }
+
+
+    public AnnotatedEntity(Identifier identifier, String abbreviation, String name) {
+        super(identifier, abbreviation, name);
+    }
 
 
     /**
@@ -199,8 +209,8 @@ public abstract class AnnotatedEntity
 
         super.readExternal(in);
 
-        int nObservations = in.readInt();
 
+        int nObservations = in.readInt();
 
         for( int i = 0 ; i < nObservations ; i++ ) {
             observations.add((AbstractObservation) in.readObject());

@@ -36,6 +36,7 @@ import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.reaction.MetaboliteParticipant;
 import uk.ac.ebi.interfaces.Identifier;
 
 
@@ -97,7 +98,11 @@ public class SBMLIOUtil {
         if( id == null ) {
             sbmlRxn.setId("rxn" + metaIdticker); // maybe need a try/catch to reset valid id
         } else {
-            sbmlRxn.setId(id.getAccession().trim());
+            String accession = id.getAccession();
+            accession = accession.trim();
+            accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
+            accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
+            sbmlRxn.setId(accession);
         }
 
 
@@ -106,6 +111,7 @@ public class SBMLIOUtil {
         }
         for( Participant<Metabolite, Double, Compartment> p : rxn.getProductParticipants() ) {
             sbmlRxn.addProduct(getSpeciesReference(model, p));
+
         }
 
         for( CrossReference xref : rxn.getAnnotationsExtending(CrossReference.class) ) {
@@ -124,12 +130,23 @@ public class SBMLIOUtil {
     public SpeciesReference getSpeciesReference(Model model,
                                                 Participant<Metabolite, Double, Compartment> participant) {
 
+        // we need a key as the coef are part of the reaction not the species...
+        // however the compartment is part of the species not the reaction
+        Participant key = new MetaboliteParticipant(participant.getMolecule(), 1d, participant.
+          getCompartment());
+
         // create a new entry if one doesn't exists
-        if( speciesReferences.containsKey(participant) == false ) {
-            speciesReferences.put(participant, addSpecies(model, participant));
+        if( speciesReferences.containsKey(key) == false ) {
+            speciesReferences.put(key, addSpecies(model, participant));
         }
 
-        return speciesReferences.get(participant);
+        SpeciesReference sref = speciesReferences.get(key);
+
+        // need to set the stoichiometry on each species reference
+        SpeciesReference srefCopy = new SpeciesReference(sref.getSpecies());
+        srefCopy.setStoichiometry(participant.getCoefficient());
+        
+        return srefCopy;
 
     }
 
@@ -147,9 +164,19 @@ public class SBMLIOUtil {
 
         Metabolite m = participant.getMolecule();
 
-        species.setId(m.getIdentifier().toString() + "_" + participant.getCompartment().
-          getAbbreviation());
+
         species.setMetaId(nextMetaId());
+        Identifier id = m.getIdentifier();
+        if( id == null ) {
+            species.setId("met" + metaIdticker); // maybe need a try/catch to reset valid id
+        } else {
+            String accession = id.getAccession();
+            accession = accession.trim();
+            accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
+            accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
+            species.setId(accession + "_" + participant.getCompartment().getAbbreviation());
+        }
+
         species.setName(m.getName());
         species.setCompartment(participant.getCompartment().name());
 
@@ -161,6 +188,8 @@ public class SBMLIOUtil {
         }
 
         model.addSpecies(species);
+
+
 
         return new SpeciesReference(species);
     }
