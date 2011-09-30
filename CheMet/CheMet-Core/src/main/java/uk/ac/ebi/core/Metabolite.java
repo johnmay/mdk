@@ -190,5 +190,17 @@ public class Metabolite
     }
 
 
+    public MetaboliteClass getType() {
+        return type;
+    }
+
+
+    public void setType(MetaboliteClass type) {
+        this.type = type;
+    }
+
+    
+
+
 }
 
