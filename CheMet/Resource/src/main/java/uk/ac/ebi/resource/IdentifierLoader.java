@@ -22,7 +22,6 @@
 package uk.ac.ebi.resource;
 
 import uk.ac.ebi.interfaces.DescriptionLoader;
-import uk.ac.ebi.chemet.resource.MIRIAMResourceLoader;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
@@ -41,7 +40,7 @@ public class IdentifierLoader
 
     private static final String RESOURCE_NAME = "IdentifierDescription.properties";
     private static final String MIR_EXTENSION = ".MIR";
-    private static final MIRIAMResourceLoader miriam = MIRIAMResourceLoader.getInstance();
+    private static final MIRIAMLoader miriam = MIRIAMLoader.getInstance();
 
 
     private IdentifierLoader() {

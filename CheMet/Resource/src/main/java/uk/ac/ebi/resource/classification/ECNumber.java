@@ -15,6 +15,9 @@
 
 package uk.ac.ebi.resource.classification;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.io.PrintStream;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
@@ -135,8 +138,6 @@ public class ECNumber
     }
 
 
-
-
     public ECNumber(String ecNumber) {
         this(ecNumber, true);
     }
@@ -178,11 +179,12 @@ public class ECNumber
 
 
     private String removePrefix(String value, int start) {
-        if(start > value.length() ){
+        if( start > value.length() ) {
             return "-.-.-.-";
         }
         // walk along string until a number is found
-        return value.substring(start).matches("[0-9]+.*") ? value.substring(start) : removePrefix(value, start + 1);
+        return value.substring(start).matches("[0-9]+.*") ? value.substring(start) : removePrefix(
+          value, start + 1);
     }
 
 
@@ -355,6 +357,28 @@ public class ECNumber
     @Override
     public ECNumber newInstance() {
         return new ECNumber();
+    }
+
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+        enzymeClass = in.readInt();
+        enzymeSubClass = in.readInt();
+        enzymeSubSubClass = in.readInt();
+        enzymeEntry = in.readInt();
+        preliminary = in.readBoolean();
+    }
+
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+        out.writeInt(enzymeClass);
+        out.writeInt(enzymeSubClass);
+        out.writeInt(enzymeSubSubClass);
+        out.writeInt(enzymeEntry);
+        out.writeBoolean(preliminary);
     }
 
 

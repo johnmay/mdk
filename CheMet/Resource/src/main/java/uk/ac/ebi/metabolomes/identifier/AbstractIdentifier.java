@@ -83,7 +83,6 @@ public abstract class AbstractIdentifier
      * @return
      */
     public Resource getResource() {
-        System.out.println("fetching entry");
         return IDENTIFIER_LOADER.getEntry(getClass());
     }
 
