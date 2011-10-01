@@ -22,10 +22,9 @@ import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 
 
 /**
@@ -51,7 +50,7 @@ public class GeneProteinProductTest extends TestCase {
     @Test
     public void testAnnotationRetrieval() throws Exception {
 
-        GeneProteinProduct product = new GeneProteinProduct(new GenericIdentifier("ProteinA"),
+        GeneProteinProduct product = new GeneProteinProduct(new BasicProteinIdentifier("ProteinA"),
                                                             "MTFG", "A protein");
 
         product.addAnnotation(new EnzymeClassification(new ECNumber("1.1.1.1")));
@@ -81,7 +80,7 @@ public class GeneProteinProductTest extends TestCase {
 
         ObjectOutput out = new ObjectOutputStream(new FileOutputStream(tmp));
         for( int i = 0 ; i < 100 ; i++ ) {
-            GeneProteinProduct product = new GeneProteinProduct(new GenericIdentifier("ProteinA"),
+            GeneProteinProduct product = new GeneProteinProduct(new BasicProteinIdentifier("ProteinA"),
                                                                 "MTFG", "A protein");
 
             product.addAnnotation(new ChEBICrossReference(new ChEBIIdentifier("ChEBI:12")));

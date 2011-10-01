@@ -6,9 +6,6 @@
 package uk.ac.ebi.core.reconstruction;
 
 import java.io.Externalizable;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -17,8 +14,8 @@ import java.io.StringWriter;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Properties;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.resource.organism.Kingdom;
+import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 
@@ -45,12 +42,12 @@ public class ReconstructionProperites
      * Accessor for the project name
      * @return
      */
-    public GenericIdentifier getProjectName() {
+    public ReconstructionIdentifier getProjectName() {
         String projectName = getProperty("Project.Name");
         if( projectName != null ) {
-            return new GenericIdentifier(projectName);
+            return new ReconstructionIdentifier(projectName);
         }
-        return new GenericIdentifier("Untitled Project");
+        return new ReconstructionIdentifier("Untitled Project");
     }
 
 
@@ -58,7 +55,7 @@ public class ReconstructionProperites
      * Set the name of the project
      * @param name
      */
-    public void setProjectName(GenericIdentifier name) {
+    public void setProjectName(ReconstructionIdentifier name) {
         put("Project.Name", name.toString());
     }
 

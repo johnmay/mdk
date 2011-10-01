@@ -17,11 +17,12 @@ import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
  * @date Apr 28, 2011
  */
 public abstract class RunnableTask
-extends AnnotatedEntity
-implements Runnable {
+  extends AnnotatedEntity
+  implements Runnable {
 
     private JobParameters parameters;
     private TaskStatus status;
+    public static final String BASE_TYPE = "Task";
 
 
     public RunnableTask(JobParameters p) {
@@ -98,6 +99,12 @@ implements Runnable {
     @Override
     public String toString() {
         return getTaskDescription() + ": " + getStatus();
+    }
+
+
+    @Override
+    public String getBaseType() {
+        return BASE_TYPE;
     }
 
 

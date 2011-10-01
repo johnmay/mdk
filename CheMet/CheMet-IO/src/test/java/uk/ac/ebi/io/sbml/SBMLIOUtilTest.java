@@ -6,24 +6,21 @@
 package uk.ac.ebi.io.sbml;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import javax.xml.stream.XMLStreamException;
-import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
-import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.reaction.MetaboliteParticipant;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
+import uk.ac.ebi.resource.ReconstructionIdentifier;
+import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
@@ -52,16 +49,16 @@ public class SBMLIOUtilTest {
     @Test
     public void testGetDocument() throws SBMLException, XMLStreamException,
                                          UnsupportedEncodingException {
-        Reconstruction recon = new Reconstruction(new GenericIdentifier("mnb-project"),
+        Reconstruction recon = new Reconstruction(new ReconstructionIdentifier("mnb-project"),
                                                   new Taxonomy());
         Metabolite m = new Metabolite();
-        m.setIdentifier(new GenericIdentifier("m1"));
+        m.setIdentifier(new BasicChemicalIdentifier("m1"));
         m.setName("molecule name");
         m.addCrossReference(new ChEBIIdentifier("CHEBI:12435"));
         recon.addMetabolite(m);
 
         Metabolite m2 = new Metabolite();
-        m2.setIdentifier(new GenericIdentifier("m2"));
+        m2.setIdentifier(new BasicChemicalIdentifier("m2"));
         m2.setName("different molecule");
         m2.addCrossReference(new ChEBIIdentifier("CHEBI:12436"));
         recon.addMetabolite(m2);

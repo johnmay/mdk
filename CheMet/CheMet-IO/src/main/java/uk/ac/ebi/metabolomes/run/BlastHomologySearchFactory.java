@@ -18,10 +18,12 @@ package uk.ac.ebi.metabolomes.run;
 import uk.ac.ebi.metabolomes.descriptor.observation.BlastParamType;
 import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
+import uk.ac.ebi.metabolomes.descriptor.observation.JobParamType;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.metabolomes.resource.BlastDatabase;
 import uk.ac.ebi.metabolomes.resource.BlastMatrix;
 import uk.ac.ebi.metabolomes.resource.BlastProgram;
+import uk.ac.ebi.resource.TaskIdentifier;
 
 
 /**
@@ -82,6 +84,9 @@ public class BlastHomologySearchFactory {
             params.put(BlastParamType.DATABASE, BlastDatabase.SWISSPROT);
 
             searches[i] = new BlastHomologySearch(params);
+            searches[i].setIdentifier(new TaskIdentifier(params.get(JobParamType.JOBID).toString()));
+            searches[i].setAbbreviation("BLAST");
+            searches[i].setName("SwissProt BLAST Search");
             searches[i].prerun();
         }
         return searches;

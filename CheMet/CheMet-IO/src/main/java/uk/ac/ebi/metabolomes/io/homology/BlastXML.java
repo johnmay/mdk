@@ -20,10 +20,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
 import uk.ac.ebi.chemet.resource.XMLHelper;
+import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 
 /**
  * BlastXML.java
@@ -83,7 +83,7 @@ public class BlastXML extends XMLHelper {
 
                     if ( emptyProductSet ) {
                         // if the collection is empty we want to create one seperately and then try adding
-                        currentProduct = new GeneProteinProduct( new GenericIdentifier( node.getTextContent() ) );
+                        currentProduct = new GeneProteinProduct( new BasicProteinIdentifier( node.getTextContent() ) );
                         Boolean added = products.addProduct( currentProduct );
                         if (added == Boolean.FALSE){
                             logger.error("Gene Product was not added to collection as the intial collection provided was empty and this is likely a duplicate set of results");
@@ -91,7 +91,7 @@ public class BlastXML extends XMLHelper {
                     }
                     else {
                         // get the product from the collection (a new one is created if a mathcing )
-                        currentProduct = products.getProteinProduct( new GenericIdentifier( node.getTextContent() ) );
+                        currentProduct = products.getProteinProduct( new BasicProteinIdentifier( node.getTextContent() ) );
                     }
 
                 } // add the hits as new observations of this gene product

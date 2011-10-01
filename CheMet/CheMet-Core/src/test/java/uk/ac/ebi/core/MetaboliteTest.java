@@ -8,7 +8,7 @@ package uk.ac.ebi.core;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
+import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import static org.junit.Assert.*;
 
 
@@ -36,9 +36,9 @@ public class MetaboliteTest {
     public void equality() {
 
         Metabolite m1 = new Metabolite();
-        m1.setIdentifier(new GenericIdentifier("m1"));
+        m1.setIdentifier(new BasicChemicalIdentifier("m1"));
         Metabolite m2 = new Metabolite();
-        m2.setIdentifier(new GenericIdentifier("m1"));
+        m2.setIdentifier(new BasicChemicalIdentifier("m1"));
 
         m1.setName("a molecule");
         m2.setName("a molecule");

@@ -26,16 +26,11 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.AtomContainer;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
-import uk.ac.ebi.core.AnnotatedEntity;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
 import uk.ac.ebi.interfaces.Identifier;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 

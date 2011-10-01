@@ -24,11 +24,9 @@ import au.com.bytecode.opencsv.CSVReader;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
-import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
+import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 /**
  * @name    IdentiferECMapper
@@ -40,7 +38,7 @@ import uk.ac.ebi.resource.protein.UniProtIdentifier;
  *
  */
 public class IdentiferECMapper
-        extends FileHashMapper<GenericIdentifier , Set<ECNumber>> {
+        extends FileHashMapper<Identifier , Set<ECNumber>> {
 
     private static final Logger LOGGER = Logger.getLogger( IdentiferECMapper.class );
 
@@ -49,8 +47,8 @@ public class IdentiferECMapper
     }
 
     @Override
-    public GenericIdentifier parseKey( String keyString ) {
-        return new GenericIdentifier( keyString );
+    public Identifier parseKey( String keyString ) {
+        return new BasicReactionIdentifier( keyString );
     }
 
     @Override

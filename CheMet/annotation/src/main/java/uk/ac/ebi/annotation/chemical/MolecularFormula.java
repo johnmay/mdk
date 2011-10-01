@@ -99,12 +99,34 @@ public class MolecularFormula
     }
 
 
+    public void setFormula(IMolecularFormula formula) {
+        this.formula = formula;
+        this.stringFormula = MolecularFormulaManipulator.getString(formula);
+    }
+
+
+    public void setFormula(String formula) {
+        IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+        this.stringFormula = formula;
+        this.formula = MolecularFormulaManipulator.getMolecularFormula(formula, builder);
+    }
+
+
     /**
      * @inheritDoc
      */
     @Override
     public String toString() {
         return stringFormula;
+    }
+
+
+    /**
+     * Returns HTML formula
+     * @return
+     */
+    public String toHTML(){
+        return MolecularFormulaManipulator.getHTML(formula);
     }
 
 

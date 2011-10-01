@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Properties;
-import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 
@@ -27,10 +27,10 @@ public class ReconstructionManager {
     private static final org.apache.log4j.Logger LOGGER =
                                                  org.apache.log4j.Logger.getLogger(
       ReconstructionManager.class);
-    private AbstractIdentifier activeProjectIdentifier;
+    private Identifier activeProjectIdentifier;
     private ArrayList<Reconstruction> projects = new ArrayList<Reconstruction>();
-    private LinkedHashMap<AbstractIdentifier, Integer> projectMap =
-                                                       new LinkedHashMap<AbstractIdentifier, Integer>();
+    private LinkedHashMap<Identifier, Integer> projectMap =
+                                               new LinkedHashMap();
     private Properties properties = new Properties();
     private File projectManagerPropertiesFiles =
                  new File(ReconstructionManager.class.getClassLoader().getResource(
@@ -67,7 +67,7 @@ public class ReconstructionManager {
      * @return The project related to the identifier if none is found null is returned
      * 
      */
-    private Reconstruction getProject(AbstractIdentifier identifier) {
+    private Reconstruction getProject(Identifier identifier) {
         for( Reconstruction project : projects ) {
             if( project.getIdentifier().equals(identifier) ) {
                 return project;
@@ -100,12 +100,35 @@ public class ReconstructionManager {
         return getProject(activeProjectIdentifier);
     }
 
+    /**
+     *
+     * Removes a project from the manager
+     *
+     * @param reconstruction The reconstruction to remove
+     * 
+     * @return
+     * 
+     */
+    public boolean removeProject(Reconstruction reconstruction) {
+
+        Identifier id = reconstruction.getIdentifier();
+
+        if( activeProjectIdentifier.equals(id) ) {
+            activeProjectIdentifier = null;
+        }
+        if( projectMap.containsKey(id)  ) {
+            projectMap.remove(id);
+        }
+        return projects.remove(reconstruction);
+
+    }
+
 
     /**
      *
      * @param activeProjectIdentifier
      */
-    public void setActiveReconstruction(AbstractIdentifier activeProjectIdentifier) {
+    public void setActiveReconstruction(Identifier activeProjectIdentifier) {
         this.activeProjectIdentifier = activeProjectIdentifier;
     }
 
@@ -126,7 +149,7 @@ public class ReconstructionManager {
         }
 
         for( Reconstruction entry : projects ) {
-            if( entry.getIdentifier().equals(reconstruction) )  {
+            if( entry.getIdentifier().equals(reconstruction) ) {
                 setActiveReconstruction(entry.getIdentifier());
                 LOGGER.error("found matching project but clashing identifiers stored:" +
                              entry.getIdentifier() +

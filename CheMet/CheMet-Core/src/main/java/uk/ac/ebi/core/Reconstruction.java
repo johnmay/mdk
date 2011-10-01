@@ -21,9 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.swing.JOptionPane;
-import org.jboss.serial.io.JBossObjectInputStream;
-import org.jboss.serial.io.JBossObjectOutputStream;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.reconstruction.ReconstructionContents;
 import uk.ac.ebi.core.reconstruction.ReconstructionProperites;
@@ -31,7 +28,7 @@ import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
 import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
 import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
+import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 
@@ -42,6 +39,7 @@ import uk.ac.ebi.resource.organism.Taxonomy;
  * @date Apr 13, 2011
  */
 public class Reconstruction
+  extends AnnotatedEntity
   implements Externalizable {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
@@ -50,11 +48,11 @@ public class Reconstruction
     private static final String DATA_FOLDER_NAME = "data";
     private static final String TMP_FOLDER_NAME = "mnb-tmp";
     private static final String GENE_PRODUCTS_FILE_NAME = "serialized-gene-projects.java-bin";
+    public static final String BASE_TYPE = "Reconstruction";
     // main container for the project on the file system
     private File container;
     private HashSet<ReconstructionContents> contents;
     private ReconstructionProperites properties;
-    private GenericIdentifier identifier;
     private Taxonomy organismIdentifier; // could be under a generic ReconstructionContents class but this is already used as an enum
     // component collections
     private GeneProductCollection products;
@@ -67,8 +65,8 @@ public class Reconstruction
      * @param id The identifier of the project
      * @param org The organism identifier
      */
-    public Reconstruction(GenericIdentifier id, Taxonomy org) {
-        identifier = id;
+    public Reconstruction(ReconstructionIdentifier id, Taxonomy org) {
+        super(id, org.getCommonName(), org.getCode());
         organismIdentifier = org;
         products = new GeneProductCollection();
         reactions = new ArrayList();
@@ -161,17 +159,6 @@ public class Reconstruction
         return container;
     }
 
-
-    public AbstractIdentifier getIdentifier() {
-        return identifier;
-    }
-
-
-    public void setIdentifier(GenericIdentifier identifier) {
-        this.identifier = identifier;
-    }
-
-
     /**
      * Loads a reconstruction from a given container
      */
@@ -189,24 +176,23 @@ public class Reconstruction
 
     /**
      * Saves the project and it's data
+     * @return if the project was saved
      */
-    public void save() {
+    public boolean save() {
         if( container != null ) {
             try {
                 ObjectOutput out = new ObjectOutputStream(new FileOutputStream(
                   new File(container, "recon.extern")));
                 this.writeExternal(out);
                 out.close();
+                return true;
             } catch( FileNotFoundException ex ) {
                 logger.error("error saving project", ex);
             } catch( IOException ex ) {
                 logger.error("error saving project", ex);
             }
-        } else {
-            // prompt
-            JOptionPane.showMessageDialog(null,
-                                          "No previous save found please use save as");
         }
+        return false;
     }
 
 
@@ -232,13 +218,6 @@ public class Reconstruction
         }
     }
 
-
-    @Override
-    public String toString() {
-        return identifier.toString();
-    }
-
-
     public void addContents(ReconstructionContents newContent) {
         contents.add(newContent);
     }
@@ -256,9 +235,10 @@ public class Reconstruction
 
     public void writeExternal(ObjectOutput out) throws IOException {
 
+        super.writeExternal(out);
+
         out.writeUTF(container.getAbsolutePath());
 
-        identifier.writeExternal(out);
         organismIdentifier.writeExternal(out);
 
         properties.writeExternal(out);
@@ -271,7 +251,7 @@ public class Reconstruction
         for( Metabolite metabolite : metabolites ) {
             metabolite.writeExternal(out);
         }
-        
+
         // reactions
         out.writeInt(reactions.size());
         for( MetabolicReaction reaction : reactions ) {
@@ -285,12 +265,11 @@ public class Reconstruction
 
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
 
         container = new File(in.readUTF());
 
         // ids
-        identifier = new GenericIdentifier();
-        identifier.readExternal(in);
         organismIdentifier = new Taxonomy();
         organismIdentifier.readExternal(in);
 
@@ -324,6 +303,12 @@ public class Reconstruction
             reactions.add(r);
         }
 
+    }
+
+
+    @Override
+    public String getBaseType() {
+        return BASE_TYPE;
     }
 
 

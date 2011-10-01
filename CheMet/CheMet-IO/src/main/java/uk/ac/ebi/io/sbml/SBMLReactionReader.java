@@ -42,13 +42,13 @@ import uk.ac.ebi.chemet.exceptions.AbsentAnnotationException;
 import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.resource.MIRIAMLoader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
+import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 
 /**
@@ -193,7 +193,7 @@ public class SBMLReactionReader {
             reaction.addProduct( getParticipant( sbmlReaction.getProduct( i ) ) );
         }
 
-        reaction.setIdentifier( new GenericIdentifier( sbmlReaction.getId() ) );
+        reaction.setIdentifier( new BasicReactionIdentifier( sbmlReaction.getId() ) );
 
         // TODO(johnmay): Add Enzyme annotations and modifiers
 
