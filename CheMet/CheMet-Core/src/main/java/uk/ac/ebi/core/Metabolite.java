@@ -53,6 +53,7 @@ public class Metabolite
     private static final Logger LOGGER = Logger.getLogger(Metabolite.class);
     private boolean generic = false;
     private MetaboliteClass type = MetaboliteClass.UNKNOWN;
+    public  static final String BASE_TYPE = "Metabolite";
 
 
     public Metabolite() {
@@ -199,7 +200,11 @@ public class Metabolite
         this.type = type;
     }
 
-    
+
+    @Override
+    public String getBaseType() {
+        return BASE_TYPE;
+    }
 
 
 }

@@ -294,5 +294,8 @@ public abstract class AnnotatedEntity
     }
 
 
+    public abstract String getBaseType();
+        
+
 }
 

@@ -30,9 +30,10 @@ public abstract class GeneProduct
                                                            org.apache.log4j.Logger.getLogger(
       GeneProduct.class);
     private ProductType type;
-   private List<Reaction> reactions = new ArrayList();
+    private List<Reaction> reactions = new ArrayList();
     private String sequence; // have to store as simple string as BioJava3 ProteinSequence is not serializable and we want to store the object it to disk :-)
     private Integer sequenceLength;
+    public static final String BASE_TYPE = "Product";
 
 
     public ProductType getType() {
@@ -121,6 +122,12 @@ public abstract class GeneProduct
         out.writeUTF(sequence);
         out.write(sequenceLength);
 //        out.writeObject(type);
+    }
+
+
+    @Override
+    public String getBaseType() {
+        return BASE_TYPE;
     }
 
 

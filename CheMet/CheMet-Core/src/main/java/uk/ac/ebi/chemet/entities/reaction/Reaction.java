@@ -67,6 +67,7 @@ public class Reaction<M, S, C>
     transient private List<S> productStoichiometries = new ArrayList<S>();
     transient private List<C> reactantCompartments = new ArrayList<C>();
     transient private List<C> productCompartments = new ArrayList<C>();
+    public static final String BASE_TYPE = "Reaction";
     // flags whether the reaction is generic or not
     transient private Boolean generic = false;
     // new class
@@ -611,6 +612,12 @@ public class Reaction<M, S, C>
                 p.writeExternal(out);
             }
         }
+    }
+
+
+    @Override
+    public String getBaseType() {
+        return BASE_TYPE;
     }
 
 
