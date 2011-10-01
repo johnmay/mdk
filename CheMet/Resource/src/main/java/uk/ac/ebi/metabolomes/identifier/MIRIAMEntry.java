@@ -51,7 +51,6 @@ public class MIRIAMEntry
     private String definition;
     private String urn;
     private String url;
-    private Class identifierClass = GenericIdentifier.class;
 
 
     public MIRIAMEntry(String id, String pattern, String resouceName, String definition, String urn,
@@ -103,14 +102,7 @@ public class MIRIAMEntry
     }
 
 
-    /**
-     * Allows the entry class to be set by the MIRIAMResouce enumeration for common encoded types
-     * @param identifierClass
-     */
-    public void setIdentifierClass(Class identifierClass) {
-        this.identifierClass = identifierClass;
-    }
-
+   
 
     public String getBaseURL() {
         return this.url;

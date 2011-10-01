@@ -19,7 +19,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 /**
@@ -27,6 +26,7 @@ import uk.ac.ebi.resource.protein.UniProtIdentifier;
  * @author johnmay
  * @date   Apr 2011
  */
+@Deprecated
 public enum Resource {
 
     // todo load from properties file
@@ -54,7 +54,6 @@ public enum Resource {
     PATENTS( "" , "PAT" , null , "" ),
     GBID( "Gene Backbone ID" , "BBS" , null , "" ),
     LOCAL( "" , "LCL" , null , "" ),
-    GENERAL( "General" , "GNL" , GenericIdentifier.class , "" ),
     UNKNOWN( "Unknown Resource (add to Resource.java)" , "" , null , "" );
 
 

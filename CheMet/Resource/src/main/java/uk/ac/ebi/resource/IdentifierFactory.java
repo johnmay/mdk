@@ -29,7 +29,6 @@ import java.util.ListIterator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.metabolomes.identifier.GenericIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.metabolomes.resource.Resource;
@@ -38,6 +37,7 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
@@ -66,6 +66,8 @@ public class IdentifierFactory {
       new ECNumber(),
       new BasicChemicalIdentifier(),
       new BasicReactionIdentifier(),
+      new ReconstructionIdentifier(),
+      new TaskIdentifier(),
       new InChI()));
 
 
@@ -97,7 +99,9 @@ public class IdentifierFactory {
      * Uses the identifier parse method to validate ids (slower)
      * @param resource
      * @param accession
+     * @deprecated do not use
      */
+    @Deprecated
     public static AbstractIdentifier getIdentifier(Resource resource, String accession) {
 
         Constructor constructor = resource.getIdentifierConstructor();
@@ -114,10 +118,17 @@ public class IdentifierFactory {
                 ex.printStackTrace();
             }
         }
-        return new GenericIdentifier(accession);
+        return new BasicProteinIdentifier(accession);
     }
 
+    /*     
+     * @param resource
+     * @param accession
+     * @return
+     * @deprecated do not use
+     */
 
+    @Deprecated
     public static AbstractIdentifier getUncheckedIdentifier(Resource resource, String accession) {
 
         Constructor constructor = resource.getIdentifierConstructor();
@@ -134,7 +145,7 @@ public class IdentifierFactory {
                 ex.printStackTrace();
             }
         }
-        return new GenericIdentifier(accession);
+        return new BasicProteinIdentifier(accession);
     }
 //
 //    public static void main( String[] args ) {
@@ -160,6 +171,7 @@ public class IdentifierFactory {
      * @param idsString
      * @return
      */
+    @Deprecated
     public static List<AbstractIdentifier> getIdentifiers(String idsString) {
 
         List<AbstractIdentifier> hitIdentifiers = new ArrayList<AbstractIdentifier>();
@@ -177,9 +189,9 @@ public class IdentifierFactory {
                 if( dbid.length() <= DBID_MAX_LENGTH ) {
                     Resource r = Resource.getResource(dbid);
 
-                    if( r != Resource.UNKNOWN && r != Resource.GENERAL ) {
+                    if( r != Resource.UNKNOWN ) {
                         hitIdentifiers.add(IdentifierFactory.getIdentifier(r, it.next()));
-                    } else if( r == Resource.GENERAL && it.hasNext() ) {
+                    } else if( it.hasNext() ) {
                         dbid = it.next();
                         r = Resource.getResource(dbid);
                         if( r != Resource.UNIPROT ) {
@@ -191,11 +203,11 @@ public class IdentifierFactory {
 
                 } else {
 
-                    hitIdentifiers.add(new GenericIdentifier(dbid));
+                    hitIdentifiers.add(new BasicProteinIdentifier(dbid));
                 }
             }
         } else {
-            hitIdentifiers.add(new GenericIdentifier(idsString));
+            hitIdentifiers.add(new BasicProteinIdentifier(idsString));
         }
 
         return hitIdentifiers;
