@@ -78,6 +78,7 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
 
         ChemicalDBWebService webservice = new KeggCompoundWebServiceConnection();
         System.out.println("Synonyms:" + ((KeggCompoundWebServiceConnection) webservice).getSynonyms("C00002"));
+        System.out.println(webservice.searchWithName("Adenosine 5'-triphosphate"));
 
 
     }

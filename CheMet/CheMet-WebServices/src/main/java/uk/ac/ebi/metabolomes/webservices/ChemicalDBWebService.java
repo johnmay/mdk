@@ -152,7 +152,8 @@ public abstract class ChemicalDBWebService {
     }
 
     /**
-     * Returns a set of identifiers found by searching with the given name
+     * Returns a set of identifiers found by searching with the given name. Note classes
+     * implementing this method should call search on all possible names/synonyms
      * @param name
      * @return
      */

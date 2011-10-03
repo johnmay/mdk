@@ -528,7 +528,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     @Override
     public Set<ChEBIIdentifier> searchWithName(String name) {
         Set<ChEBIIdentifier> ids = new HashSet<ChEBIIdentifier>();
-        for (String id : searchByName(name).keySet()) {
+        for (String id : searchBySynonym(name).keySet()) {
             ids.add(new ChEBIIdentifier());
         }
         return ids;
