@@ -175,6 +175,11 @@ public class BioCycFolderService extends ChemicalDBWebService {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public Identifier getIdentifier() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }
 

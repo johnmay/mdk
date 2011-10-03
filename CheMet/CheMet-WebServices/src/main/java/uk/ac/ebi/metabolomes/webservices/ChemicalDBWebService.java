@@ -218,4 +218,6 @@ public abstract class ChemicalDBWebService {
      * @return
      */
     public abstract Collection<String> getSynonyms(Identifier identifier);
+
+    public abstract Identifier getIdentifier();
 }

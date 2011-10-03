@@ -466,4 +466,10 @@ public class CachedChemicalWS
     public Collection<String> getSynonyms(Identifier identifier) {
         return getSynonyms(identifier.getAccession());
     }
+
+    @Override
+    public Identifier getIdentifier() {
+        return base.getIdentifier();
+    }
+    
 }

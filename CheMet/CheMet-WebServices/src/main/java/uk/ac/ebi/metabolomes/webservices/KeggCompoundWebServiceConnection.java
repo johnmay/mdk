@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 import javax.xml.rpc.ServiceException;
 
 import keggapi.KEGGLocator;
@@ -25,6 +24,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
@@ -436,5 +436,10 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
     @Override
     public Map<String, String> search(String name) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public KEGGCompoundIdentifier getIdentifier() {
+        return (KEGGCompoundIdentifier) IdentifierFactory.getInstance().ofClass(KEGGCompoundIdentifier.class);
     }
 }

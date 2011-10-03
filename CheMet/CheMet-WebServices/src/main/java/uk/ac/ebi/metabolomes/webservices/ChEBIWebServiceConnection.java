@@ -27,6 +27,7 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.*;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 public class ChEBIWebServiceConnection extends ChemicalDBWebService {
@@ -533,4 +534,11 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         }
         return ids;
     }
+
+    @Override
+    public ChEBIIdentifier getIdentifier() {
+        return (ChEBIIdentifier) IdentifierFactory.getInstance().ofClass(ChEBIIdentifier.class);
+    }
+
+
 }
