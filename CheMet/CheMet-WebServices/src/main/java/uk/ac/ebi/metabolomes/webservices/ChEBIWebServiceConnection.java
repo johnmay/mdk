@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -473,7 +474,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
 
         String accession = identifier.getAccession();
 
-        return getName(accession);
+        return getName(accession.toUpperCase(Locale.ENGLISH));
     }
 
     /**
@@ -513,7 +514,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     }
 
     public Collection<String> getSynonyms(ChEBIIdentifier identifier) {
-        return getSynonyms(identifier.getAccession());
+        return getSynonyms(identifier.getAccession().toUpperCase(Locale.ENGLISH));
     }
 
     @Override
