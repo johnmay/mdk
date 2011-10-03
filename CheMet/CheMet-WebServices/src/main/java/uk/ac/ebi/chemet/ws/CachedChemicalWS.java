@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.chemet.ws;
 
 /**
@@ -48,7 +47,6 @@ import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 
-
 /**
  *          CachedChemicalWS – 2011.08.23 <br>
  *          Provides a cache buffer to speed up some web services. The class takes as input a
@@ -58,15 +56,15 @@ import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
  * @author  $Author$ (this version)
  */
 public class CachedChemicalWS
-  extends ChemicalDBWebService {
+        extends ChemicalDBWebService {
 
     private static final Logger LOGGER = Logger.getLogger(CachedChemicalWS.class);
     private final ChemicalDBWebService base;
-    private static final String DEFAULT_CACHE_ROOT = System.getProperty("user.home") +
-                                                     File.separator +
-                                                     ".uk.ac.ebi" +
-                                                     File.separator +
-                                                     "cache";
+    private static final String DEFAULT_CACHE_ROOT = System.getProperty("user.home")
+            + File.separator
+            + ".uk.ac.ebi"
+            + File.separator
+            + "cache";
     private File cacheDir = new File(DEFAULT_CACHE_ROOT);
     private Map<String, Object> objectCache = new HashMap<String, Object>(400, 0.9f);
     // default cache sizes
@@ -83,7 +81,6 @@ public class CachedChemicalWS
     private static final String MDL_STRING = ".mdl-string";
     private static final String NAME_STRING = ".name-string";
 
-
     /**
      *
      * Constructor takes a class extending the abstract ChemicalDBWebService and uses
@@ -97,9 +94,9 @@ public class CachedChemicalWS
      *
      */
     public CachedChemicalWS(ChemicalDBWebService webservice,
-                            Integer memoryQueueSize,
-                            Integer diskQueueSize,
-                            Integer cacheExpiry) {
+            Integer memoryQueueSize,
+            Integer diskQueueSize,
+            Integer cacheExpiry) {
 
         this.base = webservice;
 
@@ -118,8 +115,6 @@ public class CachedChemicalWS
                 Long o2Time = o2.lastModified();
                 return o1Time.compareTo(o2Time);
             }
-
-
         };
 
         diskQueue = new PriorityBlockingQueue<File>(diskQueueSize, fileModifiedComparator);
@@ -129,7 +124,6 @@ public class CachedChemicalWS
 
 
     }
-
 
     /**
      *
@@ -142,10 +136,9 @@ public class CachedChemicalWS
      *
      */
     public CachedChemicalWS(ChemicalDBWebService client, Integer memoryQueueSize,
-                            Integer diskQueueSize) {
+            Integer diskQueueSize) {
         this(client, memoryQueueSize, diskQueueSize, DEFAULT_DISK_CACHE_EXPIRY);
     }
-
 
     /**
      *
@@ -160,11 +153,9 @@ public class CachedChemicalWS
         this(client, memoryQueueSize, DEFAULT_DISK_CACHE_SIZE, DEFAULT_DISK_CACHE_EXPIRY);
     }
 
-
     public CachedChemicalWS(ChemicalDBWebService client) {
         this(client, DEFAULT_MEMORY_CACHE_SIZE);
     }
-
 
     /**
      *
@@ -178,9 +169,9 @@ public class CachedChemicalWS
         long currentTime = System.currentTimeMillis();
         long expireTime = 86400000 * days;
 
-        for( File cachedFile : cacheDir.listFiles() ) {
+        for (File cachedFile : cacheDir.listFiles()) {
 
-            if( (currentTime - cachedFile.lastModified()) > expireTime ) {
+            if ((currentTime - cachedFile.lastModified()) > expireTime) {
                 cachedFile.delete();
             }
 
@@ -189,7 +180,6 @@ public class CachedChemicalWS
 
         }
     }
-
 
     /**
      *
@@ -206,11 +196,11 @@ public class CachedChemicalWS
      */
     @Override
     public String getMDLString(String id) throws UnfetchableEntry,
-                                                 MissingStructureException {
+            MissingStructureException {
 
         File cachedFile = new File(cacheDir, id + MDL_STRING);
 
-        if( cachedFile.exists() ) {
+        if (cachedFile.exists()) {
             cachedFile.setLastModified(System.currentTimeMillis());
             return (String) fetch(cachedFile);
         }
@@ -222,7 +212,6 @@ public class CachedChemicalWS
 
         return mdlString;
     }
-
 
     /**
      *
@@ -240,11 +229,11 @@ public class CachedChemicalWS
      *
      */
     public IAtomContainer getAtomContainer(String id) throws UnfetchableEntry,
-                                                             MissingStructureException {
+            MissingStructureException {
 
         String objectId = id + CDK_ATOMCONTAINER;
 
-        if( objectCache.containsKey(objectId) ) {
+        if (objectCache.containsKey(objectId)) {
 
             objectQueue.remove(objectId); // move to front
             objectQueue.add(objectId);
@@ -260,13 +249,13 @@ public class CachedChemicalWS
         try {
             molecule = reader.read(molecule);
             reader.close();
-        } catch( IOException ex ) {
+        } catch (IOException ex) {
             throw new MissingStructureException(id);
-        } catch( CDKException ex ) {
+        } catch (CDKException ex) {
             throw new MissingStructureException(id);
         }
 
-        if( molecule == null ) {
+        if (molecule == null) {
             throw new MissingStructureException(id);
         }
 
@@ -277,9 +266,9 @@ public class CachedChemicalWS
         objectCache.put(objectId, molecule);
 
         // empty the queue if there are less then 10 slots left
-        if( objectQueue.remainingCapacity() < 10 ) {
+        if (objectQueue.remainingCapacity() < 10) {
             // empty until there are more then 100
-            while( objectQueue.remainingCapacity() < 100 ) {
+            while (objectQueue.remainingCapacity() < 100) {
                 objectCache.remove(objectQueue.poll());
             }
         }
@@ -290,13 +279,12 @@ public class CachedChemicalWS
 
     }
 
-
     @Override
     public String getName(String id) throws UnfetchableEntry {
 
         String objectId = id + NAME_STRING;
 
-        if( objectCache.containsKey(objectId) ) {
+        if (objectCache.containsKey(objectId)) {
 
             objectQueue.remove(objectId); // move to front
             objectQueue.add(objectId);
@@ -306,7 +294,7 @@ public class CachedChemicalWS
 
         File cachedFile = new File(cacheDir, objectId);
 
-        if( cachedFile.exists() ) {
+        if (cachedFile.exists()) {
             cachedFile.setLastModified(System.currentTimeMillis());
             return (String) fetch(cachedFile);
         }
@@ -326,47 +314,40 @@ public class CachedChemicalWS
         return name;
     }
 
-
     private void checkQueue() {
         // empty the queue if there are less then 10 slots left
-        if( objectQueue.remainingCapacity() < 10 ) {
+        if (objectQueue.remainingCapacity() < 10) {
             // empty until there are more then 100
-            while( objectQueue.remainingCapacity() < 100 ) {
+            while (objectQueue.remainingCapacity() < 100) {
                 objectCache.remove(objectQueue.poll());
             }
         }
     }
-
 
     @Override
     public HashMap<String, String> searchByInChI(String inchi) {
         throw new UnsupportedOperationException("Not supported yet....");
     }
 
-
     @Override
     public ArrayList<IAtomContainer> downloadMolsToCDKObject(String[] ids) {
         throw new UnsupportedOperationException("Not supported yet....");
     }
-
 
     @Override
     public String getServiceProviderName() {
         return base.getServiceProviderName();
     }
 
-
     @Override
     public Set<? extends Identifier> searchWithName(String name) {
         return base.searchWithName(name);
     }
 
-
     @Override
     public Map<String, String> search(String query) {
         return base.search(query);
     }
-
 
     /**
      * @inheritDoc
@@ -377,7 +358,7 @@ public class CachedChemicalWS
         String key = accession + SYNONYMS;
 
         // try the in memory cache
-        if( objectCache.containsKey(key) ) {
+        if (objectCache.containsKey(key)) {
             objectQueue.remove(key); // move to front
             objectQueue.add(key);
             return (Collection<String>) objectCache.get(key);
@@ -386,7 +367,7 @@ public class CachedChemicalWS
         File cachedFile = new File(cacheDir, key);
 
         // no in memory cache so fest from file
-        if( cachedFile.exists() ) {
+        if (cachedFile.exists()) {
             Collection<String> synonyms = (Collection<String>) fetch(cachedFile);
             objectCache.put(key, synonyms);
             objectQueue.add(key);
@@ -408,7 +389,6 @@ public class CachedChemicalWS
 
     }
 
-
     private Object fetch(File cachedFile) {
         ObjectInputStream ois = null;
         Object obj = null;
@@ -417,16 +397,16 @@ public class CachedChemicalWS
 
             ois = new ObjectInputStream(new FileInputStream(cachedFile));
             obj = ois.readObject();
-        } catch( Exception ex ) {
+        } catch (Exception ex) {
 
             LOGGER.error("There was a problem reading the cached file");
         } finally {
 
             try {
-                if( ois != null ) {
+                if (ois != null) {
                     ois.close();
                 }
-            } catch( IOException ex ) {
+            } catch (IOException ex) {
 
                 LOGGER.error("Could not closed cached stream");
             }
@@ -436,7 +416,6 @@ public class CachedChemicalWS
 
     }
 
-
     private void store(File cachedFile, Object obj) {
         ObjectOutputStream oos = null;
 
@@ -445,16 +424,16 @@ public class CachedChemicalWS
             oos = new ObjectOutputStream(new FileOutputStream(cachedFile));
             oos.writeObject(obj);
 
-        } catch( Exception ex ) {
+        } catch (Exception ex) {
 
             LOGGER.error("There was a problem reading the cached file");
         } finally {
 
             try {
-                if( oos != null ) {
+                if (oos != null) {
                     oos.close();
                 }
-            } catch( IOException ex ) {
+            } catch (IOException ex) {
 
                 LOGGER.error("Could not closed cached stream");
             }
@@ -463,15 +442,28 @@ public class CachedChemicalWS
         diskQueue.add(cachedFile);
 
         // empty the queue if there are less then 10 slots left
-        if( diskQueue.remainingCapacity() < 10 ) {
+        if (diskQueue.remainingCapacity() < 10) {
             // empty until there are more then 100 deleteing stored files as we go
-            while( diskQueue.remainingCapacity() < 100 ) {
+            while (diskQueue.remainingCapacity() < 100) {
                 diskQueue.poll().delete();
             }
         }
 
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getName(Identifier identifier) {
+        return getName(identifier.getAccession());
+    }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Collection<String> getSynonyms(Identifier identifier) {
+        return getSynonyms(identifier.getAccession());
+    }
 }
-

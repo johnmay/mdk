@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +25,7 @@ import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.*;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 public class ChEBIWebServiceConnection extends ChemicalDBWebService {
@@ -469,6 +469,17 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
      * @inheritDoc
      */
     @Override
+    public String getName(Identifier identifier) {
+
+        String accession = identifier.getAccession();
+
+        return getName(accession);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
     public Collection<String> getSynonyms(String accession) {
         try {
 
@@ -499,6 +510,15 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
             throw new UnfetchableEntry(accession, serviceProviderName,
                     UnfetchableEntry.CLIENT_EXCEPTION);
         }
+    }
+
+    public Collection<String> getSynonyms(ChEBIIdentifier identifier) {
+        return getSynonyms(identifier.getAccession());
+    }
+
+    @Override
+    public Collection<String> getSynonyms(Identifier identifier) {
+        return getSynonyms((ChEBIIdentifier) identifier);
     }
 
     /**

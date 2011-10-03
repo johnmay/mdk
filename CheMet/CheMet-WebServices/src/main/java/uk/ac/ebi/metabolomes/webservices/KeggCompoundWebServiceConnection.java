@@ -24,6 +24,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
@@ -76,7 +77,7 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
 
 
         ChemicalDBWebService webservice = new KeggCompoundWebServiceConnection();
-        webservice.searchWithName("ATP");
+        System.out.println("Synonyms:" + ((KeggCompoundWebServiceConnection) webservice).getSynonyms("C00002"));
 
 
     }
@@ -116,6 +117,36 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
         return totalAns;
     }
 
+    /**
+     * Returns the KEGG String entry (bget) for the given identifier
+     * @param identifier
+     * @return
+     */
+    public String getEntry(KEGGCompoundIdentifier identifier) {
+        try {
+            String accession = identifier.getAccession();
+            String dbAccession = this.resolveDBPrefix(accession) + ":" + accession;
+
+            String result = serv.bget(dbAccession);
+
+            if (result.isEmpty()) {
+                throw new UnfetchableEntry(identifier.getAccession(), getServiceProviderName(), "Empty entry");
+            }
+
+            return result;
+
+
+        } catch (RemoteException ex) {
+            throw new UnfetchableEntry(identifier.getAccession(), getServiceProviderName(), ex.getMessage());
+        }
+
+
+    }
+
+    /**
+     * @deprecated use {@see searchWithName(String)} as this method allows use of the ChemicalDBWebService interfaces
+     */
+    @Deprecated
     public String[] findCompoundByName(String name) {
         try {
             return serv.search_compounds_by_name(name);
@@ -125,6 +156,7 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
         }
     }
 
+    // TODO: move a general KEGGIdentifier class/interface
     private String resolveDBPrefix(String id) {
         if (id.toLowerCase().startsWith("c")) {
             return KeggDBs.COMPOUND.getDBPrefixForBget();
@@ -309,18 +341,83 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
 
     }
 
+    /**
+     * Returns the main name of a KEGG entry. Note this method is taxing as the whole entry is downloaded and the parsed.
+     * It is recommended to use this with a cache
+     * @param accession
+     * @return
+     * @throws UnfetchableEntry
+     */
     @Override
-    public String getName(String id) throws UnfetchableEntry {
-        return id;
+    public String getName(String accession) throws UnfetchableEntry {
+        return getName(new KEGGCompoundIdentifier(accession));
+    }
+
+    public String getName(KEGGCompoundIdentifier identifier) throws UnfetchableEntry {
+
+        String entry = getEntry(identifier);
+
+        String[] lines = entry.split("\n");
+        String type = "";
+        for (String line : lines) {
+            if (line.length() > 12) {
+                String newType = line.substring(0, 12).trim();
+                type = newType.isEmpty() ? type : newType;
+                if (type.trim().equals("NAME")) {
+                    String name = line.substring(12, line.length()).trim();
+                    if (name.endsWith(";")) {
+                        name = name.substring(0, name.length() - 1);
+                    }
+                    return name;
+                }
+            }
+        }
+
+        return "";
     }
 
     @Override
     public Collection<String> getSynonyms(String accession) throws UnfetchableEntry {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return getSynonyms(new KEGGCompoundIdentifier(accession));
+    }
+
+    public Collection<String> getSynonyms(KEGGCompoundIdentifier identifier) throws UnfetchableEntry {
+
+        Collection<String> names = new HashSet();
+
+        String entry = getEntry(identifier);
+
+        String[] lines = entry.split("\n");
+        String type = "";
+        for (String line : lines) {
+            if (line.length() > 12) {
+                String newType = line.substring(0, 12).trim();
+                type = newType.isEmpty() ? type : newType;
+                if (type.trim().equals("NAME")) {
+                    String name = line.substring(12, line.length()).trim();
+                    if (name.endsWith(";")) {
+                        name = name.substring(0, name.length() - 1);
+                    }
+                    names.add(name);
+                }
+            }
+        }
+
+        return names;
+    }
+
+    @Override
+    public String getName(Identifier identifier) {
+        return getName((KEGGCompoundIdentifier) identifier);
+    }
+
+    @Override
+    public Collection<String> getSynonyms(Identifier identifier) {
+        return getSynonyms((KEGGCompoundIdentifier) identifier);
     }
 
     /**
-     * @inheritDoc
+     * Returns a set of KEGG Compound identifiers. Note this does not search glycan or drug databases
      */
     @Override
     public Set<KEGGCompoundIdentifier> searchWithName(String name) {

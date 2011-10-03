@@ -165,6 +165,16 @@ public class BioCycFolderService extends ChemicalDBWebService {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public String getName(Identifier identifier) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<String> getSynonyms(Identifier identifier) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }
 
