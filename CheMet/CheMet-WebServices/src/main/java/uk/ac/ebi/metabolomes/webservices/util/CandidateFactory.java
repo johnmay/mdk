@@ -1,4 +1,3 @@
-
 /**
  * CandidateFactory.java
  *
@@ -28,11 +27,11 @@ import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.reconciliation.StringEncoder;
-
 
 /**
  *          CandidateFactory – 2011.09.22 <br>
@@ -47,41 +46,39 @@ public class CandidateFactory {
     private final ChemicalDBWebService webservice;
     private StringEncoder encoder;
 
-
     public CandidateFactory(ChemicalDBWebService webservice, StringEncoder encoder) {
         this.webservice = webservice;
         this.encoder = encoder;
     }
-
 
     /**
      *
      * Creates a {@see Multimap} of candidate entries ({@see CandidateEntry}) with key as their
      * distance
      *
-     * @param queryName
+     * @param name
      * @param encoder A StringEncoder such as ChemicalFingerprint
      * @return
      * 
      */
-    public Multimap<Integer, SynonymCandidateEntry> getSynonymCandidates(String queryName) {
+    public Multimap<Integer, SynonymCandidateEntry> getSynonymCandidates(String name) {
 
         Multimap<Integer, SynonymCandidateEntry> map = HashMultimap.create();
 
         // todo add general search
-        for( Entry<String,String> entry : webservice.search(queryName).entrySet() ) {
+        for (Identifier id : webservice.searchWithName(name)) {
 
-            String accession = entry.getKey();
+            String accession = id.getAccession();
 
-            String description = entry.getValue(); // webservice.getName(accession);
+            String subject = webservice.getName(id); // webservice.getName(accession);
             Collection<String> synonyms = webservice.getSynonyms(accession);
 
-            Integer distance = getBestScore(queryName, synonyms);
+            Integer distance = getBestScore(name, synonyms);
             map.put(distance,
                     new SynonymCandidateEntry(accession,
-                                              description,
-                                              synonyms,
-                                              distance));
+                    subject,
+                    synonyms,
+                    distance));
 
         }
 
@@ -89,16 +86,41 @@ public class CandidateFactory {
 
     }
 
+    /**
+     * Creates a multimap of possible candidates entries which are keyed by their distance
+     * @param name
+     * @return
+     */
+    public Multimap<Integer, CandidateEntry> getCandidates(String name) {
+
+        Multimap<Integer, CandidateEntry> map = HashMultimap.create();
+
+        // todo add general search
+        for (Identifier id : webservice.searchWithName(name)) {
+
+            String accession = id.getAccession();
+            String subject = webservice.getName(id);
+
+            Integer distance = calculateDistance(encoder.encode(name), encoder.encode(subject));
+            map.put(distance,
+                    new CandidateEntry(accession,
+                    subject,
+                    distance, ""));
+
+        }
+
+        return map;
+
+    }
 
     public static void main(String[] args) {
         CandidateFactory factory = new CandidateFactory(new ChEBIWebServiceConnection(
-          StarsCategory.THREE_ONLY, 20),
-                                                        new ChemicalFingerprintEncoder());
+                StarsCategory.THREE_ONLY, 20),
+                new ChemicalFingerprintEncoder());
         System.out.println(factory.getSynonymCandidates("Adenosine triphosphate"));
         System.out.println(factory.getSynonymCandidates("GTP"));
 
     }
-
 
     public Integer getBestScore(String query, Collection<String> synonyms) {
 
@@ -106,7 +128,7 @@ public class CandidateFactory {
 
         String encodedQuery = encoder.encode(query);
 
-        for( String synonym : synonyms ) {
+        for (String synonym : synonyms) {
             int distance = calculateDistance(encodedQuery, synonym);
             score = distance < score ? distance : score;
         }
@@ -114,7 +136,6 @@ public class CandidateFactory {
         return score;
 
     }
-
 
     /**
      * Calculates then Levenshtein distance for the query and subject strings using the set
@@ -126,14 +147,10 @@ public class CandidateFactory {
      */
     public Integer calculateDistance(String encodedQuery, String subject) {
         return StringUtils.getLevenshteinDistance(encodedQuery,
-                                                  encoder.encode(subject));
+                encoder.encode(subject));
     }
-
 
     public void setEncoder(StringEncoder encoder) {
         this.encoder = encoder;
     }
-
-
 }
-
