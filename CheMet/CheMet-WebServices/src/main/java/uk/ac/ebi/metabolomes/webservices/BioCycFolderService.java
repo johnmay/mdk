@@ -22,6 +22,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.ReaderFactory;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+import uk.ac.ebi.interfaces.Identifier;
 
 
 public class BioCycFolderService extends ChemicalDBWebService {
@@ -154,7 +155,7 @@ public class BioCycFolderService extends ChemicalDBWebService {
 
 
     @Override
-    public Set<String> searchWithName(String name) {
+    public Set<Identifier> searchWithName(String name) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -37,6 +37,7 @@ import org.openscience.cdk.io.iterator.IteratingPCCompoundXMLReader;
 import org.xmlpull.v1.XmlPullParserException;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+import uk.ac.ebi.interfaces.Identifier;
 
 
 public class PubChemWebServiceConnection extends ChemicalDBWebService{
@@ -379,7 +380,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
 
 
     @Override
-    public Set<String> searchWithName(String name) {
+    public Set<Identifier> searchWithName(String name) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

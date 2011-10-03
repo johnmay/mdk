@@ -18,7 +18,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
-import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
+import uk.ac.ebi.interfaces.Identifier;
 
 
 /**
@@ -174,7 +174,7 @@ public abstract class ChemicalDBWebService {
      * @param name
      * @return
      */
-    public abstract Set<String> searchWithName(String name);
+    public abstract Set<? extends Identifier> searchWithName(String name);
     
     /**
      * Returns a map of identifiers and compound names found by searching with the given query

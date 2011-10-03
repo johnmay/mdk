@@ -45,6 +45,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 
 
@@ -356,7 +357,7 @@ public class CachedChemicalWS
 
 
     @Override
-    public Set<String> searchWithName(String name) {
+    public Set<? extends Identifier> searchWithName(String name) {
         return base.searchWithName(name);
     }
 

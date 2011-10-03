@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.metabolomes.webservices;
 
 import java.io.StringReader;
@@ -7,8 +6,10 @@ import java.util.ArrayList;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import javax.xml.rpc.ServiceException;
 
 import keggapi.KEGGLocator;
@@ -23,7 +24,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
-
+import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
 
@@ -32,127 +33,80 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
     private Logger logger = Logger.getLogger(KeggCompoundWebServiceConnection.class.getName());
     private final int bgetMaxQueries = 100;
 
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public String getMDLString(String id) throws UnfetchableEntry,
-                                                 MissingStructureException {
-        try {
-            String mdlString = serv.bget("-f m " + this.resolveDBPrefix(id) + ":" + id);
-            if( mdlString == null ) {
-                throw new MissingStructureException(id);
-            }
-            return mdlString;
-        } catch( RemoteException e ) {
-            throw new UnfetchableEntry();
-        }
-
-    }
-
-
-    @Override
-    public String getName(String id) throws UnfetchableEntry {
-        return id;
-    }
-
-
-    @Override
-    public Collection<String> getSynonyms(String accession) throws UnfetchableEntry {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
-    @Override
-    public Set<String> searchWithName(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
-    @Override
-    public Map<String, String> search(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
     private enum KeggDBs {
 
         COMPOUND("cpd"), DRUG("dr"), GLYCAN("gl");
         private final String prefix;
 
-
         KeggDBs(String prefix) {
             this.prefix = prefix;
         }
 
-
         String getDBPrefixForBget() {
             return this.prefix;
         }
-
-
     }
-
 
     public static void main(String args[]) {
         //KeggCompoundWebServiceConnection keggConn = new KeggCompoundWebServiceConnection();
         ChemicalDBWebService keggConn = new KeggCompoundWebServiceConnection();
-        if( args != null && args.length > 0 ) {
+        if (args != null && args.length > 0) {
             ArrayList<IAtomContainer> mols = keggConn.downloadMolsToCDKObject(args);
-            for( IAtomContainer mol : mols ) {
+            for (IAtomContainer mol : mols) {
                 System.out.println("ID: " + mol.getID());
             }
         }
-        String[] compIds = { "C07688", "C07689", "D00608", "D00609" };
+        String[] compIds = {"C07688", "C07689", "D00608", "D00609"};
         try {
             String res = ((KeggCompoundWebServiceConnection) keggConn).executeBget(compIds);
             System.out.println(res);
-            HashMap<String, String> testres = ((KeggCompoundWebServiceConnection) keggConn).
-              resolveNewIDsForObsoleteEntrys(res);
-            for( String key : testres.keySet() ) {
+            HashMap<String, String> testres = ((KeggCompoundWebServiceConnection) keggConn).resolveNewIDsForObsoleteEntrys(res);
+            for (String key : testres.keySet()) {
                 System.out.println(key + "\t" + testres.get(key));
                 ArrayList<String> name = new ArrayList<String>();
                 name.add(testres.get(key));
                 ArrayList<IAtomContainer> mols = keggConn.downloadMolsToCDKObject(name);
-                if( mols.size() > 0 && mols.get(0) != null ) {
+                if (mols.size() > 0 && mols.get(0) != null) {
                     System.out.println("We have struct for: " + mols.get(0).getID());
                 }
             }
 
-        } catch( RemoteException ex ) {
+        } catch (RemoteException ex) {
         }
-    }
 
+
+        ChemicalDBWebService webservice = new KeggCompoundWebServiceConnection();
+        webservice.searchWithName("ATP");
+
+
+    }
 
     public KeggCompoundWebServiceConnection() {
         this.init();
     }
 
-
     public HashMap<String, String> mapAnyObsoleteID2NewID(ArrayList<String> obsIDs) {
         String[] cpds = obsIDs.toArray(new String[obsIDs.size()]);
         try {
             return this.resolveNewIDsForObsoleteEntrys(this.executeBget(cpds));
-        } catch( RemoteException ex ) {
+        } catch (RemoteException ex) {
             logger.error("Could not retrieve compounds ids through bget: ", ex);
             return null;
         }
     }
 
-
     private String executeBget(String[] cpds) throws RemoteException {
         String totalAns = "";
         logger.debug("Amount of cpds: " + cpds.length);
-        for( int i = 0 ; i < cpds.length ; i += this.bgetMaxQueries ) {
+        for (int i = 0; i < cpds.length; i += this.bgetMaxQueries) {
             String bgetQuery = "";
             String[] subCPDS = new String[Math.min(this.bgetMaxQueries, cpds.length - i)];
             int lengthOfThisIteration = Math.min(this.bgetMaxQueries, cpds.length - i);
             // j is the pointer for cpds, j-i is the pointer for subCPDS
-            for( int j = i ; j < i + subCPDS.length ; j++ ) {
+            for (int j = i; j < i + subCPDS.length; j++) {
                 subCPDS[j - i] = cpds[j];
             }
-            for( String cpd : subCPDS ) {
+            for (String cpd : subCPDS) {
                 bgetQuery += this.resolveDBPrefix(cpd) + ":" + cpd + " ";
             }
             logger.debug("Answer before bget: " + totalAns.length());
@@ -162,25 +116,23 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
         return totalAns;
     }
 
-
     public String[] findCompoundByName(String name) {
         try {
             return serv.search_compounds_by_name(name);
-        } catch( RemoteException ex ) {
+        } catch (RemoteException ex) {
             logger.error("Could not retrieve compounds by name", ex);
             return null;
         }
     }
 
-
     private String resolveDBPrefix(String id) {
-        if( id.toLowerCase().startsWith("c") ) {
+        if (id.toLowerCase().startsWith("c")) {
             return KeggDBs.COMPOUND.getDBPrefixForBget();
         }
-        if( id.toLowerCase().startsWith("d") ) {
+        if (id.toLowerCase().startsWith("d")) {
             return KeggDBs.DRUG.getDBPrefixForBget();
         }
-        if( id.toLowerCase().startsWith("g") ) {
+        if (id.toLowerCase().startsWith("g")) {
             return KeggDBs.GLYCAN.getDBPrefixForBget();
         }
         return null;
@@ -200,19 +152,19 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
         String obsId = null;
         String newId = null;
         HashMap<String, String> res = new HashMap<String, String>();
-        for( String line : lines ) {
-            if( line.startsWith("ENTRY") && line.contains("Obsolete") ) {
+        for (String line : lines) {
+            if (line.startsWith("ENTRY") && line.contains("Obsolete")) {
                 String tokens[] = line.split("\\s+");
-                if( tokens.length > 2 ) {
+                if (tokens.length > 2) {
                     obsId = tokens[1];
                 }
-            } else if( line.startsWith("NAME") && line.contains("Transferred to") ) {
+            } else if (line.startsWith("NAME") && line.contains("Transferred to")) {
                 String tokens[] = line.split("\\s+");
-                if( tokens.length > 2 ) {
+                if (tokens.length > 2) {
                     newId = tokens[tokens.length - 1];
                 }
-            } else if( line.startsWith("///") ) {
-                if( obsId != null && newId != null ) {
+            } else if (line.startsWith("///")) {
+                if (obsId != null && newId != null) {
                     res.put(obsId, newId);
                 }
                 obsId = null;
@@ -222,17 +174,15 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
         return res;
     }
 
-
     private void init() {
         KEGGLocator locator = new KEGGLocator();
         try {
             serv = locator.getKEGGPort();
-        } catch( ServiceException e ) {
+        } catch (ServiceException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-
 
     /**
      *
@@ -242,46 +192,43 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
      * @throws MissingStructureException
      */
     public IAtomContainer getAtomContainer(String accession)
-      throws UnfetchableEntry, MissingStructureException {
+            throws UnfetchableEntry, MissingStructureException {
         try {
             String mldString = getMDLString(accession);
             MDLV2000Reader reader = new MDLV2000Reader(new StringReader(mldString));
             IAtomContainer mol = (IAtomContainer) reader.read(builder.newInstance(IMolecule.class));
 
-            if(mol == null){
+            if (mol == null) {
                 throw new UnfetchableEntry();
             }
 
             return mol;
 
-        } catch( CDKException ex ) {
+        } catch (CDKException ex) {
             throw new UnfetchableEntry();
         }
 
     }
-
-
     private IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
-
 
     @Override
     public ArrayList<IAtomContainer> downloadMolsToCDKObject(String[] ids) {
         // TODO Auto-generated method stub
         ArrayList<IAtomContainer> mols = new ArrayList<IAtomContainer>();
-        for( String id : ids ) {
+        for (String id : ids) {
             try {
                 String molTxt = this.downloadMolToString(id);
                 MDLV2000Reader reader = new MDLV2000Reader(new StringReader(molTxt));
                 IAtomContainer mol = (IAtomContainer) reader.read(builder.newInstance(
-                  IMolecule.class));
-                if( mol == null ) {
-                    logger.warn("Null CDK object for Kegg ID:" + id + ", number of ids: " +
-                                ids.length);
+                        IMolecule.class));
+                if (mol == null) {
+                    logger.warn("Null CDK object for Kegg ID:" + id + ", number of ids: "
+                            + ids.length);
                     continue;
                 }
                 mol.setID(id);
                 mols.add(mol);
-            } catch( CDKException e ) {
+            } catch (CDKException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
                 logger.error("Could not generate CDK molecule for id " + id, e);
@@ -290,53 +237,48 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
         return mols;
     }
 
-
     public String downloadMolToString(String id) {
         String molTxt = null;
         try {
             molTxt = serv.bget("-f m " + this.resolveDBPrefix(id) + ":" + id);
-        } catch( RemoteException e ) {
+        } catch (RemoteException e) {
             logger.error("Could not get id " + id + " from KeggWebService", e);
         }
         return molTxt;
     }
 
-
     public String[] downloadCompoundIDsForECNumber(String ecnumber) {
         String[] cpdIds = null;
         try {
             cpdIds = serv.get_compounds_by_enzyme("ec:" + ecnumber);
-        } catch( RemoteException ex ) {
+        } catch (RemoteException ex) {
             logger.error("Could not retrieve compounds for ec number " + ecnumber, ex);
         }
         return cpdIds;
     }
 
-
     public String[] downloadCompoundIDsForReaction(String rxnID) {
         String[] cpdIds = null;
         try {
             cpdIds = serv.get_compounds_by_reaction("rn:" + rxnID);
-        } catch( RemoteException ex ) {
+        } catch (RemoteException ex) {
             logger.error("Could not retrieve compounds for reaction " + rxnID, ex);
         }
         return cpdIds;
     }
 
-
     public Boolean[] areCompoundsGeneric(String[] cpds) {
-        if( cpds == null ) {
+        if (cpds == null) {
             return null;
         }
         Boolean[] ans = new Boolean[cpds.length];
         try {
             String bgetAns = executeBget(cpds);
-        } catch( RemoteException ex ) {
+        } catch (RemoteException ex) {
             logger.error("Error in bget query", ex);
         }
         return null;
     }
-
 
     @Override
     public String getServiceProviderName() {
@@ -344,12 +286,57 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
         return this.serviceProviderName;
     }
 
-
     @Override
     public HashMap<String, String> searchByInChI(String inchi) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getMDLString(String id) throws UnfetchableEntry,
+            MissingStructureException {
+        try {
+            String mdlString = serv.bget("-f m " + this.resolveDBPrefix(id) + ":" + id);
+            if (mdlString == null) {
+                throw new MissingStructureException(id);
+            }
+            return mdlString;
+        } catch (RemoteException e) {
+            throw new UnfetchableEntry();
+        }
 
+    }
+
+    @Override
+    public String getName(String id) throws UnfetchableEntry {
+        return id;
+    }
+
+    @Override
+    public Collection<String> getSynonyms(String accession) throws UnfetchableEntry {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Set<KEGGCompoundIdentifier> searchWithName(String name) {
+        Set<KEGGCompoundIdentifier> identifiers = new HashSet();
+        try {
+            for (String id : serv.search_compounds_by_name(name)) {
+                identifiers.add(new KEGGCompoundIdentifier(id.substring(4)));
+            }
+        } catch (RemoteException ex) {
+            throw new UnfetchableEntry(name, getServiceProviderName(), ex.getMessage());
+        }
+        return identifiers;
+    }
+
+    @Override
+    public Map<String, String> search(String name) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
-
