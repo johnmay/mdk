@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.core;
 
 /*
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import javax.swing.JOptionPane;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.core.reconstruction.ReconstructionContents;
 import uk.ac.ebi.core.reconstruction.ReconstructionProperites;
 import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
@@ -31,7 +31,6 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
-
 /**
  * Reconstruction.java
  * Object to represent a complete reconstruction with genes, reactions and metabolites
@@ -39,11 +38,11 @@ import uk.ac.ebi.resource.organism.Taxonomy;
  * @date Apr 13, 2011
  */
 public class Reconstruction
-  extends AnnotatedEntity
-  implements Externalizable {
+        extends AnnotatedEntity
+        implements Externalizable {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
-      Reconstruction.class);
+            Reconstruction.class);
     public static final String PROJECT_FILE_EXTENSION = ".mnb";
     private static final String DATA_FOLDER_NAME = "data";
     private static final String TMP_FOLDER_NAME = "mnb-tmp";
@@ -56,9 +55,8 @@ public class Reconstruction
     private Taxonomy organismIdentifier; // could be under a generic ReconstructionContents class but this is already used as an enum
     // component collections
     private GeneProductCollection products;
-    private List<MetabolicReaction> reactions;
+    private ReactionList reactions;
     private MetaboliteCollection metabolites;
-
 
     /**
      * Constructor mainly used for creating a new Reconstruction
@@ -69,7 +67,7 @@ public class Reconstruction
         super(id, org.getCommonName(), org.getCode());
         organismIdentifier = org;
         products = new GeneProductCollection();
-        reactions = new ArrayList();
+        reactions = new ReactionList();
         metabolites = new MetaboliteCollection();
         contents = new HashSet<ReconstructionContents>();
         properties = new ReconstructionProperites();
@@ -78,23 +76,19 @@ public class Reconstruction
     /*
      * Default constructor
      */
-
     private Reconstruction() {
     }
-
 
     public GeneProductCollection getGeneProducts() {
         return products;
     }
 
-
     public void setGeneProducts(GeneProductCollection newProducts) {
-        if( products.numberOfProteinProducts() != 0 ) {
+        if (products.numberOfProteinProducts() != 0) {
             contents.add(ReconstructionContents.PROTEIN_PRODUCTS);
         }
         products = newProducts;
     }
-
 
     /**
      * Add gene products to the project
@@ -104,7 +98,7 @@ public class Reconstruction
     public AbstractIdentifier[] addGeneProducts(GeneProductCollection otherProducts) {
 
         // if there are protein products present add the contents flag
-        if( otherProducts.numberOfProteinProducts() > 0 ) {
+        if (otherProducts.numberOfProteinProducts() > 0) {
             contents.add(ReconstructionContents.PROTEIN_PRODUCTS);
         }
 
@@ -112,48 +106,41 @@ public class Reconstruction
 
     }
 
-
     public void addGeneProduct(GeneProduct proudct) {
         products.addProduct(proudct);
     }
 
-
-    public List<MetabolicReaction> getReactions() {
+    public ReactionList getReactions() {
         return reactions;
     }
-
 
     public void addReaction(MetabolicReaction r) {
         reactions.add(r);
         contents.add(ReconstructionContents.REACTIONS);
 
-        for( Participant<Metabolite, ?, ?> p : r.getAllReactionParticipants() ) {
-            if( metabolites.contains(p.getMolecule()) == false ) {
+        for (Participant<Metabolite, ?, ?> p : r.getAllReactionParticipants()) {
+            if (metabolites.contains(p.getMolecule()) == false) {
                 addMetabolite(p.getMolecule());
             }
         }
 
     }
 
-
     public void addMetabolite(Metabolite entity) {
         metabolites.add(entity);
         contents.add(ReconstructionContents.METABOLITES);
     }
 
-
     public MetaboliteCollection getMetabolites() {
         return metabolites;
     }
-
 
     public void setContainer(File container) {
         this.container = container;
     }
 
-
     public File getContainer() {
-        if( container == null ) {
+        if (container == null) {
             return new File(getIdentifier() + PROJECT_FILE_EXTENSION);
         }
         return container;
@@ -173,48 +160,46 @@ public class Reconstruction
 
     }
 
-
     /**
      * Saves the project and it's data
      * @return if the project was saved
      */
     public boolean save() {
-        if( container != null ) {
+        if (container != null) {
             try {
                 ObjectOutput out = new ObjectOutputStream(new FileOutputStream(
-                  new File(container, "recon.extern")));
+                        new File(container, "recon.extern")));
                 this.writeExternal(out);
                 out.close();
                 return true;
-            } catch( FileNotFoundException ex ) {
+            } catch (FileNotFoundException ex) {
                 logger.error("error saving project", ex);
-            } catch( IOException ex ) {
+            } catch (IOException ex) {
                 logger.error("error saving project", ex);
             }
         }
         return false;
     }
 
-
     public void saveAsProject(File projectRoot) {
 
-        if( !projectRoot.getPath().endsWith("mnb") ) {
+        if (!projectRoot.getPath().endsWith("mnb")) {
             projectRoot = new File(projectRoot.getPath() + ".mnb");
         }
 
         // create folder
-        if( !projectRoot.exists() ) {
+        if (!projectRoot.exists()) {
             logger.info("Saving project as " + projectRoot);
             setContainer(projectRoot);
             container.mkdir();
             getDataDirectory().mkdir();
             save();
             //  setTmpDir();
-        } else if( projectRoot.equals(container) ) {
+        } else if (projectRoot.equals(container)) {
             save();
         } else {
             JOptionPane.showMessageDialog(null,
-                                          "Cannot overwrite a different project");
+                    "Cannot overwrite a different project");
         }
     }
 
@@ -222,16 +207,13 @@ public class Reconstruction
         contents.add(newContent);
     }
 
-
     public Set<ReconstructionContents> getContents() {
         return Collections.unmodifiableSet(contents);
     }
 
-
     private File getDataDirectory() {
         return new File(container, DATA_FOLDER_NAME);
     }
-
 
     public void writeExternal(ObjectOutput out) throws IOException {
 
@@ -248,13 +230,13 @@ public class Reconstruction
 
         // metabolites
         out.writeInt(metabolites.size());
-        for( Metabolite metabolite : metabolites ) {
+        for (Metabolite metabolite : metabolites) {
             metabolite.writeExternal(out);
         }
 
         // reactions
         out.writeInt(reactions.size());
-        for( MetabolicReaction reaction : reactions ) {
+        for (MetabolicReaction reaction : reactions) {
             reaction.writeExternal(out, metabolites);
             // already writen so don't need to write
         }
@@ -262,7 +244,6 @@ public class Reconstruction
 
 
     }
-
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
@@ -287,30 +268,30 @@ public class Reconstruction
         // metabolites
         metabolites = new MetaboliteCollection();
         int nMets = in.readInt();
-        for( int i = 0 ; i < nMets ; i++ ) {
+        for (int i = 0; i < nMets; i++) {
             Metabolite m = new Metabolite();
             m.readExternal(in);
             metabolites.add(m);
         }
 
         // reactions
-        reactions = new ArrayList();
+        reactions = new ReactionList();
 
+        long start = System.currentTimeMillis();
         int nRxns = in.readInt();
-        for( int i = 0 ; i < nRxns ; i++ ) {
+        for (int i = 0; i < nRxns; i++) {
             MetabolicReaction r = new MetabolicReaction();
             r.readExternal(in, metabolites);
             reactions.add(r);
         }
+        long end = System.currentTimeMillis();
+        logger.info("Loaded reaction into collection " + (end - start) + " ms");
+
 
     }
-
 
     @Override
     public String getBaseType() {
         return BASE_TYPE;
     }
-
-
 }
-

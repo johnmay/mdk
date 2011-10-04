@@ -405,5 +405,10 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public void setMaxResults(int max) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }

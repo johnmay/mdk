@@ -471,5 +471,10 @@ public class CachedChemicalWS
     public Identifier getIdentifier() {
         return base.getIdentifier();
     }
+
+    @Override
+    public void setMaxResults(int max) {
+        base.setMaxResults(max);
+    }
     
 }

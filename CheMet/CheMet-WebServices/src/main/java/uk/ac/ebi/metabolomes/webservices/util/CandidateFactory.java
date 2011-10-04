@@ -26,12 +26,17 @@ import java.util.Collection;
 import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.reconciliation.StringEncoder;
+import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 /**
  *          CandidateFactory – 2011.09.22 <br>
@@ -86,6 +91,18 @@ public class CandidateFactory {
 
     }
 
+    public CrossReference getCrossReference(CandidateEntry entry) {
+        Identifier id = webservice.getIdentifier();
+        id.setAccession(entry.getId());
+        if (id instanceof ChEBIIdentifier) {
+            return new ChEBICrossReference((ChEBIIdentifier) id);
+        }
+        if (id instanceof KEGGCompoundIdentifier) {
+            return new KEGGCrossReference((KEGGCompoundIdentifier) id);
+        }
+        return new CrossReference(id);
+    }
+
     /**
      * Creates a multimap of possible candidates entries which are keyed by their distance
      * @param name
@@ -95,11 +112,15 @@ public class CandidateFactory {
 
         Multimap<Integer, CandidateEntry> map = HashMultimap.create();
 
+        System.out.println("Sending candidate search");
+
         // todo add general search
         for (Identifier id : webservice.searchWithName(name)) {
 
             String accession = id.getAccession();
             String subject = webservice.getName(id);
+            System.out.println("Got candidate name.." + id + ":" +  subject);
+
 
             Integer distance = calculateDistance(encoder.encode(name), encoder.encode(subject));
             map.put(distance,

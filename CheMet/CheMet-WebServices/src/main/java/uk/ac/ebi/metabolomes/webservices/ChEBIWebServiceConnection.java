@@ -85,6 +85,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
         this.starsCategory = starsCategory;
     }
 
+    @Override
     public void setMaxResults(int maxRes) {
         this.maxResultsSearch = maxRes;
     }
@@ -529,8 +530,8 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     @Override
     public Set<ChEBIIdentifier> searchWithName(String name) {
         Set<ChEBIIdentifier> ids = new HashSet<ChEBIIdentifier>();
-        for (String id : searchBySynonym(name).keySet()) {
-            ids.add(new ChEBIIdentifier());
+        for (String accessions : searchBySynonym(name).keySet()) {
+            ids.add(new ChEBIIdentifier(accessions));
         }
         return ids;
     }
@@ -539,6 +540,4 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     public ChEBIIdentifier getIdentifier() {
         return (ChEBIIdentifier) IdentifierFactory.getInstance().ofClass(ChEBIIdentifier.class);
     }
-
-
 }

@@ -12,10 +12,11 @@ package uk.ac.ebi.resource.organism;
  */
 public enum Kingdom {
 
-    ARCHEA("archea,a"),
+    ARCHAEA("archaea,a"),
     BACTERIA("bacteria,b"),
-    EUKARYOTE("eukaryote,e"), VIRUSES_AND_PHAGES(
-    "virus,phage,v"),
+    EUKARYOTA("eukaryote,eukaryota,e"),
+    VIRUSES_AND_PHAGES(
+    "virus,viruses,phage,phages,v"),
     UNDEFINED("");
     private String[] names;
 

@@ -102,7 +102,7 @@ public class ReconstructionEntity implements Cloneable, Externalizable {
     }
 
 
-    public void setIdentifier(AbstractIdentifier id) {
+    public void setIdentifier(Identifier id) {
         this.identifier = id;
     }
 

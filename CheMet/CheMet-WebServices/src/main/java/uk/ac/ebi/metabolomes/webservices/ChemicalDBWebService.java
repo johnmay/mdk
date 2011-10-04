@@ -33,6 +33,8 @@ public abstract class ChemicalDBWebService {
 
     protected Logger logger;
 
+    public abstract void setMaxResults(int max);
+
     public boolean downloadStructureFiles(String[] ids, String path) throws IOException {
         ArrayList<IAtomContainer> mols = this.downloadMolsToCDKObject(ids);
         MDLV2000Writer out;

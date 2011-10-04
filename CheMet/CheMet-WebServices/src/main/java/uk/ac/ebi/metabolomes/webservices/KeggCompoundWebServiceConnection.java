@@ -4,9 +4,11 @@ import java.io.StringReader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.xml.rpc.ServiceException;
@@ -33,6 +35,12 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
     private static String serviceProviderName = "BioCyc";
     private Logger logger = Logger.getLogger(KeggCompoundWebServiceConnection.class.getName());
     private final int bgetMaxQueries = 100;
+    private int maxResults;
+
+    @Override
+    public void setMaxResults(int max) {
+        maxResults = max;
+    }
 
     private enum KeggDBs {
 
@@ -424,7 +432,11 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
     public Set<KEGGCompoundIdentifier> searchWithName(String name) {
         Set<KEGGCompoundIdentifier> identifiers = new HashSet();
         try {
-            for (String id : serv.search_compounds_by_name(name)) {
+            List<String> ids = Arrays.asList(serv.search_compounds_by_name(name));
+            if(ids.size() > maxResults){
+                ids = ids.subList(0, maxResults);
+            }
+            for (String id : ids) {
                 identifiers.add(new KEGGCompoundIdentifier(id.substring(4)));
             }
         } catch (RemoteException ex) {
