@@ -117,7 +117,7 @@ public class SpinningDialWaitIndicator extends WaitIndicator implements ActionLi
         dial.paintIcon(getPainter(), g, x, y);
         if (text != null) {
             Font font = g.getFont();
-            g.setFont(font.deriveFont(Font.BOLD, dial.getIconHeight()/2));
+            g.setFont(font.deriveFont(Font.PLAIN, 12));
             FontMetrics m = g.getFontMetrics();
             x += dial.getIconWidth() * 5/4;
             // FIXME vertical offset is not quite right
