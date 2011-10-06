@@ -77,6 +77,11 @@ public class Reconstruction
      * Default constructor
      */
     private Reconstruction() {
+        products = new GeneProductCollection();
+
+        metabolites = new MetaboliteCollection();
+        reactions = new ReactionList();
+
     }
 
     public GeneProductCollection getGeneProducts() {

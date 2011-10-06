@@ -131,6 +131,15 @@ public abstract class AnnotatedEntity
         return (Set<T>) getAnnotationsExtending(base);
     }
 
+    /**
+     * Remove an annotation from the entity
+     * @param annotation
+     * @return
+     */
+    public boolean removeAnnotation(final Annotation annotation){
+        return annotations.get(annotation.getIndex()).remove(annotation);
+    }
+
 
 //    public boolean addAnnotation(AbstractAnnotation annotation) {
 //        logger.debug("Adding annotation: " + annotation.toString() + " to object: " +

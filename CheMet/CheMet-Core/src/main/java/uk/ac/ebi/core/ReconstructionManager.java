@@ -2,16 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.core;
 
+import com.google.common.base.Joiner;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Properties;
+import java.util.Stack;
+import java.util.prefs.Preferences;
 import uk.ac.ebi.interfaces.Identifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-
 
 /**
  * 
@@ -25,27 +26,35 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 public class ReconstructionManager {
 
     private static final org.apache.log4j.Logger LOGGER =
-                                                 org.apache.log4j.Logger.getLogger(
-      ReconstructionManager.class);
+            org.apache.log4j.Logger.getLogger(
+            ReconstructionManager.class);
     private Identifier activeProjectIdentifier;
     private ArrayList<Reconstruction> projects = new ArrayList<Reconstruction>();
     private LinkedHashMap<Identifier, Integer> projectMap =
-                                               new LinkedHashMap();
+            new LinkedHashMap();
     private Properties properties = new Properties();
-    private File projectManagerPropertiesFiles =
-                 new File(ReconstructionManager.class.getClassLoader().getResource(
-      "config/projectmanager.properties").getFile());
-
+    private File file = new File(System.getProperty("user.home") + ".uk.ac.ebi/mnb/recent");
+    private Stack<String> recent = new Stack<String>();
 
     private ReconstructionManager() {
+
+        // get the recently open files
+        String filenames = Preferences.userNodeForPackage(this.getClass()).get("recent.files", "");
+        String[] names = filenames.split(File.pathSeparator);
+        recent.addAll(Arrays.asList(names).subList(0, Math.min(names.length, 10)));
+
+
     }
 
+    public void setRecent(Stack<String> unique) {
+        recent = unique;
+        Preferences.userNodeForPackage(this.getClass()).put("recent.files", Joiner.on(File.pathSeparator).join(recent));
+    }
 
     private static class ProjectManagerHolder {
 
         private static ReconstructionManager INSTANCE = new ReconstructionManager();
     }
-
 
     /**
      *
@@ -58,7 +67,6 @@ public class ReconstructionManager {
         return ProjectManagerHolder.INSTANCE;
     }
 
-
     /**
      *
      * Access the project bank
@@ -68,14 +76,13 @@ public class ReconstructionManager {
      * 
      */
     private Reconstruction getProject(Identifier identifier) {
-        for( Reconstruction project : projects ) {
-            if( project.getIdentifier().equals(identifier) ) {
+        for (Reconstruction project : projects) {
+            if (project.getIdentifier().equals(identifier)) {
                 return project;
             }
         }
         return null;
     }
-
 
     /**
      *
@@ -87,7 +94,6 @@ public class ReconstructionManager {
     public boolean hasProjects() {
         return !projects.isEmpty();
     }
-
 
     /**
      * 
@@ -111,18 +117,21 @@ public class ReconstructionManager {
      */
     public boolean removeProject(Reconstruction reconstruction) {
 
+        if(reconstruction == null){
+            return false;
+        }
+
         Identifier id = reconstruction.getIdentifier();
 
-        if( activeProjectIdentifier.equals(id) ) {
+        if (activeProjectIdentifier.equals(id)) {
             activeProjectIdentifier = null;
         }
-        if( projectMap.containsKey(id)  ) {
+        if (projectMap.containsKey(id)) {
             projectMap.remove(id);
         }
         return projects.remove(reconstruction);
 
     }
-
 
     /**
      *
@@ -131,7 +140,6 @@ public class ReconstructionManager {
     public void setActiveReconstruction(Identifier activeProjectIdentifier) {
         this.activeProjectIdentifier = activeProjectIdentifier;
     }
-
 
     /**
      * 
@@ -142,25 +150,32 @@ public class ReconstructionManager {
      */
     public void setActiveReconstruction(Reconstruction reconstruction) {
 
+        String path = reconstruction.getContainer().getAbsolutePath();
+        if (recent.contains(path)) {
+            recent.remove(path);
+        }
+        recent.push(path);
+        Preferences.userNodeForPackage(this.getClass()).put("recent.files", Joiner.on(File.pathSeparator).join(recent));
+
         // is it keyed? then just get the identifier and set it
-        if( projectMap.containsKey(reconstruction.getIdentifier()) ) {
+        if (projectMap.containsKey(reconstruction.getIdentifier())) {
             setActiveReconstruction(reconstruction.getIdentifier());
             return;
         }
 
-        for( Reconstruction entry : projects ) {
-            if( entry.getIdentifier().equals(reconstruction) ) {
+        for (Reconstruction entry : projects) {
+            if (entry.getIdentifier().equals(reconstruction)) {
                 setActiveReconstruction(entry.getIdentifier());
-                LOGGER.error("found matching project but clashing identifiers stored:" +
-                             entry.getIdentifier() +
-                             " new:" +
-                             reconstruction.getIdentifier());
+                LOGGER.error("found matching project but clashing identifiers stored:"
+                        + entry.getIdentifier()
+                        + " new:"
+                        + reconstruction.getIdentifier());
                 return;
             }
         }
 
         LOGGER.debug(
-          "Setting active with a project which can not be found in the current collection. A new entry will be created");
+                "Setting active with a project which can not be found in the current collection. A new entry will be created");
 
         projectMap.put(reconstruction.getIdentifier(), projects.size());
         projects.add(reconstruction);
@@ -168,7 +183,6 @@ public class ReconstructionManager {
         setActiveReconstruction(reconstruction.getIdentifier());
 
     }
-
 
     /**
      * 
@@ -182,7 +196,6 @@ public class ReconstructionManager {
         return projects.get(i);
     }
 
-
     /**
      *
      * Access the number of project currently managed
@@ -192,6 +205,10 @@ public class ReconstructionManager {
         return projects.size();
     }
 
-
+    /**
+     * Returns a list of recently opened reconstructions
+     */
+    public Stack<String> getRecent() {
+        return recent;
+    }
 }
-

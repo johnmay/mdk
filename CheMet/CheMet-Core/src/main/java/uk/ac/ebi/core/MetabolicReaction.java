@@ -1,4 +1,3 @@
-
 /**
  * MetabolicReaction.java
  *
@@ -27,7 +26,7 @@ import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-
+import uk.ac.ebi.interfaces.Identifier;
 
 /**
  *          MetabolicReaction – 2011.09.27 <br>
@@ -40,10 +39,10 @@ public class MetabolicReaction extends Reaction<Metabolite, Double, Compartment>
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicReaction.class);
 
+    public MetabolicReaction() {
+    }
 
-    
-    
-    
-
+    public MetabolicReaction(Identifier identifier, String abbreviation, String name) {
+        super(identifier, abbreviation, name);
+    }
 }
-
