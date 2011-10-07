@@ -1,4 +1,3 @@
-
 /**
  * GeneProduct.java
  *
@@ -21,8 +20,7 @@
  */
 package uk.ac.ebi.interfaces;
 
-import java.util.List;
-
+import java.util.Collection;
 
 /**
  *          Chromosome – 2011.09.12 <br>
@@ -33,14 +31,26 @@ import java.util.List;
  */
 public interface Chromosome {
 
+    public boolean add(Gene gene);
+
+    public boolean addAll(Collection<? extends Gene> genes);
+
+    public boolean remove(Gene gene);
+
+    /**
+     * Removes all genes and set
+     * @param genes
+     * @return
+     */
+    public boolean removeAll(Collection<? extends Gene> genes);
+
     /**
      *
      * Returns all the genes on this chromosome
      *
      * @return
      */
-    public List<Gene> getGenes();
-
+    public Collection<Gene> getGenes();
 
     /**
      *
@@ -48,7 +58,4 @@ public interface Chromosome {
      *
      */
     public Integer getChromosomeNumber();
-
-
 }
-

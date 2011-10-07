@@ -31,9 +31,6 @@ package uk.ac.ebi.interfaces;
  */
 public interface Gene {
 
-    public String getGeneName();
-
-
     /**
      *
      * Access the chromosome this gene is present on
@@ -51,7 +48,7 @@ public interface Gene {
      * @return
      *
      */
-    public Integer getPolarity();
+    public byte getPolarity();
 
     /**
      *
@@ -60,7 +57,7 @@ public interface Gene {
      * @return
      *
      */
-    public Integer getStart();
+    public int getStart();
 
     /**
      *
@@ -68,7 +65,7 @@ public interface Gene {
      *
      * @return
      */
-    public Integer getEnd();
+    public int getEnd();
 
     /**
      *
@@ -76,7 +73,7 @@ public interface Gene {
      *
      * @return
      */
-    public Integer getLength();
+    public int getLength();
 
 
 }
