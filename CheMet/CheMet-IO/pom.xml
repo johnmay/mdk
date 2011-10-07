@@ -62,7 +62,11 @@
             <artifactId>JSBML</artifactId>
             <version>0.8-b2</version>
         </dependency>
-
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>chemet-observation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
