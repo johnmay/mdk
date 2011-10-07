@@ -22,7 +22,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 
 
 /**
@@ -33,7 +33,7 @@ public abstract class AbstractObservation
   implements Externalizable {
 
     private JobParameters parameters = new JobParameters();
-    private GeneProduct product;
+    private OldGeneProduct product;
     private boolean highlight = false;
     private Color background = null;
     private Color highColor = Color.YELLOW;
@@ -51,12 +51,12 @@ public abstract class AbstractObservation
     }
 
 
-    public GeneProduct getProduct() {
+    public OldGeneProduct getProduct() {
         return product;
     }
 
 
-    public void setProduct(GeneProduct product) {
+    public void setProduct(OldGeneProduct product) {
         this.product = product;
     }
 
@@ -93,7 +93,7 @@ public abstract class AbstractObservation
         parameters = (JobParameters) in.readObject();
         boolean hasProduct = in.readBoolean();
         if( hasProduct ) {
-            product = (GeneProduct) in.readObject();
+            product = (OldGeneProduct) in.readObject();
         }
     }
 

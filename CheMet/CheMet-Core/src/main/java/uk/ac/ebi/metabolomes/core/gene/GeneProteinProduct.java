@@ -29,7 +29,7 @@ import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
  * @date Apr 4, 2011
  */
 public class GeneProteinProduct
-  extends GeneProduct
+  extends OldGeneProduct
   implements Externalizable {
 
     private transient static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.

@@ -22,13 +22,13 @@ import uk.ac.ebi.core.AnnotatedEntity;
  * @author johnmay
  * @date Apr 4, 2011
  */
-public abstract class GeneProduct
+public abstract class OldGeneProduct
   extends AnnotatedEntity
   implements Externalizable {
 
     private transient static final org.apache.log4j.Logger logger =
                                                            org.apache.log4j.Logger.getLogger(
-      GeneProduct.class);
+      OldGeneProduct.class);
     private ProductType type;
     private List<Reaction> reactions = new ArrayList();
     private String sequence; // have to store as simple string as BioJava3 ProteinSequence is not serializable and we want to store the object it to disk :-)

@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import uk.ac.ebi.core.EntityList;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
 
 /**
@@ -116,7 +116,7 @@ public class ObservationCollection
      * Sets the product of which the observations are assoicated with
      * @param product The parent that will be assigned to all the observations
      */
-    public void setParentProducts( GeneProduct product ) {
+    public void setParentProducts( OldGeneProduct product ) {
         for ( Iterator<AbstractObservation> it = this.iterator(); it.hasNext(); ) {
             AbstractObservation abstractObservation = it.next();
             abstractObservation.setProduct( product );

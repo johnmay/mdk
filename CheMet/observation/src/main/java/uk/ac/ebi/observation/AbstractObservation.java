@@ -1,4 +1,3 @@
-
 /**
  * AbstractObservation.java
  *
@@ -25,9 +24,12 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractDescriptor;
-
+import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.interfaces.TaskOptions;
+import uk.ac.ebi.interfaces.vistors.ObservationVisitor;
 
 /**
  *          AbstractObservation – 2011.09.14 <br>
@@ -36,24 +38,50 @@ import uk.ac.ebi.core.AbstractDescriptor;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AbstractObservation
-  extends AbstractDescriptor
-  implements Externalizable {
+public abstract class AbstractObservation
+        extends AbstractDescriptor
+        implements Observation, Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractObservation.class);
-
+    private TaskOptions taskOptions;
 
     public AbstractObservation() {
         super(ObservationLoader.getInstance());
     }
 
-
-    public void writeExternal(ObjectOutput out) throws IOException {
+    public Object getObservation() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    public void setObservation(Object observationObject) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void accept(ObservationVisitor visitor) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * Returns info the task that created this observation
+     */
+    public TaskOptions getTaskOptions() {
+        return taskOptions;
+    }
+
+    public abstract Observation getInstance();
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     }
 
-}
+    public void writeExternal(ObjectOutput out) throws IOException {
+    }
 
+    public void readExternal(ObjectInput in, List<TaskOptions> options) throws IOException, ClassNotFoundException {
+        taskOptions = (TaskOptions) options.get(in.readInt());
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out, List<TaskOptions> options) throws IOException {
+        out.writeInt(options.indexOf(taskOptions));
+    }
+}

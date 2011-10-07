@@ -14,7 +14,6 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.ac.ebi.core;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -32,10 +31,9 @@ import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Identifier;
-import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
-import uk.ac.ebi.metabolomes.descriptor.observation.ObservationCollection;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-
+import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.observation.ObservationCollection;
+import uk.ac.ebi.observation.parameters.TaskDescription;
 
 /**
  * AnnotatedEntity.java – MetabolicDevelopmentKit – Jun 23, 2011
@@ -43,28 +41,25 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
 public abstract class AnnotatedEntity
-  extends ReconstructionEntity
-  implements Externalizable {
+        extends ReconstructionEntity
+        implements Externalizable {
 
     private transient static final Logger logger = Logger.getLogger(AnnotatedEntity.class);
     private ListMultimap<Byte, Annotation> annotations = ArrayListMultimap.create();
     private ObservationCollection observations = new ObservationCollection();
 
-
     public AnnotatedEntity() {
     }
-
 
     public AnnotatedEntity(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
-    public void addAnnotations(Collection<Annotation> annotations){
+    public void addAnnotations(Collection<Annotation> annotations) {
         for (Annotation annotation : annotations) {
             addAnnotation(annotation);
         }
     }
-
 
     /**
      *
@@ -77,7 +72,6 @@ public abstract class AnnotatedEntity
         annotations.put(annotation.getIndex(), annotation);
     }
 
-
     /**
      *
      * Accessor to all the annotations currently stored
@@ -88,7 +82,6 @@ public abstract class AnnotatedEntity
     public Collection<Annotation> getAnnotations() {
         return annotations.values();
     }
-
 
     /**
      *
@@ -102,7 +95,6 @@ public abstract class AnnotatedEntity
         return (Collection<T>) annotations.get(AnnotationLoader.getInstance().getIndex(type));
     }
 
-
     /**
      *
      * Accessor to all annotations extending a given type. For example if you provide a CrossReference
@@ -114,14 +106,13 @@ public abstract class AnnotatedEntity
      */
     public Set<Annotation> getAnnotationsExtending(final Annotation base) {
         Set<Annotation> annotationSubset = new HashSet<Annotation>();
-        for( Annotation annotation : getAnnotations() ) {
-            if( base.getClass().isInstance(annotation) ) {
+        for (Annotation annotation : getAnnotations()) {
+            if (base.getClass().isInstance(annotation)) {
                 annotationSubset.add(annotation);
             }
         }
         return annotationSubset;
     }
-
 
     /**
      *
@@ -141,10 +132,9 @@ public abstract class AnnotatedEntity
      * @param annotation
      * @return
      */
-    public boolean removeAnnotation(final Annotation annotation){
+    public boolean removeAnnotation(final Annotation annotation) {
         return annotations.get(annotation.getIndex()).remove(annotation);
     }
-
 
 //    public boolean addAnnotation(AbstractAnnotation annotation) {
 //        logger.debug("Adding annotation: " + annotation.toString() + " to object: " +
@@ -167,46 +157,37 @@ public abstract class AnnotatedEntity
      * Accessor to the stored observations
      * @return unmodifiable ObservationCollection
      */
-    public ObservationCollection getObservations() {
+    public ObservationCollection getObservationCollection() {
         return observations;
     }
-
 
     /**
      * Adds an observation to the descriptor
      * @param observation The new observation to add
      * @return whether the underlying collection was modified
      */
-    public boolean addObservation(AbstractObservation observation) {
-        logger.debug("Adding observation: " + observation.toString() + " to object: " + this.
-          toString());
+    public boolean addObservation(Observation observation) {
         return observations.add(observation);
     }
-
-
 
     /**
      * Removes an observation to the descriptor
      * @param observation The observation to remove
      * @return whether the underlying collection was modified
      */
-    public boolean removeObservation(AbstractObservation observation) {
-        logger.debug("Removing observation: " + observation.toString() + " from object: " + this.
-          toString());
+    public boolean removeObservation(Observation observation) {
         return observations.remove(observation);
     }
-
 
     /**
      *
      * Adds an identifier to the cross-reference collection
      *
      */
-    public boolean addCrossReference(AbstractIdentifier id) {
+    public boolean addCrossReference(Identifier id) {
         CrossReference xref = new CrossReference(id);
         return annotations.put(xref.getIndex(), xref);
     }
-
 
     /**
      *
@@ -215,63 +196,52 @@ public abstract class AnnotatedEntity
      * @param id
      * @return
      */
-    public boolean removeCrossReference(AbstractIdentifier id) {
+    public boolean removeCrossReference(Identifier id) {
         //  return crossReferences.remove(id);
         throw new UnsupportedOperationException("not supported yet");
     }
-
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
         super.readExternal(in);
 
-
-        int nObservations = in.readInt();
-
-        for( int i = 0 ; i < nObservations ; i++ ) {
-            observations.add((AbstractObservation) in.readObject());
-        }
+        observations = new ObservationCollection();
+        observations.readExternal(in);
 
         int totalAnnotations = in.readInt();
 
         AnnotationFactory annotationFactory = AnnotationFactory.getInstance();
 
-        while( totalAnnotations > annotations.values().size() ) {
+        while (totalAnnotations > annotations.values().size()) {
             int n = in.readInt();
             Byte index = in.readByte();
-            for( int j = 0 ; j < n ; j++ ) {
+            for (int j = 0; j < n; j++) {
                 annotations.put(index, annotationFactory.readExternal(index, in));
             }
         }
 
     }
 
-
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
 
         super.writeExternal(out);
 
-        out.writeInt(observations.size());
-
-        for( AbstractObservation observation : observations ) {
-            out.writeObject(observation);
-        }
+        observations.writeExternal(out);
 
         // total number of annotations
         out.writeInt(annotations.values().size());
 
         // write by index
-        for( Byte index : annotations.keySet() ) {
+        for (Byte index : annotations.keySet()) {
             out.writeInt(annotations.get(index).size());
             out.writeByte(index);
-            for( Annotation annotation : annotations.get(index) ) {
+            for (Annotation annotation : annotations.get(index)) {
                 annotation.writeExternal(out);
             }
         }
     }
-
 
     @Override
     public int hashCode() {
@@ -281,18 +251,17 @@ public abstract class AnnotatedEntity
         return hash;
     }
 
-
     @Override
     public boolean equals(Object obj) {
 
-        if( super.equals(obj) == false ) {
+        if (super.equals(obj) == false) {
             return false;
         }
 
-        if( obj == null ) {
+        if (obj == null) {
             return false;
         }
-        if( getClass() != obj.getClass() ) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
@@ -308,9 +277,5 @@ public abstract class AnnotatedEntity
         return true;
     }
 
-
     public abstract String getBaseType();
-        
-
 }
-

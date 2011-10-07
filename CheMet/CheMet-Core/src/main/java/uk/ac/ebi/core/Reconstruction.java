@@ -24,7 +24,7 @@ import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.core.reconstruction.ReconstructionContents;
 import uk.ac.ebi.core.reconstruction.ReconstructionProperites;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
 import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
@@ -111,7 +111,7 @@ public class Reconstruction
 
     }
 
-    public void addGeneProduct(GeneProduct proudct) {
+    public void addGeneProduct(OldGeneProduct proudct) {
         products.addProduct(proudct);
     }
 

@@ -23,9 +23,11 @@ package uk.ac.ebi.observation.sequence;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.TaskOptions;
 
 /**
  *          LocalAlignment – 2011.09.12 <br>
@@ -155,9 +157,9 @@ public class LocalAlignment
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in, List<TaskOptions> options) throws IOException, ClassNotFoundException {
 
-        super.readExternal(in);
+        super.readExternal(in, options);
         query = in.readUTF();
         subject = in.readUTF();
 
@@ -175,9 +177,9 @@ public class LocalAlignment
     }
 
     @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
+    public void writeExternal(ObjectOutput out, List<TaskOptions> options) throws IOException {
 
-        super.writeExternal(out);
+        super.writeExternal(out, options);
         out.writeUTF(query);
         out.writeUTF(subject);
 
@@ -192,5 +194,10 @@ public class LocalAlignment
         out.writeDouble(expected);
         out.writeDouble(bitScore);
 
+    }
+
+    @Override
+    public LocalAlignment getInstance() {
+        return new LocalAlignment();
     }
 }

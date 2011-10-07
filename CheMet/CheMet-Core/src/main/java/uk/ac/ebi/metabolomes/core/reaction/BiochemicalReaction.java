@@ -23,7 +23,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import org.openscience.cdk.tools.manipulator.MoleculeSetManipulator;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
@@ -47,7 +47,7 @@ public class BiochemicalReaction
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( BiochemicalReaction.class );
     private static final long serialVersionUID = 1218989374829810919L;
-    private ArrayList<GeneProduct> geneProducts = new ArrayList<GeneProduct>();
+    private ArrayList<OldGeneProduct> geneProducts = new ArrayList<OldGeneProduct>();
 
     /**
      * Create a biochemical reaction with no associated gene products
@@ -60,12 +60,12 @@ public class BiochemicalReaction
      * Create a new gene product with one associate gene product
      * @param geneProduct
      */
-    public BiochemicalReaction( GeneProduct geneProduct ) {
+    public BiochemicalReaction( OldGeneProduct geneProduct ) {
         this();
         this.geneProducts.add( geneProduct );
     }
 
-    public BiochemicalReaction( ArrayList<GeneProduct> geneProducts ) {
+    public BiochemicalReaction( ArrayList<OldGeneProduct> geneProducts ) {
         this();
         this.geneProducts = geneProducts;
     }
@@ -74,7 +74,7 @@ public class BiochemicalReaction
      * Adds a gene product to the biochemical reaction
      * @param geneProduct
      */
-    public void addModifier( GeneProduct geneProduct ) {
+    public void addModifier( OldGeneProduct geneProduct ) {
         this.geneProducts.add( geneProduct );
     }
 
@@ -82,7 +82,7 @@ public class BiochemicalReaction
      * Accessor for the first gene product in the array list
      * note. warning if array list contains more then one element
      */
-    public GeneProduct getFirstModifier() {
+    public OldGeneProduct getFirstModifier() {
         if ( geneProducts.size() > 1 ) {
             logger.warn( "more then one assoicated gene product in biochemical reaction" );
         }
@@ -93,7 +93,7 @@ public class BiochemicalReaction
      * Set the associated gene product(s)
      * @param geneProducts
      */
-    public void setModifiers( ArrayList<GeneProduct> geneProducts ) {
+    public void setModifiers( ArrayList<OldGeneProduct> geneProducts ) {
         this.geneProducts = geneProducts;
     }
 
@@ -101,7 +101,7 @@ public class BiochemicalReaction
      * Accessor for the gene products
      * @return geneProducts
      */
-    public ArrayList<GeneProduct> getModifiers() {
+    public ArrayList<OldGeneProduct> getModifiers() {
         return geneProducts;
     }
 
@@ -109,8 +109,8 @@ public class BiochemicalReaction
      * Accessor for the associated gene product(s)
      * @return array of gene products
      */
-    public GeneProduct[] getFixedAssociatedGeneProducts() {
-        return geneProducts.toArray( new GeneProduct[ 0 ] );
+    public OldGeneProduct[] getFixedAssociatedGeneProducts() {
+        return geneProducts.toArray( new OldGeneProduct[ 0 ] );
     }
 
     @Override

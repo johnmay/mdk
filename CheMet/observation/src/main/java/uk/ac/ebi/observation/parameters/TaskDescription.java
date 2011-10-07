@@ -21,12 +21,18 @@
 package uk.ac.ebi.observation.parameters;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.TaskOptions;
+import uk.ac.ebi.resource.IdentifierFactory;
 
 /**
  * @name    Parameters - 2011.10.07 <br>
@@ -35,7 +41,7 @@ import uk.ac.ebi.interfaces.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class TaskDescription {
+public class TaskDescription implements TaskOptions {
 
     private String name;
     private String description;
@@ -58,7 +64,7 @@ public class TaskDescription {
         this.name = name;
         this.description = description;
         this.identifier = identifier;
-        this.date = Calendar.getInstance().getTime();
+        this.date = new Date();
     }
 
     public boolean add(TaskOption option) {
@@ -69,6 +75,34 @@ public class TaskDescription {
         return options.addAll(options);
     }
 
-    
+    public void writeExternal(ObjectOutput out) throws IOException {
+        out.writeUTF(name);
+        out.writeUTF(description);
+        out.writeUTF(program.getAbsolutePath());
+        out.writeLong(date.getTime());
 
+        out.writeByte(identifier.getIndex());
+        identifier.writeExternal(out);
+        
+        out.writeInt(options.size());
+        for (TaskOption taskOption : options) {
+            taskOption.writeExternal(out);
+        }
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        name = in.readUTF();
+        description = in.readUTF();
+        program = new File(in.readUTF());
+        date = new Date();
+        date.setTime(in.readLong());
+        identifier = IdentifierFactory.getInstance().read(in);
+        
+        int nOptions = in.readInt();
+        while (nOptions > options.size()) {
+            TaskOption to = new TaskOption();
+            to.readExternal(in);
+            options.add(to);
+        }
+    }
 }

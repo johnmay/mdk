@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.core.gene.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
 
 /**
  * @name    BiochemicalReaction
@@ -40,17 +40,17 @@ public class BiochemicalReaction<M , S , C>
         extends Reaction<M , S , C> {
 
     private static final Logger LOGGER = Logger.getLogger( BiochemicalReaction.class );
-    private List<GeneProduct> modifiers;
+    private List<OldGeneProduct> modifiers;
 
-    public BiochemicalReaction( List<GeneProduct> modifiers ) {
+    public BiochemicalReaction( List<OldGeneProduct> modifiers ) {
         this.modifiers = modifiers;
     }
 
-    public List<GeneProduct> getModifiers() {
+    public List<OldGeneProduct> getModifiers() {
         return Collections.unmodifiableList( modifiers );
     }
 
-    public void addModifier( GeneProduct modifier ) {
+    public void addModifier( OldGeneProduct modifier ) {
         this.modifiers.add( modifier );
     }
 }

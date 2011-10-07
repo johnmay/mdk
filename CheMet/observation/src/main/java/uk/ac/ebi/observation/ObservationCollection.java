@@ -18,8 +18,15 @@ package uk.ac.ebi.observation;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.observation.parameters.TaskDescription;
 
 /**
@@ -31,11 +38,7 @@ import uk.ac.ebi.observation.parameters.TaskDescription;
  */
 public class ObservationCollection {
 
-    private static final Logger LOGGER = Logger.getLogger( ObservationCollection.class );
-
-
-    
-
+    private static final Logger LOGGER = Logger.getLogger(ObservationCollection.class);
 //    private transient Map<JobParameters , List<AbstractObservation>> parametersToObservationMap;
 //
 //    public ObservationCollection() {
@@ -144,15 +147,86 @@ public class ObservationCollection {
 //    public List<BlastHit> getBlastHits() {
 //        return get( BlastHit.class );
 //    }
-
     // map of task description -> observation and task type (byte index) -> observation
-    private Multimap<TaskDescription,Observation> taskMap = ArrayListMultimap.create();
-    private Multimap<Byte,Observation> typeMap = ArrayListMultimap.create();
+    private Multimap<TaskOptions, Observation> taskMap = ArrayListMultimap.create();
+    private Multimap<Byte, Observation> typeMap = ArrayListMultimap.create();
 
     public ObservationCollection() {
     }
 
-    
+    public boolean add(Observation observation) {
+        TaskOptions taskDescription = observation.getTaskOptions();
+        taskMap.put(taskDescription, observation);
+        return typeMap.put(observation.getIndex(), observation);
+    }
+
+    public boolean addAll(Collection<Observation> observations) {
+        boolean changed = false;
+        for (Observation observation : observations) {
+            changed = add(observation) || changed;
+        }
+        return changed;
+    }
+
+    public boolean remove(Observation observation) {
+        taskMap.remove(observation.getTaskOptions(), observation);
+        return typeMap.remove(observation.getIndex(), observation);
+    }
+
+    /**
+     * Get all observations of a particular type
+     * @param type
+     * @return
+     */
+    public Object get(Class type) {
+        return typeMap.get(ObservationLoader.getInstance().getIndex(type));
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+
+        List<TaskOptions> opts = new ArrayList(taskMap.keySet());
+
+        out.writeInt(taskMap.keySet().size());
+
+        for (TaskOptions opt : opts) {
+            opt.writeExternal(out);
+        }
+
+        out.writeInt(typeMap.values().size());
+        for (Byte index : typeMap.keySet()) {
+            Collection<Observation> c = typeMap.get(index);
+            out.writeInt(c.size());
+            out.writeByte(index);
+            for (Observation o : c) {
+                o.writeExternal(out,opts);
+            }
+        }
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
 
+        int nTaskOptions = in.readInt();
+        List<TaskOptions> options = new ArrayList();
+        while(nTaskOptions > options.size()){
+            TaskOptions opts = new TaskDescription();
+            opts.readExternal(in);
+            options.add(opts);
+        }
+        
+        int nObservations = in.readInt();
+
+        ObservationFactory factory = ObservationFactory.getInstance();
+
+        while (nObservations > typeMap.values().size()) {
+            int n = in.readInt();
+            Byte index = in.readByte();
+            for (int j = 0; j < n; j++) {
+                Observation observation = factory.readExternal(index, in, options);
+                typeMap.put(index, observation);
+                taskMap.put(observation.getTaskOptions(), observation);
+            }
+        }
+
+    }
 }
