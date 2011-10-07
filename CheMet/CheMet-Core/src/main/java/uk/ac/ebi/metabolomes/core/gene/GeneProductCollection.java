@@ -15,6 +15,8 @@
 
 package uk.ac.ebi.metabolomes.core.gene;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import java.io.Externalizable;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -27,8 +29,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.jboss.serial.io.JBossObjectInputStream;
-import org.jboss.serial.io.JBossObjectOutputStream;
+import java.util.Map;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
@@ -49,6 +50,14 @@ public class GeneProductCollection
     private ArrayList<GeneProteinProduct> proteinProducts;
     private HashMap<Identifier, GeneProteinProduct> proteinProductIdentifierMap;
     private HashMap<Identifier, GeneProduct> productIdentifierMap;
+    //
+    private Multimap<Class,GeneProduct> productMap = ArrayListMultimap.create();
+    private Map<String,GeneProduct> accessionMap = new HashMap();
+    private Map<Identifier,GeneProduct> identifierMap = new HashMap();
+    // get from class
+    // add observation
+    //  ... observations
+    // add annotation and annotations
 
 
     /**

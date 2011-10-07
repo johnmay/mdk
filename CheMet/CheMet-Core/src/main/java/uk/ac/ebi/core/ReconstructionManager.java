@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Stack;
 import java.util.prefs.Preferences;
@@ -33,8 +34,7 @@ public class ReconstructionManager {
     private LinkedHashMap<Identifier, Integer> projectMap =
             new LinkedHashMap();
     private Properties properties = new Properties();
-    private File file = new File(System.getProperty("user.home") + ".uk.ac.ebi/mnb/recent");
-    private Stack<String> recent = new Stack<String>();
+    private LinkedList<String> recent = new LinkedList<String>();
 
     private ReconstructionManager() {
 
@@ -44,11 +44,6 @@ public class ReconstructionManager {
         recent.addAll(Arrays.asList(names).subList(0, Math.min(names.length, 10)));
 
 
-    }
-
-    public void setRecent(Stack<String> unique) {
-        recent = unique;
-        Preferences.userNodeForPackage(this.getClass()).put("recent.files", Joiner.on(File.pathSeparator).join(recent));
     }
 
     private static class ProjectManagerHolder {
@@ -154,7 +149,7 @@ public class ReconstructionManager {
         if (recent.contains(path)) {
             recent.remove(path);
         }
-        recent.push(path);
+        recent.add(path);
         Preferences.userNodeForPackage(this.getClass()).put("recent.files", Joiner.on(File.pathSeparator).join(recent));
 
         // is it keyed? then just get the identifier and set it
@@ -208,7 +203,7 @@ public class ReconstructionManager {
     /**
      * Returns a list of recently opened reconstructions
      */
-    public Stack<String> getRecent() {
+    public LinkedList<String> getRecent() {
         return recent;
     }
 }

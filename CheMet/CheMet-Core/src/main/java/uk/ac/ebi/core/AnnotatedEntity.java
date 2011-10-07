@@ -18,7 +18,6 @@
 package uk.ac.ebi.core;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
 import java.io.Externalizable;
 import java.io.IOException;
@@ -58,6 +57,12 @@ public abstract class AnnotatedEntity
 
     public AnnotatedEntity(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
+    }
+
+    public void addAnnotations(Collection<Annotation> annotations){
+        for (Annotation annotation : annotations) {
+            addAnnotation(annotation);
+        }
     }
 
 
@@ -177,6 +182,7 @@ public abstract class AnnotatedEntity
           toString());
         return observations.add(observation);
     }
+
 
 
     /**
