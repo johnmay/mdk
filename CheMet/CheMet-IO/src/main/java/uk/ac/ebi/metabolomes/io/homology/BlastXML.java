@@ -60,61 +60,61 @@ public class BlastXML extends XMLHelper {
                                                                   double expectValueThreshold ,
                                                                   JobParameters params ) {
 
-        Boolean emptyProductSet = products.numberOfProducts() == 0 ? Boolean.TRUE : Boolean.FALSE;
-
-        logger.debug("empty product collection provided, will not fetch new products from the collection");
-
-
-        Document doc = buildDocument( this.xmlFile );
-        NodeList iterators = doc.getElementsByTagName( "Iteration" );
-
-
-        for ( int i = 0; i < iterators.getLength(); i++ ) {
-
-            Node node = iterators.item( i ).getFirstChild();
-
-            GeneProteinProduct currentProduct = null;
-
-            while ( node != null ) {
-                String nodeName = node.getNodeName();
-                // if queryName != null then the second part isn't checked
-                if ( nodeName.equals( QUERY_NODE_NAME ) ) {
-
-
-                    if ( emptyProductSet ) {
-                        // if the collection is empty we want to create one seperately and then try adding
-                        currentProduct = new GeneProteinProduct( new BasicProteinIdentifier( node.getTextContent() ) );
-                        Boolean added = products.addProduct( currentProduct );
-                        if (added == Boolean.FALSE){
-                            logger.error("Gene Product was not added to collection as the intial collection provided was empty and this is likely a duplicate set of results");
-                        }
-                    }
-                    else {
-                        // get the product from the collection (a new one is created if a mathcing )
-                        currentProduct = products.getProteinProduct( new BasicProteinIdentifier( node.getTextContent() ) );
-                    }
-
-                } // add the hits as new observations of this gene product
-                else if ( nodeName.equals( HITS_NODE_NAME ) ) {
-                    Node hitsNode = node.getFirstChild();
-                    while ( hitsNode != null ) {
-                        Node hitsChild = hitsNode.getFirstChild();
-                        if ( hitsChild != null ) {
-                            BlastHit blasthit = new BlastHit( hitsChild );
-                            blasthit.setProduct( currentProduct);
-                            blasthit.setParameters( params );
-                            if ( blasthit.getBestExpectedValue() < expectValueThreshold ) {
-                                currentProduct.addObservation( blasthit );
-                            }
-                        }
-                        hitsNode = hitsNode.getNextSibling();
-                    }
-                } else if (nodeName.equals(QUERY_LENGTH)){
-                    currentProduct.setSequenceLength(Integer.parseInt( node.getTextContent() ));
-                }
-                node = node.getNextSibling();
-            }
-        }
+//        Boolean emptyProductSet = products.numberOfProducts() == 0 ? Boolean.TRUE : Boolean.FALSE;
+//
+//        logger.debug("empty product collection provided, will not fetch new products from the collection");
+//
+//
+//        Document doc = buildDocument( this.xmlFile );
+//        NodeList iterators = doc.getElementsByTagName( "Iteration" );
+//
+//
+//        for ( int i = 0; i < iterators.getLength(); i++ ) {
+//
+//            Node node = iterators.item( i ).getFirstChild();
+//
+//            GeneProteinProduct currentProduct = null;
+//
+//            while ( node != null ) {
+//                String nodeName = node.getNodeName();
+//                // if queryName != null then the second part isn't checked
+//                if ( nodeName.equals( QUERY_NODE_NAME ) ) {
+//
+//
+//                    if ( emptyProductSet ) {
+//                        // if the collection is empty we want to create one seperately and then try adding
+//                        currentProduct = new GeneProteinProduct( new BasicProteinIdentifier( node.getTextContent() ) );
+//                        Boolean added = products.addProduct( currentProduct );
+//                        if (added == Boolean.FALSE){
+//                            logger.error("Gene Product was not added to collection as the intial collection provided was empty and this is likely a duplicate set of results");
+//                        }
+//                    }
+//                    else {
+//                        // get the product from the collection (a new one is created if a mathcing )
+//                        currentProduct = products.getProteinProduct( new BasicProteinIdentifier( node.getTextContent() ) );
+//                    }
+//
+//                } // add the hits as new observations of this gene product
+//                else if ( nodeName.equals( HITS_NODE_NAME ) ) {
+//                    Node hitsNode = node.getFirstChild();
+//                    while ( hitsNode != null ) {
+//                        Node hitsChild = hitsNode.getFirstChild();
+//                        if ( hitsChild != null ) {
+//                            BlastHit blasthit = new BlastHit( hitsChild );
+//                            blasthit.setProduct( currentProduct);
+//                            blasthit.setParameters( params );
+//                            if ( blasthit.getBestExpectedValue() < expectValueThreshold ) {
+//                                currentProduct.addObservation( blasthit );
+//                            }
+//                        }
+//                        hitsNode = hitsNode.getNextSibling();
+//                    }
+//                } else if (nodeName.equals(QUERY_LENGTH)){
+//                    currentProduct.setSequenceLength(Integer.parseInt( node.getTextContent() ));
+//                }
+//                node = node.getNextSibling();
+//            }
+//        }
         return products;
     }
     private static final String QUERY_NODE_NAME = "Iteration_query-def";
