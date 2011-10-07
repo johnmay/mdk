@@ -1,4 +1,3 @@
-
 /**
  * LocalAlignment.java
  *
@@ -28,7 +27,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Identifier;
 
-
 /**
  *          LocalAlignment – 2011.09.12 <br>
  *          A basic annotation of a local alignment
@@ -37,36 +35,162 @@ import uk.ac.ebi.interfaces.Identifier;
  * @author  $Author$ (this version)
  */
 public class LocalAlignment
-  extends Alignment {
+        extends Alignment {
 
     private static final Logger LOGGER = Logger.getLogger(LocalAlignment.class);
-
     // mandatory fields
-    private Double expected;
-    private Double bitScore;
+    private String query;
+    private String subject;
+    private float percentage;
+    private int length;
+    private int queryStart;
+    private int queryEnd;
+    private int subjectStart;
+    private int subjectEnd;
+    private double expected;
+    private double bitScore;
     // optional fields
-    private Set<Identifier> identifiers;
+    private Set<Identifier> subjectIdentifiers;
 
+    public LocalAlignment() {
+    }
+
+    public LocalAlignment(String query, String subject, float percentage, int length, int queryStart, int queryEnd, int subjectStart, int subjectEnd, double expected, double bitScore) {
+        this.query = query;
+        this.subject = subject;
+        this.percentage = percentage;
+        this.length = length;
+        this.queryStart = queryStart;
+        this.queryEnd = queryEnd;
+        this.subjectStart = subjectStart;
+        this.subjectEnd = subjectEnd;
+        this.expected = expected;
+        this.bitScore = bitScore;
+    }
+
+    public double getBitScore() {
+        return bitScore;
+    }
+
+    public void setBitScore(double bitScore) {
+        this.bitScore = bitScore;
+    }
+
+    public double getExpected() {
+        return expected;
+    }
+
+    public void setExpected(double expected) {
+        this.expected = expected;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public float getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(float percentage) {
+        this.percentage = percentage;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    public int getQueryEnd() {
+        return queryEnd;
+    }
+
+    public void setQueryEnd(int queryEnd) {
+        this.queryEnd = queryEnd;
+    }
+
+    public int getQueryStart() {
+        return queryStart;
+    }
+
+    public void setQueryStart(int queryStart) {
+        this.queryStart = queryStart;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public int getSubjectEnd() {
+        return subjectEnd;
+    }
+
+    public void setSubjectEnd(int subjectEnd) {
+        this.subjectEnd = subjectEnd;
+    }
+
+    public int getSubjectStart() {
+        return subjectStart;
+    }
+
+    public void setSubjectStart(int subjectStart) {
+        this.subjectStart = subjectStart;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(subject.length() * 2);
+        return sb.append(subject).append(": e=").append(expected).append(" s=").append(bitScore).toString();
+    }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
         super.readExternal(in);
+        query = in.readUTF();
+        subject = in.readUTF();
+
+        percentage = in.readFloat();
+        length = in.readInt();
+
+        queryStart = in.readInt();
+        queryEnd = in.readInt();
+        subjectStart = in.readInt();
+        subjectEnd = in.readInt();
+
         expected = in.readDouble();
         bitScore = in.readDouble();
 
     }
 
-
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
 
         super.writeExternal(out);
+        out.writeUTF(query);
+        out.writeUTF(subject);
+
+        out.writeFloat(percentage);
+        out.writeInt(length);
+
+        out.writeInt(queryStart);
+        out.writeInt(queryEnd);
+        out.writeInt(subjectStart);
+        out.writeInt(subjectEnd);
+
         out.writeDouble(expected);
         out.writeDouble(bitScore);
 
     }
-
-
 }
-
