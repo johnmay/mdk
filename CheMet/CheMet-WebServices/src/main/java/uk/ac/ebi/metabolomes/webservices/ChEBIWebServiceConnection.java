@@ -27,10 +27,11 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.*;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.metabolomes.util.ExternalReference;
 import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
-public class ChEBIWebServiceConnection extends ChemicalDBWebService {
+public class ChEBIWebServiceConnection extends ChemicalDBWebService implements ICrossReferenceProvider {
 
     /**
      * @param args
@@ -539,5 +540,23 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService {
     @Override
     public ChEBIIdentifier getIdentifier() {
         return (ChEBIIdentifier) IdentifierFactory.getInstance().ofClass(ChEBIIdentifier.class);
+    }
+
+    public List<ExternalReference> getCrossReferences(String idVariablePart) {
+        List<ExternalReference> results=new ArrayList<ExternalReference>();
+        try {
+            Entity entity = this.client.getCompleteEntity("CHEBI:" + idVariablePart);
+            List<DataItem> dbLinks = entity.getDatabaseLinks();
+            for (DataItem dataItem : dbLinks) {
+                String acc = dataItem.getData();
+                String db = dataItem.getSource();
+                results.add(new ExternalReference(db,acc));
+            }
+        } catch (ChebiWebServiceFault_Exception ex) {
+            logger.warn("Could not fetch CHEBI:"+idVariablePart+" due to ", ex);
+            // throw new UnfetchableEntry("CHEBI:"+idVariablePart, ChEBIWebServiceConnection.class.getName(), UnfetchableEntry.CLIENT_EXCEPTION);
+        }
+        return results;
+        
     }
 }

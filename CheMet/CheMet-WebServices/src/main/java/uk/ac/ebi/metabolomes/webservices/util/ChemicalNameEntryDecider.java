@@ -47,6 +47,14 @@ public class ChemicalNameEntryDecider {
         this.fingerprintChemicalNames = new PseudoFingerprintChemicalNames();
     }
 
+    /**
+     * 
+     * @param query
+     * @param candidates
+     * @return
+     * @deprecated use getOrderedCandidates instead
+     */
+    @Deprecated
     public Set<CandidateEntry> decideBestCandidate( String query , Collection<String> candidates ) {
 
         Set<CandidateEntry> bestCands = this.decider.decideBestCandidate( query , candidates );

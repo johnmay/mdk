@@ -23,7 +23,6 @@ package uk.ac.ebi.metabolomes.webservices.util;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Collection;
-import java.util.Map.Entry;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;

@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 import javax.xml.rpc.ServiceException;
 import uk.ac.ebi.ook.web.services.Query;
 import uk.ac.ebi.ook.web.services.QueryServiceLocator;
@@ -43,7 +41,6 @@ public class OntologyLookUpService {
     }
 
     public List<CandidateEntry> getRankedCandidates(String query, String ontology, Integer maxRes) throws ServiceException, RemoteException {
-        // Set<CandidateEntry> res = decider.decideBestCandidate(query, this.getTermsByName(query, ontology));
         List<CandidateEntry> res = decider.getOrderedCandidates(query, this.getTermsByName(query, ontology));
         List<CandidateEntry> finalRes=new ArrayList<CandidateEntry>();
         if(maxRes!=null && res.size()>maxRes) {
@@ -63,7 +60,6 @@ public class OntologyLookUpService {
     }
     
     public List<CandidateEntry> getRankedCandidates(String query, Integer maxRes) throws ServiceException, RemoteException {
-        //Set<CandidateEntry> res = decider.decideBestCandidate(query, this.getTermsPrefixed(query));
         List<CandidateEntry> res = decider.getOrderedCandidates(query, this.getTermsPrefixed(query));
         if(maxRes!=null && res.size()>maxRes) {
             int element=1;
@@ -75,8 +71,11 @@ public class OntologyLookUpService {
         }
         return res;
     }
-
-
+    
+    public String getTermName(String identifer, String ontologyPrefix) throws ServiceException, RemoteException {
+        Query olsQuery = locator.getOntologyQuery();
+        return olsQuery.getTermById(identifer, ontologyPrefix);
+    }
 
     public static void main(String[] args) throws ServiceException, RemoteException {
         OntologyLookUpService lus = new OntologyLookUpService();

@@ -20,46 +20,58 @@
  */
 package uk.ac.ebi.metabolomes.http;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.metabolomes.util.ExternalReference;
+import uk.ac.ebi.metabolomes.webservices.ICrossReferenceProvider;
 
 /**
  * @name    CactusChemical
  * @date    2011.07.29
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
+ * @author  pmoreno
  * @author  $Author$ (this version)
  * @brief   Helper for accessing data from the NCI CADD Group Chemoinformatics Tools and User Services
  * chemical structure website http://cactus.nci.nih.gov/chemical/structure/
  *
  */
-public class CactusChemical {
+public class CactusChemical implements ICrossReferenceProvider {
 
     private static final Logger LOGGER = Logger.getLogger( CactusChemical.class );
     private HttpClient client;
     private static final String BASE_DOMAIN = "cactus.nci.nih.gov";
     private static final String CHEMICAL_STRUCTURE_PATH = "/chemical/structure/";
-    private static final String NAME_SEARCH = "/names";
-
+    //private static final String NAME_SEARCH = "/names";
+    
+    /**
+     * The cactvs representation is the format specified as the output of the query.
+     */
+    public enum CactvsRepresentation {
+        StdInChI, StdInChIKey, Smiles, 
+        Ficts, Ficus, uuuuu, SDF, Names, hashisy,
+        Image;
+        
+        public String toURLString() {
+            return toString().toLowerCase();
+        }
+    }
+    
     private CactusChemical() {
         client = new DefaultHttpClient();
     }
@@ -85,19 +97,34 @@ public class CactusChemical {
      * @return a list of synonyms/identifiers
      */
     public List<String> getNames( String compoundName ) {
+        return this.getRepresentationForStructIdentifier(compoundName, CactvsRepresentation.Names);
+    }
+    
+    /**
+     * Given a std inchi key (with or without the prefix), this returns a set of names (which in cactvs also includes
+     * cross references). Honestly, any cactvs recognizable structure identifier could be given instead of just inchi key.
+     * 
+     * @param stdInChIKey
+     * @return 
+     */
+    public List<String> getNamesForInChIKey(String stdInChIKey) {
+        return getRepresentationForStructIdentifier(stdInChIKey, CactvsRepresentation.Names);
+    }
+    
+    public List<String> getRepresentationForStructIdentifier(String structIdentifier, CactvsRepresentation rep) {
         List<String> names = new ArrayList<String>();
         try {
 
             // construct the URI, the URI has to be constructed inparts the the compoundName gets formated
             // in accordance with RFC (See. URI API)
-            URI uri = new URI( "http" , BASE_DOMAIN , CHEMICAL_STRUCTURE_PATH + compoundName + NAME_SEARCH , null );
+            URI uri = new URI( "http" , BASE_DOMAIN , CHEMICAL_STRUCTURE_PATH + structIdentifier + "/" + rep.toURLString() , null );
             HttpEntity entity = getPlainTextResponse( uri );
 
             // if an entity was returned
             if ( entity != null ) {
 
                 InputStream stream = entity.getContent();
-                Scanner scanner = new Scanner( stream );
+                Scanner scanner = new Scanner( stream ).useDelimiter("\n");
                 while ( scanner.hasNext() ) {
 
                     // unescape the response and add the list of returned names
@@ -116,6 +143,80 @@ public class CactusChemical {
             LOGGER.error( "Invalid URL  made: " + ex.getMessage() );
         }
         return names;
+    }
+    
+    private final Pattern chebiPat = Pattern.compile("(CHEBI):(\\d+)");
+    private final Pattern keggCmpPat = Pattern.compile("(C\\d{5})");
+    private final Pattern casRegNumPat = Pattern.compile("\\d+-\\d+-\\d+");
+    // BRN : I think is the Belstein Registry Number
+    private final Pattern BrnRegNumPat = Pattern.compile("BRN\\s{0,1}(\\d+)");
+    // The EPA database of pesticide chemicals
+    private final Pattern epaPesticidePat = Pattern.compile("EPA Pesticide Chemical Code (\\d+)");
+    // Zinc is a database of comercially available compounds for virtual screening.
+    private final Pattern zincDBPat = Pattern.compile("ZINC(\\d+)");
+    // Einecs is a european database of comercialy available compounds.
+    private final Pattern einecDBPat = Pattern.compile("EINECS\\s+(\\d+-\\d+-\\d+)");
+    // The HSDB Database is the Hazardous substance database.
+    private final Pattern HSDBPat = Pattern.compile("HSDB (\\d+)");
+    
+    /**
+     * For the Cactvs implementation of this interface, a structure identifier needs to be provided as query.
+     * According to the nci resolver web page: http://cactus.nci.nih.gov/chemical/structure/documentation
+     * this identifier can be SMILES, InChI/Standard InChI, different CACTVS formats like CACTVS Minimol, 
+     * CACTVS Serialized Object String, NCI/CADD Identifiers (FICTS, FICuS, uuuuu), CACTVS HASHISY hashcodes and
+     * Chemical names.
+     * 
+     * TODO This could use John's CrossReference instead of the ExternalReference object.
+     * 
+     * @param query - a valid NCI/Cactvs structure identifier
+     * @return a list of CrossReferences for selected databases
+     */
+    public List<ExternalReference> getCrossReferences(String query) {
+        List<ExternalReference> results=new ArrayList<ExternalReference>();
+        List<String> namesAndCrossRefs = this.getRepresentationForStructIdentifier(query, CactvsRepresentation.Names);
+        for (String nameCR : namesAndCrossRefs) {
+            Matcher matcher = chebiPat.matcher(nameCR);
+            if(matcher.matches()) {
+                results.add(new ExternalReference("CHEBI", matcher.group(2)));
+                continue;
+            }
+            matcher = keggCmpPat.matcher(nameCR);
+            if(matcher.matches()) {
+                results.add(new ExternalReference("LIGAND-CPD", nameCR));
+                continue;
+            }
+            matcher = einecDBPat.matcher(nameCR);
+            if(matcher.matches()) {
+                results.add(new ExternalReference("EINECS", matcher.group(1)));
+                continue;
+            }
+            matcher = zincDBPat.matcher(nameCR);
+            if(matcher.matches()) {
+                results.add(new ExternalReference("ZINC", matcher.group(1)));
+                continue;
+            }
+            matcher = HSDBPat.matcher(nameCR);
+            if(matcher.matches()) {
+                results.add(new ExternalReference("HSDB", matcher.group(1)));
+                continue;
+            }
+            matcher = epaPesticidePat.matcher(nameCR);
+            if(matcher.matches()) {
+                results.add(new ExternalReference("EPA_PESTICIDE", matcher.group(1)));
+                continue;
+            }
+            matcher = BrnRegNumPat.matcher(nameCR);
+            if(matcher.matches()) {
+                results.add(new ExternalReference("BRN", matcher.group(1)));
+                continue;
+            }
+            matcher = casRegNumPat.matcher(nameCR);
+            if(matcher.matches()) {
+                results.add(new ExternalReference("CAS", nameCR));
+                continue;
+            }
+        }
+        return results;
     }
 
     /**
