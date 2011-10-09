@@ -39,6 +39,7 @@ public class PseudoFingerprintChemicalNames {
         s = s.trim(); // first off, remove whitespace around the string
         s = s.toLowerCase(); // then lowercase it
         s = a_genericBeginning.matcher(s).replaceFirst("");
+        s = plural.matcher(s).replaceAll("");
         s = definedHtmlTags.matcher(s).replaceAll(""); // replace <i> </i>, <sub> </sub>, <sup> </sup>
         s = alphanum.matcher(s).replaceAll(""); // then remove all punctuation and control chars
         s = s.replaceAll("-", ""); // removes - 
