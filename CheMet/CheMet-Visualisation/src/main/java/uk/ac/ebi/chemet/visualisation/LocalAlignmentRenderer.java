@@ -26,7 +26,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.LocalAlignment;
+import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
  * @name    LocalAlignmentRenderer
@@ -40,7 +41,7 @@ import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.LocalAlign
 public class LocalAlignmentRenderer
         extends AbstractAlignmentRenderer {
 
-    private static final Logger LOGGER = Logger.getLogger( LocalAlignmentRenderer.class );
+    private static final Logger LOGGER = Logger.getLogger(LocalAlignmentRenderer.class);
     private Line2D traceLine;
 
     /**
@@ -49,9 +50,9 @@ public class LocalAlignmentRenderer
      * @param colorer
      * @param padding
      */
-    public LocalAlignmentRenderer( Rectangle bounds , AbstractAlignmentColor colorer ,
-                                   Integer padding ) {
-        super( bounds , colorer , padding );
+    public LocalAlignmentRenderer(Rectangle bounds, AbstractAlignmentColor colorer,
+                                  Integer padding) {
+        super(bounds, colorer, padding);
     }
 
     /**
@@ -59,8 +60,8 @@ public class LocalAlignmentRenderer
      * @param bounds
      * @param colorer
      */
-    public LocalAlignmentRenderer( Rectangle bounds , AbstractAlignmentColor colorer ) {
-        this( bounds , colorer , bounds.width / 10 );
+    public LocalAlignmentRenderer(Rectangle bounds, AbstractAlignmentColor colorer) {
+        this(bounds, colorer, bounds.width / 10);
     }
 
     /**
@@ -68,15 +69,15 @@ public class LocalAlignmentRenderer
      * @param alignment
      * @return
      */
-    public BufferedImage render( LocalAlignment alignment ) {
+    public BufferedImage render(LocalAlignment alignment, GeneProduct product) {
 
         // get an empty image from the superclass
         BufferedImage image = newBufferedImage();
 
 
         // get the graphics and render to this
-        Graphics2D g2 = ( Graphics2D ) image.getGraphics();
-        render( alignment , g2 );
+        Graphics2D g2 = (Graphics2D) image.getGraphics();
+        render(alignment, product, g2);
         g2.dispose();
 
         return image;
@@ -88,8 +89,8 @@ public class LocalAlignmentRenderer
      * @param alignment
      * @param g2
      */
-    public void render( LocalAlignment alignment , Graphics2D g2 ) {
-        render( alignment , g2 , super.outerBounds , super.innerBounds );
+    public void render(LocalAlignment alignment, GeneProduct product, Graphics2D g2) {
+        render(alignment, product, g2, super.outerBounds, super.innerBounds);
     }
 
     /**
@@ -100,29 +101,28 @@ public class LocalAlignmentRenderer
      * @param g2
      * @param outerBounds, Rectangle innerBounds
      */
-    public void render( LocalAlignment alignment , Graphics2D g2 ,
-                        Rectangle outerBounds , Rectangle innerBounds ) {
+    public void render(LocalAlignment alignment, GeneProduct product, Graphics2D g2,
+                       Rectangle outerBounds, Rectangle innerBounds) {
 
-        g2.setColor( super.color.getBackgroundColor() );
-        g2.fill( outerBounds );
+        g2.setColor(super.color.getBackgroundColor());
+        g2.fill(outerBounds);
 
         // draw the trace line
-        g2.setColor( super.color.getTraceColor() );
-        g2.draw( getTraceLine( outerBounds , innerBounds ) );
+        g2.setColor(super.color.getTraceColor());
+        g2.draw(getTraceLine(outerBounds, innerBounds));
 
         // draw the match region
-        g2.setColor( super.color.getMatchColor( alignment ) );
-        float sequenceLength = alignment.getProduct().getSequenceLength();
+        g2.setColor(super.color.getMatchColor(alignment));
+        float sequenceLength = product.getSequence().getLength();
         // normalise length by the total length of the sequence
-        Integer[] homologyRange = alignment.getQueryRange();
-        int homologyStart = ( int ) ( innerBounds.width * ( ( float ) homologyRange[0] / ( float ) sequenceLength ) );
-        int homologyEnd = ( int ) ( innerBounds.width * ( ( float ) homologyRange[1] / ( float ) sequenceLength ) );
+        int homologyStart = (int) (innerBounds.width * ((float) alignment.getQueryStart() / (float) sequenceLength));
+        int homologyEnd = (int) (innerBounds.width * ((float) alignment.getQueryEnd() / (float) sequenceLength));
         float hitBarX = innerBounds.x + homologyStart;
         float hitBarY = innerBounds.y;
         float hitBarHeight = innerBounds.height;
         float hitBarWidth = homologyEnd - homologyStart;
 
-        g2.fill( new Rectangle2D.Float( hitBarX , hitBarY , hitBarWidth , hitBarHeight ) );
+        g2.fill(new Rectangle2D.Float(hitBarX, hitBarY, hitBarWidth, hitBarHeight));
 
     }
 
@@ -130,13 +130,13 @@ public class LocalAlignmentRenderer
      * Build the trace line, only needs to be done once for multiple alignments
      * @return
      */
-    private Line2D getTraceLine( Rectangle outerBounds , Rectangle innerBounds ) {
+    private Line2D getTraceLine(Rectangle outerBounds, Rectangle innerBounds) {
 
         // create a new traceline if the current object is null or the center point is different
-        if ( traceLine == null || outerBounds.getCenterY() != traceLine.getY1() ) {
+        if (traceLine == null || outerBounds.getCenterY() != traceLine.getY1()) {
 
             Double centreY = outerBounds.getCenterY();
-            traceLine = new Line2D.Double( innerBounds.x , centreY , innerBounds.width , centreY );
+            traceLine = new Line2D.Double(innerBounds.x, centreY, innerBounds.width, centreY);
         }
 
         return traceLine;

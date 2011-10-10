@@ -23,6 +23,7 @@ package uk.ac.ebi.chemet.visualisation;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
 
 /**
@@ -65,11 +66,11 @@ public abstract class AbstractAlignmentColor {
         return backgroundColor;
     }
 
-    public Color getMatchColor( AbstractObservation observation ) {
+    public Color getMatchColor( Observation observation ) {
         return matchColor;
     }
 
-    public Color getMismatchColor( AbstractObservation observation ) {
+    public Color getMismatchColor( Observation observation ) {
         return mismatchColor;
     }
 

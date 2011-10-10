@@ -23,8 +23,8 @@ package uk.ac.ebi.chemet.visualisation;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
-import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.LocalAlignment;
+import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
  * @name    BlastAlignmentColor
@@ -45,7 +45,7 @@ public class BlastAlignmentColor
     }
 
     @Override
-    public Color getMatchColor( AbstractObservation observation ) {
+    public Color getMatchColor( Observation observation ) {
         if ( observation instanceof LocalAlignment ) {
             double bitScore = ( ( LocalAlignment ) observation ).getBitScore();
             return BlastScoreColorRange.getColorForScore( ( int ) bitScore ).getColor();
