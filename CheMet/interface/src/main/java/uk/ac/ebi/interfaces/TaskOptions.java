@@ -20,9 +20,13 @@
  */
 package uk.ac.ebi.interfaces;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Date;
+import java.util.Map;
+import javax.swing.text.html.Option;
 
 /**
  * @name    TaskDescription - 2011.10.07 <br>
@@ -37,5 +41,35 @@ public interface TaskOptions {
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException;
 
+    /**
+     * Returns the task name
+     */
+    public String getName();
 
+    /**
+     * Returns the task description
+     */
+    public String getDescription();
+
+    /**
+     * Returns the task identifier
+     * @return
+     */
+    public Identifier getIdentifier();
+
+    /**
+     * Returns the initialisation date of the task
+     */
+    public Date getInitialisationDate();
+
+    /**
+     * Returns a map of options for the task. The key is the flag e.g. -'i' or --'input'
+     */
+    public Map getOptionMap();
+
+    /**
+     * Returns the program file (if needed)
+     * @return
+     */
+    public File getProgram();
 }
