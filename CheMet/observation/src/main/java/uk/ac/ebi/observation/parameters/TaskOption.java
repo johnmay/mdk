@@ -103,4 +103,18 @@ public class TaskOption implements Externalizable {
         }
         return true;
     }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    
 }

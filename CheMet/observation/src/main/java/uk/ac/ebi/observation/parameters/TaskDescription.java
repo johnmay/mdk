@@ -24,11 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.interfaces.TaskOptions;
@@ -48,7 +47,7 @@ public class TaskDescription implements TaskOptions {
     private Identifier identifier;
     private Date date;
     private File program;
-    Set<TaskOption> options = new HashSet();
+    Map<String, TaskOption> options = new HashMap();
 
     public TaskDescription() {
     }
@@ -67,8 +66,8 @@ public class TaskDescription implements TaskOptions {
         this.date = new Date();
     }
 
-    public boolean add(TaskOption option) {
-        return options.add(option);
+    public void add(TaskOption option) {
+        options.put(option.getFlag(), option);
     }
 
     public boolean addAll(Collection<TaskOption> options) {
@@ -83,9 +82,9 @@ public class TaskDescription implements TaskOptions {
 
         out.writeByte(identifier.getIndex());
         identifier.writeExternal(out);
-        
+
         out.writeInt(options.size());
-        for (TaskOption taskOption : options) {
+        for (TaskOption taskOption : options.values()) {
             taskOption.writeExternal(out);
         }
     }
@@ -97,12 +96,54 @@ public class TaskDescription implements TaskOptions {
         date = new Date();
         date.setTime(in.readLong());
         identifier = IdentifierFactory.getInstance().read(in);
-        
+
         int nOptions = in.readInt();
         while (nOptions > options.size()) {
             TaskOption to = new TaskOption();
             to.readExternal(in);
-            options.add(to);
+            options.put(to.getFlag(), to);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public Identifier getIdentifier() {
+        return identifier;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public Date getInitialisationDate() {
+        return date;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public Map<String, TaskOption> getOptionMap() {
+        return options;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public File getProgram() {
+        return program;
     }
 }
