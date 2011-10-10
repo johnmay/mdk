@@ -20,6 +20,9 @@
  */
 package uk.ac.ebi.interfaces;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
 
@@ -53,5 +56,13 @@ public interface GeneProduct extends AnnotatedEntity {
      */
     public void setSequence(Sequence<? extends AbstractCompound> sequence);
 
-    
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException;
+
+    public void writeExternal(ObjectOutput out) throws IOException;
+
+    /**
+     * Returns a new instance of the current gene-product type
+     * @return 
+     */
+    public GeneProduct newInstance();
 }
