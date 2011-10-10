@@ -28,6 +28,7 @@ import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.compound.AminoAcidCompound;
 import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
+import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.Identifier;
 
 /**
@@ -68,6 +69,10 @@ public class ProteinProduct extends AbstractGeneProduct {
     @Override
     public String getBaseType() {
         return ProteinProduct.BASE_TYPE;
+    }
+
+    public GeneProduct newInstance() {
+        return new ProteinProduct();
     }
 
     @Override

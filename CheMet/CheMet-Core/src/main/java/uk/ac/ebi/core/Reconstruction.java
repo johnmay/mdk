@@ -55,7 +55,6 @@ public class Reconstruction
     private ReconstructionProperites properties;
     private Taxonomy organismIdentifier; // could be under a generic ReconstructionContents class but this is already used as an enum
     // component collections
-    private OldGeneProductCollection oldProducts;
     private ProductCollection products;
     private ReactionList reactions;
     private MetaboliteCollection metabolites;
@@ -68,7 +67,6 @@ public class Reconstruction
     public Reconstruction(ReconstructionIdentifier id, Taxonomy org) {
         super(id, org.getCommonName(), org.getCode());
         organismIdentifier = org;
-        oldProducts = new OldGeneProductCollection();
         reactions = new ReactionList();
         metabolites = new MetaboliteCollection();
         contents = new HashSet<ReconstructionContents>();
@@ -81,7 +79,6 @@ public class Reconstruction
      * Default constructor
      */
     private Reconstruction() {
-        oldProducts = new OldGeneProductCollection(); // remove this
         metabolites = new MetaboliteCollection();
         reactions = new ReactionList();
         products = new ProductCollection();
@@ -93,41 +90,6 @@ public class Reconstruction
      */
     public ProductCollection getProducts() {
         return products;
-    }
-
-    @Deprecated
-    public OldGeneProductCollection getGeneProductsOld() {
-        return oldProducts;
-    }
-
-    @Deprecated
-    public void setGeneProductsOld(OldGeneProductCollection newProducts) {
-        if (oldProducts.numberOfProteinProducts() != 0) {
-            contents.add(ReconstructionContents.PROTEIN_PRODUCTS);
-        }
-        oldProducts = newProducts;
-    }
-
-    /**
-     * Add gene products to the project
-     * @param otherProducts
-     * @return any clashing identifiers (identifiers matching products already in the collection)
-     */
-    @Deprecated
-    public AbstractIdentifier[] addGeneProductsOld(OldGeneProductCollection otherProducts) {
-
-        // if there are protein products present add the contents flag
-        if (otherProducts.numberOfProteinProducts() > 0) {
-            contents.add(ReconstructionContents.PROTEIN_PRODUCTS);
-        }
-
-        return oldProducts.addAll(otherProducts);
-
-    }
-
-    @Deprecated
-    public void addGeneProductOld(OldGeneProduct proudct) {
-        oldProducts.addProduct(proudct);
     }
 
     public ReactionList getReactions() {
@@ -246,7 +208,7 @@ public class Reconstruction
         properties.writeExternal(out);
 
         // products
-        oldProducts.writeExternal(out);
+        products.writeExternal(out);
 
         // metabolites
         out.writeInt(metabolites.size());
@@ -280,8 +242,8 @@ public class Reconstruction
         contents = properties.getProjectContents();
 
         // products
-        oldProducts = new OldGeneProductCollection();
-        oldProducts.readExternal(in);
+        products = new ProductCollection();
+        products.readExternal(in);
 
 
 

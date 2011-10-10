@@ -22,10 +22,15 @@ package uk.ac.ebi.core.product;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AbstractGeneProduct;
+import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.Identifier;
@@ -38,7 +43,7 @@ import uk.ac.ebi.interfaces.Observation;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct> {
+public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct>, Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(ProductCollection.class);
     private Multimap<String, GeneProduct> products = ArrayListMultimap.create();
@@ -179,5 +184,50 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
     public void clear() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
+        int nTypes = in.readInt();
+        for (int i = 0; i < nTypes; i++) {
+
+            String baseType = in.readUTF();
+
+            int nProds = in.readInt();
+            GeneProduct base = baseType.equals("Protein") ? new ProteinProduct() : null;
+            for (int j = 0; j < nProds; j++) {
+                GeneProduct product = base.newInstance();
+                product.readExternal(in);
+                accessionMap.put(product.getAccession(), product);
+                products.put(product.getBaseType(), product);
+            }
+
+        }
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public void writeExternal(ObjectOutput out) throws IOException {
+
+        Set<String> types = products.keySet();
+
+        out.writeInt(types.size()); // number of types
+
+        for (String type : types) {
+            Collection<GeneProduct> ps = products.get(type);
+
+            out.writeUTF(type);
+            out.writeInt(ps.size());
+
+            for (GeneProduct product : ps) {
+                product.writeExternal(out);
+            }
+
+        }
     }
 }
