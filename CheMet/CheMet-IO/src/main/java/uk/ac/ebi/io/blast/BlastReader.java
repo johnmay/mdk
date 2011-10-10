@@ -34,6 +34,7 @@ import java.util.HashSet;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.metabolomes.core.gene.OldGeneProductCollection;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
@@ -62,7 +63,7 @@ public class BlastReader {
         }
     }
 
-    public void load(Map<String, GeneProduct> products, File outputFile, Integer format, String version) throws IOException {
+    public void load(Map<String, GeneProduct> products, File outputFile, Integer format, String version, TaskOptions options) throws IOException {
 
         if (supportedFormats.contains(format) == false) {
             throw new IllegalParameterException("Unsupported format " + format
@@ -72,7 +73,7 @@ public class BlastReader {
                 case 7:
                     throw new UnsupportedOperationException();
                 case 8:
-                    loadFromTSV(products, new FileReader(outputFile), version);
+                    loadFromTSV(products, new FileReader(outputFile), version, options);
                     break;
             }
         }
@@ -86,7 +87,7 @@ public class BlastReader {
      * @param version
      * @throws IOException
      */
-    public void loadFromTSV(Map<String, GeneProduct> products, Reader reader, String version) throws IOException {
+    public void loadFromTSV(Map<String, GeneProduct> products, Reader reader, String version, TaskOptions options) throws IOException {
 
         CSVReader tsvReader = new CSVReader(reader, '\t', '\0');
 
@@ -95,13 +96,19 @@ public class BlastReader {
         BLASTRowParser parser = ParserFactory.getInstance().getBLASTRowParser(version);
         String[] row;
         while ((row = tsvReader.readNext()) != null) {
+            
             LocalAlignment alignment = parser.parse(row);
+            alignment.setTaskOptions(options); // set the options on the task
+            
             GeneProduct product = products.get(alignment.getQuery());
+
             if(product != null){
                 // add observation
+                product.addObservation(alignment);
             } else{
                 LOGGER.error("unable to find matching product whilst loading");
             }
+            
         }
 
         long end = System.currentTimeMillis();

@@ -48,7 +48,7 @@ public class BlastReaderTest {
         Map<String, GeneProduct> products = null;
         Reader reader = new InputStreamReader(getClass().getResourceAsStream("sample.tsv"));
         BlastReader instance = new BlastReader();
-        instance.loadFromTSV(products, reader, "2.2.25");
+        instance.loadFromTSV(products, reader, "2.2.25", null);
 
     }
 }
