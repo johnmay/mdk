@@ -89,4 +89,19 @@ public interface AnnotatedEntity extends ReconstructionEntity {
      * @return
      */
     public boolean removeAnnotation(final Annotation annotation);
+
+    /**
+     * Adds an observation to the descriptor
+     * @param observation The new observation to add
+     * @return whether the underlying collection was modified
+     */
+    public boolean addObservation(Observation observation);
+
+    /**
+     * Removes an observation to the descriptor
+     * @param observation The observation to remove
+     * @return whether the underlying collection was modified
+     */
+    public boolean removeObservation(Observation observation);
+    
 }
