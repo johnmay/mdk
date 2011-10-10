@@ -14,13 +14,9 @@
  */
 package uk.ac.ebi.metabolomes.resource;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Properties;
 
 /**
  * DatabaseProperties.java
@@ -74,7 +70,7 @@ public class DatabaseProperties extends XProperties {
      * @param key The key for the property in the file the key is automatically transformed to lower case
      * @return
      */
-    public File getDatabasePath( String key ) {
+    public File getFile( String key ) {
         if ( containsKey( key ) ) {
             String path = getProperty( key.toLowerCase() );
             return accessFile( key , path );
@@ -100,4 +96,7 @@ public class DatabaseProperties extends XProperties {
         }
         return file;
     }
+
+
+
 }

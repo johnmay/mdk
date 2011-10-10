@@ -41,9 +41,9 @@ public class UniProtDatabaseProperties {
     private UniProtDatabaseProperties() {
 
         // load the specific filenames
-        uniProtRoot = dbproperties.getDatabasePath( UNIPROT_ROOT_KEY );
-        swissProtFastaFile = dbproperties.getDatabasePath( SWISSPROT_KEY );
-        trEMBLFastaFile = dbproperties.getDatabasePath( TREMBL_KEY );
+        uniProtRoot = dbproperties.getFile( UNIPROT_ROOT_KEY );
+        swissProtFastaFile = dbproperties.getFile( SWISSPROT_KEY );
+        trEMBLFastaFile = dbproperties.getFile( TREMBL_KEY );
 
         logger.debug( "loaded uniprot locations: '" + swissProtFastaFile + "', '" + trEMBLFastaFile + "' and '" + uniProtRoot + "'" );
     }

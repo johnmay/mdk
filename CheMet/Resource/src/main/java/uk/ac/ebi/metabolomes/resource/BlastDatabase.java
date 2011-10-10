@@ -32,7 +32,7 @@ public enum BlastDatabase {
     private File location;
 
     private BlastDatabase( String dbKey ) {
-        File dbPath = DatabaseProperties.getInstance().getDatabasePath( dbKey );
+        File dbPath = DatabaseProperties.getInstance().getFile( dbKey );
         this.location = dbPath;
     }    
     

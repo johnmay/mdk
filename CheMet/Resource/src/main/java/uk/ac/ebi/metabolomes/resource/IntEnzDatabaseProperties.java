@@ -42,9 +42,9 @@ public class IntEnzDatabaseProperties {
     private IntEnzDatabaseProperties() {
 
         // load the specific filenames
-        intEnzRoot = dbproperties.getDatabasePath( INTENZ_ROOT_KEY );
-        intEnzASCIIXML = dbproperties.getDatabasePath( INTENZ_ASCII_XML_KEY );
-        intEnzXCharsXML = dbproperties.getDatabasePath( INTENZ_XCHARS_XML_KEY );
+        intEnzRoot = dbproperties.getFile( INTENZ_ROOT_KEY );
+        intEnzASCIIXML = dbproperties.getFile( INTENZ_ASCII_XML_KEY );
+        intEnzXCharsXML = dbproperties.getFile( INTENZ_XCHARS_XML_KEY );
 
         logger.debug( "loaded intenz locations: '" + intEnzRoot + "', '" + intEnzASCIIXML + "' and '" + intEnzXCharsXML + "'" );
     }
