@@ -42,7 +42,7 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
  * @author  $Author$ (this version)
  */
 public class Metabolite
-  extends AnnotatedEntity
+  extends AbstractAnnotatedEntity
   implements Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(Metabolite.class);

@@ -33,7 +33,7 @@ import uk.ac.ebi.interfaces.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AbstractGene extends AnnotatedEntity implements Gene {
+public class AbstractGene extends AbstractAnnotatedEntity implements Gene {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractGene.class);
     private static final String TYPE = "Gene";

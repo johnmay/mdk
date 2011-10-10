@@ -31,17 +31,17 @@ import uk.ac.ebi.resource.IdentifierFactory;
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public class ReconstructionEntity implements Cloneable, Externalizable {
+public class AbstractReconstructionEntity implements Cloneable, Externalizable {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
-      ReconstructionEntity.class);
+      AbstractReconstructionEntity.class);
     private Identifier identifier;
     private String abbreviation = "";
     private String name = "";
 
 
-    public ReconstructionEntity() {
+    public AbstractReconstructionEntity() {
     }
 
     /**
@@ -52,7 +52,7 @@ public class ReconstructionEntity implements Cloneable, Externalizable {
      * @param name
      * 
      */
-    public ReconstructionEntity(Identifier identifier, String abbreviation, String name) {
+    public AbstractReconstructionEntity(Identifier identifier, String abbreviation, String name) {
         this.identifier = identifier;
         this.abbreviation = abbreviation;
         this.name = name;
@@ -139,7 +139,7 @@ public class ReconstructionEntity implements Cloneable, Externalizable {
         if( getClass() != obj.getClass() ) {
             return false;
         }
-        final ReconstructionEntity other = (ReconstructionEntity) obj;
+        final AbstractReconstructionEntity other = (AbstractReconstructionEntity) obj;
         if( this.identifier != other.identifier &&
             (this.identifier == null || !this.identifier.equals(other.identifier)) ) {
             return false;

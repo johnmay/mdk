@@ -21,11 +21,12 @@ import java.util.List;
 import java.util.Set;
 import javax.swing.JOptionPane;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.core.reconstruction.ReconstructionContents;
 import uk.ac.ebi.core.reconstruction.ReconstructionProperites;
 import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
-import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProductCollection;
 import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
@@ -38,7 +39,7 @@ import uk.ac.ebi.resource.organism.Taxonomy;
  * @date Apr 13, 2011
  */
 public class Reconstruction
-        extends AnnotatedEntity
+        extends AbstractAnnotatedEntity
         implements Externalizable {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
@@ -54,7 +55,8 @@ public class Reconstruction
     private ReconstructionProperites properties;
     private Taxonomy organismIdentifier; // could be under a generic ReconstructionContents class but this is already used as an enum
     // component collections
-    private GeneProductCollection products;
+    private OldGeneProductCollection oldProducts;
+    private ProductCollection products;
     private ReactionList reactions;
     private MetaboliteCollection metabolites;
 
@@ -66,33 +68,44 @@ public class Reconstruction
     public Reconstruction(ReconstructionIdentifier id, Taxonomy org) {
         super(id, org.getCommonName(), org.getCode());
         organismIdentifier = org;
-        products = new GeneProductCollection();
+        oldProducts = new OldGeneProductCollection();
         reactions = new ReactionList();
         metabolites = new MetaboliteCollection();
         contents = new HashSet<ReconstructionContents>();
         properties = new ReconstructionProperites();
+        products = new ProductCollection();
+
     }
 
     /*
      * Default constructor
      */
     private Reconstruction() {
-        products = new GeneProductCollection();
-
+        oldProducts = new OldGeneProductCollection(); // remove this
         metabolites = new MetaboliteCollection();
         reactions = new ReactionList();
-
+        products = new ProductCollection();
     }
 
-    public GeneProductCollection getGeneProducts() {
+    /**
+     * Access to the products within this project
+     * @return
+     */
+    public ProductCollection getProducts() {
         return products;
     }
 
-    public void setGeneProducts(GeneProductCollection newProducts) {
-        if (products.numberOfProteinProducts() != 0) {
+    @Deprecated
+    public OldGeneProductCollection getGeneProductsOld() {
+        return oldProducts;
+    }
+
+    @Deprecated
+    public void setGeneProductsOld(OldGeneProductCollection newProducts) {
+        if (oldProducts.numberOfProteinProducts() != 0) {
             contents.add(ReconstructionContents.PROTEIN_PRODUCTS);
         }
-        products = newProducts;
+        oldProducts = newProducts;
     }
 
     /**
@@ -100,19 +113,21 @@ public class Reconstruction
      * @param otherProducts
      * @return any clashing identifiers (identifiers matching products already in the collection)
      */
-    public AbstractIdentifier[] addGeneProducts(GeneProductCollection otherProducts) {
+    @Deprecated
+    public AbstractIdentifier[] addGeneProductsOld(OldGeneProductCollection otherProducts) {
 
         // if there are protein products present add the contents flag
         if (otherProducts.numberOfProteinProducts() > 0) {
             contents.add(ReconstructionContents.PROTEIN_PRODUCTS);
         }
 
-        return products.addAll(otherProducts);
+        return oldProducts.addAll(otherProducts);
 
     }
 
-    public void addGeneProduct(OldGeneProduct proudct) {
-        products.addProduct(proudct);
+    @Deprecated
+    public void addGeneProductOld(OldGeneProduct proudct) {
+        oldProducts.addProduct(proudct);
     }
 
     public ReactionList getReactions() {
@@ -204,7 +219,7 @@ public class Reconstruction
             save();
         } else {
             JOptionPane.showMessageDialog(null,
-                    "Cannot overwrite a different project");
+                                          "Cannot overwrite a different project");
         }
     }
 
@@ -231,7 +246,7 @@ public class Reconstruction
         properties.writeExternal(out);
 
         // products
-        products.writeExternal(out);
+        oldProducts.writeExternal(out);
 
         // metabolites
         out.writeInt(metabolites.size());
@@ -265,8 +280,8 @@ public class Reconstruction
         contents = properties.getProjectContents();
 
         // products
-        products = new GeneProductCollection();
-        products.readExternal(in);
+        oldProducts = new OldGeneProductCollection();
+        oldProducts.readExternal(in);
 
 
 

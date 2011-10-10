@@ -12,7 +12,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 
 
 /**
@@ -23,7 +23,7 @@ import uk.ac.ebi.core.AnnotatedEntity;
  * @date Apr 4, 2011
  */
 public abstract class OldGeneProduct
-  extends AnnotatedEntity
+  extends AbstractAnnotatedEntity
   implements Externalizable {
 
     private transient static final org.apache.log4j.Logger logger =

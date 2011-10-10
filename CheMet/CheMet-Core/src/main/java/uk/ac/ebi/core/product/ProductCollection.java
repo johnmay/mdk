@@ -23,10 +23,11 @@ package uk.ac.ebi.core.product;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Collection;
-import java.util.List;
+import java.util.Iterator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractGeneProduct;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.interfaces.Observation;
 
@@ -37,11 +38,11 @@ import uk.ac.ebi.interfaces.Observation;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProductCollection {
+public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct> {
 
     private static final Logger LOGGER = Logger.getLogger(ProductCollection.class);
-    private Multimap<String, AbstractGeneProduct> products = ArrayListMultimap.create();
-    private Multimap<String, AbstractGeneProduct> accessionMap = ArrayListMultimap.create();
+    private Multimap<String, GeneProduct> products = ArrayListMultimap.create();
+    private Multimap<String, GeneProduct> accessionMap = ArrayListMultimap.create();
     // could use identifier but accession should be unique
 
     public ProductCollection() {
@@ -52,7 +53,7 @@ public class ProductCollection {
      * @param product
      * @return
      */
-    public boolean add(AbstractGeneProduct product) {
+    public boolean add(GeneProduct product) {
         return products.put(product.getBaseType(), product);
     }
 
@@ -61,9 +62,9 @@ public class ProductCollection {
      * @param products
      * @return
      */
-    public boolean addAll(Collection<AbstractGeneProduct> products) {
+    public boolean addAll(Collection<? extends GeneProduct> products) {
         boolean changed = false;
-        for (AbstractGeneProduct gp : products) {
+        for (GeneProduct gp : products) {
             changed = add(gp) || changed;
         }
         return changed;
@@ -100,8 +101,8 @@ public class ProductCollection {
 
         if (accessionMap.containsKey(accession)) {
 
-            Collection<AbstractGeneProduct> products = accessionMap.get(accession);
-            for (AbstractGeneProduct product : products) {
+            Collection<GeneProduct> products = accessionMap.get(accession);
+            for (GeneProduct product : products) {
                 // product.addObservation(observation);
             }
             return true; // atm: observations will be added whether unique or not
@@ -123,12 +124,60 @@ public class ProductCollection {
     public boolean addObservations(String accession, Collection<Observation> observations) {
         if (accessionMap.containsKey(accession)) {
 
-            Collection<AbstractGeneProduct> products = accessionMap.get(accession);
-            for (AbstractGeneProduct product : products) {
+            Collection<GeneProduct> products = accessionMap.get(accession);
+            for (GeneProduct product : products) {
                 // product.addObservation(observations);
             }
             return true; // atm: observations will be added whether unique or not
         }
         return false;
+    }
+
+    /**
+     * Returns an iterator for all products
+     * @return
+     */
+    public Iterator<GeneProduct> iterator() {
+        return products.values().iterator();
+    }
+
+    public int size() {
+        return products.values().size();
+    }
+
+    public boolean isEmpty() {
+        return products.isEmpty();
+    }
+
+    public boolean contains(Object o) {
+        return products.values().contains(o);
+    }
+
+    public Object[] toArray() {
+        return products.values().toArray();
+    }
+
+    public <T> T[] toArray(T[] a) {
+        return products.values().toArray(a);
+    }
+
+    public boolean remove(Object o) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean containsAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean removeAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean retainAll(Collection<?> c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void clear() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

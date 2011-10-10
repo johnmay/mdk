@@ -26,7 +26,6 @@ import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.compound.AminoAcidCompound;
-import org.biojava3.core.sequence.compound.NucleotideCompound;
 import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.Identifier;
@@ -41,7 +40,7 @@ import uk.ac.ebi.interfaces.Identifier;
 public class ProteinProduct extends AbstractGeneProduct {
 
     private static final Logger LOGGER = Logger.getLogger(ProteinProduct.class);
-    private static final String TYPE = "Protein";
+    public static final String BASE_TYPE = "Protein";
     private ProteinSequence sequence;
 
     public ProteinProduct() {
@@ -59,12 +58,16 @@ public class ProteinProduct extends AbstractGeneProduct {
         return sequence;
     }
 
+    public void setSequence(Sequence sequence) {
+        this.sequence = (ProteinSequence) sequence;
+    }
+
     /**
      * @inheritDoc
      */
     @Override
     public String getBaseType() {
-        return TYPE;
+        return ProteinProduct.BASE_TYPE;
     }
 
     @Override

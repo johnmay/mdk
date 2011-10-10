@@ -39,10 +39,10 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author johnmay
  * @date Apr 28, 2011
  */
-public class GeneProductCollection
+public class OldGeneProductCollection
         implements Externalizable {
 
-    private transient static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(GeneProductCollection.class);
+    private transient static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(OldGeneProductCollection.class);
     private ArrayList<OldGeneProduct> geneProducts;
     private ArrayList<GeneProteinProduct> proteinProducts;
     private HashMap<Identifier, GeneProteinProduct> proteinProductIdentifierMap;
@@ -59,7 +59,7 @@ public class GeneProductCollection
     /**
      * Constructor instantiates the underlying lists
      */
-    public GeneProductCollection() {
+    public OldGeneProductCollection() {
         geneProducts = new ArrayList<OldGeneProduct>();
         proteinProducts = new ArrayList<GeneProteinProduct>();
         proteinProductIdentifierMap = new HashMap<Identifier, GeneProteinProduct>();
@@ -70,7 +70,7 @@ public class GeneProductCollection
      * Add the other collection of gene products to this one
      * @param productCollection another collection of gene products
      */
-    public AbstractIdentifier[] addAll(GeneProductCollection productCollection) {
+    public AbstractIdentifier[] addAll(OldGeneProductCollection productCollection) {
         return addAll(productCollection.getAllProducts());
     }
 
@@ -183,11 +183,11 @@ public class GeneProductCollection
         write(file, this);
     }
 
-    public static GeneProductCollection readCollection(File file) {
+    public static OldGeneProductCollection readCollection(File file) {
         ObjectInput ois = null;
         try {
             ois = new ObjectInputStream(new FileInputStream(file));
-            GeneProductCollection collection = new GeneProductCollection();
+            OldGeneProductCollection collection = new OldGeneProductCollection();
             collection.readExternal(ois);
             ois.close();
             return collection;
@@ -197,10 +197,10 @@ public class GeneProductCollection
             logger.error(ex);
         }
 
-        return new GeneProductCollection();
+        return new OldGeneProductCollection();
     }
 
-    public static void write(File file, GeneProductCollection collection) throws
+    public static void write(File file, OldGeneProductCollection collection) throws
             FileNotFoundException, IOException {
         ObjectOutput oos = new ObjectOutputStream(new FileOutputStream(file));
         collection.writeExternal(oos);

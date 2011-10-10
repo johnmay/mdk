@@ -40,7 +40,7 @@ import uk.ac.ebi.interfaces.Observation;
  * @author  $Author$ (this version)
  */
 public abstract class AbstractGeneProduct
-        extends AnnotatedEntity implements GeneProduct {
+        extends AbstractAnnotatedEntity implements GeneProduct {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractGeneProduct.class);
     private Gene parent;
@@ -52,12 +52,6 @@ public abstract class AbstractGeneProduct
         super(identifier, abbreviation, name);
     }
 
-    /**
-     * Returns the sequence of the gene product
-     * @return a Sequence composed of either AminoAcidCompoundSet or RNACompoundSet
-     */
-    public abstract Sequence<? extends AbstractCompound> getSequence();
-
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
@@ -68,7 +62,6 @@ public abstract class AbstractGeneProduct
         super.writeExternal(out);
     }
 
-
     public void readExternal(ObjectInput in, HashSet<Gene> genes) throws IOException, ClassNotFoundException {
         super.readExternal(in);
     }
@@ -76,5 +69,4 @@ public abstract class AbstractGeneProduct
     public void writeExternal(ObjectOutput out, HashSet<Gene> genes) throws IOException {
         super.writeExternal(out);
     }
-
 }

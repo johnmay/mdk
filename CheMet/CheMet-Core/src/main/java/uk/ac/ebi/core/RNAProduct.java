@@ -25,6 +25,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.RNASequence;
+import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.Identifier;
 
 /**
@@ -37,7 +38,7 @@ import uk.ac.ebi.interfaces.Identifier;
 public class RNAProduct extends AbstractGeneProduct {
 
     private static final Logger LOGGER = Logger.getLogger(RNAProduct.class);
-    private static final String TYPE = "RNA";
+    public  static final String BASE_TYPE = "RNA";
     private RNASequence sequence;
 
     public RNAProduct() {
@@ -52,9 +53,13 @@ public class RNAProduct extends AbstractGeneProduct {
         return sequence;
     }
 
+    public void setSequence(Sequence sequence) {
+        this.sequence = (RNASequence) sequence;
+    }
+
     @Override
     public String getBaseType() {
-        return TYPE;
+        return this.BASE_TYPE;
     }
 
     @Override

@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.interfaces.Observation;
@@ -40,18 +41,18 @@ import uk.ac.ebi.observation.parameters.TaskDescription;
  * AnnotatedEntity contains collections of annotations and observations on objects
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public abstract class AnnotatedEntity
-        extends ReconstructionEntity
-        implements Externalizable {
+public abstract class AbstractAnnotatedEntity
+        extends AbstractReconstructionEntity
+        implements Externalizable, AnnotatedEntity  {
 
-    private transient static final Logger logger = Logger.getLogger(AnnotatedEntity.class);
+    private transient static final Logger logger = Logger.getLogger(AbstractAnnotatedEntity.class);
     private ListMultimap<Byte, Annotation> annotations = ArrayListMultimap.create();
     private ObservationCollection observations = new ObservationCollection();
 
-    public AnnotatedEntity() {
+    public AbstractAnnotatedEntity() {
     }
 
-    public AnnotatedEntity(Identifier identifier, String abbreviation, String name) {
+    public AbstractAnnotatedEntity(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 

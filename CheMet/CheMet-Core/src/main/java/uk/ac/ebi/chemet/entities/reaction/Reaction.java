@@ -36,7 +36,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
 import uk.ac.ebi.core.reaction.MetaboliteParticipant;
-import uk.ac.ebi.core.AnnotatedEntity;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
 
@@ -57,7 +57,7 @@ import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
  * @param   <C> The compartment class type (can be a string e.g. [e] or Enumeration) overide hashCode/equals
  */
 public class Reaction<M, S, C>
-        extends AnnotatedEntity {
+        extends AbstractAnnotatedEntity {
 
     private static final Logger LOGGER = Logger.getLogger(Reaction.class);
     transient private List<M> reactantsMolecules = new ArrayList<M>();
