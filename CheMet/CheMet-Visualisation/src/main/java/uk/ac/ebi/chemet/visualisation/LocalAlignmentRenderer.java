@@ -56,12 +56,12 @@ public class LocalAlignmentRenderer
     }
 
     /**
-     * Instantiates a renderer with specified bounds and colorer and padding of 10 % the width
+     * Instantiates a renderer with specified bounds and colorer and padding of 10 % the heigh
      * @param bounds
      * @param colorer
      */
     public LocalAlignmentRenderer(Rectangle bounds, AbstractAlignmentColor colorer) {
-        this(bounds, colorer, bounds.width / 10);
+        this(bounds, colorer, bounds.height / 10);
     }
 
     /**
