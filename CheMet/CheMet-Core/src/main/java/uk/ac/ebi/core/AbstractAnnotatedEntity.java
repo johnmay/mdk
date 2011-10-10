@@ -34,7 +34,6 @@ import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.observation.ObservationCollection;
-import uk.ac.ebi.observation.parameters.TaskDescription;
 
 /**
  * AnnotatedEntity.java – MetabolicDevelopmentKit – Jun 23, 2011
@@ -137,23 +136,7 @@ public abstract class AbstractAnnotatedEntity
         return annotations.get(annotation.getIndex()).remove(annotation);
     }
 
-//    public boolean addAnnotation(AbstractAnnotation annotation) {
-//        logger.debug("Adding annotation: " + annotation.toString() + " to object: " +
-//                     this.toString());
-//        return annotations.add(annotation);
-//    }
-//
-//
-//    /**
-//     * Removes an annotation to the descriptor
-//     * @param observation The observation to remove
-//     * @return whether the underlying collection was modified
-//     */
-//    public boolean removeAnnotation(AbstractAnnotation annotation) {
-//        logger.debug("Removing annotation: " + annotation.toString() + " from object: " + this.
-//          toString());
-//        return annotations.remove(annotation);
-//    }
+
     /**
      * Accessor to the stored observations
      * @return unmodifiable ObservationCollection
