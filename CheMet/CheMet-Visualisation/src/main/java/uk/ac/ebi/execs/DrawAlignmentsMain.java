@@ -20,26 +20,9 @@
  */
 package uk.ac.ebi.execs;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import org.apache.commons.cli.Option;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.visualisation.AlignmentRendererFactory;
-import uk.ac.ebi.chemet.visualisation.BasicAlignmentColor;
-import uk.ac.ebi.chemet.visualisation.BlastAlignmentColor;
-import uk.ac.ebi.chemet.visualisation.LocalAlignmentRenderer;
-import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
-import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
-import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
-import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
-import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.LocalAlignment;
 import uk.ac.ebi.metabolomes.execs.CommandLineMain;
-import uk.ac.ebi.metabolomes.io.homology.BlastXML;
 
 /**
  * @name    DrawAlignmentsMain
@@ -72,51 +55,51 @@ public class DrawAlignmentsMain
     @Override
     public void process() {
 
-        File xmlFile = getCmd().hasOption( "x" ) ? new File( getCmd().getOptionValue( "x" ) ) : null;
-
-        if ( xmlFile == null ) {
-
-            LOGGER.error( "No XML file provided" );
-            printHelp();
-        }
-
-        BlastXML blastIO = new BlastXML( xmlFile );
-        GeneProductCollection productCollection =
-                              blastIO.loadProteinHomologyObservations( new GeneProductCollection() ,
-                                                                       new JobParameters() );
-
-        // build the renderer, could put in the factory
-        LocalAlignmentRenderer renderer =
-                               new LocalAlignmentRenderer( new Rectangle() ,
-                                                           new BlastAlignmentColor() ,
-                                                           0 );
-
-
-        for ( GeneProteinProduct geneProteinProduct : productCollection.getProteinProducts() ) {
-
-            BufferedImage img = new BufferedImage( 800 , 5 * geneProteinProduct.getObservations().getBlastHits().size() ,
-                                                   BufferedImage.TYPE_4BYTE_ABGR );
-            Graphics2D g2 = ( Graphics2D ) img.getGraphics();
-            Rectangle outerBounds = new Rectangle( 800 , 5 );
-            Rectangle innerBounds = new Rectangle( 1 , 1 , 798 , 3 );
-
-            for ( LocalAlignment hit : geneProteinProduct.getObservations().getBlastHits() ) {
-                renderer.render( hit , g2 , outerBounds , innerBounds );
-                outerBounds.y += outerBounds.height;
-                innerBounds.y += outerBounds.height;
-            }
-
-            g2.dispose();
-            try {
-                ImageIO.write( img , "png" , new File( "/Users/johnmay/Desktop/test.png" ) );
-                return;
-            } catch ( IOException ex ) {
-                ex.printStackTrace();
-            }
-
-
-            return; // ony do one
-        }
+//        File xmlFile = getCmd().hasOption( "x" ) ? new File( getCmd().getOptionValue( "x" ) ) : null;
+//
+//        if ( xmlFile == null ) {
+//
+//            LOGGER.error( "No XML file provided" );
+//            printHelp();
+//        }
+//
+//        BlastXML blastIO = new BlastXML( xmlFile );
+//        GeneProductCollection productCollection =
+//                              blastIO.loadProteinHomologyObservations( new GeneProductCollection() ,
+//                                                                       new JobParameters() );
+//
+//        // build the renderer, could put in the factory
+//        LocalAlignmentRenderer renderer =
+//                               new LocalAlignmentRenderer( new Rectangle() ,
+//                                                           new BlastAlignmentColor() ,
+//                                                           0 );
+//
+//
+//        for ( GeneProteinProduct geneProteinProduct : productCollection.getProteinProducts() ) {
+//
+////            BufferedImage img = new BufferedImage( 800 , 5 * geneProteinProduct.getObservations().getBlastHits().size() ,
+////                                                   BufferedImage.TYPE_4BYTE_ABGR );
+////            Graphics2D g2 = ( Graphics2D ) img.getGraphics();
+////            Rectangle outerBounds = new Rectangle( 800 , 5 );
+////            Rectangle innerBounds = new Rectangle( 1 , 1 , 798 , 3 );
+////
+////            for ( LocalAlignment hit : geneProteinProduct.getObservations().getBlastHits() ) {
+////                renderer.render( hit , g2 , outerBounds , innerBounds );
+////                outerBounds.y += outerBounds.height;
+////                innerBounds.y += outerBounds.height;
+////            }
+////
+////            g2.dispose();
+////            try {
+////                ImageIO.write( img , "png" , new File( "/Users/johnmay/Desktop/test.png" ) );
+////                return;
+////            } catch ( IOException ex ) {
+////                ex.printStackTrace();
+////            }
+////
+//
+//            return; // ony do one
+//        }
 
 
 
