@@ -39,7 +39,8 @@ public class ParserFactory {
     Map<String, BLASTRowParser> blastParsers = new HashMap();
 
     private ParserFactory() {
-        blastParsers.put("2.2.25", new BLASTRowParser_V2_2_25());
+        blastParsers.put("2.2.24", new BLASTRowParser_V2_2_24());
+        blastParsers.put("2.2.25", new BLASTRowParser_V2_2_24());
     }
 
     private  static class AlignmentFactoryHolder {

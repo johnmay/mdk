@@ -16,6 +16,7 @@
  */
 package uk.ac.ebi.metabolomes.run;
 
+import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 
 /**

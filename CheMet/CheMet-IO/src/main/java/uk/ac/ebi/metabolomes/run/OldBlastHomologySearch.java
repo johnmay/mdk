@@ -15,6 +15,7 @@
 
 package uk.ac.ebi.metabolomes.run;
 
+import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.metabolomes.descriptor.observation.BlastParamType;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParamType;
 import java.io.File;
@@ -24,7 +25,7 @@ import java.util.Collection;
 import org.biojava3.core.sequence.AccessionID;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.io.FastaWriterHelper;
-import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProductCollection;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.metabolomes.io.homology.BlastXML;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
@@ -37,11 +38,12 @@ import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
  * @author johnmay
  * @date Apr 27, 2011
  */
-public class BlastHomologySearch extends RunnableTask {
+@Deprecated
+public class OldBlastHomologySearch extends RunnableTask {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
-      BlastHomologySearch.class);
+      OldBlastHomologySearch.class);
     private Process process;
     private File seqFile;
     private File xmlFile;
@@ -56,7 +58,7 @@ public class BlastHomologySearch extends RunnableTask {
      * @param program
      * @param database
      */
-    public BlastHomologySearch(JobParameters params) {
+    public OldBlastHomologySearch(JobParameters params) {
 
         super(params);
         addParameter(BlastParamType.OUTPUT_MODE, "7");
@@ -77,7 +79,7 @@ public class BlastHomologySearch extends RunnableTask {
 
             Collection<ProteinSequence> sequenceSubset = new ArrayList<ProteinSequence>();
 
-            GeneProductCollection gpc = (GeneProductCollection) super.getJobParameters().get(
+            OldGeneProductCollection gpc = (OldGeneProductCollection) super.getJobParameters().get(
               JobParamType.GENE_PRODUCT_COLLECTION);
 
             for( GeneProteinProduct product : gpc.getProteinProducts() ) {
@@ -162,7 +164,7 @@ public class BlastHomologySearch extends RunnableTask {
         // so the observations are loaded into those peptides and
         // subsequently the project they are assoicated with
         JobParameters params = getJobParameters();
-        blastXML.loadProteinHomologyObservations((GeneProductCollection) params.get(
+        blastXML.loadProteinHomologyObservations((OldGeneProductCollection) params.get(
           JobParamType.GENE_PRODUCT_COLLECTION),
                                                  params);
     }

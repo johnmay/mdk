@@ -22,7 +22,9 @@ package uk.ac.ebi.io.blast;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.hp.hpl.jena.reasoner.IllegalParameterException;
+import com.sun.tools.javac.resources.version;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
@@ -31,7 +33,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
+import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProductCollection;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
@@ -53,23 +56,37 @@ public class BlastReader {
 
         int index = 0;
         for (String name : Arrays.asList("Query.ID", "Subject.ID", "Perc.Ident", "Aln.Len",
-                "Mismatches", "Gap.Openings", "Q.start", "Q.end", "S.start",
-                "S.end", "Expected", "Bit.Score")) {
+                                         "Mismatches", "Gap.Openings", "Q.start", "Q.end", "S.start",
+                                         "S.end", "Expected", "Bit.Score")) {
             columnMap.put(name, index++);
         }
     }
 
-    public void parse(File outputFile, Integer format) {
+    public void load(Map<String, GeneProduct> products, File outputFile, Integer format, String version) throws IOException {
 
         if (supportedFormats.contains(format) == false) {
             throw new IllegalParameterException("Unsupported format " + format
-                    + ". Currently supported:" + supportedFormats);
+                                                + ". Currently supported:" + supportedFormats);
         } else {
+            switch (format) {
+                case 7:
+                    throw new UnsupportedOperationException();
+                case 8:
+                    loadFromTSV(products, new FileReader(outputFile), version);
+                    break;
+            }
         }
 
     }
 
-    public void parseFromTSV(GeneProductCollection products, Reader reader, String version) throws IOException {
+    /**
+     * Loads blast results from TSV format (-m 8)
+     * @param products
+     * @param reader
+     * @param version
+     * @throws IOException
+     */
+    public void loadFromTSV(Map<String, GeneProduct> products, Reader reader, String version) throws IOException {
 
         CSVReader tsvReader = new CSVReader(reader, '\t', '\0');
 
@@ -79,7 +96,12 @@ public class BlastReader {
         String[] row;
         while ((row = tsvReader.readNext()) != null) {
             LocalAlignment alignment = parser.parse(row);
-            // todo.. products.addObsevation(accession, alignment); // attaches to product of that accession
+            GeneProduct product = products.get(alignment.getQuery());
+            if(product != null){
+                // add observation
+            } else{
+                LOGGER.error("unable to find matching product whilst loading");
+            }
         }
 
         long end = System.currentTimeMillis();

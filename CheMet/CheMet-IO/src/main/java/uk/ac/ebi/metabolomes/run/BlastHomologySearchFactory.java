@@ -12,11 +12,10 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-
 package uk.ac.ebi.metabolomes.run;
 
 import uk.ac.ebi.metabolomes.descriptor.observation.BlastParamType;
-import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProductCollection;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParamType;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
@@ -25,7 +24,6 @@ import uk.ac.ebi.metabolomes.resource.BlastMatrix;
 import uk.ac.ebi.metabolomes.resource.BlastProgram;
 import uk.ac.ebi.resource.TaskIdentifier;
 
-
 /**
  * BlastHomologySearchFactory.java
  *
@@ -33,42 +31,42 @@ import uk.ac.ebi.resource.TaskIdentifier;
  * @author johnmay
  * @date Apr 27, 2011
  */
+@Deprecated
 public class BlastHomologySearchFactory {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
-      BlastHomologySearchFactory.class);
+            BlastHomologySearchFactory.class);
     private static Integer maxSequenceCount = 60;
-
 
     /**
      * Builds several blastp searches (number depends on maxSequenceCount)
      * @param products
      * @return
      */
-    public static BlastHomologySearch[] getBlastPonSwissProtTasks(GeneProteinProduct[] products,
-                                                                  BlastMatrix matrix,
-                                                                  String evalue,
-                                                                  Integer cpus,
-                                                                  JobParameters params) {
+    public static OldBlastHomologySearch[] getBlastPonSwissProtTasks(GeneProteinProduct[] products,
+                                                                     BlastMatrix matrix,
+                                                                     String evalue,
+                                                                     Integer cpus,
+                                                                     JobParameters params) {
 
         evalue = evalue.isEmpty() ? "1" : evalue;
 
         // always need one tasks
         int taskCount = 1 + (products.length / maxSequenceCount);
 
-        BlastHomologySearch[] searches = new BlastHomologySearch[taskCount];
+        OldBlastHomologySearch[] searches = new OldBlastHomologySearch[taskCount];
 
         int sequenceIndexStart = 0;
         int sequenceIndexEnd = 0;
 
-        for( int i = 0 ; i < searches.length ; i++ ) {
+        for (int i = 0; i < searches.length; i++) {
 
 
-            GeneProductCollection sequenceCollection = new GeneProductCollection();
+            OldGeneProductCollection sequenceCollection = new OldGeneProductCollection();
 
-            while( sequenceIndexEnd - sequenceIndexStart < maxSequenceCount && sequenceIndexEnd <
-                                                                               products.length ) {
+            while (sequenceIndexEnd - sequenceIndexStart < maxSequenceCount && sequenceIndexEnd
+                                                                               < products.length) {
                 GeneProteinProduct product = products[sequenceIndexEnd++];
                 sequenceCollection.addProduct(product);
             }
@@ -83,7 +81,7 @@ public class BlastHomologySearchFactory {
             params.put(BlastParamType.PROGRAM, BlastProgram.BLASTP);
             params.put(BlastParamType.DATABASE, BlastDatabase.SWISSPROT);
 
-            searches[i] = new BlastHomologySearch(params);
+            searches[i] = new OldBlastHomologySearch(params);
             searches[i].setIdentifier(new TaskIdentifier(params.get(JobParamType.JOBID).toString()));
             searches[i].setAbbreviation("BLAST");
             searches[i].setName("SwissProt BLAST Search");
@@ -91,7 +89,6 @@ public class BlastHomologySearchFactory {
         }
         return searches;
     }
-
 
     /**
      * Set the max number of sequences
@@ -101,7 +98,4 @@ public class BlastHomologySearchFactory {
         BlastHomologySearchFactory.maxSequenceCount = maxSequenceCount;
 
     }
-
-
 }
-

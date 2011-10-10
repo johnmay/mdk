@@ -30,9 +30,9 @@ import uk.ac.ebi.observation.sequence.LocalAlignment;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class BLASTRowParser_V2_2_25 implements BLASTRowParser {
+public class BLASTRowParser_V2_2_24 implements BLASTRowParser {
 
-    private static final Logger LOGGER = Logger.getLogger(BLASTRowParser_V2_2_25.class);
+    private static final Logger LOGGER = Logger.getLogger(BLASTRowParser_V2_2_24.class);
 
     public LocalAlignment parse(String[] row) {
 

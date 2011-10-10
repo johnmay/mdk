@@ -6,12 +6,13 @@ package uk.ac.ebi.io.blast;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Map;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
+import uk.ac.ebi.interfaces.GeneProduct;
 
 /**
  *
@@ -38,18 +39,16 @@ public class BlastReaderTest {
     public void tearDown() {
     }
 
-
-
     /**
      * Test of parseFromTSV method, of class BlastReader.
      */
     @Test
     public void testParseFromTSV() throws Exception {
         System.out.println("parseFromTSV");
-        GeneProductCollection products = null;
+        Map<String, GeneProduct> products = null;
         Reader reader = new InputStreamReader(getClass().getResourceAsStream("sample.tsv"));
         BlastReader instance = new BlastReader();
-        instance.parseFromTSV(products, reader, "2.2.25");
+        instance.loadFromTSV(products, reader, "2.2.25");
 
     }
 }

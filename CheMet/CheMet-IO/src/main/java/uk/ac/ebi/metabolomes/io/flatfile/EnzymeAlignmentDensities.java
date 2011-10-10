@@ -35,8 +35,8 @@ import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
 public class EnzymeAlignmentDensities {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( EnzymeAlignmentDensities.class );
-    private static final File positiveDensityFile       = DatabaseProperties.getInstance().getDatabasePath( "detect.positive" );
-    private static final File negativeDensityFile       = DatabaseProperties.getInstance().getDatabasePath( "detect.negative" );
+    private static final File positiveDensityFile       = DatabaseProperties.getInstance().getFile( "detect.positive" );
+    private static final File negativeDensityFile       = DatabaseProperties.getInstance().getFile( "detect.negative" );
     private HashMap<String , String> positiveDensity    = new HashMap<String , String>();
     private HashMap<String , String> negativeDensity    = new HashMap<String , String>();
 

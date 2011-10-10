@@ -104,7 +104,7 @@ public class ParseIPRScanXMLMain
     public Map makeInterProtoECMap() {
         try {
             Map<String , ECNumber> ipToECMap = new HashMap<String , ECNumber>( 200 );
-            File ecCodes = DatabaseProperties.getInstance().getDatabasePath( "interpro.ec.codes" );
+            File ecCodes = DatabaseProperties.getInstance().getFile( "interpro.ec.codes" );
             CSVReader reader = new CSVReader( new FileReader( ecCodes ) , '\t' );
             String[] row;
             while ( ( row = reader.readNext() ) != null ) {

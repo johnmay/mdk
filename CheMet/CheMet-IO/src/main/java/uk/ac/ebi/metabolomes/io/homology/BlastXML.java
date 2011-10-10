@@ -18,7 +18,7 @@ import java.io.File;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import uk.ac.ebi.metabolomes.core.gene.GeneProductCollection;
+import uk.ac.ebi.metabolomes.core.gene.OldGeneProductCollection;
 import uk.ac.ebi.metabolomes.core.gene.GeneProteinProduct;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.metabolomes.descriptor.observation.sequence.homology.BlastHit;
@@ -52,11 +52,11 @@ public class BlastXML extends XMLHelper {
         MAX_LOAD = maxLoad;
     }
 
-    public GeneProductCollection loadProteinHomologyObservations( GeneProductCollection products , JobParameters params ) {
+    public OldGeneProductCollection loadProteinHomologyObservations( OldGeneProductCollection products , JobParameters params ) {
         return loadProteinHomologyObservations( products , 10D, params );
     }
 
-    public GeneProductCollection loadProteinHomologyObservations( GeneProductCollection products ,
+    public OldGeneProductCollection loadProteinHomologyObservations( OldGeneProductCollection products ,
                                                                   double expectValueThreshold ,
                                                                   JobParameters params ) {
 
