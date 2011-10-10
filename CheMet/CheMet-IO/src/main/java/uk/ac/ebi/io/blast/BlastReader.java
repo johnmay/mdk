@@ -22,8 +22,9 @@ package uk.ac.ebi.io.blast;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.hp.hpl.jena.reasoner.IllegalParameterException;
-import com.sun.tools.javac.resources.version;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -32,10 +33,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
 import org.apache.log4j.Logger;
+import org.codehaus.stax2.XMLInputFactory2;
+import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.TaskOptions;
-import uk.ac.ebi.metabolomes.core.gene.OldGeneProductCollection;
+import uk.ac.ebi.metabolomes.io.homology.BlastXML;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
@@ -96,19 +103,19 @@ public class BlastReader {
         BLASTRowParser parser = ParserFactory.getInstance().getBLASTRowParser(version);
         String[] row;
         while ((row = tsvReader.readNext()) != null) {
-            
+
             LocalAlignment alignment = parser.parse(row);
             alignment.setTaskOptions(options); // set the options on the task
-            
+
             GeneProduct product = products.get(alignment.getQuery());
 
-            if(product != null){
+            if (product != null) {
                 // add observation
                 product.addObservation(alignment);
-            } else{
+            } else {
                 LOGGER.error("unable to find matching product whilst loading");
             }
-            
+
         }
 
         long end = System.currentTimeMillis();
@@ -119,4 +126,38 @@ public class BlastReader {
         tsvReader.close();
 
     }
+
+    public void loadFromXML(Map<String, ? extends AnnotatedEntity> entities, String filename, String version, TaskOptions options) throws XMLStreamException, FileNotFoundException {
+
+        XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
+        xmlif.setProperty(
+                XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES,
+                Boolean.FALSE);
+        xmlif.setProperty(
+                XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES,
+                Boolean.TRUE);
+        xmlif.setProperty(
+                XMLInputFactory.IS_COALESCING,
+                Boolean.FALSE);
+        xmlif.configureForSpeed();
+
+
+        XMLStreamReader2 xmlr = (XMLStreamReader2) xmlif.createXMLStreamReader(filename, new FileInputStream(filename));
+
+        BLASTXMLParser parser = new BLASTXMLParser_V2_2_24();
+        long start = System.currentTimeMillis();
+        while (xmlr.hasNext()) {
+            int eventType = xmlr.next();
+            switch (eventType) {
+                case XMLEvent.START_ELEMENT:
+                    if (xmlr.getName().toString().equals("Iteration")) {
+                        parser.parse(entities, options,  xmlr);
+                    }
+                    break;
+            }
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("Completed parsing in " + (end - start) + " ms ");
+    }
+
 }
