@@ -178,7 +178,7 @@ public class ObservationCollection {
      * @param type
      * @return
      */
-    public Object get(Class type) {
+    public Collection<Observation> get(Class type) {
         return typeMap.get(ObservationLoader.getInstance().getIndex(type));
     }
 

@@ -68,6 +68,10 @@ public abstract class AbstractObservation
         return taskOptions;
     }
 
+    public void setTaskOptions(TaskOptions options){
+        taskOptions = options;
+    }
+
     public abstract Observation getInstance();
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
