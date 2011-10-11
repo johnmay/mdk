@@ -33,14 +33,14 @@ public class BlastConsensusScorer implements ConsensusScorer {
 
     private static final Logger LOGGER = Logger.getLogger(BlastConsensusScorer.class);
 
-    public float score(char match) {
+    public int score(char match) {
         switch (match) {
             case ' ':
                 return 0;
             case '+':
-                return 0.5f;
+                return 5;
             default: // catch all other characters A-Z
-                return 1f;
+                return 10;
         }
     }
 }

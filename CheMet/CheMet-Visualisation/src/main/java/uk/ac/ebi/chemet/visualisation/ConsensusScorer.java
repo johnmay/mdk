@@ -33,8 +33,8 @@ public interface ConsensusScorer {
 
     /**
      * Scores the character from a consensus alignment string. For example in blast ' ' is a mismatch, 'D' etc is
-     * a match and a '+' is a matching group
+     * a match and a '+' is a matching group. 0 = no match, 5 = some match and 10 = all match
      */
-    public float score(char match);
+    public int score(char match);
     
 }

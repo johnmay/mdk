@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
+import java.security.InvalidParameterException;
 import java.text.StringCharacterIterator;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class ConservationRenderer extends AlignmentRenderer {
     private static final Logger LOGGER = Logger.getLogger(ConservationRenderer.class);
     private ConsensusScorer scorer;
     private Map<Integer, Color> colorMap = new HashMap();
-    private float granularity = 90f;
+    private int granularity = 90;
 
     public ConservationRenderer(Rectangle bounds, AbstractAlignmentColor colorer, ConsensusScorer scorer) {
         super(bounds, colorer);
@@ -64,6 +65,22 @@ public class ConservationRenderer extends AlignmentRenderer {
         for (int i = 0; i <= 10; i++) {
             colorMap.put(i, ColorUtilities.shade(color, (1 - (i * 0.1f)) / 4));
         }
+    }
+
+    /**
+     * Sets the granularity of the conservation diagram. 1 = 100px and 100 = 1px.
+     * @param granularity 
+     */
+    public void setGranularity(int granularity) {
+
+        if (granularity > 0 && granularity < 101) {
+
+            this.granularity = granularity;
+        } else {
+
+            throw new InvalidParameterException("Granularity must be in the range 1 -- 100");
+        }
+
     }
 
     /**
@@ -95,6 +112,9 @@ public class ConservationRenderer extends AlignmentRenderer {
         float hitBarHeight = innerBounds.height;
         float hitBarWidth = homologyEnd - homologyStart;
 
+        // from the granularity calculate how big we need our boxes
+
+
         // get the alignment string and work out how many bases/peptides will count towards each pixel
         String score = alignment.getAlignmentSequence();
         int increment = (int) Math.ceil(score.length() / hitBarWidth);
@@ -124,9 +144,7 @@ public class ConservationRenderer extends AlignmentRenderer {
         }
         score /= concensus.length();
 
-        int normalised = (int) Math.round(score * 10);
-
-        return colorMap.get(normalised);
+        return colorMap.get(Math.round(score));
 
     }
 }
