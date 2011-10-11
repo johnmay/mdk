@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 public class ColorUtilities {
 
     private static final Logger LOGGER = Logger.getLogger(ColorUtilities.class);
+    public static Color EMBL_PETROL = new Color(Integer.parseInt("006666", 16));
 
     /**
      * Shades a colour by the given amount (0-1). A positive value will lighten the colour whilst a negative value

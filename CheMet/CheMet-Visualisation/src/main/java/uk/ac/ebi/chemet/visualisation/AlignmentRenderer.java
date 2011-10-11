@@ -38,10 +38,10 @@ import uk.ac.ebi.observation.sequence.LocalAlignment;
  * @brief   ...class description...
  *
  */
-public class LocalAlignmentRenderer
+public class AlignmentRenderer
         extends AbstractAlignmentRenderer {
 
-    private static final Logger LOGGER = Logger.getLogger(LocalAlignmentRenderer.class);
+    private static final Logger LOGGER = Logger.getLogger(AlignmentRenderer.class);
     private Line2D traceLine;
 
     /**
@@ -50,8 +50,8 @@ public class LocalAlignmentRenderer
      * @param colorer
      * @param padding
      */
-    public LocalAlignmentRenderer(Rectangle bounds, AbstractAlignmentColor colorer,
-                                  Integer padding) {
+    public AlignmentRenderer(Rectangle bounds, AbstractAlignmentColor colorer,
+                             Integer padding) {
         super(bounds, colorer, padding);
     }
 
@@ -60,7 +60,7 @@ public class LocalAlignmentRenderer
      * @param bounds
      * @param colorer
      */
-    public LocalAlignmentRenderer(Rectangle bounds, AbstractAlignmentColor colorer) {
+    public AlignmentRenderer(Rectangle bounds, AbstractAlignmentColor colorer) {
         this(bounds, colorer, bounds.height / 10);
     }
 
@@ -130,7 +130,7 @@ public class LocalAlignmentRenderer
      * Build the trace line, only needs to be done once for multiple alignments
      * @return
      */
-    private Line2D getTraceLine(Rectangle outerBounds, Rectangle innerBounds) {
+    protected Line2D getTraceLine(Rectangle outerBounds, Rectangle innerBounds) {
 
         // create a new traceline if the current object is null or the center point is different
         if (traceLine == null || outerBounds.getCenterY() != traceLine.getY1()) {
