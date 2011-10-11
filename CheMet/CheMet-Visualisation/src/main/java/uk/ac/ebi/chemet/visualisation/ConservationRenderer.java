@@ -24,7 +24,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
-import java.security.InvalidParameterException;
 import java.text.StringCharacterIterator;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +44,7 @@ public class ConservationRenderer extends AlignmentRenderer {
     private static final Logger LOGGER = Logger.getLogger(ConservationRenderer.class);
     private ConsensusScorer scorer;
     private Map<Integer, Color> colorMap = new HashMap();
-    private int granularity = 90;
+    private float granularity = 0.1f;
 
     public ConservationRenderer(Rectangle bounds, AbstractAlignmentColor colorer, ConsensusScorer scorer) {
         super(bounds, colorer);
@@ -71,16 +70,8 @@ public class ConservationRenderer extends AlignmentRenderer {
      * Sets the granularity of the conservation diagram. 1 = 100px and 100 = 1px.
      * @param granularity 
      */
-    public void setGranularity(int granularity) {
-
-        if (granularity > 0 && granularity < 101) {
-
-            this.granularity = granularity;
-        } else {
-
-            throw new InvalidParameterException("Granularity must be in the range 1 -- 100");
-        }
-
+    public void setGranularity(float granularity) {
+        this.granularity = granularity;
     }
 
     /**
@@ -112,23 +103,22 @@ public class ConservationRenderer extends AlignmentRenderer {
         float hitBarHeight = innerBounds.height;
         float hitBarWidth = homologyEnd - homologyStart;
 
-        // from the granularity calculate how big we need our boxes
-
-
-        // get the alignment string and work out how many bases/peptides will count towards each pixel
+        // score
         String score = alignment.getAlignmentSequence();
-        int increment = (int) Math.ceil(score.length() / hitBarWidth);
-        float pxInc = hitBarWidth / score.length();
 
-        float xPx = 0;
+
+        // using the granularity we see get the width of the view and the model (alignment)
+        double viewWidth = hitBarWidth / (hitBarWidth * granularity);
+        double modelWidth = score.length() / (hitBarWidth / viewWidth);
+
+        int increment = (int) Math.ceil(modelWidth);
 
         for (int i = 0; i < score.length(); i += increment) {
-            String region = score.substring(i, i + increment);
+            String region = score.substring(i, Math.min(i + increment, score.length()));
             g2.setColor(getColor(region));
-            g2.fill(new Rectangle2D.Float(hitBarX + xPx, hitBarY, pxInc, hitBarHeight));
-            xPx += pxInc;
+            g2.fill(new Rectangle2D.Double(hitBarX, hitBarY, (increment / modelWidth) * viewWidth, hitBarHeight));
+            hitBarX += (increment / modelWidth) * viewWidth;
         }
-
 
     }
 
