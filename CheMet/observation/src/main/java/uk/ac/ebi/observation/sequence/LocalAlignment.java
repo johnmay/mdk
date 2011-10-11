@@ -244,4 +244,18 @@ public class LocalAlignment
     public LocalAlignment getInstance() {
         return new LocalAlignment();
     }
+
+    /**
+     * Returns a summary of the scoring information in the format of a HTML table. The intention is the summary
+     * can be wrapped in HTML tags and placed in a tool-tip.
+     */
+    public String getHTMLSummary() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<table><tr><td><b>Hit Identifier:</b></td><td>").append(subject).
+                append("</td></tr><tr><td><b>Expected Value:</b></td><td>").append(expected).
+                append("</td></tr><tr><td><b>Bit Score:</b></td><td>").append(bitScore).
+                append("</td></tr><tr><td><b>Percentage Identity:</b></td><td>").append(percentage).append("</td></tr></table>");
+
+        return sb.toString();
+    }
 }
