@@ -70,7 +70,7 @@ public class BlastReader {
         }
     }
 
-    public void load(Map<String, GeneProduct> products, File outputFile, Integer format, String version, TaskOptions options) throws IOException {
+    public void load(Map<String, GeneProduct> products, File outputFile, Integer format, String version, TaskOptions options) throws IOException, XMLStreamException {
 
         if (supportedFormats.contains(format) == false) {
             throw new IllegalParameterException("Unsupported format " + format
@@ -78,7 +78,8 @@ public class BlastReader {
         } else {
             switch (format) {
                 case 7:
-                    throw new UnsupportedOperationException();
+                    loadFromXML(products, outputFile.getAbsolutePath(), version, options);
+                    break;
                 case 8:
                     loadFromTSV(products, new FileReader(outputFile), version, options);
                     break;
@@ -129,6 +130,8 @@ public class BlastReader {
 
     public void loadFromXML(Map<String, ? extends AnnotatedEntity> entities, String filename, String version, TaskOptions options) throws XMLStreamException, FileNotFoundException {
 
+        LOGGER.info("Parsing blast xml output");
+
         XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
         xmlif.setProperty(
                 XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES,
@@ -151,7 +154,7 @@ public class BlastReader {
             switch (eventType) {
                 case XMLEvent.START_ELEMENT:
                     if (xmlr.getName().toString().equals("Iteration")) {
-                        parser.parse(entities, options,  xmlr);
+                        parser.parse(entities, options, xmlr);
                     }
                     break;
             }
@@ -159,5 +162,4 @@ public class BlastReader {
         long end = System.currentTimeMillis();
         System.out.println("Completed parsing in " + (end - start) + " ms ");
     }
-
 }

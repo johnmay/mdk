@@ -30,14 +30,17 @@ import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.TaskOptions;
+import uk.ac.ebi.io.blast.xml.setters.AlignmentSequenceSetter;
 import uk.ac.ebi.io.blast.xml.setters.AlignmentSetter;
 import uk.ac.ebi.io.blast.xml.setters.BitScoreSetter;
 import uk.ac.ebi.io.blast.xml.setters.ExpectedValueSetter;
 import uk.ac.ebi.io.blast.xml.setters.LengthSetter;
 import uk.ac.ebi.io.blast.xml.setters.PercentSetter;
 import uk.ac.ebi.io.blast.xml.setters.QueryEndSetter;
+import uk.ac.ebi.io.blast.xml.setters.QuerySequenceSetter;
 import uk.ac.ebi.io.blast.xml.setters.QueryStartSetter;
 import uk.ac.ebi.io.blast.xml.setters.SubjectEndSetter;
+import uk.ac.ebi.io.blast.xml.setters.SubjectSequenceSetter;
 import uk.ac.ebi.io.blast.xml.setters.SubjectSetter;
 import uk.ac.ebi.io.blast.xml.setters.SubjectStartSetter;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
@@ -64,13 +67,16 @@ public class BLASTXMLParser_V2_2_24 implements BLASTXMLParser {
         setters.put("Hsp_hit-from", new SubjectStartSetter());
         setters.put("Hsp_hit-to", new SubjectEndSetter());
         setters.put("Hsp_identity", new PercentSetter());
+        setters.put("Hsp_qseq", new QuerySequenceSetter());
+        setters.put("Hsp_hseq", new SubjectSequenceSetter());
+        setters.put("Hsp_midline", new AlignmentSequenceSetter());
     }
 
     public Collection<LocalAlignment> parse(Map<String, ? extends AnnotatedEntity> entities, TaskOptions options, XMLStreamReader2 xmlr) throws XMLStreamException {
 
         // System.out.println("Reading new iteration...");
-    Collection<LocalAlignment> alignments = new ArrayList();
-        String queryId = "";
+        Collection<LocalAlignment> alignments = new ArrayList();
+        String queryIdentifier = "";
 
         while (xmlr.hasNext()) {
             int eventtype = xmlr.next();
@@ -79,16 +85,18 @@ public class BLASTXMLParser_V2_2_24 implements BLASTXMLParser {
                 case XMLEvent.START_ELEMENT:
                     if (name.equals("Hit")) {
                         LocalAlignment alignment = getLocalAlignment(xmlr);
-                        alignment.setQuery(queryId);
+
+                        alignment.setQuery(queryIdentifier);
                         alignment.setTaskOptions(options);
                         // add to the entity if provided
-                        if (entities.containsKey(queryId)) {
-                            entities.get(queryId).addObservation(alignment);
+                        if (entities.containsKey(queryIdentifier)) {
+                            entities.get(queryIdentifier).addObservation(alignment);
                         }
                         alignments.add(alignment);
-                    } else if (name.equals("Iteration_query-ID")) {
+                    } else if (name.equals("Iteration_query-def")) {
                         xmlr.next();
-                        queryId = xmlr.getText();
+                        queryIdentifier = xmlr.getText();
+//                        queryIdentifier = queryIdentifier.substring(0, queryIdentifier.indexOf(' '));
                     }
                     break;
 

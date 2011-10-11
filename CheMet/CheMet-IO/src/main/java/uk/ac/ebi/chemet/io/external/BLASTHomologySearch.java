@@ -66,6 +66,8 @@ public class BLASTHomologySearch extends RunnableTask {
         }
 
         cmd = sb.toString();
+        LOGGER.info("executing: " + cmd);
+
     }
 
     @Override
@@ -99,11 +101,13 @@ public class BLASTHomologySearch extends RunnableTask {
 
             String version = Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastall.version", "");
 
+            System.out.println("format:" + format);
             // load results into object
             new BlastReader().load(map, output, format, version, getOptions());
 
         } catch (Exception ex) {
             LOGGER.info("An error occured: " + ex.getMessage());
+            ex.printStackTrace();
         }
 
     }

@@ -53,6 +53,9 @@ public class LocalAlignment
     private double bitScore;
     // optional fields
     private Set<Identifier> subjectIdentifiers;
+    private String querySequence;
+    private String subjectSequence;
+    private String alignmentSequence;
 
     public LocalAlignment() {
     }
@@ -150,6 +153,30 @@ public class LocalAlignment
         this.subjectStart = subjectStart;
     }
 
+    public String getQuerySequence() {
+        return querySequence;
+    }
+
+    public void setQuerySequence(String querySequence) {
+        this.querySequence = querySequence;
+    }
+
+    public String getSubjectSequence() {
+        return subjectSequence;
+    }
+
+    public void setSubjectSequence(String subjectSequence) {
+        this.subjectSequence = subjectSequence;
+    }
+
+    public String getAlignmentSequence() {
+        return alignmentSequence;
+    }
+
+    public void setAlignmentSequence(String alignmentSequence) {
+        this.alignmentSequence = alignmentSequence;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(subject.length() * 2);
@@ -174,6 +201,14 @@ public class LocalAlignment
         expected = in.readDouble();
         bitScore = in.readDouble();
 
+        // read sequences if available
+        boolean hasSequence = in.readBoolean();
+        if (hasSequence) {
+            querySequence = in.readUTF();
+            subjectSequence = in.readUTF();
+            alignmentSequence = in.readUTF();
+        }
+
     }
 
     @Override
@@ -193,6 +228,15 @@ public class LocalAlignment
 
         out.writeDouble(expected);
         out.writeDouble(bitScore);
+
+        if (querySequence != null) {
+            out.writeBoolean(true);
+            out.writeUTF(querySequence);
+            out.writeUTF(subjectSequence);
+            out.writeUTF(alignmentSequence);
+        } else {
+            out.writeBoolean(false);
+        }
 
     }
 
