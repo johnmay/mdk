@@ -43,8 +43,11 @@ public class LocalAlignment
     // mandatory fields
     private String query;
     private String subject;
-    private float percentage;
+    //
+    private int positive;
+    private int identity;
     private int length;
+    //
     private int queryStart;
     private int queryEnd;
     private int subjectStart;
@@ -60,10 +63,11 @@ public class LocalAlignment
     public LocalAlignment() {
     }
 
-    public LocalAlignment(String query, String subject, float percentage, int length, int queryStart, int queryEnd, int subjectStart, int subjectEnd, double expected, double bitScore) {
+    public LocalAlignment(String query, String subject, int positive, int identity, int length, int queryStart, int queryEnd, int subjectStart, int subjectEnd, double expected, double bitScore) {
         this.query = query;
         this.subject = subject;
-        this.percentage = percentage;
+        this.positive = positive;
+        this.identity = identity;
         this.length = length;
         this.queryStart = queryStart;
         this.queryEnd = queryEnd;
@@ -97,13 +101,21 @@ public class LocalAlignment
         this.length = length;
     }
 
-    public float getPercentage() {
-        return percentage;
+    public int getIdentity() {
+        return identity;
     }
 
-    public void setPercentage(float percentage) {
-        this.percentage = percentage;
+    public void setIdentity(int identity) {
+        this.identity = identity;
     }
+
+    public int getPositive() {
+        return positive;
+    }
+
+    public void setPositive(int positive) {
+        this.positive = positive;
+    }    
 
     public String getQuery() {
         return query;
@@ -190,7 +202,8 @@ public class LocalAlignment
         query = in.readUTF();
         subject = in.readUTF();
 
-        percentage = in.readFloat();
+        positive = in.readInt();
+        identity = in.readInt();
         length = in.readInt();
 
         queryStart = in.readInt();
@@ -218,7 +231,8 @@ public class LocalAlignment
         out.writeUTF(query);
         out.writeUTF(subject);
 
-        out.writeFloat(percentage);
+        out.writeInt(positive);
+        out.writeInt(identity);
         out.writeInt(length);
 
         out.writeInt(queryStart);
@@ -254,7 +268,7 @@ public class LocalAlignment
         sb.append("<table><tr><td><b>Hit Identifier:</b></td><td>").append(subject).
                 append("</td></tr><tr><td><b>Expected Value:</b></td><td>").append(expected).
                 append("</td></tr><tr><td><b>Bit Score:</b></td><td>").append(bitScore).
-                append("</td></tr><tr><td><b>Percentage Identity:</b></td><td>").append(percentage).append("</td></tr></table>");
+                append("</td></tr><tr><td><b>Positive:</b></td><td>").append(positive).append("</td></tr></table>");
 
         return sb.toString();
     }
