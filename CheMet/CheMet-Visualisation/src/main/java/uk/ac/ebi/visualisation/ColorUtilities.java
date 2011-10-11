@@ -34,6 +34,9 @@ public class ColorUtilities {
 
     private static final Logger LOGGER = Logger.getLogger(ColorUtilities.class);
     public static Color EMBL_PETROL = new Color(Integer.parseInt("006666", 16));
+    public static Color CLEAR = new Color(0, 0, 0, 0);
+    public static Color CLEAR_BLACK = new Color(0, 0, 0, 0);
+    public static Color CLEAR_WHITE = new Color(255, 255, 255, 0);
 
     /**
      * Shades a colour by the given amount (0-1). A positive value will lighten the colour whilst a negative value
@@ -52,5 +55,36 @@ public class ColorUtilities {
                                  Math.max(0f, hsb[1] - amount), // decrease saturation
                                  Math.min(1f, hsb[2] + amount)); // increase brightness
 
+    }
+
+    /**
+     * Mixes two colour by the provided percentages
+     * @param color1
+     * @param percentageColor1
+     * @param color2
+     * @param percentageColor2
+     * @return
+     */
+    public static Color getMixedColor(Color color1, float percentageColor1, Color color2, float percentageColor2) {
+        float[] clr1 = color1.getComponents(null);
+        float[] clr2 = color2.getComponents(null);
+        for (int i = 0; i < clr1.length; i++) {
+            clr1[i] = (clr1[i] * percentageColor1) + (clr2[i] * percentageColor2);
+        }
+        return new Color(clr1[0], clr1[1], clr1[2], clr1[3]);
+    }
+
+    /**
+     * Returns white or black text depending on the background.
+     * See here http://www.codeproject.com/KB/GDI-plus/IdealTextColor.aspx
+     * @param background
+     * @return
+     */
+    public static Color getTextColor(Color background) {
+        int threshold = 105;
+        int delta = (int) ((background.getRed() * 0.299) + (background.getGreen() * 0.587)
+                           + (background.getBlue() * 0.114));
+
+        return (255 - delta < threshold) ? Color.BLACK : Color.WHITE;
     }
 }

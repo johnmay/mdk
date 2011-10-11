@@ -1,6 +1,5 @@
 package uk.ac.ebi.chemet.visualisation;
 
-
 /**
  * BasicAlignmentColor.java
  *
@@ -38,7 +37,7 @@ import org.apache.log4j.Logger;
 public class BasicAlignmentColor
         extends AbstractAlignmentColor {
 
-    private static final Logger LOGGER = Logger.getLogger( BasicAlignmentColor.class );
+    private static final Logger LOGGER = Logger.getLogger(BasicAlignmentColor.class);
 
     /**
      * Basic implementation with a 'black' trace line and 'white' background. The match and mismatch
@@ -46,8 +45,9 @@ public class BasicAlignmentColor
      * @param matchColor Color for a matched alignment
      * @param mismatchColor Color for a mismatch alignment
      */
-    public BasicAlignmentColor( Color matchColor ,
-                                Color mismatchColor ) {
-        super( BufferedImage.TYPE_4BYTE_ABGR , Color.WHITE , matchColor , mismatchColor , Color.BLACK );
+    public BasicAlignmentColor(Color matchColor,
+                               Color equivalentColor,
+                               Color mismatchColor) {
+        super(BufferedImage.TYPE_4BYTE_ABGR, Color.WHITE, matchColor, equivalentColor, mismatchColor, Color.BLACK);
     }
 }

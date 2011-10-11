@@ -39,18 +39,20 @@ public abstract class AbstractAlignmentColor {
 
     public final int imageType;
     public final Color backgroundColor;
-    public final Color matchColor;
-    public final Color mismatchColor;
+    public final Color match;
+    public final Color equivalent;
+    public final Color mismatch;
     public final Color traceColor;
     // methods?
 
     public AbstractAlignmentColor( int imageType , Color backgroundColor ,
-                                   Color matchColor , Color mismatchColor ,
+                                   Color matchColor , Color equivalentColor, Color mismatchColor ,
                                    Color traceColor ) {
         this.imageType = imageType;
         this.backgroundColor = backgroundColor;
-        this.matchColor = matchColor;
-        this.mismatchColor = mismatchColor;
+        this.match = matchColor;
+        this.equivalent = equivalentColor;
+        this.mismatch = mismatchColor;
         this.traceColor = traceColor;
     }
 
@@ -67,11 +69,11 @@ public abstract class AbstractAlignmentColor {
     }
 
     public Color getMatchColor( Observation observation ) {
-        return matchColor;
+        return match;
     }
 
     public Color getMismatchColor( Observation observation ) {
-        return mismatchColor;
+        return mismatch;
     }
 
     public Color getTraceColor() {

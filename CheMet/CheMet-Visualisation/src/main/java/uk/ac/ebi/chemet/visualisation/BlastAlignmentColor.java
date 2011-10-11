@@ -41,7 +41,7 @@ public class BlastAlignmentColor
     private static final Logger LOGGER = Logger.getLogger(BlastAlignmentColor.class);
 
     public BlastAlignmentColor() {
-        super(BufferedImage.TYPE_4BYTE_ABGR, Color.WHITE, null, null, Color.LIGHT_GRAY);
+        super(BufferedImage.TYPE_4BYTE_ABGR, Color.WHITE, null, null, null, Color.LIGHT_GRAY);
     }
 
     @Override
