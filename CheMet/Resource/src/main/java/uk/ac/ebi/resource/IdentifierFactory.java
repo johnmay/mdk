@@ -241,12 +241,17 @@ public class IdentifierFactory {
         return ofIndex(IdentifierLoader.getInstance().getIndex(type));
     }
 
-
+    /**
+     * Main factory method. this returns a new identifier of the given index. The indicies are specified in the
+     * IdentifierDescription.propertiers file (see. src/main/resources)
+     * @param index
+     * @return
+     */
     public Identifier ofIndex(Byte index) {
         return identifiers[index].newInstance();
     }
 
-
+   
     /**
      *
      * Utility method for reading an identifier to an ObjectOutput
