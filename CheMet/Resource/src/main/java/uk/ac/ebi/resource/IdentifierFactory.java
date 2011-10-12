@@ -14,7 +14,6 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.ac.ebi.resource;
 
 import java.io.IOException;
@@ -34,6 +33,8 @@ import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.metabolomes.resource.Resource;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
+import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
@@ -42,7 +43,6 @@ import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
-
 
 /**
  * IdentifierFactory.java
@@ -57,43 +57,41 @@ public class IdentifierFactory {
     private static final String IDENTIFIER_MAPPING_FILE = "IdentifierResourceMapping.properties";
     private static final Identifier[] identifiers = new Identifier[Byte.MAX_VALUE];
     private List<Identifier> supportedIdentifiers = new ArrayList<Identifier>(Arrays.asList(
-      new ChEBIIdentifier(),
-      new KEGGCompoundIdentifier(),
-      new UniProtIdentifier(),
-      new TrEMBLIdentifier(),
-      new SwissProtIdentifier(),
-      new Taxonomy(),
-      new ECNumber(),
-      new BasicChemicalIdentifier(),
-      new BasicReactionIdentifier(),
-      new ReconstructionIdentifier(),
-      new TaskIdentifier(),
-      new InChI()));
-
+            new ChEBIIdentifier(),
+            new KEGGCompoundIdentifier(),
+            new UniProtIdentifier(),
+            new TrEMBLIdentifier(),
+            new SwissProtIdentifier(),
+            new Taxonomy(),
+            new ECNumber(),
+            new BasicChemicalIdentifier(),
+            new BasicReactionIdentifier(),
+            new ReconstructionIdentifier(),
+            new TaskIdentifier(),
+            new DrugBankIdentifier(),
+            new HMDBIdentifier(),
+            new InChI()));
 
     public List<Identifier> getSupportedIdentifiers() {
         return supportedIdentifiers;
     }
 
-
     private IdentifierFactory() {
-        for( Identifier identifier : supportedIdentifiers ) {
+        for (Identifier identifier : supportedIdentifiers) {
             identifiers[identifier.getIndex()] = identifier;
         }
     }
-
 
     public static class IdentifierFactoryHolder {
 
         public static IdentifierFactory INSTANCE = new IdentifierFactory();
     }
 
-
     public static IdentifierFactory getInstance() {
         return IdentifierFactoryHolder.INSTANCE;
     }
 
-
+    
     /**
      * Builds an identifier given the accession
      * Uses the identifier parse method to validate ids (slower)
@@ -105,16 +103,16 @@ public class IdentifierFactory {
     public static AbstractIdentifier getIdentifier(Resource resource, String accession) {
 
         Constructor constructor = resource.getIdentifierConstructor();
-        if( constructor != null ) {
+        if (constructor != null) {
             try {
                 return (AbstractIdentifier) constructor.newInstance(accession, true);
-            } catch( InstantiationException ex ) {
+            } catch (InstantiationException ex) {
                 ex.printStackTrace();
-            } catch( IllegalAccessException ex ) {
+            } catch (IllegalAccessException ex) {
                 ex.printStackTrace();
-            } catch( IllegalArgumentException ex ) {
+            } catch (IllegalArgumentException ex) {
                 ex.printStackTrace();
-            } catch( InvocationTargetException ex ) {
+            } catch (InvocationTargetException ex) {
                 ex.printStackTrace();
             }
         }
@@ -127,21 +125,20 @@ public class IdentifierFactory {
      * @return
      * @deprecated do not use
      */
-
     @Deprecated
     public static AbstractIdentifier getUncheckedIdentifier(Resource resource, String accession) {
 
         Constructor constructor = resource.getIdentifierConstructor();
-        if( constructor != null ) {
+        if (constructor != null) {
             try {
                 return (AbstractIdentifier) constructor.newInstance(accession, false);
-            } catch( InstantiationException ex ) {
+            } catch (InstantiationException ex) {
                 ex.printStackTrace();
-            } catch( IllegalAccessException ex ) {
+            } catch (IllegalAccessException ex) {
                 ex.printStackTrace();
-            } catch( IllegalArgumentException ex ) {
+            } catch (IllegalArgumentException ex) {
                 ex.printStackTrace();
-            } catch( InvocationTargetException ex ) {
+            } catch (InvocationTargetException ex) {
                 ex.printStackTrace();
             }
         }
@@ -163,7 +160,6 @@ public class IdentifierFactory {
 //
 //    }
 
-
     /**
      * Builds a list of identifiers from a string that may
      * or maynot contain multiple identifiers
@@ -176,25 +172,25 @@ public class IdentifierFactory {
 
         List<AbstractIdentifier> hitIdentifiers = new ArrayList<AbstractIdentifier>();
 
-        if( idsString.contains(ID_SEPERATOR) ) {
+        if (idsString.contains(ID_SEPERATOR)) {
 
             ListIterator<String> it = Arrays.asList(idsString.split(ID_ESCAPED_SEPERATOR)).
-              listIterator();
+                    listIterator();
 
             // db identifiers , gi,sp,tr etc..
-            while( it.hasNext() ) {
+            while (it.hasNext()) {
 
                 String dbid = it.next();
 
-                if( dbid.length() <= DBID_MAX_LENGTH ) {
+                if (dbid.length() <= DBID_MAX_LENGTH) {
                     Resource r = Resource.getResource(dbid);
 
-                    if( r != Resource.UNKNOWN ) {
+                    if (r != Resource.UNKNOWN) {
                         hitIdentifiers.add(IdentifierFactory.getIdentifier(r, it.next()));
-                    } else if( it.hasNext() ) {
+                    } else if (it.hasNext()) {
                         dbid = it.next();
                         r = Resource.getResource(dbid);
-                        if( r != Resource.UNIPROT ) {
+                        if (r != Resource.UNIPROT) {
                             hitIdentifiers.add(IdentifierFactory.getIdentifier(r, it.next()));
                         } else {
                             it.previous();
@@ -213,7 +209,6 @@ public class IdentifierFactory {
         return hitIdentifiers;
     }
 
-
     /**
      *
      * Access the MIRIAMEntry for the given identifier. If no MIRIAMResouce is available then null is returned
@@ -227,7 +222,6 @@ public class IdentifierFactory {
 //        }
         return null;
     }
-
 
     /**
      *
@@ -251,7 +245,6 @@ public class IdentifierFactory {
         return identifiers[index].newInstance();
     }
 
-   
     /**
      *
      * Utility method for reading an identifier to an ObjectOutput
@@ -263,7 +256,6 @@ public class IdentifierFactory {
         return identifier;
     }
 
-
     /**
      *
      * Utility method for writing an identifier to an ObjectOutput
@@ -273,10 +265,7 @@ public class IdentifierFactory {
         out.writeByte(identifier.getIndex());
         identifier.writeExternal(out);
     }
-
-
     private static final String ID_SEPERATOR = "|";
     private static final String ID_ESCAPED_SEPERATOR = "\\|";
     private static final int DBID_MAX_LENGTH = 3;
 }
-
