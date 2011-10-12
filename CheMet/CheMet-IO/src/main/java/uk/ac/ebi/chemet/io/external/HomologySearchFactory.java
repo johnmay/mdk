@@ -69,7 +69,7 @@ public class HomologySearchFactory {
                                                   int cpu,
                                                   int results) throws IOException, Exception {
         // should check for swiss prot and throw an expection if not
-        return getBLASTTask(products, HomologyDatabaseManager.getInstance().getPath("SwissProt"), expected, cpu, results, "blastp", 8);
+        return getBlastP(products, HomologyDatabaseManager.getInstance().getPath("SwissProt"), expected, cpu, results, 6);
     }
 
     /**
@@ -88,7 +88,7 @@ public class HomologySearchFactory {
                                          double expected,
                                          int cpu,
                                          int results) throws IOException, Exception {
-        return getBLASTTask(products, database, expected, cpu, results, "blastp", 8);
+        return getBlastP(products, database, expected, cpu, results, 6);
     }
 
     /**
@@ -97,33 +97,31 @@ public class HomologySearchFactory {
      * @param expected The expected value to filter for
      * @param cpu The number of cpus to allow
      * @param results the number of results to allow
-     * @param program the blast program e.g. blastp, blastx, blastn..
      * @param format the blast format 7=xml, 8=tabular....
      * @return A runnable task to perform the blast search externally
      */
-    public RunnableTask getBLASTTask(Collection<GeneProduct> products,
+    public RunnableTask getBlastP(Collection<GeneProduct> products,
                                      File database,
                                      double expected,
                                      int cpu,
                                      int results,
-                                     String program,
                                      int format) throws IOException, Exception {
 
-        String blastPath = Preferences.userNodeForPackage(this.getClass()).get("blastall.path", null);
+        String blastp = Preferences.userNodeForPackage(this.getClass()).get("blastp.path", null);
 
-        if (blastPath == null) {
-            throw new MissingPreferencesException("No path found for blastall, please configure the user preference");
+        if (blastp == null) {
+            throw new MissingPreferencesException("No path found for blastp, please configure the user preference");
         }
 
-        TaskDescription options = new TaskDescription(new File(blastPath),
-                                                      "BLAST", "BLAST Sequence Homology", new TaskIdentifier(UUID.randomUUID().toString()));
+        TaskDescription options = new TaskDescription(new File(blastp),
+                                                      "BLASTP", "Local Sequence Homology", new TaskIdentifier(UUID.randomUUID().toString()));
 
-        options.add(new TaskOption("Program", "p", program));
-        options.add(new TaskOption("Database", "d", database.getAbsolutePath()));
-        options.add(new TaskOption("Expected value", "e", String.format("%e", expected)));
-        options.add(new TaskOption("Number of CPUs to use", "a", Integer.toString(cpu)));
-        options.add(new TaskOption("Max results", "b", Integer.toString(results))); // not sure if this is the correct param
-        options.add(new TaskOption("Output format", "m", Integer.toString(format)));
+        options.add(new TaskOption("Database", "db", database.getAbsolutePath()));
+        options.add(new TaskOption("Expected value", "evalue", String.format("%e", expected)));
+        options.add(new TaskOption("Number of CPUs to use", "num_threads", Integer.toString(cpu)));
+        options.add(new TaskOption("Max results", "num_descriptions", Integer.toString(results))); // not sure if this is the correct param
+        options.add(new TaskOption("Max results", "num_alignments", Integer.toString(results))); // not sure if this is the correct param
+        options.add(new TaskOption("Output format", "outfmt", Integer.toString(format)));
 
 
         Map accessionMap = new HashMap(); // we need an id map incase some names change
@@ -154,8 +152,8 @@ public class HomologySearchFactory {
         FastaWriterHelper.writeProteinSequence(input, sequences);
 
 
-        options.add(new TaskOption("Input file", "i", input.getAbsolutePath()));
-        options.add(new TaskOption("Output file", "o", File.createTempFile("blast", "").getAbsolutePath()));
+        options.add(new TaskOption("Input file", "query", input.getAbsolutePath()));
+        options.add(new TaskOption("Output file", "out", File.createTempFile("blast", "").getAbsolutePath()));
 
         return new BLASTHomologySearch(options, accessionMap);
     }

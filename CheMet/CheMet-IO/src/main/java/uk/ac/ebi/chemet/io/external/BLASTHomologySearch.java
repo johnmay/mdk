@@ -58,14 +58,7 @@ public class BLASTHomologySearch extends RunnableTask {
     @Override
     public void prerun() {
 
-        // build the command
-        StringBuilder sb = new StringBuilder(250);
-        sb.append(getOptions().getProgram().getAbsoluteFile()).append(" ");
-        for (TaskOption option : (Collection<TaskOption>) getOptions().getOptionMap().values()) {
-            sb.append(option.getFlagValuePair()).append(" ");
-        }
-
-        cmd = sb.toString();
+        cmd = getCommand();
         LOGGER.info("executing: " + cmd);
 
     }
@@ -95,11 +88,11 @@ public class BLASTHomologySearch extends RunnableTask {
     @Override
     public void postrun() {
         try {
-            TaskOption outputOption = (TaskOption) getOptions().getOptionMap().get("o");
+            TaskOption outputOption = (TaskOption) getOptions().getOptionMap().get("out");
             File output = new File(outputOption.getValue());
-            Integer format = Integer.parseInt((String) ((TaskOption) getOptions().getOptionMap().get("m")).getValue());
+            Integer format = Integer.parseInt((String) ((TaskOption) getOptions().getOptionMap().get("outfmt")).getValue());
 
-            String version = Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastall.version", "");
+            String version = Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastp.version", "");
 
             System.out.println("format:" + format);
             // load results into object
