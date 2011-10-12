@@ -22,11 +22,11 @@ package uk.ac.ebi.chemet.io.external;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.io.blast.BlastReader;
@@ -53,6 +53,11 @@ public class BLASTHomologySearch extends RunnableTask {
     public BLASTHomologySearch(TaskOptions options, Map<String, GeneProduct> map) {
         super(options);
         this.map = map;
+
+        // tell the update manager what to update
+        addAll(new ArrayList<AnnotatedEntity>(map.values()));
+
+
     }
 
     @Override
