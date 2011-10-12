@@ -119,7 +119,7 @@
             <name>BioJava repository</name>
             <url>http://www.biojava.org/download/maven/</url>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
