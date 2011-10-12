@@ -59,8 +59,8 @@ public class BlastReader {
     private Map<String, Integer> columnMap = new HashMap();
 
     public BlastReader() {
-        supportedFormats.add(7); // xml
-        supportedFormats.add(8); // tsv
+        supportedFormats.add(5); // xml
+        supportedFormats.add(6); // tsv
 
         int index = 0;
         for (String name : Arrays.asList("Query.ID", "Subject.ID", "Perc.Ident", "Aln.Len",
@@ -72,15 +72,17 @@ public class BlastReader {
 
     public void load(Map<String, GeneProduct> products, File outputFile, Integer format, String version, TaskOptions options) throws IOException, XMLStreamException {
 
+        LOGGER.info("parsing blast file: " + outputFile + " outfmt: " + format + " version: " + version);
+
         if (supportedFormats.contains(format) == false) {
             throw new IllegalParameterException("Unsupported format " + format
                                                 + ". Currently supported:" + supportedFormats);
         } else {
             switch (format) {
-                case 7:
+                case 5:
                     loadFromXML(products, outputFile.getAbsolutePath(), version, options);
                     break;
-                case 8:
+                case 6:
                     loadFromTSV(products, new FileReader(outputFile), version, options);
                     break;
             }
@@ -130,19 +132,20 @@ public class BlastReader {
 
     public void loadFromXML(Map<String, ? extends AnnotatedEntity> entities, String filename, String version, TaskOptions options) throws XMLStreamException, FileNotFoundException {
 
-        LOGGER.info("Parsing blast xml output");
+        LOGGER.info("Begun parsing blast xml output");
 
         XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
         xmlif.setProperty(
                 XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES,
                 Boolean.FALSE);
+        xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
         xmlif.setProperty(
                 XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES,
                 Boolean.TRUE);
         xmlif.setProperty(
                 XMLInputFactory.IS_COALESCING,
                 Boolean.FALSE);
-        xmlif.configureForSpeed();
+        xmlif.configureForLowMemUsage();
 
 
         XMLStreamReader2 xmlr = (XMLStreamReader2) xmlif.createXMLStreamReader(filename, new FileInputStream(filename));

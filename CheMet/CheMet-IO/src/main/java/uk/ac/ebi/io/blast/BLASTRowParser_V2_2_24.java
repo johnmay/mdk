@@ -39,8 +39,9 @@ public class BLASTRowParser_V2_2_24 implements BLASTRowParser {
         String query = row[0];
         String subject = row[1];
 
-        float percentage = Float.parseFloat(row[2]);
         int length = Integer.parseInt(row[3]);
+        int identity = (int) Float.parseFloat(row[2]) * length;
+
 
         int mismatch = Integer.parseInt(row[4]);
         int gaps = Integer.parseInt(row[5]);
@@ -49,11 +50,11 @@ public class BLASTRowParser_V2_2_24 implements BLASTRowParser {
         int queryEnd = Integer.parseInt(row[7]);
         int subjectStart = Integer.parseInt(row[8]);
         int subjectEnd = Integer.parseInt(row[9]);
-        
+
         double exepected = Double.parseDouble(row[10]);
         double bit = Double.parseDouble(row[11]);
 
-        return new LocalAlignment(query, subject, percentage, length, queryStart, queryEnd, subjectStart, subjectEnd, exepected, bit);
+        return new LocalAlignment(query, subject, identity, 0, length, queryStart, queryEnd, subjectStart, subjectEnd, exepected, bit);
 
     }
 }

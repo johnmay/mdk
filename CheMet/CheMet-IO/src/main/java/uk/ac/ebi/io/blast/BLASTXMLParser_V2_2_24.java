@@ -30,24 +30,12 @@ import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.TaskOptions;
-import uk.ac.ebi.io.blast.xml.setters.AlignmentSequenceSetter;
-import uk.ac.ebi.io.blast.xml.setters.AlignmentSetter;
-import uk.ac.ebi.io.blast.xml.setters.BitScoreSetter;
-import uk.ac.ebi.io.blast.xml.setters.ExpectedValueSetter;
-import uk.ac.ebi.io.blast.xml.setters.LengthSetter;
-import uk.ac.ebi.io.blast.xml.setters.PercentSetter;
-import uk.ac.ebi.io.blast.xml.setters.QueryEndSetter;
-import uk.ac.ebi.io.blast.xml.setters.QuerySequenceSetter;
-import uk.ac.ebi.io.blast.xml.setters.QueryStartSetter;
-import uk.ac.ebi.io.blast.xml.setters.SubjectEndSetter;
-import uk.ac.ebi.io.blast.xml.setters.SubjectSequenceSetter;
-import uk.ac.ebi.io.blast.xml.setters.SubjectSetter;
-import uk.ac.ebi.io.blast.xml.setters.SubjectStartSetter;
+import uk.ac.ebi.io.blast.xml.setters.*;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
  * @name    BLASTXMLParser_V2_2_24 - 2011.10.10 <br>
- *          Class description
+ *          Blast XML Parser for version 2 2 4
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -66,7 +54,8 @@ public class BLASTXMLParser_V2_2_24 implements BLASTXMLParser {
         setters.put("Hsp_query-to", new QueryEndSetter());
         setters.put("Hsp_hit-from", new SubjectStartSetter());
         setters.put("Hsp_hit-to", new SubjectEndSetter());
-        setters.put("Hsp_identity", new PercentSetter());
+        setters.put("Hsp_identity", new IdentitySetter());
+        setters.put("Hsp_positive", new PositiveSetter());
         setters.put("Hsp_qseq", new QuerySequenceSetter());
         setters.put("Hsp_hseq", new SubjectSequenceSetter());
         setters.put("Hsp_midline", new AlignmentSequenceSetter());
@@ -130,52 +119,6 @@ public class BLASTXMLParser_V2_2_24 implements BLASTXMLParser {
                             return alignment;
                         }
                     }
-
-//                    if (xmlr.getName().toString().equals("Hit_id")) {
-//                        xmlr.next();
-//                        alignment.setSubject(xmlr.getText());
-//
-//                    } else if (xmlr.getName().toString().equals("Hit_len")) {
-//                        xmlr.next();
-//                        alignment.setLength(Integer.parseInt(xmlr.getText()));
-//
-//                    } else if (xmlr.getName().toString().equals("Hsp_num")) {
-//                        xmlr.next();
-//                        if (xmlr.getText().equals("1") == false) {
-//                            LOGGER.error("Multiple HSPs detected. this is not handled");
-//                            // what we need is already loaded
-//                            return alignment;
-//                        }
-//                    } else if (xmlr.getName().toString().equals("Hsp_bit-score")) {
-//                        xmlr.next();
-//                        alignment.setBitScore(Double.parseDouble(xmlr.getText()));
-//
-//                    } else if (xmlr.getName().toString().equals("Hsp_evalue")) {
-//                        xmlr.next();
-//                        alignment.setExpected(Double.parseDouble(xmlr.getText()));
-//
-//                    } else if (xmlr.getName().toString().equals("Hsp_query-from")) {
-//                        xmlr.next();
-//                        alignment.setQueryStart(Integer.parseInt(xmlr.getText()));
-//
-//                    } else if (xmlr.getName().toString().equals("Hsp_query-to")) {
-//                        xmlr.next();
-//                        alignment.setQueryEnd(Integer.parseInt(xmlr.getText()));
-//
-//                    } else if (xmlr.getName().toString().equals("Hsp_hit-from")) {
-//                        xmlr.next();
-//                        alignment.setSubjectStart(Integer.parseInt(xmlr.getText()));
-//
-//                    } else if (xmlr.getName().toString().equals("Hsp_hit-to")) {
-//                        xmlr.next();
-//                        alignment.setSubjectEnd(Integer.parseInt(xmlr.getText()));
-//
-//                    }
-//                    else if (xmlr.getName().toString().equals("Hsp_identity")) {
-//                        xmlr.next();
-//                        alignment.setPercentage(Integer.parseInt(xmlr.getText())/alignment.getLength());
-//                    }
-
                     break;
                 case XMLEvent.END_ELEMENT:
                     if (name.equals("Hit")) {
