@@ -80,11 +80,6 @@ public class ConservationRenderer extends AlignmentRenderer {
     @Override
     public void render(LocalAlignment alignment, GeneProduct product, Graphics2D g2, Rectangle outerBounds, Rectangle innerBounds) {
 
-        // use the basic alignment if the sequence is null
-        if (alignment.getAlignmentSequence() == null) {
-            super.render(alignment, product, g2, outerBounds, innerBounds);
-        }
-
         g2.setColor(super.color.getBackgroundColor());
         g2.fill(outerBounds);
 
