@@ -84,6 +84,10 @@ public abstract class CommandLineMain
         return cmdLine;
     }
 
+    public boolean hasOption(String option){
+        return getCommandLine().hasOption(option);
+    }
+
     /**
      * Convenience method for accessing a file from the parsed options. Note the method does not check if
      * the file exists
