@@ -189,6 +189,14 @@ public class LocalAlignment
         this.alignmentSequence = alignmentSequence;
     }
 
+    /**
+     * Returns true if query, subject and alignment sequence are not null
+     * @return 
+     */
+    public boolean hasSequences(){
+        return querySequence != null && alignmentSequence != null && subjectSequence != null;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(subject.length() * 2);

@@ -37,32 +37,32 @@ import uk.ac.ebi.metabolomes.io.flatfile.IntEnzXML;
  * Builds a table of every EC Number and UniProtKB/SwissProt and UniProtKB/TrEMBL
  * @author johnmay
  */
-public class BuildUniProtECMappingMain {
+public class CreateUniprotECTable {
 
     /**
      * @param args the command line arguments
      */
-    public static void main( String[] args ) throws IOException {
+    public static void main(String[] args) throws IOException {
 
         IntEnzXML intenz = IntEnzXML.getLoadedInstance();
-        List<ECNumber> ecCodes = new ArrayList<ECNumber>( intenz.getEnzymeSequenceMap().keySet() );
-        CSVWriter writer = new CSVWriter( new BufferedWriter( new FileWriter( "/nfs/nobackup/research/steinbeck/johnmay/uniprot_all_ec.tsv" ) ) );
+        List<ECNumber> ecCodes = new ArrayList<ECNumber>(intenz.getEnzymeSequenceMap().keySet());
+        CSVWriter writer = new CSVWriter(new BufferedWriter(new FileWriter("/databases/uniprot/uniprot_enzymecodes.tsv")), '\t', '\0');
+        writer.writeNext(new String[]{"Accession", "Enzyme.Nomenclature", "Reviewed"});
 
         double size = ecCodes.size();
 
-        for ( int i = 0; i < ecCodes.size(); i++ ) {
-
-            System.out.printf("[%.2f]", i/size );
-
+        for (int i = 0; i < ecCodes.size(); i++) {
+            System.out.printf("[%.2f]", i / size);
             List params = new ArrayList<NameValuePair>();
             UniProtSearchQuery query = new UniProtSearchQuery("");
-            query.setAndEnzymeCommissionNumber(ecCodes.get( i ).toString() );
-            params.add( new BasicNameValuePair( "query" , query.buildQuery()));
-            params.add( new BasicNameValuePair( "format" , "tab" ) );
-            params.add( new BasicNameValuePair( "columns" , "id,ec,reviewed" ) );
-            HttpEntity entity = UniProtSearch.getInstance().search( params );
-            CSVReader reader = new CSVReader( new BufferedReader( new InputStreamReader( entity.getContent() ) ) );
-            writer.writeAll( reader.readAll() );
+            query.setAndEnzymeCommissionNumber(ecCodes.get(i).toString());
+            params.add(new BasicNameValuePair("query", query.buildQuery()));
+            params.add(new BasicNameValuePair("format", "tab"));
+            params.add(new BasicNameValuePair("columns", "id,ec,reviewed"));
+            HttpEntity entity = UniProtSearch.getInstance().search(params);
+            CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(entity.getContent())));
+            reader.readNext(); // discard header
+            writer.writeAll(reader.readAll());
 
         }
     }

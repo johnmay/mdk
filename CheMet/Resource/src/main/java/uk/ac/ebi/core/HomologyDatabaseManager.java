@@ -41,10 +41,10 @@ public class HomologyDatabaseManager {
     private HomologyDatabaseManager() {
 
         File blast = DatabaseProperties.getInstance().getFile("blast.db.root");
-        if (new File(blast, "swissprot.pal").exists()) {
-            nameToFileMap.put("SwissProt", new File(blast, "swissprot"));
+        if (new File(blast, "uniprot_sprot.pin").exists()) {
+            nameToFileMap.put("SwissProt", new File(blast, "uniprot_sprot"));
         }
-        if (new File(blast, "nr.pal").exists()) {
+        if (new File(blast, "nr.pin").exists()) {
             nameToFileMap.put("Non-redundant", new File(blast, "nr"));
         }
 
