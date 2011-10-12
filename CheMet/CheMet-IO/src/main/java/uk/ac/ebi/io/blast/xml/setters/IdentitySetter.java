@@ -31,10 +31,11 @@ import uk.ac.ebi.observation.sequence.LocalAlignment;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class PercentSetter implements AlignmentSetter {
+public class IdentitySetter implements AlignmentSetter {
 
     public void set(LocalAlignment alignment, XMLStreamReader2 xmlr) throws XMLStreamException {
         xmlr.next();
-        alignment.setPercentage(Integer.parseInt(xmlr.getText()) / alignment.getLength());
+        alignment.setIdentity(Integer.parseInt(xmlr.getText()));
     }
+
 }

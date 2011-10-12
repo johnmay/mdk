@@ -21,6 +21,7 @@
 package uk.ac.ebi.io.blast.xml.setters;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
@@ -34,8 +35,19 @@ import uk.ac.ebi.observation.sequence.LocalAlignment;
 public class QuerySequenceSetter implements AlignmentSetter {
 
     public void set(LocalAlignment alignment, XMLStreamReader2 xmlr) throws XMLStreamException {
-        xmlr.next();
-        alignment.setBitScore(Double.parseDouble(xmlr.getText()));
-    }
 
+        StringBuilder sb = new StringBuilder(200);
+
+        // read until the end of the element
+
+        while (xmlr.hasNext()) {
+            int eventType = xmlr.next();
+            if (eventType == XMLEvent.END_ELEMENT) {
+                alignment.setQuerySequence(sb.toString());
+                return;
+            }
+            sb.append(xmlr.getText());
+
+        }
+    }
 }
