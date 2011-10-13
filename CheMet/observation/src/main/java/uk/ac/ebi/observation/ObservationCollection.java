@@ -25,9 +25,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.TaskOptions;
-import uk.ac.ebi.observation.parameters.TaskDescription;
 
 /**
  * ObservationCollection.java
@@ -148,15 +147,15 @@ public class ObservationCollection {
 //        return get( BlastHit.class );
 //    }
     // map of task description -> observation and task type (byte index) -> observation
-    private Multimap<TaskOptions, Observation> taskMap = ArrayListMultimap.create();
+    private Multimap<AnnotatedEntity, Observation> taskMap = ArrayListMultimap.create();
     private Multimap<Byte, Observation> typeMap = ArrayListMultimap.create();
 
     public ObservationCollection() {
     }
 
     public boolean add(Observation observation) {
-        TaskOptions taskDescription = observation.getTaskOptions();
-        taskMap.put(taskDescription, observation);
+        AnnotatedEntity source = observation.getSource();
+        taskMap.put(source, observation);
         return typeMap.put(observation.getIndex(), observation);
     }
 
@@ -169,7 +168,7 @@ public class ObservationCollection {
     }
 
     public boolean remove(Observation observation) {
-        taskMap.remove(observation.getTaskOptions(), observation);
+        taskMap.remove(observation.getSource(), observation);
         return typeMap.remove(observation.getIndex(), observation);
     }
 
@@ -184,12 +183,12 @@ public class ObservationCollection {
 
     public void writeExternal(ObjectOutput out) throws IOException {
 
-        List<TaskOptions> opts = new ArrayList(taskMap.keySet());
+        List<AnnotatedEntity> sources = new ArrayList(taskMap.keySet());
 
         out.writeInt(taskMap.keySet().size());
 
-        for (TaskOptions opt : opts) {
-            opt.writeExternal(out);
+        for (AnnotatedEntity opt : sources) {
+            out.writeObject(opt);
         }
 
         out.writeInt(typeMap.values().size());
@@ -198,7 +197,7 @@ public class ObservationCollection {
             out.writeInt(c.size());
             out.writeByte(index);
             for (Observation o : c) {
-                o.writeExternal(out,opts);
+                o.writeExternal(out, sources);
             }
         }
     }
@@ -207,11 +206,9 @@ public class ObservationCollection {
 
 
         int nTaskOptions = in.readInt();
-        List<TaskOptions> options = new ArrayList();
-        while(nTaskOptions > options.size()){
-            TaskOptions opts = new TaskDescription();
-            opts.readExternal(in);
-            options.add(opts);
+        List<AnnotatedEntity> sources = new ArrayList();
+        while(nTaskOptions > sources.size()){
+            sources.add((AnnotatedEntity) in.readObject());
         }
         
         int nObservations = in.readInt();
@@ -222,9 +219,9 @@ public class ObservationCollection {
             int n = in.readInt();
             Byte index = in.readByte();
             for (int j = 0; j < n; j++) {
-                Observation observation = factory.readExternal(index, in, options);
+                Observation observation = factory.readExternal(index, in, sources);
                 typeMap.put(index, observation);
-                taskMap.put(observation.getTaskOptions(), observation);
+                taskMap.put(observation.getSource(), observation);
             }
         }
 

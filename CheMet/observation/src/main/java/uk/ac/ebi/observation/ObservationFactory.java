@@ -25,11 +25,10 @@ import java.io.ObjectInput;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.List;
-import uk.ac.ebi.interfaces.Annotation;
 import org.apache.log4j.Logger;
 
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
@@ -108,7 +107,7 @@ public class ObservationFactory {
         return obs;
     }
 
-    public Observation readExternal(Byte index, ObjectInput in, List<TaskOptions> options) throws IOException, ClassNotFoundException {
+    public Observation readExternal(Byte index, ObjectInput in, List<AnnotatedEntity> options) throws IOException, ClassNotFoundException {
         Observation obs = ofIndex(index);
         obs.readExternal(in, options);
         return obs;

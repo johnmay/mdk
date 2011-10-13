@@ -26,7 +26,7 @@ import java.io.ObjectOutput;
 import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.TaskOptions;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
@@ -204,9 +204,9 @@ public class LocalAlignment
     }
 
     @Override
-    public void readExternal(ObjectInput in, List<TaskOptions> options) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in, List<AnnotatedEntity> sources) throws IOException, ClassNotFoundException {
 
-        super.readExternal(in, options);
+        super.readExternal(in, sources);
         query = in.readUTF();
         subject = in.readUTF();
 
@@ -233,9 +233,9 @@ public class LocalAlignment
     }
 
     @Override
-    public void writeExternal(ObjectOutput out, List<TaskOptions> options) throws IOException {
+    public void writeExternal(ObjectOutput out, List<AnnotatedEntity> sources) throws IOException {
 
-        super.writeExternal(out, options);
+        super.writeExternal(out, sources);
         out.writeUTF(query);
         out.writeUTF(subject);
 

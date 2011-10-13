@@ -20,6 +20,9 @@
  */
 package uk.ac.ebi.interfaces;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.Set;
 
@@ -103,5 +106,8 @@ public interface AnnotatedEntity extends ReconstructionEntity {
      * @return whether the underlying collection was modified
      */
     public boolean removeObservation(Observation observation);
-    
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException;
+
+    public void writeExternal(ObjectOutput out) throws IOException;
 }

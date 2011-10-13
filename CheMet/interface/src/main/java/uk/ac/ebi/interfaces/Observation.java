@@ -31,12 +31,12 @@ public interface Observation extends Descriptor {
      */
     public void accept(ObservationVisitor visitor);
 
-    public TaskOptions getTaskOptions();
+    public AnnotatedEntity getSource();
 
     public Observation getInstance();
 
-    public void writeExternal(ObjectOutput out, List<TaskOptions> tasks) throws IOException;
+    public void writeExternal(ObjectOutput out, List<AnnotatedEntity> sources) throws IOException;
 
-    public void readExternal(ObjectInput in, List<TaskOptions> tasks) throws IOException, ClassNotFoundException;
+    public void readExternal(ObjectInput in, List<AnnotatedEntity> sources) throws IOException, ClassNotFoundException;
 
 }

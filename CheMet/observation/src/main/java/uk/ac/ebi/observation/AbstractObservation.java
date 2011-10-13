@@ -27,6 +27,7 @@ import java.io.ObjectOutput;
 import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractDescriptor;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.interfaces.vistors.ObservationVisitor;
@@ -43,7 +44,7 @@ public abstract class AbstractObservation
         implements Observation, Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractObservation.class);
-    private TaskOptions taskOptions;
+    private AnnotatedEntity source;
 
     public AbstractObservation() {
         super(ObservationLoader.getInstance());
@@ -61,15 +62,12 @@ public abstract class AbstractObservation
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /**
-     * Returns info the task that created this observation
-     */
-    public TaskOptions getTaskOptions() {
-        return taskOptions;
+    public void setSource(AnnotatedEntity source) {
+        this.source = source;
     }
 
-    public void setTaskOptions(TaskOptions options){
-        taskOptions = options;
+    public AnnotatedEntity getSource() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public abstract Observation getInstance();
@@ -80,12 +78,12 @@ public abstract class AbstractObservation
     public void writeExternal(ObjectOutput out) throws IOException {
     }
 
-    public void readExternal(ObjectInput in, List<TaskOptions> options) throws IOException, ClassNotFoundException {
-        taskOptions = (TaskOptions) options.get(in.readInt());
+    public void readExternal(ObjectInput in, List<AnnotatedEntity> options) throws IOException, ClassNotFoundException {
+        source = (AnnotatedEntity) options.get(in.readInt());
     }
 
     @Override
-    public void writeExternal(ObjectOutput out, List<TaskOptions> options) throws IOException {
-        out.writeInt(options.indexOf(taskOptions));
+    public void writeExternal(ObjectOutput out, List<AnnotatedEntity> options) throws IOException {
+        out.writeInt(options.indexOf(source));
     }
 }
