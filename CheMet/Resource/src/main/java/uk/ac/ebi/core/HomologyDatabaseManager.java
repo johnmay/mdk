@@ -44,6 +44,9 @@ public class HomologyDatabaseManager {
         if (new File(blast, "uniprot_sprot.pin").exists()) {
             nameToFileMap.put("SwissProt", new File(blast, "uniprot_sprot"));
         }
+        if (new File(blast, "uniprot_sprot_enzymes.pin").exists()) {
+            nameToFileMap.put("Enzymes (SwissProt)", new File(blast, "uniprot_sprot_enzymes"));
+        }
         if (new File(blast, "nr.pin").exists()) {
             nameToFileMap.put("Non-redundant", new File(blast, "nr"));
         }

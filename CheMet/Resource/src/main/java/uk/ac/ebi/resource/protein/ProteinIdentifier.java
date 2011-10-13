@@ -1,4 +1,3 @@
-
 /**
  * ProteinIdentifier.java
  *
@@ -21,9 +20,9 @@
  */
 package uk.ac.ebi.resource.protein;
 
+import java.util.LinkedList;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-
 
 /**
  *          ProteinIdentifier – 2011.09.14 <br>
@@ -33,21 +32,25 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author  $Author$ (this version)
  */
 public abstract class ProteinIdentifier
-  extends AbstractIdentifier {
+        extends AbstractIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(ProteinIdentifier.class);
 
-
     public ProteinIdentifier() {
     }
-
 
     public ProteinIdentifier(String accession) {
         super(accession);
     }
 
+    /**
+     * Resolve the identifier from a given list of tokens.
+     */
+    public abstract LinkedList<String> resolve(LinkedList<String> tokens);
 
 
-
+    /**
+     * Returns the header code for the sequence e.g. sp of swissprot, tr for trembl
+     */
+    public abstract String getHeaderCode();
 }
-

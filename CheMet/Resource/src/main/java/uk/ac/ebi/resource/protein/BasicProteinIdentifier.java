@@ -1,4 +1,3 @@
-
 /**
  * BasicProteinIdentifier.java
  *
@@ -21,8 +20,8 @@
  */
 package uk.ac.ebi.resource.protein;
 
+import java.util.LinkedList;
 import org.apache.log4j.Logger;
-
 
 /**
  *          BasicProteinIdentifier – 2011.09.14 <br>
@@ -32,19 +31,16 @@ import org.apache.log4j.Logger;
  * @author  $Author$ (this version)
  */
 public class BasicProteinIdentifier
-  extends ProteinIdentifier {
+        extends ProteinIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicProteinIdentifier.class);
-
 
     public BasicProteinIdentifier() {
     }
 
-
     public BasicProteinIdentifier(String accession) {
         super(accession);
     }
-
 
     /**
      * @inheritDoc
@@ -54,6 +50,19 @@ public class BasicProteinIdentifier
         return new BasicProteinIdentifier();
     }
 
+    @Override
+    public LinkedList<String> resolve(LinkedList<String> tokens) {
+        String database = tokens.get(1); // store?
+        setAccession(tokens.get(2));
+        tokens.removeFirst();
+        tokens.removeFirst();
+        tokens.removeFirst();
+        return tokens;
 
+    }
+
+    @Override
+    public String getHeaderCode() {
+        return "gnl";
+    }
 }
-

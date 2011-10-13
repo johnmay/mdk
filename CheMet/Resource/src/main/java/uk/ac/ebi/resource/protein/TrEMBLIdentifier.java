@@ -1,4 +1,3 @@
-
 /**
  * TrEMBLIdentifier.java
  *
@@ -21,9 +20,9 @@
  */
 package uk.ac.ebi.resource.protein;
 
+import java.util.LinkedList;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.IdentifierDescription;
-
 
 /**
  *          TrEMBLIdentifier – 2011.09.14 <br>
@@ -33,21 +32,18 @@ import uk.ac.ebi.resource.IdentifierDescription;
  * @author  $Author$ (this version)
  */
 public class TrEMBLIdentifier
-  extends UniProtIdentifier {
+        extends UniProtIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(TrEMBLIdentifier.class);
     private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
-      TrEMBLIdentifier.class);
-
+            TrEMBLIdentifier.class);
 
     public TrEMBLIdentifier() {
     }
 
-
     public TrEMBLIdentifier(String identifier) {
         super(identifier);
     }
-
 
     /**
      * @inheritDoc
@@ -57,7 +53,6 @@ public class TrEMBLIdentifier
         return new TrEMBLIdentifier();
     }
 
-
     /**
      * @inheritDoc
      */
@@ -66,5 +61,28 @@ public class TrEMBLIdentifier
         return DESCRIPTION.index;
     }
 
+    @Override
+    public UniProtIdentifier.Status getStatus() {
+        return UniProtIdentifier.Status.UNREVIEWED;
+    }
 
+    @Override
+    public LinkedList<String> resolve(LinkedList<String> tokens) {
+        setAccession(tokens.get(1));
+        String name = tokens.get(2); // store?
+        tokens.removeFirst();
+        tokens.removeFirst();
+        tokens.removeFirst();
+
+        return tokens;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getHeaderCode() {
+        return "tr";
+    }
 }

@@ -1,4 +1,3 @@
-
 /**
  * SwissProtIdentifier.java
  *
@@ -21,9 +20,9 @@
  */
 package uk.ac.ebi.resource.protein;
 
+import java.util.LinkedList;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.IdentifierDescription;
-
 
 /**
  *          SwissProtIdentifier – 2011.09.14 <br>
@@ -33,21 +32,18 @@ import uk.ac.ebi.resource.IdentifierDescription;
  * @author  $Author$ (this version)
  */
 public class SwissProtIdentifier
-  extends UniProtIdentifier {
+        extends UniProtIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(SwissProtIdentifier.class);
     private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
-      SwissProtIdentifier.class);
-
+            SwissProtIdentifier.class);
 
     public SwissProtIdentifier() {
     }
 
-
     public SwissProtIdentifier(String identifier) {
         super(identifier);
     }
-
 
     /**
      * @inheritDoc
@@ -65,6 +61,27 @@ public class SwissProtIdentifier
         return DESCRIPTION.index;
     }
 
+    @Override
+    public UniProtIdentifier.Status getStatus() {
+        return UniProtIdentifier.Status.REVIEWED;
+    }
 
+    @Override
+    public LinkedList<String> resolve(LinkedList<String> tokens) {
+        setAccession(tokens.get(1));
+        String name = tokens.get(2); // store?
+        tokens.removeFirst();
+        tokens.removeFirst();
+        tokens.removeFirst();
+
+        return tokens;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getHeaderCode() {
+        return "sp";
+    }
 }
-

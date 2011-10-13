@@ -23,8 +23,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
@@ -39,9 +44,9 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
+import uk.ac.ebi.resource.protein.ProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 /**
@@ -59,7 +64,6 @@ public class IdentifierFactory {
     private List<Identifier> supportedIdentifiers = new ArrayList<Identifier>(Arrays.asList(
             new ChEBIIdentifier(),
             new KEGGCompoundIdentifier(),
-            new UniProtIdentifier(),
             new TrEMBLIdentifier(),
             new SwissProtIdentifier(),
             new Taxonomy(),
@@ -71,6 +75,10 @@ public class IdentifierFactory {
             new DrugBankIdentifier(),
             new HMDBIdentifier(),
             new InChI()));
+    private List<ProteinIdentifier> proteinIdentifiers = Arrays.asList(new BasicProteinIdentifier(),
+                                                                       new TrEMBLIdentifier(),
+                                                                       new SwissProtIdentifier());
+    private Map<String, ProteinIdentifier> proteinIdMap = new HashMap();
 
     public List<Identifier> getSupportedIdentifiers() {
         return supportedIdentifiers;
@@ -80,6 +88,12 @@ public class IdentifierFactory {
         for (Identifier identifier : supportedIdentifiers) {
             identifiers[identifier.getIndex()] = identifier;
         }
+
+
+        for (ProteinIdentifier id : proteinIdentifiers) {
+            proteinIdMap.put(id.getHeaderCode(), id);
+        }
+
     }
 
     public static class IdentifierFactoryHolder {
@@ -91,7 +105,29 @@ public class IdentifierFactory {
         return IdentifierFactoryHolder.INSTANCE;
     }
 
-    
+    /**
+     * Resolves a sequence header e.g. sp|Q38483|EKFF_EKH to one of our identifiers
+     */
+    public Set<Identifier> resolveSequenceHeader(String header) {
+
+        Set<Identifier> idSet = new HashSet();
+        LinkedList<String> tokens = new LinkedList(Arrays.asList(header.split("\\|")));
+
+        while (tokens.size() > 0) {
+            String key = tokens.get(0);
+            if (proteinIdMap.containsKey(key)) {
+                ProteinIdentifier id = (ProteinIdentifier) proteinIdMap.get(key).newInstance();
+                tokens = id.resolve(tokens);
+                idSet.add(id);
+            } else {
+                tokens.removeFirst();
+            }
+        }
+
+        return idSet;
+
+    }
+
     /**
      * Builds an identifier given the accession
      * Uses the identifier parse method to validate ids (slower)
