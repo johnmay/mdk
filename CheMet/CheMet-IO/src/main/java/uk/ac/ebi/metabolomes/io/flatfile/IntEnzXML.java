@@ -16,6 +16,7 @@ import uk.ac.ebi.metabolomes.resource.IntEnzDatabaseProperties;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
+import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 
 /**
  * IntEnzXML.java
@@ -153,7 +154,7 @@ public class IntEnzXML {
 
         // could put into a test class
         IntEnzXML iex = IntEnzXML.getLoadedInstance();
-        List<ECNumber> ecs = iex.getECNumbers( new UniProtIdentifier( "P41747" ) );
+        List<ECNumber> ecs = iex.getECNumbers( new SwissProtIdentifier( "P41747" ) );
         System.out.println( ecs );
 
         // query

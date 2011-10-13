@@ -135,7 +135,7 @@ public class HomologySearchFactory {
                 ProteinProduct protein = (ProteinProduct) p;
                 ProteinSequence sequence = protein.getSequence();
 
-                sequence.setAccession(new AccessionID(protein.getAccession())); // ensure the output has matching ids
+                sequence.setOriginalHeader(protein.getAccession()); // ensure the output has matching ids
 
                 if (accessionMap.containsKey(protein.getAccession())) {
                     throw new InvalidParameterException("Clashing protein accessions: " + protein.getAccession() + " sequence will not be used in search");

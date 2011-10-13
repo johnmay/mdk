@@ -72,7 +72,7 @@ public class BlastReader {
 
     public void load(Map<String, GeneProduct> products, File outputFile, Integer format, String version, TaskOptions options) throws IOException, XMLStreamException {
 
-        LOGGER.info("parsing blast file: " + outputFile + " outfmt: " + format + " version: " + version);
+        LOGGER.debug("parsing blast file: " + outputFile + " outfmt: " + format + " version: " + version);
 
         if (supportedFormats.contains(format) == false) {
             throw new IllegalParameterException("Unsupported format " + format
@@ -151,6 +151,7 @@ public class BlastReader {
         XMLStreamReader2 xmlr = (XMLStreamReader2) xmlif.createXMLStreamReader(filename, new FileInputStream(filename));
 
         BLASTXMLParser parser = new BLASTXMLParser_V2_2_24();
+        int iterations = 0;
         long start = System.currentTimeMillis();
         while (xmlr.hasNext()) {
             int eventType = xmlr.next();
@@ -158,11 +159,12 @@ public class BlastReader {
                 case XMLEvent.START_ELEMENT:
                     if (xmlr.getName().toString().equals("Iteration")) {
                         parser.parse(entities, options, xmlr);
+                        iterations++;
                     }
                     break;
             }
         }
         long end = System.currentTimeMillis();
-        System.out.println("Completed parsing in " + (end - start) + " ms ");
+        LOGGER.debug("Completed parsing " + iterations + " iterations in " + (end - start) + " ms ");
     }
 }

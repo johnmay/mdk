@@ -55,7 +55,7 @@ public class BLASTHomologySearch extends RunnableTask {
         this.map = map;
 
         // tell the update manager what to update
-        addAll(new ArrayList<AnnotatedEntity>(map.values()));
+        addAll(map.values());
 
 
     }
@@ -99,13 +99,14 @@ public class BLASTHomologySearch extends RunnableTask {
 
             String version = Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastp.version", "");
 
-            System.out.println("format:" + format);
             // load results into object
             new BlastReader().load(map, output, format, version, getOptions());
+            setCompletedStatus();
 
         } catch (Exception ex) {
             LOGGER.info("An error occured: " + ex.getMessage());
             ex.printStackTrace();
+            setErrorStatus();
         }
 
     }

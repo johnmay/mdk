@@ -55,7 +55,7 @@
             <artifactId>biojava3-core</artifactId>
             <groupId>org.biojava</groupId>
             <type>jar</type>
-            <version>3.0.1</version>
+            <version>3.0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.sbml</groupId>

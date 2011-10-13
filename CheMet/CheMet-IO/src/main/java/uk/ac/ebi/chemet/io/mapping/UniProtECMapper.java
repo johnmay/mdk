@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 /**
@@ -59,7 +60,7 @@ public class UniProtECMapper
         if ( id instanceof UniProtIdentifier ) {
             return ( UniProtIdentifier ) id;
         }
-        return new UniProtIdentifier( keyString );
+        return new SwissProtIdentifier( keyString );
     }
 
     @Override

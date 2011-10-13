@@ -24,7 +24,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 

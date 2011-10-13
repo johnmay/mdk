@@ -80,7 +80,10 @@ public class BLASTXMLParser_V2_2_24 implements BLASTXMLParser {
                         // add to the entity if provided
                         if (entities.containsKey(queryIdentifier)) {
                             entities.get(queryIdentifier).addObservation(alignment);
+                        } else {
+                            LOGGER.error("No match found in mapped entries for " + queryIdentifier + " current keys are " + entities.keySet());
                         }
+
                         alignments.add(alignment);
                     } else if (name.equals("Iteration_query-def")) {
                         xmlr.next();

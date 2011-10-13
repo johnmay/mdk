@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
 import uk.ac.ebi.metabolomes.run.TaskStatus;
@@ -73,8 +73,12 @@ public abstract class RunnableTask
      * @param entity
      * @return
      */
-    public boolean addAll(Collection<AnnotatedEntity> entities) {
-        return entities.addAll(entities);
+    public boolean addAll(Collection<? extends AnnotatedEntity> entities) {
+        boolean changed = false;
+        for (AnnotatedEntity entity : entities) {
+            changed = add(entity) || changed;
+        }
+        return changed;
     }
 
     /**
