@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.DNASequence;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
  * @name    Gene - 2011.10.07 <br>

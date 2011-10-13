@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Stack;
 import java.util.prefs.Preferences;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
  * 

@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.Observation;
 
 /**

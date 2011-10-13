@@ -29,7 +29,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 /**

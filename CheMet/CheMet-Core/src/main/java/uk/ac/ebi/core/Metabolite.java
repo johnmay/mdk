@@ -30,7 +30,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 

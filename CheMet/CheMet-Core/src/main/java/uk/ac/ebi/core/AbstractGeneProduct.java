@@ -29,7 +29,7 @@ import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.Observation;
 
 /**

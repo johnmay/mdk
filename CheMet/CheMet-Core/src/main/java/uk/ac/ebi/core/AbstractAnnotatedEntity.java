@@ -31,7 +31,7 @@ import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.observation.ObservationCollection;
 

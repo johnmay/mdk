@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.RNASequence;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
  * @name    RNAProduct - 2011.10.07 <br>

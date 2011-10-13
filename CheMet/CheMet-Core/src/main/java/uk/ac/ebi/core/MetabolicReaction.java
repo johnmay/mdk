@@ -26,7 +26,7 @@ import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
  *          MetabolicReaction – 2011.09.27 <br>
