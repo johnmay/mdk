@@ -28,9 +28,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.interfaces.TaskOptions;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.IdentifierFactory;
 
 /**

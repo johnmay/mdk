@@ -26,8 +26,8 @@ import java.io.ObjectOutput;
 import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Identifier;
 import uk.ac.ebi.interfaces.TaskOptions;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
  *          LocalAlignment – 2011.09.12 <br>
