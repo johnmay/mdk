@@ -32,10 +32,13 @@ import java.util.LinkedList;
  */
 public interface SequenceIdentifier extends Identifier {
 
-
     /**
      * Resolve the list of tokens in to a sequence identifier
      */
     public LinkedList<String> resolve(LinkedList<String> tokens);
 
+    /**
+     * Returns the header code for the sequence e.g. sp of swissprot, tr for trembl
+     */
+    public abstract String getHeaderCode();
 }
