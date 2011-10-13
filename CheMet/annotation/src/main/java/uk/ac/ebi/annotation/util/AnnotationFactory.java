@@ -36,6 +36,8 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.annotation.task.FileParameter;
+import uk.ac.ebi.annotation.task.Parameter;
 
 
 /**
@@ -79,7 +81,9 @@ public class AnnotationFactory {
                                                        CROSS_REFERENCE,
                                                        CLASSIFICATION,
                                                        ENZYME_CLASSIFICATION, CHEBI_CROSS_REFERENCE,
-                                                       new Subsystem()) ) {
+                                                       new Subsystem(),
+                                                       new FileParameter(),
+                                                       new Parameter()) ) {
 
                 constructors[annotation.getIndex()] = annotation.getClass().getConstructor();
                 instances[annotation.getIndex()] = annotation;
