@@ -36,6 +36,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
 
@@ -82,6 +83,7 @@ public class AnnotationFactory {
                                                        CLASSIFICATION,
                                                        ENZYME_CLASSIFICATION, CHEBI_CROSS_REFERENCE,
                                                        new Subsystem(),
+                                                       new ExecutableParameter(),
                                                        new FileParameter(),
                                                        new Parameter()) ) {
 
