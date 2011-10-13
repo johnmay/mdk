@@ -22,8 +22,6 @@
 package uk.ac.ebi.chemet.ws.exceptions;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Identifier;
-import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 
 
 /**

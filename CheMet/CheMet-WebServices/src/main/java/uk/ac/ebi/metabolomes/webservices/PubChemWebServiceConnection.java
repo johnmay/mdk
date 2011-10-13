@@ -37,7 +37,7 @@ import org.openscience.cdk.io.iterator.IteratingPCCompoundXMLReader;
 import org.xmlpull.v1.XmlPullParserException;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 public class PubChemWebServiceConnection extends ChemicalDBWebService {
 
