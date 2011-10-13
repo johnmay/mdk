@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.PrintStream;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 
 /**
@@ -362,18 +361,17 @@ public class ECNumber
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
         enzymeClass = in.readInt();
         enzymeSubClass = in.readInt();
         enzymeSubSubClass = in.readInt();
         enzymeEntry = in.readInt();
         preliminary = in.readBoolean();
+        setAccession(toString());
     }
 
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-        super.writeExternal(out);
         out.writeInt(enzymeClass);
         out.writeInt(enzymeSubClass);
         out.writeInt(enzymeSubSubClass);
