@@ -28,6 +28,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.io.blast.xml.setters.*;
@@ -61,7 +62,7 @@ public class BLASTXMLParser_V2_2_24 implements BLASTXMLParser {
         setters.put("Hsp_midline", new AlignmentSequenceSetter());
     }
 
-    public Collection<LocalAlignment> parse(Map<String, ? extends AnnotatedEntity> entities, TaskOptions options, XMLStreamReader2 xmlr) throws XMLStreamException {
+    public Collection<LocalAlignment> parse(Map<String, ? extends AnnotatedEntity> entities, RunnableTask source, XMLStreamReader2 xmlr) throws XMLStreamException {
 
         // System.out.println("Reading new iteration...");
         Collection<LocalAlignment> alignments = new ArrayList();
@@ -76,7 +77,7 @@ public class BLASTXMLParser_V2_2_24 implements BLASTXMLParser {
                         LocalAlignment alignment = getLocalAlignment(xmlr);
 
                         alignment.setQuery(queryIdentifier);
-                        alignment.setTaskOptions(options);
+                        alignment.setSource(source);
                         // add to the entity if provided
                         if (entities.containsKey(queryIdentifier)) {
                             entities.get(queryIdentifier).addObservation(alignment);

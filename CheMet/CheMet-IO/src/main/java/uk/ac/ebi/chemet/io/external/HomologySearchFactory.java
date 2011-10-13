@@ -30,15 +30,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
-import org.biojava3.core.sequence.AccessionID;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.io.FastaWriterHelper;
+import uk.ac.ebi.annotation.task.ExecutableParameter;
+import uk.ac.ebi.annotation.task.FileParameter;
+import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.chemet.exceptions.MissingPreferencesException;
 import uk.ac.ebi.core.HomologyDatabaseManager;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.observation.parameters.TaskDescription;
-import uk.ac.ebi.observation.parameters.TaskOption;
 import uk.ac.ebi.resource.TaskIdentifier;
 
 /**
@@ -101,11 +101,11 @@ public class HomologySearchFactory {
      * @return A runnable task to perform the blast search externally
      */
     public RunnableTask getBlastP(Collection<GeneProduct> products,
-                                     File database,
-                                     double expected,
-                                     int cpu,
-                                     int results,
-                                     int format) throws IOException, Exception {
+                                  File database,
+                                  double expected,
+                                  int cpu,
+                                  int results,
+                                  int format) throws IOException, Exception {
 
         String blastp = Preferences.userNodeForPackage(this.getClass()).get("blastp.path", null);
 
@@ -113,15 +113,7 @@ public class HomologySearchFactory {
             throw new MissingPreferencesException("No path found for blastp, please configure the user preference");
         }
 
-        TaskDescription options = new TaskDescription(new File(blastp),
-                                                      "BLASTP", "Local Sequence Homology", new TaskIdentifier(UUID.randomUUID().toString()));
 
-        options.add(new TaskOption("Database", "db", database.getAbsolutePath()));
-        options.add(new TaskOption("Expected value", "evalue", String.format("%e", expected)));
-        options.add(new TaskOption("Number of CPUs to use", "num_threads", Integer.toString(cpu)));
-        options.add(new TaskOption("Max results", "num_descriptions", Integer.toString(results))); // not sure if this is the correct param
-        options.add(new TaskOption("Max results", "num_alignments", Integer.toString(results))); // not sure if this is the correct param
-        options.add(new TaskOption("Output format", "outfmt", Integer.toString(format)));
 
 
         Map accessionMap = new HashMap(); // we need an id map incase some names change
@@ -129,32 +121,38 @@ public class HomologySearchFactory {
         Collection<ProteinSequence> sequences = new ArrayList();
 
         for (GeneProduct p : products) {
-
             if (p instanceof ProteinProduct) {
-
                 ProteinProduct protein = (ProteinProduct) p;
                 ProteinSequence sequence = protein.getSequence();
-
                 sequence.setOriginalHeader(protein.getAccession()); // ensure the output has matching ids
-
                 if (accessionMap.containsKey(protein.getAccession())) {
                     throw new InvalidParameterException("Clashing protein accessions: " + protein.getAccession() + " sequence will not be used in search");
                 } else {
                     accessionMap.put(protein.getAccession(), protein);
                     sequences.add(sequence);
                 }
-
             }
         }
 
-        File input = File.createTempFile("blastInput", ".fa");
+        File input = File.createTempFile("mnb-blast-input-", ".fa");
 
         FastaWriterHelper.writeProteinSequence(input, sequences);
 
+        RunnableTask task = new BLASTHomologySearch(accessionMap, new TaskIdentifier(UUID.randomUUID().toString()));
 
-        options.add(new TaskOption("Input file", "query", input.getAbsolutePath()));
-        options.add(new TaskOption("Output file", "out", File.createTempFile("blast", "").getAbsolutePath()));
+        // executable parameter
+        task.addAnnotation(new ExecutableParameter("BLASTP", "BlastP executable", new File(blastp)));
 
-        return new BLASTHomologySearch(options, accessionMap);
+        task.addAnnotation(new Parameter("Database", "The database to search", "-db", database.getAbsolutePath()));
+        task.addAnnotation(new Parameter("Expected value", "Thrshold for expexted value", "-evalue", String.format("%e", expected)));
+        task.addAnnotation(new Parameter("Threads", "The number of threads to split the task accross", "-num_threads", String.format("%e", expected)));
+        task.addAnnotation(new Parameter("N. Info", "Max", "-num_descriptions", Integer.toString(results)));
+        task.addAnnotation(new Parameter("N. Alignments", "Max", "-num_alignments", Integer.toString(results)));
+        task.addAnnotation(new Parameter("Format", "Thrshold for expexted value", "-outfmt", Integer.toString(format)));
+
+        task.addAnnotation(new FileParameter("Query", "The query file", "-query", input));
+        task.addAnnotation(new FileParameter("Output", "The output file", "-out", File.createTempFile("blast", "")));
+
+        return task;
     }
 }

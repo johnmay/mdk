@@ -118,13 +118,6 @@
             <id>biojava-maven-repo</id>
             <name>BioJava repository</name>
             <url>http://www.biojava.org/download/maven/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>interval:10080</updatePolicy> <!-- weekly -->
-            </releases>
         </repository>
         
         <repository>
@@ -152,15 +145,15 @@
             </snapshots>
         </repository>
         
-        <repository>
+       <!-- <repository>
             <id>ch-cam</id>
             <name>ch-cam</name>
             <url>http://maven.ch.cam.ac.uk/m2repo</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>interval:10080</updatePolicy> <!-- weekly -->
+                <updatePolicy>interval:10080</updatePolicy>
             </snapshots>
-        </repository>
+        </repository> -->
         <!--<repository>
             <id>rothamsted-bbsrc</id>
             <name>rothamsted-bbsrc</name>

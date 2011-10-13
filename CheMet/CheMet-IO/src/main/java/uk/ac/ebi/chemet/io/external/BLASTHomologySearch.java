@@ -22,13 +22,14 @@ package uk.ac.ebi.chemet.io.external;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.security.InvalidParameterException;
 import java.util.Map;
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.annotation.task.FileParameter;
+import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.interfaces.GeneProduct;
-import uk.ac.ebi.interfaces.TaskOptions;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.blast.BlastReader;
 import uk.ac.ebi.observation.parameters.TaskOption;
 
@@ -50,8 +51,8 @@ public class BLASTHomologySearch extends RunnableTask {
      * @param options
      * @param accessionMap A HashMap of query accessions to corresponding products
      */
-    public BLASTHomologySearch(TaskOptions options, Map<String, GeneProduct> map) {
-        super(options);
+    public BLASTHomologySearch(Map<String, GeneProduct> map, Identifier id) {
+        super(id, "BLASTP", "Local homology search");
         this.map = map;
 
         // tell the update manager what to update
@@ -70,6 +71,11 @@ public class BLASTHomologySearch extends RunnableTask {
 
     @Override
     public void run() {
+
+        if (isFinished()) {
+            // don't rerun
+            return;
+        }
 
 
         setRunningStatus();
@@ -93,14 +99,30 @@ public class BLASTHomologySearch extends RunnableTask {
     @Override
     public void postrun() {
         try {
-            TaskOption outputOption = (TaskOption) getOptions().getOptionMap().get("out");
-            File output = new File(outputOption.getValue());
-            Integer format = Integer.parseInt((String) ((TaskOption) getOptions().getOptionMap().get("outfmt")).getValue());
+
+            File output = null;
+            Integer format = null;
+
+            for (FileParameter param : getAnnotations(FileParameter.class)) {
+                if (param.getFlag().equals("-out")) {
+                    output = param.getValue();
+                }
+            }
+            for (Parameter param : getAnnotations(Parameter.class)) {
+                if (param.getFlag().equals("-outfmt")) {
+                    format = Integer.parseInt(param.toString());
+                }
+            }
+
+            // check for missing output... and outfmt..
+            if(output == null || format == null){
+                throw new InvalidParameterException("Output or format missing");
+            }
 
             String version = Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastp.version", "");
 
             // load results into object
-            new BlastReader().load(map, output, format, version, getOptions());
+            new BlastReader().load(map, output, format, version, this);
             setCompletedStatus();
 
         } catch (Exception ex) {

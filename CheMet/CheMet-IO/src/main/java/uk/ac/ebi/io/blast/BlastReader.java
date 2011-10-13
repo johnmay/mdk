@@ -39,10 +39,10 @@ import javax.xml.stream.events.XMLEvent;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.TaskOptions;
-import uk.ac.ebi.metabolomes.io.homology.BlastXML;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
@@ -70,7 +70,7 @@ public class BlastReader {
         }
     }
 
-    public void load(Map<String, GeneProduct> products, File outputFile, Integer format, String version, TaskOptions options) throws IOException, XMLStreamException {
+    public void load(Map<String, GeneProduct> products, File outputFile, Integer format, String version, RunnableTask task) throws IOException, XMLStreamException {
 
         LOGGER.debug("parsing blast file: " + outputFile + " outfmt: " + format + " version: " + version);
 
@@ -80,10 +80,10 @@ public class BlastReader {
         } else {
             switch (format) {
                 case 5:
-                    loadFromXML(products, outputFile.getAbsolutePath(), version, options);
+                    loadFromXML(products, outputFile.getAbsolutePath(), version, task);
                     break;
                 case 6:
-                    loadFromTSV(products, new FileReader(outputFile), version, options);
+                    loadFromTSV(products, new FileReader(outputFile), version, task);
                     break;
             }
         }
@@ -97,7 +97,7 @@ public class BlastReader {
      * @param version
      * @throws IOException
      */
-    public void loadFromTSV(Map<String, GeneProduct> products, Reader reader, String version, TaskOptions options) throws IOException {
+    public void loadFromTSV(Map<String, GeneProduct> products, Reader reader, String version, RunnableTask task) throws IOException {
 
         CSVReader tsvReader = new CSVReader(reader, '\t', '\0');
 
@@ -108,7 +108,7 @@ public class BlastReader {
         while ((row = tsvReader.readNext()) != null) {
 
             LocalAlignment alignment = parser.parse(row);
-            alignment.setTaskOptions(options); // set the options on the task
+            alignment.setSource(task); // set the options on the task
 
             GeneProduct product = products.get(alignment.getQuery());
 
@@ -130,7 +130,7 @@ public class BlastReader {
 
     }
 
-    public void loadFromXML(Map<String, ? extends AnnotatedEntity> entities, String filename, String version, TaskOptions options) throws XMLStreamException, FileNotFoundException {
+    public void loadFromXML(Map<String, ? extends AnnotatedEntity> entities, String filename, String version, RunnableTask task) throws XMLStreamException, FileNotFoundException {
 
         LOGGER.info("Begun parsing blast xml output");
 
@@ -158,7 +158,7 @@ public class BlastReader {
             switch (eventType) {
                 case XMLEvent.START_ELEMENT:
                     if (xmlr.getName().toString().equals("Iteration")) {
-                        parser.parse(entities, options, xmlr);
+                        parser.parse(entities, task, xmlr);
                         iterations++;
                     }
                     break;

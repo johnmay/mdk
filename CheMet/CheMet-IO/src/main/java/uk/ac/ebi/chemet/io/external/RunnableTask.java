@@ -4,17 +4,17 @@
  */
 package uk.ac.ebi.chemet.io.external;
 
+import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import uk.ac.ebi.annotation.task.ExecutableParameter;
+import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.TaskOptions;
-import uk.ac.ebi.metabolomes.descriptor.observation.JobParameters;
-import uk.ac.ebi.metabolomes.run.TaskStatus;
-import uk.ac.ebi.observation.parameters.TaskOption;
 
 /**
  * RunnableTask.java
@@ -27,34 +27,30 @@ public abstract class RunnableTask
         extends AbstractAnnotatedEntity
         implements Runnable {
 
-    private JobParameters parameters;
-    private TaskOptions options;
     private TaskStatus status = TaskStatus.QUEUED;
     public static final String BASE_TYPE = "Task";
-    private Date time;
+    private Date start = new Date();
+    private Date end;
     public Set<AnnotatedEntity> entities = new HashSet();
 
-    public RunnableTask(TaskOptions options, Identifier identifier, String abbreviation, String name) {
+    public RunnableTask(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
-        this.parameters = parameters;
-        this.status = status;
     }
 
     public RunnableTask(TaskOptions options) {
         super(options.getIdentifier(), options.getName(), options.getDescription());
-        this.options = options;
-    }
-
-    public TaskOptions getOptions() {
-        return options;
     }
 
     /**
-     * Returns the current elapsed time for task. If the task is completed then the completion time is return
+     * Returns the current elapsed time for task. If the task is completed
+     * then the completion time is return
      *
      */
     public Date getElapesedTime() {
-        return isFinished() ? time : new Date(System.currentTimeMillis() - options.getInitialisationDate().getTime());
+        long elapased = System.currentTimeMillis() - start.getTime();
+        return isFinished()
+               ? end
+               : new Date(elapased);
     }
 
     /**
@@ -81,6 +77,12 @@ public abstract class RunnableTask
         return changed;
     }
 
+    public Date getStart() {
+        return start;
+    }
+
+    
+
     /**
      * Returns a set of all entities added to the task
      */
@@ -88,34 +90,7 @@ public abstract class RunnableTask
         return entities;
     }
 
-    /**
-     * Use other constructor
-     * @param p
-     * @deprecated
-     */
-    @Deprecated
-    public RunnableTask(JobParameters p) {
-        this.status = TaskStatus.QUEUED;
-        this.parameters = p;
-    }
-
-    /**
-     * Accessor to the job parameters
-     * @return
-     */
-    public JobParameters getJobParameters() {
-        return parameters;
-    }
-
-    public void addParameter(String parameter,
-                             Object value) {
-        parameters.put(parameter, value);
-    }
-
     public abstract void prerun();
-
-    @Override
-    public abstract void run();
 
     public abstract void postrun();
 
@@ -139,12 +114,12 @@ public abstract class RunnableTask
     }
 
     public void setErrorStatus() {
-        time = getElapesedTime();
+        end = getElapesedTime();
         this.status = TaskStatus.ERROR;
     }
 
     public void setCompletedStatus() {
-        time = getElapesedTime();
+        end = getElapesedTime();
         this.status = TaskStatus.COMPLETED;
     }
 
@@ -160,19 +135,6 @@ public abstract class RunnableTask
         return new Thread(this);
     }
 
-    public String getTaskDescription() {
-        return "";
-    }
-
-    public String getTaskCommand() {
-        return "";
-    }
-
-    @Override
-    public String toString() {
-        return getTaskDescription() + ": " + getStatus();
-    }
-
     @Override
     public String getBaseType() {
         return BASE_TYPE;
@@ -183,12 +145,25 @@ public abstract class RunnableTask
      * an empty string is returned
      */
     public String getCommand() {
+
         StringBuilder sb = new StringBuilder(250);
-        sb.append(getOptions().getProgram().getAbsoluteFile()).append(" ");
-        for (TaskOption option : (Collection<TaskOption>) getOptions().getOptionMap().values()) {
-            sb.append(option.getFlagValuePair()).append(" ");
+
+        Collection<ExecutableParameter> execs = getAnnotations(ExecutableParameter.class);
+        if (execs.size() > 1 || execs.isEmpty()) {
+            throw new InvalidParameterException("ExecutableParamer should be unique to class but there are " + execs.size());
+        }
+
+        ExecutableParameter exec = execs.iterator().next();
+
+        sb.append(exec.getValue());
+
+        for (Parameter param : getAnnotationsExtending(Parameter.class)) {
+            if (param.equals(exec) == false) {
+                sb.append(param.getFlag()).append(" ").append(param.getValue()).append(" ");
+            }
         }
 
         return sb.toString();
+
     }
 }

@@ -16,6 +16,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.ac.ebi.chemet.io.external.BLASTHomologySearch;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.observation.parameters.TaskDescription;
@@ -63,6 +64,6 @@ public class BlastReaderTest {
     public void testLargeXML() throws XMLStreamException, FileNotFoundException {
         File largeXml = new File("/Users/johnmay/Desktop/blast4372477819469635580");
         Map<String, GeneProduct> products = new HashMap();
-        new BlastReader().loadFromXML(products, largeXml.getAbsolutePath(), "2.2.25", new TaskDescription());
+        new BlastReader().loadFromXML(products, largeXml.getAbsolutePath(), "2.2.25", new BLASTHomologySearch(products, null));
     }
 }

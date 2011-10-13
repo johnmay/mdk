@@ -24,8 +24,8 @@ import java.util.Collection;
 import java.util.Map;
 import javax.xml.stream.XMLStreamException;
 import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
@@ -37,5 +37,5 @@ import uk.ac.ebi.observation.sequence.LocalAlignment;
  */
 public interface BLASTXMLParser {
 
-    public Collection<LocalAlignment> parse(Map<String, ? extends AnnotatedEntity> entities, TaskOptions options, XMLStreamReader2 xmlr) throws XMLStreamException;
+    public Collection<LocalAlignment> parse(Map<String, ? extends AnnotatedEntity> entities, RunnableTask source, XMLStreamReader2 xmlr) throws XMLStreamException;
 }
