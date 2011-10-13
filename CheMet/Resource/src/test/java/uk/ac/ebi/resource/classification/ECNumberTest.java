@@ -9,7 +9,7 @@ import com.sun.source.tree.AssertTree;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import static org.junit.Assert.*;
 
 

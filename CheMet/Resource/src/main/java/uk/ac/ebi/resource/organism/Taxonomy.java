@@ -18,7 +18,7 @@ package uk.ac.ebi.resource.organism;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.organism.Kingdom;
 

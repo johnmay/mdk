@@ -25,7 +25,7 @@ import com.google.common.collect.HashMultimap;
 import java.io.*;
 import java.util.*;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.*;
 
 

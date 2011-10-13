@@ -23,7 +23,7 @@ package uk.ac.ebi.metabolomes.identifier;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.IdentifierDescription;
 import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
 

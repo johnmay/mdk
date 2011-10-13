@@ -31,7 +31,9 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
+import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
@@ -44,7 +46,6 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
-import uk.ac.ebi.resource.protein.ProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
@@ -75,10 +76,10 @@ public class IdentifierFactory {
             new DrugBankIdentifier(),
             new HMDBIdentifier(),
             new InChI()));
-    private List<ProteinIdentifier> proteinIdentifiers = Arrays.asList(new BasicProteinIdentifier(),
-                                                                       new TrEMBLIdentifier(),
-                                                                       new SwissProtIdentifier());
-    private Map<String, ProteinIdentifier> proteinIdMap = new HashMap();
+    private List<SequenceIdentifier> proteinIdentifiers = new ArrayList(Arrays.asList(new BasicProteinIdentifier(),
+                                                                                      new TrEMBLIdentifier(),
+                                                                                      new SwissProtIdentifier()));
+    private Map<String, SequenceIdentifier> proteinIdMap = new HashMap();
 
     public List<Identifier> getSupportedIdentifiers() {
         return supportedIdentifiers;
@@ -90,7 +91,7 @@ public class IdentifierFactory {
         }
 
 
-        for (ProteinIdentifier id : proteinIdentifiers) {
+        for (SequenceIdentifier id : proteinIdentifiers) {
             proteinIdMap.put(id.getHeaderCode(), id);
         }
 

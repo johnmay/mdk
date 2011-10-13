@@ -15,7 +15,7 @@
 
 package uk.ac.ebi.metabolomes.identifier;
 
-import uk.ac.ebi.interfaces.Identifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 
 /**

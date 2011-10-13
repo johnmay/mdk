@@ -29,7 +29,7 @@ import uk.ac.ebi.resource.IdentifierDescription;
  * @date Mar 21, 2011
  */
 public abstract class UniProtIdentifier
-        extends ProteinIdentifier
+        extends AbstractProteinIdentifier
         implements Externalizable {
 
     private static final org.apache.log4j.Logger logger =
@@ -45,7 +45,6 @@ public abstract class UniProtIdentifier
 
         REVIEWED, UNREVIEWED
     };
-
     private String name = "";
 
     public UniProtIdentifier() {
@@ -145,7 +144,4 @@ public abstract class UniProtIdentifier
     public void setName(String name) {
         this.name = name;
     }
-
-
-
 }
