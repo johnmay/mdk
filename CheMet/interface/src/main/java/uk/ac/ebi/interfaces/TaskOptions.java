@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.interfaces;
 
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;

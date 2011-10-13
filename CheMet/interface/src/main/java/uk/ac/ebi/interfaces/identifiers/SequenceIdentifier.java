@@ -1,7 +1,7 @@
 /**
- * ReconstructionEntity.java
+ * SequenceIdentifier.java
  *
- * 2011.10.10
+ * 2011.10.13
  *
  * This file is part of the CheMet library
  * 
@@ -18,40 +18,24 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.interfaces;
+package uk.ac.ebi.interfaces.identifiers;
 
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import java.util.LinkedList;
 
 /**
- * @name    ReconstructionEntity - 2011.10.10 <br>
- *          Interface description
+ * @name    SequenceIdentifier - 2011.10.13 <br>
+ *          A generic identifier describing a sequence.
+ *          The interfaces allows resolution of a sequence header
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface ReconstructionEntity {
-
-    public String getName();
-
-    public String getAbbreviation();
-
-    public Identifier getIdentifier();
-
-    public void setName(String name);
-
-    public void setAbbreviation(String abbreviation);
-
-    public void setIdentifier(Identifier identifier);
-
-    /**
-     * Access a string representation of the entity's identifier
-     */
-    public String getAccession();
+public interface SequenceIdentifier extends Identifier {
 
 
     /**
-     * Returns the base type of the entity e.g. Metabolite, Reaction, Gene, Gene-product
-     * @return
+     * Resolve the list of tokens in to a sequence identifier
      */
-    public String getBaseType();
+    public LinkedList<String> resolve(LinkedList<String> tokens);
+
 }
