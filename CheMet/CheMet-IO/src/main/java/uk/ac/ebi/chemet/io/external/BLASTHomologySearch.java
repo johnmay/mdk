@@ -92,6 +92,7 @@ public class BLASTHomologySearch extends RunnableTask {
         } catch (IOException ex) {
             setErrorStatus();
             LOGGER.info("IO Exception... add to messages");
+            ex.printStackTrace();
         }
 
     }

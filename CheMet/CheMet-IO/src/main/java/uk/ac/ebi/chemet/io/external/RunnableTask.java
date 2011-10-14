@@ -155,7 +155,7 @@ public abstract class RunnableTask
 
         ExecutableParameter exec = execs.iterator().next();
 
-        sb.append(exec.getValue());
+        sb.append(exec.getValue()).append(" ");
 
         for (Parameter param : getAnnotationsExtending(Parameter.class)) {
             if (param.equals(exec) == false) {

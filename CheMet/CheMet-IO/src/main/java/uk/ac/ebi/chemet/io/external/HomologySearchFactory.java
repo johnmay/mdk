@@ -134,7 +134,7 @@ public class HomologySearchFactory {
             }
         }
 
-        File input = File.createTempFile("mnb-blast-input-", ".fa");
+        File input = File.createTempFile("mnb-blast-input-", ".fasta");
 
         FastaWriterHelper.writeProteinSequence(input, sequences);
 
@@ -144,11 +144,11 @@ public class HomologySearchFactory {
         task.addAnnotation(new ExecutableParameter("BLASTP", "BlastP executable", new File(blastp)));
 
         task.addAnnotation(new Parameter("Database", "The database to search", "-db", database.getAbsolutePath()));
-        task.addAnnotation(new Parameter("Expected value", "Results above this thrshold will be ignored", "-evalue", String.format("%.1e", expected)));
-        task.addAnnotation(new Parameter("Threads", "The number of threads to split the task accross (CPUs)", "-num_threads", Integer.toString(cpu)));
-        task.addAnnotation(new Parameter("Number of Descriptions", "The maximum number of alignment to display", "-num_descriptions", Integer.toString(results)));
-        task.addAnnotation(new Parameter("Number of Alignments", "The maximum number of alignment to display", "-num_alignments", Integer.toString(results)));
-        task.addAnnotation(new Parameter("Output Format", "Format of blast outpu (4=tsv, 5=xml)", "-outfmt", Integer.toString(format)));
+        task.addAnnotation(new Parameter("Expected value", "Results above the specified threshold will be ignored", "-evalue", String.format("%.1e", expected)));
+        task.addAnnotation(new Parameter("Threads", "The number of threads to split the task accross", "-num_threads", Integer.toString(cpu)));
+        task.addAnnotation(new Parameter("Number of Descriptions", "The maximum number of descriptions to display", "-num_descriptions", Integer.toString(results)));
+        task.addAnnotation(new Parameter("Number of Alignments", "The maximum number of alignments to display", "-num_alignments", Integer.toString(results)));
+        task.addAnnotation(new Parameter("Output Format", "Format of blast output (4=tsv, 5=xml)", "-outfmt", Integer.toString(format)));
 
         task.addAnnotation(new FileParameter("Query File", "The query file", "-query", input));
         task.addAnnotation(new FileParameter("Output File", "The output file", "-out", File.createTempFile("blast", "")));
