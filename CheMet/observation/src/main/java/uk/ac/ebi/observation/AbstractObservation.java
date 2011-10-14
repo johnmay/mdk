@@ -67,7 +67,7 @@ public abstract class AbstractObservation
     }
 
     public AnnotatedEntity getSource() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.source;
     }
 
     public abstract Observation getInstance();
