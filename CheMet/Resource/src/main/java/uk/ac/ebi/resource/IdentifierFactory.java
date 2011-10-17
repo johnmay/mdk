@@ -55,7 +55,7 @@ import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 /**
  * IdentifierFactory.java
- *
+ * Factory for identifiers
  *
  * @author johnmay
  * @date May 6, 2011
@@ -194,26 +194,13 @@ public class IdentifierFactory {
         }
         return new BasicProteinIdentifier(accession);
     }
-//
-//    public static void main( String[] args ) {
-//
-//        GeneProduct product = new GeneProteinProduct();
-//        UniProtIdentifier id = ( UniProtIdentifier ) IdentifierFactory.getIdentifier( Resource.UNIPROT , "QYEUEE.1" );
-//        System.out.println( "Created Id:" + id );
-//
-//        // multiple id parsing
-//        String ids = "gi|254777906|sp|B9E8Z7.1|DNAA_MACCJ";
-//        List idList = IdentifierFactory.getIdentifiers( ids );
-//        for ( Object object : idList ) {
-//            System.out.println( object.getClass() + " " + object );
-//        }
-//
-//    }
+
 
     /**
      * Builds a list of identifiers from a string that may
      * or maynot contain multiple identifiers
      * atm: handle gi|39327|sp|398339 etc..
+     * Use resolveSequenceHeader
      * @param idsString
      * @return
      */
@@ -257,20 +244,6 @@ public class IdentifierFactory {
         }
 
         return hitIdentifiers;
-    }
-
-    /**
-     *
-     * Access the MIRIAMEntry for the given identifier. If no MIRIAMResouce is available then null is returned
-     *
-     * @param idClass
-     * @return
-     */
-    public static MIRIAMEntry getResouce(Class<? extends AbstractIdentifier> idClass) {
-//        if(idClass == ChEBIIdentifier.class){
-//            return MIRIAMEntry
-//        }
-        return null;
     }
 
     /**
