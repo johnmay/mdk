@@ -48,7 +48,7 @@ public class BasicRNAIdentifier extends RNAIdentifier {
      * jvm instance
      */
     public static Identifier nextIdentifier() {
-        return new BasicRNAIdentifier("rna_%06s" + ++ticker);
+        return new BasicRNAIdentifier(String.format("rna_%05d", ++ticker));
     }
 
     public Identifier newInstance() {

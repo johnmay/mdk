@@ -48,7 +48,7 @@ public class BasicGeneIdentifier extends GeneIdentifier {
      * jvm instance
      */
     public static Identifier nextIdentifier() {
-        return new BasicGeneIdentifier("gene_%06s" + ++ticker);
+        return new BasicGeneIdentifier(String.format("gene_%05d", ++ticker));
     }
 
     public Identifier newInstance() {

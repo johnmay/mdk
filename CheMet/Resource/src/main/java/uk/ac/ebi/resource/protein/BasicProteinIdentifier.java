@@ -22,9 +22,9 @@ package uk.ac.ebi.resource.protein;
 
 import java.util.LinkedList;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.MetaboliteIdentifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 /**
  *          BasicProteinIdentifier – 2011.09.14 <br>
@@ -37,12 +37,17 @@ public class BasicProteinIdentifier
         extends AbstractProteinIdentifier implements ProteinIdentifier, MetaboliteIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicProteinIdentifier.class);
+    private static int ticker = 0;
 
     public BasicProteinIdentifier() {
     }
 
     public BasicProteinIdentifier(String accession) {
         super(accession);
+    }
+
+    public static Identifier nextIdentifier() {
+        return new BasicProteinIdentifier(String.format("protein_%05d", ++ticker));
     }
 
     /**
