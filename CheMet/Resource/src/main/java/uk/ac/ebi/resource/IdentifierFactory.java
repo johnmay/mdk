@@ -46,6 +46,7 @@ import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.resource.classification.GeneOntologyAnnotation;
 import uk.ac.ebi.resource.classification.InterPro;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
@@ -79,6 +80,7 @@ public class IdentifierFactory {
             new DrugBankIdentifier(),
             new HMDBIdentifier(),
             new InterPro(),
+            new GeneOntologyAnnotation(),
             new InChI()));
     private Map<String, Identifier> synonyms = new HashMap();
     private List<SequenceIdentifier> proteinIdentifiers = new ArrayList(Arrays.asList(new BasicProteinIdentifier(),
@@ -97,9 +99,15 @@ public class IdentifierFactory {
         }
 
         for (Identifier identifier : supportedIdentifiers) {
+
             synonyms.put(identifier.getShortDescription().toLowerCase(Locale.ENGLISH), identifier);
+
             for (String synonym : identifier.getDatabaseSynonyms()) {
-                synonyms.put(synonym.toLowerCase(Locale.ENGLISH), identifier);
+                String key = synonym.toLowerCase(Locale.ENGLISH);
+                if (synonyms.containsKey(key)) {
+                    logger.warn("Clashing synonym names in map: " + key + " appears more then once");
+                }
+                synonyms.put(key, identifier);
             }
         }
 
@@ -195,7 +203,6 @@ public class IdentifierFactory {
         return new BasicProteinIdentifier(accession);
     }
 
-
     /**
      * Builds a list of identifiers from a string that may
      * or maynot contain multiple identifiers
@@ -276,13 +283,13 @@ public class IdentifierFactory {
      * @return
      */
     public Identifier ofSynonym(String synonym) {
-        
+
         String key = synonym.toLowerCase(Locale.ENGLISH);
 
         if (synonyms.containsKey(key)) {
             return synonyms.get(key).newInstance();
         }
-       
+
         throw new InvalidParameterException("No matching identifier synonym found for: " + synonym);
     }
 
