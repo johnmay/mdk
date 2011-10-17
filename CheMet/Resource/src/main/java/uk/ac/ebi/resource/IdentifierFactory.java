@@ -87,6 +87,7 @@ public class IdentifierFactory {
                                                                                       new TrEMBLIdentifier(),
                                                                                       new SwissProtIdentifier()));
     private Map<String, SequenceIdentifier> proteinIdMap = new HashMap();
+    private List<String> synonymExclusions = Arrays.asList("uniprotkb");
 
     public List<Identifier> getSupportedIdentifiers() {
         return supportedIdentifiers;
@@ -103,11 +104,19 @@ public class IdentifierFactory {
             synonyms.put(identifier.getShortDescription().toLowerCase(Locale.ENGLISH), identifier);
 
             for (String synonym : identifier.getDatabaseSynonyms()) {
+
                 String key = synonym.toLowerCase(Locale.ENGLISH);
-                if (synonyms.containsKey(key)) {
-                    logger.warn("Clashing synonym names in map: " + key + " appears more then once");
+
+                if (synonymExclusions.contains(key) == Boolean.FALSE) {
+
+                    if (synonyms.containsKey(key)) {
+                        logger.warn("Clashing synonym names in map: " + key + " appears more then once");
+                    }
+
+                    synonyms.put(key, identifier);
+
                 }
-                synonyms.put(key, identifier);
+
             }
         }
 
