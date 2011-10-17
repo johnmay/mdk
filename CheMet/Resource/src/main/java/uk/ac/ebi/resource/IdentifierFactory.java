@@ -49,6 +49,7 @@ import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.classification.GeneOntologyAnnotation;
 import uk.ac.ebi.resource.classification.InterPro;
 import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
+import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
@@ -83,6 +84,7 @@ public class IdentifierFactory {
             new BasicRNAIdentifier(),
             new BasicProteinIdentifier(),
             new ReconstructionIdentifier(),
+            new ChromosomeIdentifier(),
             new TaskIdentifier(),
             new DrugBankIdentifier(),
             new HMDBIdentifier(),

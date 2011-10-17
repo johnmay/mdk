@@ -76,10 +76,7 @@ public class IdentifierLoader
      */
     public MIRIAMEntry getEntry(Class type) {
         Short mir = getMIR(type);
-        if (mir != 0) {
-            return miriam.getEntry(mir);
-        }
-        return null;
+        return miriam.getEntry(mir);
     }
 
     /**
