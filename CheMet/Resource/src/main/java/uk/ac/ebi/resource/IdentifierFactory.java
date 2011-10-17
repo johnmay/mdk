@@ -48,11 +48,13 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.classification.GeneOntologyAnnotation;
 import uk.ac.ebi.resource.classification.InterPro;
+import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
+import uk.ac.ebi.resource.rna.BasicRNAIdentifier;
 import uk.ac.ebi.resource.structure.HSSPIdentifier;
 import uk.ac.ebi.resource.structure.PDBIdentifier;
 
@@ -77,6 +79,9 @@ public class IdentifierFactory {
             new ECNumber(),
             new BasicChemicalIdentifier(),
             new BasicReactionIdentifier(),
+            new BasicGeneIdentifier(),
+            new BasicRNAIdentifier(),
+            new BasicProteinIdentifier(),
             new ReconstructionIdentifier(),
             new TaskIdentifier(),
             new DrugBankIdentifier(),
