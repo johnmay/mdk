@@ -1,7 +1,7 @@
 /**
- * IdentifierDescription.java
+ * GeneOntologyTerm.java
  *
- * 2011.09.15
+ * 2011.09.14
  *
  * This file is part of the CheMet library
  *
@@ -18,32 +18,34 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource;
+package uk.ac.ebi.resource.classification;
 
-import java.util.Collection;
-import uk.ac.ebi.core.Description;
-import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
+import org.apache.log4j.Logger;
 
 /**
- *          IdentifierDescription – 2011.09.15 <br>
+ *          GeneOntologyTerm – 2011.09.14 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class IdentifierDescription
-        extends Description {
+public class InterPro
+        extends ClassificationIdentifier {
 
-    public final MIRIAMEntry resource;
-    private final Collection<String> synonyms;
+    private static final Logger LOGGER = Logger.getLogger(InterPro.class);
 
-    public IdentifierDescription(MIRIAMEntry miriam,
-                                 String shortDescription,
-                                 String longDescription,
-                                 Byte index,
-                                 Collection<String> synonyms) {
-        super(shortDescription, longDescription, index);
-        this.resource = miriam;
-        this.synonyms = synonyms;
+    public InterPro() {
+    }
+
+    public InterPro(String accession) {
+        super(accession);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public InterPro newInstance() {
+        return new InterPro();
     }
 }

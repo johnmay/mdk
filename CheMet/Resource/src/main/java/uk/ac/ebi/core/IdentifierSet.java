@@ -1,4 +1,3 @@
-
 /**
  * IdentifierSet.java
  *
@@ -28,7 +27,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.*;
 
-
 /**
  *          IdentifierSet – 2011.09.18 <br>
  *          A class for handling multiple identifiers providing efficient read/write externalization
@@ -37,11 +35,10 @@ import uk.ac.ebi.resource.*;
  * @author  $Author$ (this version)
  */
 public class IdentifierSet
-  implements Externalizable {
+        implements Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(IdentifierSet.class);
     private HashMultimap<Byte, Identifier> identifiers = HashMultimap.create();
-
 
     /**
      * Adds an identifier to the set
@@ -51,7 +48,6 @@ public class IdentifierSet
     public boolean add(Identifier identifier) {
         return identifiers.put(identifier.getIndex(), identifier);
     }
-
 
     /**
      *
@@ -64,7 +60,6 @@ public class IdentifierSet
         return identifiers.remove(identifier.getIndex(), identifier);
     }
 
-
     /**
      *
      * Accessor to all the identifiers currently pressent in the set
@@ -75,7 +70,6 @@ public class IdentifierSet
     public Collection<Identifier> getIdentifiers() {
         return identifiers.values();
     }
-
 
     /**
      *
@@ -90,7 +84,6 @@ public class IdentifierSet
         return (Collection<T>) identifiers.get(IdentifierLoader.getInstance().getIndex(type));
     }
 
-
     /**
      *
      * Accessor to all identifiers extending a given type. For example if you provide a
@@ -104,7 +97,6 @@ public class IdentifierSet
         return getSubIdentifiers(base.getClass());
     }
 
-
     /**
      *
      * {@see getSubIdentifiers(Identifier)}
@@ -115,14 +107,17 @@ public class IdentifierSet
      */
     public Set<Identifier> getSubIdentifiers(Class base) {
         Set<Identifier> identifierSubset = new HashSet<Identifier>();
-        for( Identifier id : getIdentifiers() ) {
-            if( base.isInstance(id) ) {
+        for (Identifier id : getIdentifiers()) {
+            if (base.isInstance(id)) {
                 identifierSubset.add(id);
             }
         }
         return identifierSubset;
     }
 
+    public boolean contains(Identifier identifier) {
+        return identifiers.containsValue(identifier);
+    }
 
     /**
      * @inheritDoc
@@ -132,21 +127,20 @@ public class IdentifierSet
         Set<Byte> keys = identifiers.keySet();
         out.writeInt(keys.size());
 
-        for( Byte index : keys ) {
+        for (Byte index : keys) {
 
             Set<Identifier> values = identifiers.get(index);
 
             out.writeByte(index);
             out.writeInt(values.size());
 
-            for( Identifier id : values ) {
+            for (Identifier id : values) {
                 id.writeExternal(out);
             }
 
         }
 
     }
-
 
     /**
      * @inheritDoc
@@ -157,11 +151,11 @@ public class IdentifierSet
 
         Integer nClasses = in.readInt();
 
-        for( int i = 0 ; i < nClasses ; i++ ) {
+        for (int i = 0; i < nClasses; i++) {
             Identifier idTemplate = factory.ofIndex(in.readByte());
             Integer nOfClass = in.readInt();
 
-            for( int j = 0 ; j < nOfClass ; j++ ) {
+            for (int j = 0; j < nOfClass; j++) {
                 Identifier newIdentifier = idTemplate.newInstance();
                 newIdentifier.readExternal(in);
                 identifiers.put(newIdentifier.getIndex(), newIdentifier);
@@ -170,7 +164,4 @@ public class IdentifierSet
         }
 
     }
-
-
 }
-

@@ -1,4 +1,3 @@
-
 /**
  * IdentifierLoader.java
  *
@@ -21,11 +20,12 @@
  */
 package uk.ac.ebi.resource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import uk.ac.ebi.interfaces.DescriptionLoader;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-
 
 /**
  *          IdentifierLoader – 2011.09.15 <br>
@@ -35,29 +35,26 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
  * @author  $Author$ (this version)
  */
 public class IdentifierLoader
-  extends AbstractLoader
-  implements DescriptionLoader {
+        extends AbstractLoader
+        implements DescriptionLoader {
 
     private static final String RESOURCE_NAME = "IdentifierDescription.properties";
     private static final String MIR_EXTENSION = ".MIR";
+    private static final String SYNONYMS = ".Synonyms";
     private static final MIRIAMLoader miriam = MIRIAMLoader.getInstance();
-
 
     private IdentifierLoader() {
         super(IdentifierLoader.class.getResourceAsStream(RESOURCE_NAME));
     }
-
 
     private static class IdentifierLoaderHolder {
 
         private static IdentifierLoader INSTANCE = new IdentifierLoader();
     }
 
-
     public static IdentifierLoader getInstance() {
         return IdentifierLoaderHolder.INSTANCE;
     }
-
 
     /**
      *
@@ -70,7 +67,6 @@ public class IdentifierLoader
         return Short.parseShort(super.getProperty(type.getSimpleName() + MIR_EXTENSION));
     }
 
-
     /**
      *
      * Returns the miriam entry for this identifier class
@@ -80,12 +76,11 @@ public class IdentifierLoader
      */
     public MIRIAMEntry getEntry(Class type) {
         Short mir = getMIR(type);
-        if( mir != 0 ) {
+        if (mir != 0) {
             return miriam.getEntry(mir);
         }
         return null;
     }
-
 
     /**
      * @inheritDoc
@@ -96,13 +91,13 @@ public class IdentifierLoader
         String key = type.getSimpleName() + SHORT_DESCRIPTION;
 
 
-        if( super.containsKey(key) ) {
+        if (super.containsKey(key)) {
             return super.getShortDescription(type);
         }
 
         Short mir = getMIR(type);
 
-        if( mir != 0 ) {
+        if (mir != 0) {
             MIRIAMEntry entry = miriam.getEntry(mir);
             return entry.getResourceName();
         }
@@ -111,22 +106,21 @@ public class IdentifierLoader
 
     }
 
-
     /**
      * @inheritDoc
      */
     @Override
     public String getLongDescription(Class type) {
 
-        String name = type.getSimpleName();
+        String key = type.getSimpleName() + LONG_DESCRIPTION;
 
-        if( super.containsKey(name) ) {
+        if (super.containsKey(key)) {
             return super.getLongDescription(type);
         }
 
         Short mir = getMIR(type);
 
-        if( mir != 0 ) {
+        if (mir != 0) {
             MIRIAMEntry entry = miriam.getEntry(mir);
             return entry.getDefinition();
         }
@@ -135,14 +129,34 @@ public class IdentifierLoader
 
     }
 
+    /**
+     * Access the synonyms for this identifier
+     * @param type
+     * @return
+     */
+    public Collection<String> getDatabaseSynonyms(Class type) {
+
+        String key = type.getSimpleName() + SYNONYMS;
+
+        Short mir = getMIR(type);
+
+        Collection<String> synonyms = new ArrayList();
+        if (mir != 0) {
+            synonyms.addAll(miriam.getEntry(mir).getSynonyms());
+        }
+
+        if (super.containsKey(key)) {
+            synonyms.addAll(Arrays.asList(super.getProperty(key).split(",")));
+        }
+
+        return synonyms;
+    }
 
     public IdentifierDescription getMetaInfo(Class type) {
         return new IdentifierDescription(getEntry(type),
                                          getShortDescription(type),
                                          getLongDescription(type),
-                                         getIndex(type));
+                                         getIndex(type),
+                                         getDatabaseSynonyms(type));
     }
-
-
 }
-

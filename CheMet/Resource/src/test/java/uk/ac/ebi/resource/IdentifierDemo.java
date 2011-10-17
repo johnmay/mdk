@@ -26,6 +26,8 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 
 /**
@@ -73,6 +75,8 @@ public class IdentifierDemo {
         Identifier id = IdentifierFactory.getInstance().ofClass(KEGGCompoundIdentifier.class);
         id.setAccession("C00023");
         System.out.println(id.getURN());
+        System.out.println(new ECNumber().getDatabaseSynonyms());
+        System.out.println(new BasicReactionIdentifier().getLongDescription());
         // urn:miriam:kegg.compound:C00023
 
     }

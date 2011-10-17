@@ -8,6 +8,7 @@ import java.util.Set;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.junit.Test;
+import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
@@ -45,6 +46,13 @@ public class IdentifierFactoryTest extends TestCase {
     }
 
     @Test
+    public void testSynonymLoading() {
+        IdentifierFactory factory = IdentifierFactory.getInstance();
+        System.out.println(factory.ofSynonym("EC").getClass());
+
+    }
+
+    @Test
     public void testClassLoading() {
         IdentifierFactory factory = IdentifierFactory.getInstance();
 
@@ -73,7 +81,7 @@ public class IdentifierFactoryTest extends TestCase {
 
         // basic features
         String sequenceHeader = "sp|Q197F8|002R_IIV3|sp|Q6GZX1|004R_FRG3G|gnl|ec|1.1.1.1";
-        Set<Identifier> ids = IdentifierFactory.getInstance().resolveSequenceHeader(sequenceHeader);
+        IdentifierSet ids = IdentifierFactory.getInstance().resolveSequenceHeader(sequenceHeader);
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q197F8")));
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q6GZX1")));
         Assert.assertTrue(ids.contains(new BasicProteinIdentifier("1.1.1.1")));
@@ -86,7 +94,7 @@ public class IdentifierFactoryTest extends TestCase {
 
         // basic features
         String sequenceHeader = "gi|2010202|sp|Q197F8|002R_IIV3|sp|Q6GZX1|004R_FRG3G|gnl|ec|1.1.1.1";
-        Set<Identifier> ids = IdentifierFactory.getInstance().resolveSequenceHeader(sequenceHeader);
+        IdentifierSet ids = IdentifierFactory.getInstance().resolveSequenceHeader(sequenceHeader);
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q197F8")));
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q6GZX1")));
         Assert.assertTrue(ids.contains(new BasicProteinIdentifier("1.1.1.1")));

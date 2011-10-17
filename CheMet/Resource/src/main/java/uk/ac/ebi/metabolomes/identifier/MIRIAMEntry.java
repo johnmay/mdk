@@ -19,6 +19,7 @@ package uk.ac.ebi.metabolomes.identifier;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Resource;
 
@@ -51,16 +52,18 @@ public class MIRIAMEntry
     private String definition;
     private String urn;
     private String url;
+    private Collection<String> synonyms;
 
 
     public MIRIAMEntry(String id, String pattern, String resouceName, String definition, String urn,
-                       String url) {
+                       String url, Collection<String> synonyms) {
         this.id = id;
         this.pattern = pattern;
         this.resouceName = resouceName;
         this.definition = definition;
         this.urn = urn;
         this.url = url;
+        this.synonyms = synonyms;
     }
 
 
@@ -118,6 +121,12 @@ public class MIRIAMEntry
         }
         return null;
     }
+
+    public Collection<String> getSynonyms() {
+        return synonyms;
+    }
+
+
 
 
 }

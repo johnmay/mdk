@@ -21,16 +21,18 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
@@ -44,6 +46,7 @@ import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.resource.classification.InterPro;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
@@ -75,7 +78,9 @@ public class IdentifierFactory {
             new TaskIdentifier(),
             new DrugBankIdentifier(),
             new HMDBIdentifier(),
+            new InterPro(),
             new InChI()));
+    private Map<String, Identifier> synonyms = new HashMap();
     private List<SequenceIdentifier> proteinIdentifiers = new ArrayList(Arrays.asList(new BasicProteinIdentifier(),
                                                                                       new TrEMBLIdentifier(),
                                                                                       new SwissProtIdentifier()));
@@ -86,8 +91,16 @@ public class IdentifierFactory {
     }
 
     private IdentifierFactory() {
+
         for (Identifier identifier : supportedIdentifiers) {
             identifiers[identifier.getIndex()] = identifier;
+        }
+
+        for (Identifier identifier : supportedIdentifiers) {
+            synonyms.put(identifier.getShortDescription().toLowerCase(Locale.ENGLISH), identifier);
+            for (String synonym : identifier.getDatabaseSynonyms()) {
+                synonyms.put(synonym.toLowerCase(Locale.ENGLISH), identifier);
+            }
         }
 
 
@@ -109,9 +122,9 @@ public class IdentifierFactory {
     /**
      * Resolves a sequence header e.g. sp|Q38483|EKFF_EKH to one of our identifiers
      */
-    public Set<Identifier> resolveSequenceHeader(String header) {
+    public IdentifierSet resolveSequenceHeader(String header) {
 
-        Set<Identifier> idSet = new HashSet();
+        IdentifierSet idSet = new IdentifierSet();
         LinkedList<String> tokens = new LinkedList(Arrays.asList(header.split("\\|")));
 
         while (tokens.size() > 0) {
@@ -280,6 +293,24 @@ public class IdentifierFactory {
      */
     public Identifier ofIndex(Byte index) {
         return identifiers[index].newInstance();
+    }
+
+    /**
+     * Create an identifier of the given synonym. for example "EC" for ECNumber.
+     * The synonyms are loaded from the MIRIAM registry with custom synonyms
+     * specified in the IdentifierDescription properites resource file.
+     * @param synonym
+     * @return
+     */
+    public Identifier ofSynonym(String synonym) {
+        
+        String key = synonym.toLowerCase(Locale.ENGLISH);
+
+        if (synonyms.containsKey(key)) {
+            return synonyms.get(key).newInstance();
+        }
+       
+        throw new InvalidParameterException("No matching identifier synonym found for: " + synonym);
     }
 
     /**

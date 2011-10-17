@@ -1,4 +1,3 @@
-
 /**
  * Identifier.java
  *
@@ -22,9 +21,9 @@
 package uk.ac.ebi.interfaces.identifiers;
 
 import java.net.URL;
+import java.util.Collection;
 import uk.ac.ebi.interfaces.Descriptor;
 import uk.ac.ebi.interfaces.Resource;
-
 
 /**
  *          Identifier – 2011.09.15 <br>
@@ -35,7 +34,6 @@ import uk.ac.ebi.interfaces.Resource;
  */
 public interface Identifier extends Descriptor {
 
-
     /**
      *
      * Access the stored accession
@@ -44,7 +42,6 @@ public interface Identifier extends Descriptor {
      *
      */
     public void setAccession(String accession);
-
 
     /**
      *
@@ -55,7 +52,6 @@ public interface Identifier extends Descriptor {
      */
     public String getAccession();
 
-
     /**
      *
      * Returns a new empty instance of the identifier object. Primarily used in factory methods
@@ -65,14 +61,12 @@ public interface Identifier extends Descriptor {
      */
     public Identifier newInstance();
 
-
     /**
      *
      * Return the URL of the database item
      *
      */
     public URL getURL();
-
 
     /**
      *
@@ -81,9 +75,14 @@ public interface Identifier extends Descriptor {
      */
     public String getURN();
 
+    /**
+     * Results a list of synonyms commonly used to describe the database of this
+     * identifier. For example Enzyme Nomenclature is more frequently referred to
+     * as EC. The synonyms are specified in the IdentifierDescription.properites
+     * file. If no synonyms are present an empty collection is returned
+     * @return
+     */
+    public Collection<String> getDatabaseSynonyms();
 
     public Resource getResource();
-
-
 }
-

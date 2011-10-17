@@ -12,7 +12,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-
 package uk.ac.ebi.metabolomes.identifier;
 
 import java.io.Externalizable;
@@ -20,11 +19,11 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.net.URL;
+import java.util.Collection;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.core.AbstractDescriptor;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.resource.IdentifierLoader;
-
 
 /**
  *
@@ -42,24 +41,21 @@ import uk.ac.ebi.resource.IdentifierLoader;
  *
  */
 public abstract class AbstractIdentifier
-  extends AbstractDescriptor
-  implements Identifier,
-             Externalizable {
+        extends AbstractDescriptor
+        implements Identifier,
+                   Externalizable {
 
     public static final IdentifierLoader IDENTIFIER_LOADER = IdentifierLoader.getInstance();
     private String accession;
-
 
     public AbstractIdentifier() {
         super(IdentifierLoader.getInstance());
     }
 
-
     public AbstractIdentifier(String accession) {
         super(IdentifierLoader.getInstance());
         this.accession = accession;
     }
-
 
     /**
      * @inheritDoc
@@ -67,7 +63,6 @@ public abstract class AbstractIdentifier
     public String getAccession() {
         return accession;
     }
-
 
     /**
      * @param accession
@@ -77,7 +72,6 @@ public abstract class AbstractIdentifier
         this.accession = accession;
     }
 
-
     /**
      *
      * @return
@@ -85,7 +79,6 @@ public abstract class AbstractIdentifier
     public Resource getResource() {
         return IDENTIFIER_LOADER.getEntry(getClass());
     }
-
 
     /**
      * @inheritDoc
@@ -95,26 +88,24 @@ public abstract class AbstractIdentifier
         return accession;
     }
 
-
     /**
      * @inheritDoc
      */
     @Override
     public boolean equals(Object obj) {
-        if( obj == null ) {
+        if (obj == null) {
             return false;
         }
-        if( getClass() != obj.getClass() ) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final AbstractIdentifier other = (AbstractIdentifier) obj;
-        if( (this.accession == null) ? (other.accession != null) : !this.accession.equals(
-          other.accession) ) {
+        if ((this.accession == null) ? (other.accession != null) : !this.accession.equals(
+                other.accession)) {
             return false;
         }
         return true;
     }
-
 
     /**
      * @inheritDoc
@@ -126,14 +117,12 @@ public abstract class AbstractIdentifier
         return hash;
     }
 
-
     /**
      * @inheritDoc
      */
     public String getURN() {
         return getResource().getURN(accession);
     }
-
 
     /**
      * @inheritDoc
@@ -142,17 +131,18 @@ public abstract class AbstractIdentifier
         return getResource().getURL(getAccession());
     }
 
+    /**
+     * @inheritDoc
+     */
+    public Collection<String> getDatabaseSynonyms() {
+        return IDENTIFIER_LOADER.getDatabaseSynonyms(getClass());
+    }
 
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeUTF(accession);
     }
 
-
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         this.accession = in.readUTF();
     }
-
-
-
 }
-
