@@ -53,6 +53,8 @@ import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
+import uk.ac.ebi.resource.structure.HSSPIdentifier;
+import uk.ac.ebi.resource.structure.PDBIdentifier;
 
 /**
  * IdentifierFactory.java
@@ -81,6 +83,8 @@ public class IdentifierFactory {
             new HMDBIdentifier(),
             new InterPro(),
             new GeneOntologyAnnotation(),
+            new HSSPIdentifier(),
+            new PDBIdentifier(),
             new InChI()));
     private Map<String, Identifier> synonyms = new HashMap();
     private List<SequenceIdentifier> proteinIdentifiers = new ArrayList(Arrays.asList(new BasicProteinIdentifier(),
