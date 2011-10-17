@@ -114,26 +114,26 @@ public class ECNumber
      * @param ecNumber EC accession (e.g. {@code "1.1.4.3", "1.1.-.-"})
      *
      */
-    public ECNumber(String ecNumber, Boolean check) {
+    public ECNumber(String ecNumber) {
+        setAccession(ecNumber);
+    }
+
+    @Override
+    public void setAccession(String accession) {
 
         // remove prefix chars e.g. EC=, EC: EC\s
-        ecNumber = removePrefix(ecNumber, 0);
-        ecNumber = removePostfix(ecNumber, ecNumber.length());
+        accession = removePrefix(accession, 0);
+        accession = removePostfix(accession, accession.length());
 
-        String[] ident = ecNumber.split(EC_SEPERATOR);
+        String[] ident = accession.split(EC_SEPERATOR);
 
         this.enzymeClass = ident.length > 0 ? StringToIdent(ident[0]) : 0;
         this.enzymeSubClass = ident.length > 1 ? StringToIdent(ident[1]) : 0;
         this.enzymeSubSubClass = ident.length > 2 ? StringToIdent(ident[2]) : 0;
         this.enzymeEntry = ident.length > 3 ? StringToIdent(ident[3]) : 0;
 
+        super.setAccession(this.toString());
 
-        setAccession(toString());
-
-    }
-
-    public ECNumber(String ecNumber) {
-        this(ecNumber, true);
     }
 
     /**
@@ -343,7 +343,7 @@ public class ECNumber
         enzymeSubSubClass = in.readInt();
         enzymeEntry = in.readInt();
         preliminary = in.readBoolean();
-        setAccession(toString());
+        super.setAccession(this.toString());
     }
 
     @Override
@@ -371,5 +371,21 @@ public class ECNumber
         }
 
         return 0;
+    }
+
+    public int getEnzymeClass() {
+        return enzymeClass;
+    }
+
+    public int getEnzymeSubClass() {
+        return enzymeSubClass;
+    }
+
+    public int getEnzymeSubSubClass() {
+        return enzymeSubSubClass;
+    }
+
+    public int getEnzymeEntry() {
+        return enzymeEntry;
     }
 }

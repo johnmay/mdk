@@ -10,6 +10,8 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.chemical.HMDBIdentifier;
+import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 
@@ -48,8 +50,9 @@ public class IdentifierFactoryTest extends TestCase {
     @Test
     public void testSynonymLoading() {
         IdentifierFactory factory = IdentifierFactory.getInstance();
-        System.out.println(factory.ofSynonym("EC").getClass());
-
+        assertEquals(ECNumber.class, factory.ofSynonym("EC").getClass());
+        assertEquals(SwissProtIdentifier.class, factory.ofSynonym("Sprot").getClass());
+        assertEquals(HMDBIdentifier.class, factory.ofSynonym("HMDB").getClass());
     }
 
     @Test
