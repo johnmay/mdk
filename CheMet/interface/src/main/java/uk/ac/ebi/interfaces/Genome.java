@@ -58,8 +58,7 @@ public interface Genome {
     /**
      * Adds a chromosome to the genome.
      * @param chromosome The chromosome to add
-     * @return whether the chromosome was added (false if a chromosome with
-     *         the same number already exists)
+     * @return whether the chromosome added replaces an existing entry
      */
     public boolean add(Chromosome chromosome);
 
@@ -73,7 +72,7 @@ public interface Genome {
 
     /**
      * Convenience method to add a gene to the genome on the specified
-     * chromosome. If a number is provided that does not map to a chormosome
+     * chromosome. If a number is provided that does not map to a chromosome
      * an {@see InvalidParameterException} will be thrown
      * @param number - the chromosome number that the gene will be added too
      * @param gene   - a gene to add
