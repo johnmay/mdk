@@ -35,6 +35,10 @@ import org.biojava3.core.sequence.template.Sequence;
  */
 public interface GeneProduct extends AnnotatedEntity {
 
+    public Gene getGene();
+
+    public void setGene(Gene gene);
+
     /**
      *
      * Access the name of the gene product

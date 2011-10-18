@@ -1,4 +1,3 @@
-
 /**
  * GeneProduct.java
  *
@@ -21,6 +20,8 @@
  */
 package uk.ac.ebi.interfaces;
 
+import org.biojava3.core.sequence.Strand;
+import org.biojava3.core.sequence.template.Sequence;
 
 /**
  *          Gene – 2011.09.12 <br>
@@ -29,7 +30,7 @@ package uk.ac.ebi.interfaces;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface Gene {
+public interface Gene extends AnnotatedEntity {
 
     /**
      *
@@ -40,15 +41,18 @@ public interface Gene {
      */
     public Chromosome getChromosome();
 
+    public void setChromosome(Chromosome chromosome);
 
     /**
      *
-     * Access the strand the gene is sense (+)/3'-5'/watson or anti-sense (-)/5'-3'/crick
+     * Access the sense the gene is sense (+)/3'-5'/watson or anti-sense (-)/5'-3'/crick
      *
      * @return
      *
      */
-    public byte getPolarity();
+    public Strand getStrand();
+
+    public void setStrand(Strand strand);
 
     /**
      *
@@ -59,6 +63,8 @@ public interface Gene {
      */
     public int getStart();
 
+    public void setStart(int end);
+
     /**
      *
      * Access the end location of the gene
@@ -66,6 +72,8 @@ public interface Gene {
      * @return
      */
     public int getEnd();
+
+    public void setEnd(int end);
 
     /**
      *
@@ -75,6 +83,16 @@ public interface Gene {
      */
     public int getLength();
 
+    /**
+     * Access the sequence of the gene
+     * @return
+     */
+    public Sequence getSequence();
 
+    /**
+     * Set the sequence of the gene (normally derived from the start and end
+     * with the entire genome sequence
+     * @param sequence
+     */
+    public void setSequence(Sequence sequence);
 }
-

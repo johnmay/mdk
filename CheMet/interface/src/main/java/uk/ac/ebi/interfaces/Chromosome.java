@@ -20,25 +20,38 @@
  */
 package uk.ac.ebi.interfaces;
 
+import java.io.Externalizable;
 import java.util.Collection;
 
 /**
  *          Chromosome – 2011.09.12 <br>
- *          Class description
+ *          Interface description of a chromosome
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface Chromosome {
+public interface Chromosome extends Externalizable {
 
+    /**
+     * A gene to the chromosome. This will set the circular reference for the gene
+     * back to this chromosome as well as the sequence (based on start/end)
+     * @param gene
+     * @return whether the gene was added (false if the gene is already present)
+     */
     public boolean add(Gene gene);
 
+    /**
+     * Iteratively add genes to the chromosome
+     * @param genes
+     * @return whether the gene was added (false if the gene is already present)
+     */
     public boolean addAll(Collection<? extends Gene> genes);
 
     public boolean remove(Gene gene);
 
     /**
-     * Removes all genes and set
+     * Removes all genes and their references back to this chromosome. Note
+     * the sequence of the gene is also unset
      * @param genes
      * @return
      */
@@ -57,5 +70,6 @@ public interface Chromosome {
      * Access the number of the chromosome
      *
      */
-    public Integer getChromosomeNumber();
+    public int getChromosomeNumber();
+    
 }
