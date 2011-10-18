@@ -36,7 +36,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class RNAProduct extends AbstractGeneProduct {
+public abstract class RNAProduct extends AbstractGeneProduct {
 
     private static final Logger LOGGER = Logger.getLogger(RNAProduct.class);
     public static final String BASE_TYPE = "RNA";
@@ -61,10 +61,6 @@ public class RNAProduct extends AbstractGeneProduct {
     @Override
     public String getBaseType() {
         return this.BASE_TYPE;
-    }
-
-    public GeneProduct newInstance() {
-        return new RNAProduct();
     }
 
     @Override

@@ -1,7 +1,7 @@
 /**
- * Gene.java
+ * RibsomalRNA.java
  *
- * 2011.10.07
+ * 2011.10.17
  *
  * This file is part of the CheMet library
  * 
@@ -21,56 +21,34 @@
 package uk.ac.ebi.core;
 
 import org.apache.log4j.Logger;
-import org.biojava3.core.sequence.DNASequence;
-import uk.ac.ebi.interfaces.Chromosome;
-import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
- * @name    Gene - 2011.10.07 <br>
+ *          RibsomalRNA - 2011.10.17 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AbstractGene extends AbstractAnnotatedEntity implements Gene {
+public class TransferRNA extends RNAProduct {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractGene.class);
-    private static final String TYPE = "Gene";
-    private DNASequence sequence;
-    private int start;
-    private int end;
+    private static final Logger LOGGER = Logger.getLogger(TransferRNA.class);
+    public static final String BASE_TYPE = "tRNA";
 
-    public AbstractGene() {
+    public TransferRNA() {
     }
 
-    public AbstractGene(Identifier identifier, String abbreviation, String name) {
+    public TransferRNA(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
     @Override
     public String getBaseType() {
-        return TYPE;
+        return BASE_TYPE;
     }
 
-
-    public Chromosome getChromosome() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public byte getPolarity() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public int getStart() {
-        return start;
-    }
-
-    public int getEnd() {
-        return end;
-    }
-
-    public int getLength() { // wrap biojava
-        return sequence.getLength();
+    public GeneProduct newInstance() {
+        return new TransferRNA();
     }
 }

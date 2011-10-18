@@ -38,7 +38,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProteinProduct extends AbstractGeneProduct {
+public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.interfaces.ProteinProduct {
 
     private static final Logger LOGGER = Logger.getLogger(ProteinProduct.class);
     public static final String BASE_TYPE = "Protein";

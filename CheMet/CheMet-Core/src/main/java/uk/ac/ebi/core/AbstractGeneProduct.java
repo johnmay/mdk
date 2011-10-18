@@ -23,14 +23,11 @@ package uk.ac.ebi.core;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.HashSet;
+import java.util.List;
 import org.apache.log4j.Logger;
-import org.biojava3.core.sequence.template.AbstractCompound;
-import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.Observation;
 
 /**
  * @name    GeneProduct - 2011.10.07 <br>
@@ -43,13 +40,21 @@ public abstract class AbstractGeneProduct
         extends AbstractAnnotatedEntity implements GeneProduct {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractGeneProduct.class);
-    private Gene parent;
+    private Gene gene;
 
     public AbstractGeneProduct() {
     }
 
     public AbstractGeneProduct(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
+    }
+
+    public void setGene(Gene gene) {
+        this.gene = gene;
+    }
+
+    public Gene getGene() {
+        return this.gene;
     }
 
     @Override
@@ -62,11 +67,14 @@ public abstract class AbstractGeneProduct
         super.writeExternal(out);
     }
 
-    public void readExternal(ObjectInput in, HashSet<Gene> genes) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in, List<Gene> genes) throws IOException, ClassNotFoundException {
         super.readExternal(in);
+        int index = in.read();
+        gene = index == -1 ? null : genes.get(index);
     }
 
-    public void writeExternal(ObjectOutput out, HashSet<Gene> genes) throws IOException {
+    public void writeExternal(ObjectOutput out, List<Gene> genes) throws IOException {
         super.writeExternal(out);
+        out.write(gene == null ? -1 : genes.indexOf(gene));
     }
 }
