@@ -113,7 +113,6 @@ public class IdentifierFactory {
         for (Identifier identifier : supportedIdentifiers) {
 
             synonyms.put(identifier.getShortDescription().toLowerCase(Locale.ENGLISH), identifier);
-
             for (String synonym : identifier.getDatabaseSynonyms()) {
 
                 String key = synonym.toLowerCase(Locale.ENGLISH);
