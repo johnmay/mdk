@@ -53,7 +53,7 @@ public class ChromosomeIdentifier extends AbstractIdentifier {
     public int getNumber() {
         return number;
     }
-    
+
     public ChromosomeIdentifier nextIdentifier() {
         return new ChromosomeIdentifier(++ticker);
     }
