@@ -29,6 +29,7 @@ import java.util.Arrays;
 import uk.ac.ebi.interfaces.Annotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AuthorAnnotation;
+import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.annotation.Subsystem;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.Classification;
@@ -85,7 +86,8 @@ public class AnnotationFactory {
                                                        new Subsystem(),
                                                        new ExecutableParameter(),
                                                        new FileParameter(),
-                                                       new Parameter()) ) {
+                                                       new Parameter(),
+                                                       new Locus()) ) {
 
                 constructors[annotation.getIndex()] = annotation.getClass().getConstructor();
                 instances[annotation.getIndex()] = annotation;
