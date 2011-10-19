@@ -20,6 +20,9 @@
  */
 package uk.ac.ebi.core;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -102,5 +105,29 @@ public class GenomeImplementation implements Genome {
      */
     public boolean add(int number, Gene gene) {
         return getChromosome(number).add(gene);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public void read(ObjectInput in) throws IOException, ClassNotFoundException {
+        int nChromsomes = in.readInt();
+        for (int i = 0; i < nChromsomes; i++) {
+            Chromosome c = new ChromosomeImplementation();
+            c.readExternal(in);
+            add(c);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public void write(ObjectOutput out) throws IOException {
+
+        out.writeInt(chromosomes.size());
+        for (Chromosome c : getChromosomes()) {
+            c.writeExternal(out);
+        }
+
     }
 }

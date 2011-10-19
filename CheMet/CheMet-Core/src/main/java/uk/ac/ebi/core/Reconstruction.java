@@ -4,33 +4,26 @@ package uk.ac.ebi.core;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import java.io.Externalizable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import javax.swing.JOptionPane;
+
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.core.reconstruction.ReconstructionContents;
 import uk.ac.ebi.core.reconstruction.ReconstructionProperites;
-import uk.ac.ebi.metabolomes.core.gene.OldGeneProduct;
-import uk.ac.ebi.metabolomes.core.gene.OldGeneProductCollection;
 import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
+
+import javax.swing.JOptionPane;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.Genome;
 
 /**
  * Reconstruction.java
@@ -53,8 +46,9 @@ public class Reconstruction
     private File container;
     private HashSet<ReconstructionContents> contents;
     private ReconstructionProperites properties;
-    private Taxonomy organismIdentifier; // could be under a generic ReconstructionContents class but this is already used as an enum
+    private Taxonomy taxonomy; // could be under a generic ReconstructionContents class but this is already used as an enum
     // component collections
+    private Genome genome;
     private ProductCollection products;
     private ReactionList reactions;
     private MetaboliteCollection metabolites;
@@ -66,12 +60,15 @@ public class Reconstruction
      */
     public Reconstruction(ReconstructionIdentifier id, Taxonomy org) {
         super(id, org.getCommonName(), org.getCode());
-        organismIdentifier = org;
+        taxonomy = org;
         reactions = new ReactionList();
         metabolites = new MetaboliteCollection();
+        products = new ProductCollection();
+        genome = new GenomeImplementation();
+
+
         contents = new HashSet<ReconstructionContents>();
         properties = new ReconstructionProperites();
-        products = new ProductCollection();
 
     }
 
@@ -81,7 +78,31 @@ public class Reconstruction
     private Reconstruction() {
         metabolites = new MetaboliteCollection();
         reactions = new ReactionList();
+        genome = new GenomeImplementation();
         products = new ProductCollection();
+    }
+
+    public Taxonomy getTaxonomy() {
+        return taxonomy;
+    }
+
+    /**
+     * Access the genome of the reconstruction. The genome provides methods
+     * for adding chromosomes and genes.
+     * @return
+     */
+    public Genome getGenome() {
+        return genome;
+    }
+
+    /**
+     * Access a collection of all the genes in the reconstruction. Adding genes
+     * to this collection will not add them to the reconstruction.
+     * See {@see Chromosome} and {@Genome} for how to add genes.
+     * @return
+     */
+    public Collection<Gene> getGenes() {
+        return genome.getGenes();
     }
 
     /**
@@ -133,8 +154,8 @@ public class Reconstruction
      */
     public static Reconstruction load(File container) throws IOException, ClassNotFoundException {
 
-        File file = new File(container, "recon.extern");
-        ObjectInput in = new ObjectInputStream(new FileInputStream(file));
+        File file = new File(container, "recon.extern.gzip");
+        ObjectInput in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
         Reconstruction reconstruction = new Reconstruction();
         reconstruction.readExternal(in);
 
@@ -149,8 +170,8 @@ public class Reconstruction
     public boolean save() {
         if (container != null) {
             try {
-                ObjectOutput out = new ObjectOutputStream(new FileOutputStream(
-                        new File(container, "recon.extern")));
+                ObjectOutput out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(
+                        new File(container, "recon.extern.gzip"))));
                 this.writeExternal(out);
                 out.close();
                 return true;
@@ -203,9 +224,12 @@ public class Reconstruction
 
         out.writeUTF(container.getAbsolutePath());
 
-        organismIdentifier.writeExternal(out);
+        taxonomy.writeExternal(out);
 
         properties.writeExternal(out);
+
+        // genome
+        genome.write(out);
 
         // products
         products.writeExternal(out);
@@ -233,13 +257,16 @@ public class Reconstruction
         container = new File(in.readUTF());
 
         // ids
-        organismIdentifier = new Taxonomy();
-        organismIdentifier.readExternal(in);
+        taxonomy = new Taxonomy();
+        taxonomy.readExternal(in);
 
         // properties
         properties = new ReconstructionProperites();
         properties.readExternal(in);
         contents = properties.getProjectContents();
+
+        // genome
+        genome.read(in);
 
         // products
         products = new ProductCollection();

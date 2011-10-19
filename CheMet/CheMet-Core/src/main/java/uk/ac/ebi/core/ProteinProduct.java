@@ -25,8 +25,6 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
-import org.biojava3.core.sequence.compound.AminoAcidCompound;
-import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -78,12 +76,12 @@ public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.int
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
-        sequence = new ProteinSequence(in.readUTF());
+        sequence = SequenceSerializer.readProteinSequence(in);//new ProteinSequence(in.readUTF());
     }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeUTF(sequence.getSequenceAsString());
+        SequenceSerializer.writeProteinSequence(sequence, out);//out.writeUTF(sequence.getSequenceAsString());
     }
 }

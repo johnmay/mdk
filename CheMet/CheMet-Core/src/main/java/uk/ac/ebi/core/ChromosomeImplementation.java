@@ -24,9 +24,9 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.interfaces.Chromosome;
@@ -46,7 +46,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
     private static final Logger LOGGER = Logger.getLogger(ChromosomeImplementation.class);
     public static final String BASE_TYPE = "Chromosome";
     private ChromosomeSequence sequence;
-    private Set<Gene> genes = new HashSet();
+    private List<Gene> genes = new ArrayList();
 
     public ChromosomeImplementation() {
     }
@@ -124,7 +124,16 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
-        sequence = new ChromosomeSequence(in.readUTF());
+        sequence = new ChromosomeSequence(SequenceSerializer.readDNASequence(in).getSequenceAsString());
+
+        int ngenes = in.readInt();
+
+        while (ngenes > genes.size()) {
+            Gene gene = new GeneImplementation();
+            gene.readExternal(in);
+            genes.add(gene);
+        }
+
     }
 
     /**
@@ -133,6 +142,13 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeUTF(sequence.getSequenceAsString());
+        SequenceSerializer.writeDNASequence(sequence, out);
+
+        out.writeInt(genes.size());
+
+        for (Gene gene : genes) {
+            gene.writeExternal(out);
+        }
+
     }
 }

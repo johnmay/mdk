@@ -66,12 +66,13 @@ public abstract class RNAProduct extends AbstractGeneProduct {
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
-        sequence = new RNASequence(in.readUTF());
+        sequence = SequenceSerializer.readRNASequence(in);//new RNASequence(in.readUTF());
     }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeUTF(sequence.getSequenceAsString());
+        SequenceSerializer.writeRNASequence(sequence, out);
+        // out.writeUTF(sequence.getSequenceAsString());
     }
 }
