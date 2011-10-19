@@ -20,6 +20,9 @@
  */
 package uk.ac.ebi.resource.gene;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
@@ -61,4 +64,11 @@ public class ChromosomeIdentifier extends AbstractIdentifier {
     public ChromosomeIdentifier newInstance() {
         return new ChromosomeIdentifier();
     }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+        number = Integer.parseInt(getAccession());
+    }
+
 }
