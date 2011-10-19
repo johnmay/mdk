@@ -20,6 +20,9 @@
  */
 package uk.ac.ebi.interfaces;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Collection;
 
 /**
@@ -79,4 +82,16 @@ public interface Genome {
      * @return whether the gene was added to the chromosome
      */
     public boolean add(int number, Gene gene);
+
+    /**
+     * Reads a genome from an input stream
+     * @param in
+     */
+    public void read(ObjectInput in) throws IOException, ClassNotFoundException;
+
+    /**
+     * Writes the genome to an output stream
+     * @param out
+     */
+    public void write(ObjectOutput out) throws IOException;
 }
