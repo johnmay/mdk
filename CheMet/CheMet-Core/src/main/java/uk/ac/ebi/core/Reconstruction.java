@@ -232,7 +232,7 @@ public class Reconstruction
         genome.write(out);
 
         // products
-        products.writeExternal(out);
+        products.writeExternal(out, genome);
 
         // metabolites
         out.writeInt(metabolites.size());
@@ -270,7 +270,7 @@ public class Reconstruction
 
         // products
         products = new ProductCollection();
-        products.readExternal(in);
+        products.readExternal(in, genome);
 
 
 

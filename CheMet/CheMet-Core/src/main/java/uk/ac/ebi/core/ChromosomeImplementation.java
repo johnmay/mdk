@@ -51,6 +51,10 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
     public ChromosomeImplementation() {
     }
 
+    protected ChromosomeImplementation(ObjectInput in) throws IOException, ClassNotFoundException {
+        readExternal(in);
+    }
+
     public ChromosomeImplementation(int number, ChromosomeSequence sequence) {
         super(new ChromosomeIdentifier(number), "CH:" + number, "Choromsome " + number);
         this.sequence = sequence;
@@ -79,7 +83,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
     /**
      * @inheritDoc
      */
-    public Collection<Gene> getGenes() {
+    public List<Gene> getGenes() {
         return genes;
     }
 
@@ -128,10 +132,10 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
 
         int ngenes = in.readInt();
 
-        while (ngenes > genes.size()) {
+        for (int i = 0; i < ngenes; i++) {
             Gene gene = new GeneImplementation();
             gene.readExternal(in);
-            genes.add(gene);
+            add(gene);
         }
 
     }

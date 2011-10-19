@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
@@ -84,4 +85,6 @@ public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.int
         super.writeExternal(out);
         SequenceSerializer.writeProteinSequence(sequence, out);//out.writeUTF(sequence.getSequenceAsString());
     }
+
+ 
 }

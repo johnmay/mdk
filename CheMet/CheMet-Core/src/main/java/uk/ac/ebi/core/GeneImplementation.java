@@ -20,15 +20,15 @@
  */
 package uk.ac.ebi.core;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.Strand;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
 
 /**
  *          GeneImplementation - 2011.10.17 <br>
@@ -110,4 +110,19 @@ public class GeneImplementation extends AbstractAnnotatedEntity implements Gene 
         return BASE_TYPE;
     }
 
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
+        start = in.readInt();
+        end = in.readInt();
+        strand = (Strand)in.readObject();
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+        out.writeInt(start);
+        out.writeInt(end);
+        out.writeObject(strand);
+    }
 }

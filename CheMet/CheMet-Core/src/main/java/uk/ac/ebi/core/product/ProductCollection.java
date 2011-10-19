@@ -35,6 +35,7 @@ import uk.ac.ebi.core.RibosomalRNA;
 import uk.ac.ebi.core.TransferRNA;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.Observation;
 
@@ -231,6 +232,45 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
             for (GeneProduct product : ps) {
                 product.writeExternal(out);
+            }
+
+        }
+    }
+
+    public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
+        Set<String> types = products.keySet();
+
+        out.writeInt(types.size()); // number of types
+
+        for (String type : types) {
+            Collection<GeneProduct> ps = products.get(type);
+
+            out.writeUTF(type);
+            out.writeInt(ps.size());
+
+            for (GeneProduct product : ps) {
+                product.writeExternal(out, genome);
+            }
+
+        }
+    }
+
+    public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
+        int nTypes = in.readInt();
+        for (int i = 0; i < nTypes; i++) {
+
+            String baseType = in.readUTF();
+
+            int nProds = in.readInt();
+            GeneProduct base = baseType.equals("Protein") ? new ProteinProduct()
+                               : baseType.equals("rRNA") ? new RibosomalRNA()
+                                 : baseType.equals("tRNA") ? new TransferRNA()
+                                   : null;
+            for (int j = 0; j < nProds; j++) {
+                GeneProduct product = base.newInstance();
+                product.readExternal(in, genome);
+                accessionMap.put(product.getAccession(), product);
+                products.put(product.getBaseType(), product);
             }
 
         }

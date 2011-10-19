@@ -23,10 +23,10 @@ package uk.ac.ebi.core;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
@@ -67,14 +67,23 @@ public abstract class AbstractGeneProduct
         super.writeExternal(out);
     }
 
-    public void readExternal(ObjectInput in, List<Gene> genes) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
-        int index = in.read();
-        gene = index == -1 ? null : genes.get(index);
+    public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
+        this.readExternal(in);
+        if (in.readBoolean()) {
+            int c = in.readInt();
+            int g = in.readInt();
+            this.gene = genome.getGene(c, g);
+        }
     }
 
-    public void writeExternal(ObjectOutput out, List<Gene> genes) throws IOException {
-        super.writeExternal(out);
-        out.write(gene == null ? -1 : genes.indexOf(gene));
+    public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
+        this.writeExternal(out);
+        if (gene != null) {
+            out.writeBoolean(true);
+            int[] index = genome.getIndex(gene);
+            out.writeInt(index[0]);
+            out.writeInt(index[1]);
+        }
+
     }
 }

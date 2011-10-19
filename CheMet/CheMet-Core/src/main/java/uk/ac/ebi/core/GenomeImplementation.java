@@ -113,8 +113,7 @@ public class GenomeImplementation implements Genome {
     public void read(ObjectInput in) throws IOException, ClassNotFoundException {
         int nChromsomes = in.readInt();
         for (int i = 0; i < nChromsomes; i++) {
-            Chromosome c = new ChromosomeImplementation();
-            c.readExternal(in);
+            Chromosome c = new ChromosomeImplementation(in);
             add(c);
         }
     }
@@ -129,5 +128,24 @@ public class GenomeImplementation implements Genome {
             c.writeExternal(out);
         }
 
+    }
+
+    /**
+     * Access a gene for the given index on the given chromosome
+     */
+    public Gene getGene(int number, int index) {
+        if (chromosomes.containsKey(number)) {
+            return chromosomes.get(number).getGenes().get(index);
+        }
+        return null;
+    }
+
+    public int[] getIndex(Gene gene) {
+        for (Chromosome c : getChromosomes()) {
+            int index = c.getGenes().indexOf(gene);
+            if (index != -1);
+            return new int[]{c.getChromosomeNumber(), index};
+        }
+        return new int[]{-1, -1};
     }
 }
