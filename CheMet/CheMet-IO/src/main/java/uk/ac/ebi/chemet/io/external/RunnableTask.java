@@ -33,6 +33,9 @@ public abstract class RunnableTask
     private Date end;
     public Set<AnnotatedEntity> entities = new HashSet();
 
+    public RunnableTask() {
+    }
+
     public RunnableTask(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
@@ -80,8 +83,6 @@ public abstract class RunnableTask
     public Date getStart() {
         return start;
     }
-
-    
 
     /**
      * Returns a set of all entities added to the task
