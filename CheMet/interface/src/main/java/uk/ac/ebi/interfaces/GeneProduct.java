@@ -64,6 +64,10 @@ public interface GeneProduct extends AnnotatedEntity {
 
     public void writeExternal(ObjectOutput out) throws IOException;
 
+    public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException;
+
+    public void writeExternal(ObjectOutput out, Genome genome) throws IOException;
+
     /**
      * Returns a new instance of the current gene-product type
      * @return 

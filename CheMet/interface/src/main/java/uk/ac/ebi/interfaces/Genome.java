@@ -94,4 +94,8 @@ public interface Genome {
      * @param out
      */
     public void write(ObjectOutput out) throws IOException;
+
+    public Gene getGene(int number, int index);
+
+    public int[] getIndex(Gene gene);
 }

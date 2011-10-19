@@ -22,6 +22,7 @@ package uk.ac.ebi.interfaces;
 
 import java.io.Externalizable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *          Chromosome – 2011.09.12 <br>
@@ -63,7 +64,7 @@ public interface Chromosome extends Externalizable {
      *
      * @return
      */
-    public Collection<Gene> getGenes();
+    public List<Gene> getGenes();
 
     /**
      *
