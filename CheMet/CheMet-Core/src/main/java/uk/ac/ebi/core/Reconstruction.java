@@ -243,7 +243,7 @@ public class Reconstruction
         // reactions
         out.writeInt(reactions.size());
         for (MetabolicReaction reaction : reactions) {
-            reaction.writeExternal(out, metabolites);
+            reaction.writeExternal(out, metabolites, products);
             // already writen so don't need to write
         }
 
@@ -290,7 +290,7 @@ public class Reconstruction
         int nRxns = in.readInt();
         for (int i = 0; i < nRxns; i++) {
             MetabolicReaction r = new MetabolicReaction();
-            r.readExternal(in, metabolites);
+            r.readExternal(in, metabolites, products);
             reactions.add(r);
         }
         long end = System.currentTimeMillis();

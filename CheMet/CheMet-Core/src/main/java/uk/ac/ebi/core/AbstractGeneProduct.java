@@ -21,6 +21,7 @@
 package uk.ac.ebi.core;
 
 import java.io.IOException;
+import java.io.NotSerializableException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
@@ -59,16 +60,16 @@ public abstract class AbstractGeneProduct
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
+        throw new NotSerializableException();
     }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-        super.writeExternal(out);
+        throw new NotSerializableException();
     }
 
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
-        this.readExternal(in);
+        super.readExternal(in);
         if (in.readBoolean()) {
             int c = in.readInt();
             int g = in.readInt();
@@ -77,13 +78,16 @@ public abstract class AbstractGeneProduct
     }
 
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
-        this.writeExternal(out);
+        super.writeExternal(out);
         if (gene != null) {
             out.writeBoolean(true);
             int[] index = genome.getIndex(gene);
             out.writeInt(index[0]);
             out.writeInt(index[1]);
+        } else {
+            out.writeBoolean(false);
         }
+
 
     }
 }

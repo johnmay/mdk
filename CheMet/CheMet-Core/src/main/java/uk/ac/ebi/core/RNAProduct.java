@@ -26,7 +26,7 @@ import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.RNASequence;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
@@ -64,14 +64,14 @@ public abstract class RNAProduct extends AbstractGeneProduct {
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
+    public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
+        super.readExternal(in, genome);
         sequence = SequenceSerializer.readRNASequence(in);//new RNASequence(in.readUTF());
     }
 
     @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        super.writeExternal(out);
+    public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
+        super.writeExternal(out, genome);
         SequenceSerializer.writeRNASequence(sequence, out);
         // out.writeUTF(sequence.getSequenceAsString());
     }

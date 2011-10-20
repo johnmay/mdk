@@ -75,16 +75,14 @@ public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.int
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
+    public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
+        super.readExternal(in, genome);
         sequence = SequenceSerializer.readProteinSequence(in);//new ProteinSequence(in.readUTF());
     }
 
     @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        super.writeExternal(out);
+    public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
+        super.writeExternal(out, genome);
         SequenceSerializer.writeProteinSequence(sequence, out);//out.writeUTF(sequence.getSequenceAsString());
     }
-
- 
 }

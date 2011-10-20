@@ -23,10 +23,15 @@ package uk.ac.ebi.core;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.core.product.ProductCollection;
+import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
 
 /**
  *          MetabolicReaction – 2011.09.27 <br>
@@ -38,11 +43,45 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 public class MetabolicReaction extends Reaction<Metabolite, Double, Compartment> {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicReaction.class);
+    private List<GeneProduct> modifiers = new ArrayList();
 
     public MetabolicReaction() {
     }
 
     public MetabolicReaction(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
+    }
+
+    public void addModifier(GeneProduct product) {
+        modifiers.add(product);
+    }
+
+    public Collection<GeneProduct> getModifiers() {
+        return modifiers;
+    }
+
+    public void readExternal(ObjectInput in, MetaboliteCollection metabolites, ProductCollection products) throws IOException, ClassNotFoundException {
+        super.readExternal(in, metabolites);
+        if (in.readBoolean()) {
+            int n = in.readInt();
+            while (n > modifiers.size()) {
+                String baseType = in.readUTF();
+                modifiers.add(products.getAll(baseType).get(in.readInt()));
+            }
+        }
+    }
+
+    public void writeExternal(ObjectOutput out, MetaboliteCollection metabolites, ProductCollection products) throws IOException {
+        super.writeExternal(out, metabolites);
+
+        out.writeBoolean(!modifiers.isEmpty());
+        if (!modifiers.isEmpty()) {
+            out.writeInt(modifiers.size());
+            for (GeneProduct product : modifiers) {
+                out.writeUTF(product.getBaseType());
+                out.writeInt(products.getAll(product.getBaseType()).indexOf(product));
+            }
+        }
+
     }
 }

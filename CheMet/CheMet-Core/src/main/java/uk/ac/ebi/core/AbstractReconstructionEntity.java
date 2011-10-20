@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.core;
 
+import com.google.common.base.Objects;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -131,28 +132,32 @@ public class AbstractReconstructionEntity implements Cloneable, Externalizable {
     }
 
 
-    @Override
-    public boolean equals(Object obj) {
-        if( obj == null ) {
-            return false;
-        }
-        if( getClass() != obj.getClass() ) {
-            return false;
-        }
-        final AbstractReconstructionEntity other = (AbstractReconstructionEntity) obj;
-        if( this.identifier != other.identifier &&
-            (this.identifier == null || !this.identifier.equals(other.identifier)) ) {
-            return false;
-        }
-        return true;
-    }
-
+ 
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 37 * hash + (this.identifier != null ? this.identifier.hashCode() : 0);
-        return hash;
+        return Objects.hashCode(identifier, name, abbreviation);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AbstractReconstructionEntity other = (AbstractReconstructionEntity) obj;
+        if (this.identifier != other.identifier && (this.identifier == null || !this.identifier.equals(other.identifier))) {
+            return false;
+        }
+        if ((this.abbreviation == null) ? (other.abbreviation != null) : !this.abbreviation.equals(other.abbreviation)) {
+            return false;
+        }
+        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
+            return false;
+        }
+        return true;
     }
 
 

@@ -27,12 +27,12 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 public class ReconstructionManager {
 
     private static final org.apache.log4j.Logger LOGGER =
-            org.apache.log4j.Logger.getLogger(
+                                                 org.apache.log4j.Logger.getLogger(
             ReconstructionManager.class);
     private Identifier activeProjectIdentifier;
     private ArrayList<Reconstruction> projects = new ArrayList<Reconstruction>();
     private LinkedHashMap<Identifier, Integer> projectMap =
-            new LinkedHashMap();
+                                               new LinkedHashMap();
     private Properties properties = new Properties();
     private LinkedList<String> recent = new LinkedList<String>();
 
@@ -95,9 +95,18 @@ public class ReconstructionManager {
      * Accessor for the active reconstruction
      *
      * @return
-     * 
+     * @deprecated  use getActive()
      */
+    @Deprecated
     public Reconstruction getActiveReconstruction() {
+        return getProject(activeProjectIdentifier);
+    }
+
+    /**
+     * Access the active reconstruction
+     * @return 
+     */
+    public Reconstruction getActive() {
         return getProject(activeProjectIdentifier);
     }
 
@@ -112,7 +121,7 @@ public class ReconstructionManager {
      */
     public boolean removeProject(Reconstruction reconstruction) {
 
-        if(reconstruction == null){
+        if (reconstruction == null) {
             return false;
         }
 
@@ -162,9 +171,9 @@ public class ReconstructionManager {
             if (entry.getIdentifier().equals(reconstruction)) {
                 setActiveReconstruction(entry.getIdentifier());
                 LOGGER.error("found matching project but clashing identifiers stored:"
-                        + entry.getIdentifier()
-                        + " new:"
-                        + reconstruction.getIdentifier());
+                             + entry.getIdentifier()
+                             + " new:"
+                             + reconstruction.getIdentifier());
                 return;
             }
         }

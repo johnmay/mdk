@@ -16,6 +16,7 @@
  */
 package uk.ac.ebi.core;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import java.io.Externalizable;
@@ -42,7 +43,7 @@ import uk.ac.ebi.observation.ObservationCollection;
  */
 public abstract class AbstractAnnotatedEntity
         extends AbstractReconstructionEntity
-        implements Externalizable, AnnotatedEntity  {
+        implements Externalizable, AnnotatedEntity {
 
     private transient static final Logger logger = Logger.getLogger(AbstractAnnotatedEntity.class);
     private ListMultimap<Byte, Annotation> annotations = ArrayListMultimap.create();
@@ -135,7 +136,6 @@ public abstract class AbstractAnnotatedEntity
     public boolean removeAnnotation(final Annotation annotation) {
         return annotations.get(annotation.getIndex()).remove(annotation);
     }
-
 
     /**
      * Accessor to the stored observations
@@ -230,9 +230,7 @@ public abstract class AbstractAnnotatedEntity
     @Override
     public int hashCode() {
         int hash = super.hashCode();
-        hash = 67 * hash + (this.annotations != null ? this.annotations.hashCode() : 0);
-        hash = 67 * hash + (this.observations != null ? this.observations.hashCode() : 0);
-        return hash;
+        return Objects.hashCode(hash, annotations, observations);
     }
 
     @Override

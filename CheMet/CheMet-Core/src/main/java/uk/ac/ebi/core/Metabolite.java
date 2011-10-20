@@ -1,4 +1,3 @@
-
 /**
  * Metabolite.java
  *
@@ -33,7 +32,6 @@ import uk.ac.ebi.core.metabolite.MetaboliteClass;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
-
 /**
  *          Metabolite – 2011.09.05 <br>
  *          Class description
@@ -42,23 +40,20 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
  * @author  $Author$ (this version)
  */
 public class Metabolite
-  extends AbstractAnnotatedEntity
-  implements Externalizable {
+        extends AbstractAnnotatedEntity
+        implements Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(Metabolite.class);
     private boolean generic = false;
     private MetaboliteClass type = MetaboliteClass.UNKNOWN;
-    public  static final String BASE_TYPE = "Metabolite";
-
+    public static final String BASE_TYPE = "Metabolite";
 
     public Metabolite() {
     }
 
-
     public Metabolite(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
-
 
     /**
      *
@@ -73,7 +68,6 @@ public class Metabolite
         super(new BasicChemicalIdentifier(accession), abbreviation, name);
     }
 
-
     /**
      *
      * Accessor to whether the molecule is generic (contains one or more -R groups)
@@ -84,7 +78,6 @@ public class Metabolite
         return generic;
     }
 
-
     /**
      *
      * Sets whether the molecule is generic (has -R group)
@@ -93,7 +86,6 @@ public class Metabolite
     public void setGeneric(boolean generic) {
         this.generic = generic;
     }
-
 
     /**
      *
@@ -106,11 +98,9 @@ public class Metabolite
         return getChemicalStructures().iterator().hasNext();
     }
 
-
     public Collection<ChemicalStructure> getChemicalStructures() {
         return super.getAnnotations(ChemicalStructure.class);
     }
-
 
     /**
      *
@@ -124,7 +114,6 @@ public class Metabolite
         return getChemicalStructures().iterator().next();
     }
 
-
     /**
      * @inheritDoc
      */
@@ -134,7 +123,6 @@ public class Metabolite
         type = MetaboliteClass.valueOf(in.readUTF());
         generic = in.readBoolean();
     }
-
 
     /**
      * @inheritDoc
@@ -146,35 +134,33 @@ public class Metabolite
         out.writeBoolean(generic);
     }
 
-
     /**
      * @inheritDoc
      */
     @Override
     public boolean equals(Object obj) {
 
-        if( obj == null ) {
+        if (obj == null) {
             return false;
         }
-        if( getClass() != obj.getClass() ) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final Metabolite other = (Metabolite) obj;
 
-        if( super.equals(other) == false ) {
+        if (super.equals(other) == false) {
             return false;
         }
 
-        if( this.generic != other.generic ) {
+        if (this.generic != other.generic) {
             return false;
         }
-        if( this.type != other.type ) {
+        if (this.type != other.type) {
             return false;
         }
 
         return true;
     }
-
 
     /**
      * @inheritDoc
@@ -182,25 +168,19 @@ public class Metabolite
     @Override
     public int hashCode() {
         int hash = super.hashCode();
-        return 47 * hash + Objects.hashCode(generic, type);
+        return Objects.hashCode(hash, generic, type);
     }
-
 
     public MetaboliteClass getType() {
         return type;
     }
 
-
     public void setType(MetaboliteClass type) {
         this.type = type;
     }
-
 
     @Override
     public String getBaseType() {
         return BASE_TYPE;
     }
-
-
 }
-
