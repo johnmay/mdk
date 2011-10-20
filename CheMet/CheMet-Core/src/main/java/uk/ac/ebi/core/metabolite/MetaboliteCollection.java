@@ -15,8 +15,9 @@
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.metabolomes.core.compound;
+package uk.ac.ebi.core.metabolite;
 
+import com.google.common.collect.Multimap;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -57,7 +58,6 @@ public class MetaboliteCollection
         }
         return true;
     }
-
 
 }
 

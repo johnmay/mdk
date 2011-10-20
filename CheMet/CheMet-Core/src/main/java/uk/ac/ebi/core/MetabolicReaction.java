@@ -31,7 +31,7 @@ import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
+import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 
 /**
  *          MetabolicReaction – 2011.09.27 <br>

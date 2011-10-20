@@ -17,7 +17,7 @@ import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.core.reconstruction.ReconstructionContents;
 import uk.ac.ebi.core.reconstruction.ReconstructionProperites;
-import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
+import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 

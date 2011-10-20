@@ -38,7 +38,7 @@ import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
 import uk.ac.ebi.core.reaction.MetaboliteParticipant;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.core.compound.MetaboliteCollection;
+import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 
 /**
  * Reaction –  2011.08.08

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 
@@ -48,13 +49,13 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
         super(reactions);
     }
 
-  
     @Override
     public boolean add(MetabolicReaction rxn) {
 
-        for (Metabolite m : rxn.getAllReactionMolecules()) {
-            participantMap.get(m).add(rxn);
+        for (Participant<Metabolite, ?, ?> m : rxn.getAllReactionParticipants()) {
+            participantMap.get(m.getMolecule()).add(rxn);
         }
+
 
         return super.add(rxn);
 
@@ -104,5 +105,12 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
         return participantMap.get(m);
     }
 
-
+    public void rebuildParticipantMap() {
+        participantMap.clear();
+        for (MetabolicReaction rxn : this) {
+            for (Participant<Metabolite, ?, ?> m : rxn.getAllReactionParticipants()) {
+                participantMap.get(m.getMolecule()).add(rxn);
+            }
+        }
+    }
 }

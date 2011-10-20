@@ -21,13 +21,15 @@
 package uk.ac.ebi.core.product;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import java.io.Externalizable;
 import java.io.IOException;
+import java.io.NotSerializableException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.ProteinProduct;
@@ -49,8 +51,9 @@ import uk.ac.ebi.interfaces.Observation;
 public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct>, Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(ProductCollection.class);
-    private Multimap<String, GeneProduct> products = ArrayListMultimap.create();
-    private Multimap<String, GeneProduct> accessionMap = ArrayListMultimap.create();
+    private List<GeneProduct> productList = new ArrayList();
+    private ArrayListMultimap<String, GeneProduct> products = ArrayListMultimap.create();
+    private ArrayListMultimap<String, GeneProduct> accessionMap = ArrayListMultimap.create();
     // could use identifier but accession should be unique
 
     public ProductCollection() {
@@ -169,6 +172,10 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         return products.values().toArray(a);
     }
 
+    public List<GeneProduct> getAll(String basetype) {
+        return products.get(basetype);
+    }
+
     public boolean remove(Object o) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -193,48 +200,14 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
      * @inheritDoc
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
-        int nTypes = in.readInt();
-        for (int i = 0; i < nTypes; i++) {
-
-            String baseType = in.readUTF();
-
-            int nProds = in.readInt();
-            GeneProduct base = baseType.equals("Protein") ? new ProteinProduct()
-                               : baseType.equals("rRNA") ? new RibosomalRNA()
-                                 : baseType.equals("tRNA") ? new TransferRNA()
-                                   : null;
-            for (int j = 0; j < nProds; j++) {
-                GeneProduct product = base.newInstance();
-                product.readExternal(in);
-                accessionMap.put(product.getAccession(), product);
-                products.put(product.getBaseType(), product);
-            }
-
-        }
-
+        throw new NotSerializableException();
     }
 
     /**
      * @inheritDoc
      */
     public void writeExternal(ObjectOutput out) throws IOException {
-
-        Set<String> types = products.keySet();
-
-        out.writeInt(types.size()); // number of types
-
-        for (String type : types) {
-            Collection<GeneProduct> ps = products.get(type);
-
-            out.writeUTF(type);
-            out.writeInt(ps.size());
-
-            for (GeneProduct product : ps) {
-                product.writeExternal(out);
-            }
-
-        }
+        throw new NotSerializableException();
     }
 
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
@@ -269,6 +242,7 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
             for (int j = 0; j < nProds; j++) {
                 GeneProduct product = base.newInstance();
                 product.readExternal(in, genome);
+                productList.add(product);
                 accessionMap.put(product.getAccession(), product);
                 products.put(product.getBaseType(), product);
             }
