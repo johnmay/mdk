@@ -128,7 +128,7 @@ public class AbstractReconstructionEntity implements Cloneable, Externalizable {
 
     @Override
     public String toString() {
-        return identifier.toString();
+        return name;
     }
 
 
