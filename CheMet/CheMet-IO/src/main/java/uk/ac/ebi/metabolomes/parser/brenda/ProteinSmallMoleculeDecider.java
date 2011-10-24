@@ -13,10 +13,13 @@ import java.util.regex.Pattern;
 public class ProteinSmallMoleculeDecider {
     private static final Pattern ase_end_Pattern = Pattern.compile("(?i)ase$");
     private static final Pattern ase_sep_Pattern = Pattern.compile("(?i)ase[ \\]] ");
+    private static final Pattern acpPattern = Pattern.compile("(?i)\\[acp\\]"); // acp : acyl carrier protein
     private static final Pattern brcaPattern = Pattern.compile("(?i)BRCA");
+    private static final Pattern eIF5aPrecPattern = Pattern.compile("(?i)eIF5A-precursor");
     private static final Pattern calmodulinPattern = Pattern.compile("(?i)calmodulin");
     private static final Pattern caseinPattern = Pattern.compile("(?i)casein");
     private static final Pattern caspasePattern = Pattern.compile("(?i)caspase");
+    private static final Pattern carboxylasePattern = Pattern.compile("(?i)carboxylase");
     private static final Pattern cateninPattern = Pattern.compile("(?i)catenin");
     private static final Pattern channelPattern = Pattern.compile("(?i)channel");
     private static final Pattern claudinPattern = Pattern.compile("(?i)claudin");
@@ -25,6 +28,7 @@ public class ProteinSmallMoleculeDecider {
     private static final Pattern collagenPattern = Pattern.compile("(?i)collagen");
     private static final Pattern cytochromePattern = Pattern.compile("(?i)cytochrome");
     private static final Pattern doxinPattern = Pattern.compile("(?i)doxin");
+    private static final Pattern dehydrogenasePattern = Pattern.compile("(?i)hydrogenase");
     private static final Pattern elastinPattern = Pattern.compile("(?i)elastin");
     private static final Pattern enzymePattern = Pattern.compile("(?i)enzyme");
     private static final Pattern factorPattern = Pattern.compile("(?i)factor");
@@ -36,9 +40,12 @@ public class ProteinSmallMoleculeDecider {
     private static final Pattern histonePattern = Pattern.compile("(?i)istone");
     private static final Pattern kinasePattern = Pattern.compile("(?i)kinase");
     private static final Pattern kininogenPattern = Pattern.compile("(?i)kininogen");
+    private static final Pattern ligasePattern = Pattern.compile("(?i)ligase");
     private static final Pattern myosinPattern = Pattern.compile("(?i)myosin");
     private static final Pattern paxilinPattern = Pattern.compile("(?i)paxilin");
     private static final Pattern phosphorylatedPattern = Pattern.compile("(?i)phosphorylated");
+    // [phosphorylase a] still goes undetected
+    private static final Pattern phosphorylasePattern = Pattern.compile("(?i)phosphorylase");
     private static final Pattern plasminPattern = Pattern.compile("(?i)plasmin");
     private static final Pattern protaminePattern = Pattern.compile("(?i)protamine");
     private static final Pattern proteasPattern = Pattern.compile("(?i)proteas");
@@ -54,6 +61,7 @@ public class ProteinSmallMoleculeDecider {
     private static final Pattern thrombinPattern = Pattern.compile("(?i)thrombin");
     private static final Pattern thrombospondinPattern = Pattern.compile("(?i)thrombospondin");
     private static final Pattern transferrinPattern = Pattern.compile("(?i)transferrin");
+    private static final Pattern transferasePattern = Pattern.compile("(?i)transferase");
     private static final Pattern tubulinPattern = Pattern.compile("(?i)tubulin");
     private static final Pattern vimentinPattern = Pattern.compile("(?i)vimentin");
     
@@ -71,6 +79,10 @@ public class ProteinSmallMoleculeDecider {
             }
             return true;
         } else if (caseinPattern.matcher(name).find()) {
+            return true;
+        } else if (carboxylasePattern.matcher(name).find()) {
+            return true;
+        } else if (dehydrogenasePattern.matcher(name).find()) {
             return true;
         } else if (collagenPattern.matcher(name).find()) {
             return true;
@@ -104,11 +116,17 @@ public class ProteinSmallMoleculeDecider {
             return true;
         } else if (fibronectinPattern.matcher(name).find()) {
             return true;
+        } else if (eIF5aPrecPattern.matcher(name).find()) {
+            return true;
         } else if (kininogenPattern.matcher(name).find()) {
+            return true;
+        } else if (ligasePattern.matcher(name).find()) {
             return true;
         } else if (ase_sep_Pattern.matcher(name).find()) {
             return true;
         } else if (ase_end_Pattern.matcher(name).find()) {
+            return true;
+        } else if (acpPattern.matcher(name).find()) {
             return true;
         } else if (synthasePattern.matcher(name).find()) {
             return true;
@@ -126,6 +144,8 @@ public class ProteinSmallMoleculeDecider {
         } else if (gelsolinPattern.matcher(name).find()) {
             return true;
         } else if (cateninPattern.matcher(name).find()) {
+            return true;
+        } else if (phosphorylatedPattern.matcher(name).find()) {
             return true;
         } else if (phosphorylatedPattern.matcher(name).find()) {
             return true;
@@ -154,6 +174,8 @@ public class ProteinSmallMoleculeDecider {
         } else if (protaminePattern.matcher(name).find()) {
             return true;
         } else if (transferrinPattern.matcher(name).find()) {
+            return true;
+        } else if (transferasePattern.matcher(name).find()) {
             return true;
         } else if (proteoglycanPattern.matcher(name).find()) {
             return true;
