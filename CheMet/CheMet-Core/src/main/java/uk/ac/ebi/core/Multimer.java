@@ -99,13 +99,15 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
         throw new UnsupportedOperationException("Unable to add a gene to a multimer");
     }
 
-    public Sequence<? extends AbstractCompound> getSequence() {
+    public List<? extends Sequence> getSequences() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void setSequence(Sequence<? extends AbstractCompound> sequence) {
+    public boolean addSequence(Sequence<? extends AbstractCompound> sequence) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+   
 
 
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {

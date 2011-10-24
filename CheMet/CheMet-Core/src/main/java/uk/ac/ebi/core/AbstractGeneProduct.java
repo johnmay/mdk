@@ -76,7 +76,7 @@ public abstract class AbstractGeneProduct
 
         int nGenes = in.readInt();
 
-        while (genes.size() > nGenes) {
+        while (nGenes > genes.size()) {
             int c = in.readInt();
             int g = in.readInt();
             this.genes.add(genome.getGene(c, g));
@@ -86,7 +86,6 @@ public abstract class AbstractGeneProduct
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
         super.writeExternal(out);
 
-        out.writeBoolean(true);
         out.writeInt(genes.size());
 
         for (Gene gene : genes) {

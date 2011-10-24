@@ -23,6 +23,8 @@ package uk.ac.ebi.core;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.RNASequence;
 import org.biojava3.core.sequence.template.Sequence;
@@ -40,7 +42,7 @@ public abstract class RNAProduct extends AbstractGeneProduct {
 
     private static final Logger LOGGER = Logger.getLogger(RNAProduct.class);
     public static final String BASE_TYPE = "RNA";
-    private RNASequence sequence;
+    private List<RNASequence> sequences = new ArrayList();
 
     public RNAProduct() {
     }
@@ -49,13 +51,12 @@ public abstract class RNAProduct extends AbstractGeneProduct {
         super(identifier, abbreviation, name);
     }
 
-    @Override
-    public RNASequence getSequence() {
-        return sequence;
+    public List<RNASequence> getSequences() {
+        return sequences;
     }
 
-    public void setSequence(Sequence sequence) {
-        this.sequence = (RNASequence) sequence;
+    public boolean addSequence(Sequence sequence) {
+        return this.sequences.add((RNASequence) sequence);
     }
 
     @Override
@@ -66,13 +67,18 @@ public abstract class RNAProduct extends AbstractGeneProduct {
     @Override
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
         super.readExternal(in, genome);
-        sequence = SequenceSerializer.readRNASequence(in);//new RNASequence(in.readUTF());
+        int n = in.readInt();
+        while (n > sequences.size()) {
+            sequences.add(SequenceSerializer.readRNASequence(in));
+        }
     }
 
     @Override
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
         super.writeExternal(out, genome);
-        SequenceSerializer.writeRNASequence(sequence, out);
-        // out.writeUTF(sequence.getSequenceAsString());
+        out.writeInt(sequences.size());
+        for (RNASequence sequence : sequences) {
+            SequenceSerializer.writeRNASequence(sequence, out);
+        }
     }
 }

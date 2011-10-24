@@ -23,8 +23,13 @@ package uk.ac.ebi.core;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
+import org.biojava3.core.sequence.compound.AminoAcidCompound;
+import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.Genome;
@@ -41,7 +46,7 @@ public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.int
 
     private static final Logger LOGGER = Logger.getLogger(ProteinProduct.class);
     public static final String BASE_TYPE = "Protein";
-    private ProteinSequence sequence;
+    private List<ProteinSequence> sequences = new ArrayList();
 
     public ProteinProduct() {
     }
@@ -50,16 +55,12 @@ public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.int
         super(identifier, abbreviation, name);
     }
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public ProteinSequence getSequence() {
-        return sequence;
+    public List<ProteinSequence> getSequences() {
+        return sequences;
     }
 
-    public void setSequence(Sequence sequence) {
-        this.sequence = (ProteinSequence) sequence;
+    public boolean addSequence(Sequence sequence) {
+        return this.sequences.add((ProteinSequence) sequence);
     }
 
     /**
@@ -77,12 +78,18 @@ public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.int
     @Override
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
         super.readExternal(in, genome);
-        sequence = SequenceSerializer.readProteinSequence(in);//new ProteinSequence(in.readUTF());
+        int n = in.readInt();
+        while (n > sequences.size()) {
+            sequences.add(SequenceSerializer.readProteinSequence(in));
+        }
     }
 
     @Override
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
         super.writeExternal(out, genome);
-        SequenceSerializer.writeProteinSequence(sequence, out);//out.writeUTF(sequence.getSequenceAsString());
+        out.writeInt(sequences.size());
+        for (ProteinSequence sequence : sequences) {
+            SequenceSerializer.writeProteinSequence(sequence, out);
+        }
     }
 }
