@@ -4,12 +4,21 @@
  */
 package uk.ac.ebi.resource;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.Set;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.junit.Test;
 import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
@@ -105,7 +114,23 @@ public class IdentifierFactoryTest extends TestCase {
     }
 
     @Test
-    public void testGetSupportedIdentifiers() {
+    public void testIO() throws IOException, ClassNotFoundException {
+        ProteinIdentifier id = new BasicProteinIdentifier("Basic Protein");
+        IdentifierFactory factory = IdentifierFactory.getInstance();
+
+        File f = File.createTempFile("tmp", ".binary");
+
+        ObjectOutput out = new ObjectOutputStream(new FileOutputStream(f));
+        factory.write(out, id);
+        out.close();
+
+        ObjectInput in = new ObjectInputStream(new FileInputStream(f));
+        Identifier readId = factory.read(in);
+        in.close();
+
+
+        System.out.println(readId);
+
     }
 
     @Test

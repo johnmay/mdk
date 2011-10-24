@@ -110,10 +110,10 @@ public class InChI
         // use the main inchi as the identifier
         setAccession(inchi);
 
-//        String[] layers = this.inchi.split("/");
-//        if( standardInChIMatcher.matcher(layers[0]).find() ) {
-//            standard = true;
-//        }
+        String[] layers = this.inchi.split("/");
+        if( standardInChIMatcher.matcher(layers[0]).find() ) {
+            standard = true;
+        }
 //
 //
 //        for( String inchiLayer : layers ) {

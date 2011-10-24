@@ -36,7 +36,7 @@ public class BasicChemicalIdentifier
   extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicChemicalIdentifier.class);
-
+    private static int ticker = 0;
 
     public BasicChemicalIdentifier() {
         super();
@@ -47,6 +47,10 @@ public class BasicChemicalIdentifier
         super(accession);
     }
 
+
+    public static BasicChemicalIdentifier nextIdentifier(){
+        return new BasicChemicalIdentifier("m_" + ++ticker);
+    }
 
     /**
      * @inheritDoc
