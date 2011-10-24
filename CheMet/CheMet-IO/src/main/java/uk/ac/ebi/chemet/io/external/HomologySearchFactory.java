@@ -123,7 +123,11 @@ public class HomologySearchFactory {
         for (GeneProduct p : products) {
             if (p instanceof ProteinProduct) {
                 ProteinProduct protein = (ProteinProduct) p;
-                ProteinSequence sequence = protein.getSequence();
+                if (protein.getSequences().size() > 1) {
+                    LOGGER.info("Protein with multiple sequences");
+                }
+
+                ProteinSequence sequence = protein.getSequences().iterator().next();
                 sequence.setOriginalHeader(protein.getAccession()); // ensure the output has matching ids
                 if (accessionMap.containsKey(protein.getAccession())) {
                     throw new InvalidParameterException("Clashing protein accessions: " + protein.getAccession() + " sequence will not be used in search");

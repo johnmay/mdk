@@ -31,6 +31,7 @@ import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.Strand;
 import org.biojava3.core.sequence.template.AbstractSequence;
 import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.GeneImplementation;
 import uk.ac.ebi.core.IdentifierSet;
@@ -93,7 +94,7 @@ public class ENAFeatureParser {
                 String locationText = xmlr.getAttributeValue(i);
 
                 // remove scaffold
-                if(locationText.contains(":")){
+                if (locationText.contains(":")) {
                     locationText = locationText.substring(locationText.indexOf(":") + 1);
                 }
 
@@ -206,7 +207,7 @@ public class ENAFeatureParser {
             cds.addAnnotation(new CrossReference(identifier));
         }
 
-        cds.setSequence(new ProteinSequence(getTranslation()));
+        cds.addSequence(new ProteinSequence(getTranslation()));
 
         return cds;
 
@@ -230,9 +231,12 @@ public class ENAFeatureParser {
                                            end,
                                            (complement ? Strand.NEGATIVE : Strand.POSITIVE));
 
-        // no xrefs
-        // what about old locus
-
+        // we presume there will always be a locus tag
+        gene.addAnnotation(new Locus(getLocusTag()));
+        if (getOldLocusTag().isEmpty() == false) {
+            gene.addAnnotation(new Locus(getOldLocusTag()));
+        }
+        
         return gene;
 
     }

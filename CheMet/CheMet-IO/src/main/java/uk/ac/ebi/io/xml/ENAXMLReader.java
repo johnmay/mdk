@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +90,7 @@ public class ENAXMLReader {
                             GeneProduct product = (GeneProduct) feature.getEntity();
                             Gene gene = genes.get(feature.getLocusTag());
                             if (gene != null) {
-                                product.setGene(gene);
+                                product.addGene(gene);
                             } else {
                                 LOGGER.error("No gene found for locus tag: " + feature.getLocusTag());
                             }
@@ -117,12 +118,14 @@ public class ENAXMLReader {
         DNASequence genome = new DNASequence(getGenomeString());
         for (GeneProduct product : products) {
             if (product instanceof RNAProduct) {
-                Gene gene = product.getGene();
-                Sequence seq = genome.getSubSequence(gene.getStart(), gene.getEnd());
-                if (gene.getStrand() == Strand.NEGATIVE) {
-                    seq = seq.getInverse();
+                Collection<Gene> pGenes = product.getGenes();
+                for (Gene gene : pGenes) {
+                    Sequence seq = genome.getSubSequence(gene.getStart(), gene.getEnd());
+                    if (gene.getStrand() == Strand.NEGATIVE) {
+                        seq = seq.getInverse();
+                    }
+                    product.addSequence(new DNASequence(seq.getSequenceAsString()).getRNASequence());
                 }
-                product.setSequence(new DNASequence(seq.getSequenceAsString()).getRNASequence());
             }
         }
 

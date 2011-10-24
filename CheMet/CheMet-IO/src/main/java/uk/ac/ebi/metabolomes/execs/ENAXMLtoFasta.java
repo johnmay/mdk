@@ -23,6 +23,7 @@ package uk.ac.ebi.metabolomes.execs;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import org.apache.commons.cli.Option;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
@@ -76,9 +77,12 @@ public class ENAXMLtoFasta extends CommandLineMain {
             Collection<ProteinSequence> sequences = new ArrayList();
             for (GeneProduct product : products) {
                 if (product instanceof ProteinProduct) {
-                    ProteinSequence sequence = (ProteinSequence) product.getSequence();
-                    sequence.setOriginalHeader(product.getAbbreviation() + " " + product.getName());
-                    sequences.add(sequence);
+                    List<ProteinSequence> productSequences = (List<ProteinSequence>) product.getSequences();
+                    int tick = 0;
+                    for (ProteinSequence sequence : productSequences) {
+                        sequence.setOriginalHeader(product.getAbbreviation() + (productSequences.size() > 1 ? "-" + ++tick : "") + " " + product.getName());
+                        productSequences.add(sequence);
+                    }
                 }
             }
 
