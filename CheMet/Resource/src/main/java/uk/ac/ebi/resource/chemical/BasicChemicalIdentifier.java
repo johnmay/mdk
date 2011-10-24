@@ -67,8 +67,7 @@ public class BasicChemicalIdentifier
 
     @Override
     public String getShortDescription() {
-        return "";
-        //return this.shortDesc;
+        return this.shortDesc != null ? this.shortDesc : super.getShortDescription();
     }
 
     
