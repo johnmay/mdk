@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.io.NotSerializableException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.GeneProduct;
@@ -41,7 +44,7 @@ public abstract class AbstractGeneProduct
         extends AbstractAnnotatedEntity implements GeneProduct {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractGeneProduct.class);
-    private Gene gene;
+    private List<Gene> genes = new ArrayList();
 
     public AbstractGeneProduct() {
     }
@@ -50,12 +53,12 @@ public abstract class AbstractGeneProduct
         super(identifier, abbreviation, name);
     }
 
-    public void setGene(Gene gene) {
-        this.gene = gene;
+    public boolean addGene(Gene gene) {
+        return this.genes.add(gene);
     }
 
-    public Gene getGene() {
-        return this.gene;
+    public Collection<Gene> getGenes() {
+        return this.genes;
     }
 
     @Override
@@ -70,22 +73,26 @@ public abstract class AbstractGeneProduct
 
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
         super.readExternal(in);
-        if (in.readBoolean()) {
+
+        int nGenes = in.readInt();
+
+        while (genes.size() > nGenes) {
             int c = in.readInt();
             int g = in.readInt();
-            this.gene = genome.getGene(c, g);
+            this.genes.add(genome.getGene(c, g));
         }
     }
 
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
         super.writeExternal(out);
-        if (gene != null) {
-            out.writeBoolean(true);
+
+        out.writeBoolean(true);
+        out.writeInt(genes.size());
+
+        for (Gene gene : genes) {
             int[] index = genome.getIndex(gene);
             out.writeInt(index[0]);
             out.writeInt(index[1]);
-        } else {
-            out.writeBoolean(false);
         }
 
 

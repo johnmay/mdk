@@ -16,7 +16,8 @@
  */
 package uk.ac.ebi.core.util;
 
-import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Util.java
@@ -27,19 +28,28 @@ import java.util.List;
  */
 public class Util {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( Util.class );
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(Util.class);
 
-
-    public static String encodeURN( String s ) {
-        StringBuilder sb = new StringBuilder( s.length() );
-        for ( int i = 0; i < s.length(); i++ ) {
-            char c = s.charAt( i );
-            if ( c > 127 || c == '"' || c == '<' || c == '>' ) {
-                sb.append( "&#" ).append( ( int ) c );
+    public static String encodeURN(String s) {
+        StringBuilder sb = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c > 127 || c == '"' || c == '<' || c == '>') {
+                sb.append("&#").append((int) c);
             } else {
-                sb.append( c );
+                sb.append(c);
             }
         }
         return sb.toString();
+    }
+
+    public static String unescapeHTML(String s) {
+        Pattern pattern = Pattern.compile("&#(\\d+);");
+        Matcher m = pattern.matcher(s);
+        while (m.find()) {
+            s = m.replaceAll(new String(new char[]{(char) Integer.parseInt(m.group(1))}));
+            m = pattern.matcher(s);
+        }
+        return s;
     }
 }
