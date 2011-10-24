@@ -65,7 +65,9 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
      * @return
      */
     public boolean add(GeneProduct product) {
-        return products.put(product.getBaseType(), product);
+       products.put(product.getBaseType(), product);
+       accessionMap.put(product.getAccession(), product);
+       return true;
     }
 
     /**
@@ -102,11 +104,15 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
     }
 
     /**
-     * Adds an observation to product(s) matching the specified accession. If there are multiple products with the
-     * same accession the observation is added to all
+     *
+     * Adds an observation to product(s) matching the specified accession. If 
+     * there are multiple products with the same accession the observation is
+     * added to all
+     *
      * @param accession
      * @param observation
      * @return
+     * 
      */
     public boolean addObservation(String accession, Observation observation) {
 
@@ -142,6 +148,10 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
             return true; // atm: observations will be added whether unique or not
         }
         return false;
+    }
+
+    public List<GeneProduct> get(String accession){
+        return accessionMap.get(accession);
     }
 
     /**

@@ -78,8 +78,9 @@ public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.int
     @Override
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
         super.readExternal(in, genome);
+
         int n = in.readInt();
-        while (n > sequences.size()) {
+        for (int i = 0; i < n; i++) {
             sequences.add(SequenceSerializer.readProteinSequence(in));
         }
     }
@@ -87,6 +88,7 @@ public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.int
     @Override
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
         super.writeExternal(out, genome);
+
         out.writeInt(sequences.size());
         for (ProteinSequence sequence : sequences) {
             SequenceSerializer.writeProteinSequence(sequence, out);

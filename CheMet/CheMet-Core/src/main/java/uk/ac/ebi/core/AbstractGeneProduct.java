@@ -74,9 +74,8 @@ public abstract class AbstractGeneProduct
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
         super.readExternal(in);
 
-        int nGenes = in.readInt();
-
-        while (nGenes > genes.size()) {
+        int n = in.readInt();
+        for (int i = 0; i < n; i++) {
             int c = in.readInt();
             int g = in.readInt();
             this.genes.add(genome.getGene(c, g));
@@ -84,6 +83,7 @@ public abstract class AbstractGeneProduct
     }
 
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
+        
         super.writeExternal(out);
 
         out.writeInt(genes.size());

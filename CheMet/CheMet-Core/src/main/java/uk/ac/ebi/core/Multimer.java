@@ -27,16 +27,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.biojava3.core.sequence.compound.AminoAcidCompoundSet;
 import org.biojava3.core.sequence.template.AbstractCompound;
-import org.biojava3.core.sequence.template.AbstractCompoundSet;
-import org.biojava3.core.sequence.template.AbstractSequence;
-import org.biojava3.core.sequence.template.Compound;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 
 /**
  *          Multimer - 2011.10.24 <br>
@@ -65,9 +62,30 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
      * @param product
      */
     public Multimer(GeneProduct... subunits) {
-        for (GeneProduct subunit : subunits) {
+
+        // make an aggregated name
+
+        StringBuilder idBuilder = new StringBuilder();
+        StringBuilder nameBuilder = new StringBuilder();
+        StringBuilder abbrBuilder = new StringBuilder();
+
+        for (int i = 0; i < subunits.length; i++) {
+            GeneProduct subunit = subunits[i];
             addSubunit(subunit);
+
+            idBuilder.append(subunit.getAccession()).append(i + 1 < subunits.length
+                                                            ? " + " : "");
+            nameBuilder.append(subunit.getName()).append(i + 1 < subunits.length
+                                                         ? " + " : "");
+            abbrBuilder.append(subunit.getAbbreviation()).append(i + 1 < subunits.length
+                                                                 ? " + " : "");
+
         }
+
+        setIdentifier(new BasicProteinIdentifier(idBuilder.toString()));
+        setName(nameBuilder.toString());
+        setAbbreviation(abbrBuilder.toString());
+
     }
 
     public final boolean addSubunit(GeneProduct subunit) {
@@ -100,15 +118,16 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
     }
 
     public List<? extends Sequence> getSequences() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Sequence> sequences = new ArrayList();
+        for (GeneProduct product : subunits) {
+            sequences.addAll(product.getSequences());
+        }
+        return sequences;
     }
 
     public boolean addSequence(Sequence<? extends AbstractCompound> sequence) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-   
-
 
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
