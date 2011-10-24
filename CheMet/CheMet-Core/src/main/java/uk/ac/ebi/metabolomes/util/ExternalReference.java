@@ -44,6 +44,9 @@ public class ExternalReference {
         this.dbName=db;
         this.externalID=externalID;
     }
+    
+    public ExternalReference() {
+    }
 
     /**
      * @return the dbName
