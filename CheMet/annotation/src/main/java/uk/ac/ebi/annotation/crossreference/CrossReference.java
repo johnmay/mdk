@@ -74,7 +74,7 @@ public class CrossReference<E extends Identifier>
      */
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return identifier != null ? identifier.getShortDescription() : description.shortDescription;
     }
 
 
@@ -83,7 +83,7 @@ public class CrossReference<E extends Identifier>
      */
     @Override
     public String getLongDescription() {
-        return description.longDescription;
+        return identifier != null ? identifier.getLongDescription() : description.longDescription;
     }
 
 
