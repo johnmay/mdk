@@ -226,4 +226,26 @@ public class ObservationCollection {
         }
 
     }
+
+    @Override
+    public int hashCode() {
+        return typeMap.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ObservationCollection other = (ObservationCollection) obj;
+        if (this.typeMap != other.typeMap && (this.typeMap == null || !this.typeMap.equals(other.typeMap))) {
+            return false;
+        }
+        return true;
+    }
+
+
 }

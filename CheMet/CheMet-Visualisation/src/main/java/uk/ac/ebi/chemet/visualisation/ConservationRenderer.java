@@ -89,7 +89,7 @@ public class ConservationRenderer extends AlignmentRenderer {
 
         // draw the match region
         g2.setColor(super.color.getMatchColor(alignment));
-        float sequenceLength = product.getSequence().getLength();
+        float sequenceLength = product.getSequences().iterator().next().getLength();
         // normalise length by the total length of the sequence
         int homologyStart = (int) (innerBounds.width * ((float) alignment.getQueryStart() / (float) sequenceLength));
         int homologyEnd = (int) (innerBounds.width * ((float) alignment.getQueryEnd() / (float) sequenceLength));

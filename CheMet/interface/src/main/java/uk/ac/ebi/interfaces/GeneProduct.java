@@ -23,6 +23,8 @@ package uk.ac.ebi.interfaces;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Collection;
+import java.util.List;
 import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
 
@@ -35,9 +37,13 @@ import org.biojava3.core.sequence.template.Sequence;
  */
 public interface GeneProduct extends AnnotatedEntity {
 
-    public Gene getGene();
+    /**
+     * Access all genes encoding this protein
+     * @return
+     */
+    public Collection<Gene> getGenes();
 
-    public void setGene(Gene gene);
+    public boolean addGene(Gene gene);
 
     /**
      *
@@ -52,13 +58,13 @@ public interface GeneProduct extends AnnotatedEntity {
      * Returns the sequence of the gene product
      * @return a Sequence composed of either AminoAcidCompoundSet or RNACompoundSet
      */
-    public Sequence<? extends AbstractCompound> getSequence();
+    public List<? extends Sequence> getSequences();
 
     /**
-     * Mutator for the sequence
+     * Add a sequence for the product
      * @param sequence
      */
-    public void setSequence(Sequence<? extends AbstractCompound> sequence);
+    public boolean addSequence(Sequence<? extends AbstractCompound> sequence);
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException;
 
