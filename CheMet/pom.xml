@@ -12,9 +12,9 @@
         <module>CheMet-WebServices</module>
         <module>CheMet-Visualisation</module>
         <module>Resource</module>
-        <module>Annotation</module>
-        <module>Interface</module>
-        <module>Observation</module>
+        <module>annotation</module>
+        <module>interface</module>
+        <module>observation</module>
     </modules>
     <repositories>
         
