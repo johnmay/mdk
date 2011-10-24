@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.util.ExternalReference;
 import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 public class ChEBIWebServiceConnection extends ChemicalDBWebService implements ICrossReferenceProvider {
@@ -555,12 +557,19 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
     public List<CrossReference> getCrossReferences(ChEBIIdentifier identifier) {
         List<CrossReference> results = new ArrayList<CrossReference>();
         try {
-            Entity entity = this.client.getCompleteEntity(identifier.getAccession());
+            Entity entity = client.getCompleteEntity(identifier.getAccession().toUpperCase(Locale.ENGLISH));
             List<DataItem> dbLinks = entity.getDatabaseLinks();
             for (DataItem dataItem : dbLinks) {
                 String acc = dataItem.getData();
                 String db = dataItem.getType();
-                Identifier identifierCR = factory.ofSynonym(db);
+                Identifier identifierCR;
+                try {
+                    identifierCR = factory.ofSynonym(db);
+                } catch(InvalidParameterException e) {
+                    logger.warn("Could not recognize db "+db+" for creating identifier, just using basica chemical identifier.");
+                    identifierCR = new BasicChemicalIdentifier();
+                    ((BasicChemicalIdentifier)identifierCR).setShortDescription(db);
+                }
                 identifierCR.setAccession(acc);
                 CrossReference cr = new CrossReference(identifierCR);
                 results.add(cr);
@@ -577,7 +586,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
     public List<ExternalReference> getCrossReferences(String idVariablePart) {
         List<ExternalReference> results=new ArrayList<ExternalReference>();
         try {
-            Entity entity = this.client.getCompleteEntity("CHEBI:" + idVariablePart);
+            Entity entity = client.getCompleteEntity("CHEBI:" + idVariablePart);
             List<DataItem> dbLinks = entity.getDatabaseLinks();
             for (DataItem dataItem : dbLinks) {
                 String acc = dataItem.getData();

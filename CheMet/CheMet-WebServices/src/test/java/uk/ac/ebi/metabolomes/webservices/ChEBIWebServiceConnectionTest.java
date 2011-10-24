@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.util.ExternalReference;
@@ -21,7 +22,10 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
  */
 public class ChEBIWebServiceConnectionTest {
 
+    private ChEBIWebServiceConnection chebi;
+    
     public ChEBIWebServiceConnectionTest() {
+        chebi = new ChEBIWebServiceConnection();
     }
 
     @BeforeClass
@@ -52,7 +56,6 @@ public class ChEBIWebServiceConnectionTest {
         System.out.println("testGetAtomContainer()");
         try {
             Integer chebiId = 36549;
-            ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
             IAtomContainer structure = chebi.getAtomContainer(chebiId);
             System.out.println(structure);
         } catch (Exception ex) {
@@ -65,7 +68,6 @@ public class ChEBIWebServiceConnectionTest {
         System.out.println("testGetSynonyms()");
         try {
             String chebiId = "CHEBI:" + 12;
-            ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
             System.out.println(chebi.getSynonyms(chebiId));
         } catch (UnfetchableEntry ex) {
             System.out.println(ex.getMessage());
@@ -77,7 +79,6 @@ public class ChEBIWebServiceConnectionTest {
         System.out.println("testGetCrossReferences_tobramycin");
         try {
             String chebiID_tobra = ""+28864;
-            ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
             for (ExternalReference externalReference : chebi.getCrossReferences(chebiID_tobra)) {
                 System.out.println(externalReference.getDbName()+"\t"+externalReference.getExternalID());
             }
@@ -91,7 +92,6 @@ public class ChEBIWebServiceConnectionTest {
         System.out.println("testGetCrossReferences_entryDrugBankCrossRef"); 
         try {
             String chebiID_tobra = ""+4909; // etodolac
-            ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
             for (ExternalReference externalReference : chebi.getCrossReferences(chebiID_tobra)) {
                 System.out.println(externalReference.getDbName()+"\t"+externalReference.getExternalID());
             }
@@ -100,15 +100,14 @@ public class ChEBIWebServiceConnectionTest {
         }
     }
     
-        @Test
+    @Test
     public void testGetCrossReferences_tobramycin_identifier() {
         System.out.println("testGetCrossReferences_tobramycin_identifier");
         try {
             ChEBIIdentifier identifier = new ChEBIIdentifier(28864);
-            ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
-            /*for (ExternalReference externalReference : chebi.getCrossReferences(chebiID_tobra)) {
-                System.out.println(externalReference.getDbName()+"\t"+externalReference.getExternalID());
-            }*/
+            for (CrossReference cr : chebi.getCrossReferences(identifier)) {
+                System.out.println(cr.getIdentifier().getShortDescription()+"\t"+cr.getIdentifier().getAccession());
+            }
         } catch(UnfetchableEntry ex) {
             System.out.println(ex.getMessage());
         }
@@ -118,10 +117,9 @@ public class ChEBIWebServiceConnectionTest {
     public void testGetCrossReferences_entryDrugBankCrossRef_identifier() {
         System.out.println("testGetCrossReferences_entryDrugBankCrossRef_identifier"); 
         try {
-            String chebiID_tobra = ""+4909; // etodolac
-            ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
-            for (ExternalReference externalReference : chebi.getCrossReferences(chebiID_tobra)) {
-                System.out.println(externalReference.getDbName()+"\t"+externalReference.getExternalID());
+            ChEBIIdentifier identifier = new ChEBIIdentifier(4909); // etodolac
+            for (CrossReference cr : chebi.getCrossReferences(identifier)) {
+                System.out.println(cr.getIdentifier().getShortDescription()+"\t"+cr.getIdentifier().getAccession());
             }
         } catch(UnfetchableEntry ex) {
             System.out.println(ex.getMessage());
