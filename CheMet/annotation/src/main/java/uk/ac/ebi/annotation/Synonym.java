@@ -1,8 +1,7 @@
-
 /**
- * Subsystem.java
+ * SynonymAnnotation.java
  *
- * 2011.09.26
+ * 2011.10.24
  *
  * This file is part of the CheMet library
  * 
@@ -25,63 +24,46 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-
+import uk.ac.ebi.interfaces.Annotation;
 
 /**
- *          Subsystem – 2011.09.26 <br>
- *          Class holding the annotation of a gene locus
+ *          SynonymAnnotation - 2011.10.24 <br>
+ *          An annotation of a synonym/alternate name
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class Locus
-  extends AbstractAnnotation {
+public class Synonym extends AbstractAnnotation {
 
-    private static final Logger LOGGER = Logger.getLogger(Locus.class);
-    private String locus;
+    private static final Logger LOGGER = Logger.getLogger(Synonym.class);
+    private String synonym;
 
-
-    public Locus() {
+    public Synonym() {
     }
 
-
-    public Locus(String locus) {
-        this.locus = locus;
+    public Synonym(String synonym) {
+        this.synonym = synonym;
     }
 
-
-    public Locus getInstance() {
-        return new Locus();
+    public Annotation getInstance() {
+        return new Synonym();
     }
-
 
     @Override
     public String toString() {
-        return locus;
+        return synonym;
     }
-
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
-        locus = in.readUTF();
+        synonym = in.readUTF();
     }
-
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeUTF(locus);
+        out.writeUTF(synonym);
     }
-
-    /**
-     * Determines whether the locus tag defines multiple loci (as a multimeric
-     * protein)
-     */
-    public boolean containsMultiple() {
-        return locus.contains("+");
-    }
-
 
 }
-
