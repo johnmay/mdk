@@ -19,7 +19,6 @@ import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
-
 /**
  * This abstract class encompasses web services that connect to chemical databases.
  * Among the functions of connecting to a Chemical database should retrieve molecules

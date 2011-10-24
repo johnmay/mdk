@@ -22,6 +22,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
 
+import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.*;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
@@ -47,10 +48,11 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
     private ChebiWebServiceClient client;
     private static String serviceProviderName = "ChEBI";
     private static final Logger logger = Logger.getLogger(ChEBIWebServiceConnection.class);
+    private static IdentifierFactory factory = IdentifierFactory.getInstance();
     private int maxResultsSearch;
     private StarsCategory starsCategory;
 
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
         // TODO Auto-generated method stub
         ChEBIWebServiceConnection c = new ChEBIWebServiceConnection();
         String ids[] = {"33568", "15377", "143213"};
@@ -550,6 +552,28 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
         return (ChEBIIdentifier) IdentifierFactory.getInstance().ofClass(ChEBIIdentifier.class);
     }
 
+    public List<CrossReference> getCrossReferences(ChEBIIdentifier identifier) {
+        List<CrossReference> results = new ArrayList<CrossReference>();
+        try {
+            Entity entity = this.client.getCompleteEntity(identifier.getAccession());
+            List<DataItem> dbLinks = entity.getDatabaseLinks();
+            for (DataItem dataItem : dbLinks) {
+                String acc = dataItem.getData();
+                String db = dataItem.getType();
+                Identifier identifierCR = factory.ofSynonym(db);
+                identifierCR.setAccession(acc);
+                CrossReference cr = new CrossReference(identifierCR);
+                results.add(cr);
+            }
+        } catch (ChebiWebServiceFault_Exception ex) {
+            logger.warn("Could not fetch "+identifier.getAccession()+" due to ", ex);
+            // throw new UnfetchableEntry("CHEBI:"+idVariablePart, ChEBIWebServiceConnection.class.getName(), UnfetchableEntry.CLIENT_EXCEPTION);
+        } catch (Exception ex) {
+            logger.error("An unknown ChEBI Web service error for query " + identifier.getAccession(), ex);
+        }
+        return results;
+    }
+    
     public List<ExternalReference> getCrossReferences(String idVariablePart) {
         List<ExternalReference> results=new ArrayList<ExternalReference>();
         try {

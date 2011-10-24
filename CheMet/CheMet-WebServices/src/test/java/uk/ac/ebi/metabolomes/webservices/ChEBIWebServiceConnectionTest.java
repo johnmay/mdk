@@ -100,6 +100,34 @@ public class ChEBIWebServiceConnectionTest {
         }
     }
     
+        @Test
+    public void testGetCrossReferences_tobramycin_identifier() {
+        System.out.println("testGetCrossReferences_tobramycin_identifier");
+        try {
+            ChEBIIdentifier identifier = new ChEBIIdentifier(28864);
+            ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
+            /*for (ExternalReference externalReference : chebi.getCrossReferences(chebiID_tobra)) {
+                System.out.println(externalReference.getDbName()+"\t"+externalReference.getExternalID());
+            }*/
+        } catch(UnfetchableEntry ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetCrossReferences_entryDrugBankCrossRef_identifier() {
+        System.out.println("testGetCrossReferences_entryDrugBankCrossRef_identifier"); 
+        try {
+            String chebiID_tobra = ""+4909; // etodolac
+            ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
+            for (ExternalReference externalReference : chebi.getCrossReferences(chebiID_tobra)) {
+                System.out.println(externalReference.getDbName()+"\t"+externalReference.getExternalID());
+            }
+        } catch(UnfetchableEntry ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+    
     @Test
     public void fetchWithIdentifier() {
         Identifier id = new ChEBIIdentifier(12);
