@@ -37,6 +37,7 @@ public class BasicChemicalIdentifier
 
     private static final Logger LOGGER = Logger.getLogger(BasicChemicalIdentifier.class);
     private static int ticker = 0;
+    private String shortDesc;
 
     public BasicChemicalIdentifier() {
         super();
@@ -51,6 +52,10 @@ public class BasicChemicalIdentifier
     public static BasicChemicalIdentifier nextIdentifier(){
         return new BasicChemicalIdentifier("m_" + ++ticker);
     }
+    
+    public void setShortDescription(String shortDesc) {
+        this.shortDesc = shortDesc;
+    }
 
     /**
      * @inheritDoc
@@ -60,6 +65,13 @@ public class BasicChemicalIdentifier
         return new BasicChemicalIdentifier();
     }
 
+    @Override
+    public String getShortDescription() {
+        return "";
+        //return this.shortDesc;
+    }
+
+    
 
 }
 

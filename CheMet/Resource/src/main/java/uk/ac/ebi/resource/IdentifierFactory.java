@@ -45,6 +45,7 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.resource.chemical.KEGGDrugIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.classification.GeneOntologyAnnotation;
 import uk.ac.ebi.resource.classification.InterPro;
@@ -74,6 +75,7 @@ public class IdentifierFactory {
     private List<Identifier> supportedIdentifiers = new ArrayList<Identifier>(Arrays.asList(
             new ChEBIIdentifier(),
             new KEGGCompoundIdentifier(),
+            new KEGGDrugIdentifier(),
             new TrEMBLIdentifier(),
             new SwissProtIdentifier(),
             new Taxonomy(),
