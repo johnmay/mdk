@@ -6,19 +6,14 @@ package uk.ac.ebi.metabolomes.webservices;
 
 import com.google.common.io.Files;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.openscience.cdk.io.iterator.IIteratingChemObjectReader;
-import uk.ac.ebi.interfaces.Identifier;
+
 
 /**
  *
