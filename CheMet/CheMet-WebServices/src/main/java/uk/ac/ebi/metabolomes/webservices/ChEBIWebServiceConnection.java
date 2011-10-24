@@ -33,6 +33,14 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 public class ChEBIWebServiceConnection extends ChemicalDBWebService implements ICrossReferenceProvider {
 
+    /*private static ChEBIWebServiceConnection conn;
+    
+    public static ChEBIWebServiceConnection getInstance() {
+        if(conn==null) {
+            conn = new ChEBIWebServiceConnection();
+        }
+        return conn;
+    }*/
     /**
      * @param args
      */
@@ -549,12 +557,14 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
             List<DataItem> dbLinks = entity.getDatabaseLinks();
             for (DataItem dataItem : dbLinks) {
                 String acc = dataItem.getData();
-                String db = dataItem.getSource();
+                String db = dataItem.getType();
                 results.add(new ExternalReference(db,acc));
             }
         } catch (ChebiWebServiceFault_Exception ex) {
             logger.warn("Could not fetch CHEBI:"+idVariablePart+" due to ", ex);
             // throw new UnfetchableEntry("CHEBI:"+idVariablePart, ChEBIWebServiceConnection.class.getName(), UnfetchableEntry.CLIENT_EXCEPTION);
+        } catch (Exception ex) {
+            logger.error("An unknown ChEBI Web service error for query CHEBI:" + idVariablePart, ex);
         }
         return results;
         

@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import uk.ac.ebi.metabolomes.http.CactusChemical.CactvsRepresentation;
 import uk.ac.ebi.metabolomes.util.ExternalReference;
 
 /**
@@ -109,6 +108,22 @@ public class CactusChemicalTest {
         String query = "DAEPDZWVDSPTHF-UHFFFAOYSA-M"; // pubchem sodium pyruvate
         CactusChemical instance = CactusChemical.getInstance();
         List<ExternalReference> result = instance.getCrossReferences(query);
+        System.out.println("Names for "+query);
+        for (ExternalReference ref : result) {
+            System.out.println("Ext:\t"+ref.getDbName()+":"+ref.getExternalID());
+        }
+        assertTrue(result.size()>0);
+        
+        query = "Adenosine Diphosphate";
+        result = instance.getCrossReferences(query);
+        System.out.println("Names for "+query);
+        for (ExternalReference ref : result) {
+            System.out.println("Ext:\t"+ref.getDbName()+":"+ref.getExternalID());
+        }
+        assertTrue(result.size()>0);
+        
+        query = "pyruvate";
+        result = instance.getCrossReferences(query);
         System.out.println("Names for "+query);
         for (ExternalReference ref : result) {
             System.out.println("Ext:\t"+ref.getDbName()+":"+ref.getExternalID());

@@ -14,8 +14,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,6 +39,7 @@ import org.openscience.cdk.io.iterator.IteratingPCCompoundXMLReader;
 import org.xmlpull.v1.XmlPullParserException;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 public class PubChemWebServiceConnection extends ChemicalDBWebService {
@@ -95,7 +98,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         }
         return this.downloadMolsToCDKObject(idsInt);
     }
-    
+
     public IIteratingChemObjectReader downloadMolsToIteratingCDKReader(String[] ids) throws Exception {
         int[] idsInt = new int[ids.length];
         for (int i = 0; i < ids.length; i++) {
@@ -156,7 +159,113 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         return null;
     }
 
-    // TODO this method show throw an exception instead of null.
+    public Integer downloadMolsToIndividualMolFiles(String[] pchemCompIds, String destination) throws WebServiceException {
+        int[] pubchemCIDs = new int[pchemCompIds.length];
+        for (int i = 0; i < pchemCompIds.length; i++) {
+            try {
+                pubchemCIDs[i] = Integer.parseInt(pchemCompIds[i]);
+            } catch(NumberFormatException e) {
+                logger.warn("One of the pchemCompIds was not an integer as required: "+pchemCompIds[i]);
+                pubchemCIDs[i] = 0;
+            }
+        }
+        return downloadMolsToIndividualMolFiles(pubchemCIDs, destination);
+    }
+    
+    public Integer downloadMolsToIndividualMolFiles(int[] pchemCompIds, String destination) throws WebServiceException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(this.downloadFile(pchemCompIds, FormatType.eFormat_SDF)));
+        String line;
+        StringBuffer buffer = new StringBuffer();
+        String pchemID = null;
+        boolean nextLineIsID = false;
+        int filesWritten = 0;
+        try {
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("$$$$") && pchemID != null) {
+                    FileWriter writer = new FileWriter(new File(destination + File.separator + "CID_" + pchemID + ".mol"));
+                    writer.write(buffer.toString());
+                    writer.close();
+                    buffer = new StringBuffer();
+                    pchemID = null;
+                    filesWritten++;
+                } else {
+                    buffer.append(line).append("\n");
+
+                    if (nextLineIsID) {
+                        pchemID = line.trim();
+                        nextLineIsID = false;
+                    }
+                    if (line.contains("> <PUBCHEM_COMPOUND_CID>")) {
+                        nextLineIsID = true;
+                    }
+                }
+            }
+            reader.close();
+        } catch (IOException ex) {
+            throw new WebServiceException("Several ids...", PubChemWebServiceConnection.class.getName(), "IOErrors: " + ex.getMessage());
+        }
+        return filesWritten;
+    }
+
+    public InputStream downloadFile(String[] pchemCompIds, FormatType type) throws WebServiceException {
+        int[] pubchemCIDs = new int[pchemCompIds.length];
+        for (int i = 0; i < pchemCompIds.length; i++) {
+            try {
+                pubchemCIDs[i] = Integer.parseInt(pchemCompIds[i]);
+            } catch(NumberFormatException e) {
+                logger.warn("One of the pchemCompIds was not an integer as required: "+pchemCompIds[i]);
+                pubchemCIDs[i] = 0;
+            }
+        }
+        return downloadFile(pubchemCIDs, type);
+    }
+    
+    public InputStream downloadFile(int[] ids, FormatType type) throws WebServiceException {
+        String listKey;
+        String downloadKey;
+        InputStream result = null;
+        try {
+            listKey = soap.inputList(ids, PCIDType.eID_CID);
+            downloadKey = soap.download(listKey, type,
+                    CompressType.eCompress_None, false);
+        } catch (RemoteException ex) {
+            logger.error("Problems in inputting list to PUG soap web service", ex);
+            throw new WebServiceException("List of accessions...", PubChemWebServiceConnection.class.getName(), WebServiceException.CLIENT_EXCEPTION);
+        }
+        // Wait for the download to be prepared
+        StatusType status;
+        try {
+            while ((status = soap.getOperationStatus(downloadKey)) == StatusType.eStatus_Running
+                    || status == StatusType.eStatus_Queued) {
+                System.out.println("Waiting for download to finish...");
+                Thread.sleep(10000);
+            }
+        } catch (InterruptedException ex) {
+            logger.error("Problems with thread waiting for download", ex);
+            throw new UnfetchableEntry("List of accessions...", PubChemWebServiceConnection.class.getName(),
+                    "Problems with waiting for status " + ex.getMessage());
+        } catch (RemoteException ex) {
+            logger.error("RemoteException while waiting for PUG soap web service", ex);
+            throw new WebServiceException("List of accessions...", PubChemWebServiceConnection.class.getName(), WebServiceException.CLIENT_EXCEPTION);
+        }
+        try {
+            if (status == StatusType.eStatus_Success) {
+                URL url = new URL(soap.getDownloadUrl(downloadKey));
+                logger.debug("Success! Download URL = " + url.toString());
+
+                // get input stream from URL
+                URLConnection fetch = url.openConnection();
+                result = fetch.getInputStream();
+            }
+        } catch (IOException ex) {
+            logger.error("Problems while downloading the URL", ex);
+            throw new WebServiceException("List of accessions...", PubChemWebServiceConnection.class.getName(), WebServiceException.CLIENT_EXCEPTION);
+        }
+
+        return result;
+    }
+
+    // TODO this method should throw an exception instead of null.
     protected String downloadFile(int[] ids, FormatType type, String dest) {
         String listKey;
         String downloadKey;
@@ -215,9 +324,9 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
 
     public boolean downloadSDFFile(int[] ids, String path) {
         String filename = this.downloadFile(ids, FormatType.eFormat_SDF, path);
-        return filename!=null;
+        return filename != null;
     }
-    
+
     public boolean downloadStructureFiles(int[] ids, String path) {
         //String filename = this.downloadFile(ids, FormatType.eFormat_SDF, path
         //		+ "/pubchem/");
@@ -397,11 +506,6 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
     }
 
     @Override
-    public Set<Identifier> searchWithName(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public Map<String, String> search(String name) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -426,5 +530,8 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
+    @Override
+    public Set<? extends Identifier> searchWithName(String name) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

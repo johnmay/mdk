@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.metabolomes.util.ExternalReference;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 /**
@@ -70,7 +71,35 @@ public class ChEBIWebServiceConnectionTest {
             System.out.println(ex.getMessage());
         }
     }
+    
+    @Test
+    public void testGetCrossReferences_tobramycin() {
+        System.out.println("testGetCrossReferences_tobramycin");
+        try {
+            String chebiID_tobra = ""+28864;
+            ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
+            for (ExternalReference externalReference : chebi.getCrossReferences(chebiID_tobra)) {
+                System.out.println(externalReference.getDbName()+"\t"+externalReference.getExternalID());
+            }
+        } catch(UnfetchableEntry ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 
+    @Test
+    public void testGetCrossReferences_entryDrugBankCrossRef() {
+        System.out.println("testGetCrossReferences_entryDrugBankCrossRef"); 
+        try {
+            String chebiID_tobra = ""+4909; // etodolac
+            ChEBIWebServiceConnection chebi = new ChEBIWebServiceConnection();
+            for (ExternalReference externalReference : chebi.getCrossReferences(chebiID_tobra)) {
+                System.out.println(externalReference.getDbName()+"\t"+externalReference.getExternalID());
+            }
+        } catch(UnfetchableEntry ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+    
     @Test
     public void fetchWithIdentifier() {
         Identifier id = new ChEBIIdentifier(12);

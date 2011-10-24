@@ -1,47 +1,55 @@
+
 /**
- * EUtilsWebServiceConnection.java
+ * UnfetchableEntry.java
  *
- * 2011.08.04
+ * 2011.08.23
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.metabolomes.webservices;
+package uk.ac.ebi.chemet.ws.exceptions;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
 import org.apache.log4j.Logger;
 
+
 /**
- * @name    EUtilsWebServiceConnection
- * @date    2011.08.04
+ *          UnfetchableEntry – 2011.08.23 <br>
+ *          Class should be thrown if a web service could not retrieve a record for the given id
  * @version $Rev$ : Last Changed $Date$
  * @author  pmoreno
  * @author  $Author$ (this version)
- * @brief   Web service to access the E-Utils service from NCBI. Relies on Jersey Client. 
- * WARNING: see NCBI usage policies: 
- *
  */
-public class EUtilsWebServiceConnection {
+public class WebServiceException extends Exception {
+
+    private static final Logger LOGGER = Logger.getLogger(WebServiceException.class);
+    public static final String NO_MATCH_FOUND = "no match was found";
+    public static final String CLIENT_EXCEPTION = "the client threw an exception";
+
+
+    public WebServiceException() {
+    }
+
+
+    public WebServiceException(String accession, String ws, String reason) {
+       super( new StringBuilder(60).append("Unable to fetch ").append(accession).
+          append(" from ").append(ws).
+          append(" because ").append(reason).toString());
+    }
+
     
-    private static final Logger LOGGER = Logger.getLogger(EUtilsWebServiceConnection.class);
-    
-    private Client client;
-    private WebResource webResource;
-    
-    private final String baseURL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
-    
-    
+
+
 }
+
