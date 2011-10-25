@@ -21,6 +21,7 @@ package uk.ac.ebi.io.remote;
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 
@@ -55,7 +56,7 @@ public interface RemoteResource {
     /**
      * Perform update by downloading the remote file
      */
-    public void update();
+    public void update() throws IOException;
 
     /**
      * Returns the location of where the remote data is stored

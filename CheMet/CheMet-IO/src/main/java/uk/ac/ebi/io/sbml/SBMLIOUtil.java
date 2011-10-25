@@ -1,4 +1,3 @@
-
 /**
  * SBMLIOUtil.java
  *
@@ -39,7 +38,6 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.reaction.MetaboliteParticipant;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
-
 /**
  *          SBMLIOUtil – 2011.09.27 <br>
  *          Class description
@@ -55,23 +53,19 @@ public class SBMLIOUtil {
     private long metaIdticker = 0;
     private Map<Participant, SpeciesReference> speciesReferences = new HashMap();
 
-
     public SBMLIOUtil(int level, int version) {
         this.level = level;
         this.version = version;
     }
 
-
     public SBMLIOUtil() {
         this(2, 2);
     }
-
 
     private String nextMetaId() {
         metaIdticker++;
         return Long.toString(metaIdticker);
     }
-
 
     public SBMLDocument getDocument(Reconstruction reconstruction) {
 
@@ -79,14 +73,13 @@ public class SBMLIOUtil {
         Model model = new Model(level, version);
         doc.setModel(model);
 
-        for( MetabolicReaction rxn : reconstruction.getReactions() ) {
+        for (MetabolicReaction rxn : reconstruction.getReactions()) {
             addReaction(model, rxn);
         }
 
         return doc;
 
     }
-
 
     public Reaction addReaction(Model model, MetabolicReaction rxn) {
 
@@ -95,26 +88,27 @@ public class SBMLIOUtil {
         // set id and meta-id
         Identifier id = rxn.getIdentifier();
         sbmlRxn.setMetaId(nextMetaId());
-        if( id == null ) {
+        if (id == null) {
             sbmlRxn.setId("rxn" + metaIdticker); // maybe need a try/catch to reset valid id
         } else {
             String accession = id.getAccession();
             accession = accession.trim();
+            accession = accession.replaceAll(":", "%3A"); // replace spaces and dashes with underscores
             accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
             accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
             sbmlRxn.setId(accession);
         }
 
 
-        for( Participant<Metabolite, Double, Compartment> p : rxn.getReactantParticipants() ) {
+        for (Participant<Metabolite, Double, Compartment> p : rxn.getReactantParticipants()) {
             sbmlRxn.addReactant(getSpeciesReference(model, p));
         }
-        for( Participant<Metabolite, Double, Compartment> p : rxn.getProductParticipants() ) {
+        for (Participant<Metabolite, Double, Compartment> p : rxn.getProductParticipants()) {
             sbmlRxn.addProduct(getSpeciesReference(model, p));
 
         }
 
-        for( CrossReference xref : rxn.getAnnotationsExtending(CrossReference.class) ) {
+        for (CrossReference xref : rxn.getAnnotationsExtending(CrossReference.class)) {
             String resource = xref.getIdentifier().getURN();
             CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS_DESCRIBED_BY, resource);
             sbmlRxn.addCVTerm(term);
@@ -126,17 +120,15 @@ public class SBMLIOUtil {
 
     }
 
-
     public SpeciesReference getSpeciesReference(Model model,
                                                 Participant<Metabolite, Double, Compartment> participant) {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
-        Participant key = new MetaboliteParticipant(participant.getMolecule(), 1d, participant.
-          getCompartment());
+        Participant key = new MetaboliteParticipant(participant.getMolecule(), 1d, participant.getCompartment());
 
         // create a new entry if one doesn't exists
-        if( speciesReferences.containsKey(key) == false ) {
+        if (speciesReferences.containsKey(key) == false) {
             speciesReferences.put(key, addSpecies(model, participant));
         }
 
@@ -145,11 +137,10 @@ public class SBMLIOUtil {
         // need to set the stoichiometry on each species reference
         SpeciesReference srefCopy = new SpeciesReference(sref.getSpecies());
         srefCopy.setStoichiometry(participant.getCoefficient());
-        
+
         return srefCopy;
 
     }
-
 
     /**
      * Creates a new species in the given model adding
@@ -167,7 +158,7 @@ public class SBMLIOUtil {
 
         species.setMetaId(nextMetaId());
         Identifier id = m.getIdentifier();
-        if( id == null ) {
+        if (id == null) {
             species.setId("met" + metaIdticker); // maybe need a try/catch to reset valid id
         } else {
             String accession = id.getAccession();
@@ -180,12 +171,13 @@ public class SBMLIOUtil {
         species.setName(m.getName());
         species.setCompartment(participant.getCompartment().name());
 
-
-        for( CrossReference xref : m.getAnnotationsExtending(CrossReference.class) ) {
+        CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
+        for (CrossReference xref : m.getAnnotationsExtending(CrossReference.class)) {
             String resource = xref.getIdentifier().getURN();
-            CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS, resource);
-            species.addCVTerm(term);
+            term.addResource(resource);
         }
+        species.addCVTerm(term);
+
 
         model.addSpecies(species);
 
@@ -193,7 +185,4 @@ public class SBMLIOUtil {
 
         return new SpeciesReference(species);
     }
-
-
 }
-

@@ -23,6 +23,7 @@ package uk.ac.ebi.resource.chemical;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
@@ -37,7 +38,7 @@ public class BasicChemicalIdentifier
         extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicChemicalIdentifier.class);
-    private static int ticker = 0;
+    private static long ticker = Preferences.userNodeForPackage(BasicChemicalIdentifier.class).getLong("ticker", 0);
     private String shortDesc;
 
     public BasicChemicalIdentifier() {
@@ -54,7 +55,8 @@ public class BasicChemicalIdentifier
     }
 
     public static BasicChemicalIdentifier nextIdentifier() {
-        return new BasicChemicalIdentifier("m_" + ++ticker);
+        Preferences.userNodeForPackage(BasicChemicalIdentifier.class).putLong("ticker", ++ticker);
+        return new BasicChemicalIdentifier(String.format("Met:{%07d}", ticker));
     }
 
     /**
