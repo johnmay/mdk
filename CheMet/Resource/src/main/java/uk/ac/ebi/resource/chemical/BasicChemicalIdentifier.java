@@ -1,4 +1,3 @@
-
 /**
  * BasicChemicalIdentifier.java
  *
@@ -21,9 +20,11 @@
  */
 package uk.ac.ebi.resource.chemical;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-
 
 /**
  *          BasicChemicalIdentifier – 2011.09.14 <br>
@@ -33,7 +34,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  $Author$ (this version)
  */
 public class BasicChemicalIdentifier
-  extends ChemicalIdentifier {
+        extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicChemicalIdentifier.class);
     private static int ticker = 0;
@@ -43,16 +44,25 @@ public class BasicChemicalIdentifier
         super();
     }
 
-
     public BasicChemicalIdentifier(String accession) {
         super(accession);
     }
 
+    public BasicChemicalIdentifier(String accession, String shortDescription) {
+        super(accession);
+        this.shortDesc = shortDescription;
+    }
 
-    public static BasicChemicalIdentifier nextIdentifier(){
+    public static BasicChemicalIdentifier nextIdentifier() {
         return new BasicChemicalIdentifier("m_" + ++ticker);
     }
-    
+
+    /**
+     * Sets the shortDescription of the class. This allows handling of chemical
+     * resources that either don't have a MIRIAM entry or a CheMet identifier
+     * class
+     * @param shortDesc short description, for example CAS
+     */
     public void setShortDescription(String shortDesc) {
         this.shortDesc = shortDesc;
     }
@@ -65,12 +75,38 @@ public class BasicChemicalIdentifier
         return new BasicChemicalIdentifier();
     }
 
+    /**
+     * Returns the short description as set ({@see setShortDescription(String)})
+     * or if no description is set the super class method is called.
+     * @return
+     */
     @Override
     public String getShortDescription() {
         return this.shortDesc != null ? this.shortDesc : super.getShortDescription();
     }
 
-    
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        super.readExternal(in);
 
+        if (in.readBoolean()) {
+            this.shortDesc = in.readUTF();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        super.writeExternal(out);
+        if (this.shortDesc != null) {
+            out.writeBoolean(true);
+            out.writeUTF(shortDesc);
+        }
+        out.writeBoolean(false);
+    }
 }
-
