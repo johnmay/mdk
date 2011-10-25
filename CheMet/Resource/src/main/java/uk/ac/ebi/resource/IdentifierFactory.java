@@ -40,13 +40,18 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.metabolomes.resource.Resource;
+import uk.ac.ebi.resource.chemical.BRNIdentifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
+import uk.ac.ebi.resource.chemical.EINECSIdentifier;
+import uk.ac.ebi.resource.chemical.EPAPesticideIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
+import uk.ac.ebi.resource.chemical.HSDBIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGDrugIdentifier;
 import uk.ac.ebi.resource.chemical.LIPIDMapsIdentifier;
+import uk.ac.ebi.resource.chemical.ZINCIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.classification.GeneOntologyAnnotation;
 import uk.ac.ebi.resource.classification.InterPro;
@@ -96,6 +101,11 @@ public class IdentifierFactory {
             new GeneOntologyAnnotation(),
             new HSSPIdentifier(),
             new PDBIdentifier(),
+            new EINECSIdentifier(),
+            new HSDBIdentifier(),
+            new ZINCIdentifier(),
+            new EPAPesticideIdentifier(),
+            new BRNIdentifier(),
             new InChI()));
     private Map<String, Identifier> synonyms = new HashMap();
     private List<SequenceIdentifier> proteinIdentifiers = new ArrayList(Arrays.asList(new BasicProteinIdentifier(),
