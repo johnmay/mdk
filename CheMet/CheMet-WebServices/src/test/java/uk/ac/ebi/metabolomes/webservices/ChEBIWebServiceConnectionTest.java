@@ -112,6 +112,19 @@ public class ChEBIWebServiceConnectionTest {
             System.out.println(ex.getMessage());
         }
     }
+    
+    @Test
+    public void testGetCrossReferences_12SHPETE_identifier() {
+        System.out.println("testGetCrossReferences_12SHPETE_identifier");
+        try {
+            ChEBIIdentifier identifier = new ChEBIIdentifier(15626);
+            for (CrossReference cr : chebi.getCrossReferences(identifier)) {
+                System.out.println(cr.getIdentifier().getShortDescription()+"\t"+cr.getIdentifier().getAccession());
+            }
+        } catch(UnfetchableEntry ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 
     @Test
     public void testGetCrossReferences_entryDrugBankCrossRef_identifier() {
