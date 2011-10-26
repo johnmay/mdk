@@ -22,6 +22,7 @@ package uk.ac.ebi.io.remote;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -42,9 +43,13 @@ public abstract class AbstrastRemoteResource implements RemoteResource {
     private File local;
     private Date lastUpdated = new Date();
 
-    public AbstrastRemoteResource(URL remote, File local) {
-        this.remote = remote;
-        this.local = local;
+    public AbstrastRemoteResource(String remote, File local) {
+        try {
+            this.remote = new URL(remote);
+            this.local = local;
+        } catch (MalformedURLException ex) {
+            LOGGER.info("Malformed URL: " + ex.getMessage());
+        }
     }
 
     /**

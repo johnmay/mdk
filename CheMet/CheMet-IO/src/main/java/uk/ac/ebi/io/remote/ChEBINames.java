@@ -31,16 +31,20 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
+import uk.ac.ebi.interfaces.services.LuceneService;
 
 /**
  *          ChEBISearch - 2011.10.25 <br>
@@ -49,13 +53,17 @@ import org.apache.lucene.util.Version;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ChEBINames extends AbstrastRemoteResource {
+public class ChEBINames
+extends AbstrastRemoteResource
+implements LuceneService {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBINames.class);
+    private SimpleAnalyzer analzyer;
+    private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names_3star.tsv";
 
-    public ChEBINames() throws MalformedURLException {
-        super(new URL("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names_3star.tsv"),
-              getFile());
+    public ChEBINames() {
+        super(location, getFile());
+        analzyer = new SimpleAnalyzer(Version.LUCENE_34);
     }
 
     public void update() throws IOException {
@@ -64,30 +72,43 @@ public class ChEBINames extends AbstrastRemoteResource {
         String[] row = reader.readNext();
         Map<String, Integer> map = createMap(row);
 
-        LinkedList<Document> docs = new LinkedList();
+        Map<Integer, Document> docs = new HashMap();
         String currentId = "";
 
         while ((row = reader.readNext()) != null) {
-            String id = row[map.get("COMPOUND_ID")];
+            int id = Integer.parseInt(row[map.get("COMPOUND_ID")]);
             String name = row[map.get("NAME")];
-
-            if (currentId.equals(id) == false) {
-                docs.add(new Document());
-                currentId = id;
+            Document doc = docs.get(id);
+            if (doc == null) {
+                doc = new Document();
+                NumericField field = new NumericField("id", 1, Field.Store.YES, true);
+                field.setIntValue(id);
+                doc.add(field);
+                docs.put(id, doc);
             }
-            Document doc = docs.get(docs.size() - 1);
-            doc.add(new Field("Id", id, Field.Store.YES, Field.Index.ANALYZED));
-            doc.add(new Field("Name", name, Field.Store.YES, Field.Index.ANALYZED));
+            doc.add(new Field("name", name, Field.Store.YES, Field.Index.ANALYZED));
         }
         reader.close();
 
         // write the index
         Directory index = new SimpleFSDirectory(getLocal());
-        IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, new SimpleAnalyzer(Version.LUCENE_34)));
-        writer.addDocuments(docs);
+        IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, analzyer));
+        writer.addDocuments(docs.values());
         writer.close();
         index.close();
 
+    }
+
+    public Analyzer getAnalzyer() {
+        return analzyer;
+    }
+
+    public Directory getDirectory(){
+        try {
+            return new SimpleFSDirectory(getLocal());
+        } catch (IOException ex) {
+            throw new UnsupportedOperationException("Index can not fail to open! unsupported");
+        }
     }
 
     private Map<String, Integer> createMap(String[] row) {
@@ -96,6 +117,10 @@ public class ChEBINames extends AbstrastRemoteResource {
             map.put(row[i], i);
         }
         return map;
+    }
+
+    public static void main(String[] args) throws MalformedURLException, IOException {
+        new ChEBINames().update();
     }
 
     private static File getFile() {
