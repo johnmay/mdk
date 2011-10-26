@@ -30,6 +30,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.services.NameQueryService;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
 import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
@@ -44,14 +45,14 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class CandidateFactory {
+public class CandidateFactory<I extends Identifier> {
 
     private static final Logger LOGGER = Logger.getLogger(CandidateFactory.class);
-    private final ChemicalDBWebService webservice;
+    private final NameQueryService<I> service;
     private StringEncoder encoder;
 
-    public CandidateFactory(ChemicalDBWebService webservice, StringEncoder encoder) {
-        this.webservice = webservice;
+    public CandidateFactory(NameQueryService<I> service, StringEncoder encoder) {
+        this.service = service;
         this.encoder = encoder;
     }
 
@@ -70,18 +71,15 @@ public class CandidateFactory {
         Multimap<Integer, SynonymCandidateEntry> map = HashMultimap.create();
 
         // todo add general search
-        for (Identifier id : webservice.searchWithName(name)) {
+        for (I id : service.searchForName(name)) {
 
-            String accession = id.getAccession();
+            Collection<String> names = service.getNames(id);
 
-            String subject = webservice.getName(id); // webservice.getName(accession);
-            Collection<String> synonyms = webservice.getSynonyms(accession);
-
-            Integer distance = getBestScore(name, synonyms);
+            Integer distance = getBestScore(name, names);
             map.put(distance,
-                    new SynonymCandidateEntry(accession,
-                    subject,
-                    synonyms,
+                    new SynonymCandidateEntry(id.getAccession(),
+                    names.size() > 0 ? names.iterator().next() : "",
+                    names,
                     distance));
 
         }
@@ -91,7 +89,7 @@ public class CandidateFactory {
     }
 
     public CrossReference getCrossReference(CandidateEntry entry) {
-        Identifier id = webservice.getIdentifier();
+        Identifier id = service.getIdentifier();
         id.setAccession(entry.getId());
         if (id instanceof ChEBIIdentifier) {
             return new ChEBICrossReference((ChEBIIdentifier) id);
@@ -113,34 +111,34 @@ public class CandidateFactory {
 
         System.out.println("Sending candidate search");
 
-        // todo add general search
-        for (Identifier id : webservice.searchWithName(name)) {
+        throw new UnsupportedOperationException();
 
-            String accession = id.getAccession();
-            String subject = webservice.getName(id);
-            System.out.println("Got candidate name.." + id + ":" +  subject);
+//        // todo add general search
+//        for (I id : service.searchWithName(name)) {
+//
+//            String subject = service.getNames(id);
+//            System.out.println("Got candidate name.." + id + ":" +  subject);
+//
+//
+//            Integer distance = calculateDistance(encoder.encode(name), encoder.encode(subject));
+//            map.put(distance,
+//                    new CandidateEntry(accession,
+//                    subject,
+//                    distance, ""));
+//
+//        }
 
-
-            Integer distance = calculateDistance(encoder.encode(name), encoder.encode(subject));
-            map.put(distance,
-                    new CandidateEntry(accession,
-                    subject,
-                    distance, ""));
-
-        }
-
-        return map;
-
-    }
-
-    public static void main(String[] args) {
-        CandidateFactory factory = new CandidateFactory(new ChEBIWebServiceConnection(
-                StarsCategory.THREE_ONLY, 20),
-                new ChemicalFingerprintEncoder());
-        System.out.println(factory.getSynonymCandidates("Adenosine triphosphate"));
-        System.out.println(factory.getSynonymCandidates("GTP"));
+        //return map;
 
     }
+
+//    public static void main(String[] args) {
+//        CandidateFactory factory = new CandidateFactory(new ChEBINameService(),
+//                new ChemicalFingerprintEncoder());
+//        System.out.println(factory.getSynonymCandidates("Adenosine triphosphate"));
+//        System.out.println(factory.getSynonymCandidates("GTP"));
+//
+//    }
 
     public Integer getBestScore(String query, Collection<String> synonyms) {
 
