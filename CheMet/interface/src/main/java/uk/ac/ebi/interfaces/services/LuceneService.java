@@ -1,7 +1,7 @@
 /**
- * NameQueryService.java
+ * LuceneProvider.java
  *
- * 2011.10.25
+ * 2011.10.26
  *
  * This file is part of the CheMet library
  * 
@@ -20,25 +20,20 @@
  */
 package uk.ac.ebi.interfaces.services;
 
-import java.util.Collection;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.store.Directory;
 
 /**
- *          NameQueryService - 2011.10.25 <br>
- *          Interface defines a InChI query service that can be used to fetch
- *          the InChI's of a given identifier or to search using a provided
- *          InChI and return matching identifiers
+ *          LuceneProvider - 2011.10.26 <br>
+ *          Interface describe a service that provides a lucene Directory and
+ *          Analzyer
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface InChIQueryService<I extends Identifier> extends QueryService<I> {
+public interface LuceneService {
 
+    public Analyzer getAnalzyer();
 
-    public Collection<I> searchWithInChI(Identifier inchi);
-
-
-    public Collection<Identifier> getInChIs(I identifier);
-    
-
+    public Directory getDirectory();
 }

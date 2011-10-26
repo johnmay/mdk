@@ -1,7 +1,7 @@
 /**
- * NameQueryService.java
+ * QueryService.java
  *
- * 2011.10.25
+ * 2011.10.26
  *
  * This file is part of the CheMet library
  * 
@@ -20,25 +20,16 @@
  */
 package uk.ac.ebi.interfaces.services;
 
-import java.util.Collection;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
- *          NameQueryService - 2011.10.25 <br>
- *          Interface defines a InChI query service that can be used to fetch
- *          the InChI's of a given identifier or to search using a provided
- *          InChI and return matching identifiers
+ *          QueryService - 2011.10.26 <br>
+ *          Interface description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface InChIQueryService<I extends Identifier> extends QueryService<I> {
+public interface QueryService<I extends Identifier> {
 
-
-    public Collection<I> searchWithInChI(Identifier inchi);
-
-
-    public Collection<Identifier> getInChIs(I identifier);
-    
-
+    public I getIdentifier();
 }

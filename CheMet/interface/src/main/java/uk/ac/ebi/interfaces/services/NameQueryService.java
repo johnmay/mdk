@@ -32,13 +32,14 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface NameQueryService {
+public interface NameQueryService<I extends Identifier> extends QueryService<I> {
+   
+    public Collection<I> fuzzySearchForName(String name);
 
+    public Collection<I> searchForName(String name);
 
-    public Collection<Identifier> searchWithName(String name);
+    public Collection<String> getNames(I identifier);
 
-
-    public Collection<String> getNames(Identifier identifier);
-    
+  
 
 }
