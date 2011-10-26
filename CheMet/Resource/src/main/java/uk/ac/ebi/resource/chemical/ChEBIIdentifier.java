@@ -63,7 +63,7 @@ public class ChEBIIdentifier
      *
      */
     public ChEBIIdentifier(Integer accession) {
-        super("ChEBI:" + accession);
+        super("CHEBI:" + accession);
     }
 
     /**
