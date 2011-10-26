@@ -50,7 +50,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
     private ChebiWebServiceClient client;
     private static String serviceProviderName = "ChEBI";
     private static final Logger logger = Logger.getLogger(ChEBIWebServiceConnection.class);
-    private static IdentifierFactory factory = IdentifierFactory.getInstance();
+    private final IdentifierFactory factory = IdentifierFactory.getInstance();
     private int maxResultsSearch;
     private StarsCategory starsCategory;
 
@@ -583,6 +583,8 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
         return results;
     }
     
+    
+    
     public List<ExternalReference> getCrossReferences(String idVariablePart) {
         List<ExternalReference> results=new ArrayList<ExternalReference>();
         try {
@@ -601,5 +603,11 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
         }
         return results;
         
+    }
+
+    public List<CrossReference> getCrossReferences(Identifier query) {
+        if(query instanceof ChEBIIdentifier)
+            return this.getCrossReferences((ChEBIIdentifier)query);
+        return new ArrayList<CrossReference>();
     }
 }

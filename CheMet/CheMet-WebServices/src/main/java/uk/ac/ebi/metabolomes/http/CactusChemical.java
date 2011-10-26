@@ -37,8 +37,11 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.util.ExternalReference;
 import uk.ac.ebi.metabolomes.webservices.ICrossReferenceProvider;
+import uk.ac.ebi.resource.IdentifierFactory;
 
 /**
  * @name    CactusChemical
@@ -57,6 +60,7 @@ public class CactusChemical implements ICrossReferenceProvider {
     private HttpClient client;
     private static final String BASE_DOMAIN = "cactus.nci.nih.gov";
     private static final String CHEMICAL_STRUCTURE_PATH = "/chemical/structure/";
+    private final IdentifierFactory factory = IdentifierFactory.getInstance();
     //private static final String NAME_SEARCH = "/names";
     
     /**
@@ -155,10 +159,30 @@ public class CactusChemical implements ICrossReferenceProvider {
     // Zinc is a database of comercially available compounds for virtual screening.
     private final Pattern zincDBPat = Pattern.compile("ZINC(\\d+)");
     // Einecs is a european database of comercialy available compounds.
-    private final Pattern einecDBPat = Pattern.compile("EINECS\\s+(\\d+-\\d+-\\d+)");
+    private final Pattern einecDBPat = Pattern.compile("EINECS\\s*(\\d+-\\d+-\\d+)");
     // The HSDB Database is the Hazardous substance database.
-    private final Pattern HSDBPat = Pattern.compile("HSDB (\\d+)");
+    private final Pattern HSDBPat = Pattern.compile("HSDB\\s{0,1}(\\d+)");
     
+    /**
+     * For the Cactvs implementation of this interface, a structure identifier needs to be provided as query.
+     * According to the nci resolver web page: http://cactus.nci.nih.gov/chemical/structure/documentation
+     * this identifier can be SMILES, InChI/Standard InChI, different CACTVS formats like CACTVS Minimol, 
+     * CACTVS Serialized Object String, NCI/CADD Identifiers (FICTS, FICuS, uuuuu), CACTVS HASHISY hashcodes and
+     * Chemical names.
+     * 
+     * @param query - a valid NCI/Cactvs structure identifier
+     * @return a list of CrossReferences for selected databases
+     */
+    public List<CrossReference> getCrossReferences(Identifier identifier) {
+        List<CrossReference> crossReferences = new ArrayList<CrossReference>();
+        for (ExternalReference externalReference : getCrossReferences(identifier.getAccession())) {
+            Identifier crIdent = factory.ofSynonym(externalReference.getDbName());
+            crIdent.setAccession(externalReference.getExternalID());
+            CrossReference ref = new CrossReference(crIdent);
+            crossReferences.add(ref);
+        }
+        return crossReferences;
+    }
     /**
      * For the Cactvs implementation of this interface, a structure identifier needs to be provided as query.
      * According to the nci resolver web page: http://cactus.nci.nih.gov/chemical/structure/documentation
