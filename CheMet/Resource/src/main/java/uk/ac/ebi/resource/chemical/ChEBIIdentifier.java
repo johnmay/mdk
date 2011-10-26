@@ -109,6 +109,13 @@ public class ChEBIIdentifier
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
+    }    
+    /**
+     * Returns the numeric part of the CHEBI accession.
+     * @return 
+     */
+    public String getNumericPartOfAccession() {
+        return super.getAccession().replace("ChEBI:", "").replace("CHEBI:", "");
     }
 
     public Integer getValue() {

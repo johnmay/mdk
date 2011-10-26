@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -38,11 +37,12 @@ import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
-import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.metabolomes.resource.Resource;
 import uk.ac.ebi.resource.chemical.BRNIdentifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+import uk.ac.ebi.resource.chemical.CASIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.ChemSpiderIdentifier;
 import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
 import uk.ac.ebi.resource.chemical.EINECSIdentifier;
 import uk.ac.ebi.resource.chemical.EPAPesticideIdentifier;
@@ -51,6 +51,8 @@ import uk.ac.ebi.resource.chemical.HSDBIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGDrugIdentifier;
 import uk.ac.ebi.resource.chemical.LIPIDMapsIdentifier;
+import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
+import uk.ac.ebi.resource.chemical.PubChemSubstanceIdentifier;
 import uk.ac.ebi.resource.chemical.ZINCIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.classification.GeneOntologyAnnotation;
@@ -106,6 +108,10 @@ public class IdentifierFactory {
             new ZINCIdentifier(),
             new EPAPesticideIdentifier(),
             new BRNIdentifier(),
+            new CASIdentifier(),
+            new ChemSpiderIdentifier(),
+            new PubChemCompoundIdentifier(),
+            new PubChemSubstanceIdentifier(),
             new InChI()));
     private Map<String, Identifier> synonyms = new HashMap();
     private List<SequenceIdentifier> proteinIdentifiers = new ArrayList(Arrays.asList(new BasicProteinIdentifier(),
