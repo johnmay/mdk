@@ -1,4 +1,3 @@
-
 /**
  * ChEBIIdentifier.java
  *
@@ -25,7 +24,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.resource.IdentifierDescription;
 
-
 /**
  *
  * @name    ChEBIIdentifier – 2011.08.16
@@ -37,16 +35,14 @@ import uk.ac.ebi.resource.IdentifierDescription;
  *
  */
 public class ChEBIIdentifier
-  extends ChemicalIdentifier {
+        extends ChemicalIdentifier implements Cloneable {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIIdentifier.class);
     private static final IdentifierDescription META_DATA = IDENTIFIER_LOADER.getMetaInfo(
-      ChEBIIdentifier.class);
-
+            ChEBIIdentifier.class);
 
     public ChEBIIdentifier() {
     }
-
 
     /**
      *
@@ -59,7 +55,6 @@ public class ChEBIIdentifier
         super(accession);
     }
 
-
     /**
      *
      * Convenience constructor using only the integer accession of a ChEBI accession
@@ -71,7 +66,6 @@ public class ChEBIIdentifier
         super("ChEBI:" + accession);
     }
 
-
     /**
      * @inheritDoc
      */
@@ -79,7 +73,6 @@ public class ChEBIIdentifier
     public ChEBIIdentifier newInstance() {
         return new ChEBIIdentifier();
     }
-
 
     /**
      * @inheritDoc
@@ -89,7 +82,6 @@ public class ChEBIIdentifier
         return META_DATA.index;
     }
 
-
     /**
      * @inheritDoc
      */
@@ -97,7 +89,6 @@ public class ChEBIIdentifier
     public String getShortDescription() {
         return META_DATA.shortDescription;
     }
-
 
     /**
      * @inheritDoc
@@ -107,7 +98,6 @@ public class ChEBIIdentifier
         return META_DATA.longDescription;
     }
 
-
     /**
      * @inheritDoc
      */
@@ -116,5 +106,12 @@ public class ChEBIIdentifier
         return META_DATA.resource;
     }
 
-}
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
+    public Integer getValue() {
+        return Integer.parseInt(getAccession().substring(6));
+    }
+}
