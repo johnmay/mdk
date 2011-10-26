@@ -26,7 +26,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 
 /**
@@ -50,6 +49,11 @@ public abstract class AbstrastRemoteResource implements RemoteResource {
         } catch (MalformedURLException ex) {
             LOGGER.info("Malformed URL: " + ex.getMessage());
         }
+    }
+    
+    public AbstrastRemoteResource(URL remote, File local) {
+            this.remote = remote;
+            this.local = local;
     }
 
     /**
