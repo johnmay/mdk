@@ -111,4 +111,8 @@ public class DrugBankCrossRefs extends AbstrastRemoteResource implements RemoteR
         Preferences prefs = Preferences.userNodeForPackage(DrugBankCrossRefs.class);
         return new File(prefs.get("drugbank.crossrefs.path", defaultFile));
     }
+
+    public String getDescription() {
+        return "DrugBank Cross-references";
+    }
 }

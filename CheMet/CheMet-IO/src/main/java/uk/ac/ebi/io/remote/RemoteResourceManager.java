@@ -69,6 +69,14 @@ public class RemoteResourceManager {
     }
 
     /**
+     * Returns a collection of all resources currently managed
+     * @return
+     */
+    public Collection<RemoteResource> getResources(){
+        return resources;
+    }
+
+    /**
      * Returns all resources older then a certain age (days). This method is a
      * convenience method delegating to {@see getResouces(long, boolean)}
      *

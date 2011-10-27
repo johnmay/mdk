@@ -56,8 +56,8 @@ import uk.ac.ebi.interfaces.services.LuceneService;
  * @author  $Author$ (this version)
  */
 public class ChEBINames
-extends AbstrastRemoteResource
-implements LuceneService, RemoteResource {
+        extends AbstrastRemoteResource
+        implements LuceneService, RemoteResource {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBINames.class);
     private Analyzer analzyer;
@@ -105,7 +105,7 @@ implements LuceneService, RemoteResource {
         return analzyer;
     }
 
-    public Directory getDirectory(){
+    public Directory getDirectory() {
         try {
             return new SimpleFSDirectory(getLocal());
         } catch (IOException ex) {
@@ -132,5 +132,9 @@ implements LuceneService, RemoteResource {
                              + File.separator + "chebi-names";
         Preferences prefs = Preferences.userNodeForPackage(ChEBINames.class);
         return new File(prefs.get("chebi.name.path", defaultFile));
+    }
+
+    public String getDescription() {
+        return "ChEBI Names";
     }
 }

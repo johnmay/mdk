@@ -56,8 +56,8 @@ import uk.ac.ebi.interfaces.services.LuceneService;
  * @author  $Author$ (this version)
  */
 public class KEGGCompoundNames
-extends AbstrastRemoteResource
-implements LuceneService, RemoteResource {
+        extends AbstrastRemoteResource
+        implements LuceneService, RemoteResource {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundNames.class);
     private Analyzer analzyer;
@@ -76,7 +76,7 @@ implements LuceneService, RemoteResource {
         return analzyer;
     }
 
-    public Directory getDirectory(){
+    public Directory getDirectory() {
         try {
             return new SimpleFSDirectory(getLocal());
         } catch (IOException ex) {
@@ -91,5 +91,9 @@ implements LuceneService, RemoteResource {
                              + File.separator + "kegg-names";
         Preferences prefs = Preferences.userNodeForPackage(KEGGCompoundNames.class);
         return new File(prefs.get("kegg.name.path", defaultFile));
+    }
+
+    public String getDescription() {
+        return "KEGG Compound Names";
     }
 }

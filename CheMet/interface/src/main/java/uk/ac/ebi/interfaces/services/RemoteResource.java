@@ -65,4 +65,9 @@ public interface RemoteResource {
     public File getLocal();
 
     public URL getRemote();
+
+    /**
+     * Access a short description of the remote resource
+     */
+    public String getDescription();
 }
