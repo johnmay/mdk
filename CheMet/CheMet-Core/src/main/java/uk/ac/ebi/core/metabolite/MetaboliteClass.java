@@ -12,7 +12,9 @@ package uk.ac.ebi.core.metabolite;
  */
 public enum MetaboliteClass {
     PROTEIN("Protein"),
-    NUCLEIC_ACID("Nucleic Acid"), SMALL_MOLECULE("Small Molecule"), UNKNOWN("Other");
+    NUCLEIC_ACID("Nucleic Acid"),
+    CHEMICAL_ENTITY("Chemical Entity"),
+    UNKNOWN("Other");
     private String desc;
 
 

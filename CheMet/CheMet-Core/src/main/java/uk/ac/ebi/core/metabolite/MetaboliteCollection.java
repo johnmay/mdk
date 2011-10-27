@@ -37,7 +37,6 @@ public class MetaboliteCollection
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
       MetaboliteCollection.class);
-    private static final long serialVersionUID = -694434528337274752L;
     HashSet<Metabolite> unique = new HashSet<Metabolite>();
 
 
