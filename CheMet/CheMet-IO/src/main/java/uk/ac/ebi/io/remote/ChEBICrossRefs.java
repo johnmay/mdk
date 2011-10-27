@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.prefs.Preferences;
@@ -40,7 +41,9 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.resource.IdentifierFactory;
 
 /**
  *          ChEBISearch - 2011.10.25 <br>
@@ -57,6 +60,7 @@ public class ChEBICrossRefs
     private Analyzer analzyer;
     private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession.tsv";
     private static final String location3star = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession_3star.tsv";
+    private static final IdentifierFactory FACTORY= IdentifierFactory.getInstance();
     
     
     public enum ChEBICrossRefsLuceneFields {
@@ -90,6 +94,18 @@ public class ChEBICrossRefs
             int id = Integer.parseInt(row[map.get("COMPOUND_ID")]);
             String type = row[map.get("TYPE")];
             String accession = row[map.get("ACCESSION_NUMBER")];
+            Identifier extIdent=null;
+            try {
+                extIdent = FACTORY.ofSynonym(type);
+            } catch(InvalidParameterException e) {
+                if(type.equalsIgnoreCase("PubMed citation"))
+                    continue;
+                if(type.equalsIgnoreCase("Wikipedia accession"))
+                    continue;
+                LOGGER.warn("Could not recognize db: "+type+" skipping.");
+                continue;
+            }
+            extIdent.setAccession(accession);
             Document doc = docs.get(id);
             if (doc == null) {
                 doc = new Document();
@@ -98,8 +114,8 @@ public class ChEBICrossRefs
                 doc.add(field);
                 docs.put(id, doc);
             }
-            doc.add(new Field(ChEBICrossRefsLuceneFields.ExtDB.toString(), type, Field.Store.YES, Field.Index.ANALYZED));
-            doc.add(new Field(ChEBICrossRefsLuceneFields.ExtID.toString(), accession, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.add(new Field(ChEBICrossRefsLuceneFields.ExtDB.toString(), extIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.add(new Field(ChEBICrossRefsLuceneFields.ExtID.toString(), extIdent.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
         }
         reader.close();
 
@@ -133,7 +149,7 @@ public class ChEBICrossRefs
     }
 
     public static void main(String[] args) throws MalformedURLException, IOException {
-        new ChEBICrossRefs().update();
+        new ChEBICrossRefs(false).update();
     }
 
     private static File getFile() {
