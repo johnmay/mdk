@@ -1,4 +1,3 @@
-
 /**
  * KEGGCompoundIdentifier.java
  *
@@ -25,7 +24,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierDescription;
 
-
 /**
  *
  * @name    KEGGCompoundIdentifier – 2011.08.16
@@ -38,21 +36,18 @@ import uk.ac.ebi.resource.IdentifierDescription;
  *
  */
 public class KEGGCompoundIdentifier
-  extends ChemicalIdentifier {
+        extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundIdentifier.class);
     private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
-      KEGGCompoundIdentifier.class);
-
+            KEGGCompoundIdentifier.class);
 
     public KEGGCompoundIdentifier() {
     }
 
-
     public KEGGCompoundIdentifier(String accession) {
         super(accession);
     }
-
 
     /**
      * @inheritDoc
@@ -62,7 +57,6 @@ public class KEGGCompoundIdentifier
         return new KEGGCompoundIdentifier();
     }
 
-
     /**
      * @inheritDoc
      */
@@ -70,7 +64,6 @@ public class KEGGCompoundIdentifier
     public Byte getIndex() {
         return DESCRIPTION.index;
     }
-
 
     /**
      * @inheritDoc
@@ -80,7 +73,6 @@ public class KEGGCompoundIdentifier
         return DESCRIPTION.shortDescription;
     }
 
-
     /**
      * @inheritDoc
      */
@@ -88,7 +80,6 @@ public class KEGGCompoundIdentifier
     public String getLongDescription() {
         return DESCRIPTION.longDescription;
     }
-
 
     /**
      * @inheritDoc
@@ -98,6 +89,11 @@ public class KEGGCompoundIdentifier
         return DESCRIPTION.resource;
     }
 
-
+    /**
+     * Returns the numeric part of the compound id
+     * @return
+     */
+    public int getValue() {
+        return Integer.parseInt(getAccession().substring(1));
+    }
 }
-
