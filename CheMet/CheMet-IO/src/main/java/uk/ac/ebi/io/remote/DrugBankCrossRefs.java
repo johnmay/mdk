@@ -51,21 +51,22 @@ import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class DrugBankCrossRefs extends AbstrastRemoteResource {
+public class DrugBankCrossRefs extends AbstrastRemoteResource implements RemoteResource {
 
     private static final Logger LOGGER = Logger.getLogger(DrugBankCrossRefs.class);
-    
+    private static final String location = "http://drugbank.ca/system/downloads/current/drugbank.xml.zip";
+
     public enum DrugBankCrossRefsLuceneFields {
+
         DrugBankID, ExtDB, ExtID;
     }
 
-    public DrugBankCrossRefs() throws MalformedURLException {
-        super(new URL("http://drugbank.ca/system/downloads/current/drugbank.xml.zip"),
-                getFile());
+    public DrugBankCrossRefs() {
+        super(location, getFile());
     }
 
     public void update() throws IOException {
-        
+
 
         LinkedList<Document> docs = new LinkedList();
 
@@ -79,13 +80,13 @@ public class DrugBankCrossRefs extends AbstrastRemoteResource {
                 DrugBankIdentifier ident = entry.getIdentifier();
                 Document doc = new Document();
                 for (Identifier extIdent : entry.getCrossReferences().getIdentifiers()) {
-                    LOGGER.info("Adding: DrugBank:"+ident.getAccession()+" ExtDB:"+extIdent.getShortDescription()+" ExtID:"+extIdent.getAccession());
-                    doc.add(new Field(DrugBankCrossRefsLuceneFields.DrugBankID.toString(),ident.getAccession(),Field.Store.YES, Field.Index.ANALYZED));
-                    doc.add(new Field(DrugBankCrossRefsLuceneFields.ExtDB.toString(),extIdent.getShortDescription(),Field.Store.YES,Field.Index.ANALYZED));
-                    doc.add(new Field(DrugBankCrossRefsLuceneFields.ExtID.toString(),extIdent.getAccession(),Field.Store.YES,Field.Index.ANALYZED));
+                    LOGGER.info("Adding: DrugBank:" + ident.getAccession() + " ExtDB:" + extIdent.getShortDescription() + " ExtID:" + extIdent.getAccession());
+                    doc.add(new Field(DrugBankCrossRefsLuceneFields.DrugBankID.toString(), ident.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
+                    doc.add(new Field(DrugBankCrossRefsLuceneFields.ExtDB.toString(), extIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
+                    doc.add(new Field(DrugBankCrossRefsLuceneFields.ExtID.toString(), extIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
                 }
                 docs.add(doc);
-                
+
             }
             reader.close();
         } catch (XMLStreamException e) {
@@ -103,9 +104,9 @@ public class DrugBankCrossRefs extends AbstrastRemoteResource {
 
     public static File getFile() {
         String defaultFile = System.getProperty("user.home")
-                + File.separator + "databases"
-                + File.separator + "indexes"
-                + File.separator + "drugbank-crossref";
+                             + File.separator + "databases"
+                             + File.separator + "indexes"
+                             + File.separator + "drugbank-crossref";
         Preferences prefs = Preferences.userNodeForPackage(DrugBankCrossRefs.class);
         return new File(prefs.get("drugbank.crossrefs.path", defaultFile));
     }

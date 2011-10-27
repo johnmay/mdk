@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -55,15 +56,15 @@ import uk.ac.ebi.interfaces.services.LuceneService;
  */
 public class ChEBINames
 extends AbstrastRemoteResource
-implements LuceneService {
+implements LuceneService, RemoteResource {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBINames.class);
-    private SimpleAnalyzer analzyer;
+    private Analyzer analzyer;
     private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names_3star.tsv";
 
     public ChEBINames() {
         super(location, getFile());
-        analzyer = new SimpleAnalyzer(Version.LUCENE_34);
+        analzyer = new KeywordAnalyzer();
     }
 
     public void update() throws IOException {

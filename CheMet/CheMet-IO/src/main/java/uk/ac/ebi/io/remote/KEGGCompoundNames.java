@@ -56,11 +56,11 @@ import uk.ac.ebi.interfaces.services.LuceneService;
  */
 public class KEGGCompoundNames
 extends AbstrastRemoteResource
-implements LuceneService {
+implements LuceneService, RemoteResource {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundNames.class);
     private Analyzer analzyer;
-    private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names_3star.tsv";
+    private static final String location = "http://www.google.com";
 
     public KEGGCompoundNames() {
         super(location, getFile());
