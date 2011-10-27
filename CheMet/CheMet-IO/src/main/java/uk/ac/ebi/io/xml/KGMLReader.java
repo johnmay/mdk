@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.io.xml.kgml;
+package uk.ac.ebi.io.xml;
 
 import com.sun.org.apache.regexp.internal.recompile;
 import java.awt.BasicStroke;

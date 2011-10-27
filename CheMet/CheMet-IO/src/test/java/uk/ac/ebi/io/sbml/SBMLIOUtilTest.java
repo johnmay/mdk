@@ -5,6 +5,7 @@
 
 package uk.ac.ebi.io.sbml;
 
+import uk.ac.ebi.io.xml.SBMLIOUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import javax.xml.stream.XMLStreamException;

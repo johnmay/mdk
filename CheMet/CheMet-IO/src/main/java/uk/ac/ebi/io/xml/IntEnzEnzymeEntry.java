@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.metabolomes.io.flatfile;
+package uk.ac.ebi.io.xml;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
