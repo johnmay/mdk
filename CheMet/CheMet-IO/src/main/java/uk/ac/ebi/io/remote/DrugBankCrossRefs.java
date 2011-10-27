@@ -22,16 +22,15 @@ package uk.ac.ebi.io.remote;
 
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.prefs.Preferences;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -79,14 +78,15 @@ public class DrugBankCrossRefs extends AbstrastRemoteResource implements RemoteR
             DrugBankXMLReader reader = new DrugBankXMLReader(zin);
             while ((entry = reader.getNext()) != null) {
                 DrugBankIdentifier ident = entry.getIdentifier();
-                Document doc = new Document();
                 for (Identifier extIdent : entry.getCrossReferences().getIdentifiers()) {
-                    LOGGER.info("Adding: DrugBank:" + ident.getAccession() + " ExtDB:" + extIdent.getShortDescription() + " ExtID:" + extIdent.getAccession());
-                    doc.add(new Field(DrugBankCrossRefsLuceneFields.DrugBankID.toString(), ident.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
-                    doc.add(new Field(DrugBankCrossRefsLuceneFields.ExtDB.toString(), extIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
-                    doc.add(new Field(DrugBankCrossRefsLuceneFields.ExtID.toString(), extIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
+                    LOGGER.info("Adding: DrugBank:"+ident.getAccession()+" ExtDB:"+extIdent.getShortDescription()+" ExtID:"+extIdent.getAccession());
+                    Document doc = new Document();
+                    doc.add(new Field(DrugBankCrossRefsLuceneFields.DrugBankID.toString(),ident.getAccession(),Field.Store.YES, Field.Index.ANALYZED));
+                    doc.add(new Field(DrugBankCrossRefsLuceneFields.ExtDB.toString(),extIdent.getShortDescription(),Field.Store.YES,Field.Index.ANALYZED));
+                    doc.add(new Field(DrugBankCrossRefsLuceneFields.ExtID.toString(),extIdent.getAccession(),Field.Store.YES,Field.Index.ANALYZED));
+                    docs.add(doc);
                 }
-                docs.add(doc);
+                
 
             }
             reader.close();
@@ -96,7 +96,7 @@ public class DrugBankCrossRefs extends AbstrastRemoteResource implements RemoteR
 
         // write the index
         Directory index = new SimpleFSDirectory(getLocal());
-        IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, new SimpleAnalyzer(Version.LUCENE_34)));
+        IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, new KeywordAnalyzer()));
         writer.addDocuments(docs);
         writer.close();
         index.close();
