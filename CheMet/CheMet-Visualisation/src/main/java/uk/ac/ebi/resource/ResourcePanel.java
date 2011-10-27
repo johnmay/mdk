@@ -25,14 +25,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import java.awt.Desktop.Action;
+import furbelow.SpinningDial;
 import java.awt.Font;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -60,6 +59,7 @@ public class ResourcePanel extends JPanel {
     private RemoteResourceManager manager = RemoteResourceManager.getInstance();
     private CellConstraints cc = new CellConstraints();
     private FormLayout layout = new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p");
+    private Map<RemoteResource, JLabel> labelMap = new HashMap();
 
     public ResourcePanel() {
 
@@ -80,15 +80,17 @@ public class ResourcePanel extends JPanel {
 
             date.setFont(new Font("VERDANA", Font.BOLD, 11));
             date.setFont(new Font("VERDANA", Font.PLAIN, 11));
-            local.setFont(new Font("VERDANA", Font.PLAIN, 11));
-            remote.setFont(new Font("VERDANA", Font.PLAIN, 11));
+            local.setFont(new Font("VERDANA", Font.PLAIN, 8));
+            remote.setFont(new Font("VERDANA", Font.PLAIN, 8));
             update.setFont(new Font("VERDANA", Font.PLAIN, 11));
 
             desc.setText(resource.getDescription() + ":");
-            desc.setAlignmentY(SwingConstants.RIGHT);
+            desc.setHorizontalAlignment(SwingConstants.RIGHT);
             date.setText(resource.getLastUpdated().getTime() == 0l ? "Not loaded" : dateFormat.format(resource.getLastUpdated()));
             local.setText(resource.getLocal().getPath());
-            remote.setText(resource.getRemote().getPath());
+            remote.setText(resource.getRemote().toString());
+
+            labelMap.put(resource, desc);
 
             add(desc, cc.xy(1, layout.getRowCount()));
             add(date, cc.xy(3, layout.getRowCount()));
@@ -113,6 +115,7 @@ public class ResourcePanel extends JPanel {
 
             try {
                 this.setEnabled(false);
+                labelMap.get(resource).setIcon(new SpinningDial(16, 16));
                 SwingWorker worker = new SwingWorker() {
 
                     @Override
@@ -122,6 +125,7 @@ public class ResourcePanel extends JPanel {
 
                             public void run() {
                                 button.setEnabled(true);
+                                labelMap.get(resource).setIcon(null);
                             }
                         });
                         return null;
