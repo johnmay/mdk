@@ -32,6 +32,7 @@ import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
+import uk.ac.ebi.core.reaction.ReactionType;
 
 /**
  *          MetabolicReaction – 2011.09.27 <br>
@@ -44,6 +45,7 @@ public class MetabolicReaction extends Reaction<Metabolite, Double, Compartment>
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicReaction.class);
     private List<GeneProduct> modifiers = new ArrayList();
+    private ReactionType type = ReactionType.ENZYMATIC;
 
     public MetabolicReaction() {
     }
@@ -60,6 +62,14 @@ public class MetabolicReaction extends Reaction<Metabolite, Double, Compartment>
         return modifiers;
     }
 
+    public void setType(ReactionType type) {
+        this.type = type;
+    }
+
+    public ReactionType getType() {
+        return type;
+    }
+
     public void readExternal(ObjectInput in, MetaboliteCollection metabolites, ProductCollection products) throws IOException, ClassNotFoundException {
         super.readExternal(in, metabolites);
         if (in.readBoolean()) {
@@ -69,6 +79,7 @@ public class MetabolicReaction extends Reaction<Metabolite, Double, Compartment>
                 modifiers.add(products.getAll(baseType).get(in.readInt()));
             }
         }
+        type = (ReactionType) in.readObject();
     }
 
     public void writeExternal(ObjectOutput out, MetaboliteCollection metabolites, ProductCollection products) throws IOException {
@@ -82,6 +93,7 @@ public class MetabolicReaction extends Reaction<Metabolite, Double, Compartment>
                 out.writeInt(products.getAll(product.getBaseType()).indexOf(product));
             }
         }
+        out.writeObject(type);
 
     }
 }
