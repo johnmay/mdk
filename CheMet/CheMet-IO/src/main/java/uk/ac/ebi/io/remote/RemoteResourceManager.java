@@ -41,6 +41,7 @@ public class RemoteResourceManager {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(RemoteResourceManager.class);
     private List<RemoteResource> resources = new ArrayList<RemoteResource>(Arrays.asList(new DrugBankCrossRefs(),
                                                                                          new ChEBINames(),
+                                                                                         new ChEBICrossRefs(),
                                                                                          new KEGGCompoundNames()));
 
     private RemoteResourceManager() {
