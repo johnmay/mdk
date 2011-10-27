@@ -55,6 +55,12 @@ public class ChEBIIdentifier
         super(accession);
     }
 
+    @Override
+    public void setAccession(String accession) {
+        if(accession.matches("^\\d+"))
+            accession = "ChEBI:"+accession;
+        super.setAccession(accession);
+    }
     /**
      *
      * Convenience constructor using only the integer accession of a ChEBI accession

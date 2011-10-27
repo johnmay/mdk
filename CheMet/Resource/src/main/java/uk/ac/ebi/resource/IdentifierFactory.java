@@ -40,19 +40,25 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.metabolomes.resource.Resource;
 import uk.ac.ebi.resource.chemical.BRNIdentifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+import uk.ac.ebi.resource.chemical.BioCycChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.CASIdentifier;
+import uk.ac.ebi.resource.chemical.CHEMBLIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.ChemSpiderIdentifier;
 import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
 import uk.ac.ebi.resource.chemical.EINECSIdentifier;
 import uk.ac.ebi.resource.chemical.EPAPesticideIdentifier;
+import uk.ac.ebi.resource.chemical.GmelinRegistryIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.resource.chemical.HSDBIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGDrugIdentifier;
+import uk.ac.ebi.resource.chemical.KeggGlycanIdentifier;
 import uk.ac.ebi.resource.chemical.LIPIDMapsIdentifier;
+import uk.ac.ebi.resource.chemical.PDBChemIdentifier;
 import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 import uk.ac.ebi.resource.chemical.PubChemSubstanceIdentifier;
+import uk.ac.ebi.resource.chemical.UMBBDIdentifier;
 import uk.ac.ebi.resource.chemical.ZINCIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.classification.GeneOntologyAnnotation;
@@ -109,6 +115,12 @@ public class IdentifierFactory {
             new EPAPesticideIdentifier(),
             new BRNIdentifier(),
             new CASIdentifier(),
+            new GmelinRegistryIdentifier(),
+            new UMBBDIdentifier(),
+            new PDBChemIdentifier(),
+            new CHEMBLIdentifier(),
+            new BioCycChemicalIdentifier(),
+            new KeggGlycanIdentifier(),
             new ChemSpiderIdentifier(),
             new PubChemCompoundIdentifier(),
             new PubChemSubstanceIdentifier(),
