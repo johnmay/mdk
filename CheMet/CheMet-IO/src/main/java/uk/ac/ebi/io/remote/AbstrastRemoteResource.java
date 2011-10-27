@@ -56,6 +56,18 @@ public abstract class AbstrastRemoteResource implements RemoteResource {
             this.remote = remote;
             this.local = local;
     }
+    
+    public AbstrastRemoteResource(File local) {
+        this.local = local;
+    }
+    
+    void setRemote(String remote) {
+        try {
+            this.remote = new URL(remote);
+        } catch(MalformedURLException ex) {
+            LOGGER.info("Malformed URL: " + ex.getMessage());
+        }
+    }
 
     /**
      * @inheritDoc
