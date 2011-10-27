@@ -78,14 +78,39 @@ public class CandidateFactory<I extends Identifier> {
             Integer distance = getBestScore(name, names);
             map.put(distance,
                     new SynonymCandidateEntry(id.getAccession(),
-                    names.size() > 0 ? names.iterator().next() : "",
-                    names,
-                    distance));
+                                              names.size() > 0 ? names.iterator().next() : "",
+                                              names,
+                                              distance));
 
         }
 
         return map;
 
+    }
+
+    /**
+     * Uses fuzzy match to search
+     * @param name
+     * @return
+     */
+    public Multimap<Integer, SynonymCandidateEntry> getFuzzySynonymCandidates(String name) {
+        Multimap<Integer, SynonymCandidateEntry> map = HashMultimap.create();
+
+        // todo add general search
+        for (I id : service.fuzzySearchForName(name)) {
+
+            Collection<String> names = service.getNames(id);
+
+            Integer distance = getBestScore(name, names);
+            map.put(distance,
+                    new SynonymCandidateEntry(id.getAccession(),
+                                              names.size() > 0 ? names.iterator().next() : "",
+                                              names,
+                                              distance));
+
+        }
+
+        return map;
     }
 
     public CrossReference getCrossReference(CandidateEntry entry) {
@@ -139,7 +164,6 @@ public class CandidateFactory<I extends Identifier> {
 //        System.out.println(factory.getSynonymCandidates("GTP"));
 //
 //    }
-
     public Integer getBestScore(String query, Collection<String> synonyms) {
 
         int score = Integer.MAX_VALUE;
@@ -165,7 +189,7 @@ public class CandidateFactory<I extends Identifier> {
      */
     public Integer calculateDistance(String encodedQuery, String subject) {
         return StringUtils.getLevenshteinDistance(encodedQuery,
-                encoder.encode(subject));
+                                                  encoder.encode(subject));
     }
 
     public void setEncoder(StringEncoder encoder) {

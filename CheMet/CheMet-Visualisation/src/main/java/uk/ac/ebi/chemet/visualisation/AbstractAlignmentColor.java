@@ -21,10 +21,8 @@ package uk.ac.ebi.chemet.visualisation;
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 import java.awt.Color;
-import java.awt.image.BufferedImage;
-import org.apache.log4j.Logger;
+
 import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.metabolomes.descriptor.observation.AbstractObservation;
 
 /**
  * @name    AbstractAlignmentColor
