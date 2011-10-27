@@ -22,11 +22,18 @@ package uk.ac.ebi.io.remote;
 
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import au.com.bytecode.opencsv.CSVReader;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -34,6 +41,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.prefs.Preferences;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
@@ -61,7 +70,7 @@ public class KEGGCompoundNames
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundNames.class);
     private Analyzer analzyer;
-    private static final String location = "http://www.google.com";
+    private static final String location = "http://www.ebi.ac.uk/steinbeck-srv/chemet/databases/indexes/kegg-names/";
 
     public KEGGCompoundNames() {
         super(location, getFile());
@@ -69,7 +78,31 @@ public class KEGGCompoundNames
     }
 
     public void update() throws IOException {
-        // todo
+        URL url = getRemote();
+        java.net.URLConnection con = url.openConnection();
+        con.connect();
+        BufferedReader dir = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String line;
+        Pattern pattern = Pattern.compile("<a.+>(.+)</a>");
+
+        while ((line = dir.readLine()) != null) {
+            Matcher m = pattern.matcher(line);
+            if (m.find()) {
+                String name = m.group(1);
+                if (!name.equals("Parent Directory")) {
+                    URL remote = new URL(location + name);
+                    URLConnection conection = remote.openConnection();
+                    InputStream in = new BufferedInputStream(conection.getInputStream(), 10000);
+                    OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(getLocal(), name)), 10000);
+                    int value;
+                    while ((value = in.read()) != -1) {
+                        out.write(value);
+                    }
+                    in.close();
+                    out.close();
+                }
+            }
+        }
     }
 
     public Analyzer getAnalzyer() {
@@ -96,4 +129,5 @@ public class KEGGCompoundNames
     public String getDescription() {
         return "KEGG Compound Names";
     }
+
 }
