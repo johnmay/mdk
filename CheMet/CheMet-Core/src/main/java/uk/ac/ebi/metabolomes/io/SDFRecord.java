@@ -22,7 +22,10 @@ package uk.ac.ebi.metabolomes.io;
 
 import java.util.ArrayList;
 import java.util.List;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.util.ExternalReference;
+import uk.ac.ebi.resource.IdentifierFactory;
 
 /**
  * @name    Record
@@ -38,7 +41,8 @@ public class SDFRecord {
         private String id;
         private final List<String> secondaryId = new ArrayList<String>();
         private final List<String> synonyms = new ArrayList<String>();
-        private final List<ExternalReference> crossRefs = new ArrayList<ExternalReference> ();
+        private final List<CrossReference> crossRefs = new ArrayList<CrossReference> ();
+        private final static IdentifierFactory factory = IdentifierFactory.getInstance();
 
         /**
          * @return the name
@@ -91,14 +95,16 @@ public class SDFRecord {
         }
         
         public void addCrossReference(String db, String identifier) {
-            ExternalReference ref = new ExternalReference(db, identifier);
+            Identifier ident = factory.ofSynonym(db);
+            ident.setAccession(identifier);
+            CrossReference ref = new CrossReference(ident);
             this.crossRefs.add(ref);
         }
 
         /**
          * @return the crossRefs
          */
-        public List<ExternalReference> getCrossRefs() {
+        public List<CrossReference> getCrossRefs() {
             return crossRefs;
         }
         

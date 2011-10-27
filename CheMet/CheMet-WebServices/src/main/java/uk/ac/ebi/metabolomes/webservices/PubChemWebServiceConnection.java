@@ -440,29 +440,12 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
         try {
             File input = new File(filename);
-            //ReaderFactory readerFactory = new ReaderFactory();
-            //IChemObjectReader reader = readerFactory.createReader(new FileReader(input));
-            //MDLReader reader = (MDLReader) readerFactory.createReader(new FileReader(input));
-            //MDLReader reader = new MDLReader(new FileReader(input));
             IteratingPCCompoundXMLReader readerXML = new IteratingPCCompoundXMLReader(new FileReader(input), builder);
             while (readerXML.hasNext()) {
                 //IChemObject n = ;
                 //Map props = n.getProperties();//PubChem CID
                 v.add((IAtomContainer) readerXML.next());
             }
-
-            //IChemFile content = (IChemFile) reader.read(builder.newChemFile());
-            //IMoleculeSet content = (IMoleculeSet) readerXML.read(builder.newMoleculeSet());
-//	            List c;
-//
-//	            if (content != null) {
-//	            	//c = ChemFileManipulator.getAllAtomContainers(content);
-//	            	c = (List) content.molecules();
-//	            	for (j = 0; j < c.size(); j++) v.add((IAtomContainer) c.get(j));
-//	            }
-//	            System.out.println("hola");
-
-
         } catch (IOException e) {
             logger.error("Problems opening file for reading", e);
         } catch (XmlPullParserException e) {
