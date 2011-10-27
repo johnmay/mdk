@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.io.remote;
 
+import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;

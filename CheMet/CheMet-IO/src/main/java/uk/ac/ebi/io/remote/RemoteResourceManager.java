@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.io.remote;
 
+import uk.ac.ebi.interfaces.services.RemoteResource;
 import com.google.common.base.Joiner;
 import java.io.PrintStream;
 import java.util.ArrayList;

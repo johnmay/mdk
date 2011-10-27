@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.io.remote;
 
+import uk.ac.ebi.interfaces.services.RemoteResource;
 import au.com.bytecode.opencsv.CSVReader;
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package uk.ac.ebi.io.remote;
+package uk.ac.ebi.interfaces.services;
 
 /**
  * RemoteResource.java
