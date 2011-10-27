@@ -1,4 +1,3 @@
-
 /**
  * KGMLEntry.java
  *
@@ -25,11 +24,17 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
 import org.apache.log4j.Logger;
+import org.codehaus.stax2.XMLStreamReader2;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
+import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
+import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
+import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 /**
  *          KGMLEntry – 2011.09.16 <br>
@@ -42,39 +47,35 @@ public class KGMLEntry {
 
     public final int id;
     public final String name;
+    private final String type;
     private final KGMLGraphics[] graphics;
     private static final Logger LOGGER = Logger.getLogger(KGMLEntry.class);
 
-
-    public KGMLEntry(int id, String name, KGMLGraphics[] graphics) {
+    public KGMLEntry(int id, String name, String type, KGMLGraphics[] graphics) {
         this.id = id;
         this.name = name;
+        this.type = type;
         this.graphics = graphics;
     }
-
 
     public KGMLGraphics[] getGraphics() {
         return graphics;
     }
 
-
     public KGMLGraphics getFirstGraphics() {
         return graphics.length > 0 ? graphics[0] : null;
     }
-
 
     public Point2D getPoint() {
         return graphics.length > 0 ? getFirstGraphics().getPoint() : new Point2D.Double(0, 0);
     }
 
-
     public Point2D getPoint(double scaleX, double scaleY) {
         Point2D p = getPoint();
-       return new Point2D.Double(p.getX() * scaleX, p.getY() * scaleY);
+        return new Point2D.Double(p.getX() * scaleX, p.getY() * scaleY);
     }
 
-
-    public Color getForeground(){
+    public Color getForeground() {
         return graphics.length > 0 ? getFirstGraphics().getForeground() : Color.GRAY;
     }
 
@@ -88,18 +89,70 @@ public class KGMLEntry {
 
         List<KGMLGraphics> graphics = new ArrayList();
         NodeList childNodes = n.getChildNodes();
-        for( int i = 0 ; i < childNodes.getLength() ; i++ ) {
+        for (int i = 0; i < childNodes.getLength(); i++) {
             Node graphicsNode = childNodes.item(i);
-            if( graphicsNode.getNodeName().equals("graphics") ) {
+            if (graphicsNode.getNodeName().equals("graphics")) {
                 graphics.add(KGMLGraphics.newInstance(graphicsNode));
             }
         }
 
         return new KGMLEntry(Integer.parseInt(attrMap.getNamedItem("id").getTextContent()),
                              attrMap.getNamedItem("name").getTextContent(),
+                             attrMap.getNamedItem("type").getTextContent(),
                              graphics.toArray(new KGMLGraphics[0]));
     }
 
+    public static KGMLEntry newInstance(XMLStreamReader2 xmlr) throws XMLStreamException {
 
+        int id = -1;
+        String name = "";
+        String type = "";
+
+        for (int i = 0; i < xmlr.getAttributeCount(); i++) {
+            String attrName = xmlr.getAttributeName(i).getLocalPart();
+            if (attrName.equals("name")) {
+                name = xmlr.getAttributeValue(i);
+            } else if (attrName.equals("id")) {
+                id = Integer.parseInt(xmlr.getAttributeValue(i));
+            } else if (attrName.equals("type")) {
+                type = xmlr.getAttributeValue(i);
+            }
+        }
+
+
+        List<KGMLGraphics> graphics = new ArrayList();
+
+        int event;
+        while (xmlr.hasNext()) {
+            event = xmlr.next();
+            switch (event) {
+                case XMLEvent.START_ELEMENT:
+                    if (xmlr.getLocalName().equals("graphics")) {
+                        graphics.add(KGMLGraphics.newInstance(xmlr));
+                    }
+                    break;
+                case XMLEvent.END_ELEMENT:
+                    if (xmlr.getLocalName().equals("entry")) {
+                        return new KGMLEntry(id,
+                                             name,
+                                             type,
+                                             graphics.toArray(new KGMLGraphics[0]));
+                    }
+                    break;
+            }
+        }
+
+
+
+
+
+        return null;
+    }
+
+    public Metabolite createMetabolite() {
+        String subName = name.substring(4);
+        Metabolite m = new Metabolite(new KEGGCompoundIdentifier(subName), subName, subName);
+        m.addAnnotation(new KEGGCrossReference(new KEGGCompoundIdentifier(subName)));
+        return m;
+    }
 }
-

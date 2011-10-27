@@ -128,7 +128,7 @@ implements LuceneService {
                              + File.separator + "databases"
                              + File.separator + "indexes"
                              + File.separator + "chebi-names";
-        Preferences prefs = Preferences.systemNodeForPackage(ChEBINames.class);
+        Preferences prefs = Preferences.userNodeForPackage(ChEBINames.class);
         return new File(prefs.get("chebi.name.path", defaultFile));
     }
 }

@@ -1,4 +1,3 @@
-
 /**
  * KGMLGraphics.java
  *
@@ -24,9 +23,9 @@ package uk.ac.ebi.io.xml.kgml;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import org.apache.log4j.Logger;
+import org.codehaus.stax2.XMLStreamReader2;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-
 
 /**
  *          KGMLGraphics – 2011.09.16 <br>
@@ -43,14 +42,12 @@ public class KGMLGraphics {
     public final Color background;
     private final Point2D point;
 
-
     public KGMLGraphics(String name, Color foreground, Color background, Point2D coordinates) {
         this.name = name;
         this.foreground = foreground;
         this.background = background;
         this.point = coordinates;
     }
-
 
     /**
      *
@@ -75,8 +72,8 @@ public class KGMLGraphics {
         String fgString = fg.getTextContent();
 
         Color fgColor = fgString.startsWith("#") ? new Color(Integer.parseInt(fg.getTextContent().
-          substring(1), 16)) :
-                        Color.BLACK;
+                substring(1), 16))
+                        : Color.BLACK;
 
 
 
@@ -86,26 +83,46 @@ public class KGMLGraphics {
                                 new Point2D.Float(xValue, yValue));
     }
 
+    public static KGMLGraphics newInstance(XMLStreamReader2 xmlr) {
+
+        float x = 0f, y = 0f;
+        Color fg = null;
+        String name = null;
+
+        for (int i = 0; i < xmlr.getAttributeCount(); i++) {
+            String attrName = xmlr.getAttributeName(i).getLocalPart();
+            if (attrName.equals("x")) {
+                x = Float.parseFloat(xmlr.getAttributeValue(i));
+            } else if (attrName.equals("y")) {
+                y = Float.parseFloat(xmlr.getAttributeValue(i));
+            } else if (attrName.equals("fgcolor")) {
+                String value = xmlr.getAttributeValue(i);
+                fg = value.startsWith("#") ? new Color(Integer.parseInt(value.substring(1), 16)) : Color.BLACK;
+            } else if (attrName.equals("name")) {
+                name = xmlr.getAttributeValue(i);
+            }
+        }
+
+        return new KGMLGraphics(name,
+                                fg,
+                                Color.WHITE,
+                                new Point2D.Float(x, y));
+
+    }
 
     public Color getForeground() {
         return foreground;
     }
 
-
     public double getX() {
         return point.getX();
     }
-
 
     public Point2D getPoint() {
         return point;
     }
 
-
     public double getY() {
         return point.getY();
     }
-
-
 }
-
