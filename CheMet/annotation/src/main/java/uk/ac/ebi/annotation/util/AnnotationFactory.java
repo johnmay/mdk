@@ -38,6 +38,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.annotation.crossreference.Citation;
 import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
@@ -89,7 +90,8 @@ public class AnnotationFactory {
                                                        new FileParameter(),
                                                        new Parameter(),
                                                        new Synonym(),
-                                                       new Locus()) ) {
+                                                       new Locus(),
+                                                       new Citation()) ) {
 
                 constructors[annotation.getIndex()] = annotation.getClass().getConstructor();
                 instances[annotation.getIndex()] = annotation;
