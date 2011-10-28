@@ -42,7 +42,8 @@ public class RemoteResourceManager {
     private List<RemoteResource> resources = new ArrayList<RemoteResource>(Arrays.asList(new DrugBankCrossRefs(),
                                                                                          new ChEBINames(),
                                                                                          new ChEBICrossRefs(),
-                                                                                         new KEGGCompoundNames()));
+                                                                                         new KEGGCompoundNames(),
+                                                                                         new KEGGCompoundMDLs()));
 
     private RemoteResourceManager() {
     }
@@ -73,7 +74,7 @@ public class RemoteResourceManager {
      * Returns a collection of all resources currently managed
      * @return
      */
-    public Collection<RemoteResource> getResources(){
+    public Collection<RemoteResource> getResources() {
         return resources;
     }
 
@@ -128,5 +129,4 @@ public class RemoteResourceManager {
             stream.println(Joiner.on("\t").join(Arrays.asList(resource.getLastUpdated(), resource.getLocalSize(), resource.getLocal(), resource.getRemote())));
         }
     }
-
 }

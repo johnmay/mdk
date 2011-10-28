@@ -67,6 +67,16 @@ public class AbstractQueryService {
         return max;
     }
 
+    public byte[] getBinaryValue(ScoreDoc document, String field) throws CorruptIndexException, IOException {
+        int index = document.doc;
+
+        if (documents[index] == null) {
+            documents[index] = reader.document(index);
+        }
+
+        return documents[index].getBinaryValue(field);
+    }
+
     public String getValue(ScoreDoc document, String field) throws CorruptIndexException, IOException {
 
         int index = document.doc;
