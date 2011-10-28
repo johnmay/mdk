@@ -108,4 +108,13 @@ public class SDFRecord {
             return crossRefs;
         }
         
+        /**
+         * This method should be called when the SDFRecord is going to be archived. It allows to wrap any unfinished 
+         * business before it is lost from memory sight.
+         * 
+         */
+        public void computeWhenArchiving() {
+            // do nothing
+        }
+        
     }

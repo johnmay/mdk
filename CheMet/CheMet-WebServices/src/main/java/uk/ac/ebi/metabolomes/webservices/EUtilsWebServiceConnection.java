@@ -38,6 +38,7 @@ import javax.xml.stream.events.XMLEvent;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
  * @name    EUtilsWebServiceConnection
@@ -56,6 +57,14 @@ public class EUtilsWebServiceConnection {
     private Client client;
     private WebResource webResource;
 
+    public Multimap<String, String> getPubChemSubstanceFromPubChemCompoundIdents(List<PubChemCompoundIdentifier> pubChemCompoundIdentifiers) {
+        List<String> pubchemComps = new ArrayList<String>(pubChemCompoundIdentifiers.size());
+        for (PubChemCompoundIdentifier pubChemCompoundIdentifier : pubChemCompoundIdentifiers) {
+            pubchemComps.add(pubChemCompoundIdentifier.getAccession());
+        }
+        return getPubChemSubstanceFromPubChemCompound(pubchemComps);
+    }
+
     
     
     public enum EntrezDB {
@@ -69,11 +78,51 @@ public class EUtilsWebServiceConnection {
         webResource = client.resource(baseURL);
     }
     
+    /**
+     * Queries the NCBI EUtils web service to retrieve through elink.cgi all the associations existing in a database 
+     * (dbto) for the identifiers provided for an initial different database (dbfrom). The one to one associations are 
+     * stored in the Multimap returned.
+     * 
+     * @param dbFromIds the list of string identifiers to search for
+     * @param dbFrom    the database in Entrez corresponding to those identifiers
+     * @param dbTo      the database where we want to find hits.
+     * @return          multimap with all the one-to-many associations fromDB identifiers (keys) -to- toDB identifiers (values).
+     */
+    public Multimap<String,String> getDBToIDsFromDBFromIDs(List<String> dbFromIds,EntrezDB dbFrom, EntrezDB dbTo) {
+        WebResource webRes = client.resource(baseURL+"elink.fcgi");
+        MultivaluedMap queryParams = new MultivaluedMapImpl();
+        queryParams.add("dbfrom", dbFrom.toString());
+        queryParams.add("db", dbTo.toString());
+        for (String id : dbFromIds) {
+            queryParams.add("id", id);
+        }
+        
+        ClientResponse resp = webRes.queryParams(queryParams).post(ClientResponse.class);
+        
+        if (resp.getStatus() != 200) {
+		   throw new RuntimeException("Failed : HTTP error code : "
+			+ resp.getStatus());
+        }
+        Multimap<String,String> res = ArrayListMultimap.create();
+        try {
+            res.putAll(parseLinkSetBlock(resp.getEntityInputStream()));
+        } catch (XMLStreamException ex) {
+            LOGGER.warn("Could not parse output XML adequately...", ex);
+        }
+        
+        return res;
+    }
+    
+    
     /*public Multimap<PubChemCompoundIdentifier,PubChemSubstanceIdentifier> getPubChemSubstanceIdentFromPubChemCompoundIdents(List<PubChemCompoundIdentifier> compounds) {
         
     }*/
     
     public Multimap<String,String> getPubChemSubstanceFromPubChemCompound(List<String> pubchemCompoundIds) {
+        return this.getDBToIDsFromDBFromIDs(pubchemCompoundIds, EntrezDB.pccompound, EntrezDB.pcsubstance);
+    }
+    
+    /*public Multimap<String,String> getPubChemSubstanceFromPubChemCompound(List<String> pubchemCompoundIds) {
         WebResource webRes = client.resource(baseURL+"elink.fcgi");
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("dbfrom", EntrezDB.pccompound.toString());
@@ -92,7 +141,7 @@ public class EUtilsWebServiceConnection {
         //String result = resp.getEntity(String.class);
         Multimap<String,String> res = ArrayListMultimap.create();
         try {
-            res.putAll(parseXMLPCCompounds2PCSubstance(resp.getEntityInputStream()));
+            res.putAll(parseLinkSetBlock(resp.getEntityInputStream()));
         } catch (XMLStreamException ex) {
             LOGGER.warn("Could not parse output XML adequately...", ex);
         }
@@ -100,10 +149,10 @@ public class EUtilsWebServiceConnection {
         //System.out.println(result);
         
         return res;
-    }
+    }*/
     
     
-    private Multimap<String,String> parseXMLPCCompounds2PCSubstance(InputStream in) throws XMLStreamException {
+    private Multimap<String,String> parseLinkSetBlock(InputStream in) throws XMLStreamException {
         
         XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
         xmlif.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.FALSE);
@@ -126,7 +175,7 @@ public class EUtilsWebServiceConnection {
                     break;
                 case XMLEvent.START_ELEMENT:
                     if(xmlr.getLocalName().equalsIgnoreCase("LinkSet")) {
-                        multiMap.putAll(parseLinkSetEntryPCComp2PCSubs(xmlr));
+                        multiMap.putAll(parseLinkSetEntry(xmlr));
                     }
                     break;
             }
@@ -135,7 +184,7 @@ public class EUtilsWebServiceConnection {
         return multiMap;
     }
     
-    private ListMultimap<String,String> parseLinkSetEntryPCComp2PCSubs(XMLStreamReader2 xmlr) throws XMLStreamException {
+    private ListMultimap<String,String> parseLinkSetEntry(XMLStreamReader2 xmlr) throws XMLStreamException {
         int event;
         ListMultimap<String,String> multiMap = ArrayListMultimap.create();
         String pchemcompID=null;
@@ -150,12 +199,12 @@ public class EUtilsWebServiceConnection {
                     if(xmlr.getLocalName().equalsIgnoreCase("IdList")) {
                         pchemcompID = parseIDFollowingIDTag(xmlr);
                     } else if(xmlr.getLocalName().equalsIgnoreCase("LinkSetDb")) {
-                        List<String> pchemSubs = parsePubChemSubstancesLinkSetDB(xmlr);
+                        List<String> pchemSubs = parseLinkSetDB(xmlr);
                         if(pchemcompID!=null && pchemcompID.length()>0) {
                             for (String substance : pchemSubs) {
                                 multiMap.put(pchemcompID, substance);
                             }
-                            pchemcompID = null;
+                            //pchemcompID = null;
                         } else {
                             LOGGER.warn("Got substance ids but compound id is null or empty and it shouldn't!!!");
                         }
@@ -197,7 +246,7 @@ public class EUtilsWebServiceConnection {
         return id;
     }
     
-    private List<String> parsePubChemSubstancesLinkSetDB(XMLStreamReader2 xmlr) throws XMLStreamException {
+    private List<String> parseLinkSetDB(XMLStreamReader2 xmlr) throws XMLStreamException {
         int event;
         List<String> substances = new ArrayList<String>();
         loop1:

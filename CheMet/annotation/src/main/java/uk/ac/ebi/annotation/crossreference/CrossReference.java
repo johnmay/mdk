@@ -129,7 +129,29 @@ public class CrossReference<E extends Identifier>
         return visitor.visit(this);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CrossReference<E> other = (CrossReference<E>) obj;
+        if (this.identifier != other.identifier && (this.identifier == null || !this.identifier.equals(other.identifier))) {
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + (this.identifier != null ? this.identifier.hashCode() : 0);
+        return hash;
+    }
+
+    
 
 
 

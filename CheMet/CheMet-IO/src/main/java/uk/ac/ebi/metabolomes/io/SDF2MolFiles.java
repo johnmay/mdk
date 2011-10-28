@@ -48,6 +48,8 @@ public class SDF2MolFiles {
     private String previousLineToID;
     private String toReplaceInID;
     
+    private boolean writeFile;
+    
     private FieldExtractor fieldExtractor;
 
     /**
@@ -60,7 +62,12 @@ public class SDF2MolFiles {
      */
     public SDF2MolFiles(InputStream incomingSDF, String database, String destinationDir, String previousLineToID) {
         this.incomingSDFStream = incomingSDF;
-        this.destinationDir = destinationDir;
+        if(destinationDir==null) {
+            writeFile = false;
+        } else {
+            this.destinationDir = destinationDir;
+            writeFile = true;
+        }
         this.database = database != null ? database : "";
         this.previousLineToID = previousLineToID;
     }
@@ -81,7 +88,7 @@ public class SDF2MolFiles {
         boolean nextLineIsID = false;
         boolean onlySelectedIDs = false;
         int filesWritten = 0;
-        if(identifiers!=null || identifiers.size() > 0) {
+        if(identifiers!=null && identifiers.size() > 0) {
             onlySelectedIDs=true;
             if(fieldExtractor!=null)
                 fieldExtractor.setSelectedIdentifiers(identifiers);
@@ -122,9 +129,11 @@ public class SDF2MolFiles {
     }
 
     private void writeBufferToFile(String currentID, StringBuffer buffer) throws IOException {
-        FileWriter writer = new FileWriter(new File(buildPathFor(currentID)));
-        writer.write(buffer.toString());
-        writer.close();
+        if(writeFile) {
+            FileWriter writer = new FileWriter(new File(buildPathFor(currentID)));
+            writer.write(buffer.toString());
+            writer.close();
+        }
     }
     
     /**
@@ -161,6 +170,13 @@ public class SDF2MolFiles {
      */
     public void setFieldExtractor(FieldExtractor fieldExtractor) {
         this.fieldExtractor = fieldExtractor;
+    }
+
+    /**
+     * @param writeFile the writeFile to set
+     */
+    public void setWriteFile(boolean writeFile) {
+        this.writeFile = writeFile;
     }
 
     

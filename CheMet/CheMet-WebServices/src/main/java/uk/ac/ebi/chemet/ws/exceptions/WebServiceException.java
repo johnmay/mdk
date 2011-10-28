@@ -47,6 +47,10 @@ public class WebServiceException extends Exception {
           append(" from ").append(ws).
           append(" because ").append(reason).toString());
     }
+    
+    public WebServiceException(String message) {
+        super(message);
+    }
 
     
 

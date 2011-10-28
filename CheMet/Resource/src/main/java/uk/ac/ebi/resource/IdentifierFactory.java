@@ -44,6 +44,7 @@ import uk.ac.ebi.resource.chemical.BioCycChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.CASIdentifier;
 import uk.ac.ebi.resource.chemical.CHEMBLIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.ChemIDplusIdentifier;
 import uk.ac.ebi.resource.chemical.ChemSpiderIdentifier;
 import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
 import uk.ac.ebi.resource.chemical.EINECSIdentifier;
@@ -124,6 +125,7 @@ public class IdentifierFactory {
             new ChemSpiderIdentifier(),
             new PubChemCompoundIdentifier(),
             new PubChemSubstanceIdentifier(),
+            new ChemIDplusIdentifier(),
             new InChI()));
     private Map<String, Identifier> synonyms = new HashMap();
     private List<SequenceIdentifier> proteinIdentifiers = new ArrayList(Arrays.asList(new BasicProteinIdentifier(),

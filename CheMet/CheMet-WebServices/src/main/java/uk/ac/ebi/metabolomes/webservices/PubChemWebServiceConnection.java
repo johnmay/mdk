@@ -1,5 +1,6 @@
 package uk.ac.ebi.metabolomes.webservices;
 
+import com.google.common.io.Files;
 import gov.nih.nlm.ncbi.pubchem.CompressType;
 import gov.nih.nlm.ncbi.pubchem.FormatType;
 import gov.nih.nlm.ncbi.pubchem.PCIDType;
@@ -44,7 +45,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 public class PubChemWebServiceConnection extends ChemicalDBWebService {
 
-    private final Logger logger = Logger.getLogger(PubChemWebServiceConnection.class);
+    private final Logger LOGGER = Logger.getLogger(PubChemWebServiceConnection.class);
     private PUGLocator locator;
     private PUGSoap soap;
     private String defaultPath;
@@ -52,26 +53,9 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
     private final String propertyCID = "PubChem CID";
     private final String propertyInchiKey = "InChIKey (Standard)";
     private final String serviceProviderName = "PubChem";
-
-    // this should be a test, not a main
-	/*public static void main(String[] args) {
-    Properties p = System.getProperties();
-    PubChemWebServiceConnection c = new PubChemWebServiceConnection();
-    int[] ids = new int[args.length];
-    for (int i = 0; i < args.length; i++) {
-    ids[i] = Integer.parseInt(args[i]);
-    }
-    HashMap<String, String> id2Inchi = c.getInChIs(ids);
-    HashMap<String, String> id2InchiKey = c.getInChIKeys(ids);
-    c.downloadStructureFiles(ids, c.defaultPath);
-    ArrayList<IAtomContainer> mols = c.downloadMolsToCDKObject(ids);
-    for(IAtomContainer m : mols) {
-    System.out.println("CID of mol: "+m.getProperty("PubChem CID"));
-    }
-    for(String id : id2InchiKey.keySet()) {
-    System.out.println(id+"\t"+id2InchiKey.get(id));
-    }
-    }*/
+    
+    
+    
     public PubChemWebServiceConnection() {
         init();
     }
@@ -80,14 +64,8 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         this.locator = new PUGLocator();
         try {
             this.soap = locator.getPUGSoap();
-            // Generate factory - throws CDKException if native code does not load
-            // TODO Remove all the inchi generation code from these web service classes.
-            this.factory = InChIGeneratorFactory.getInstance();
-            // Get InChIGenerator
-        } catch (CDKException e) {
-            logger.error("Problem loading inchi generator", e);
         } catch (ServiceException e) {
-            logger.error("Error with connection to pubchem web service", e);
+            LOGGER.error("Error with connection to pubchem web service", e);
         }
     }
 
@@ -119,12 +97,12 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         StatusType status;
         while ((status = soap.getOperationStatus(downloadKey)) == StatusType.eStatus_Running
                 || status == StatusType.eStatus_Queued) {
-            logger.info("Waiting for download to finish...");
+            LOGGER.info("Waiting for download to finish...");
             Thread.sleep(10000);
         }
         if (status == StatusType.eStatus_Success) {
             URL url = new URL(soap.getDownloadUrl(downloadKey));
-            logger.info("Success! Download URL = " + url.toString());
+            LOGGER.info("Success! Download URL = " + url.toString());
 
             // get input stream from URL
             URLConnection fetch = url.openConnection();
@@ -142,8 +120,9 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
     public ArrayList<IAtomContainer> downloadMolsToCDKObject(int[] ids) {
         // This method should be changed so that an exception is thrown
         // instead of returning null.
+        
+        ArrayList<IAtomContainer> v = new ArrayList<IAtomContainer>();
         try {
-            ArrayList<IAtomContainer> v = new ArrayList<IAtomContainer>();
             IIteratingChemObjectReader readerXML = this.downloadMolsToIteratingCDKReader(ids);
             while (readerXML.hasNext()) {
                 //IChemObject n = ;
@@ -154,7 +133,8 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
             }
             return v;
         } catch (Exception e) {
-            logger.error("Problems generating IAtomContainer arraylist from PubChem download", e);
+            LOGGER.error("Problems generating IAtomContainer arraylist from PubChem download", e);
+            //throw new WebServiceException("Problems generating IAtomContainer arraylist from PubChem download");
         }
         return null;
     }
@@ -165,15 +145,27 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
             try {
                 pubchemCIDs[i] = Integer.parseInt(pchemCompIds[i]);
             } catch(NumberFormatException e) {
-                logger.warn("One of the pchemCompIds was not an integer as required: "+pchemCompIds[i]);
+                LOGGER.warn("One of the pchemCompIds was not an integer as required: "+pchemCompIds[i]);
                 pubchemCIDs[i] = 0;
             }
         }
         return downloadMolsToIndividualMolFiles(pubchemCIDs, destination);
     }
     
-    public Integer downloadMolsToIndividualMolFiles(int[] pchemCompIds, String destination) throws WebServiceException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(this.downloadFile(pchemCompIds, FormatType.eFormat_SDF)));
+    /**
+     * Downloads the specified list of PubChem ids (of the specified type of id) as SDF to the destination defined. This
+     * method only applies to compounds and substances.
+     * 
+     * @param pchemIds
+     * @param idType
+     * @param destination
+     * @return
+     * @throws WebServiceException 
+     */
+    public Integer downloadMolsToIndividualMolFiles(int[] pchemIds, PCIDType idType, String destination) throws WebServiceException {
+        if(!(idType.equals(PCIDType.eID_CID) || idType.equals(PCIDType.eID_SID)))
+            throw new WebServiceException("Only Substance or Compound can be accepted as the id type");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(this.downloadFile(pchemIds, FormatType.eFormat_SDF, idType)));
         String line;
         StringBuffer buffer = new StringBuffer();
         String pchemID = null;
@@ -195,7 +187,9 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
                         pchemID = line.trim();
                         nextLineIsID = false;
                     }
-                    if (line.contains("> <PUBCHEM_COMPOUND_CID>")) {
+                    if (idType.equals(PCIDType.eID_CID) && line.contains("> <PUBCHEM_COMPOUND_CID>")) {
+                        nextLineIsID = true;
+                    } else if(idType.equals(PCIDType.eID_SID) && line.contains("> <PUBCHEM_COMPOUND_SID>")) {
                         nextLineIsID = true;
                     }
                 }
@@ -206,30 +200,69 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         }
         return filesWritten;
     }
-
+    
+    /**
+     * This is the default method, which will download the provided list of PubChem Compound IDs in the format
+     * specified with FormatType enum.
+     * 
+     * @param pchemCompIds
+     * @param destination
+     * @return integer number of mols downloaded.
+     * @throws WebServiceException 
+     */
+    public Integer downloadMolsToIndividualMolFiles(int[] pchemCompIds, String destination) throws WebServiceException {
+        return this.downloadMolsToIndividualMolFiles(pchemCompIds, PCIDType.eID_CID, destination);
+    }
+    
+    /**
+     * This is the default method, which will download the provided list of PubChem Compound IDs in the format
+     * specified with FormatType enum.
+     * 
+     * @param pchemCompIds array of strings containing the pubchem compounds to download.
+     * @param type The type of download format (the enumeration contains options for ASN.1, XML, SDF, etc).
+     * @return  the input stream to the download file.
+     * @throws WebServiceException 
+     */
     public InputStream downloadFile(String[] pchemCompIds, FormatType type) throws WebServiceException {
-        int[] pubchemCIDs = new int[pchemCompIds.length];
-        for (int i = 0; i < pchemCompIds.length; i++) {
+        return downloadFile(pchemCompIds, type, PCIDType.eID_CID);
+    }
+
+    /**
+     * Downloads the specified set of ids, corresponding to the type specified of ID, in the specified format type.
+     * 
+     * @param pchemIds  array of ids to download.
+     * @param formatType    type of format to download (SDF, XML, ASN.1, etc).
+     * @param pubchemIdType  type of id (Compound CID, Substance SID, Assay AID, etc).
+     * @return the input stream to the downloaded data.
+     * @throws WebServiceException 
+     */
+    public InputStream downloadFile(String[] pchemIds, FormatType formatType, PCIDType pubchemIdType) throws WebServiceException {
+        int[] pubchemCIDs = new int[pchemIds.length];
+        for (int i = 0; i < pchemIds.length; i++) {
             try {
-                pubchemCIDs[i] = Integer.parseInt(pchemCompIds[i]);
+                pubchemCIDs[i] = Integer.parseInt(pchemIds[i]);
             } catch(NumberFormatException e) {
-                logger.warn("One of the pchemCompIds was not an integer as required: "+pchemCompIds[i]);
+                LOGGER.warn("One of the pchemCompIds was not an integer as required: "+pchemIds[i]);
                 pubchemCIDs[i] = 0;
             }
         }
-        return downloadFile(pubchemCIDs, type);
+        return downloadFile(pubchemCIDs, formatType, pubchemIdType);
     }
     
     public InputStream downloadFile(int[] ids, FormatType type) throws WebServiceException {
+        return this.downloadFile(ids, type, PCIDType.eID_CID);
+    }
+    
+    public InputStream downloadFile(int[] ids, FormatType type, PCIDType pubchemIdType) throws WebServiceException {
         String listKey;
         String downloadKey;
         InputStream result = null;
         try {
-            listKey = soap.inputList(ids, PCIDType.eID_CID);
+            listKey = soap.inputList(ids, pubchemIdType);
             downloadKey = soap.download(listKey, type,
                     CompressType.eCompress_None, false);
         } catch (RemoteException ex) {
-            logger.error("Problems in inputting list to PUG soap web service", ex);
+            LOGGER.error("Problems in inputting list to PUG soap web service", ex);
             throw new WebServiceException("List of accessions...", PubChemWebServiceConnection.class.getName(), WebServiceException.CLIENT_EXCEPTION);
         }
         // Wait for the download to be prepared
@@ -241,24 +274,24 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
                 Thread.sleep(10000);
             }
         } catch (InterruptedException ex) {
-            logger.error("Problems with thread waiting for download", ex);
+            LOGGER.error("Problems with thread waiting for download", ex);
             throw new UnfetchableEntry("List of accessions...", PubChemWebServiceConnection.class.getName(),
                     "Problems with waiting for status " + ex.getMessage());
         } catch (RemoteException ex) {
-            logger.error("RemoteException while waiting for PUG soap web service", ex);
+            LOGGER.error("RemoteException while waiting for PUG soap web service", ex);
             throw new WebServiceException("List of accessions...", PubChemWebServiceConnection.class.getName(), WebServiceException.CLIENT_EXCEPTION);
         }
         try {
             if (status == StatusType.eStatus_Success) {
                 URL url = new URL(soap.getDownloadUrl(downloadKey));
-                logger.debug("Success! Download URL = " + url.toString());
+                LOGGER.debug("Success! Download URL = " + url.toString());
 
                 // get input stream from URL
                 URLConnection fetch = url.openConnection();
                 result = fetch.getInputStream();
             }
         } catch (IOException ex) {
-            logger.error("Problems while downloading the URL", ex);
+            LOGGER.error("Problems while downloading the URL", ex);
             throw new WebServiceException("List of accessions...", PubChemWebServiceConnection.class.getName(), WebServiceException.CLIENT_EXCEPTION);
         }
 
@@ -282,7 +315,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
             }
             if (status == StatusType.eStatus_Success) {
                 URL url = new URL(soap.getDownloadUrl(downloadKey));
-                logger.debug("Success! Download URL = " + url.toString());
+                LOGGER.debug("Success! Download URL = " + url.toString());
 
                 // get input stream from URL
                 URLConnection fetch = url.openConnection();
@@ -301,7 +334,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
                 }
 
                 FileOutputStream output = new FileOutputStream(filename);
-                logger.debug("Writing data to " + filename);
+                LOGGER.debug("Writing data to " + filename);
 
                 // buffered read/write
                 byte[] buffer = new byte[10000];
@@ -315,9 +348,9 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
             }
 
         } catch (IOException e) {
-            logger.error("Problems for saving downloaded files", e);
+            LOGGER.error("Problems for saving downloaded files", e);
         } catch (InterruptedException e) {
-            logger.error("Problems with thread waiting for download", e);
+            LOGGER.error("Problems with thread waiting for download", e);
         }
         return null;
     }
@@ -337,14 +370,14 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         try {
             for (IAtomContainer mol : mols) {
                 InChIGenerator gen = factory.getInChIGenerator(mol);
-                logger.debug("inChi is:" + gen.getInchi());
-                logger.debug("inChiKey is:" + gen.getInchiKey());
+                LOGGER.debug("inChi is:" + gen.getInchi());
+                LOGGER.debug("inChiKey is:" + gen.getInchiKey());
                 //mol.setID(dic.get(gen.getInchi()));
                 String specFileName = this.defaultPath + "/pubchem/" + mol.getID() + ".mol";
                 this.writeMoleculeMolToFile(mol, specFileName);
             }
         } catch (CDKException e) {
-            logger.error("Problems with cdk inchi factory", e);
+            LOGGER.error("Problems with cdk inchi factory", e);
             e.printStackTrace();
         }
         return true;
@@ -382,7 +415,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
     public HashMap<String, String> getInChIs(int[] ids) {
         // TODO Auto-generated method stub
         HashMap<String, String> res = new HashMap<String, String>();
-        String filename = this.downloadFile(ids, FormatType.eFormat_InChI, null);
+        String filename = this.downloadFile(ids, FormatType.eFormat_InChI, Files.createTempDir().getAbsolutePath());
         BufferedReader inchiFile;
         try {
             inchiFile = new BufferedReader(new FileReader(filename));
@@ -397,7 +430,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
             inchiFile.close();
             (new File(filename)).delete();
         } catch (IOException e) {
-            logger.error("Problems reading file with inchis", e);
+            LOGGER.error("Problems reading file with inchis", e);
         }
 
 
@@ -418,7 +451,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         try {
             w = new FileWriter(new File(filename));
         } catch (IOException e1) {
-            logger.error("Could not opern file for writing mols", e1);
+            LOGGER.error("Could not opern file for writing mols", e1);
             return false;
         }
         try {
@@ -426,10 +459,10 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
             mw.write(m);
             mw.close();
         } catch (CDKException e) {
-            logger.error("Problems when writing to the MDLWriter", e);
+            LOGGER.error("Problems when writing to the MDLWriter", e);
             return false;
         } catch (IOException e) {
-            logger.error("Could not close file being written with mols", e);
+            LOGGER.error("Could not close file being written with mols", e);
         }
         return true;
     }
@@ -447,9 +480,9 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
                 v.add((IAtomContainer) readerXML.next());
             }
         } catch (IOException e) {
-            logger.error("Problems opening file for reading", e);
+            LOGGER.error("Problems opening file for reading", e);
         } catch (XmlPullParserException e) {
-            logger.error("XML Parsing Troubles", e);
+            LOGGER.error("XML Parsing Troubles", e);
         }
 
         // convert the vector to a simple array
@@ -458,7 +491,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
             retValues[i] = (IAtomContainer) v.get(i);
             Map<Object, Object> props = retValues[i].getProperties();
             retValues[i].setID((String) props.get(this.propertyCID));
-            logger.debug("ID: " + retValues[i].getID());
+            LOGGER.debug("ID: " + retValues[i].getID());
         }
         return retValues;
     }
