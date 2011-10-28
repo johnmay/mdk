@@ -30,8 +30,8 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface MDLQueryService<I extends Identifier> extends QueryService<I> {
+public interface MolQueryService<I extends Identifier> extends QueryService<I> {
    
-    public String getMDL(I identifier);
+    public String getMol(I identifier);
 
 }

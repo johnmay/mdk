@@ -30,7 +30,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface StructureQueryService<I extends Identifier> extends MDLQueryService<I> {
+public interface StructureQueryService<I extends Identifier> extends MolQueryService<I> {
 
     public IAtomContainer getStructure(I identifier);
 }

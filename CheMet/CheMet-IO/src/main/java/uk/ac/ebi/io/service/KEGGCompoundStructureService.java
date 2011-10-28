@@ -73,7 +73,7 @@ public class KEGGCompoundStructureService extends KEGGCompoundQueryService
 
     public IAtomContainer getStructure(KEGGCompoundIdentifier identifier) {
         try {
-            String str = getMDL(identifier);
+            String str = getMol(identifier);
 
             if (str.isEmpty()) {
                 return null;
@@ -89,7 +89,7 @@ public class KEGGCompoundStructureService extends KEGGCompoundQueryService
 
     }
 
-    public String getMDL(KEGGCompoundIdentifier identifier) {
+    public String getMol(KEGGCompoundIdentifier identifier) {
         try {
 
             Query q = NumericRangeQuery.newIntRange("id", identifier.getValue(), identifier.getValue(), true, true);
