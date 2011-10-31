@@ -55,13 +55,13 @@ public class PubChemCompoundCrossRefsTest {
         pubchemCompoundIds.add("16133648");
         pubchemCompoundIds.add("16132374");
         pubchemCompoundIds.add("16132321");
-        pubchemCompoundIds.add("16132312");
+        pubchemCompoundIds.add("16132312");*/
         pubchemCompoundIds.add("16132280");
         pubchemCompoundIds.add("16131310");
         pubchemCompoundIds.add("16129677");
         pubchemCompoundIds.add("16129627");
         pubchemCompoundIds.add("16051918");
-        pubchemCompoundIds.add("11979494");*/
+        pubchemCompoundIds.add("11979494");
         pubchemCompoundIds.add("6"); // Einecs, ZINC, EPA Pesticide, HSDB
         //pubchemCompoundIds.add("11840966"); // DrugBank, ChEMBL, ChEBI.
         //pubchemCompoundIds.add("2725"); // Kegg drug example, Kegg glycans apparently don't have compounds assigned.

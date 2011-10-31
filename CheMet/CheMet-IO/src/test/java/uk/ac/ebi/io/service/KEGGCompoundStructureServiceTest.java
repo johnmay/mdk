@@ -35,6 +35,6 @@ public class KEGGCompoundStructureServiceTest {
 
     @Test
     public void testGetMDL() {
-        System.out.println(KEGGCompoundStructureService.getInstance().getMDL(new KEGGCompoundIdentifier("C00009")));
+        System.out.println(KEGGCompoundStructureService.getInstance().getMol(new KEGGCompoundIdentifier("C00009")));
     }
 }

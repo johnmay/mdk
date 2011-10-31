@@ -12,6 +12,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
 import static org.junit.Assert.*;
 
 /**
@@ -20,7 +21,10 @@ import static org.junit.Assert.*;
  */
 public class EUtilsWebServiceConnectionTest {
 
+    private EUtilsWebServiceConnection instance;
+    
     public EUtilsWebServiceConnectionTest() {
+        instance = new EUtilsWebServiceConnection();
     }
 
     @BeforeClass
@@ -43,7 +47,7 @@ public class EUtilsWebServiceConnectionTest {
      * Test of getPubChemSubstanceFromPubChemCompound method, of class EUtilsWebServiceConnection.
      */
     @Test
-    public void testGetPubChemSubstanceFromPubChemCompound() {
+    public void testGetPubChemSubstanceFromPubChemCompound() throws Exception {
         System.out.println("getPubChemSubstanceFromPubChemCompound");
         List<String> pubchemCompoundIds = new ArrayList<String>();
         pubchemCompoundIds.add("44264212");
@@ -62,7 +66,6 @@ public class EUtilsWebServiceConnectionTest {
         pubchemCompoundIds.add("16051918");
         pubchemCompoundIds.add("11979494");
 
-        EUtilsWebServiceConnection instance = new EUtilsWebServiceConnection();
         Multimap<String,String> result = instance.getPubChemSubstanceFromPubChemCompound(pubchemCompoundIds);
         
         assertNotNull(result);
@@ -75,5 +78,26 @@ public class EUtilsWebServiceConnectionTest {
                 assertTrue(substance.length()>0);
             }
         }
+    }
+    
+    @Test
+    public void testGetExternalIdentifiersForPubChemSubstances() throws Exception {
+        System.out.println("testGetExternalIdentifiersForPubChemSubstances");
+        List<String> pubchemSubstances = new ArrayList<String>();
+        pubchemSubstances.add("30179699");
+        pubchemSubstances.add("103178971");
+        
+        Multimap<String,CrossReference> result = instance.getExternalIdentifiersForPubChemSubstances(pubchemSubstances);
+        
+        assertNotNull(result);
+        
+        System.out.println("Substance\tExtDB\tExtID");
+        for (String subsID : result.keySet()) {
+            for (CrossReference crossReference : result.get(subsID)) {
+                System.out.println(subsID+"\t"+crossReference.getShortDescription()+"\t"+crossReference.getIdentifier().getAccession());
+            }
+        }
+        
+        
     }
 }

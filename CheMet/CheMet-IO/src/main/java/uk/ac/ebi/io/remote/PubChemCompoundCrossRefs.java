@@ -20,21 +20,16 @@
  */
 package uk.ac.ebi.io.remote;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import gov.nih.nlm.ncbi.pubchem.FormatType;
-import gov.nih.nlm.ncbi.pubchem.PCIDType;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.KeywordAnalyzer;
@@ -57,11 +52,8 @@ import org.apache.lucene.util.Version;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.io.PubChemSubstanceSDFFieldExtractor;
-import uk.ac.ebi.metabolomes.io.SDF2MolFiles;
-import uk.ac.ebi.metabolomes.io.SDFRecord;
 import uk.ac.ebi.metabolomes.webservices.EUtilsWebServiceConnection;
-import uk.ac.ebi.metabolomes.webservices.PubChemWebServiceConnection;
+import uk.ac.ebi.resource.chemical.ChemSpiderIdentifier;
 import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
@@ -98,79 +90,92 @@ public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements 
     public void update() throws IOException {
         LinkedList<Document> docs = new LinkedList();
 
-        PubChemWebServiceConnection pcwsc = new PubChemWebServiceConnection();
+        //PubChemWebServiceConnection pcwsc = new PubChemWebServiceConnection();
         EUtilsWebServiceConnection euwsc = new EUtilsWebServiceConnection();
 
         Directory index = new SimpleFSDirectory(getLocal());
 
-        // We retrieve the mapping from compound ids to substance ids.
-        Multimap<String, String> comp2subs = euwsc.getPubChemSubstanceFromPubChemCompoundIdents(pubChemCompoundIdentifiers);
-        LOGGER.info("Retrieved "+comp2subs.keySet().size()+" compounds and "+comp2subs.values().size()+" substances associated..");
-        Set<String> uniqueSubs = new TreeSet<String>();
-        uniqueSubs.addAll(comp2subs.values());
+
 
         try {
-            // we submit the unique list of substance ids to download the SDF (which is shorter than the XML apparently)
-            InputStream in = pcwsc.downloadFile((String[]) (uniqueSubs.toArray(new String[uniqueSubs.size()])), FormatType.eFormat_SDF, PCIDType.eID_SID);
-            LOGGER.info("Retrieved SDF files for "+uniqueSubs.size()+" different substances...");
-            SDF2MolFiles sdfmf = new SDF2MolFiles(in, null, null, "> <PUBCHEM_SUBSTANCE_ID>");
-            PubChemSubstanceSDFFieldExtractor sDFFieldExtractor = new PubChemSubstanceSDFFieldExtractor();
-            sdfmf.setFieldExtractor(sDFFieldExtractor);
-            // we use the SDF2MolFiles to go through the SDF, using the SDFFieldExtractor to get the annotations
-            // no Mol files are written as we don't give the 
-            sdfmf.splitSDFIntoMolFilesForIDs(null);
-            in.close();
-            IndexSearcher searcher=null;
-            boolean indexExists=false;
-            try {
-                if(index.listAll().length>0) {
-                    searcher = new IndexSearcher(index);
-                    indexExists=true;
-                }
-            } catch(NoSuchDirectoryException e) {
-                LOGGER.warn("The index doesn't exist.. we just write everything");
-            }
+            // We retrieve the mapping from compound ids to substance ids.
+            Multimap<String, String> comp2subs = euwsc.getPubChemSubstanceFromPubChemCompoundIdents(pubChemCompoundIdentifiers);
+            LOGGER.info("Retrieved " + comp2subs.keySet().size() + " compounds and " + comp2subs.values().size() + " substances associated..");
+            Set<String> uniqueSubs = new HashSet<String>();
+            uniqueSubs.addAll(comp2subs.values());
 
-            LOGGER.info("Searching found cross refs in exiting index if any...");
-            Multimap<PubChemCompoundIdentifier, CrossReference> crossRefsToAddNotInIndex = HashMultimap.create();
-            for (String pubchemCompID : comp2subs.keySet()) {
-                Set<CrossReference> uniqueCrossRefs = new HashSet<CrossReference>();
-                PubChemCompoundIdentifier identPCComp = new PubChemCompoundIdentifier(pubchemCompID);
-                for (String substanceID : comp2subs.get(pubchemCompID)) {
-                    SDFRecord rec = sDFFieldExtractor.getRecordFor(substanceID);
-                    uniqueCrossRefs.addAll(rec.getCrossRefs());
+            List<String> substances = new ArrayList<String>(uniqueSubs);
+            int step = 5000;
+            for (int i = 0; i < substances.size(); i += step) {
+                // we submit the unique list of substance ids to download the SDF (which is shorter than the XML apparently)
+                List<String> subsToDownload = substances.subList(i, Math.min(substances.size(), i + step));
+
+
+                //--  InputStream in = pcwsc.downloadFile((String[]) (subsToDownload.toArray(new String[subsToDownload.size()])), FormatType.eFormat_SDF, PCIDType.eID_SID);
+                LOGGER.info("Retrieved SDF files for " + subsToDownload.size() + " different substances...");
+                Multimap<String, CrossReference> subs2CrossRefs = euwsc.getExternalIdentifiersForPubChemSubstances(subsToDownload);
+                //--  SDF2MolFiles sdfmf = new SDF2MolFiles(in, null, null, "> <PUBCHEM_SUBSTANCE_ID>");
+                //-- PubChemSubstanceSDFFieldExtractor sDFFieldExtractor = new PubChemSubstanceSDFFieldExtractor();
+                //-- sdfmf.setFieldExtractor(sDFFieldExtractor);
+                // we use the SDF2MolFiles to go through the SDF, using the SDFFieldExtractor to get the annotations
+                // no Mol files are written as we don't give the 
+                //-- sdfmf.splitSDFIntoMolFilesForIDs(null);
+                //-- in.close();
+                IndexSearcher searcher = null;
+                boolean indexExists = false;
+                try {
+                    if (index.listAll().length > 0) {
+                        searcher = new IndexSearcher(index);
+                        indexExists = true;
+                    }
+                } catch (NoSuchDirectoryException e) {
+                    LOGGER.warn("The index doesn't exist.. we just write everything");
                 }
-                for (CrossReference crossReference : uniqueCrossRefs) {
-                    if (!indexExists || !isCrossRefInIndex(searcher, identPCComp, crossReference.getIdentifier())) {
-                        crossRefsToAddNotInIndex.put(identPCComp, crossReference);
-                    } else if(indexExists && isCrossRefInIndex(searcher, identPCComp, crossReference.getIdentifier())) {
-                        LOGGER.info("Existing entry "+identPCComp.getAccession()+" ExtDB:"+crossReference.getIdentifier().getShortDescription()
-                                +" ID:"+crossReference.getIdentifier().getAccession());
+
+                LOGGER.info("Searching found cross refs in exiting index if any...");
+                Multimap<PubChemCompoundIdentifier, CrossReference> crossRefsToAddNotInIndex = HashMultimap.create();
+                for (String pubchemCompID : comp2subs.keySet()) {
+                    Set<CrossReference> uniqueCrossRefs = new HashSet<CrossReference>();
+                    PubChemCompoundIdentifier identPCComp = new PubChemCompoundIdentifier(pubchemCompID);
+                    for (String substanceID : comp2subs.get(pubchemCompID)) {
+                        //-- SDFRecord rec = sDFFieldExtractor.getRecordFor(substanceID);
+                        //-- uniqueCrossRefs.addAll(rec.getCrossRefs());
+                        uniqueCrossRefs.addAll(subs2CrossRefs.get(substanceID));
+                    }
+                    for (CrossReference crossReference : uniqueCrossRefs) {
+                        if(crossReference.getIdentifier() instanceof ChemSpiderIdentifier)
+                            continue;;
+                        if (!indexExists || !isCrossRefInIndex(searcher, identPCComp, crossReference.getIdentifier())) {
+                            crossRefsToAddNotInIndex.put(identPCComp, crossReference);
+                        } else if (indexExists && isCrossRefInIndex(searcher, identPCComp, crossReference.getIdentifier())) {
+                            LOGGER.info("Existing entry " + identPCComp.getAccession() + " ExtDB:" + crossReference.getIdentifier().getShortDescription()
+                                    + " ID:" + crossReference.getIdentifier().getAccession());
+                        }
                     }
                 }
-            }
-            if(indexExists)
-                searcher.close();
-
-            IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, new KeywordAnalyzer()));
-            LOGGER.info("Compounds selected for writting new cross refs: "+crossRefsToAddNotInIndex.keySet().size());
-            for (PubChemCompoundIdentifier pccompIdent : crossRefsToAddNotInIndex.keySet()) {
-                for (CrossReference crossReference : crossRefsToAddNotInIndex.get(pccompIdent)) {
-                    Identifier crIdent = crossReference.getIdentifier();
-                    LOGGER.info("Adding: PubChemComp:" + pccompIdent.getAccession() + " ExtDB:" + crIdent.getShortDescription() + " ExtID:" + crIdent.getAccession());
-                    Document doc = new Document();
-                    doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.PubChemCompID.toString(), pccompIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
-                    doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.ExtDB.toString(), crIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
-                    doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.ExtID.toString(), crIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
-                    docs.add(doc);
+                if (indexExists) {
+                    searcher.close();
                 }
+
+                IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, new KeywordAnalyzer()));
+                LOGGER.info("Compounds selected for writting new cross refs: " + crossRefsToAddNotInIndex.keySet().size());
+                for (PubChemCompoundIdentifier pccompIdent : crossRefsToAddNotInIndex.keySet()) {
+                    for (CrossReference crossReference : crossRefsToAddNotInIndex.get(pccompIdent)) {
+                        Identifier crIdent = crossReference.getIdentifier();
+                        LOGGER.info("Adding: PubChemComp:" + pccompIdent.getAccession() + " ExtDB:" + crIdent.getShortDescription() + " ExtID:" + crIdent.getAccession());
+                        Document doc = new Document();
+                        doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.PubChemCompID.toString(), pccompIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
+                        doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.ExtDB.toString(), crIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
+                        doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.ExtID.toString(), crIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
+                        docs.add(doc);
+                    }
+                }
+                LOGGER.info("Finished writing " + crossRefsToAddNotInIndex.size() + " cross refs to index.");
+                // write the index
+                writer.addDocuments(docs);
+                writer.close();
             }
-            LOGGER.info("Finished writing "+crossRefsToAddNotInIndex.size()+" cross refs to index.");
 
-            // write the index
-
-            writer.addDocuments(docs);
-            writer.close();
             index.close();
         } catch (IOException e) {
             LOGGER.error("Problems reading the ouput of the PubChem web service", e);
