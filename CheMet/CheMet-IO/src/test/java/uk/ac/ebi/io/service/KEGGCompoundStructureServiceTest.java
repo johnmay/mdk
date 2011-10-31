@@ -7,6 +7,7 @@ package uk.ac.ebi.io.service;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.ac.ebi.core.tools.CDKSerializer;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import static org.junit.Assert.*;
 
@@ -29,7 +30,7 @@ public class KEGGCompoundStructureServiceTest {
 
     @Test
     public void testGetStructure() {
-        System.out.println(KEGGCompoundStructureService.getInstance().getStructure(new KEGGCompoundIdentifier("C00009")));
+        System.out.println(CDKSerializer.serialize(KEGGCompoundStructureService.getInstance().getStructure(new KEGGCompoundIdentifier("C00003"))).length);
 
     }
 

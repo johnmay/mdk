@@ -37,7 +37,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.interfaces.services.StructureQueryService;
-import uk.ac.ebi.io.remote.KEGGCompoundMDLs;
+import uk.ac.ebi.io.remote.KEGGCompoundMols;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 /**
@@ -54,7 +54,7 @@ public class KEGGCompoundStructureService extends KEGGCompoundQueryService
     private IndexSearcher searcher;
 
     private KEGGCompoundStructureService() {
-        super(new KEGGCompoundMDLs());
+        super(new KEGGCompoundMols());
         try {
             searcher = new IndexSearcher(getDirectory(), true);
         } catch (IOException ex) {
