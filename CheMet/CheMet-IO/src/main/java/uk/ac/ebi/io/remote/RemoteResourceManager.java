@@ -43,7 +43,7 @@ public class RemoteResourceManager {
                                                                                          new ChEBINames(),
                                                                                          new ChEBICrossRefs(),
                                                                                          new KEGGCompoundNames(),
-                                                                                         new KEGGCompoundMDLs()));
+                                                                                         new KEGGCompoundMols()));
 
     private RemoteResourceManager() {
     }
