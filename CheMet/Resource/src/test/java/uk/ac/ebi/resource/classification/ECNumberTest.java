@@ -5,7 +5,6 @@
 
 package uk.ac.ebi.resource.classification;
 
-import com.sun.source.tree.AssertTree;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
