@@ -132,6 +132,12 @@
             <artifactId>chemet-observation</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <artifactId>cdk-data</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <type>jar</type>
+            <version>1.3.8-20110817.211404-3</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

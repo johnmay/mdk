@@ -110,6 +110,8 @@ public abstract class AbstractAnnotatedEntity
         for (Annotation annotation : getAnnotations()) {
             if (base.getClass().isInstance(annotation)) {
                 annotationSubset.add(annotation);
+            }else{
+                System.out.println(base.getClass() + " not with " + annotation.getClass() + " " + annotation);
             }
         }
         return annotationSubset;
