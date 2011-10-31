@@ -111,7 +111,7 @@ public class ChemicalStructure
             out.writeUTF(stringWriter.toString());
 
         } catch( Exception ex ) {
-
+            ex.printStackTrace();
             throw new IOException("Unable to write IAtomContainer: " + ex.getMessage());
         }
 

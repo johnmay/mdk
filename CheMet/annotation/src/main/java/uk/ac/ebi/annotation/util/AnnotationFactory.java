@@ -1,4 +1,3 @@
-
 /**
  * AnnotationFactory.java
  *
@@ -39,10 +38,10 @@ import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.Citation;
+import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
-
 
 /**
  *          AnnotationFactory – 2011.09.12 <br>
@@ -65,43 +64,39 @@ public class AnnotationFactory {
     private static Constructor[] constructors = new Constructor[Byte.MAX_VALUE];
     private static Annotation[] instances = new Annotation[Byte.MAX_VALUE];
 
-
     public static AnnotationFactory getInstance() {
         return AnnotationFactoryHolder.INSTANCE;
     }
-
 
     private static class AnnotationFactoryHolder {
 
         private static AnnotationFactory INSTANCE = new AnnotationFactory();
     }
 
-
     private AnnotationFactory() {
         try {
-            for( Annotation annotation : Arrays.asList(CHEMICAL_STRUCTURE,
+            for (Annotation annotation : Arrays.asList(CHEMICAL_STRUCTURE,
                                                        FORMULA,
                                                        AUTHOR_ANNOTATION,
                                                        CROSS_REFERENCE,
                                                        CLASSIFICATION,
-                                                       ENZYME_CLASSIFICATION, CHEBI_CROSS_REFERENCE,
+                                                       ENZYME_CLASSIFICATION, CHEBI_CROSS_REFERENCE, new KEGGCrossReference(),
                                                        new Subsystem(),
                                                        new ExecutableParameter(),
                                                        new FileParameter(),
                                                        new Parameter(),
                                                        new Synonym(),
                                                        new Locus(),
-                                                       new Citation()) ) {
+                                                       new Citation())) {
 
                 constructors[annotation.getIndex()] = annotation.getClass().getConstructor();
                 instances[annotation.getIndex()] = annotation;
 
             }
-        } catch( Exception e ) {
+        } catch (Exception e) {
             LOGGER.error("Could not store annotation constructor in map");
         }
     }
-
 
     /**
      *
@@ -115,19 +110,19 @@ public class AnnotationFactory {
     public Annotation ofIndexCascade(int index) {
 
 
-        if( index == CHEMICAL_STRUCTURE.getIndex() ) {
+        if (index == CHEMICAL_STRUCTURE.getIndex()) {
             return new ChemicalStructure();
-        } else if( index == ENZYME_CLASSIFICATION.getIndex() ) {
+        } else if (index == ENZYME_CLASSIFICATION.getIndex()) {
             return new EnzymeClassification();
-        } else if( index == FORMULA.getIndex() ) {
+        } else if (index == FORMULA.getIndex()) {
             return new MolecularFormula();
-        } else if( index == CROSS_REFERENCE.getIndex() ) {
+        } else if (index == CROSS_REFERENCE.getIndex()) {
             return new CrossReference();
-        } else if( index == AUTHOR_ANNOTATION.getIndex() ) {
+        } else if (index == AUTHOR_ANNOTATION.getIndex()) {
             return new AuthorAnnotation();
-        } else if( index == CLASSIFICATION.getIndex() ) {
+        } else if (index == CLASSIFICATION.getIndex()) {
             return new Classification();
-        } else if( index == CHEBI_CROSS_REFERENCE.getIndex() ) {
+        } else if (index == CHEBI_CROSS_REFERENCE.getIndex()) {
             return new Classification();
         }
 
@@ -135,7 +130,6 @@ public class AnnotationFactory {
         return null;
 
     }
-
 
     /**
      *
@@ -157,12 +151,11 @@ public class AnnotationFactory {
 //                                                    " has not been implemented in factory");
 //            }
 
-        } catch( Exception ex ) {
+        } catch (Exception ex) {
             throw new InvalidParameterException("Unable to construct: " + ex.getMessage());
         }
 
     }
-
 
     /**
      *
@@ -178,7 +171,6 @@ public class AnnotationFactory {
         return ofIndex(AnnotationLoader.getInstance().getIndex(type));
     }
 
-
     /**
      *
      * Construct an empty annotation given it's index. It the index returns a null pointer then an
@@ -192,16 +184,17 @@ public class AnnotationFactory {
      */
     public Annotation ofIndex(int index) {
 
+        System.out.println(index);
+
         Annotation annotation = instances[index];
 
-        if( annotation != null ) {
+        if (annotation != null) {
             return annotation.getInstance();
         }
 
-        throw new InvalidParameterException("Unable to get instance of annotation with index: " +
-                                            index);
+        throw new InvalidParameterException("Unable to get instance of annotation with index: "
+                                            + index);
     }
-
 
     public Annotation readExternal(Byte index, ObjectInput in) throws IOException,
                                                                       ClassNotFoundException {
@@ -209,7 +202,6 @@ public class AnnotationFactory {
         ann.readExternal(in);
         return ann;
     }
-
 
     public static void main(String[] args) {
 
@@ -219,14 +211,13 @@ public class AnnotationFactory {
         long instanceAvg = 0;
         long cascadeAvg = 0;
 
-        for( Annotation ann : instances ) {
+        for (Annotation ann : instances) {
 
-            if( ann != null ) {
+            if (ann != null) {
 
                 long cStart = System.currentTimeMillis();
-                for( int i = 0 ; i < 1000000 ; i++ ) {
-                    Annotation annotation = AnnotationFactory.getInstance().ofIndexCascade(ann.
-                      getIndex());
+                for (int i = 0; i < 1000000; i++) {
+                    Annotation annotation = AnnotationFactory.getInstance().ofIndexCascade(ann.getIndex());
                 }
                 long cEnd = System.currentTimeMillis();
                 System.out.println("time using cascade: " + (cEnd - cStart) + " (ms)");
@@ -235,7 +226,7 @@ public class AnnotationFactory {
 
 
                 long rStart = System.currentTimeMillis();
-                for( int i = 0 ; i < 1000000 ; i++ ) {
+                for (int i = 0; i < 1000000; i++) {
                     Annotation annotation = AnnotationFactory.getInstance().ofIndex(ann.getIndex());
                 }
                 long rEnd = System.currentTimeMillis();
@@ -246,7 +237,7 @@ public class AnnotationFactory {
 
 
                 long iStart = System.currentTimeMillis();
-                for( int i = 0 ; i < 1000000 ; i++ ) {
+                for (int i = 0; i < 1000000; i++) {
                     Annotation annotation = AnnotationFactory.getInstance().ofIndex(ann.getIndex());
                 }
                 long iEnd = System.currentTimeMillis();
@@ -264,7 +255,4 @@ public class AnnotationFactory {
         System.out.println("  instances mean: " + instanceAvg + " (ms)");
 
     }
-
-
 }
-
