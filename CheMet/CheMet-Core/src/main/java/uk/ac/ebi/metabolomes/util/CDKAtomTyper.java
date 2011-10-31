@@ -8,6 +8,7 @@ package uk.ac.ebi.metabolomes.util;
 import java.util.Iterator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -19,9 +20,16 @@ import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 /**
  *
  * @author pmoreno
+ * @deprecated no longer needed? See method javadoc
  */
+@Deprecated
 public class CDKAtomTyper {
 
+    /**
+     * @deprecated use AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(mol);
+     *             or  AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(mol);
+     */
+    @Deprecated
     public static void typeAtoms(IAtomContainer mol) {
         CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(mol.getBuilder());
         Iterator<IAtom> atoms = mol.atoms().iterator();

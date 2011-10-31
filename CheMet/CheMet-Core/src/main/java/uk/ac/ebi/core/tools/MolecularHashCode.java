@@ -165,6 +165,7 @@ public class MolecularHashCode {
         for (int i = 0; i < seeds.length; i++) {
 
             IAtom atom = mol.getAtom(i);
+            
             seeds[i] = 257 * seed + atom.getAtomicNumber();               // system number
             seeds[i] = 257 * seeds[i] + mol.getConnectedAtomsCount(atom); // number of bonded neighbours
 

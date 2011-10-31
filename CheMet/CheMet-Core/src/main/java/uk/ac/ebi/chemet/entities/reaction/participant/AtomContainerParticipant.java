@@ -33,6 +33,7 @@ import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.tools.MolecularHashCode;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 
@@ -146,19 +147,21 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
     @Override
     public int hashCode() {
 
-        int hash = 7;
+        int hash = MolecularHashCode.hashCode(skeleton);
 
-        hash = 257 * hash + ( ( Double ) Math.pow( this.skeleton.getAtomCount() ,
-                                                   this.skeleton.getBondCount() ) ).hashCode();
-        for ( IAtom atom : atoms ) {
-            hash = 257 * hash + ( atom.getSymbol() != null ? atom.getSymbol().hashCode() : 0 );
-            hash = 257 * hash +
-                   ( atom.getAtomicNumber() != null ? atom.getAtomicNumber().hashCode() : 0 );
-            hash = 257 * hash + ( atom.getExactMass() != null ? atom.getExactMass().hashCode() : 0 );
-            hash = 257 * hash +
-                   ( ( Double ) AtomContainerManipulator.getBondOrderSum( this.skeleton , atom ) ).
-              hashCode(); // can't use this
-        }
+//        int hash = 7;
+//
+//        hash = 257 * hash + ( ( Double ) Math.pow( this.skeleton.getAtomCount() ,
+//                                                   this.skeleton.getBondCount() ) ).hashCode();
+//        for ( IAtom atom : atoms ) {
+//            hash = 257 * hash + ( atom.getSymbol() != null ? atom.getSymbol().hashCode() : 0 );
+//            hash = 257 * hash +
+//                   ( atom.getAtomicNumber() != null ? atom.getAtomicNumber().hashCode() : 0 );
+//            hash = 257 * hash + ( atom.getExactMass() != null ? atom.getExactMass().hashCode() : 0 );
+//            hash = 257 * hash +
+//                   ( ( Double ) AtomContainerManipulator.getBondOrderSum( this.skeleton , atom ) ).
+//              hashCode(); // can't use this
+//        }
 
         hash = 257 * hash + ( super.coefficient != null ? super.coefficient.hashCode() : 0 );
         hash = 257 * hash + ( super.compartment != null ? super.compartment.hashCode() : 0 );
