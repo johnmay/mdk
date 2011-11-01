@@ -23,11 +23,13 @@ package uk.ac.ebi.visualisation.molecule;
 import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
 
 /**
  *          MoleculeChooser - 2011.10.31 <br>
@@ -47,7 +49,7 @@ public class MoleculeTable extends JTable {
         for(int i = 0 ; i< getColumnCount(); i++){
             getColumnModel().getColumn(i).setWidth(100);
         }
-        setDefaultRenderer(List.class, new AnnotationCell);
+        setDefaultRenderer(List.class, new AnnotationCellRenderer());
     }
 
     @Override

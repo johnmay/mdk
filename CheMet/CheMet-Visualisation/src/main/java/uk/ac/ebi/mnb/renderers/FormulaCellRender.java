@@ -25,7 +25,7 @@ import java.util.Collection;
 import javax.swing.JTable;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.mnb.view.ViewUtils;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  * @name    FormulaCellRender - 2011.10.06 <br>

@@ -25,8 +25,6 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.view.ViewUtils;
 
 /**
  * @name    DefaultRenderer - 2011.10.06 <br>
