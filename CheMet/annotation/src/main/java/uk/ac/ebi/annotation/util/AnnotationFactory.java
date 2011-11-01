@@ -184,8 +184,6 @@ public class AnnotationFactory {
      */
     public Annotation ofIndex(int index) {
 
-        System.out.println(index);
-
         Annotation annotation = instances[index];
 
         if (annotation != null) {

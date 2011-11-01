@@ -1,4 +1,3 @@
-
 /**
  * SynonymCandidateEntry.java
  *
@@ -25,7 +24,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import org.apache.log4j.Logger;
 
-
 /**
  *          SynonymCandidateEntry – 2011.09.23 <br>
  *          Similar to candidate entry but maintains a collection of descriptions for a single
@@ -35,11 +33,10 @@ import org.apache.log4j.Logger;
  * @author  $Author$ (this version)
  */
 public class SynonymCandidateEntry
-  extends CandidateEntry {
+        extends CandidateEntry {
 
     private static final Logger LOGGER = Logger.getLogger(SynonymCandidateEntry.class);
     private Collection<String> synonyms;
-
 
     public SynonymCandidateEntry(String accession,
                                  String description,
@@ -50,7 +47,6 @@ public class SynonymCandidateEntry
         this.synonyms = synonyms;
     }
 
-
     public SynonymCandidateEntry(String accession,
                                  String description,
                                  Collection<String> synonyms,
@@ -58,18 +54,17 @@ public class SynonymCandidateEntry
         this(accession, description, synonyms, distance, "Synonym Candidate");
     }
 
-
     public SynonymCandidateEntry(String accession,
                                  String description) {
         super(accession, description, 10, "Synonym Candidate");
         this.synonyms = new HashSet<String>();
     }
 
-
     public boolean addSynonym(String synonym) {
         return this.synonyms.add(synonym);
     }
 
-
+    public Collection<String> getSynonyms() {
+        return synonyms;
+    }
 }
-
