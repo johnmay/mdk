@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,6 +63,8 @@ public class ChEBICrossRefs
     private Analyzer analzyer;
     private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession.tsv";
     private static final String location3star = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession_3star.tsv";
+    private static final String compoundsLocation =
+            "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv"; // get parent - child compound
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
 
     public enum ChEBICrossRefsLuceneFields {
@@ -85,6 +88,8 @@ public class ChEBICrossRefs
     }
 
     public void update() throws IOException {
+        Map<String, String> sec2PrimaryID = getSecondaryToParentID();
+
         CSVReader reader = new CSVReader(new InputStreamReader(getRemote().openStream()), '\t', '\0');
 
         String[] row = reader.readNext();
@@ -97,6 +102,10 @@ public class ChEBICrossRefs
             String id = row[map.get("COMPOUND_ID")];
             String type = row[map.get("TYPE")];
             String accession = row[map.get("ACCESSION_NUMBER")];
+            List<String> chebiIDsToLinkToRef = new ArrayList<String>();
+            if(sec2PrimaryID.containsKey(id))
+                chebiIDsToLinkToRef.add(sec2PrimaryID.get(id));
+            chebiIDsToLinkToRef.add(id);
             Identifier extIdent = null;
             try {
                 extIdent = FACTORY.ofSynonym(type);
@@ -112,12 +121,15 @@ public class ChEBICrossRefs
             }
             extIdent.setAccession(accession);
 
-            Document doc = new Document();
+            for (String chebiID2Link : chebiIDsToLinkToRef) {
+                Document doc = new Document();
 
-            doc.add(new Field(ChEBICrossRefsLuceneFields.ChebiID.toString(),id,Field.Store.YES,Field.Index.NOT_ANALYZED));
-            doc.add(new Field(ChEBICrossRefsLuceneFields.ExtDB.toString(), extIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
-            doc.add(new Field(ChEBICrossRefsLuceneFields.ExtID.toString(), extIdent.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            docs.add(doc);
+                doc.add(new Field(ChEBICrossRefsLuceneFields.ChebiID.toString(), chebiID2Link, Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.add(new Field(ChEBICrossRefsLuceneFields.ExtDB.toString(), extIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
+                doc.add(new Field(ChEBICrossRefsLuceneFields.ExtID.toString(), extIdent.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                docs.add(doc);
+            }
+
         }
         reader.close();
 
@@ -128,6 +140,29 @@ public class ChEBICrossRefs
         writer.close();
         index.close();
 
+    }
+
+    /**
+     * Retrieves the secondary chebi id to parent chebi ids relations from the compounds.tsv file.
+     * @return
+     * @throws IOException 
+     */
+    private Map<String, String> getSecondaryToParentID() throws IOException {
+        CSVReader compsReader = new CSVReader(new InputStreamReader((new URL(compoundsLocation)).openStream()), '\t', '\0');
+        String[] rowComps = compsReader.readNext();
+        Map<String, Integer> compsMap = createMap(rowComps);
+        Map<String, String> secondaryToParentID = new HashMap<String, String>();
+        while ((rowComps = compsReader.readNext()) != null) {
+            String parent = rowComps[compsMap.get("PARENT_ID")].replaceFirst("CHEBI:", "");
+            if (parent.equals("null")) {
+                continue;
+            }
+            String chebiAcc = rowComps[compsMap.get("CHEBI_ACCESSION")].replaceFirst("CHEBI:", "");
+            //String source = rowComps[compsMap.get("SOURCE")];
+            secondaryToParentID.put(chebiAcc, parent);
+        }
+        compsReader.close();
+        return secondaryToParentID;
     }
 
     public Analyzer getAnalzyer() {
