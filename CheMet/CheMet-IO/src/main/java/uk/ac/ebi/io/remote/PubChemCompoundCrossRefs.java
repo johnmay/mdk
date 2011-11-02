@@ -22,6 +22,7 @@ package uk.ac.ebi.io.remote;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import org.apache.lucene.analysis.Analyzer;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +53,7 @@ import org.apache.lucene.util.Version;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.metabolomes.webservices.EUtilsWebServiceConnection;
 import uk.ac.ebi.resource.chemical.ChemSpiderIdentifier;
 import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
@@ -66,11 +68,24 @@ import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
  * @author  pmoreno
  * @author  $Author$ (this version)
  */
-public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements RemoteResource {
+public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements LuceneService, RemoteResource {
 
     private static final Logger LOGGER = Logger.getLogger(PubChemCompoundCrossRefs.class);
     private static final String location = "http://pubchem.ncbi.nlm.nih.gov/"; // just for reference, this is not being used in this impl.
     private final List<PubChemCompoundIdentifier> pubChemCompoundIdentifiers = new ArrayList<PubChemCompoundIdentifier>();
+    private Analyzer analzyer;
+
+    public Analyzer getAnalzyer() {
+        return analzyer;
+    }
+
+    public Directory getDirectory() {
+        try {
+            return new SimpleFSDirectory(getLocal());
+        } catch (IOException ex) {
+            throw new UnsupportedOperationException("Index can not fail to open! unsupported");
+        }
+    }
 
     public enum PubChemCompoundsCrossRefsLuceneFields {
 
@@ -85,6 +100,16 @@ public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements 
     public PubChemCompoundCrossRefs(List<PubChemCompoundIdentifier> pchemIds) {
         super(location, getFile());
         this.pubChemCompoundIdentifiers.addAll(pchemIds);
+        init();
+    }
+    
+    public PubChemCompoundCrossRefs() {
+        super(location,getFile());
+        init();
+    }
+    
+    private void init() {
+        this.analzyer = new KeywordAnalyzer();
     }
 
     public void update() throws IOException {
@@ -93,7 +118,7 @@ public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements 
         //PubChemWebServiceConnection pcwsc = new PubChemWebServiceConnection();
         EUtilsWebServiceConnection euwsc = new EUtilsWebServiceConnection();
 
-        Directory index = new SimpleFSDirectory(getLocal());
+        Directory index = getDirectory();
 
 
 
@@ -157,7 +182,7 @@ public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements 
                     searcher.close();
                 }
 
-                IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, new KeywordAnalyzer()));
+                IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, getAnalzyer()));
                 LOGGER.info("Compounds selected for writting new cross refs: " + crossRefsToAddNotInIndex.keySet().size());
                 for (PubChemCompoundIdentifier pccompIdent : crossRefsToAddNotInIndex.keySet()) {
                     for (CrossReference crossReference : crossRefsToAddNotInIndex.get(pccompIdent)) {

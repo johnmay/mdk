@@ -27,7 +27,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
@@ -60,10 +62,10 @@ public class ChEBICrossRefs
     private Analyzer analzyer;
     private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession.tsv";
     private static final String location3star = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession_3star.tsv";
-    private static final IdentifierFactory FACTORY= IdentifierFactory.getInstance();
-    
-    
+    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+
     public enum ChEBICrossRefsLuceneFields {
+
         ChebiID, ExtDB, ExtID;
     }
 
@@ -71,13 +73,14 @@ public class ChEBICrossRefs
         super(location, getFile());
         analzyer = new KeywordAnalyzer();
     }
-    
+
     public ChEBICrossRefs(boolean only3star) {
         super(getFile());
-        if(only3star)
+        if (only3star) {
             super.setRemote(location3star);
-        else
+        } else {
             super.setRemote(location);
+        }
         analzyer = new KeywordAnalyzer();
     }
 
@@ -87,42 +90,41 @@ public class ChEBICrossRefs
         String[] row = reader.readNext();
         Map<String, Integer> map = createMap(row);
 
-        Map<Integer, Document> docs = new HashMap();
+        List<Document> docs = new ArrayList<Document>();
         String currentId = "";
 
         while ((row = reader.readNext()) != null) {
-            int id = Integer.parseInt(row[map.get("COMPOUND_ID")]);
+            String id = row[map.get("COMPOUND_ID")];
             String type = row[map.get("TYPE")];
             String accession = row[map.get("ACCESSION_NUMBER")];
-            Identifier extIdent=null;
+            Identifier extIdent = null;
             try {
                 extIdent = FACTORY.ofSynonym(type);
-            } catch(InvalidParameterException e) {
-                if(type.equalsIgnoreCase("PubMed citation"))
+            } catch (InvalidParameterException e) {
+                if (type.equalsIgnoreCase("PubMed citation")) {
                     continue;
-                if(type.equalsIgnoreCase("Wikipedia accession"))
+                }
+                if (type.equalsIgnoreCase("Wikipedia accession")) {
                     continue;
-                LOGGER.warn("Could not recognize db: "+type+" skipping.");
+                }
+                LOGGER.warn("Could not recognize db: " + type + " skipping.");
                 continue;
             }
             extIdent.setAccession(accession);
-            Document doc = docs.get(id);
-            if (doc == null) {
-                doc = new Document();
-                NumericField field = new NumericField(ChEBICrossRefsLuceneFields.ChebiID.toString(), 1, Field.Store.YES, true);
-                field.setIntValue(id);
-                doc.add(field);
-                docs.put(id, doc);
-            }
+
+            Document doc = new Document();
+
+            doc.add(new Field(ChEBICrossRefsLuceneFields.ChebiID.toString(),id,Field.Store.YES,Field.Index.NOT_ANALYZED));
             doc.add(new Field(ChEBICrossRefsLuceneFields.ExtDB.toString(), extIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
             doc.add(new Field(ChEBICrossRefsLuceneFields.ExtID.toString(), extIdent.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            docs.add(doc);
         }
         reader.close();
 
         // write the index
         Directory index = new SimpleFSDirectory(getLocal());
         IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, analzyer));
-        writer.addDocuments(docs.values());
+        writer.addDocuments(docs);
         writer.close();
         index.close();
 
@@ -154,9 +156,9 @@ public class ChEBICrossRefs
 
     private static File getFile() {
         String defaultFile = System.getProperty("user.home")
-                             + File.separator + "databases"
-                             + File.separator + "indexes"
-                             + File.separator + "chebi-crossrefs";
+                + File.separator + "databases"
+                + File.separator + "indexes"
+                + File.separator + "chebi-crossrefs";
         Preferences prefs = Preferences.userNodeForPackage(ChEBICrossRefs.class);
         return new File(prefs.get("chebi.crossrefs.path", defaultFile));
     }
