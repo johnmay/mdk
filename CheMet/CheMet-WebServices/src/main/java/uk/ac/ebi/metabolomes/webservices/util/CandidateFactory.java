@@ -22,18 +22,16 @@ package uk.ac.ebi.metabolomes.webservices.util;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.chebi.webapps.chebiWS.model.StarsCategory;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.NameQueryService;
-import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
-import uk.ac.ebi.metabolomes.webservices.ChemicalDBWebService;
-import uk.ac.ebi.reconciliation.ChemicalFingerprintEncoder;
 import uk.ac.ebi.reconciliation.StringEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
@@ -75,12 +73,10 @@ public class CandidateFactory<I extends Identifier> {
 
             Collection<String> names = service.getNames(id);
 
-            Integer distance = getBestScore(name, names);
-            map.put(distance,
-                    new SynonymCandidateEntry(id.getAccession(),
-                                              names.size() > 0 ? names.iterator().next() : "",
-                                              names,
-                                              distance));
+            SynonymCandidateEntry entry = getBestScore(name, names);
+            entry.setId(id.getAccession());
+
+            map.put(entry.getDistance(), entry);
 
         }
 
@@ -101,12 +97,10 @@ public class CandidateFactory<I extends Identifier> {
 
             Collection<String> names = service.getNames(id);
 
-            Integer distance = getBestScore(name, names);
-            map.put(distance,
-                    new SynonymCandidateEntry(id.getAccession(),
-                                              names.size() > 0 ? names.iterator().next() : "",
-                                              names,
-                                              distance));
+            SynonymCandidateEntry entry = getBestScore(name, names);
+            entry.setId(id.getAccession());
+
+            map.put(entry.getDistance(), entry);
 
         }
 
@@ -164,18 +158,31 @@ public class CandidateFactory<I extends Identifier> {
 //        System.out.println(factory.getSynonymCandidates("GTP"));
 //
 //    }
-    public Integer getBestScore(String query, Collection<String> synonyms) {
+    public SynonymCandidateEntry getBestScore(String query, Collection<String> synonyms) {
 
         int score = Integer.MAX_VALUE;
+        int index = -1;
 
         String encodedQuery = encoder.encode(query);
 
-        for (String synonym : synonyms) {
-            int distance = calculateDistance(encodedQuery, synonym);
-            score = distance < score ? distance : score;
+        List<String> synonymList = new ArrayList(synonyms);
+
+        for (int i = 0; i < synonyms.size(); i++) {
+            int distance = calculateDistance(encodedQuery, synonymList.get(i));
+
+            if (distance < score) {
+                score = distance;
+                index = i;
+            }
+
         }
 
-        return score;
+
+        return new SynonymCandidateEntry("",
+                                         synonyms.size() > 0 ? synonyms.iterator().next() : "",
+                                         synonyms,
+                                         score, index);
+
 
     }
 

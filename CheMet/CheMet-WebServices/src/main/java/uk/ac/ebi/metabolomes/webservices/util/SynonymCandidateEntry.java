@@ -41,7 +41,8 @@ public class SynonymCandidateEntry
     public SynonymCandidateEntry(String accession,
                                  String description,
                                  Collection<String> synonyms,
-                                 Integer distance,
+                                 int distance,
+                                 int index,
                                  String comment) {
         super(accession, description, distance, comment);
         this.synonyms = synonyms;
@@ -50,8 +51,9 @@ public class SynonymCandidateEntry
     public SynonymCandidateEntry(String accession,
                                  String description,
                                  Collection<String> synonyms,
-                                 Integer distance) {
-        this(accession, description, synonyms, distance, "Synonym Candidate");
+                                 int distance,
+                                 int index) {
+        this(accession, description, synonyms, distance, index, "Synonym Candidate");
     }
 
     public SynonymCandidateEntry(String accession,
