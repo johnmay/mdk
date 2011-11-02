@@ -83,9 +83,7 @@ public class ChEBINames
             Document doc = docs.get(id);
             if (doc == null) {
                 doc = new Document();
-                NumericField field = new NumericField("id", 1, Field.Store.YES, true);
-                field.setIntValue(id);
-                doc.add(field);
+                doc.add(new Field("id", "CHEBI:" + id, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
                 docs.put(id, doc);
             }
             doc.add(new Field("name", name, Field.Store.YES, Field.Index.ANALYZED));

@@ -56,6 +56,7 @@ public class ChEBINameService
 
     private static final Logger LOGGER = Logger.getLogger(ChEBINameService.class);
     private IndexSearcher searcher;
+    private Term idTerm = new Term("id");
     private Term nameTerm = new Term("name");
 
     private ChEBINameService() {
@@ -105,7 +106,7 @@ public class ChEBINameService
 
     public Collection<String> getNames(ChEBIIdentifier identifier) {
         try {
-            Query q = NumericRangeQuery.newIntRange("id", identifier.getValue(), identifier.getValue(), true, true);
+            Query q = new TermQuery(idTerm.createTerm(identifier.getAccession()));
 
             TopScoreDocCollector collector = TopScoreDocCollector.create(5, true);
             searcher.search(q, collector);
