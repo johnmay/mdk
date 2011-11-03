@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.io.remote;
 
+import org.apache.lucene.index.CorruptIndexException;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import au.com.bytecode.opencsv.CSVReader;
 import java.io.File;
@@ -41,6 +42,12 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
@@ -66,6 +73,22 @@ public class ChEBICrossRefs
     private static final String compoundsLocation =
             "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv"; // get parent - child compound
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+
+    private List<Identifier> getIdentsAssocToChEBIID(IndexSearcher searcher, String get) throws CorruptIndexException, IOException {
+        Query chebiIDQuery = new TermQuery(new Term(ChEBICrossRefsLuceneFields.ChebiID.toString(), get));
+        TopDocs topDocs = searcher.search(chebiIDQuery, 50); // this search shouldn't have more than one hit normally.
+
+        ScoreDoc[] scoreDosArray = topDocs.scoreDocs;
+        List<Identifier> idents = new ArrayList<Identifier>();
+        for (ScoreDoc scoreDoc : scoreDosArray) {
+            Document doc = searcher.doc(scoreDoc.doc);
+            Identifier ident = FACTORY.ofSynonym(doc.get(ChEBICrossRefsLuceneFields.ExtDB.toString()));
+            ident.setAccession(doc.get(ChEBICrossRefsLuceneFields.ExtID.toString()));
+            idents.add(ident);
+        }
+        return idents;
+       
+    }
 
     public enum ChEBICrossRefsLuceneFields {
 
@@ -129,13 +152,36 @@ public class ChEBICrossRefs
                 doc.add(new Field(ChEBICrossRefsLuceneFields.ExtID.toString(), extIdent.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 docs.add(doc);
             }
-
         }
         reader.close();
 
         // write the index
         Directory index = new SimpleFSDirectory(getLocal());
         IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, analzyer));
+        writer.addDocuments(docs);
+        writer.close();
+        
+        writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, analzyer));
+        //writer.close();
+        
+        // Now using each secondary chebi ids, we get the primary ids, and see whether each secondary id has all the cross
+        // refs that the primary id has.
+        IndexSearcher searcher = new IndexSearcher(index, true);
+        docs.clear();
+        for (String secondaryID : sec2PrimaryID.keySet()) {
+            List<Identifier> identsAssocToPrimary = getIdentsAssocToChEBIID(searcher,sec2PrimaryID.get(secondaryID));
+            List<Identifier> identsAssocToSecondary = getIdentsAssocToChEBIID(searcher, secondaryID);
+            for (Identifier identifier2Add : identsAssocToPrimary) {
+                if(!identsAssocToSecondary.contains(identifier2Add)) {
+                    Document doc = new Document();
+                    doc.add(new Field(ChEBICrossRefsLuceneFields.ChebiID.toString(), secondaryID, Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    doc.add(new Field(ChEBICrossRefsLuceneFields.ExtDB.toString(), identifier2Add.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
+                    doc.add(new Field(ChEBICrossRefsLuceneFields.ExtID.toString(), identifier2Add.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    docs.add(doc);
+                }
+            }
+        }
+        searcher.close();
         writer.addDocuments(docs);
         writer.close();
         index.close();
