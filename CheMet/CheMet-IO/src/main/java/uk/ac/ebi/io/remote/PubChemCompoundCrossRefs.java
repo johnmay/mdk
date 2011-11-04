@@ -102,12 +102,12 @@ public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements 
         this.pubChemCompoundIdentifiers.addAll(pchemIds);
         init();
     }
-    
+
     public PubChemCompoundCrossRefs() {
-        super(location,getFile());
+        super(location, getFile());
         init();
     }
-    
+
     private void init() {
         this.analzyer = new KeywordAnalyzer();
     }
@@ -128,6 +128,7 @@ public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements 
             LOGGER.info("Retrieved " + comp2subs.keySet().size() + " compounds and " + comp2subs.values().size() + " substances associated..");
             Set<String> uniqueSubs = new HashSet<String>();
             uniqueSubs.addAll(comp2subs.values());
+            Multimap<String, CrossReference> uniquePChemCompID2CrossRef = HashMultimap.create();
 
             List<String> substances = new ArrayList<String>(uniqueSubs);
             int step = 5000;
@@ -146,60 +147,82 @@ public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements 
                 // no Mol files are written as we don't give the 
                 //-- sdfmf.splitSDFIntoMolFilesForIDs(null);
                 //-- in.close();
+                /*
                 IndexSearcher searcher = null;
                 boolean indexExists = false;
                 try {
-                    if (index.listAll().length > 0) {
-                        searcher = new IndexSearcher(index);
-                        indexExists = true;
-                    }
-                } catch (NoSuchDirectoryException e) {
-                    LOGGER.warn("The index doesn't exist.. we just write everything");
+                if (index.listAll().length > 0) {
+                searcher = new IndexSearcher(index);
+                indexExists = true;
                 }
+                } catch (NoSuchDirectoryException e) {
+                LOGGER.warn("The index doesn't exist.. we just write everything");
+                }*/
 
-                LOGGER.info("Searching found cross refs in exiting index if any...");
+                //LOGGER.info("Searching found cross refs in exiting index if any...");
                 Multimap<PubChemCompoundIdentifier, CrossReference> crossRefsToAddNotInIndex = HashMultimap.create();
                 for (String pubchemCompID : comp2subs.keySet()) {
                     Set<CrossReference> uniqueCrossRefs = new HashSet<CrossReference>();
-                    PubChemCompoundIdentifier identPCComp = new PubChemCompoundIdentifier(pubchemCompID);
+                    //PubChemCompoundIdentifier identPCComp = new PubChemCompoundIdentifier(pubchemCompID);
                     for (String substanceID : comp2subs.get(pubchemCompID)) {
                         //-- SDFRecord rec = sDFFieldExtractor.getRecordFor(substanceID);
                         //-- uniqueCrossRefs.addAll(rec.getCrossRefs());
                         uniqueCrossRefs.addAll(subs2CrossRefs.get(substanceID));
                     }
                     for (CrossReference crossReference : uniqueCrossRefs) {
+                        uniquePChemCompID2CrossRef.put(pubchemCompID, crossReference);
+                        /*
                         if(crossReference.getIdentifier() instanceof ChemSpiderIdentifier)
-                            continue;;
+                        continue;
                         if (!indexExists || !isCrossRefInIndex(searcher, identPCComp, crossReference.getIdentifier())) {
-                            crossRefsToAddNotInIndex.put(identPCComp, crossReference);
+                        crossRefsToAddNotInIndex.put(identPCComp, crossReference);
                         } else if (indexExists && isCrossRefInIndex(searcher, identPCComp, crossReference.getIdentifier())) {
-                            LOGGER.info("Existing entry " + identPCComp.getAccession() + " ExtDB:" + crossReference.getIdentifier().getShortDescription()
-                                    + " ID:" + crossReference.getIdentifier().getAccession());
-                        }
+                        LOGGER.info("Existing entry " + identPCComp.getAccession() + " ExtDB:" + crossReference.getIdentifier().getShortDescription()
+                        + " ID:" + crossReference.getIdentifier().getAccession());
+                        }*/
                     }
                 }
-                if (indexExists) {
-                    searcher.close();
+                /*if (indexExists) {
+                searcher.close();
                 }
-
+                
                 IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, getAnalzyer()));
                 LOGGER.info("Compounds selected for writting new cross refs: " + crossRefsToAddNotInIndex.keySet().size());
                 for (PubChemCompoundIdentifier pccompIdent : crossRefsToAddNotInIndex.keySet()) {
-                    for (CrossReference crossReference : crossRefsToAddNotInIndex.get(pccompIdent)) {
-                        Identifier crIdent = crossReference.getIdentifier();
-                        LOGGER.info("Adding: PubChemComp:" + pccompIdent.getAccession() + " ExtDB:" + crIdent.getShortDescription() + " ExtID:" + crIdent.getAccession());
-                        Document doc = new Document();
-                        doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.PubChemCompID.toString(), pccompIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
-                        doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.ExtDB.toString(), crIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
-                        doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.ExtID.toString(), crIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
-                        docs.add(doc);
-                    }
+                for (CrossReference crossReference : crossRefsToAddNotInIndex.get(pccompIdent)) {
+                Identifier crIdent = crossReference.getIdentifier();
+                LOGGER.info("Adding: PubChemComp:" + pccompIdent.getAccession() + " ExtDB:" + crIdent.getShortDescription() + " ExtID:" + crIdent.getAccession());
+                Document doc = new Document();
+                doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.PubChemCompID.toString(), pccompIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
+                doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.ExtDB.toString(), crIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
+                doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.ExtID.toString(), crIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
+                docs.add(doc);
+                }
                 }
                 LOGGER.info("Finished writing " + crossRefsToAddNotInIndex.size() + " cross refs to index.");
                 // write the index
                 writer.addDocuments(docs);
-                writer.close();
+                writer.close();*/
             }
+
+            IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, getAnalzyer()));
+            LOGGER.info("Compounds selected for writting new cross refs: " + uniquePChemCompID2CrossRef.keySet().size());
+            for (String pccompId : uniquePChemCompID2CrossRef.keySet()) {
+                Identifier pccompIdent = new PubChemCompoundIdentifier(pccompId); 
+                for (CrossReference crossReference : uniquePChemCompID2CrossRef.get(pccompId)) {
+                    Identifier crIdent = crossReference.getIdentifier();
+                    LOGGER.info("Adding: PubChemComp:" + pccompIdent.getAccession() + " ExtDB:" + crIdent.getShortDescription() + " ExtID:" + crIdent.getAccession());
+                    Document doc = new Document();
+                    doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.PubChemCompID.toString(), pccompIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
+                    doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.ExtDB.toString(), crIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
+                    doc.add(new Field(PubChemCompoundsCrossRefsLuceneFields.ExtID.toString(), crIdent.getAccession(), Field.Store.YES, Field.Index.ANALYZED));
+                    docs.add(doc);
+                }
+            }
+            LOGGER.info("Finished writing " + uniquePChemCompID2CrossRef.size() + " cross refs to index.");
+            // write the index
+            writer.addDocuments(docs);
+            writer.close();
 
             index.close();
         } catch (IOException e) {

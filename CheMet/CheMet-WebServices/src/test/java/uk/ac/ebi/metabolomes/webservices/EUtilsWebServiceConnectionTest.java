@@ -100,4 +100,25 @@ public class EUtilsWebServiceConnectionTest {
         
         
     }
+    
+    @Test
+    public void testCitricAcid() throws Exception {
+        System.out.println("testCitricAcid");
+        List<String> pubchemCompCitricAcid = new ArrayList<String>(1);
+        pubchemCompCitricAcid.add("311");
+        
+        Multimap<String,String> pccomp2subs = instance.getPubChemSubstanceFromPubChemCompound(pubchemCompCitricAcid);
+        assertTrue(pccomp2subs.values().size()>0);
+        System.out.println("Substances retrieved: "+pccomp2subs.values().size());
+        
+        List<String> subs = new ArrayList<String>();
+        subs.addAll(pccomp2subs.get("311"));
+        Multimap<String,CrossReference> refs = instance.getExternalIdentifiersForPubChemSubstances(subs);
+        
+        for (String substance : subs) {
+            for (CrossReference crossReference : refs.get(substance)) {
+                System.out.println(substance+"\t"+crossReference.getShortDescription()+"\t"+crossReference.getIdentifier().getAccession());
+            }
+        }
+    }
 }
