@@ -21,13 +21,17 @@
 package uk.ac.ebi.visualisation.molecule;
 
 import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
+import java.awt.Color;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
 
@@ -41,15 +45,24 @@ import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
 public class MoleculeTable extends JTable {
 
     private static final Logger LOGGER = Logger.getLogger(MoleculeTable.class);
+    private Color lightGreen = new Color(200, 255, 200);
 
     public MoleculeTable() {
         super(new MoleculeTableModel());
-        setUI(new ITunesTableUI());
-        setRowHeight(64);
-        for(int i = 0 ; i< getColumnCount(); i++){
+        for (int i = 0; i < getColumnCount(); i++) {
             getColumnModel().getColumn(i).setWidth(100);
         }
-        setDefaultRenderer(List.class, new AnnotationCellRenderer());
+        setDefaultRenderer(Synonym.class, new AnnotationCellRenderer(false, "; "));
+        setSelectionBackground(lightGreen);
+        setSelectionForeground(Color.BLACK);
+
+    }
+
+ 
+
+    @Override
+    public Class<?> getColumnClass(int column) {
+        return getModel().getColumnClass(column);
     }
 
     @Override
@@ -71,4 +84,3 @@ public class MoleculeTable extends JTable {
         frame.setVisible(true);
     }
 }
-

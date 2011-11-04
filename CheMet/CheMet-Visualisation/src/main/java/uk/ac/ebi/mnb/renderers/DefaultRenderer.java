@@ -25,6 +25,7 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  * @name    DefaultRenderer - 2011.10.06 <br>
@@ -36,7 +37,8 @@ import javax.swing.table.TableCellRenderer;
 public class DefaultRenderer extends JLabel implements TableCellRenderer {
 
     public DefaultRenderer() {
-        setFont(MacFontUtils.ITUNES_FONT);
+        setFont(ViewUtils.VERDANA_PLAIN_11);
+        setOpaque(true);
     }
 
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {

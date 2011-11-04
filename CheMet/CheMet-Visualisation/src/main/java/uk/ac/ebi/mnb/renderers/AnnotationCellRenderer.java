@@ -21,30 +21,51 @@
 package uk.ac.ebi.mnb.renderers;
 
 import com.google.common.base.Joiner;
+import java.awt.Color;
 import java.awt.Component;
 import java.util.Collection;
 import javax.swing.JTable;
+import uk.ac.ebi.annotation.Synonym;
+import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.visualisation.ViewUtils;
 
 /**
  *          AnnotationCellRenderer – 2011.09.29 <br>
- *          A simple annotation cell renderer that joins the toString() values of a collection
- *          of annotations using a comma and space ', '.
+ *          A simple annotation cell renderer that joins the toString() values 
+ *          of a collection of annotations using a comma and space ', '.
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
 public class AnnotationCellRenderer extends DefaultRenderer {
 
+    private boolean html = false;
+    private String token = ", ";
+
+    public AnnotationCellRenderer() {
+    }
+
+    public AnnotationCellRenderer(boolean html, String token) {
+        this.html = html;
+        this.token = token;
+    }
+
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row,
-            int column) {
+    public Component getTableCellRendererComponent(JTable table,
+                                                   Object value,
+                                                   boolean isSelected,
+                                                   boolean hasFocus,
+                                                   int row,
+                                                   int column) {
 
         Collection collection = (Collection) value;
-        this.setText(Joiner.on(", ").join(collection));
+        String text = Joiner.on(token).join(collection);
+
+        this.setText(html ? ViewUtils.htmlWrapper(text) : text);
 
         this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
         this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+
 
         return this;
 

@@ -45,6 +45,7 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 public class MoleculeTableModel extends DefaultTableModel {
 
     private String[] columns = new String[]{"Name", "Synonyms", "Formula", "Structure", "Charge"};
+    private Class[] colType = new Class[]{String.class, Synonym.class, MolecularFormula.class, ChemicalStructure.class, Integer.class};
     List<Metabolite> metabolites = new ArrayList();
 
     public MoleculeTableModel() {
@@ -77,6 +78,8 @@ public class MoleculeTableModel extends DefaultTableModel {
             String accession = candidate.getId();
             Metabolite m = new Metabolite("", "", candidate.getDescription());
 
+            m.setName(candidate.getDesc());
+
             if (accession.startsWith("ChEBI") || accession.startsWith("CHEBI")) {
                 m.addAnnotation(new ChEBICrossReference(new ChEBIIdentifier(accession)));
             } else if (accession.startsWith("C")) {
@@ -95,6 +98,13 @@ public class MoleculeTableModel extends DefaultTableModel {
         }
         set(tmp);
     }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return colType[columnIndex];
+    }
+
+
 
     public Collection<Metabolite> getEntities(int[] index) {
         List<Metabolite> aggregateList = new ArrayList();
