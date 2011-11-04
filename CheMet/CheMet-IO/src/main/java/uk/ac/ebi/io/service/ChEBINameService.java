@@ -95,7 +95,7 @@ public class ChEBINameService
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc scoreDoc : hits) {
-                ids.add(new ChEBIIdentifier("CHEBI:" + getValue(scoreDoc, "id")));
+                ids.add(new ChEBIIdentifier(getValue(scoreDoc, "id")));
             }
         } catch (IOException ex) {
             LOGGER.error("Error occur whilst searching with query " + query);
