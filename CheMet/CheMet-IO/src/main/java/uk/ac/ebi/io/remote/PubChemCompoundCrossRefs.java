@@ -170,10 +170,10 @@ public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements 
                         uniqueCrossRefs.addAll(subs2CrossRefs.get(substanceID));
                     }
                     for (CrossReference crossReference : uniqueCrossRefs) {
+                        if(crossReference.getIdentifier() instanceof ChemSpiderIdentifier)
+                            continue;
                         uniquePChemCompID2CrossRef.put(pubchemCompID, crossReference);
                         /*
-                        if(crossReference.getIdentifier() instanceof ChemSpiderIdentifier)
-                        continue;
                         if (!indexExists || !isCrossRefInIndex(searcher, identPCComp, crossReference.getIdentifier())) {
                         crossRefsToAddNotInIndex.put(identPCComp, crossReference);
                         } else if (indexExists && isCrossRefInIndex(searcher, identPCComp, crossReference.getIdentifier())) {
