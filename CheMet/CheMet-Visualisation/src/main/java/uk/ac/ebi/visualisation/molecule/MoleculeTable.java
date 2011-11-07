@@ -58,8 +58,6 @@ public class MoleculeTable extends JTable {
 
     }
 
- 
-
     @Override
     public Class<?> getColumnClass(int column) {
         return getModel().getColumnClass(column);
