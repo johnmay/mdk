@@ -170,6 +170,10 @@ public class TestMoleculeFactory {
 
     }
 
+    public static IAtomContainer formaldehyde() {
+        return loadMol("ChEBI_16842.mol", "Formaldehyde", true);
+    }
+
     public static IAtomContainer loadMol(String resource, String name, Boolean addH) {
 
         InputStream stream = TestMoleculeFactory.class.getResourceAsStream(resource);
@@ -180,7 +184,7 @@ public class TestMoleculeFactory {
             molecule.setID(name);
             CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance());
             if (addH) {
-            AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
+                AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
                 adder.addImplicitHydrogens(molecule);
                 AtomContainerManipulator.convertImplicitToExplicitHydrogens(molecule);
             }
