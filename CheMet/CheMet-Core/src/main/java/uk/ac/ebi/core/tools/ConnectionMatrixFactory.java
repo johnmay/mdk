@@ -22,15 +22,13 @@ package uk.ac.ebi.core.tools;
 
 import java.util.EnumMap;
 import java.util.HashMap;
-import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.AtomType;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.qsar.AtomValenceTool;
-import org.openscience.cdk.tools.LonePairElectronChecker;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 /**
  *          ConnectionMatrixFactory - 2011.11.09 <br>
@@ -130,6 +128,7 @@ public class ConnectionMatrixFactory {
 
                 IAtom jAtom = bond.getAtom(j);
                 int jIndex = getIndex(jAtom, atoms);
+                connections[jIndex][jIndex] = CDKUtils.getNonBondedValenceElectronCount(molecule, jAtom).byteValue();
 
                 for (int k = j + 1; k < bond.getAtomCount(); k++) {
 
