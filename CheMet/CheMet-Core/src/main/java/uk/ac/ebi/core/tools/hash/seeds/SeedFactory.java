@@ -22,7 +22,9 @@ package uk.ac.ebi.core.tools.hash.seeds;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *          SeedFactory - 2011.11.11 <br>
@@ -56,11 +58,24 @@ public class SeedFactory {
         return SeedFactoryHolder.INSTANCE;
     }
 
+    /**
+     * Generates a set of AtomSeed that can be directly added to
+     * MolecularHashFactory.
+     * @param classes
+     * @return
+     */
+    public Set<AtomSeed> getSeeds(Class<? extends AtomSeed>... classes) {
+        Set<AtomSeed> seeds = new HashSet();
+        for (Class<? extends AtomSeed> clazz : classes) {
+            seeds.add(getSeed(clazz));
+        }
+        return seeds;
+    }
+
     private static class SeedFactoryHolder {
 
         private static final SeedFactory INSTANCE = new SeedFactory();
     }
-
 
     /**
      *
