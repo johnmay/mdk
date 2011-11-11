@@ -16,8 +16,10 @@
  */
 package uk.ac.ebi.core.util;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang.mutable.MutableInt;
 
 /**
  * Util.java
@@ -51,5 +53,54 @@ public class Util {
             m = pattern.matcher(s);
         }
         return s;
+    }
+
+    /**
+     *
+     * Performs pseudo random number generation on the provided seed
+     *
+     * @param seed
+     * @return
+     */
+    public static int xorShift(int seed) {
+        seed ^= seed << 6;
+        seed ^= seed >>> 21;
+        seed ^= (seed << 7);
+        return seed;
+    }
+
+    /**
+     *
+     * Rotates the seed using xor shift (pseudo random number generation) the
+     * specified number of times.
+     *
+     * @param seed the starting seed
+     * @param rotation Number of xor rotations to perform
+     * @return The starting seed rotated the specified number of times
+     */
+    public static int rotate(int seed, int rotation) {
+        for (int j = 0; j < rotation; j++) {
+            seed = xorShift(seed);
+        }
+        return seed;
+    }
+
+    /**
+     *
+     * Rotates the seed if the seed has already been seen in the provided
+     * occurrences map
+     *
+     * @param seed
+     * @param occurences
+     * @return
+     */
+    public static int rotate(int seed, Map<Integer, MutableInt> occurences) {
+        if (occurences.get(seed) == null) {
+            occurences.put(seed, new MutableInt());
+        } else {
+            occurences.get(seed).increment();
+        }
+        // System.out.printf("%10s", occMap.get(seed).value);
+        return rotate(seed, occurences.get(seed).intValue());
     }
 }
