@@ -27,7 +27,10 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.MDLV3000Reader;
+import org.openscience.cdk.io.formats.SDFFormat;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -50,7 +53,7 @@ public class TestMoleculeFactory {
     private static final InChI butan1olInChI = new InChI("InChI=1S/C4H10O/c1-2-3-4-5/h5H,2-4H2,1H3");
     private static final InChI butan2olInChI = new InChI("InChI=1S/C4H10O/c1-3-4(2)5/h4-5H,3H2,1-2H3");
     private static final InChI but1ene = new InChI("InChI=1S/C4H8/c1-3-4-2/h3H,1,4H2,2H3");
-    private static final InChI butane = new InChI("InChI=1S/C4H8/c1-3-4-2/h3H,1,4H2,2H3");
+    private static final InChI butane = new InChI("InChI=1S/C4H10/c1-3-4-2/h3-4H2,1-2H3");
 
     public static IAtomContainer butane() {
         IMolecule mol = CDKMoleculeBuilder.getInstance().buildFromInChI(butane);
@@ -89,6 +92,22 @@ public class TestMoleculeFactory {
         IAtomContainer ac = MoleculeFactory.makeCyclohexane();
         ac.setID("Cyclohexane");
         return ac;
+    }
+
+    public static IAtomContainer lAlanine() {
+        return loadMol("ChEBI_15570.mol", "L-alanine", Boolean.TRUE);
+    }
+
+    public static IAtomContainer dAlanine() {
+        return loadMol("ChEBI_16977.mol", "D-alanine", Boolean.TRUE);
+    }
+
+    public static IAtomContainer atp_minus_3() {
+        return loadMol("ChEBI_57299.mol", "ATP (3-)", Boolean.FALSE);
+    }
+
+    public static IAtomContainer atp_minus_4() {
+        return loadMol("ChEBI_30616.mol", "ATP (4-)", Boolean.FALSE);
     }
 
     public static IAtomContainer butan1ol() {
@@ -183,8 +202,9 @@ public class TestMoleculeFactory {
             mol2Reader.read(molecule);
             molecule.setID(name);
             CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance());
+            AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
+
             if (addH) {
-                AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
                 adder.addImplicitHydrogens(molecule);
                 AtomContainerManipulator.convertImplicitToExplicitHydrogens(molecule);
             }

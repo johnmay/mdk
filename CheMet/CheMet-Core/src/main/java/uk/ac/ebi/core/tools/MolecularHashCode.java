@@ -20,10 +20,14 @@
  */
 package uk.ac.ebi.core.tools;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.Bond;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -36,15 +40,63 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated use {@see MolecularHashFactory}
+ *
  */
+@Deprecated
 public class MolecularHashCode {
 
     private static final Logger LOGGER = Logger.getLogger(MolecularHashCode.class);
     private static Byte index = 42;
 
-    public static int hashCode(IAtomContainer mol) {
-        int hash = 0;
+    public static boolean areIdentical(IAtomContainer mol1, IAtomContainer mol2) {
 
+        if (mol1.getAtomCount() != mol2.getAtomCount()) {
+            return false;
+        }
+
+        List mol1Seeds = new ArrayList(Arrays.asList(getSeeds(mol1)));
+        List mol2Seeds = new ArrayList(Arrays.asList(getSeeds(mol2)));
+
+
+        mol1Seeds.retainAll(mol2Seeds);
+
+        if (mol1Seeds.size() != mol2Seeds.size()) {
+            return false;
+        }
+
+        // true by this test
+        return true;
+
+    }
+
+    public static int[] getSeeds(IAtomContainer mol) {
+        int[] inseeds = getAtomSeeds(mol);
+        int[] fiseeds = new int[inseeds.length];
+        byte[][] table = getConnectionMatrix(mol);
+
+        Map<Integer, MutableInt> codeCount = new HashMap(inseeds.length, 1f);
+        Map<Integer, MutableInt> occMap = new HashMap(inseeds.length, 1f);
+
+        for (int i = 0; i < inseeds.length; i++) {
+
+            occMap.clear();
+            occMap.put(inseeds[i], new MutableInt());
+            occMap.get(inseeds[i]).increment();
+
+            fiseeds[i] = inseeds[i];
+            for (int j = 0; j < table[i].length; j++) {
+                if (table[i][j] != 0) {
+                    fiseeds[i] ^= rotate(inseeds[j], occMap);
+                }
+            }
+        }
+        return fiseeds;
+    }
+
+    public static int hashCode(IAtomContainer mol) {
+        int hash = 257;
+        
         int[] seeds = getAtomSeeds(mol);
         byte[][] table = getConnectionMatrix(mol);
 
@@ -66,14 +118,27 @@ public class MolecularHashCode {
                 }
             }
 
-            MutableInt count = codeCount.get(value);
-            if (count == null) {
-                count = new MutableInt();
-                codeCount.put(value, count);
+            {
+                MutableInt count = codeCount.get(value);
+                if (count == null) {
+                    count = new MutableInt();
+                    codeCount.put(value, count);
+                } else{
+                count.increment();
+                }
             }
-            count.increment();
+            {
+                MutableInt count = codeCount.get(hash);
+                if (count == null) {
+                    count = new MutableInt();
+                    codeCount.put(hash, count);
+                } else {
+                count.increment();
+                }
+            }
 
-            hash ^= rotate(value, codeCount.get(value).value);
+            int rotated = rotate(value, codeCount);
+            hash ^= rotated;
 
         }
         return hash;
@@ -114,16 +179,78 @@ public class MolecularHashCode {
         for (int i = 0; i < bonds.length; i++) {
             IBond bond = bonds[i];
             for (int j = 0; j < bond.getAtomCount(); j++) {
-                int index = getIndex(bond.getAtom(j), atoms);
+                int aindex = getIndex(bond.getAtom(j), atoms);
                 for (int k = j + 1; k < bond.getAtomCount(); k++) {
-                    int index2 = getIndex(bond.getAtom(k), atoms);
-                    connections[index][index2] =
-                    connections[index2][index] = 1;
+                    int bindex = getIndex(bond.getAtom(k), atoms);
+                    connections[aindex][bindex] =
+                    connections[bindex][aindex] = 1;
                 }
             }
         }
 
         return connections;
+    }
+
+    public static String explain(IAtomContainer mol) {
+
+        StringBuilder sb = new StringBuilder(mol.getAtomCount() * 10);
+
+        sb.append("Seeds:[");
+
+        int hash = 257;
+
+        int[] seeds = getAtomSeeds(mol);
+        byte[][] table = getConnectionMatrix(mol);
+
+        Map<Integer, MutableInt> codeCount = new HashMap(seeds.length, 1f);
+        Map<Integer, MutableInt> occMap = new HashMap(seeds.length, 1f);
+
+        for (int i = 0; i < seeds.length; i++) {
+
+            occMap.clear();
+            occMap.put(seeds[i], new MutableInt());
+            occMap.get(seeds[i]).increment();
+
+            int value = seeds[i];
+            for (int j = 0; j < table[i].length; j++) {
+                if (table[i][j] != 0) {
+                    // System.out.printf("\t%12s  %12s  ", value, seeds[j]);
+                    value ^= rotate(seeds[j], occMap);
+                    //System.out.printf("  %12s\n", value);
+                }
+            }
+            {
+                MutableInt count = codeCount.get(value);
+                if (count == null) {
+                    count = new MutableInt();
+                    codeCount.put(value, count);
+                }
+                count.increment();
+            }
+            {
+                MutableInt count = codeCount.get(hash);
+                if (count == null) {
+                    count = new MutableInt();
+                    codeCount.put(hash, count);
+                }
+                count.increment();
+            }
+
+            int rotated = rotate(value, codeCount);
+
+            sb.append(hash).append(':');
+
+
+            hash ^= rotated;
+
+            sb.append(rotated).append(i + 1 < seeds.length ? "," : "");
+
+
+        }
+        sb.append("] hash=").append(hash);
+
+
+        return sb.toString();
     }
 
     /**
@@ -157,7 +284,7 @@ public class MolecularHashCode {
      * @param mol
      * @return
      */
-    private static int[] getAtomSeeds(IAtomContainer mol) {
+    public static int[] getAtomSeeds(IAtomContainer mol) {
 
         int[] seeds = new int[mol.getAtomCount()];
         int seed = seeds.length % 257;
@@ -165,10 +292,10 @@ public class MolecularHashCode {
         for (int i = 0; i < seeds.length; i++) {
 
             IAtom atom = mol.getAtom(i);
-            
+
             seeds[i] = 257 * seed + atom.getAtomicNumber();               // system number
             seeds[i] = 257 * seeds[i] + mol.getConnectedAtomsCount(atom); // number of bonded neighbours
-
+           seeds[i] = 257 * seeds[i] + ((Double) mol.getBondOrderSum(atom)).hashCode(); // bond order sum
             // normalise the bit distribution using low-order bits
             for (int j = 0; j < Math.min(seeds[i] & 0x7, 5); j++) {
                 seeds[i] = xorShift(seeds[i]);
@@ -177,6 +304,37 @@ public class MolecularHashCode {
         }
 
         return seeds;
+    }
+
+    public static String explainSeeds(IAtomContainer mol) {
+        StringBuilder sb = new StringBuilder();
+        int[] seeds = new int[mol.getAtomCount()];
+        int seed = seeds.length % 257;
+
+        for (int i = 0; i < seeds.length; i++) {
+
+            IAtom atom = mol.getAtom(i);
+
+            seeds[i] = 257 * seed + atom.getAtomicNumber();               // system number
+            seeds[i] = 257 * seeds[i] + mol.getConnectedAtomsCount(atom); // number of bonded neighbours
+
+            int prerotation = seeds[i];
+
+            // normalise the bit distribution using low-order bits
+            for (int j = 0; j < Math.min(seeds[i] & 0x7, 5); j++) {
+                seeds[i] = xorShift(seeds[i]);
+            }
+
+            sb.append(i).append("\t").
+                    append(atom.getSymbol()).append("\t").
+                    append(atom.getAtomicNumber()).append("\t").
+                    append(mol.getConnectedAtomsCount(atom)).append("\t").
+                    append(prerotation).append("\t").
+                    append(seeds[i]).append("\r\n");
+
+        }
+
+        return sb.toString();
     }
 
     private static int xorShift(int seed) {
