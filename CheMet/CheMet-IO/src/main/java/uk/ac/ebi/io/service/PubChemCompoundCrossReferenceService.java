@@ -21,34 +21,23 @@
 package uk.ac.ebi.io.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.logging.Level;
 import org.apache.log4j.Logger;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
-import org.apache.lucene.util.Version;
-import uk.ac.ebi.interfaces.identifiers.ChemicalIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.CrossReferenceQueryService;
-import uk.ac.ebi.interfaces.services.NameQueryService;
-import uk.ac.ebi.io.remote.ChEBINames;
 import uk.ac.ebi.io.remote.PubChemCompoundCrossRefs;
 import uk.ac.ebi.io.remote.PubChemCompoundCrossRefs.PubChemCompoundsCrossRefsLuceneFields;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
@@ -68,6 +57,7 @@ public class PubChemCompoundCrossReferenceService
 
     private PubChemCompoundCrossReferenceService() {
         super(new PubChemCompoundCrossRefs());
+        setMaxResults(100);
         try {
             searcher = new IndexSearcher(getDirectory(), true);
         } catch (IOException ex) {
