@@ -20,7 +20,9 @@
  */
 package uk.ac.ebi.metabolomes.webservices;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -32,7 +34,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.jws.WebService;
@@ -43,6 +47,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.metabolomes.webservices.eutils.ELinkXMLResponseParser;
+import uk.ac.ebi.metabolomes.webservices.eutils.PubChemCompoundESummaryResult;
+import uk.ac.ebi.metabolomes.webservices.eutils.PubChemCompoundXMLResponseParser;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemSubstanceESummaryResult;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemSubstanceXMLResponseParser;
 import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
@@ -64,6 +70,13 @@ public class EUtilsWebServiceConnection {
     private WebResource webResource;
     private Long previousCallTime;
 
+    /**
+     * Makes sure that we don't submit more entries than the imposed by the NCBI. It throws an exception if more than
+     * 5000 entities are being submitted at once.
+     * 
+     * @param dbFromIds
+     * @throws WebServiceException 
+     */
     private void checkNumberOfSubmittedEntries(List<String> dbFromIds) throws WebServiceException {
         if(dbFromIds.size()>5000)
             throw new WebServiceException("More than 5000 entries submitted, this is not permitted.... submitted "+dbFromIds.size()+" entries.");
@@ -227,6 +240,43 @@ public class EUtilsWebServiceConnection {
         }
         return res;
 
+    }
+    
+    /**
+     * Given a set of PubChem Compound IDs (not more than 5000), this method returns the preferred name for each
+     * one of the entries. For pubchem compound the prefer name tends to be the first one in the list of synonyms.
+     * 
+     * @param pubchemCompoundIds
+     * @return cids 2 names map. 
+     */
+    public Map<String, String> getPreferredNameForPubChemCompounds(List<String> pubchemCompoundIds) {
+        WebResource webRes = client.resource(baseURL + "esummary.fcgi");
+        MultivaluedMap queryParams = new MultivaluedMapImpl();
+        queryParams.add("db", "pccompound");
+        queryParams.add("id", StringUtils.join(pubchemCompoundIds, ","));
+        ClientResponse resp = submitPost(webRes, queryParams);
+        
+        LOGGER.info("Resp: "+resp.toString());
+
+        if (resp.getStatus() != 200) {
+            throw new RuntimeException("Failed : HTTP error code : "
+                    + resp.getStatus() +" : "+ resp.toString());
+        }
+
+        
+        Map<String,String> cids2name = new HashMap<String, String>();
+        PubChemCompoundXMLResponseParser parser = new PubChemCompoundXMLResponseParser();
+        try {
+            List<PubChemCompoundESummaryResult> resultsParse = parser.parseESummaryResult(resp.getEntityInputStream());
+            for (PubChemCompoundESummaryResult pubChemSubstanceESummaryResult : resultsParse) {
+                cids2name.put(pubChemSubstanceESummaryResult.getId(), pubChemSubstanceESummaryResult.getPreferredName());
+            }
+        } catch (XMLStreamException ex) {
+            LOGGER.warn("Could not parse output XML adequately... returning empty result", ex);
+        }
+        return cids2name;
+        
+        
     }
 
     /**

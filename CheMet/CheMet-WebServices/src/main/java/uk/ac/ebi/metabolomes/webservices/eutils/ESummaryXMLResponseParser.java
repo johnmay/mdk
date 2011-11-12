@@ -20,9 +20,6 @@
  */
 package uk.ac.ebi.metabolomes.webservices.eutils;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;

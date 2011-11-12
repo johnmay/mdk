@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.metabolomes.webservices;
 
+import java.util.Map;
 import java.util.ArrayList;
 import com.google.common.collect.Multimap;
 import java.util.List;
@@ -119,6 +120,34 @@ public class EUtilsWebServiceConnectionTest {
             for (CrossReference crossReference : refs.get(substance)) {
                 System.out.println(substance+"\t"+crossReference.getShortDescription()+"\t"+crossReference.getIdentifier().getAccession());
             }
+        }
+    }
+    
+    @Test
+    public void testPreferredNameRetrievalForPubChemCIDs() throws Exception {
+        System.out.println("testPreferredNameRetrievalForPubChemCIDs");
+        List<String> pubchemCompoundIds = new ArrayList<String>();
+        pubchemCompoundIds.add("44264212");
+        pubchemCompoundIds.add("44134622");
+        pubchemCompoundIds.add("24201024");
+        pubchemCompoundIds.add("16218850");
+        pubchemCompoundIds.add("16133838");
+        pubchemCompoundIds.add("16133648");
+        pubchemCompoundIds.add("16132374");
+        pubchemCompoundIds.add("16132321");
+        pubchemCompoundIds.add("16132312");
+        pubchemCompoundIds.add("16132280");
+        pubchemCompoundIds.add("16131310");
+        pubchemCompoundIds.add("16129677");
+        pubchemCompoundIds.add("16129627");
+        pubchemCompoundIds.add("16051918");
+        pubchemCompoundIds.add("11979494");
+        
+        Map<String,String> pccomp2Names = instance.getPreferredNameForPubChemCompounds(pubchemCompoundIds);
+        assertTrue(pccomp2Names.values().size()>0);
+        
+        for (String pccompId : pccomp2Names.keySet()) {
+            System.out.println(pccompId+"\t"+pccomp2Names.get(pccompId));
         }
     }
 }
