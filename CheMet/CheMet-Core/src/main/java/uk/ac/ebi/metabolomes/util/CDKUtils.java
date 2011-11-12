@@ -153,4 +153,15 @@ public class CDKUtils {
         }
         return 0;
     }
+    
+    private final static SmilesBugAmender smilesBugAmender = new SmilesBugAmender();
+    /**
+     * Looks for certain patterns of SMILES and uniforms them.
+     * 
+     * @param smilesToAmend
+     * @return correctedSmiles
+     */
+    public static String amendCDKSmilesForPhosphateGroupLikeBug(String smilesToAmend) {
+        return smilesBugAmender.amendSmiles(smilesToAmend);
+    }
 }
