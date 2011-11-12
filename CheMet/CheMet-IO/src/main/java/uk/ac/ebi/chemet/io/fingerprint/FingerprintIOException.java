@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
  * @brief   ...class description...
  *
  */
-class FingerprintIOException extends Exception {
+public class FingerprintIOException extends Exception {
     
     private static final Logger LOGGER = Logger.getLogger(FingerprintIOException.class);
 

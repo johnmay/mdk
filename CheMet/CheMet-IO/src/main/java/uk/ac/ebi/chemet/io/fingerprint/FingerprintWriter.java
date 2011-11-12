@@ -41,6 +41,7 @@ public class FingerprintWriter extends BufferedWriter {
     private static final Logger LOGGER = Logger.getLogger(FingerprintWriter.class);
     private String fingerPrinterClassName;
     private IFingerprinter fingerprinter;
+    Integer fingerprintSize;
 
     public FingerprintWriter(Writer writer, Class<? extends IFingerprinter> fingerprinter, Integer fingerprintSize) throws IOException {
         super(writer);
@@ -54,6 +55,7 @@ public class FingerprintWriter extends BufferedWriter {
     
     private void init(Class<? extends IFingerprinter> fingerprinter, Integer fingerprintSize) throws IOException {
         fingerPrinterClassName = fingerprinter.getSimpleName();
+        this.fingerprintSize = fingerprintSize;
         super.write(fingerPrinterClassName+"\n");
         super.write(fingerprintSize+"\n");
     }

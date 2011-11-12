@@ -64,8 +64,12 @@ public class FingerprintReader extends BufferedReader {
         BitSet bitSet = new BitSet(this.fingerprintLength);
         line = line.replace("{", "").replace("}", "").trim();
         for (String position : line.split(", ")) {
+            try {
             Integer pos = Integer.parseInt(position);
             bitSet.set(pos);
+            } catch(NumberFormatException e) {
+                continue;
+            }
         }
         return bitSet;
     }
