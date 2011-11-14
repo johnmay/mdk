@@ -45,6 +45,7 @@ public class Metabolite
 
     private static final Logger LOGGER = Logger.getLogger(Metabolite.class);
     private boolean generic = false;
+    private Double charge = 0d;
     private MetaboliteClass type = MetaboliteClass.UNKNOWN;
     public static final String BASE_TYPE = "Metabolite";
 
@@ -89,6 +90,25 @@ public class Metabolite
 
     /**
      *
+     * Access the charge of this molecule
+     *
+     * @return
+     */
+    public Double getCharge(){
+        return charge;
+    }
+
+    /**
+     *
+     * Molecule charge mutator
+     *
+     */
+    public void setCharge(Double charge){
+        this.charge = charge;
+    }
+
+    /**
+     *
      * Queries whether the metabolite entry has any {@see ChemicalStructure} attached
      *
      * @return
@@ -122,6 +142,7 @@ public class Metabolite
         super.readExternal(in);
         type = MetaboliteClass.valueOf(in.readUTF());
         generic = in.readBoolean();
+        charge = in.readDouble();
     }
 
     /**
@@ -132,6 +153,7 @@ public class Metabolite
         super.writeExternal(out);
         out.writeUTF(type.name());
         out.writeBoolean(generic);
+        out.writeDouble(charge);
     }
 
     /**
