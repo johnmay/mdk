@@ -38,8 +38,8 @@ public class DefaultTheme implements Theme {
 
     private static final Logger LOGGER = Logger.getLogger(DefaultTheme.class);
     private Color bg = new Color(237, 237, 237);
-    private Icon plus =  ViewUtils.getIcon("plus_12x12.png");
-    private Icon minus =  ViewUtils.getIcon("minus_12x12.png");
+    private Icon plus =  ViewUtils.getIcon("images/plus_12x12.png");
+    private Icon minus =  ViewUtils.getIcon("images/minus_12x12.png");
 
     public Color getWarningForeground() {
         return Color.RED;
