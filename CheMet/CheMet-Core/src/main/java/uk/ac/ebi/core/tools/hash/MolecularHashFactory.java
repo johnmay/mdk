@@ -55,6 +55,11 @@ public class MolecularHashFactory {
     private ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory.getInstance();
     private Map<Integer, MutableInt> occurences = new HashMap(150);
     private Map<Integer, MutableInt> postoccurences = new HashMap(150);
+    private boolean seedWithMoleculeSize = true;
+    private int maxDepth = 1;
+    private int[] precursorSeeds;
+    private int[] completedSeeds;
+    private byte[][] table;
 
     private MolecularHashFactory() {
         seedMethods.add(SeedFactory.getInstance().getSeed(AtomicNumberSeed.class));
@@ -105,7 +110,7 @@ public class MolecularHashFactory {
      * @return Whether the new seed was added (false if it is already present)
      *
      */
-    public boolean addSeedMethod(AtomSeed seed){
+    public boolean addSeedMethod(AtomSeed seed) {
         return this.seedMethods.add(seed);
     }
 
@@ -154,9 +159,9 @@ public class MolecularHashFactory {
 
         int hash = 49157;
 
-        int[] precursorSeeds = getAtomSeeds(molecule, methods);
-        int[] completedSeeds = new int[precursorSeeds.length];
-        byte[][] table = matrixFactory.getConnectionMatrix(molecule);
+        precursorSeeds = getAtomSeeds(molecule, methods);
+        completedSeeds = new int[precursorSeeds.length];
+        table = matrixFactory.getConnectionMatrix(molecule);
 
         postoccurences.clear();
 
@@ -165,13 +170,7 @@ public class MolecularHashFactory {
             occurences.clear();
             occurences.put(precursorSeeds[i], new MutableInt());
 
-            int value = precursorSeeds[i];
-            for (int j = 0; j < table[i].length; j++) {
-
-                if (table[i][j] != 0) {
-                    value ^= Util.rotate(precursorSeeds[j], occurences);
-                }
-            }
+            int value = neighbourHash(i, precursorSeeds[i], 0);
 
             {
                 MutableInt count = postoccurences.get(value);
@@ -208,6 +207,55 @@ public class MolecularHashFactory {
 
     /**
      *
+     * Returns the hash value xor'd with that of the atom's neighbours. The method
+     * is recursive thus the depth indicates the current depth of the method
+     *
+     * The max depth is set with the {@see setDepth(int depth)} method.
+     *
+     * @param index Atom index to add the neighbour values too
+     * @param value The current value of the above atom
+     * @param depth The current depth
+     *
+     * @return Computed value
+     *
+     */
+    private int neighbourHash(int index, int value, int depth) {
+
+        for (int j = 0; j < table[index].length; j++) {
+
+            if (table[index][j] != 0) {
+                value ^= Util.rotate(precursorSeeds[j], occurences);
+                value = depth < maxDepth ? neighbourHash(j, value, depth + 1) : value;
+            }
+        }
+
+        return value;
+
+    }
+
+    /**
+     * Sets the depth to recurse on each atom
+     * @param depth
+     */
+    public void setDepth(int depth) {
+        this.maxDepth = depth;
+    }
+
+    /**
+     *
+     * If set to true (default) the base seed will use the molecule size. This
+     * will not allow comparison of sub-graph hashes. To allow sub-graph
+     * pseudo sub-graph matching {@see MolecularHash#getSimilarity(MolecularHash)}
+     * this should be set to false
+     *
+     * @param useMoleculeSize
+     */
+    public void setSeedWithMoleculeSize(boolean useMoleculeSize){
+        this.seedWithMoleculeSize = useMoleculeSize;
+    }
+
+    /**
+     *
      * Generates an array of atomic seed values for each atom in the molecule.
      * These seeds are generated using the provided methods
      *
@@ -220,7 +268,7 @@ public class MolecularHashFactory {
     public int[] getAtomSeeds(IAtomContainer molecule, Set<AtomSeed> methods) {
 
         int[] seeds = new int[molecule.getAtomCount()];
-        int seed = seeds.length % 389;
+        int seed = seedWithMoleculeSize ? seeds.length % 389 : 389;
 
         for (int i = 0; i < seeds.length; i++) {
 
@@ -239,7 +287,4 @@ public class MolecularHashFactory {
         return seeds;
 
     }
-
-   
-
 }

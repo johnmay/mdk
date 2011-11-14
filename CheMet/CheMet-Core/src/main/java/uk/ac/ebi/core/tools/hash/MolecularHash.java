@@ -20,8 +20,10 @@
  */
 package uk.ac.ebi.core.tools.hash;
 
-import com.google.common.base.Objects;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 
 /**
@@ -63,6 +65,49 @@ public class MolecularHash {
     }
 
     /**
+     * Calculates a simple similarity score between this MolecularHash and the
+     * other. Score = n matches / total.
+     * @param other
+     * @return
+     */
+    public float getSimilarity(MolecularHash other) {
+
+        float total = this.atomicHashes.length + other.atomicHashes.length;
+
+        HashMap<Integer, MutableInt> thisMap = new HashMap();
+        HashMap<Integer, MutableInt> otherMap = new HashMap();
+
+        for (int aHash : this.atomicHashes) {
+            if (!thisMap.containsKey(aHash)) {
+                thisMap.put(aHash, new MutableInt());
+            }
+            thisMap.get(aHash).increment();
+        }
+
+        for (int aHash : other.atomicHashes) {
+            if (!otherMap.containsKey(aHash)) {
+                otherMap.put(aHash, new MutableInt());
+            }
+            otherMap.get(aHash).increment();
+        }
+
+        // put all the keys together retaining those that match
+        Set<Integer> keys = new HashSet(thisMap.keySet());
+        keys.retainAll(otherMap.keySet());
+
+        float score = keys.size() * 2;
+
+        // add multiple match values
+        for (Integer key : keys) {
+            score += Math.min(thisMap.get(key).intValue(),
+                              otherMap.get(key).intValue()) - 1;
+        }
+
+        return score / total;
+
+    }
+
+    /**
      * @inheritDoc
      */
     @Override
@@ -99,5 +144,19 @@ public class MolecularHash {
 
         return true;
 
+    }
+
+    @Override
+    public String toString() {
+
+        StringBuilder sb = new StringBuilder(20 * atomicHashes.length);
+
+        sb.append(hash).append(": ");
+
+        for (int i : atomicHashes) {
+            sb.append(i).append(", ");
+        }
+
+        return sb.toString();
     }
 }

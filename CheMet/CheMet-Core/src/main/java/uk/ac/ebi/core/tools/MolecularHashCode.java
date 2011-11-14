@@ -51,22 +51,24 @@ public class MolecularHashCode {
 
     public static boolean areIdentical(IAtomContainer mol1, IAtomContainer mol2) {
 
-        if (mol1.getAtomCount() != mol2.getAtomCount()) {
-            return false;
-        }
+        throw new UnsupportedOperationException("Method is broken!");
 
-        List mol1Seeds = new ArrayList(Arrays.asList(getSeeds(mol1)));
-        List mol2Seeds = new ArrayList(Arrays.asList(getSeeds(mol2)));
-
-
-        mol1Seeds.retainAll(mol2Seeds);
-
-        if (mol1Seeds.size() != mol2Seeds.size()) {
-            return false;
-        }
+//        if (mol1.getAtomCount() != mol2.getAtomCount()) {
+//            return false;
+//        }
+//
+//        List mol1Seeds = new ArrayList(Arrays.asList(getSeeds(mol1)));
+//        List mol2Seeds = new ArrayList(Arrays.asList(getSeeds(mol2)));
+//
+//
+//        mol1Seeds.retainAll(mol2Seeds);
+//
+//        if (mol1Seeds.size() != mol2Seeds.size()) {
+//            return false;
+//        }
 
         // true by this test
-        return true;
+  //      return true;
 
     }
 
