@@ -49,12 +49,11 @@ public class MoleculeTable extends JTable {
 
     public MoleculeTable() {
         super(new MoleculeTableModel());
-        for (int i = 0; i < getColumnCount(); i++) {
-            getColumnModel().getColumn(i).setWidth(100);
-        }
-        setDefaultRenderer(Synonym.class, new AnnotationCellRenderer(false, "; "));
+   
+        setDefaultRenderer(Synonym.class, new AnnotationCellRenderer(true, "<br>"));
         setSelectionBackground(lightGreen);
         setSelectionForeground(Color.BLACK);
+
 
     }
 
