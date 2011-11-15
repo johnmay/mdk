@@ -39,7 +39,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
@@ -193,7 +192,7 @@ public class ChEBICrossRefs
      * @return
      * @throws IOException 
      */
-    private Map<String, String> getSecondaryToParentID() throws IOException {
+    protected static Map<String, String> getSecondaryToParentID() throws IOException {
         CSVReader compsReader = new CSVReader(new InputStreamReader((new URL(compoundsLocation)).openStream()), '\t', '\0');
         String[] rowComps = compsReader.readNext();
         Map<String, Integer> compsMap = createMap(rowComps);
@@ -223,7 +222,7 @@ public class ChEBICrossRefs
         }
     }
 
-    private Map<String, Integer> createMap(String[] row) {
+    private static Map<String, Integer> createMap(String[] row) {
         Map<String, Integer> map = new HashMap();
         for (int i = 0; i < row.length; i++) {
             map.put(row[i], i);

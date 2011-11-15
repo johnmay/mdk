@@ -42,6 +42,7 @@ public class RemoteResourceManager {
     private List<RemoteResource> resources = new ArrayList<RemoteResource>(Arrays.asList(new DrugBankCrossRefs(),
                                                                                          new ChEBINames(),
                                                                                          new ChEBICrossRefs(),
+                                                                                         new ChEBIChemicalData(),
                                                                                          new KEGGCompoundNames(),
                                                                                          new KEGGCompoundMols()));
 
