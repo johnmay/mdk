@@ -41,10 +41,10 @@ import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
- *          ChEBINameService - 2011.10.26 <br>
+ *          PubChemCompoundCrossReferenceService - 2011.10.26 <br>
  *          Singleton description
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
+ * @author  pmoreno
  * @author  $Author$ (this version)
  */
 public class PubChemCompoundCrossReferenceService

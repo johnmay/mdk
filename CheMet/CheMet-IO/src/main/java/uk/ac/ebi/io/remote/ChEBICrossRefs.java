@@ -23,6 +23,11 @@ package uk.ac.ebi.io.remote;
 import org.apache.lucene.index.CorruptIndexException;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import au.com.bytecode.opencsv.CSVReader;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,9 +36,12 @@ import java.net.URL;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.prefs.Preferences;
+import java.util.zip.ZipInputStream;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
@@ -50,9 +58,12 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
+import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.metabolomes.webservices.EUtilsWebServiceConnection;
 import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
  *          ChEBISearch - 2011.10.25 <br>
@@ -71,6 +82,8 @@ public class ChEBICrossRefs
     private static final String location3star = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession_3star.tsv";
     private static final String compoundsLocation =
             "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv"; // get parent - child compound
+    private static final String referenceFile =
+            "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/reference.tsv.zip"; // for pubchem substance
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
 
     private List<Identifier> getIdentsAssocToChEBIID(IndexSearcher searcher, String get) throws CorruptIndexException, IOException {
@@ -86,7 +99,7 @@ public class ChEBICrossRefs
             idents.add(ident);
         }
         return idents;
-       
+
     }
 
     public enum ChEBICrossRefsLuceneFields {
@@ -112,21 +125,53 @@ public class ChEBICrossRefs
     public void update() throws IOException {
         Map<String, String> sec2PrimaryID = getSecondaryToParentID();
 
+        List<Document> docs = new ArrayList<Document>();
+
+        Multimap<String, String> chebi2PubChemComp = getPubChemCompoundFromReferenceFile();
+
+        for (String chebiID : chebi2PubChemComp.keySet()) {
+            List<String> chebiIDsToLinkToRef = new ArrayList<String>();
+            if (sec2PrimaryID.containsKey(chebiID)) {
+                chebiIDsToLinkToRef.add(sec2PrimaryID.get(chebiID));
+            }
+            chebiIDsToLinkToRef.add(chebiID);
+            
+            for (String pchemComp : chebi2PubChemComp.get(chebiID)) {
+                PubChemCompoundIdentifier extIdent = new PubChemCompoundIdentifier();
+                extIdent.setAccession(pchemComp);
+
+                for (String chebiID2Link : chebiIDsToLinkToRef) {
+                    Document doc = new Document();
+
+                    doc.add(new Field(ChEBICrossRefsLuceneFields.ChebiID.toString(), chebiID2Link, Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    doc.add(new Field(ChEBICrossRefsLuceneFields.ExtDB.toString(), extIdent.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
+                    doc.add(new Field(ChEBICrossRefsLuceneFields.ExtID.toString(), extIdent.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    docs.add(doc);
+                }
+            }
+        }
+        
+        // write the index
+        Directory index = new SimpleFSDirectory(getLocal());
+        IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, analzyer));
+        writer.addDocuments(docs);
+        docs.clear();
+
+        String currentId = "";
+
         CSVReader reader = new CSVReader(new InputStreamReader(getRemote().openStream()), '\t', '\0');
 
         String[] row = reader.readNext();
         Map<String, Integer> map = createMap(row);
-
-        List<Document> docs = new ArrayList<Document>();
-        String currentId = "";
 
         while ((row = reader.readNext()) != null) {
             String id = row[map.get("COMPOUND_ID")];
             String type = row[map.get("TYPE")];
             String accession = row[map.get("ACCESSION_NUMBER")];
             List<String> chebiIDsToLinkToRef = new ArrayList<String>();
-            if(sec2PrimaryID.containsKey(id))
+            if (sec2PrimaryID.containsKey(id)) {
                 chebiIDsToLinkToRef.add(sec2PrimaryID.get(id));
+            }
             chebiIDsToLinkToRef.add(id);
             Identifier extIdent = null;
             try {
@@ -154,24 +199,22 @@ public class ChEBICrossRefs
         }
         reader.close();
 
-        // write the index
-        Directory index = new SimpleFSDirectory(getLocal());
-        IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, analzyer));
+        
         writer.addDocuments(docs);
         writer.close();
-        
+
         writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, analzyer));
         //writer.close();
-        
+
         // Now using each secondary chebi ids, we get the primary ids, and see whether each secondary id has all the cross
         // refs that the primary id has.
         IndexSearcher searcher = new IndexSearcher(index, true);
         docs.clear();
         for (String secondaryID : sec2PrimaryID.keySet()) {
-            List<Identifier> identsAssocToPrimary = getIdentsAssocToChEBIID(searcher,sec2PrimaryID.get(secondaryID));
+            List<Identifier> identsAssocToPrimary = getIdentsAssocToChEBIID(searcher, sec2PrimaryID.get(secondaryID));
             List<Identifier> identsAssocToSecondary = getIdentsAssocToChEBIID(searcher, secondaryID);
             for (Identifier identifier2Add : identsAssocToPrimary) {
-                if(!identsAssocToSecondary.contains(identifier2Add)) {
+                if (!identsAssocToSecondary.contains(identifier2Add)) {
                     Document doc = new Document();
                     doc.add(new Field(ChEBICrossRefsLuceneFields.ChebiID.toString(), secondaryID, Field.Store.YES, Field.Index.NOT_ANALYZED));
                     doc.add(new Field(ChEBICrossRefsLuceneFields.ExtDB.toString(), identifier2Add.getShortDescription(), Field.Store.YES, Field.Index.ANALYZED));
@@ -184,6 +227,53 @@ public class ChEBICrossRefs
         writer.addDocuments(docs);
         writer.close();
         index.close();
+
+    }
+
+    /**
+     * This method should read the reference file in the ftp, load all the chebi id 2 pubchem substances, and then
+     * retrieve, with eutils, the compounds corresponding to those substances. Finally generates a chebi2pubchemCompound.
+     * @return 
+     */
+    private Multimap<String, String> getPubChemCompoundFromReferenceFile() throws IOException {
+        ZipInputStream zipInput = new ZipInputStream((new URL(referenceFile)).openStream());
+        zipInput.getNextEntry();
+        CSVReader compsReader = new CSVReader(new InputStreamReader(zipInput), '\t', '\0');
+        String[] rowComps = compsReader.readNext();
+        Map<String, Integer> compsMap = createMap(rowComps);
+        ListMultimap<String, String> chebi2pubchemSubs = ArrayListMultimap.create();
+
+        while ((rowComps = compsReader.readNext()) != null) {
+            if (rowComps[compsMap.get("REFERENCE_DB_NAME")].equalsIgnoreCase("PubChem")) {
+                String chebiID = rowComps[compsMap.get("COMPOUND_ID")];
+                String pchemSubs = rowComps[compsMap.get("REFERENCE_ID")];
+                chebi2pubchemSubs.put(chebiID, pchemSubs);
+            }
+        }
+
+        EUtilsWebServiceConnection euwsc = new EUtilsWebServiceConnection();
+        Set<String> substances = new HashSet<String>(chebi2pubchemSubs.values());
+        List<String> substanceList = new ArrayList<String>(substances);
+        SetMultimap<String, String> chebi2pubchemComps = HashMultimap.create();
+        for (int i = 0; i < substanceList.size(); i += euwsc.MAX_RECORDS_PER_QUERY) {
+            List<String> substance2Submit = substanceList.subList(i, Math.min(substanceList.size(), i + euwsc.MAX_RECORDS_PER_QUERY));
+            try {
+                Multimap<String, String> subs2Comps = euwsc.getPubChemCompoundFromPubChemSubstance(substance2Submit);
+                for (String chebiId : chebi2pubchemSubs.keySet()) {
+                    for (String substance : chebi2pubchemSubs.get(chebiId)) {
+                        if (subs2Comps.containsKey(substance)) {
+                            for (String compound : subs2Comps.get(substance)) {
+                                chebi2pubchemComps.put(chebiId, compound);
+                            }
+                        }
+                    }
+                }
+            } catch (WebServiceException e) {
+                LOGGER.error("Could not load substance to compounds from EUtils", e);
+            }
+        }
+
+        return chebi2pubchemComps;
 
     }
 

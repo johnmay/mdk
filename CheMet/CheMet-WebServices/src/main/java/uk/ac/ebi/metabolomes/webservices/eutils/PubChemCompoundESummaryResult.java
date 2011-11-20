@@ -54,6 +54,32 @@ public class PubChemCompoundESummaryResult extends ESummaryResult {
         this.preferredName = preferredName;
     }
 
+    private void choosePreferredName() {
+        //this.setPreferredName(this.synonyms.get(0));
+        if(this.synonyms.size()==1)
+            this.setPreferredName(this.synonyms.get(0));
+        else {
+            int index=0;
+            while(true) {
+                if(this.synonyms.get(index).startsWith("BRN ")) {
+                    index++;
+                    continue;
+                }
+                if(this.synonyms.get(index).startsWith("AC1L")) {
+                    index++;
+                    continue;
+                }
+                if(this.synonyms.get(index).startsWith("CHEBI:")) {
+                    index++;
+                    continue;
+                }
+                break;
+            }
+            if(index<this.synonyms.size())
+                this.setPreferredName(synonyms.get(index));
+        }
+    }
+
     /**
      * This enum holds the fields that are lists (more than one value)
      * that are currently parsed by the XML parser. If more list fields are desired for parsing (that are present in the
@@ -116,8 +142,9 @@ public class PubChemCompoundESummaryResult extends ESummaryResult {
     public void wrap() {
         super.wrap();
         // here we could set the preferred name to either the first synonym or the iupac name.
-        if(this.synonyms.size()>0)
-            this.setPreferredName(this.synonyms.get(0));
+        if(this.synonyms.size()>0) {
+            choosePreferredName();
+        }
         else
             this.setPreferredName(this.iupacName);
     }

@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +53,7 @@ import uk.ac.ebi.metabolomes.webservices.eutils.PubChemCompoundXMLResponseParser
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemSubstanceESummaryResult;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemSubstanceXMLResponseParser;
 import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
+import uk.ac.ebi.resource.chemical.PubChemSubstanceIdentifier;
 
 /**
  * @name    EUtilsWebServiceConnection
@@ -69,6 +71,7 @@ public class EUtilsWebServiceConnection {
     private Client client;
     private WebResource webResource;
     private Long previousCallTime;
+    public final Integer MAX_RECORDS_PER_QUERY = 5000;
 
     /**
      * Makes sure that we don't submit more entries than the imposed by the NCBI. It throws an exception if more than
@@ -77,8 +80,8 @@ public class EUtilsWebServiceConnection {
      * @param dbFromIds
      * @throws WebServiceException 
      */
-    private void checkNumberOfSubmittedEntries(List<String> dbFromIds) throws WebServiceException {
-        if(dbFromIds.size()>5000)
+    private void checkNumberOfSubmittedEntries(Collection<String> dbFromIds) throws WebServiceException {
+        if(dbFromIds.size()>MAX_RECORDS_PER_QUERY)
             throw new WebServiceException("More than 5000 entries submitted, this is not permitted.... submitted "+dbFromIds.size()+" entries.");
     }
 
@@ -156,6 +159,14 @@ public class EUtilsWebServiceConnection {
         return res;
     }
     
+    public Multimap<String, String> getPubChemCompoundFromPubChemSubstanceIdents(List<PubChemSubstanceIdentifier> pubChemSubstanceIdentifiers) throws WebServiceException {
+        List<String> pubchemSubs = new ArrayList<String>(pubChemSubstanceIdentifiers.size());
+        for (PubChemSubstanceIdentifier pubChemSubstanceIdentifier : pubChemSubstanceIdentifiers) {
+            pubchemSubs.add(pubChemSubstanceIdentifier.getAccession());
+        }
+        return getPubChemCompoundFromPubChemSubstance(pubchemSubs);
+    }
+    
     public Multimap<String, String> getPubChemSubstanceFromPubChemCompoundIdents(List<PubChemCompoundIdentifier> pubChemCompoundIdentifiers) throws WebServiceException {
         List<String> pubchemComps = new ArrayList<String>(pubChemCompoundIdentifiers.size());
         for (PubChemCompoundIdentifier pubChemCompoundIdentifier : pubChemCompoundIdentifiers) {
@@ -170,6 +181,10 @@ public class EUtilsWebServiceConnection {
     public Multimap<String, String> getPubChemSubstanceFromPubChemCompound(List<String> pubchemCompoundIds) throws WebServiceException {
         return this.getDBToIDsFromDBFromIDs(pubchemCompoundIds, EntrezDB.pccompound, EntrezDB.pcsubstance,"linkname","pccompound_pcsubstance_same");
     }
+    
+    public Multimap<String, String> getPubChemCompoundFromPubChemSubstance(List<String> pubchemSubstanceIds) throws WebServiceException {
+        return this.getDBToIDsFromDBFromIDs(pubchemSubstanceIds, EntrezDB.pcsubstance, EntrezDB.pccompound,"linkname","pcsubstance_pccompound_same");
+    }
 
     /**
      * Uses ESummary to submit a list of pubchem substance ids, for which cross references will be retrieved (taken from
@@ -178,7 +193,7 @@ public class EUtilsWebServiceConnection {
      * @param pubchemSubstanceIds
      * @return multimap that links substance ids to crossreferences. 
      */
-    public Multimap<String, CrossReference> getExternalIdentifiersForPubChemSubstances(List<String> pubchemSubstanceIds) throws WebServiceException {
+    public Multimap<String, CrossReference> getExternalIdentifiersForPubChemSubstances(Collection<String> pubchemSubstanceIds) throws WebServiceException {
         checkNumberOfSubmittedEntries(pubchemSubstanceIds);
         WebResource epostWebRes = client.resource(baseURL+"epost.fcgi");
         MultivaluedMap queryParamsEPost = new MultivaluedMapImpl();

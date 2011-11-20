@@ -82,6 +82,30 @@ public class EUtilsWebServiceConnectionTest {
     }
     
     @Test
+    public void testGetExternalIdentifiersForPubChemCompound() throws Exception {
+        System.out.println("testGetExternalIdentifiersForPubChemCompounds");
+        List<String> pubchemComps = new ArrayList<String>();
+        pubchemComps.add("53477538");
+        
+        Multimap<String,String> cpd2subs = instance.getPubChemSubstanceFromPubChemCompound(pubchemComps);
+        for(String cpd : cpd2subs.keySet()) {
+        Multimap<String,CrossReference> result = instance.getExternalIdentifiersForPubChemSubstances(cpd2subs.get(cpd));
+        
+        assertNotNull(result);
+        
+        System.out.println("Compound\tSubstance\tExtDB\tExtID");
+        for (String subsID : result.keySet()) {
+            System.out.println("For substance:"+subsID);
+            for (CrossReference crossReference : result.get(subsID)) {
+                System.out.println(cpd+"\t"+subsID+"\t"+crossReference.getShortDescription()+"\t"+crossReference.getIdentifier().getAccession());
+            }
+        }
+        }
+        
+        
+    }
+    
+    @Test
     public void testGetExternalIdentifiersForPubChemSubstances() throws Exception {
         System.out.println("testGetExternalIdentifiersForPubChemSubstances");
         List<String> pubchemSubstances = new ArrayList<String>();
@@ -142,6 +166,8 @@ public class EUtilsWebServiceConnectionTest {
         pubchemCompoundIds.add("16129627");
         pubchemCompoundIds.add("16051918");
         pubchemCompoundIds.add("11979494");
+        
+        pubchemCompoundIds.add("447286"); // To test AC1L case
         
         Map<String,String> pccomp2Names = instance.getPreferredNameForPubChemCompounds(pubchemCompoundIds);
         assertTrue(pccomp2Names.values().size()>0);

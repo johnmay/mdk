@@ -1,7 +1,7 @@
 /**
- * ChEBIQueryService.java
+ * NameQueryService.java
  *
- * 2011.10.26
+ * 2011.10.25
  *
  * This file is part of the CheMet library
  * 
@@ -18,21 +18,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.io.service;
+package uk.ac.ebi.interfaces.services;
 
-import uk.ac.ebi.interfaces.services.LuceneService;
+import java.util.Collection;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
- *          ChEBIQueryService - 2011.10.26 <br>
- *          Class description
+ *          PropertyQueryService - 2011.10.25 <br>
+ *          Interface defines a name query service that can be used to fetch
+ *          properties of a given identifier or to search for properties and return
+ *          matching identifiers
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
+ * @author  pmoreno
  * @author  $Author$ (this version)
  */
-public class PubChemCompoundQueryService
-        extends AbstractQueryService {
+public interface PropertyQueryService<I extends Identifier> extends QueryService<I> {
+   
+    public Collection<I> fuzzySearchForProperty(String name);
 
-    public PubChemCompoundQueryService(LuceneService service) {
-        super(service);
-    }
+    public Collection<I> searchForProperty(String name);
+
+    public Collection<String> getProperties(I identifier);
+
+  
+
 }
