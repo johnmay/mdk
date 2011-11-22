@@ -45,6 +45,8 @@ public class ViewUtils {
     public static final Font COURIER_NEW_PLAIN_11 = new Font("Courier New", Font.PLAIN, 11);
     public static final Font MENOL_PLAIN_11 = new Font("Menlo", Font.PLAIN, 11);
     // normal fonts
+    public static final Font GILL_SANS_PLAIN_12 = new Font("Gill Sans", Font.PLAIN, 12);
+    public static final Font GILL_SANS_BOLD_12 = GILL_SANS_PLAIN_12.deriveFont(Font.BOLD);
     public static final Font VERDANA_PLAIN_11 = new Font("SansSerif", Font.PLAIN, 11);
     public static final Font VERDANA_BOLD_11 = new Font("SansSerif", Font.BOLD, 11);
     public static final Font VERDANA_UNDERLINE_PLAIN_11 = getUnderlineFont("SansSerif", 11);
@@ -57,8 +59,8 @@ public class ViewUtils {
     public static final Font HELVATICA_NEUE_BOLD_15 = new Font("Helvatica Neue", Font.BOLD, 15);
     // set from prefrences
     public static final Font DEFAULT_MONO_SPACE_FONT = MENOL_PLAIN_11;
-    public static final Font DEFAULT_BODY_FONT = VERDANA_PLAIN_11;
-    public static final Font DEFAULT_HEADER_FONT = VERDANA_BOLD_11;
+    public static final Font DEFAULT_BODY_FONT = GILL_SANS_PLAIN_12;
+    public static final Font DEFAULT_HEADER_FONT = GILL_SANS_BOLD_12;
     public static final Font DEFAULT_LINK_FONT = VERDANA_UNDERLINE_PLAIN_11;
     public static final Font DEFAULT_LINK_HOVER_FONT = VERDANA_UNDERLINE_BOLD_11;
     // image icons

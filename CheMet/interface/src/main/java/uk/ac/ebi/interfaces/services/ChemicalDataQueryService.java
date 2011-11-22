@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.interfaces.services;
 
+import java.util.Collection;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
@@ -32,7 +33,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  */
 public interface ChemicalDataQueryService<I extends Identifier> extends QueryService<I> {
 
-    public IMolecularFormula getFormula(I identifier);
+    public Collection<IMolecularFormula> getFormulas(I identifier);
 
     public Double getCharge(I identifier);
 }

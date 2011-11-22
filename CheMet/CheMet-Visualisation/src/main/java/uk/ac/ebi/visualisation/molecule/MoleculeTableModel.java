@@ -63,7 +63,7 @@ public class MoleculeTableModel extends DefaultTableModel {
         for (int i = 0; i < metabolites.size(); i++) {
             Metabolite m = metabolites.get(i);
             data[i][0] = metabolites.get(i).getName();
-            data[i][1] = metabolites.get(i).getAnnotationsExtending(Synonym.class);
+            data[i][1] = (Collection) metabolites.get(i).getAnnotationsExtending(Synonym.class);
             //data[i][2] = metabolites.get(i).getAnnotationsExtending(MolecularFormula.class);
             //data[i][3] = m.hasStructureAssociated() ? m.getFirstChemicalStructure() : null;
             data[i][2] = metabolites.get(i).getCharge();

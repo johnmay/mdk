@@ -48,9 +48,9 @@ public class ListLinkRenderer extends JLabel implements ListCellRenderer {
 
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         AbstractAnnotatedEntity entity = ((AbstractAnnotatedEntity) value);
-        String name = entity.getName();
+        String name = entity.getAbbreviation() + " : " + entity.getName();
         setText(name.substring(0, Math.min(40, name.length())));
-        setToolTipText(entity.getAbbreviation() + ":" + name);
+        setToolTipText(name);
         Theme theme = Settings.getInstance().getTheme();
         setForeground(isSelected ? theme.getEmphasisedForeground() : theme.getForeground());
         return this;

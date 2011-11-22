@@ -41,8 +41,6 @@ public interface ReconstructionEntity {
 
     public void setAbbreviation(String abbreviation);
 
-    public void setIdentifier(Identifier identifier);
-
     /**
      * Access a string representation of the entity's identifier
      */

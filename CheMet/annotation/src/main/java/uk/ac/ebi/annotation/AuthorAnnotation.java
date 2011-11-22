@@ -106,8 +106,7 @@ public class AuthorAnnotation
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(author.length() + annotation.length() + 2);
-        return builder.append('@').append(author).append(' ').append(annotation).toString();
+        return annotation;
     }
 
 
@@ -132,7 +131,7 @@ public class AuthorAnnotation
      */
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return "@" + author;
     }
 
 

@@ -63,6 +63,9 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
      */
     public Multimer(GeneProduct... subunits) {
 
+        super(BasicProteinIdentifier.nextIdentifier(), null, null);
+
+
         // make an aggregated name
 
         StringBuilder idBuilder = new StringBuilder();
@@ -82,7 +85,6 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
 
         }
 
-        setIdentifier(new BasicProteinIdentifier(idBuilder.toString()));
         setName(nameBuilder.toString());
         setAbbreviation(abbrBuilder.toString());
 

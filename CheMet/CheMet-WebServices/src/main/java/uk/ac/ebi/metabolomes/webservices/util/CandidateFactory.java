@@ -179,7 +179,7 @@ public class CandidateFactory<I extends Identifier> {
 
 
         return new SynonymCandidateEntry("",
-                                         synonyms.size() > 0 ? synonyms.iterator().next() : "",
+                                         index != -1 ? synonymList.get(index) : "",
                                          synonyms,
                                          score, index);
 

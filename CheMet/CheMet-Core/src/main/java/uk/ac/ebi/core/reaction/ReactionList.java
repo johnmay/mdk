@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
  * @name    ReactionSet - 2011.10.04 <br>
@@ -40,7 +41,7 @@ import uk.ac.ebi.core.Metabolite;
 public final class ReactionList extends ArrayList<MetabolicReaction> implements Collection<MetabolicReaction> {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionList.class);
-    private Multimap<Metabolite, MetabolicReaction> participantMap = ArrayListMultimap.create();
+    private Multimap<Identifier, MetabolicReaction> participantMap = ArrayListMultimap.create();
 
     public ReactionList() {
     }
@@ -53,7 +54,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     public boolean add(MetabolicReaction rxn) {
 
         for (Participant<Metabolite, ?, ?> m : rxn.getAllReactionParticipants()) {
-            participantMap.get(m.getMolecule()).add(rxn);
+            participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
         }
 
 
@@ -76,9 +77,9 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
 
     public boolean remove(MetabolicReaction rxn) {
         for (Metabolite m : rxn.getAllReactionMolecules()) {
-            participantMap.get(m).remove(rxn);
-            if (participantMap.get(m).isEmpty()) {
-                participantMap.removeAll(m);
+            participantMap.get(m.getIdentifier()).remove(rxn);
+            if (participantMap.get(m.getIdentifier()).isEmpty()) {
+                participantMap.removeAll(m.getIdentifier());
             }
         }
         return super.remove(rxn);
@@ -102,14 +103,14 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
      * If not mapping is found an empty collection is returned
      */
     public Collection<MetabolicReaction> getReactions(Metabolite m) {
-        return participantMap.get(m);
+        return participantMap.get(m.getIdentifier());
     }
 
     public void rebuildParticipantMap() {
         participantMap.clear();
         for (MetabolicReaction rxn : this) {
             for (Participant<Metabolite, ?, ?> m : rxn.getAllReactionParticipants()) {
-                participantMap.get(m.getMolecule()).add(rxn);
+                participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
             }
         }
     }

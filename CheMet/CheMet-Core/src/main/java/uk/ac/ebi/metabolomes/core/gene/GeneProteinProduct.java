@@ -28,6 +28,7 @@ import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
  * @author johnmay
  * @date Apr 4, 2011
  */
+@Deprecated
 public class GeneProteinProduct
   extends OldGeneProduct
   implements Externalizable {
@@ -67,7 +68,7 @@ public class GeneProteinProduct
     public GeneProteinProduct(AbstractIdentifier identifier,
                               String sequence,
                               String description) {
-        setIdentifier(identifier);
+//        setIdentifier(identifier);
         setType(ProductType.PROTEIN);
         setSequence(sequence);
         setSequenceLength(sequence.length());

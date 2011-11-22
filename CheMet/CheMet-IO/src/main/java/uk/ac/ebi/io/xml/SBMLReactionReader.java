@@ -193,8 +193,6 @@ public class SBMLReactionReader {
             reaction.addProduct( getParticipant( sbmlReaction.getProduct( i ) ) );
         }
 
-        reaction.setIdentifier( new BasicReactionIdentifier( sbmlReaction.getId() ) );
-
         // TODO(johnmay): Add Enzyme annotations and modifiers
 
         return reaction;

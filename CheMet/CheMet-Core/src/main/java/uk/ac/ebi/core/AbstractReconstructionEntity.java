@@ -102,12 +102,6 @@ public class AbstractReconstructionEntity implements Cloneable, Externalizable {
         return identifier;
     }
 
-
-    public void setIdentifier(Identifier id) {
-        this.identifier = id;
-    }
-
-
 //    @Override
 //    public Object clone() throws CloneNotSupportedException {
 //        return super.clone();

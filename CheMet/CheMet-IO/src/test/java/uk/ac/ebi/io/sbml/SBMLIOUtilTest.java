@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.io.sbml;
 
 import uk.ac.ebi.io.xml.SBMLIOUtil;
@@ -26,7 +25,6 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
-
 /**
  *
  * @author johnmay
@@ -36,30 +34,25 @@ public class SBMLIOUtilTest {
     public SBMLIOUtilTest() {
     }
 
-
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
 
-
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
-
 
     @Test
     public void testGetDocument() throws SBMLException, XMLStreamException,
                                          UnsupportedEncodingException {
         Reconstruction recon = new Reconstruction(new ReconstructionIdentifier("mnb-project"),
                                                   new Taxonomy());
-        Metabolite m = new Metabolite();
-        m.setIdentifier(new BasicChemicalIdentifier("m1"));
+        Metabolite m = new Metabolite(new BasicChemicalIdentifier("m2"), null, null);
         m.setName("molecule name");
         m.addCrossReference(new ChEBIIdentifier("CHEBI:12435"));
         recon.addMetabolite(m);
 
-        Metabolite m2 = new Metabolite();
-        m2.setIdentifier(new BasicChemicalIdentifier("m2"));
+        Metabolite m2 = new Metabolite(new BasicChemicalIdentifier("m2"), null, null);
         m2.setName("different molecule");
         m2.addCrossReference(new ChEBIIdentifier("CHEBI:12436"));
         recon.addMetabolite(m2);
@@ -78,7 +71,4 @@ public class SBMLIOUtilTest {
         // todo assertEquals
 
     }
-
-
 }
-

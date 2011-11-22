@@ -76,7 +76,7 @@ public class MatchIndication {
     public enum Quality {
 
         Bad(Color.RED),
-        Okay(Color.ORANGE),
+        Okay(new Color(0xF87217)),
         Good(new Color(34, 139, 34));
         private Color color;
 

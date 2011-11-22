@@ -91,7 +91,9 @@ public class ChEBIChemicalData
             }
 
             if (type.equals("FORMULA")) {
-                doc.add(new Field("Formula", data, Field.Store.YES, Field.Index.ANALYZED));
+                if (!data.equals(".")) {
+                    doc.add(new Field("Formula", data, Field.Store.YES, Field.Index.ANALYZED));
+                }
             } else if (type.equals("CHARGE")) {
                 doc.add(new Field("Charge", data, Field.Store.YES, Field.Index.ANALYZED));
             }
@@ -108,7 +110,8 @@ public class ChEBIChemicalData
         }
 
         // normalise chemical data accross secondary ids
-        for (String id : docs.keySet()) {
+        List<String> keys = new ArrayList(docs.keySet());
+        for (String id : keys) {
             String oid = internalXref.get(id);
 
             if (oid != null) {
@@ -119,6 +122,7 @@ public class ChEBIChemicalData
                 if (docO == null) {
                     docO = new Document();
                     docO.add(new Field("Id", "CHEBI:" + oid, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+                    docs.put(oid, docO);
                 }
 
                 merge(docI, docO, "Id");
@@ -133,6 +137,7 @@ public class ChEBIChemicalData
                     if (docO == null) {
                         docO = new Document();
                         docO.add(new Field("Id", "CHEBI:" + other, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+                        docs.put(other, docO);
                     }
 
                     merge(docI, docO, "Id");
@@ -150,7 +155,6 @@ public class ChEBIChemicalData
 
     }
 
-    
     public Analyzer getAnalzyer() {
         return analzyer;
     }

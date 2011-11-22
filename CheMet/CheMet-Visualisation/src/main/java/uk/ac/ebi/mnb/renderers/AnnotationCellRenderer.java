@@ -62,9 +62,7 @@ public class AnnotationCellRenderer extends DefaultRenderer {
         String text = Joiner.on(token).join(collection);
 
 
-        this.setText(html ? ViewUtils.htmlWrapper(text) : text);
-
-        table.setRowHeight(row, Math.max(table.getRowHeight(row), this.getPreferredSize().height));
+        this.setText(html ? ViewUtils.htmlWrapper(text) : text);      
 
         this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
         this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
