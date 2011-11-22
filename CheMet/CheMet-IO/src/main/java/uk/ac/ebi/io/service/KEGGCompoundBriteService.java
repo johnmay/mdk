@@ -23,6 +23,7 @@ package uk.ac.ebi.io.service;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
+import javax.swing.text.StyledEditorKit.BoldAction;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
@@ -87,6 +88,13 @@ public class KEGGCompoundBriteService
         return this.search(query);
     }
 
+    /**
+     * Does an exact term search of brite category on the index, returning all the KEGG Compound identifiers that match.
+     * It looks for the query string in all the levels of the Brite hierarchy loaded in the index.
+     * 
+     * @param keggBriteCategory
+     * @return collection of KEGGCompoundIdentifier annotated with this category. 
+     */
     public Collection<KEGGCompoundIdentifier> searchForProperty(String keggBriteCategory) {
         Query entryCat = new TermQuery(new Term(KEGGCompBriteLuceneFields.BriteEntry.toString(),keggBriteCategory));
         Query defCat = new TermQuery(new Term(KEGGCompBriteLuceneFields.BriteDefinition.toString(),keggBriteCategory));
@@ -104,7 +112,34 @@ public class KEGGCompoundBriteService
         
         return this.search(query);
     }
+    
+    public Boolean compoundHasCategory(String keggCompID, String keggBriteCategory) {
+        BooleanQuery query = new BooleanQuery();
+        
+        for (KEGGCompBriteLuceneFields fields : KEGGCompBriteLuceneFields.values()) {
+            if(fields.equals(KEGGCompBriteLuceneFields.KeggCompID))
+                continue;
+            if(fields.equals(KEGGCompBriteLuceneFields.CompoundName))
+                continue;
+            Query nQuery = new TermQuery(new Term(fields.toString(),keggBriteCategory));
+            query.add(nQuery,BooleanClause.Occur.SHOULD);
+        }
+        
+        for (KEGGCompBriteCategories cat : KEGGCompBriteCategories.values()) {
+            Query nQuery = new TermQuery(new Term(cat.toString(),keggBriteCategory));
+            query.add(nQuery,BooleanClause.Occur.SHOULD);
+        }
+        
+        return this.search(query).size() > 0;
+    }
 
+    /**
+     * Given a KEGGCompoundIdentifier, it retrieves all the brite categories annotated to it in the index. The hierarchy
+     * is lost, just a list of categories is retrieved.
+     * 
+     * @param identifier
+     * @return collection of brite categories annotated.
+     */
     public Collection<String> getProperties(KEGGCompoundIdentifier identifier) {
         Query compIDQuery = new TermQuery(new Term(KEGGCompBriteLuceneFields.KeggCompID.toString(),identifier.getAccession()));
         return reverseSearch(compIDQuery);
