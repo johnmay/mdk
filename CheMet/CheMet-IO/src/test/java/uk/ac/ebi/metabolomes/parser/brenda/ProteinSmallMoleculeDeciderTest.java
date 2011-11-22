@@ -463,6 +463,7 @@ public class ProteinSmallMoleculeDeciderTest {
         candidates2expectedOutcome.put("Apo-[propionyl-CoA:carbon-dioxide ligase (ADP-forming)]", true);
         candidates2expectedOutcome.put("Nitrile", false);
         candidates2expectedOutcome.put("Dermatan 6'-sulfate", false);
+        candidates2expectedOutcome.put("XYZa protein-<i>S</i>-methyl-L-cysteine", true);
     }
 
     @After
@@ -475,6 +476,7 @@ public class ProteinSmallMoleculeDeciderTest {
     @Test
     public void testIsProteinName() {
         System.out.println("isProteinName");
+        System.out.println("Size: "+candidates2expectedOutcome.size());
         for (String name : this.candidates2expectedOutcome.keySet()) {
             boolean expResult = candidates2expectedOutcome.get(name);
             boolean result = ProteinSmallMoleculeDecider.isProteinName(name);
