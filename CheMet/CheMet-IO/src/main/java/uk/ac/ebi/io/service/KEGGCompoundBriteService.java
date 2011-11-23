@@ -114,7 +114,11 @@ public class KEGGCompoundBriteService
     }
     
     public Boolean compoundHasCategory(String keggCompID, String keggBriteCategory) {
-        BooleanQuery query = new BooleanQuery();
+        Query identQuery = new TermQuery(new Term(KEGGCompBriteLuceneFields.KeggCompID.toString(),keggCompID));
+        
+        BooleanQuery booleanQuery = new BooleanQuery();
+        BooleanQuery finalQuery = new BooleanQuery();
+        finalQuery.add(identQuery,BooleanClause.Occur.MUST);
         
         for (KEGGCompBriteLuceneFields fields : KEGGCompBriteLuceneFields.values()) {
             if(fields.equals(KEGGCompBriteLuceneFields.KeggCompID))
@@ -122,15 +126,16 @@ public class KEGGCompoundBriteService
             if(fields.equals(KEGGCompBriteLuceneFields.CompoundName))
                 continue;
             Query nQuery = new TermQuery(new Term(fields.toString(),keggBriteCategory));
-            query.add(nQuery,BooleanClause.Occur.SHOULD);
+            booleanQuery.add(nQuery,BooleanClause.Occur.SHOULD);
         }
         
         for (KEGGCompBriteCategories cat : KEGGCompBriteCategories.values()) {
             Query nQuery = new TermQuery(new Term(cat.toString(),keggBriteCategory));
-            query.add(nQuery,BooleanClause.Occur.SHOULD);
+            booleanQuery.add(nQuery,BooleanClause.Occur.SHOULD);
         }
         
-        return this.search(query).size() > 0;
+        finalQuery.add(booleanQuery,BooleanClause.Occur.MUST);
+        return this.search(finalQuery).size() > 0;
     }
 
     /**
@@ -167,7 +172,9 @@ public class KEGGCompoundBriteService
                         ids.add(ans);
                 }
                 for (KEGGCompBriteCategories catFields : KEGGCompBriteCategories.values()) {
-                    ids.add(getValue(scoreDoc, catFields.toString()));
+                    String value = getValue(scoreDoc, catFields.toString());
+                    if(value!=null && !value.equalsIgnoreCase("null"))
+                        ids.add(value);
                 }
             }
         } catch (IOException ex) {

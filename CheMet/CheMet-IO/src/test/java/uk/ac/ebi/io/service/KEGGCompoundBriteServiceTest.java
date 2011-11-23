@@ -95,6 +95,7 @@ public class KEGGCompoundBriteServiceTest {
     public void testGetProperties() {
         System.out.println("getProperties");
         KEGGCompoundIdentifier identifier = new KEGGCompoundIdentifier("C03525");
+        //KEGGCompoundIdentifier identifier = new KEGGCompoundIdentifier("C10469"); // isoeugenol
         KEGGCompoundBriteService instance = KEGGCompoundBriteService.getInstance();
         //Collection expResult = null;
         Collection<String> result = instance.getProperties(identifier);
@@ -104,5 +105,21 @@ public class KEGGCompoundBriteServiceTest {
         }
         //assertEquals(expResult, result);
         
+    }
+    
+    @Test
+    public void testCompoundHasCategory() {
+        System.out.println("compoundHasCategory");
+        KEGGCompoundIdentifier identifier = new KEGGCompoundIdentifier("C03525");
+        //KEGGCompoundIdentifier identifier = new KEGGCompoundIdentifier("C10469"); // isoeugenol
+        KEGGCompoundBriteService instance = KEGGCompoundBriteService.getInstance();
+        assertTrue(instance.compoundHasCategory(identifier.getAccession(), "Metabolite"));
+        assertTrue(instance.compoundHasCategory(identifier.getAccession(), "Carbohydrates"));
+        assertFalse(instance.compoundHasCategory(identifier.getAccession(), "Lipids"));
+        assertFalse(instance.compoundHasCategory("C10469", "Lipids"));
+        assertFalse(instance.compoundHasCategory("C10469", "Carbohydrates"));
+        assertFalse(instance.compoundHasCategory("C10469", "Peptides"));
+        assertTrue(instance.compoundHasCategory("C00129", "Terpenoids"));
+        assertFalse(instance.compoundHasCategory("C00089", "Terpenoids"));
     }
 }
