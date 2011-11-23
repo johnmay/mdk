@@ -57,12 +57,12 @@ public class IdentifierCurationStatusService
         try {
             searcher = new IndexSearcher(getDirectory(), true);
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(IdentifierCurationStatusService.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error("Problems loading index searcher", ex);
         }
     }
 
     public static IdentifierCurationStatusService getInstance() {
-        return PubChemCompoundServiceHolder.INSTANCE;
+        return IdentifierCurationStatusServiceHolder.INSTANCE;
     }
 
     public String getManualCuration(Identifier identifier, String collection) {
@@ -104,7 +104,7 @@ public class IdentifierCurationStatusService
         return search(query);
     }
 
-    private static class PubChemCompoundServiceHolder {
+    private static class IdentifierCurationStatusServiceHolder {
 
         private static final IdentifierCurationStatusService INSTANCE = new IdentifierCurationStatusService();
     }
