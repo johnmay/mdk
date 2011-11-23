@@ -121,5 +121,7 @@ public class KEGGCompoundBriteServiceTest {
         assertFalse(instance.compoundHasCategory("C10469", "Peptides"));
         assertTrue(instance.compoundHasCategory("C00129", "Terpenoids"));
         assertFalse(instance.compoundHasCategory("C00089", "Terpenoids"));
+        assertTrue(instance.compoundHasCategory("C11015", "Pesticides and herbicides"));
+        assertTrue(instance.compoundHasCategory("C00147", "Nucleic acids"));
     }
 }
