@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
+import uk.ac.ebi.visualisation.molecule.access.EntityAccessor;
 
 /**
  *          MoleculeChooser - 2011.10.31 <br>
@@ -47,9 +48,9 @@ public class MoleculeTable extends JTable {
     private static final Logger LOGGER = Logger.getLogger(MoleculeTable.class);
     private Color lightGreen = new Color(200, 255, 200);
 
-    public MoleculeTable() {
-        super(new MoleculeTableModel());
-   
+    public MoleculeTable(EntityAccessor... accessors) {
+        super(new MoleculeTableModel(accessors));
+
         setDefaultRenderer(Synonym.class, new AnnotationCellRenderer(true, "<br>"));
         setSelectionBackground(lightGreen);
         setSelectionForeground(Color.BLACK);

@@ -21,6 +21,7 @@
 package uk.ac.ebi.visualisation.molecule;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +37,7 @@ import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.visualisation.molecule.access.EntityAccessor;
 
 /**
  *          MoleculeTableModel - 2011.10.31 <br>
@@ -46,32 +48,35 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  */
 public class MoleculeTableModel extends DefaultTableModel {
 
-    private String[] columns = new String[]{"Name", "Synonyms", "Charge"};
-    private Class[] colType = new Class[]{String.class, Synonym.class, MolecularFormula.class, ChemicalStructure.class, Integer.class};
     private List<Metabolite> metabolites = new ArrayList();
     private Map<Metabolite, CandidateEntry> map = new HashMap();
+    private List<EntityAccessor> columns = new ArrayList<EntityAccessor>();
 
-    public MoleculeTableModel() {
+    public MoleculeTableModel(EntityAccessor... accessors) {
+        columns = Arrays.asList(accessors);
     }
 
     public void set(List<Metabolite> metabolites) {
 
         this.metabolites = metabolites;
 
-        Object[][] data = new Object[metabolites.size()][3];
+        Object[][] data = new Object[metabolites.size()][columns.size()];
 
-        for (int i = 0; i < metabolites.size(); i++) {
-            Metabolite m = metabolites.get(i);
-            data[i][0] = metabolites.get(i).getName();
-            data[i][1] = (Collection) metabolites.get(i).getAnnotationsExtending(Synonym.class);
-            //data[i][2] = metabolites.get(i).getAnnotationsExtending(MolecularFormula.class);
-            //data[i][3] = m.hasStructureAssociated() ? m.getFirstChemicalStructure() : null;
-            data[i][2] = metabolites.get(i).getCharge();
+        for (int i = 0; i < columns.size(); i++) {
+            for (int j = 0; j < metabolites.size(); j++) {
+                Metabolite m = metabolites.get(j);
+                data[j][i] = columns.get(i).getValue(m);
+            }
         }
 
-        setDataVector(data, columns);
+        setDataVector(data, new String[columns.size()]);
         fireTableStructureChanged();
 
+    }
+
+    @Override
+    public String getColumnName(int column) {
+        return columns.get(column).getName();
     }
 
     public void setCandidates(Collection<SynonymCandidateEntry> candidates) {
@@ -109,7 +114,7 @@ public class MoleculeTableModel extends DefaultTableModel {
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        return colType[columnIndex];
+        return columns.get(columnIndex).getColumnClass();
     }
 
     public Collection<Metabolite> getEntities(int[] index) {
