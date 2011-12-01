@@ -42,8 +42,10 @@ public class FormulaCellRender extends DefaultRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
         Collection collection = (Collection) value;
-        if (collection.size() == 1) {
+        if (collection.isEmpty() == false) {
             this.setText(ViewUtils.htmlWrapper(((MolecularFormula) collection.iterator().next()).toHTML()));
+        } else {
+            this.setText("");
         }
 
         this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());

@@ -24,8 +24,12 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.RenderedImage;
+import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -40,13 +44,15 @@ import javax.swing.ImageIcon;
 public class ViewUtils {
 
     private static final org.apache.log4j.Logger logger =
-            org.apache.log4j.Logger.getLogger(ViewUtils.class);
+                                                 org.apache.log4j.Logger.getLogger(ViewUtils.class);
     // mono space fonts
     public static final Font COURIER_NEW_PLAIN_11 = new Font("Courier New", Font.PLAIN, 11);
     public static final Font MENOL_PLAIN_11 = new Font("Menlo", Font.PLAIN, 11);
     // normal fonts
     public static final Font GILL_SANS_PLAIN_12 = new Font("Gill Sans", Font.PLAIN, 12);
     public static final Font GILL_SANS_BOLD_12 = GILL_SANS_PLAIN_12.deriveFont(Font.BOLD);
+    public static final Font GILL_SANS_UNDERLINE_PLAIN_12 = getUnderlineFont("Gill Sans", 12);
+    public static final Font GILL_SANS_UNDERLINE_BOLD_12 = getUnderlineBoldFont("Gill Sans", 12);
     public static final Font VERDANA_PLAIN_11 = new Font("SansSerif", Font.PLAIN, 11);
     public static final Font VERDANA_BOLD_11 = new Font("SansSerif", Font.BOLD, 11);
     public static final Font VERDANA_UNDERLINE_PLAIN_11 = getUnderlineFont("SansSerif", 11);
@@ -61,21 +67,21 @@ public class ViewUtils {
     public static final Font DEFAULT_MONO_SPACE_FONT = MENOL_PLAIN_11;
     public static final Font DEFAULT_BODY_FONT = GILL_SANS_PLAIN_12;
     public static final Font DEFAULT_HEADER_FONT = GILL_SANS_BOLD_12;
-    public static final Font DEFAULT_LINK_FONT = VERDANA_UNDERLINE_PLAIN_11;
-    public static final Font DEFAULT_LINK_HOVER_FONT = VERDANA_UNDERLINE_BOLD_11;
+    public static final Font DEFAULT_LINK_FONT = GILL_SANS_UNDERLINE_PLAIN_12;
+    public static final Font DEFAULT_LINK_HOVER_FONT = GILL_SANS_UNDERLINE_BOLD_12;
     // image icons
     public static final ImageIcon icon_16x16 = getIcon("images/networkbuilder_16x16.png",
-            "Metabolic Network Builder");
+                                                       "Metabolic Network Builder");
     public static final ImageIcon icon_32x32 = getIcon("images/networkbuilder_32x32.png",
-            "Metabolic Network Builder");
+                                                       "Metabolic Network Builder");
     public static final ImageIcon task = getIcon("images/runtasks_32x32.png",
-            "Metabolic Network Builder");
+                                                 "Metabolic Network Builder");
     public static final ImageIcon icon_64x64 = getIcon("images/networkbuilder_64x64.png",
-            "Metabolic Network Builder");
+                                                       "Metabolic Network Builder");
     public static final ImageIcon WARNING_ICON_16x16 = getIcon("images/cutout/warning_16x16.png",
-            "Warning");
+                                                               "Warning");
     public static final ImageIcon ERROR_ICON_16x16 = getIcon("images/cutout/error_16x16.png",
-            "Warning");
+                                                             "Warning");
     // buffered images
     public static final BufferedImage logo_32x32 = getImage(
             "images/networkbuilder_32x32.png");
@@ -100,7 +106,7 @@ public class ViewUtils {
      * @return
      */
     public static ImageIcon getIcon(String path,
-            String description) {
+                                    String description) {
 
         java.net.URL imageURL = ViewUtils.class.getResource(path);
 
@@ -148,7 +154,7 @@ public class ViewUtils {
 
     public static FormLayout formLayoutHelper(int ncols, int nrows, int ygap, int xgap) {
         return new FormLayout(goodiesFormHelper(ncols, ygap, true),
-                goodiesFormHelper(nrows, xgap, false));
+                              goodiesFormHelper(nrows, xgap, false));
     }
 
     /**
@@ -176,7 +182,7 @@ public class ViewUtils {
             sb.append(JGOODIES_PREFERED_WIDTH);
             if ((i + 1) < nelements) {
                 sb.append(JGOODIES_SEPERATOR).append(gap).append(JGOODIES_DLU).append(JGOODIES_SEPERATOR
-                        + "");
+                                                                                      + "");
             }
         }
         return sb.toString();
@@ -206,5 +212,30 @@ public class ViewUtils {
         return new Font(map);
     }
 
-
+    /**
+     * Converts a RenderedImage to a buffered image
+     * Code source: http://www.jguru.com/faq/view.jsp?EID=114602
+     * @param img
+     * @return
+     */
+    public static BufferedImage convertRenderedImage(RenderedImage img) {
+        if (img instanceof BufferedImage) {
+            return (BufferedImage) img;
+        }
+        ColorModel cm = img.getColorModel();
+        int width = img.getWidth();
+        int height = img.getHeight();
+        WritableRaster raster = cm.createCompatibleWritableRaster(width, height);
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        Hashtable properties = new Hashtable();
+        String[] keys = img.getPropertyNames();
+        if (keys != null) {
+            for (int i = 0; i < keys.length; i++) {
+                properties.put(keys[i], img.getProperty(keys[i]));
+            }
+        }
+        BufferedImage result = new BufferedImage(cm, raster, isAlphaPremultiplied, properties);
+        img.copyData(raster);
+        return result;
+    }
 }
