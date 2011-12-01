@@ -18,6 +18,7 @@ import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.core.reconstruction.ReconstructionContents;
 import uk.ac.ebi.core.reconstruction.ReconstructionProperites;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
@@ -249,6 +250,16 @@ public class Reconstruction
 
 
 
+    }
+
+    @Override
+    public ReconstructionIdentifier getIdentifier() {
+        return (ReconstructionIdentifier) super.getIdentifier();
+    }
+
+    @Override
+    public String toString() {
+        return getAccession();
     }
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {

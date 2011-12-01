@@ -12,9 +12,9 @@ package uk.ac.ebi.chemet.entities.reaction;
  */
 public enum Reversibility {
 
-    REVERSIBLE( "<==>" ),
-    IRREVERSIBLE_LEFT_TO_RIGHT( "-->" ),
-    IRREVERSIBLE_RIGHT_TO_LEFT( "<--" ),
+    REVERSIBLE( "\u21CC" ),
+    IRREVERSIBLE_LEFT_TO_RIGHT( "\u2192" ),
+    IRREVERSIBLE_RIGHT_TO_LEFT( "\u2190" ),
     UNKNOWN( "<?>" );
     private String symbol;
 

@@ -8,10 +8,11 @@ import com.google.common.base.Joiner;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
-import java.util.Stack;
 import java.util.prefs.Preferences;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
@@ -38,10 +39,17 @@ public class ReconstructionManager {
 
     private ReconstructionManager() {
 
-        // get the recently open files
+        // get the recently open files, remove entries that don't exists
         String filenames = Preferences.userNodeForPackage(this.getClass()).get("recent.files", "");
         String[] names = filenames.split(File.pathSeparator);
-        recent.addAll(Arrays.asList(names).subList(0, Math.min(names.length, 10)));
+        List<String> valid = new ArrayList();
+        for (String file : names) {
+            File f = new File(file);
+            if (f.exists()) {
+                valid.add(f.getAbsolutePath());
+            }
+        }
+        recent.addAll(valid.subList(0, Math.min(valid.size(), 10)));
 
 
     }
@@ -60,6 +68,10 @@ public class ReconstructionManager {
      */
     public static ReconstructionManager getInstance() {
         return ProjectManagerHolder.INSTANCE;
+    }
+
+    public Collection<Reconstruction> getProjects() {
+        return projects;
     }
 
     /**
