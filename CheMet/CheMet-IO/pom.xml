@@ -72,6 +72,11 @@
             <artifactId>lucene-core</artifactId>
             <version>3.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>chemet-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -55,14 +55,14 @@ public class ReactionMatrixIO {
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( ReactionMatrixIO.class );
     private static char separator = '\t';
     private static char quoteCharacter = '\0';
-    private static boolean convertDoubleToInChI = true;
+    private static boolean convertDoubles = true;
 
     /**
      * Invoking method informers writer methods to convert double value to integers
-     * @param convertDoubleToInChI
+     * @param convert
      */
-    public static void setConvertDoubleToInChI( boolean convertDoubleToInChI ) {
-        ReactionMatrixIO.convertDoubleToInChI = convertDoubleToInChI;
+    public static void setConvertDoubleToInChI( boolean convert ) {
+        ReactionMatrixIO.convertDoubles = convert;
     }
 
     /**
@@ -214,7 +214,7 @@ public class ReactionMatrixIO {
             copy[0] = s.getMolecule( i ).toString();
             for ( int j = 0; j < m; j++ ) {
                 // if the value is null
-                copy[j + 1] = convertDoubleToInChI ?
+                copy[j + 1] = convertDoubles ?
                               Integer.toString( s.get( i , j ).intValue() ) :
                               s.get( i , j ).toString();
             }
