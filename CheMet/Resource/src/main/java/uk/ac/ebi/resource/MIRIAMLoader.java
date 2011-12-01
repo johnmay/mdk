@@ -26,6 +26,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import uk.ac.ebi.chemet.resource.XMLHelper;
+import uk.ac.ebi.interfaces.Resource;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
  * MIRIAMLoader.java – MetabolicDevelopmentKit – Jun 25, 2011
@@ -39,6 +41,7 @@ public class MIRIAMLoader {
             MIRIAMLoader.class);
     private Map<String, MIRIAMEntry> nameEntryMap = new HashMap<String, MIRIAMEntry>(50);
     private Map<String, MIRIAMEntry> urnEntryMap = new HashMap<String, MIRIAMEntry>(50);
+    private Map<Resource, Identifier> idMap = new HashMap<Resource, Identifier>(50);
     private MIRIAMEntry[] mirs = new MIRIAMEntry[200];
 
     /**
@@ -108,7 +111,7 @@ public class MIRIAMLoader {
                         NodeList synonymNodes = datatypeChild.getChildNodes();
                         for (int i = 0; i < synonymNodes.getLength(); i++) {
                             String synonym = synonymNodes.item(i).getTextContent().trim();
-                            if(synonym.isEmpty() == Boolean.FALSE){
+                            if (synonym.isEmpty() == Boolean.FALSE) {
                                 synonyms.add(synonym);
                             }
                         }
@@ -125,6 +128,9 @@ public class MIRIAMLoader {
             }
             datatypeNode = datatypeNode.getNextSibling();
         }
+
+
+
     }
 
     private String getURL(Node node) {
@@ -156,8 +162,28 @@ public class MIRIAMLoader {
      * @param urn such as urn:miriam:obo.chebi:CHEBI%3A17196
      * @return the identifier i.e. "CHEBI:17196" in the above example
      */
-    public static String getIdentifier(String urn) {
+    public static String getAccession(String urn) {
         return urn.substring(urn.lastIndexOf(":") + 1).replace("%3A", ":");
+    }
+
+    public Identifier getIdentifier(String urn) {
+
+        String urnPart = urn.substring(0, urn.lastIndexOf(":"));
+
+        // build the map if it's empty
+        if (idMap.isEmpty()) {
+            for (Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers()) {
+                idMap.put(id.getResource(), id);
+            }
+        }
+
+        // get a new instance of the identifier and set the accession if not null
+        Identifier id = idMap.get(urnEntryMap.get(urnPart)).newInstance();
+        
+        if(id != null) id.setAccession(getAccession(urn)); // could throw exception for missing URN
+
+        return id;
+
     }
 
     public static void main(String[] args) {
