@@ -14,10 +14,10 @@
  */
 package uk.ac.ebi.metabolomes.core.reaction;
 
+import com.google.common.base.Joiner;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.interfaces.IMoleculeSet;
@@ -131,7 +131,7 @@ public class BiochemicalReaction
                 ids.add( inchis.get( i ).getName() );
             }
         }
-        return StringUtils.join( ids , " + " );
+        return Joiner.on(" + ").join(ids);
     }
 
     @Override

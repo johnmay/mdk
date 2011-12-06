@@ -12,6 +12,7 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.hamcrest.CoreMatchers;
 import org.junit.AfterClass;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import org.junit.Assert;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.surface.NeighborList;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -62,6 +64,50 @@ public class StereoSeedTest {
 
         Assert.assertThat(factory.getHash(dalanine), CoreMatchers.not(factory.getHash(lalanine)));
 
+
+    }
+
+
+    /**
+     * Tests that when using the stereo-seed
+     * @throws CDKException
+     * @throws IOException
+     */
+    @Test
+    public void testStereoAlteration() throws CDKException, IOException {
+
+        IMolecule mol1, mol2 = null;
+
+        {
+            InputStream stream = getClass().getResourceAsStream("C00129.mol");
+            MDLV2000Reader reader = new MDLV2000Reader(stream);
+            mol1 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+            reader.close();
+        }
+        {
+            InputStream stream = getClass().getResourceAsStream("C00235.mol");
+            MDLV2000Reader reader = new MDLV2000Reader(stream);
+            mol2 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+            reader.close();
+        }
+
+        Assert.assertNotNull("Failed to loaded C00129.mol from resource", mol1);
+        Assert.assertNotNull("Failed to loaded C00235.mol from resource", mol2);
+
+
+        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+        Set<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                 ConnectedAtomSeed.class,
+                                                                 BondOrderSumSeed.class);
+
+
+        Assert.assertNotSame(factory.getHash(mol1, seeds),
+                             factory.getHash(mol2, seeds));
+
+        seeds.add(SeedFactory.getInstance().getSeed(StereoSeed.class));
+
+        Assert.assertNotSame(factory.getHash(mol1, seeds),
+                             factory.getHash(mol2, seeds));
 
     }
 
@@ -109,9 +155,9 @@ public class StereoSeedTest {
 
         // we then test that all those with the same number of stereo-bonds (type
         // specific) generate the same hash value
-        for (Map map: values.keySet()) {
-            if( values.get(map).size() > 1 ){
-                Set unique = new HashSet( values.get(map));
+        for (Map map : values.keySet()) {
+            if (values.get(map).size() > 1) {
+                Set unique = new HashSet(values.get(map));
                 Assert.assertThat(unique.size(), CoreMatchers.is(1));
             }
         }

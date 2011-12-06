@@ -19,6 +19,7 @@ import uk.ac.ebi.core.reconstruction.ReconstructionContents;
 import uk.ac.ebi.core.reconstruction.ReconstructionProperites;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
@@ -53,6 +54,8 @@ public class Reconstruction
     private ProductCollection products;
     private ReactionList reactions;
     private MetaboliteCollection metabolites;
+    // s matrix
+    private StoichiometricMatrix matrix;
 
     /**
      * Constructor mainly used for creating a new Reconstruction
@@ -313,5 +316,17 @@ public class Reconstruction
     @Override
     public String getBaseType() {
         return BASE_TYPE;
+    }
+
+    public void setMatix(StoichiometricMatrix<CompartmentalisedMetabolite, MetabolicReaction> matrix) {
+        this.matrix = matrix;
+    }
+
+    public StoichiometricMatrix<CompartmentalisedMetabolite, MetabolicReaction> getMatrix() {
+        return matrix;
+    }
+
+    public boolean hasMatrix() {
+        return matrix != null;
     }
 }

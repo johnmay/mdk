@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
+import com.google.common.base.Joiner;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -31,7 +32,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
@@ -471,8 +471,8 @@ public class Reaction<M, S, C>
     public String toString() {
         StringBuilder sb = new StringBuilder(40);
 
-        sb.append(StringUtils.join(reactants, " + ")).append(' ').append(reversibility).append(' ').
-                append(StringUtils.join(products, " + "));
+        sb.append(Joiner.on(" + ").join(reactants)).append(' ').append(reversibility).append(' ').
+                append(Joiner.on(" + ").join(products));
 
 
         return sb.toString();
@@ -550,7 +550,7 @@ public class Reaction<M, S, C>
     public void writeExternal(ObjectOutput out, MetaboliteCollection metabolites) throws IOException {
         super.writeExternal(out);
         out.writeUTF(reversibility.name());
-        out.writeUTF(reactants.get(0).getClass().getSimpleName());
+        out.writeUTF(reactants.isEmpty() ? products.get(0).getClass().getSimpleName() : reactants.get(0).getClass().getSimpleName());
         out.writeInt(reactants.size());
         for (Participant p : reactants) {
             if (p instanceof MetaboliteParticipant) {
