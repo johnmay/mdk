@@ -147,7 +147,7 @@ public class ObservationCollection {
 //        return get( BlastHit.class );
 //    }
     // map of task description -> observation and task type (byte index) -> observation
-    private Multimap<AnnotatedEntity, Observation> taskMap = ArrayListMultimap.create();
+    private Multimap<AnnotatedEntity, Observation> sourceMap = ArrayListMultimap.create();
     private Multimap<Byte, Observation> typeMap = ArrayListMultimap.create();
 
     public ObservationCollection() {
@@ -155,7 +155,7 @@ public class ObservationCollection {
 
     public boolean add(Observation observation) {
         AnnotatedEntity source = observation.getSource();
-        taskMap.put(source, observation);
+        sourceMap.put(source, observation);
         return typeMap.put(observation.getIndex(), observation);
     }
 
@@ -168,7 +168,7 @@ public class ObservationCollection {
     }
 
     public boolean remove(Observation observation) {
-        taskMap.remove(observation.getSource(), observation);
+        sourceMap.remove(observation.getSource(), observation);
         return typeMap.remove(observation.getIndex(), observation);
     }
 
@@ -181,11 +181,15 @@ public class ObservationCollection {
         return typeMap.get(ObservationLoader.getInstance().getIndex(type));
     }
 
+    public Collection<Observation> getAll(){
+        return sourceMap.values();
+    }
+
     public void writeExternal(ObjectOutput out) throws IOException {
 
-        List<AnnotatedEntity> sources = new ArrayList(taskMap.keySet());
+        List<AnnotatedEntity> sources = new ArrayList(sourceMap.keySet());
 
-        out.writeInt(taskMap.keySet().size());
+        out.writeInt(sourceMap.keySet().size());
 
         for (AnnotatedEntity opt : sources) {
             out.writeObject(opt);
@@ -221,7 +225,7 @@ public class ObservationCollection {
             for (int j = 0; j < n; j++) {
                 Observation observation = factory.readExternal(index, in, sources);
                 typeMap.put(index, observation);
-                taskMap.put(observation.getSource(), observation);
+                sourceMap.put(observation.getSource(), observation);
             }
         }
 

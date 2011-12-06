@@ -65,8 +65,6 @@ public class MatrixPane extends JScrollPane {
                            rxns);
         setViewportView(table);
 
-        System.out.println(table.getColumnCount());
-
         table.setFont(ViewUtils.DEFAULT_BODY_FONT.deriveFont(10.0f));
 
         Enumeration<TableColumn> columns = table.getColumnModel().getColumns();

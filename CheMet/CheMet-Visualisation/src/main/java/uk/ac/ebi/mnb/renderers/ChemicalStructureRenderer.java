@@ -60,9 +60,10 @@ public class ChemicalStructureRenderer extends DefaultRenderer {
                 this.setIcon(new ImageIcon(MoleculeRenderer.getInstance().getImage(structure.getMolecule(),
                                                                                    new Rectangle(0, 0, table.getRowHeight(), table.getRowHeight()))));
             } catch (CDKException ex) {
-                Logger.getLogger(ChemicalStructureRenderer.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println("Unable to render molecule: " + ex.getMessage());
             }
-        } else{
+
+        } else {
             this.setIcon(null);
         }
 

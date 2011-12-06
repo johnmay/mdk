@@ -1,4 +1,3 @@
-
 /**
  * MoleculeRenderer.java
  *
@@ -48,7 +47,6 @@ import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.templates.MoleculeFactory;
 
-
 /**
  *          MoleculeRenderer – 2011.09.08 <br>
  *          Class description
@@ -63,27 +61,23 @@ public class MoleculeRenderer {
     private RendererModel model;
     private final StructureDiagramGenerator structureGenerator = new StructureDiagramGenerator();
 
-
     private MoleculeRenderer() {
         List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
         generators.add(new BasicSceneGenerator());
-        generators.add(new BasicAtomGenerator());
         generators.add(new BasicBondGenerator());
+        generators.add(new BasicAtomGenerator());
         renderer = new AtomContainerRenderer(generators, new AWTFontManager());
         model = renderer.getRenderer2DModel();
     }
-
 
     public static MoleculeRenderer getInstance() {
         return MoleculeRendererHolder.INSTANCE;
     }
 
-
     private static class MoleculeRendererHolder {
 
         private static final MoleculeRenderer INSTANCE = new MoleculeRenderer();
     }
-
 
     public BufferedImage getImage(IAtomContainer molecule, Rectangle bounds) throws CDKException {
 
@@ -94,6 +88,8 @@ public class MoleculeRenderer {
         structureGenerator.setMolecule(new Molecule(molecule));
         structureGenerator.generateCoordinates();
         IMolecule moleculeWithXYZ = structureGenerator.getMolecule();
+        g2.setColor(Color.WHITE);
+        g2.fill(bounds);
         renderer.paint(moleculeWithXYZ, new AWTDrawVisitor(g2), bounds, true);
         g2.dispose();
 
@@ -101,15 +97,11 @@ public class MoleculeRenderer {
 
     }
 
-
     public static void main(String[] args) throws CDKException, IOException {
-            MoleculeRenderer MOL_RENDERER = MoleculeRenderer.getInstance();
-            BufferedImage buffImg = MOL_RENDERER.getImage(MoleculeFactory.make123Triazole(),new Rectangle(200,200));
-            File tmp = File.createTempFile("test", ".png");
-            ImageIO.write(buffImg, "png", new FileOutputStream(tmp));
-            System.out.println("writen image to tmp file: " + tmp);
+        MoleculeRenderer MOL_RENDERER = MoleculeRenderer.getInstance();
+        BufferedImage buffImg = MOL_RENDERER.getImage(MoleculeFactory.make123Triazole(), new Rectangle(200, 200));
+        File tmp = File.createTempFile("test", ".png");
+        ImageIO.write(buffImg, "png", new FileOutputStream(tmp));
+        System.out.println("writen image to tmp file: " + tmp);
     }
-
-
 }
-

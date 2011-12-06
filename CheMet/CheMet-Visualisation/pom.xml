@@ -17,7 +17,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <cdk.version>1.4.5</cdk.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -30,6 +32,8 @@
             <artifactId>log4j</artifactId>
             <version>1.2.16</version>
         </dependency>
+
+        <!-- Internal Dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>CheMet-IO</artifactId>
@@ -40,30 +44,41 @@
             <artifactId>CheMet-Core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+
+        <!-- Chemistry Development Kit -->
         <dependency>
             <artifactId>cdk-render</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <type>jar</type>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <artifactId>cdk-sdg</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <type>jar</type>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <artifactId>cdk-renderawt</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <type>jar</type>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <artifactId>cdk-renderbasic</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <type>jar</type>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-extra</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-core</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+
+        <!-- Layout and Components -->
         <dependency>
             <groupId>com.jgoodies</groupId>
             <artifactId>forms</artifactId>
@@ -75,20 +90,4 @@
             <version>0.10-SNAPSHOT</version>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-        <!-- NOTE: We don't need a groupId specification because the group is
-             org.apache.maven.plugins ...which is assumed by default.
-         -->
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2.1</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
