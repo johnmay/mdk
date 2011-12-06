@@ -56,7 +56,7 @@ public class MolecularHashFactory {
     private Map<Integer, MutableInt> occurences = new HashMap(150);
     private Map<Integer, MutableInt> postoccurences = new HashMap(150);
     private boolean seedWithMoleculeSize = true;
-    private int maxDepth = 1;
+    private int maxDepth = 2;
     private int[] precursorSeeds;
     private int[] completedSeeds;
     private byte[][] table;
@@ -163,7 +163,10 @@ public class MolecularHashFactory {
         completedSeeds = new int[precursorSeeds.length];
         table = matrixFactory.getConnectionMatrix(molecule);
 
+        int[] atomSeeds = new int[precursorSeeds.length];
+
         postoccurences.clear();
+
 
         for (int i = 0; i < precursorSeeds.length; i++) {
 
@@ -191,7 +194,7 @@ public class MolecularHashFactory {
                 }
             }
 
-
+            atomSeeds[i]      = value;
             completedSeeds[i] = Util.rotate(value, postoccurences);
 
             hash ^= completedSeeds[i];
@@ -201,7 +204,7 @@ public class MolecularHashFactory {
         Arrays.sort(completedSeeds);
 
 
-        return new MolecularHash(hash, completedSeeds);
+        return new MolecularHash(hash, atomSeeds);
 
     }
 
@@ -225,7 +228,7 @@ public class MolecularHashFactory {
 
             if (table[index][j] != 0) {
                 value ^= Util.rotate(precursorSeeds[j], occurences);
-                value = depth < maxDepth ? neighbourHash(j, value, depth + 1) : value;
+                value = depth <= maxDepth ? neighbourHash(j, value, depth + 1) : value;
             }
         }
 
