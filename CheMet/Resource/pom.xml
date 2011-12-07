@@ -7,7 +7,7 @@
         <groupId>uk.ac.ebi.chemet</groupId>
         <version>1.2-SNAPSHOT</version>
     </parent>
-    <groupId>uk.ac.ebi</groupId>
+    <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>chemet-resource</artifactId>
     <version>1.2-SNAPSHOT</version>
     <name>Resource</name>
