@@ -38,11 +38,6 @@
             <artifactId>CheMet-WebServices</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi</groupId>
-            <artifactId>chemet-resource</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
 		<!--
 		<dependency>
@@ -75,6 +70,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>chemet-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>chemet-resource</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
