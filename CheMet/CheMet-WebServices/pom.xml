@@ -15,6 +15,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+   
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -68,22 +71,6 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>gov.nih.nlm.ncbi.pubchem</groupId>
-            <artifactId>pubchem-ws</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>jp.genome</groupId>
-            <artifactId>keggapi</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>axis</artifactId>
-                    <groupId>axis</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>CheMet-Core</artifactId>
             <version>${project.version}</version>
@@ -98,23 +85,6 @@
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-client</artifactId>
             <version>1.9-ea01</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.chebi.webapps.chebiWS.client</groupId>
-            <artifactId>chebiWS-client</artifactId>
-            <version>2.0</version>
-            <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jaxws-rt</artifactId>
-                    <groupId>com.sun.xml.ws</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.biomodels</groupId>
-            <artifactId>biomodels</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.restlet.jse</groupId>
@@ -142,9 +112,97 @@
             <artifactId>stax2-api</artifactId>
             <version>3.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>gov.nih.nlm.ncbi.pubchem</groupId>
+            <artifactId>pubchem-ws</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
+
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/autogen</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDestDir>src/main/autogen</sourceDestDir>
+                    <wsdlDirectory>src/main/resources/wsdl/jaxws/</wsdlDirectory>
+                    <wsdlFiles>
+                        <wsdlFile>chebi.wsdl</wsdlFile>
+                    </wsdlFiles>
+                    <packageName>uk.ac.ebi.chebi.webapps.chebiWS.model</packageName>
+                    <keep>true</keep>
+                    <extension>true</extension>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>axistools-maven-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>                                      
+                    <sourceDirectory>src/main/resources/wsdl/axis</sourceDirectory>
+                    <outputDirectory>src/main/autogen</outputDirectory>
+                    <useEmitter>true</useEmitter>
+                    <mappings>
+                        <mapping>
+                            <namespace>http://www.ebi.ac.uk/biomodels-main/services/BioModelsWebServices</namespace>
+                            <targetPackage>uk.ac.ebi.biomodels</targetPackage>
+                        </mapping>
+                        <mapping>
+                            <namespace>SOAP/KEGG</namespace>
+                            <targetPackage>keggapi</targetPackage>
+                        </mapping>
+                        <mapping>
+                            <namespace>http://pubchem.ncbi.nlm.nih.gov/</namespace>
+                            <targetPackage>gov.nih.nlm.ncbi.pubchem</targetPackage>
+                        </mapping>
+                    </mappings>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.mail</groupId>
+                        <artifactId>mail</artifactId>
+                        <version>1.4.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                        <version>1.1</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
         <!-- NOTE: We don't need a groupId specification because the group is
              org.apache.maven.plugins ...which is assumed by default.
@@ -158,26 +216,7 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
-            <!-- <plugin>
-                
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/../../../CheMet-deps</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                            <excludeTransitive>false</excludeTransitive>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin> -->
+
         </plugins>
     </build>
 

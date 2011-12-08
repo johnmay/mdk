@@ -53,9 +53,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
     private final String propertyCID = "PubChem CID";
     private final String propertyInchiKey = "InChIKey (Standard)";
     private final String serviceProviderName = "PubChem";
-    
-    
-    
+
     public PubChemWebServiceConnection() {
         init();
     }
@@ -96,7 +94,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         // Wait for the download to be prepared
         StatusType status;
         while ((status = soap.getOperationStatus(downloadKey)) == StatusType.eStatus_Running
-                || status == StatusType.eStatus_Queued) {
+               || status == StatusType.eStatus_Queued) {
             LOGGER.info("Waiting for download to finish...");
             Thread.sleep(10000);
         }
@@ -120,7 +118,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
     public ArrayList<IAtomContainer> downloadMolsToCDKObject(int[] ids) {
         // This method should be changed so that an exception is thrown
         // instead of returning null.
-        
+
         ArrayList<IAtomContainer> v = new ArrayList<IAtomContainer>();
         try {
             IIteratingChemObjectReader readerXML = this.downloadMolsToIteratingCDKReader(ids);
@@ -144,14 +142,14 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         for (int i = 0; i < pchemCompIds.length; i++) {
             try {
                 pubchemCIDs[i] = Integer.parseInt(pchemCompIds[i]);
-            } catch(NumberFormatException e) {
-                LOGGER.warn("One of the pchemCompIds was not an integer as required: "+pchemCompIds[i]);
+            } catch (NumberFormatException e) {
+                LOGGER.warn("One of the pchemCompIds was not an integer as required: " + pchemCompIds[i]);
                 pubchemCIDs[i] = 0;
             }
         }
         return downloadMolsToIndividualMolFiles(pubchemCIDs, destination);
     }
-    
+
     /**
      * Downloads the specified list of PubChem ids (of the specified type of id) as SDF to the destination defined. This
      * method only applies to compounds and substances.
@@ -163,8 +161,9 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
      * @throws WebServiceException 
      */
     public Integer downloadMolsToIndividualMolFiles(int[] pchemIds, PCIDType idType, String destination) throws WebServiceException {
-        if(!(idType.equals(PCIDType.eID_CID) || idType.equals(PCIDType.eID_SID)))
+        if (!(idType.equals(PCIDType.eID_CID) || idType.equals(PCIDType.eID_SID))) {
             throw new WebServiceException("Only Substance or Compound can be accepted as the id type");
+        }
         BufferedReader reader = new BufferedReader(new InputStreamReader(this.downloadFile(pchemIds, FormatType.eFormat_SDF, idType)));
         String line;
         StringBuffer buffer = new StringBuffer();
@@ -189,7 +188,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
                     }
                     if (idType.equals(PCIDType.eID_CID) && line.contains("> <PUBCHEM_COMPOUND_CID>")) {
                         nextLineIsID = true;
-                    } else if(idType.equals(PCIDType.eID_SID) && line.contains("> <PUBCHEM_COMPOUND_SID>")) {
+                    } else if (idType.equals(PCIDType.eID_SID) && line.contains("> <PUBCHEM_COMPOUND_SID>")) {
                         nextLineIsID = true;
                     }
                 }
@@ -200,7 +199,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         }
         return filesWritten;
     }
-    
+
     /**
      * This is the default method, which will download the provided list of PubChem Compound IDs in the format
      * specified with FormatType enum.
@@ -213,7 +212,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
     public Integer downloadMolsToIndividualMolFiles(int[] pchemCompIds, String destination) throws WebServiceException {
         return this.downloadMolsToIndividualMolFiles(pchemCompIds, PCIDType.eID_CID, destination);
     }
-    
+
     /**
      * This is the default method, which will download the provided list of PubChem Compound IDs in the format
      * specified with FormatType enum.
@@ -241,18 +240,18 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         for (int i = 0; i < pchemIds.length; i++) {
             try {
                 pubchemCIDs[i] = Integer.parseInt(pchemIds[i]);
-            } catch(NumberFormatException e) {
-                LOGGER.warn("One of the pchemCompIds was not an integer as required: "+pchemIds[i]);
+            } catch (NumberFormatException e) {
+                LOGGER.warn("One of the pchemCompIds was not an integer as required: " + pchemIds[i]);
                 pubchemCIDs[i] = 0;
             }
         }
         return downloadFile(pubchemCIDs, formatType, pubchemIdType);
     }
-    
+
     public InputStream downloadFile(int[] ids, FormatType type) throws WebServiceException {
         return this.downloadFile(ids, type, PCIDType.eID_CID);
     }
-    
+
     public InputStream downloadFile(int[] ids, FormatType type, PCIDType pubchemIdType) throws WebServiceException {
         String listKey;
         String downloadKey;
@@ -260,7 +259,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         try {
             listKey = soap.inputList(ids, pubchemIdType);
             downloadKey = soap.download(listKey, type,
-                    CompressType.eCompress_None, false);
+                                        CompressType.eCompress_None, false);
         } catch (RemoteException ex) {
             LOGGER.error("Problems in inputting list to PUG soap web service", ex);
             throw new WebServiceException("List of accessions...", PubChemWebServiceConnection.class.getName(), WebServiceException.CLIENT_EXCEPTION);
@@ -269,14 +268,14 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         StatusType status;
         try {
             while ((status = soap.getOperationStatus(downloadKey)) == StatusType.eStatus_Running
-                    || status == StatusType.eStatus_Queued) {
+                   || status == StatusType.eStatus_Queued) {
                 System.out.println("Waiting for download to finish...");
                 Thread.sleep(10000);
             }
         } catch (InterruptedException ex) {
             LOGGER.error("Problems with thread waiting for download", ex);
             throw new UnfetchableEntry("List of accessions...", PubChemWebServiceConnection.class.getName(),
-                    "Problems with waiting for status " + ex.getMessage());
+                                       "Problems with waiting for status " + ex.getMessage());
         } catch (RemoteException ex) {
             LOGGER.error("RemoteException while waiting for PUG soap web service", ex);
             throw new WebServiceException("List of accessions...", PubChemWebServiceConnection.class.getName(), WebServiceException.CLIENT_EXCEPTION);
@@ -305,11 +304,11 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
         try {
             listKey = soap.inputList(ids, PCIDType.eID_CID);
             downloadKey = soap.download(listKey, type,
-                    CompressType.eCompress_None, false);
+                                        CompressType.eCompress_None, false);
             // Wait for the download to be prepared
             StatusType status;
             while ((status = soap.getOperationStatus(downloadKey)) == StatusType.eStatus_Running
-                    || status == StatusType.eStatus_Queued) {
+                   || status == StatusType.eStatus_Queued) {
                 System.out.println("Waiting for download to finish...");
                 Thread.sleep(10000);
             }
@@ -325,11 +324,11 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
                 String filename;
                 if (dest == null) {
                     filename = "/tmp/"
-                            + url.getFile().substring(
+                               + url.getFile().substring(
                             url.getFile().lastIndexOf('/'));
                 } else {
                     filename = dest
-                            + url.getFile().substring(
+                               + url.getFile().substring(
                             url.getFile().lastIndexOf('/'));
                 }
 
@@ -507,7 +506,7 @@ public class PubChemWebServiceConnection extends ChemicalDBWebService {
 
     @Override
     public String getMDLString(String id) throws UnfetchableEntry,
-            MissingStructureException {
+                                                 MissingStructureException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
