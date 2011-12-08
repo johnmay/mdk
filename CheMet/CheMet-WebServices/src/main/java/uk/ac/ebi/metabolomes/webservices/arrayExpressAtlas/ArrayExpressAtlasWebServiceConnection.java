@@ -29,7 +29,9 @@ import uk.ac.ebi.ook.web.services.QueryServiceLocator;
 /**
  *
  * @author pmoreno
+ * @deprecated uses old SOAP service. Use ArrayExpressAtlasRESTfulWebService
  */
+@Deprecated
 public class ArrayExpressAtlasWebServiceConnection extends ExpressionWebServiceConnection{
 
     private AtlasWebServiceImpl as;
