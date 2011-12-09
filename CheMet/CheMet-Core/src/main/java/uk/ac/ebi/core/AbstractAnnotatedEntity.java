@@ -32,6 +32,7 @@ import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.Rating;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.observation.ObservationCollection;
@@ -48,6 +49,7 @@ public abstract class AbstractAnnotatedEntity
     private transient static final Logger logger = Logger.getLogger(AbstractAnnotatedEntity.class);
     private ListMultimap<Byte, Annotation> annotations = ArrayListMultimap.create();
     private ObservationCollection observations = new ObservationCollection();
+    private Rating rating = StarRating.ONE_STAR;
 
     public AbstractAnnotatedEntity() {
     }
@@ -168,21 +170,18 @@ public abstract class AbstractAnnotatedEntity
      * Adds an identifier to the cross-reference collection
      *
      */
+    @Deprecated
     public boolean addCrossReference(Identifier id) {
         CrossReference xref = new CrossReference(id);
         return annotations.put(xref.getIndex(), xref);
     }
 
-    /**
-     *
-     * Removes an identifier from the cross-reference collection
-     *
-     * @param id
-     * @return
-     */
-    public boolean removeCrossReference(Identifier id) {
-        //  return crossReferences.remove(id);
-        throw new UnsupportedOperationException("not supported yet");
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 
     @Override

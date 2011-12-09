@@ -107,6 +107,16 @@ public interface AnnotatedEntity extends ReconstructionEntity {
      */
     public boolean removeObservation(Observation observation);
 
+    /**
+     * Access the rating for this entity
+     */
+    public Rating getRating();
+
+    /**
+     * Set the rating for this entity
+     */
+    public void setRating(Rating rating);
+
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException;
 
     public void writeExternal(ObjectOutput out) throws IOException;
