@@ -189,6 +189,8 @@ public abstract class AbstractAnnotatedEntity
 
         super.readExternal(in);
 
+        rating = (Rating) in.readObject();
+
         observations = new ObservationCollection();
         observations.readExternal(in);
 
@@ -210,6 +212,8 @@ public abstract class AbstractAnnotatedEntity
     public void writeExternal(ObjectOutput out) throws IOException {
 
         super.writeExternal(out);
+
+        out.writeObject(rating);
 
         observations.writeExternal(out);
 

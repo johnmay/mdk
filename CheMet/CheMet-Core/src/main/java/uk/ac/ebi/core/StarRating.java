@@ -32,8 +32,9 @@ import uk.ac.ebi.interfaces.Rating;
 public enum StarRating implements Rating {
 
     ONE_STAR,
-    TWO_STAR,
-    THREE_STAR,
-    FOUR_STAR,
-    FIVE_STAR;
+    TWO_STARS,
+    THREE_STARS,
+    FOUR_STARS,
+    FIVE_STARS,
+    NO_RATING;
 }
