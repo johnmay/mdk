@@ -20,8 +20,12 @@
  */
 package uk.ac.ebi.io.xml;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.Model;
@@ -29,6 +33,10 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.xml.XMLNamespaces;
+import org.sbml.jsbml.xml.XMLNode;
+import org.sbml.jsbml.xml.XMLTriple;
+import org.w3c.dom.Document;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.Compartment;
@@ -52,6 +60,7 @@ public class SBMLIOUtil {
     public final int version;
     private long metaIdticker = 0;
     private Map<Participant, SpeciesReference> speciesReferences = new HashMap();
+    private Map<Compartment, org.sbml.jsbml.Compartment> compartmentMap = new EnumMap<Compartment, org.sbml.jsbml.Compartment>(Compartment.class);
 
     public SBMLIOUtil(int level, int version) {
         this.level = level;
@@ -114,6 +123,27 @@ public class SBMLIOUtil {
             sbmlRxn.addCVTerm(term);
         }
 
+//        sbmlRxn.setNotes("<cml xmlns=\"http://www.xml-cml.org/schema\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:conventions=\"http://www.xml-cml.org/convention/\" convention=\"conventions:molecular\"><dc:title>test file for http://www.xml-cml.org/conventions/molecular convention</dc:title><dc:description>should not fail because atoms in formula/atomArray do not need ids</dc:description><dc:date>2009-04-05</dc:date><molecule id=\"m1\"><formula><atomArray><atom elementType=\"H\" isotopeNumber=\"2\" /></atomArray></formula></molecule></cml>");
+//        XMLNode annotation = new XMLNode(new XMLTriple("title",
+//                                                       "http://purl.org/dc/elements/1.1/",
+//                                                       "dc"));
+//        annotation.addAttr("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+//        annotation.addChild(new XMLNode("John Doe"));
+//        XMLNode notes = new XMLNode("notes");
+//        notes.addChild(annotation);
+//        sbmlRxn.setNotes(notes);
+
+//        try {
+//
+//            DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
+//            Document doc = docBuilder.newDocument();
+//            XMLAnnotationWriter writer = new XMLAnnotationWriter(doc);
+//            sbmlRxn.setNotes(writer.getSBMLNotes(rxn));
+//        } catch (Exception ex) {
+//            LOGGER.error(ex);
+//        }
+
         model.addReaction(sbmlRxn);
 
         return sbmlRxn;
@@ -169,20 +199,40 @@ public class SBMLIOUtil {
         }
 
         species.setName(m.getName());
-        species.setCompartment(participant.getCompartment().name());
+        species.setCompartment(getCompartment(model, participant));
 
-        CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
-        for (CrossReference xref : m.getAnnotationsExtending(CrossReference.class)) {
-            String resource = xref.getIdentifier().getURN();
-            term.addResource(resource);
+        if (m.getAnnotationsExtending(CrossReference.class).iterator().hasNext()) {
+            CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
+            for (CrossReference xref : m.getAnnotationsExtending(CrossReference.class)) {
+                String resource = xref.getIdentifier().getURN();
+                term.addResource(resource);
+            }
+            species.addCVTerm(term);
         }
-        species.addCVTerm(term);
 
 
         model.addSpecies(species);
 
+        SpeciesReference sr = new SpeciesReference(species);
 
+        return sr;
+    }
 
-        return new SpeciesReference(species);
+    public org.sbml.jsbml.Compartment getCompartment(Model model, Participant<?, ?, Compartment> participant) {
+
+        if (compartmentMap.containsKey(participant.getCompartment())) {
+            return compartmentMap.get(participant.getCompartment());
+        }
+
+        org.sbml.jsbml.Compartment sbmlCompartment = new org.sbml.jsbml.Compartment(level, version);
+        sbmlCompartment.setId(participant.getCompartment().getAbbreviation());
+        sbmlCompartment.setName(participant.getCompartment().getDescription());
+
+        model.addCompartment(sbmlCompartment);
+
+        compartmentMap.put(participant.getCompartment(), sbmlCompartment);
+
+        return sbmlCompartment;
+
     }
 }

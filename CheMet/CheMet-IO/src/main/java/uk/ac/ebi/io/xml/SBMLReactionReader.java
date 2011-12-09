@@ -23,8 +23,10 @@ package uk.ac.ebi.io.xml;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -96,6 +98,7 @@ public class SBMLReactionReader {
     private final Integer reactionCount;
     private AbstractParticipantFilter filter;
     //
+    private Map<SpeciesReference, Species> speciesRefMap = new HashMap<SpeciesReference, Species>();
     private Map<Species, Metabolite> speciesMap = new HashMap<Species, Metabolite>();
     private Map<String, Metabolite> speciesNameMap = new HashMap<String, Metabolite>();
 
@@ -177,6 +180,7 @@ public class SBMLReactionReader {
         MetabolicReaction reaction = new MetabolicReaction(new BasicReactionIdentifier(sbmlReaction.getId()),
                                                            sbmlReaction.getMetaId(),
                                                            sbmlReaction.getName());
+        LOGGER.info("Reading reaction " + reaction);
 
         for (int i = 0; i < sbmlReaction.getNumReactants(); i++) {
             reaction.addReactant(getMetaboliteParticipant(sbmlReaction.getReactant(i)));
@@ -209,15 +213,27 @@ public class SBMLReactionReader {
     public MetaboliteParticipant getMetaboliteParticipant(SpeciesReference speciesReference)
             throws UnknownCompartmentException {
 
-        Species species = speciesReference.getSpeciesInstance();
-        Compartment compartment = Compartment.getCompartment(
-                species.getCompartmentInstance().getId());
-
-        if (compartment == Compartment.UNKNOWN) {
-            throw new UnknownCompartmentException("Compartment " + species.getCompartmentInstance().
-                    getId()
-                                                  + " was not identifiable");
+        Species species = null;
+        if (speciesRefMap.containsKey(speciesReference)) {
+            species = speciesRefMap.get(species);
+        } else {
+            species = speciesReference.getSpeciesInstance();
+            speciesRefMap.put(speciesReference, species);
         }
+
+        if (species == null) {
+            species = model.getSpecies(speciesReference.getId());
+        }
+        if(species == null){
+            LOGGER.error("ERROR!");
+        }
+
+        org.sbml.jsbml.Compartment sbmlCompartment = species.getCompartmentInstance();
+
+
+        Compartment compartment = Compartment.getCompartment(sbmlCompartment == null
+                                                             ? ""
+                                                             : sbmlCompartment.getId());
 
 
         Double coefficient = speciesReference.getStoichiometry();
@@ -311,8 +327,12 @@ public class SBMLReactionReader {
             MissingStructureException {
 
         Species species = speciesReference.getSpeciesInstance();
-        Compartment compartment = Compartment.getCompartment(
-                species.getCompartmentInstance().getId());
+        org.sbml.jsbml.Compartment sbmlCompartment = species.getCompartmentInstance();
+
+
+        Compartment compartment = Compartment.getCompartment(sbmlCompartment == null
+                                                             ? ""
+                                                             : sbmlCompartment.getId());
 
         if (compartment == Compartment.UNKNOWN) {
             throw new UnknownCompartmentException("Compartment " + species.getCompartmentInstance().

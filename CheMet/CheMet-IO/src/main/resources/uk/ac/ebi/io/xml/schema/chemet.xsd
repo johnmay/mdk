@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://www.w3schools.com"
+           targetNamespace="http://www.ebi.ac.uk/~johnmay/"
+           elementFormDefault="qualified">
+
+    <xs:element name="annotations">
+        <xs:complexType>
+            <xs:sequence>
+                
+                <xs:element name="simple-annotation">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="value" type="xs:string"/>
+                        </xs:sequence>
+                        <xs:attribute name="annotation-index" type="xs:byte" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="structure-annotation">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="mol" type="xs:string"/>
+                        </xs:sequence>
+                        <xs:attribute name="annotation-index" type="xs:byte" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                
+                <xs:element name="author-annotation">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="name" type="xs:string"/>
+                            <xs:element name="comment" type="xs:string"/>
+                        </xs:sequence>
+                        <xs:attribute name="annotation-index" type="xs:byte" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+</xs:schema>
