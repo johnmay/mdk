@@ -85,8 +85,9 @@ public enum Compartment {
     }
 
     public static Compartment getCompartment( String description ) {
-        if ( abbreviationMap.containsKey( description ) ) {
-            return abbreviationMap.get( description );
+        String description_lc = description.toLowerCase();
+        if ( abbreviationMap.containsKey( description_lc ) ) {
+            return abbreviationMap.get( description_lc );
         }
         return Compartment.UNKNOWN;
     }
