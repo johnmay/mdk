@@ -1,7 +1,7 @@
 /**
- * SynonymAnnotation.java
+ * BasicStringAnnotation.java
  *
- * 2011.10.24
+ * 2011.12.08
  *
  * This file is part of the CheMet library
  * 
@@ -18,33 +18,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.annotation;
-
-import org.apache.log4j.Logger;
+package uk.ac.ebi.interfaces;
 
 /**
- *          SynonymAnnotation - 2011.10.24 <br>
- *          An annotation of a synonym/alternate name
+ *          BasicStringAnnotation - 2011.12.08 <br>
+ *          Interface specifies that annotation can be parsed as a simple string (simplifying editing and IO operations)
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class Synonym extends AbstractStringAnnotation {
+public interface StringAnnotation extends Annotation {
 
-    private static final Logger LOGGER = Logger.getLogger(Synonym.class);
+    public String getValue();
 
-    public Synonym() {
-    }
+    public void setValue(String value);
 
-    public Synonym(String synonym) {
-        super(synonym);
-    }
+    public Annotation getInstance(String value);
 
-    public Synonym getInstance() {
-        return new Synonym();
-    }
-
-    public Synonym getInstance(String synonym) {
-        return new Synonym(synonym);
-    }
 }

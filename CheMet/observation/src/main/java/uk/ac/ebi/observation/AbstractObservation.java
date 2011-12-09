@@ -29,7 +29,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractDescriptor;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.interfaces.vistors.ObservationVisitor;
 
 /**

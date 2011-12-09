@@ -1,4 +1,3 @@
-
 /**
  * Subsystem.java
  *
@@ -21,11 +20,7 @@
  */
 package uk.ac.ebi.annotation;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-
 
 /**
  *          Subsystem – 2011.09.26 <br>
@@ -35,45 +30,22 @@ import org.apache.log4j.Logger;
  * @author  $Author$ (this version)
  */
 public class Subsystem
-  extends AbstractAnnotation {
+        extends AbstractStringAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(Subsystem.class);
-    private String subsystem;
-
 
     public Subsystem() {
     }
 
-
     public Subsystem(String subsystem) {
-        this.subsystem = subsystem;
+        super(subsystem);
     }
-
 
     public Subsystem getInstance() {
         return new Subsystem();
     }
 
-
-    @Override
-    public String toString() {
-        return subsystem;
+    public Subsystem getInstance(String subsystem) {
+        return new Subsystem(subsystem);
     }
-
-
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
-        subsystem = in.readUTF();
-    }
-
-
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        super.writeExternal(out);
-        out.writeUTF(subsystem);
-    }
-
-
 }
-

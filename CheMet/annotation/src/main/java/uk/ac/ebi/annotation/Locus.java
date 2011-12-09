@@ -1,4 +1,3 @@
-
 /**
  * Subsystem.java
  *
@@ -21,11 +20,7 @@
  */
 package uk.ac.ebi.annotation;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-
 
 /**
  *          Subsystem – 2011.09.26 <br>
@@ -35,43 +30,23 @@ import org.apache.log4j.Logger;
  * @author  $Author$ (this version)
  */
 public class Locus
-  extends AbstractAnnotation {
+        extends AbstractStringAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(Locus.class);
-    private String locus;
-
 
     public Locus() {
     }
 
-
     public Locus(String locus) {
-        this.locus = locus;
+        super(locus);
     }
-
 
     public Locus getInstance() {
         return new Locus();
     }
 
-
-    @Override
-    public String toString() {
-        return locus;
-    }
-
-
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
-        locus = in.readUTF();
-    }
-
-
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        super.writeExternal(out);
-        out.writeUTF(locus);
+    public Locus getInstance(String locus) {
+        return new Locus(locus);
     }
 
     /**
@@ -79,9 +54,6 @@ public class Locus
      * protein)
      */
     public boolean containsMultiple() {
-        return locus.contains("+");
+        return getValue().contains("+");
     }
-
-
 }
-
