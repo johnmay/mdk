@@ -24,12 +24,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -134,8 +137,29 @@ public class IdentifierFactory {
     private Map<String, SequenceIdentifier> proteinIdMap = new HashMap();
     private List<String> synonymExclusions = Arrays.asList("uniprotkb");
 
+    /**
+     * Access a subset of all available identifiers that the accession matches
+     * the pattern provided by {@see uk.ac.ebi.interfaces.Resource#getCompiledPattern()}
+     *
+     * @return Unmodifiable List of identifier
+     */
+    public List<Identifier> getMatchingIdentifiers(String accession) {
+        List<Identifier> subset = new ArrayList<Identifier>();
+        for (Identifier identifier : supportedIdentifiers) {
+            Pattern pattern = identifier.getResource().getCompiledPattern();
+            if(pattern.matcher(accession).matches()){
+                subset.add(identifier);
+            }
+        }
+        return subset;
+    }
+
+    /**
+     * Access a list of all available identifiers
+     * @return Unmodifiable List of identifier
+     */
     public List<Identifier> getSupportedIdentifiers() {
-        return supportedIdentifiers;
+        return Collections.unmodifiableList(supportedIdentifiers);
     }
 
     private IdentifierFactory() {
@@ -164,10 +188,19 @@ public class IdentifierFactory {
             }
         }
 
-
+        // TODO Build proteinIdentifiers list from supported identifiers list
         for (SequenceIdentifier id : proteinIdentifiers) {
             proteinIdMap.put(id.getHeaderCode(), id);
         }
+
+
+        // sort by resource name
+        Collections.sort(supportedIdentifiers, new Comparator<Identifier>() {
+
+            public int compare(Identifier o1, Identifier o2) {
+                return o1.getResource().getName().compareTo(o2.getResource().getName());
+            }
+        });
 
     }
 
@@ -260,7 +293,7 @@ public class IdentifierFactory {
      * Builds a list of identifiers from a string that may
      * or maynot contain multiple identifiers
      * atm: handle gi|39327|sp|398339 etc..
-     * Use resolveSequenceHeader
+     * @Deprecated Use resolveSequenceHeader
      * @param idsString
      * @return
      */
