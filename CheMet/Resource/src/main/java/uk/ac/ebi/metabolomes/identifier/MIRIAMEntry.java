@@ -69,6 +69,14 @@ public class MIRIAMEntry
         this.synonyms = synonyms;
     }
 
+    public String getDescription() {
+        return definition;
+    }
+
+    /**
+     * @deprecated use {@see getDescription()}
+     */
+    @Deprecated
     public String getDefinition() {
         return definition;
     }
@@ -89,6 +97,14 @@ public class MIRIAMEntry
         return pattern;
     }
 
+    public String getName() {
+        return resouceName;
+    }
+
+    /**
+     * @deprecated use {@see getName()}
+     */
+    @Deprecated
     public String getResourceName() {
         return resouceName;
     }

@@ -1,4 +1,3 @@
-
 /**
  * Resource.java
  *
@@ -22,22 +21,57 @@
 package uk.ac.ebi.interfaces;
 
 import java.net.URL;
-
+import java.util.regex.Pattern;
 
 /**
  *          Resource – 2011.09.15 <br>
- *          Class description
+ * 
+ *          Identifier resource description of an identifier. Provides basic
+ *          functionality such as Name, Definition and URL link. The internal
+ *          URL should provide the address of an entry with the provided accession.
+ *          The compiled pattern determines whether the accession patches the pattern
+ *          for this resources identifier
+ *
+ *          This class primarily serves as a mapping for a
+ *          <a href="http://www.ebi.ac.uk/miriam">MIRIAM Registry</a> entry
+ *
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
 public interface Resource {
 
+    /**
+     * Name of the resource
+     * @return
+     */
+    public String getName();
+
+    /**
+     * Description of the resource
+     */
+    public String getDescription();
+
+    /**
+     * Persist URN of resource for provided
+     * accession (if available)
+     * @param accession
+     * @return
+     */
     public String getURN(String accession);
 
-
+    /**
+     * Accessible URL of resource for the provided
+     * accession
+     * @param accession
+     * @return
+     */
     public URL getURL(String accession);
 
-
+    /**
+     * Access the required pattern for
+     * this resource
+     * @return
+     */
+    public Pattern getCompiledPattern();
 }
-

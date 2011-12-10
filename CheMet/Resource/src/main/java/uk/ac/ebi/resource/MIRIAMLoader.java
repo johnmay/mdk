@@ -76,7 +76,7 @@ public class MIRIAMLoader {
 
         // default entry
         mirs[0] = new MIRIAMEntry("MIR:00000000",
-                                  "N/A",
+                                  ".+",
                                   "N/A",
                                   "None MIRIAM Entry",
                                   "",
