@@ -14,15 +14,14 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.ac.ebi.metabolomes.identifier;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Resource;
-
 
 /**
  * MIRIAMEntry.java – MetabolicDevelopmentKit – Jun 25, 2011
@@ -42,20 +41,24 @@ import uk.ac.ebi.interfaces.Resource;
  *
  */
 public class MIRIAMEntry
-  implements Resource {
+        implements Resource {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(MIRIAMEntry.class);
     private String id;
-    private String pattern;
+    private Pattern pattern;
     private String resouceName;
     private String definition;
     private String urn;
     private String url;
     private Collection<String> synonyms;
 
+    public MIRIAMEntry(String id, String regex, String resouceName, String definition, String urn,
+                       String url, Collection<String> synonyms) {
+        this(id, Pattern.compile(regex), resouceName, definition, urn, url, synonyms);
+    }
 
-    public MIRIAMEntry(String id, String pattern, String resouceName, String definition, String urn,
+    public MIRIAMEntry(String id, Pattern pattern, String resouceName, String definition, String urn,
                        String url, Collection<String> synonyms) {
         this.id = id;
         this.pattern = pattern;
@@ -66,36 +69,33 @@ public class MIRIAMEntry
         this.synonyms = synonyms;
     }
 
-
     public String getDefinition() {
         return definition;
     }
-
 
     public String getId() {
         return id;
     }
 
-
     public static Logger getLogger() {
         return logger;
     }
 
-
     public String getPattern() {
-        return pattern;
+        return pattern.pattern();
     }
 
+    public Pattern getCompiledPattern() {
+        return pattern;
+    }
 
     public String getResourceName() {
         return resouceName;
     }
 
-
     public String getBaseURN() {
         return urn;
     }
-
 
     public String getURN(String accession) {
         StringBuilder sb = new StringBuilder(urn.length());
@@ -104,19 +104,15 @@ public class MIRIAMEntry
         return sb.toString();
     }
 
-
-   
-
     public String getBaseURL() {
         return this.url;
     }
-
 
     public URL getURL(String accession) {
         try {
             String url = this.url;
             return new URL(url.replaceAll("\\$id", accession));
-        } catch( MalformedURLException ex ) {
+        } catch (MalformedURLException ex) {
             ex.printStackTrace();
         }
         return null;
@@ -125,9 +121,4 @@ public class MIRIAMEntry
     public Collection<String> getSynonyms() {
         return synonyms;
     }
-
-
-
-
 }
-
