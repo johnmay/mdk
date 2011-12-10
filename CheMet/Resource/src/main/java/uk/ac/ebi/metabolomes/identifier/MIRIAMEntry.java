@@ -69,6 +69,9 @@ public class MIRIAMEntry
         this.synonyms = synonyms;
     }
 
+    /**
+     * @inheritDoc
+     */
     public String getDescription() {
         return definition;
     }
@@ -85,18 +88,20 @@ public class MIRIAMEntry
         return id;
     }
 
-    public static Logger getLogger() {
-        return logger;
-    }
-
     public String getPattern() {
         return pattern.pattern();
     }
 
+    /**
+     * @inheritDoc
+     */
     public Pattern getCompiledPattern() {
         return pattern;
     }
 
+    /**
+     * @inheritDoc
+     */
     public String getName() {
         return resouceName;
     }
@@ -113,6 +118,9 @@ public class MIRIAMEntry
         return urn;
     }
 
+    /**
+     * @inheritDoc
+     */
     public String getURN(String accession) {
         StringBuilder sb = new StringBuilder(urn.length());
 
@@ -124,6 +132,9 @@ public class MIRIAMEntry
         return this.url;
     }
 
+    /**
+     * @inheritDoc
+     */
     public URL getURL(String accession) {
         try {
             String url = this.url;
@@ -134,6 +145,9 @@ public class MIRIAMEntry
         return null;
     }
 
+    /**
+     * @inheritDoc
+     */
     public Collection<String> getSynonyms() {
         return synonyms;
     }

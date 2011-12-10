@@ -21,6 +21,7 @@
 package uk.ac.ebi.interfaces;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.regex.Pattern;
 
 /**
@@ -74,4 +75,12 @@ public interface Resource {
      * @return
      */
     public Pattern getCompiledPattern();
+
+    /**
+     * Access a set of synonyms that this resource
+     * may be known as.
+     *
+     * @return Collection of synonyms
+     */
+    public Collection<String> getSynonyms();
 }
