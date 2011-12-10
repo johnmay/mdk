@@ -42,7 +42,7 @@ public class MIRIAMLoader {
     private Map<String, MIRIAMEntry> nameEntryMap = new HashMap<String, MIRIAMEntry>(50);
     private Map<String, MIRIAMEntry> urnEntryMap = new HashMap<String, MIRIAMEntry>(50);
     private Map<Resource, Identifier> idMap = new HashMap<Resource, Identifier>(50);
-    private MIRIAMEntry[] mirs = new MIRIAMEntry[200];
+    private MIRIAMEntry[] mirs = new MIRIAMEntry[300];
 
     /**
      * Singleton Accessor
