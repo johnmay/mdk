@@ -38,6 +38,7 @@ import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLTriple;
 import org.w3c.dom.Document;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
@@ -108,6 +109,12 @@ public class SBMLIOUtil {
             sbmlRxn.setId(accession);
         }
 
+        sbmlRxn.setReversible(rxn.getReversibility() == Reversibility.REVERSIBLE ? true : false);
+
+        if(rxn.getReversibility() == Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT){
+            rxn.transpose();
+            rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
+        }
 
         for (Participant<Metabolite, Double, Compartment> p : rxn.getReactantParticipants()) {
             sbmlRxn.addReactant(getSpeciesReference(model, p));
