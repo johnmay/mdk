@@ -45,7 +45,6 @@ import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.io.remote.AbstrastRemoteResource;
 import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
 import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.classification.ECNumber;
