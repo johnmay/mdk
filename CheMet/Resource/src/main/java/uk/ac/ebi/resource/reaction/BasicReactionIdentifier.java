@@ -1,4 +1,3 @@
-
 /**
  * BasicReactionIdentifier.java
  *
@@ -21,9 +20,8 @@
  */
 package uk.ac.ebi.resource.reaction;
 
+import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-
 
 /**
  *          BasicReactionIdentifier – 2011.09.26 <br>
@@ -35,27 +33,26 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 public class BasicReactionIdentifier extends ReactionIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicReactionIdentifier.class);
-
+    private static long ticker = Preferences.userNodeForPackage(BasicReactionIdentifier.class).getLong("ticker", 0);
 
     public BasicReactionIdentifier() {
     }
 
-
     public BasicReactionIdentifier(String accession) {
         super(accession);
     }
-
 
     @Override
     public void setAccession(String accession) {
         super.setAccession(accession);
     }
 
-
     public BasicReactionIdentifier newInstance() {
         return new BasicReactionIdentifier();
     }
 
-
+    public static BasicReactionIdentifier nextIdentifier() {
+        Preferences.userNodeForPackage(BasicReactionIdentifier.class).putLong("ticker", ++ticker);
+        return new BasicReactionIdentifier(String.format("Rxn:{%07d}", ticker));
+    }
 }
-
