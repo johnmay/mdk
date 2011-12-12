@@ -1,4 +1,3 @@
-
 /**
  * CrossReference.java
  *
@@ -24,14 +23,19 @@ package uk.ac.ebi.annotation.crossreference;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
 import uk.ac.ebi.resource.IdentifierFactory;
-
 
 /**
  *          CrossReference – 2011.09.14 <br>
@@ -41,33 +45,30 @@ import uk.ac.ebi.resource.IdentifierFactory;
  * @author  $Author$ (this version)
  */
 public class CrossReference<E extends Identifier>
-  extends AbstractAnnotation {
+        extends AbstractAnnotation
+        implements ObservationBasedAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(CrossReference.class);
     private E identifier;
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
-      CrossReference.class);
-
+            CrossReference.class);
+    private List<Observation> observations = new ArrayList();
 
     public CrossReference() {
     }
-
 
     public CrossReference(E identifier) {
         this.identifier = identifier;
     }
 
-
     public E getIdentifier() {
         return identifier;
     }
-
 
     @Override
     public String toString() {
         return identifier.toString();
     }
-
 
     /**
      * @inheritDoc
@@ -77,7 +78,6 @@ public class CrossReference<E extends Identifier>
         return identifier != null ? identifier.getShortDescription() : description.shortDescription;
     }
 
-
     /**
      * @inheritDoc
      */
@@ -85,7 +85,6 @@ public class CrossReference<E extends Identifier>
     public String getLongDescription() {
         return identifier != null ? identifier.getLongDescription() : description.longDescription;
     }
-
 
     /**
      * @inheritDoc
@@ -95,7 +94,6 @@ public class CrossReference<E extends Identifier>
         return description.index;
     }
 
-
     /**
      * @inheritDoc
      */
@@ -103,6 +101,26 @@ public class CrossReference<E extends Identifier>
         return new CrossReference();
     }
 
+    /**
+     * @inheritDoc
+     */
+    public Collection<Observation> getObservations() {
+        return Collections.unmodifiableList(observations);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public boolean addObservation(Observation observation) {
+        return observations.add(observation);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public boolean addObservations(Collection<Observation> observations) {
+        return this.observations.addAll(observations);
+    }
 
     /**
      * @inheritDoc
@@ -113,16 +131,14 @@ public class CrossReference<E extends Identifier>
         identifier = (E) IdentifierFactory.getInstance().read(in);
     }
 
-
     /**
      * @inheritDoc
      */
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        IdentifierFactory.getInstance().write(out, identifier);
+        IdentifierFactory.getInstance().write(out, identifier);     
     }
-
 
     @Override
     public Object accept(AnnotationVisitor visitor) {
@@ -150,10 +166,4 @@ public class CrossReference<E extends Identifier>
         hash = 53 * hash + (this.identifier != null ? this.identifier.hashCode() : 0);
         return hash;
     }
-
-    
-
-
-
 }
-
