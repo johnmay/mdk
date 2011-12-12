@@ -16,11 +16,7 @@ import uk.ac.ebi.interfaces.vistors.ObservationVisitor;
  *
  * @author johnmay
  */
-public interface Observation extends Descriptor {
-
-    public Object getObservation();
-
-    public void setObservation(Object observationObject);
+public interface Observation extends Descriptor {  
 
     /**
      *

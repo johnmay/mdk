@@ -49,16 +49,8 @@ public abstract class AbstractObservation
         super(ObservationLoader.getInstance());
     }
 
-    public Object getObservation() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void setObservation(Object observationObject) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     public void accept(ObservationVisitor visitor) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        visitor.visit(this);
     }
 
     public void setSource(AnnotatedEntity source) {
