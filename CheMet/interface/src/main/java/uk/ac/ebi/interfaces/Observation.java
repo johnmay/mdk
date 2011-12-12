@@ -16,7 +16,8 @@ import uk.ac.ebi.interfaces.vistors.ObservationVisitor;
  *
  * @author johnmay
  */
-public interface Observation extends Descriptor {  
+public interface Observation
+        extends Descriptor {
 
     /**
      *
@@ -29,10 +30,15 @@ public interface Observation extends Descriptor {
 
     public AnnotatedEntity getSource();
 
+    public AnnotatedEntity getEntity();
+
+    public void setEntity(AnnotatedEntity entity);
+
     public Observation getInstance();
 
-    public void writeExternal(ObjectOutput out, List<AnnotatedEntity> sources) throws IOException;
+    public void writeExternal(ObjectOutput out,
+                              List<AnnotatedEntity> sources) throws IOException;
 
-    public void readExternal(ObjectInput in, List<AnnotatedEntity> sources) throws IOException, ClassNotFoundException;
-
+    public void readExternal(ObjectInput in,
+                             List<AnnotatedEntity> sources) throws IOException, ClassNotFoundException;
 }

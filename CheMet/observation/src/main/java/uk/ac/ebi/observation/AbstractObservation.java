@@ -40,10 +40,12 @@ import uk.ac.ebi.interfaces.vistors.ObservationVisitor;
  */
 public abstract class AbstractObservation
         extends AbstractDescriptor
-        implements Observation, Externalizable {
+        implements Observation,
+                   Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractObservation.class);
     private AnnotatedEntity source;
+    private AnnotatedEntity entity;
 
     public AbstractObservation() {
         super(ObservationLoader.getInstance());
@@ -61,6 +63,14 @@ public abstract class AbstractObservation
         return this.source;
     }
 
+    public AnnotatedEntity getEntity() {
+        return this.entity;
+    }
+
+    public void setEntity(AnnotatedEntity entity) {
+        this.entity = entity;
+    }
+
     public abstract Observation getInstance();
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
@@ -69,12 +79,14 @@ public abstract class AbstractObservation
     public void writeExternal(ObjectOutput out) throws IOException {
     }
 
-    public void readExternal(ObjectInput in, List<AnnotatedEntity> options) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in,
+                             List<AnnotatedEntity> options) throws IOException, ClassNotFoundException {
         source = (AnnotatedEntity) options.get(in.readInt());
     }
 
     @Override
-    public void writeExternal(ObjectOutput out, List<AnnotatedEntity> options) throws IOException {
+    public void writeExternal(ObjectOutput out,
+                              List<AnnotatedEntity> options) throws IOException {
         out.writeInt(options.indexOf(source));
     }
 }
