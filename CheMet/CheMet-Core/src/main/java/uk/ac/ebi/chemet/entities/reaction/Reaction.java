@@ -315,6 +315,16 @@ public class Reaction<M, S, C>
     }
 
     /**
+     * Determines whether any reaction participants
+     * change compartment
+     * @return 
+     */
+    public boolean isTransport() {
+        Set<C> uniqueCompartments = new HashSet<C>(this.getAllReactionCompartments());
+        return uniqueCompartments.size() > 1;
+    }
+
+    /**
      * Calculates the hash code for the reaction in it's current state. As the molecules need to be sorted
      * this operation is more expensive and thus non-optimal. The hash is therefore cached in a the variable
      * this.cachedHash which is 'nullified' if the state of the object changes.

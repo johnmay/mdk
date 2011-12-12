@@ -26,12 +26,15 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
+import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
+import uk.ac.ebi.core.reaction.MetaboliteParticipant;
 import uk.ac.ebi.core.reaction.ReactionType;
 
 /**

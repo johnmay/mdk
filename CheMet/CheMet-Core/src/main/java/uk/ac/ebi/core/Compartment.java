@@ -35,45 +35,54 @@ import java.util.Map;
 public enum Compartment {
 
     // Organelles (prokaryotes)
-    CYTOPLASM( "c" , "Cytoplasm" ),
-    PERIPLASM( "p" , "Periplasm" ),
-    EXTRACELLULA( "e" , "Extracellular" ),
+    CYTOPLASM("c", "Cytoplasm"),
+    PERIPLASM("p", "Periplasm"),
+    EXTRACELLULA("e", "Extracellular"),
     // Organelles (eukaryotes) and tissues/organs
-    FLAGELLUM( "f" , "Flagellum" ),
-    GOLGI( "g" , "Golgi" ),
-    CHLOROPLAST( "h" , "Chloroplast" ),
-    EYESPOT( "i" , "Eyespot" ),
-    APICOPLAST( "a" , "Apicoplast" ),
-    LYSOSOME( "l" , "Lysosome" ),
-    MITOCHONDRION( "m" , "Mitochondrion" ),
-    NUCLEUS( "n" , "Nucleus" ),
-    GLYOXYSOMES( "o" , "Glyoxysomes" ),
-    ENDOPLASMIC_RETICULUM( "r" , "Endoplasmic Reticulum" ),
-    PLASTID( "s" , "Plastid" ),
-    THYLAKOID( "t" , "Thylakoid" ),
-    VACUOLE( "v" , "Vacuole" ),
-    GLYOXYSOME( "w" , "Glyoxysome" ),
-    PEROXISOME( "x" , "Peroxisome" ),
-    GLYCOSOME( "y" , "Glycosome" ),
-    // Membranes
-    GOLGI_MEMBRANE( "gm" , "Golgi Membrane" ),
-    MITOCHONDRIAL_MEMBRANE( "mm" , "Mitochondrial Membrane" ),
-    NUCLEAR_MEMBRANE( "nm" , "Nuclear Membrane" ),
-    PLASMA_MEMBRANE( "pm" , "Plasma Membrane" ),
-    ENDOPLASMIC_RETICULUM_MEMBRANE( "rm" , "Endoplasmic Reticulum Membrane" ),
-    VACUOLAR_MEMBRANE( "vm" , "Vacuolar Membrane" ),
-    PEROXISOMAL_MEMBRANE( "xm" , "Peroxisomal Membrane" ),
-    // indicates compartment is unknown
-    UNKNOWN( "xx" , "Unknown Compartment" );
-    // store the abbreviation 1/2 leter code and the textual description
-    private String abbreviation;
-    private String description;
-    private static final Map<String , Compartment> abbreviationMap = buildAbbreviationMap();
+    FLAGELLUM("f", "Flagellum"),
+    GOLGI("g", "Golgi"),
+    CHLOROPLAST("h", "Chloroplast"),
+    EYESPOT("i", "Eyespot"),
+    APICOPLAST("a", "Apicoplast"),
+    LYSOSOME("l", "Lysosome"),
+    MITOCHONDRION("m", "Mitochondrion"),
+    NUCLEUS("n", "Nucleus"),
+    GLYOXYSOMES("o", "Glyoxysomes"),
+    ENDOPLASMIC_RETICULUM("r", "Endoplasmic Reticulum"),
+    PLASTID("s", "Plastid"),
+    THYLAKOID("t", "Thylakoid"),
+    VACUOLE("v", "Vacuole"),
+    GLYOXYSOME("w", "Glyoxysome"),
+    PEROXISOME("x", "Peroxisome"),
+    GLYCOSOME("y", "Glycosome"),
+    BLOOD("bl", "Blood"),
+    // Tissues (put in a different enumeration
+    // Adibopcyte("a", ); // clashes with Apicoplast
+    // Myocyte("m") // clashes with mitrochondrion
+    // Hepatocyte("h"); // no clash
 
-    private Compartment( String abbreviation ,
-                         String description ) {
+    // Membranes
+    GOLGI_MEMBRANE(
+    "gm", "Golgi Membrane"),
+    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane"),
+    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane"),
+    PLASMA_MEMBRANE("pm", "Plasma Membrane"),
+    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane"),
+    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane"),
+    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane"),
+    // indicates compartment is unknown
+    UNKNOWN("xx", "Unknown Compartment");
+    // store the abbreviation 1/2 leter code and the textual description
+    private final int ranking;
+    private final String abbreviation;
+    private final String description;
+    private static final Map<String, Compartment> abbreviationMap = buildAbbreviationMap();
+
+    private Compartment(String abbreviation,
+                        String description) {
         this.abbreviation = abbreviation;
         this.description = description;
+        this.ranking = Ticker.nextValue();
     }
 
     public String getAbbreviation() {
@@ -84,21 +93,25 @@ public enum Compartment {
         return description;
     }
 
-    public static Compartment getCompartment( String description ) {
+    public int getRanking() {
+        return ranking;
+    }
+
+    public static Compartment getCompartment(String description) {
         String description_lc = description.toLowerCase();
-        if ( abbreviationMap.containsKey( description_lc ) ) {
-            return abbreviationMap.get( description_lc );
+        if (abbreviationMap.containsKey(description_lc)) {
+            return abbreviationMap.get(description_lc);
         }
         return Compartment.UNKNOWN;
     }
 
     private static Map buildAbbreviationMap() {
-        Map<String , Compartment> map = new HashMap<String , Compartment>();
-        for ( Compartment c : values() ) {
-            map.put( "[" + c.getAbbreviation() + "]" , c );
-            map.put( c.getAbbreviation() , c );
-            map.put( c.getDescription() , c );
-            map.put( c.getDescription().replace( " " , "" ) , c );
+        Map<String, Compartment> map = new HashMap<String, Compartment>();
+        for (Compartment c : values()) {
+            map.put("[" + c.getAbbreviation() + "]", c);
+            map.put(c.getAbbreviation(), c);
+            map.put(c.getDescription(), c);
+            map.put(c.getDescription().replace(" ", ""), c);
         }
         return map;
     }
@@ -106,5 +119,14 @@ public enum Compartment {
     @Override
     public String toString() {
         return "[" + abbreviation + "]";
+    }
+}
+
+class Ticker {
+
+    public static int ticker = 0;
+
+    public static int nextValue() {
+        return ticker++;
     }
 }

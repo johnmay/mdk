@@ -1,4 +1,3 @@
-
 /**
  * MetaboliteParticipant.java
  *
@@ -30,7 +29,6 @@ import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 import uk.ac.ebi.core.Metabolite;
 
-
 /**
  *          MetaboliteParticipant – 2011.09.27 <br>
  *          Class description
@@ -42,25 +40,24 @@ public class MetaboliteParticipant extends Participant<Metabolite, Double, Compa
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteParticipant.class);
 
-
     public MetaboliteParticipant() {
     }
 
+    public MetaboliteParticipant(Metabolite molecule, Compartment compartment) {
+        super(molecule, 1d, compartment);
+    }
 
     public MetaboliteParticipant(Metabolite molecule, Double coefficient, Compartment compartment) {
         super(molecule, coefficient, compartment);
     }
 
-
     public MetaboliteParticipant(Metabolite molecule, Double coefficient) {
         super(molecule, coefficient);
     }
 
-
     public MetaboliteParticipant(Metabolite molecule) {
         super(molecule);
     }
-
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
@@ -73,14 +70,12 @@ public class MetaboliteParticipant extends Participant<Metabolite, Double, Compa
         setCompartment(Compartment.valueOf(in.readUTF()));
     }
 
-
     public void readExternal(ObjectInput in, MetaboliteCollection metabolites) throws IOException,
                                                                                       ClassNotFoundException {
         setMolecule(metabolites.get(in.readInt()));
         setCoefficient(in.readDouble());
         setCompartment(Compartment.valueOf(in.readUTF()));
     }
-
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
@@ -96,7 +91,4 @@ public class MetaboliteParticipant extends Participant<Metabolite, Double, Compa
         out.writeDouble(getCoefficient());
         out.writeUTF(getCompartment().name());
     }
-
-
 }
-
