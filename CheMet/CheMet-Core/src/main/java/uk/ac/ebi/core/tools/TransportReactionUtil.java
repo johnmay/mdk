@@ -20,16 +20,18 @@
  */
 package uk.ac.ebi.core.tools;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import java.util.AbstractMap.*;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.Compartment;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.Metabolite;
 
 /**
  *          TransportReactionClassifier - 2011.12.12 <br>
@@ -52,35 +54,59 @@ public class TransportReactionUtil {
     };
 
     /**
+     * Uses a simple direct object reference comparison for mapping
+     * @param <T>
+     * @param transportReaction
+     * @return
+     */
+    public static <T> BiMap<Participant<T, ?, Compartment>, Participant<T, ?, Compartment>> getMappings(
+            Reaction<T, ?, Compartment> transportReaction) {
+        return getMappings(transportReaction, new Comparator<T>() {
+
+            public int compare(T o1,
+                               T o2) {
+                return o1.equals(o2) ? 0 : -1;
+            }
+        });
+    }
+
+    public static <T> BiMap<Participant<T, ?, Compartment>, Participant<T, ?, Compartment>> getMappings(
+            Reaction<T, ?, Compartment> transportReaction,
+            Comparator<T> comparator) {
+
+        BiMap<Participant<T, ?, Compartment>, Participant<T, ?, Compartment>> mappings = HashBiMap.create();
+
+        for (Participant<T, ?, Compartment> p1 : transportReaction.getReactantParticipants()) {
+            for (Participant<T, ?, Compartment> p2 : transportReaction.getProductParticipants()) {
+                if (comparator.compare(p1.getMolecule(), p2.getMolecule()) == 0) {
+                    mappings.put(p1, p2);
+                }                
+            }
+        }
+
+        return mappings;
+    }
+
+    /**
      * Classifies the provided MetabolicReaction
      */
-    public static Classification getClassification(MetabolicReaction transportReaction) {
+    public static Classification getClassification(Reaction<Metabolite, ?, Compartment> transportReaction) {
 
         if (!transportReaction.isTransport()) {
             return Classification.UNKNOWN;
         }
 
-        Collection<Entry<Participant<?, ?, Compartment>, Participant<?, ?, Compartment>>> mappings = new ArrayList<Entry<Participant<?, ?, Compartment>, Participant<?, ?, Compartment>>>();
-
-        for (Participant<?, ?, Compartment> p1 : transportReaction.getReactantParticipants()) {
-            for (Participant<?, ?, Compartment> p2 : transportReaction.getProductParticipants()) {
-                if (p1.getMolecule() == p2.getMolecule()) {
-                    mappings.add(new SimpleEntry(p1, p2));
-                }
-            }
-        }
-
-
-        return getClassification(mappings);
+        return getClassification(getMappings(transportReaction));
 
     }
 
-    private static Classification getClassification(Collection<Entry<Participant<?, ?, Compartment>, Participant<?, ?, Compartment>>> mappings) {
+    private static <T> Classification getClassification(
+            BiMap<Participant<T, ?, Compartment>, Participant<T, ?, Compartment>> mappings) {
 
         int total = 0;
         Set<Integer> movement = new HashSet<Integer>();
 
-        for (Entry<Participant<?, ?, Compartment>, Participant<?, ?, Compartment>> entry : mappings) {
+        for (Entry<Participant<T, ?, Compartment>, Participant<T, ?, Compartment>> entry : mappings.entrySet()) {
 
             Participant<?, ?, Compartment> p1 = entry.getKey();
             Participant<?, ?, Compartment> p2 = entry.getValue();
