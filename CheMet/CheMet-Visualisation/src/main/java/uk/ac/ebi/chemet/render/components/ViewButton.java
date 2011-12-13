@@ -67,7 +67,7 @@ public class ViewButton extends JToggleButton {
             @Override
             public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
                 Graphics2D g2 = (Graphics2D) g;
-                g2.setColor(Color.BLACK);
+                g2.setColor(Color.DARK_GRAY);
                 g2.setStroke(new BasicStroke(1.0f));
                 g2.draw(getShape(true));
             }

@@ -20,17 +20,14 @@
  */
 package uk.ac.ebi.chemet.render.list.renderers;
 
+import com.jgoodies.forms.factories.Borders;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Rectangle;
+import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
-import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.render.alignment.AlignmentRenderer;
 import uk.ac.ebi.chemet.render.alignment.BasicAlignmentColor;
@@ -49,7 +46,7 @@ import uk.ac.ebi.chemet.render.ViewUtilities;
  * @author  $Author$ (this version)
  */
 public class LocalAlignmentListCellRenderer
-        extends JPanelRenderingPool<LocalAlignment> {
+        extends ComponentRenderingPool<LocalAlignment> {
 
     private static final Logger LOGGER = Logger.getLogger(LocalAlignmentListCellRenderer.class);
     private static final BasicAlignmentColor color = new BasicAlignmentColor(ColorUtilities.EMBL_PETROL,
@@ -68,10 +65,10 @@ public class LocalAlignmentListCellRenderer
     }
 
     @Override
-    public JPanel create(LocalAlignment object) {
-        JPanel panel = new JPanel();
-        panel.setAlignmentY(SwingConstants.LEFT);
-        return panel;
+    public JComponent create() {
+        Box box = Box.createHorizontalBox();
+        box.setBorder(Borders.EMPTY_BORDER);
+        return box;
     }
 
     @Override
@@ -83,8 +80,8 @@ public class LocalAlignmentListCellRenderer
      * @inheritDoc
      */
     @Override
-    public boolean validate(JComponent component,
-                            LocalAlignment alignment) {
+    public boolean setup(JComponent component,
+                         LocalAlignment alignment) {
 
         component.removeAll();
 
