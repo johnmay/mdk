@@ -20,9 +20,11 @@
  */
 package uk.ac.ebi.chemet.render.factory;
 
+import com.jgoodies.forms.factories.Borders;
 import javax.swing.Action;
 import javax.swing.JButton;
 
+import javax.swing.plaf.basic.BasicButtonUI;
 import org.apache.log4j.Logger;
 
 /**
@@ -34,17 +36,47 @@ import org.apache.log4j.Logger;
  */
 public final class ButtonFactory {
 
-    private static final Logger LOGGER = Logger.getLogger(ButtonFactory.class);
-
+    /**
+     *
+     * Creates a normal button with the provided action. Note that
+     * in most cases the action provides the text/images/description
+     * for the button. These can be easily specified using GeneralAction
+     * and ActionProperties files
+     *
+     * @param action
+     * @return new button instance
+     * 
+     */
     public static JButton newButton(Action action) {
         return new JButton(action);
     }
 
-    public static JButton newButton(String name,
+    /**
+     * Creates a button with the associated action and specified text
+     * @param text title to display on button
+     * @param action the action to perform
+     * @return new button instance
+     */
+    public static JButton newButton(String text,
                                     Action action) {
         JButton button = newButton(action);
-        button.setText(name);
+        button.setText(text);
         return button;
     }
 
+    /**
+     * Creates a 'clean' button with null background color and
+     * an empty border. This is useful for buttons that will only
+     * use an image and no text. 
+     *
+     * @param action the action to perform
+     * @return new button instance
+     */
+    public static JButton newCleanButton(Action action) {
+        JButton button = newButton(action);
+        button.setUI(new BasicButtonUI());
+        button.setBackground(null);
+        button.setBorder(Borders.EMPTY_BORDER);
+        return button;
+    }
 }
