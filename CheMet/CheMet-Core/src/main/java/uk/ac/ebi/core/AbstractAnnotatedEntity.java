@@ -44,7 +44,8 @@ import uk.ac.ebi.observation.ObservationCollection;
  */
 public abstract class AbstractAnnotatedEntity
         extends AbstractReconstructionEntity
-        implements Externalizable, AnnotatedEntity {
+        implements Externalizable,
+                   AnnotatedEntity {
 
     private transient static final Logger logger = Logger.getLogger(AbstractAnnotatedEntity.class);
     private ListMultimap<Byte, Annotation> annotations = ArrayListMultimap.create();
@@ -54,7 +55,9 @@ public abstract class AbstractAnnotatedEntity
     public AbstractAnnotatedEntity() {
     }
 
-    public AbstractAnnotatedEntity(Identifier identifier, String abbreviation, String name) {
+    public AbstractAnnotatedEntity(Identifier identifier,
+                                   String abbreviation,
+                                   String name) {
         super(identifier, abbreviation, name);
     }
 
@@ -153,6 +156,7 @@ public abstract class AbstractAnnotatedEntity
      * @return whether the underlying collection was modified
      */
     public boolean addObservation(Observation observation) {
+        observation.setEntity(this); // set association as we pass to observation collection
         return observations.add(observation);
     }
 
@@ -162,6 +166,7 @@ public abstract class AbstractAnnotatedEntity
      * @return whether the underlying collection was modified
      */
     public boolean removeObservation(Observation observation) {
+        observation.setEntity(null); 
         return observations.remove(observation);
     }
 
@@ -192,7 +197,7 @@ public abstract class AbstractAnnotatedEntity
         rating = (Rating) in.readObject();
 
         observations = new ObservationCollection();
-        observations.readExternal(in);
+        observations.readExternal(in, this);
 
         int totalAnnotations = in.readInt();
 
