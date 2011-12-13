@@ -38,12 +38,12 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class ComponentRenderingPool<C extends JComponent,O>  {
+public abstract class ComponentRenderingPool<C extends JComponent, O> {
 
     private static final Logger LOGGER = Logger.getLogger(ComponentRenderingPool.class);
     private long expirationTime;
     private BiMap<O, C> prerenderPool = HashBiMap.create();
-    private Set<AgingComponent> lockedSet = new HashSet();
+    private Set<AgingComponent> locked = new HashSet();
     private PriorityQueue<AgingComponent> unlocked;
     private Map<C, AgingComponent> componentMap = new HashMap();
 
@@ -78,7 +78,9 @@ public abstract class ComponentRenderingPool<C extends JComponent,O>  {
 
     private void remove(AgingComponent wrapper) {
         C component = wrapper.getComponent();
-        unlocked.remove(wrapper);
+        if (locked.contains(wrapper)) {
+            LOGGER.error("Hmm that's odd?");
+        }
         prerenderPool.inverse().remove(component);
         componentMap.remove(component);
         expire(component);
@@ -88,20 +90,29 @@ public abstract class ComponentRenderingPool<C extends JComponent,O>  {
 
     public synchronized C checkOut(O value) {
 
+        LOGGER.debug("Atempting check out component for " + value);
+
         if (prerenderPool.containsKey(value)) {
+            LOGGER.debug("...using prerendered pool");
             C panel = prerenderPool.get(value);
             unlocked.remove(componentMap.get(panel));
-            lockedSet.add(componentMap.get(panel).resetTimestamp());
+            if (!locked.contains(componentMap.get(panel))) {
+                locked.add(componentMap.get(panel));
+            }
             return panel;
         }
 
         long currentTime = System.currentTimeMillis();
+
+        LOGGER.debug(getClass().getSimpleName() + " unlocked size: " + unlocked.size());
+        LOGGER.debug(getClass().getSimpleName() + " locked size: " + locked.size());
 
         if (unlocked.size() > 0) {
 
             while (!unlocked.isEmpty()
                    && unlocked.peek().isExpired(currentTime)) {
                 remove(unlocked.poll());
+                LOGGER.debug("Removing expired item");
             }
 
             AgingComponent wrapper = unlocked.poll(); // oldest item
@@ -109,23 +120,24 @@ public abstract class ComponentRenderingPool<C extends JComponent,O>  {
                 C component = wrapper.getComponent();
 
                 if (setup(component, value)) {
+                    LOGGER.debug("...using unlocked pooled");
                     unlocked.remove(wrapper);
                     prerenderPool.inverse().remove(component);
                     prerenderPool.put(value, component);
-                    lockedSet.add(wrapper.resetTimestamp());
+                    locked.add(wrapper.resetTimestamp());
                     return component;
                 } else {
                     LOGGER.fatal("Component failed setup. This is not recoverable");
                 }
             }
 
-
         }
 
+        LOGGER.debug("...creating new");
         C component = create();
         setup(component, value);
         AgingComponent wrapper = new AgingComponent(component);
-        lockedSet.add(wrapper);
+        locked.add(wrapper);
         componentMap.put(component, wrapper);
         prerenderPool.put(value, component);
         return component;
@@ -133,18 +145,19 @@ public abstract class ComponentRenderingPool<C extends JComponent,O>  {
     }
 
     public synchronized void checkIn(O value) {
+        LOGGER.debug("Checking in " + value);
         if (prerenderPool.containsKey(value)) {
             checkIn(prerenderPool.get(value));
+        } else {
+            LOGGER.debug("Attepting check-in on non managed object");
         }
     }
 
     public synchronized void checkIn(C component) {
         AgingComponent wrapper = componentMap.get(component);
-        lockedSet.remove(wrapper);
+        locked.remove(wrapper);
         unlocked.add(wrapper.resetTimestamp());
     }
-
-
 
     private class AgingComponent
             implements Comparable<AgingComponent> {
