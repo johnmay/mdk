@@ -37,8 +37,8 @@ import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.tools.ReconstructionComparison;
-import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
-import uk.ac.ebi.mnb.renderers.ChemicalStructureRenderer;
+import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
+import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;
 
 /**
  *          Comparisson - 2011.11.29 <br>

@@ -25,7 +25,7 @@ import java.awt.Color;
 import java.awt.Font;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Theme;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  *          DefaultTheme – 2011.09.30 <br>
@@ -56,15 +56,15 @@ public class DarkTheme implements Theme {
     }
 
     public Color getDialogBackground() {
-        return ViewUtils.BACKGROUND;
+        return ViewUtilities.BACKGROUND;
     }
 
     public Font getBodyFont() {
-        return ViewUtils.DEFAULT_BODY_FONT;
+        return ViewUtilities.DEFAULT_BODY_FONT;
     }
 
     public Font getHeaderFont() {
-        return ViewUtils.DEFAULT_HEADER_FONT;
+        return ViewUtilities.DEFAULT_HEADER_FONT;
     }
 
     public float getDialogOpacity() {
@@ -72,7 +72,7 @@ public class DarkTheme implements Theme {
     }
 
     public Font getLinkFont() {
-        return ViewUtils.DEFAULT_LINK_FONT;
+        return ViewUtilities.DEFAULT_LINK_FONT;
     }
 
     public Color getEmphasisedForeground() {

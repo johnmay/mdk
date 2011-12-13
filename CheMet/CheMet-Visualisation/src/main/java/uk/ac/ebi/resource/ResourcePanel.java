@@ -25,7 +25,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import furbelow.SpinningDial;
+import net.sf.furbelow.SpinningDial;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.text.DateFormat;

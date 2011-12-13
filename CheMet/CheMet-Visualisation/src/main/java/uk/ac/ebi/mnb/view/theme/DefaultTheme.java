@@ -25,7 +25,7 @@ import java.awt.Color;
 import java.awt.Font;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Theme;
-import uk.ac.ebi.visualisation.ViewUtils;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  *          DefaultTheme – 2011.09.30 <br>
@@ -38,8 +38,8 @@ public class DefaultTheme implements Theme {
 
     private static final Logger LOGGER = Logger.getLogger(DefaultTheme.class);
     private Color bg = new Color(237, 237, 237);
-    private Icon plus =  ViewUtils.getIcon("images/plus_12x12.png");
-    private Icon minus =  ViewUtils.getIcon("images/minus_12x12.png");
+    private Icon plus =  ViewUtilities.getIcon("images/plus_12x12.png");
+    private Icon minus =  ViewUtilities.getIcon("images/minus_12x12.png");
 
     public Color getWarningForeground() {
         return Color.RED;
@@ -68,15 +68,15 @@ public class DefaultTheme implements Theme {
     }
 
     public Font getBodyFont() {
-        return ViewUtils.DEFAULT_BODY_FONT;
+        return ViewUtilities.DEFAULT_BODY_FONT;
     }
 
     public Font getHeaderFont() {
-        return ViewUtils.DEFAULT_HEADER_FONT;
+        return ViewUtilities.DEFAULT_HEADER_FONT;
     }
 
     public Font getLinkFont(){
-        return ViewUtils.DEFAULT_LINK_FONT;
+        return ViewUtilities.DEFAULT_LINK_FONT;
     }
 
     

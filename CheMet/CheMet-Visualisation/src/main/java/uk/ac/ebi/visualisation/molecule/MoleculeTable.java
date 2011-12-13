@@ -33,7 +33,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.mnb.renderers.AnnotationCellRenderer;
+import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.visualisation.molecule.access.EntityAccessor;
 
 /**
