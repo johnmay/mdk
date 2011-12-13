@@ -35,43 +35,45 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.interfaces.services.ChemicalNameQueryService;
-import uk.ac.ebi.io.remote.ChEBINames;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.io.remote.PubChemCompoundNames;
+import uk.ac.ebi.io.remote.PubChemCompoundNames.PCCompNamesLuceneFields;
+import uk.ac.ebi.io.remote.PubChemCompoundNames.PCCompNameTypes;
+import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
- *          ChEBINameService - 2011.10.26 <br>
+ *          PubChemCompoundNameService - 2011.10.26 <br>
  *          Singleton description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ChEBINameService
-        extends ChEBIQueryService
-        implements ChemicalNameQueryService<ChEBIIdentifier> {
+public class PubChemCompoundNameService
+        extends PubChemCompoundQueryService
+            implements ChemicalNameQueryService<PubChemCompoundIdentifier> {
 
-    private static final Logger LOGGER = Logger.getLogger(ChEBINameService.class);
+    private static final Logger LOGGER = Logger.getLogger(PubChemCompoundNameService.class);
     private IndexSearcher searcher;
-    private Term idTerm = new Term("id");
-    private Term nameTerm = new Term("name");
-    private Term typeTerm = new Term(ChEBINames.ChEBINameLuceneFields.type.toString());
+    private Term idTerm = new Term(PCCompNamesLuceneFields.PubChemCompID.toString());
+    private Term nameTerm = new Term(PCCompNamesLuceneFields.Name.toString());
+    private Term typeTerm = new Term(PCCompNamesLuceneFields.Type.toString());
 
-    private ChEBINameService() {
-        super(new ChEBINames());
+    private PubChemCompoundNameService() {
+        super(new PubChemCompoundNames());
         try {
             searcher = new IndexSearcher(getDirectory(), true);
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ChEBINameService.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PubChemCompoundNameService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public static ChEBINameService getInstance() {
-        return ChEBINameServiceHolder.INSTANCE;
+    public static PubChemCompoundNameService getInstance() {
+        return PubChemCompoundNameServiceHolder.INSTANCE;
     }
 
-    public String getIUPACName(ChEBIIdentifier identifier) {
+    public String getIUPACName(PubChemCompoundIdentifier identifier) {
         try {
-            Query queryId = new TermQuery(idTerm.createTerm("CHEBI:"+identifier.getNumericPartOfAccession()));
-            Query queryType = new TermQuery(typeTerm.createTerm("IUPAC NAME"));
+            Query queryId = new TermQuery(idTerm.createTerm(identifier.getAccession()));
+            Query queryType = new TermQuery(typeTerm.createTerm(PCCompNameTypes.IUPACName.toString()));
             
             BooleanQuery query = new BooleanQuery();
             query.add(queryId, Occur.MUST);
@@ -81,37 +83,41 @@ public class ChEBINameService
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             if(hits.length>0)
-                return getValue(hits[0], ChEBINames.ChEBINameLuceneFields.name.toString());
+                return getValue(hits[0], PCCompNamesLuceneFields.Name.toString());
         } catch(IOException ex) {
             LOGGER.info(ex.getMessage());
         }
         return null;
     }
 
-    private static class ChEBINameServiceHolder {
-
-        private static final ChEBINameService INSTANCE = new ChEBINameService();
+    public PubChemCompoundIdentifier getIdentifier() {
+        return new PubChemCompoundIdentifier();
     }
 
-    public Collection<ChEBIIdentifier> fuzzySearchForName(String name) {
+    private static class PubChemCompoundNameServiceHolder {
+
+        private static final PubChemCompoundNameService INSTANCE = new PubChemCompoundNameService();
+    }
+
+    public Collection<PubChemCompoundIdentifier> fuzzySearchForName(String name) {
         Query q = new FuzzyQuery(nameTerm.createTerm(name));
         return search(q);
     }
 
-    public Collection<ChEBIIdentifier> searchForName(String name) {
+    public Collection<PubChemCompoundIdentifier> searchForName(String name) {
         Query q = new TermQuery(nameTerm.createTerm(name));
         return search(q);
     }
 
-    private Collection<ChEBIIdentifier> search(Query query) {
-        Collection<ChEBIIdentifier> ids = new HashSet<ChEBIIdentifier>();
+    private Collection<PubChemCompoundIdentifier> search(Query query) {
+        Collection<PubChemCompoundIdentifier> ids = new HashSet<PubChemCompoundIdentifier>();
 
         try {
             TopScoreDocCollector collector = TopScoreDocCollector.create(getMaxResults(), true);
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc scoreDoc : hits) {
-                ids.add(new ChEBIIdentifier(getValue(scoreDoc, "id")));
+                ids.add(new PubChemCompoundIdentifier(getValue(scoreDoc, PCCompNamesLuceneFields.PubChemCompID.toString())));
             }
         } catch (IOException ex) {
             LOGGER.error("Error occur whilst searching with query " + query);
@@ -120,10 +126,10 @@ public class ChEBINameService
         return ids;
     }
     
-    public String getPreferredName(ChEBIIdentifier identifier) {
+    public String getPreferredName(PubChemCompoundIdentifier identifier) {
         try {
-            Query queryId = new TermQuery(idTerm.createTerm("CHEBI:"+identifier.getNumericPartOfAccession()));
-            Query queryType = new TermQuery(typeTerm.createTerm("NAME"));
+            Query queryId = new TermQuery(idTerm.createTerm(identifier.getAccession()));
+            Query queryType = new TermQuery(typeTerm.createTerm(PCCompNameTypes.Name.toString()));
             
             BooleanQuery query = new BooleanQuery();
             query.add(queryId, Occur.MUST);
@@ -133,28 +139,28 @@ public class ChEBINameService
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             if(hits.length>0)
-                return getValue(hits[0], ChEBINames.ChEBINameLuceneFields.name.toString());
+                return getValue(hits[0], PCCompNamesLuceneFields.Name.toString());
         } catch(IOException ex) {
             LOGGER.info(ex.getMessage());
         }
         return null;
     }
     
-    public Collection<String> getSynonyms(ChEBIIdentifier identifier) {
+    public Collection<String> getSynonyms(PubChemCompoundIdentifier identifier) {
         try {
-            Query queryId = new TermQuery(idTerm.createTerm("CHEBI:"+identifier.getNumericPartOfAccession()));
-            Query queryType = new TermQuery(typeTerm.createTerm("SYNONYM"));
+            Query queryId = new TermQuery(idTerm.createTerm(identifier.getAccession()));
+            Query queryType = new TermQuery(typeTerm.createTerm(PCCompNameTypes.Synonym.toString()));
             
             BooleanQuery query = new BooleanQuery();
             query.add(queryId, Occur.MUST);
             query.add(queryType, Occur.MUST);
             
-            TopScoreDocCollector collector = TopScoreDocCollector.create(50, true);
+            TopScoreDocCollector collector = TopScoreDocCollector.create(100, true);
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             Collection<String> synonyms = new HashSet<String>(hits.length);
             for (ScoreDoc scoreDoc : hits) {
-                synonyms.add(getValue(scoreDoc, ChEBINames.ChEBINameLuceneFields.name.toString()));
+                synonyms.add(getValue(scoreDoc, PCCompNamesLuceneFields.Name.toString()));
             }
             return synonyms;
         } catch(IOException ex) {
@@ -163,9 +169,9 @@ public class ChEBINameService
         return null;
     }
 
-    public Collection<String> getNames(ChEBIIdentifier identifier) {
+    public Collection<String> getNames(PubChemCompoundIdentifier identifier) {
         try {
-            Query q = new TermQuery(idTerm.createTerm("CHEBI:"+identifier.getNumericPartOfAccession()));
+            Query q = new TermQuery(idTerm.createTerm(identifier.getAccession()));
 
             TopScoreDocCollector collector = TopScoreDocCollector.create(20, true);
             searcher.search(q, collector);
@@ -175,7 +181,7 @@ public class ChEBINameService
             //}
             Collection<String> names = new HashSet<String>(hits.length);
             for (ScoreDoc scoreDoc : hits) {
-                names.add(getValue(scoreDoc, ChEBINames.ChEBINameLuceneFields.name.toString()));
+                names.add(getValue(scoreDoc, PCCompNamesLuceneFields.Name.toString()));
                 //return Arrays.asList(getValues(scoreDoc, "name"));
             }
             return names;

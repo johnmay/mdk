@@ -61,7 +61,9 @@ import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
  *          PubChemCompoundCrossRefs - 2011.10.25 <br>
  *          This class is slightly different to the other ones of its class in the sense that it doesn't build an index
  *          for the entire database of PubChem compounds, but only for a provided set. When run with an existent index,
- *          it should only add new cross references. This should not be executed with more than 5000, which is the suggested
+ *          it should only add new cross references (but this is not currently working, as that part is commented for some reason). 
+ *          This should not be executed with more than 5000 records at once, 
+ *          which is the suggested
  *          record limit for ELink at NCBI (ELink is part of the EUtils).
  * @version $Rev$ : Last Changed $Date$
  * @author  pmoreno

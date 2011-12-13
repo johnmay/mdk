@@ -20,9 +20,7 @@
  */
 package uk.ac.ebi.metabolomes.webservices;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -50,6 +48,7 @@ import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.metabolomes.webservices.eutils.ELinkXMLResponseParser;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemCompoundESummaryResult;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemCompoundXMLResponseParser;
+import uk.ac.ebi.metabolomes.webservices.eutils.PubChemNamesResult;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemSubstanceESummaryResult;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemSubstanceXMLResponseParser;
 import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
@@ -174,6 +173,14 @@ public class EUtilsWebServiceConnection {
         }
         return getPubChemSubstanceFromPubChemCompound(pubchemComps);
     }
+    
+    public PubChemNamesResult getNamesForPubChemCompoundIdentifiers(Collection<PubChemCompoundIdentifier> pubchemCompoundIds) {
+        Collection<String> pubchemComps = new ArrayList<String>(pubchemCompoundIds.size());
+        for (PubChemCompoundIdentifier pubChemCompoundIdentifier : pubchemCompoundIds) {
+            pubchemComps.add(pubChemCompoundIdentifier.getAccession());
+        }
+        return getNamesForPubChemCompounds(pubchemComps);
+    }
 
     /*public Multimap<PubChemCompoundIdentifier,PubChemSubstanceIdentifier> getPubChemSubstanceIdentFromPubChemCompoundIdents(List<PubChemCompoundIdentifier> compounds) {
     
@@ -265,6 +272,18 @@ public class EUtilsWebServiceConnection {
      * @return cids 2 names map. 
      */
     public Map<String, String> getPreferredNameForPubChemCompounds(List<String> pubchemCompoundIds) {
+        PubChemNamesResult result = getNamesForPubChemCompounds(pubchemCompoundIds);
+        return result.getCompound2PreferredNameMap();
+    }
+    
+    /**
+     * Given a set of PubChem Compound IDs (not more than 5000), this method returns the preferred name for each
+     * one of the entries. For pubchem compound the preferred name tends to be the first one in the list of synonyms.
+     * 
+     * @param pubchemCompoundIds
+     * @return cids 2 names map. 
+     */
+    public PubChemNamesResult getNamesForPubChemCompounds(Collection<String> pubchemCompoundIds) {
         WebResource webRes = client.resource(baseURL + "esummary.fcgi");
         MultivaluedMap queryParams = new MultivaluedMapImpl();
         queryParams.add("db", "pccompound");
@@ -281,17 +300,18 @@ public class EUtilsWebServiceConnection {
         
         Map<String,String> cids2name = new HashMap<String, String>();
         PubChemCompoundXMLResponseParser parser = new PubChemCompoundXMLResponseParser();
+        PubChemNamesResult result = new PubChemNamesResult();
         try {
             List<PubChemCompoundESummaryResult> resultsParse = parser.parseESummaryResult(resp.getEntityInputStream());
             for (PubChemCompoundESummaryResult pubChemSubstanceESummaryResult : resultsParse) {
-                cids2name.put(pubChemSubstanceESummaryResult.getId(), pubChemSubstanceESummaryResult.getPreferredName());
+                result.addPreferredName(pubChemSubstanceESummaryResult.getId(), pubChemSubstanceESummaryResult.getPreferredName());
+                result.addIUPACName(pubChemSubstanceESummaryResult.getId(), pubChemSubstanceESummaryResult.getIUPACName());
+                result.addSynonyms(pubChemSubstanceESummaryResult.getId(), pubChemSubstanceESummaryResult.getSynonyms());
             }
         } catch (XMLStreamException ex) {
             LOGGER.warn("Could not parse output XML adequately... returning empty result", ex);
         }
-        return cids2name;
-        
-        
+        return result;   
     }
 
     /**

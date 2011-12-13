@@ -40,6 +40,8 @@ public interface NameQueryService<I extends Identifier> extends QueryService<I> 
 
     public Collection<String> getNames(I identifier);
 
-  
+    public String getPreferredName(I identifier);
+    
+    public Collection<String> getSynonyms(I identifier);
 
 }

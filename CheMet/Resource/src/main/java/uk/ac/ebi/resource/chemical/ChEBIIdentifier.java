@@ -46,7 +46,7 @@ public class ChEBIIdentifier
 
     /**
      *
-     * Constructor a ChEBI identifier with a given accession
+     * Constructor a ChEBI identifier with a given accession. The accession given should begin with 'ChEBI:'.
      *
      * @param accession
      *
@@ -69,7 +69,7 @@ public class ChEBIIdentifier
      *
      */
     public ChEBIIdentifier(Integer accession) {
-        super("CHEBI:" + accession);
+        super("ChEBI:" + accession);
     }
 
     /**

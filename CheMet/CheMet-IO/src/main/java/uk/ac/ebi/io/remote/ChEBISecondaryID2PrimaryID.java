@@ -22,15 +22,25 @@ package uk.ac.ebi.io.remote;
 
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import au.com.bytecode.opencsv.CSVReader;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.prefs.Preferences;
+import java.util.zip.ZipInputStream;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
@@ -38,81 +48,60 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
+import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.metabolomes.webservices.EUtilsWebServiceConnection;
+import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
- *          ChEBISearch - 2011.10.25 <br>
- *          Class description
+ *          ChEBISecondaryID2PrimaryID - 2011.12.11 <br>
+ *          Creates a Lucene index that allows to map secondary ChEBI identifiers to primary ChEBI Identifiers.
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
+ * @author  pmoreno
  * @author  $Author$ (this version)
  */
-public class ChEBINames
+public class ChEBISecondaryID2PrimaryID
         extends AbstrastRemoteResource
         implements LuceneService, RemoteResource {
 
-    private static final Logger LOGGER = Logger.getLogger(ChEBINames.class);
+    private static final Logger LOGGER = Logger.getLogger(ChEBISecondaryID2PrimaryID.class);
     private Analyzer analzyer;
-    private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names_3star.tsv";
-    private static final String locationAllStars = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv";
+    private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession.tsv";
+    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
 
-    public enum ChEBINameLuceneFields {
+    public enum ChEBISecondary2PrimaryLuceneFields {
 
-        id, name, type;
+        ChebiIDSec, ChebiIDPrim;
     }
 
-    /**
-     * Constructor uses by default 3 stars.
-     * 
-     */
-    public ChEBINames() {
+    public ChEBISecondaryID2PrimaryID() {
         super(location, getFile());
         analzyer = new KeywordAnalyzer();
     }
 
-    /**
-     * If given true, it will use the 3 stars location, else, it will use the file containing the all stars.
-     * 
-     * @param only3Stars 
-     */
-    public ChEBINames(Boolean only3Stars) {
-        super(getFile());
-        if (only3Stars) {
-            super.setRemote(location);
-        } else {
-            super.setRemote(locationAllStars);
-        }
-        analzyer = new KeywordAnalyzer();
-    }
-
     public void update() throws IOException {
-        CSVReader reader = new CSVReader(new InputStreamReader(getRemote().openStream()), '\t', '\0');
+        // TODO Method getSecondaryToParentID could be moved to this class and be called statically from this class,
+        // which seems more related to the task of resolving secondary to primary links.
+        Map<String, String> sec2PrimaryID = ChEBICrossRefs.getSecondaryToParentID();
 
-        String[] row = reader.readNext();
-        Map<String, Integer> map = createMap(row);
-
-        //Map<Integer, Document> docs = new HashMap();
         List<Document> docs = new ArrayList<Document>();
-        String currentId = "";
 
-        while ((row = reader.readNext()) != null) {
-            int id = Integer.parseInt(row[map.get("COMPOUND_ID")]);
-            String name = row[map.get("NAME")];
-            String type = row[map.get("TYPE")];
-            //Document doc = docs.get(id);
-            //if (doc == null) {
+        for (String chebiIDSec : sec2PrimaryID.keySet()) {
+
+            String chebiIDPrim = sec2PrimaryID.get(chebiIDSec);
             Document doc = new Document();
-            doc.add(new Field(ChEBINameLuceneFields.id.toString(), "CHEBI:" + id, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
-            doc.add(new Field(ChEBINameLuceneFields.type.toString(), type, Field.Store.YES, Field.Index.ANALYZED));
-            doc.add(new Field(ChEBINameLuceneFields.name.toString(), name, Field.Store.YES, Field.Index.ANALYZED));
+
+            doc.add(new Field(ChEBISecondary2PrimaryLuceneFields.ChebiIDSec.toString(), chebiIDSec, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.add(new Field(ChEBISecondary2PrimaryLuceneFields.ChebiIDPrim.toString(), chebiIDPrim, Field.Store.YES, Field.Index.NOT_ANALYZED));
             docs.add(doc);
-            //}
-            
+
         }
-        reader.close();
 
         // write the index
         Directory index = new SimpleFSDirectory(getLocal());
@@ -120,7 +109,7 @@ public class ChEBINames
         writer.addDocuments(docs);
         writer.close();
         index.close();
-
+        docs.clear();
     }
 
     public Analyzer getAnalzyer() {
@@ -134,29 +123,23 @@ public class ChEBINames
             throw new UnsupportedOperationException("Index can not fail to open! unsupported");
         }
     }
-
-    private Map<String, Integer> createMap(String[] row) {
-        Map<String, Integer> map = new HashMap();
-        for (int i = 0; i < row.length; i++) {
-            map.put(row[i], i);
-        }
-        return map;
-    }
-
+    
+    
     public static void main(String[] args) throws MalformedURLException, IOException {
-        new ChEBINames(false).update();
+        new ChEBISecondaryID2PrimaryID().update();
     }
+    
 
     private static File getFile() {
         String defaultFile = System.getProperty("user.home")
                 + File.separator + "databases"
                 + File.separator + "indexes"
-                + File.separator + "chebi-names";
-        Preferences prefs = Preferences.userNodeForPackage(ChEBINames.class);
-        return new File(prefs.get("chebi.name.path", defaultFile));
+                + File.separator + "chebi-sec2prim";
+        Preferences prefs = Preferences.userNodeForPackage(ChEBISecondaryID2PrimaryID.class);
+        return new File(prefs.get("chebi.secondary2primary.path", defaultFile));
     }
 
     public String getDescription() {
-        return "ChEBI Names";
+        return "ChEBI Secondary to primary resolver";
     }
 }

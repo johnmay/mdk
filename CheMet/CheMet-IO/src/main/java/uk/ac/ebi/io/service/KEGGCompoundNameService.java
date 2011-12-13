@@ -65,6 +65,14 @@ public class KEGGCompoundNameService
         return KEGGCompoundNameServiceHolder.INSTANCE;
     }
 
+    public String getPreferredName(KEGGCompoundIdentifier identifier) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Collection<String> getSynonyms(KEGGCompoundIdentifier identifier) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     private static class KEGGCompoundNameServiceHolder {
 
         private static final KEGGCompoundNameService INSTANCE = new KEGGCompoundNameService();

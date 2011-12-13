@@ -22,7 +22,9 @@ package uk.ac.ebi.metabolomes.webservices.eutils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.IdentifierFactory;
 
@@ -53,30 +55,114 @@ public class PubChemCompoundESummaryResult extends ESummaryResult {
     public void setPreferredName(String preferredName) {
         this.preferredName = preferredName;
     }
+    private final Pattern inchiKeyPat = Pattern.compile("^[A-Z]{14}\\-[A-Z]{10}\\-[A-Z]{1}");
+    private final Pattern casNumberPat = Pattern.compile("^\\d+\\-\\d+\\-\\d+$");
+    private final Pattern pchemCidPat = Pattern.compile("^CID\\d+$");
+    private final Pattern keggDrugPat = Pattern.compile("^D\\d+$");
+    private final Pattern keggCompPat = Pattern.compile("^C\\d+$");
+    private final Pattern strangePubchemCodePat = Pattern.compile("^[A-Z0-9]{32}$");
+    private final Pattern strangeEPCodePat = Pattern.compile("\\d+-EP\\d+A\\d");
+    private final Pattern flukaPat = Pattern.compile("\\d+_FLUKA");
+    private final Pattern molPortPat = Pattern.compile("^MolPort");
+    private final Pattern aldrichPat = Pattern.compile("_ALDRICH");
+    private final Pattern sialPat = Pattern.compile("_SIAL");
+    private final Pattern ncgcPat = Pattern.compile("^NCGC\\d+-\\d+");
+    private final Pattern ccCrisPat = Pattern.compile("^CCRIS");
+    private final Pattern akosPat = Pattern.compile("^AKOS");
+
+
+    private void cleanUpSynonyms() {
+        
+        List<Pattern> patterns = new ArrayList<Pattern>(15);
+        patterns.add(inchiKeyPat);
+        patterns.add(casNumberPat);
+        patterns.add(pchemCidPat);
+        patterns.add(keggCompPat);
+        patterns.add(keggDrugPat);
+        patterns.add(strangeEPCodePat);
+        patterns.add(strangePubchemCodePat);
+        patterns.add(flukaPat);
+        patterns.add(molPortPat);
+        patterns.add(aldrichPat);
+        patterns.add(sialPat);
+        patterns.add(ncgcPat);
+        patterns.add(ccCrisPat);
+        patterns.add(akosPat);
+        
+        loop1:
+        for (int index = 0; index < synonyms.size(); index++) {
+            if (this.synonyms.get(index).startsWith("BRN ")) {
+                synonyms.remove(index);
+                index--;
+                continue;
+            }
+            for (Pattern pattern : patterns) {
+                if(pattern.matcher(synonyms.get(index)).find()) {
+                    synonyms.remove(index);
+                    index--;
+                    continue loop1;
+                }
+            }
+            if (this.synonyms.get(index).startsWith("AC1")) {
+                synonyms.remove(index);
+                index--;
+                continue;
+            }
+            if (this.synonyms.get(index).startsWith("CHEBI:")) {
+                synonyms.remove(index);
+                index--;
+                continue;
+            }
+            if (this.synonyms.get(index).startsWith("CHEMBL")) {
+                synonyms.remove(index);
+                index--;
+                continue;
+            }
+            if (this.synonyms.get(index).startsWith("EINECS")) {
+                synonyms.remove(index);
+                index--;
+                continue;
+            }
+            if (this.synonyms.get(index).startsWith("ZINC")) {
+                synonyms.remove(index);
+                index--;
+                continue;
+            }
+            if (this.synonyms.get(index).startsWith("HMDB")) {
+                synonyms.remove(index);
+                index--;
+                continue;
+            }
+            if (this.synonyms.get(index).startsWith("HSDB")) {
+                synonyms.remove(index);
+                index--;
+                continue;
+            }
+            if (this.synonyms.get(index).startsWith("AIDS")) {
+                synonyms.remove(index);
+                index--;
+                continue;
+            }
+            if (this.synonyms.get(index).startsWith("InChI")) {
+                synonyms.remove(index);
+                index--;
+                continue;
+            }
+        }
+    }
 
     private void choosePreferredName() {
         //this.setPreferredName(this.synonyms.get(0));
-        if(this.synonyms.size()==1)
+        if (this.synonyms.size() == 1) {
             this.setPreferredName(this.synonyms.get(0));
-        else {
-            int index=0;
-            while(true) {
-                if(this.synonyms.get(index).startsWith("BRN ")) {
-                    index++;
-                    continue;
-                }
-                if(this.synonyms.get(index).startsWith("AC1L")) {
-                    index++;
-                    continue;
-                }
-                if(this.synonyms.get(index).startsWith("CHEBI:")) {
-                    index++;
-                    continue;
-                }
-                break;
+        } else {
+            int index = 0;
+
+            if (index < this.synonyms.size()) {
+                this.setPreferredName(this.synonyms.remove(index));
+            } else {
+                this.setPreferredName(iupacName);
             }
-            if(index<this.synonyms.size())
-                this.setPreferredName(synonyms.get(index));
         }
     }
 
@@ -98,7 +184,6 @@ public class PubChemCompoundESummaryResult extends ESummaryResult {
 
         CID, IUPACName;
     }
-    
     /**
      * This is all internal representation.
      */
@@ -141,16 +226,21 @@ public class PubChemCompoundESummaryResult extends ESummaryResult {
     @Override
     public void wrap() {
         super.wrap();
+        cleanUpSynonyms();
         // here we could set the preferred name to either the first synonym or the iupac name.
-        if(this.synonyms.size()>0) {
+        if (this.synonyms.size() > 0) {
             choosePreferredName();
-        }
-        else
+        } else {
             this.setPreferredName(this.iupacName);
+        }
     }
-    
+
     private void setIupacName(String iupacName) {
         this.iupacName = iupacName;
+    }
+
+    public String getIUPACName() {
+        return iupacName;
     }
 
     /**
@@ -184,5 +274,4 @@ public class PubChemCompoundESummaryResult extends ESummaryResult {
     public void addSynonym(String synonym) {
         this.synonyms.add(synonym);
     }
-
 }

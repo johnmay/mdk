@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.metabolomes.webservices.eutils.PubChemNamesResult;
 import static org.junit.Assert.*;
 
 /**
@@ -151,6 +152,7 @@ public class EUtilsWebServiceConnectionTest {
     public void testPreferredNameRetrievalForPubChemCIDs() throws Exception {
         System.out.println("testPreferredNameRetrievalForPubChemCIDs");
         List<String> pubchemCompoundIds = new ArrayList<String>();
+        pubchemCompoundIds.add("949");
         pubchemCompoundIds.add("44264212");
         pubchemCompoundIds.add("44134622");
         pubchemCompoundIds.add("24201024");
@@ -174,6 +176,14 @@ public class EUtilsWebServiceConnectionTest {
         
         for (String pccompId : pccomp2Names.keySet()) {
             System.out.println(pccompId+"\t"+pccomp2Names.get(pccompId));
+        }
+        
+        PubChemNamesResult res = instance.getNamesForPubChemCompounds(pubchemCompoundIds);
+        
+        for (String pccompId : res.getCompoundIds()) {
+            for (String syn : res.getSynonyms(pccompId)) {
+                System.out.println(pccompId+"\tS:"+syn);
+            }
         }
     }
 }
