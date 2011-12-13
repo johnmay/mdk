@@ -44,7 +44,9 @@ public class RemoteResourceManager {
                                                                                          new ChEBICrossRefs(),
                                                                                          new ChEBIChemicalData(),
                                                                                          new KEGGCompoundNames(),
-                                                                                         new KEGGCompoundMols()));
+                                                                                         new KEGGCompoundMols(),
+                                                                                         new PubChemCompoundNames(),
+                                                                                         new PubChemCompoundCrossRefs()));
 
     private RemoteResourceManager() {
     }
