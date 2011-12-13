@@ -21,6 +21,7 @@
 package uk.ac.ebi.chemet.render.factory;
 
 import com.jgoodies.forms.factories.Borders;
+import java.awt.Color;
 import javax.swing.Action;
 import javax.swing.JButton;
 
@@ -75,8 +76,8 @@ public final class ButtonFactory {
     public static JButton newCleanButton(Action action) {
         JButton button = newButton(action);
         button.setUI(new BasicButtonUI());
-        button.setBackground(null);
         button.setBorder(Borders.EMPTY_BORDER);
+        button.setBackground(null);
         return button;
     }
 }

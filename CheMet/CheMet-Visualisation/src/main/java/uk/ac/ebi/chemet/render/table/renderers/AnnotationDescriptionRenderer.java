@@ -1,7 +1,7 @@
 /**
- * BasicAnnotationCellRenderer.java
+ * AnnotationDescriptionRenderer.java
  *
- * 2011.09.29
+ * 2011.12.13
  *
  * This file is part of the CheMet library
  * 
@@ -20,60 +20,42 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
-import com.google.common.base.Joiner;
-import java.awt.Component;
-import java.util.Collection;
 import javax.swing.JLabel;
-import javax.swing.JTable;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.render.factory.LabelFactory;
 import uk.ac.ebi.chemet.render.list.renderers.TableCellRenderingPool;
 import uk.ac.ebi.interfaces.Annotation;
 
 /**
- *          AnnotationCellRenderer – 2011.09.29 <br>
- *          A simple annotation cell renderer that joins the toString() values 
- *          of a collection of annotations using a comma and space ', '.
+ *          AnnotationDescriptionRenderer - 2011.12.13 <br>
+ *          Using an annotation this renderer will produce a nice label
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AnnotationCellRenderer
-        extends TableCellRenderingPool<JLabel, Object> {
+public class AnnotationDescriptionRenderer
+        extends TableCellRenderingPool<JLabel, Annotation> {
 
-    private boolean html = false;
-    private String token = ", ";
+    private static final Logger LOGGER = Logger.getLogger(AnnotationDescriptionRenderer.class);
 
-    public AnnotationCellRenderer() {
-    }
-
-    public AnnotationCellRenderer(boolean html,
-                                  String token) {
-        this.html = html;
-        this.token = token;
-    }
-
-    @Override
-    public boolean setup(JLabel component,
-                         Object value) {
-        String text = value instanceof Collection
-                      ? Joiner.on(token).join((Collection) value)
-                      : value.toString();
-
-
-        component.setText(html ? ViewUtilities.htmlWrapper(text) : text);
-
-        return true;
-
+    public AnnotationDescriptionRenderer() {
     }
 
     @Override
     public JLabel create() {
-        return LabelFactory.newLabel("empty");
+        return LabelFactory.newFormLabel("empty");
     }
 
     @Override
     public void expire(JLabel component) {
         // do nothing
+    }
+
+    @Override
+    public boolean setup(JLabel label,
+                         Annotation annotation) {
+        label.setText(annotation.getShortDescription());
+        label.setToolTipText(annotation.getLongDescription());
+        return true;
     }
 }

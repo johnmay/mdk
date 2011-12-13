@@ -37,7 +37,8 @@ import uk.ac.ebi.visualisation.molecule.MoleculeRenderer;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ChemicalStructureRenderer extends DefaultRenderer {
+public class ChemicalStructureRenderer
+        extends DefaultRenderer {
 
     public ChemicalStructureRenderer() {
     }
@@ -50,13 +51,20 @@ public class ChemicalStructureRenderer extends DefaultRenderer {
                                                    int row,
                                                    int column) {
 
-        Collection<ChemicalStructure> collection = value instanceof Collection ? (Collection) value : Arrays.asList(value);
+        Collection<ChemicalStructure> collection = value instanceof Collection ? (Collection) value : Arrays.asList(
+                value);
+
+        if (table.getColumnModel().getColumn(column).getPreferredWidth() != table.getRowHeight(row)) {
+            table.setRowHeight(row, table.getColumnModel().getColumn(column).getPreferredWidth());
+        }
 
         if (collection.iterator().hasNext()) {
             try {
                 ChemicalStructure structure = collection.iterator().next();
                 this.setIcon(new ImageIcon(MoleculeRenderer.getInstance().getImage(structure.getMolecule(),
-                                                                                   new Rectangle(0, 0, table.getRowHeight(), table.getRowHeight()))));
+                                                                                   new Rectangle(0, 0,
+                                                                                                 table.getRowHeight(row),
+                                                                                                 table.getRowHeight(row)))));
             } catch (CDKException ex) {
                 System.err.println("Unable to render molecule: " + ex.getMessage());
             }

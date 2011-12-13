@@ -22,12 +22,14 @@ package uk.ac.ebi.chemet.render.list.renderers;
 
 import com.jgoodies.forms.factories.Borders;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Rectangle;
 import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.render.alignment.AlignmentRenderer;
 import uk.ac.ebi.chemet.render.alignment.BasicAlignmentColor;
@@ -46,7 +48,7 @@ import uk.ac.ebi.chemet.render.ViewUtilities;
  * @author  $Author$ (this version)
  */
 public class LocalAlignmentListCellRenderer
-        extends ComponentRenderingPool<LocalAlignment> {
+        extends ListCellRenderingPool<JLabel, LocalAlignment> {
 
     private static final Logger LOGGER = Logger.getLogger(LocalAlignmentListCellRenderer.class);
     private static final BasicAlignmentColor color = new BasicAlignmentColor(ColorUtilities.EMBL_PETROL,
@@ -65,14 +67,14 @@ public class LocalAlignmentListCellRenderer
     }
 
     @Override
-    public JComponent create() {
-        Box box = Box.createHorizontalBox();
-        box.setBorder(Borders.EMPTY_BORDER);
-        return box;
+    public JLabel create() {
+        JLabel label = new JLabel();
+        label.setOpaque(true);
+        return label;
     }
 
     @Override
-    public void expire(JComponent component) {
+    public void expire(JLabel component) {
         // nothing to close
     }
 
@@ -80,21 +82,15 @@ public class LocalAlignmentListCellRenderer
      * @inheritDoc
      */
     @Override
-    public boolean setup(JComponent component,
+    public boolean setup(JLabel label,
                          LocalAlignment alignment) {
-
-        component.removeAll();
 
         AlignmentRenderer renderer = alignment.hasSequences() ? COMPLEX_RENDERER : BASIC_RENDERER;
         Icon icon = new ImageIcon(renderer.render(alignment, (GeneProduct) alignment.getEntity()));
-        JLabel label = new JLabel();
         label.setIcon(icon);
-        label.setBorder(null);
-        label.setFont(ViewUtilities.VERDANA_PLAIN_11);
+        label.setFont(ViewUtilities.DEFAULT_BODY_FONT);
         label.setText(alignment.getSubject());
         label.setToolTipText(ViewUtilities.htmlWrapper(alignment.getHTMLSummary()));
-
-        component.add(label);
 
         return true;
 

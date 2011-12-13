@@ -1,7 +1,7 @@
 /**
- * FormulaCellRender.java
+ * ActionButtonCellRenderer.java
  *
- * 2011.10.06
+ * 2011.12.13
  *
  * This file is part of the CheMet library
  * 
@@ -20,24 +20,43 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
+import java.awt.Color;
 import java.awt.Component;
-import java.util.Collection;
+import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JTable;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.chemet.render.factory.ButtonFactory;
+import uk.ac.ebi.chemet.render.list.renderers.TableCellRenderingPool;
 
 /**
- * @name    FormulaCellRender - 2011.10.06 <br>
+ *          ActionButtonCellRenderer - 2011.12.13 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class FormulaCellRender
-        extends DefaultRenderer {
+public class ActionButtonCellRenderer
+        extends TableCellRenderingPool<JButton, Action> {
 
-    private static final Logger LOGGER = Logger.getLogger(FormulaCellRender.class);
+    private static final Logger LOGGER = Logger.getLogger(ActionButtonCellRenderer.class);
+    private boolean visible = true;
+
+    public ActionButtonCellRenderer(boolean allowBackgroundChange) {
+        super(allowBackgroundChange);
+    }
+
+    public ActionButtonCellRenderer() {
+    }
+
+    @Override
+    public JButton create() {
+        return ButtonFactory.newCleanButton(null);
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 
     @Override
     public Component getTableCellRendererComponent(JTable table,
@@ -47,22 +66,24 @@ public class FormulaCellRender
                                                    int row,
                                                    int column) {
 
-        if (value instanceof Collection) {
-            Collection collection = (Collection) value;
-            if (!collection.isEmpty()) {
-                this.setText(ViewUtilities.htmlWrapper(((MolecularFormula) collection.iterator().next()).toHTML()));
-            } else {
-                this.setText("");
-            }
-        } else if (value instanceof MolecularFormula) {
-            this.setText(ViewUtilities.htmlWrapper(((MolecularFormula) value).toHTML()));
-        } else {
-            this.setText("");
+        if (visible && value != null) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
+                                                                      column);
+
+            return component;
         }
+        return null;
 
-        this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
-        this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+    }
 
-        return this;
+    @Override
+    public boolean setup(JButton component,
+                         Action object) {
+        component.setAction(object);
+        return true;
+    }
+
+    @Override
+    public void expire(JButton component) {
     }
 }

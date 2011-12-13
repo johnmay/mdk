@@ -23,16 +23,12 @@ package uk.ac.ebi.chemet.render.list.renderers;
 import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import java.awt.Color;
-import java.awt.Component;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 
 /**
@@ -42,15 +38,14 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class ComponentRenderingPool<O>
-        implements PoolBasedListRenderer<O> {
+public abstract class ComponentRenderingPool<C extends JComponent,O>  {
 
     private static final Logger LOGGER = Logger.getLogger(ComponentRenderingPool.class);
     private long expirationTime;
-    private BiMap<O, JComponent> prerenderPool = HashBiMap.create();
+    private BiMap<O, C> prerenderPool = HashBiMap.create();
     private Set<AgingComponent> lockedSet = new HashSet();
     private PriorityQueue<AgingComponent> unlocked;
-    private Map<JComponent, AgingComponent> componentMap = new HashMap();
+    private Map<C, AgingComponent> componentMap = new HashMap();
 
     public ComponentRenderingPool() {
         expirationTime = 10000; // ten second expiry
@@ -68,7 +63,7 @@ public abstract class ComponentRenderingPool<O>
         }
     }
 
-    public abstract JComponent create();
+    public abstract C create();
 
     /**
      * Validates/sets up the new object
@@ -76,13 +71,13 @@ public abstract class ComponentRenderingPool<O>
      * @param object
      * @return
      */
-    public abstract boolean setup(JComponent component,
+    public abstract boolean setup(C component,
                                   O object);
 
-    public abstract void expire(JComponent component);
+    public abstract void expire(C component);
 
     private void remove(AgingComponent wrapper) {
-        JComponent component = wrapper.getComponent();
+        C component = wrapper.getComponent();
         unlocked.remove(wrapper);
         prerenderPool.inverse().remove(component);
         componentMap.remove(component);
@@ -91,10 +86,10 @@ public abstract class ComponentRenderingPool<O>
         wrapper = null;
     }
 
-    public synchronized JComponent checkOut(O value) {
+    public synchronized C checkOut(O value) {
 
         if (prerenderPool.containsKey(value)) {
-            JComponent panel = prerenderPool.get(value);
+            C panel = prerenderPool.get(value);
             unlocked.remove(componentMap.get(panel));
             lockedSet.add(componentMap.get(panel).resetTimestamp());
             return panel;
@@ -111,7 +106,7 @@ public abstract class ComponentRenderingPool<O>
 
             AgingComponent wrapper = unlocked.poll(); // oldest item
             if (wrapper != null) {
-                JComponent component = wrapper.getComponent();
+                C component = wrapper.getComponent();
 
                 if (setup(component, value)) {
                     unlocked.remove(wrapper);
@@ -127,7 +122,7 @@ public abstract class ComponentRenderingPool<O>
 
         }
 
-        JComponent component = create();
+        C component = create();
         setup(component, value);
         AgingComponent wrapper = new AgingComponent(component);
         lockedSet.add(wrapper);
@@ -143,30 +138,21 @@ public abstract class ComponentRenderingPool<O>
         }
     }
 
-    public synchronized void checkIn(JComponent component) {
+    public synchronized void checkIn(C component) {
         AgingComponent wrapper = componentMap.get(component);
         lockedSet.remove(wrapper);
         unlocked.add(wrapper.resetTimestamp());
     }
 
-    public Component getListCellRendererComponent(JList list,
-                                                  Object value,
-                                                  int index,
-                                                  boolean isSelected,
-                                                  boolean cellHasFocus) {
-        JComponent component = checkOut((O) value);
-        component.setBackground(isSelected ? Color.BLACK : Color.WHITE);
-        component.setForeground(isSelected ? Color.WHITE : Color.BLACK);
-        return component;
-    }
+
 
     private class AgingComponent
             implements Comparable<AgingComponent> {
 
-        private final JComponent component;
+        private final C component;
         private Long age;
 
-        public AgingComponent(JComponent component) {
+        public AgingComponent(C component) {
             this.component = component;
             age = System.currentTimeMillis();
         }
@@ -176,7 +162,7 @@ public abstract class ComponentRenderingPool<O>
             return this;
         }
 
-        public JComponent getComponent() {
+        public C getComponent() {
             return component;
         }
 

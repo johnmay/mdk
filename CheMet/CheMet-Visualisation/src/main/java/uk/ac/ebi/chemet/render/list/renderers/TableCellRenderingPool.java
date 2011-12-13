@@ -1,7 +1,7 @@
 /**
- * FormulaCellRender.java
+ * TableCellRenderingPool.java
  *
- * 2011.10.06
+ * 2011.12.13
  *
  * This file is part of the CheMet library
  * 
@@ -18,51 +18,52 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.chemet.render.table.renderers;
+package uk.ac.ebi.chemet.render.list.renderers;
 
 import java.awt.Component;
-import java.util.Collection;
+import javax.swing.JComponent;
 import javax.swing.JTable;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
- * @name    FormulaCellRender - 2011.10.06 <br>
+ *          TableCellRenderingPool - 2011.12.13 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class FormulaCellRender
-        extends DefaultRenderer {
+public abstract class TableCellRenderingPool<C extends JComponent, O>
+        extends ComponentRenderingPool<C, O>
+        implements PoolBasedTableRenderer<O> {
 
-    private static final Logger LOGGER = Logger.getLogger(FormulaCellRender.class);
+    private static final Logger LOGGER = Logger.getLogger(TableCellRenderingPool.class);
+    private boolean allowBackgroundChange = true;
 
-    @Override
+    public TableCellRenderingPool(boolean allowBackgroundChange) {
+        this.allowBackgroundChange = allowBackgroundChange;
+    }
+
+    public TableCellRenderingPool() {
+    }
+
+    public void setAllowBackgroundChange(boolean allowBackgroundChange) {
+        this.allowBackgroundChange = allowBackgroundChange;
+    }
+
+    public boolean isAllowBackgroundChange() {
+        return allowBackgroundChange;
+    }
+
     public Component getTableCellRendererComponent(JTable table,
                                                    Object value,
                                                    boolean isSelected,
                                                    boolean hasFocus,
                                                    int row,
                                                    int column) {
+        JComponent component = checkOut((O) value);
+        component.setBackground(
+                allowBackgroundChange && isSelected ? table.getSelectionBackground() : table.getBackground());
+        return component;
 
-        if (value instanceof Collection) {
-            Collection collection = (Collection) value;
-            if (!collection.isEmpty()) {
-                this.setText(ViewUtilities.htmlWrapper(((MolecularFormula) collection.iterator().next()).toHTML()));
-            } else {
-                this.setText("");
-            }
-        } else if (value instanceof MolecularFormula) {
-            this.setText(ViewUtilities.htmlWrapper(((MolecularFormula) value).toHTML()));
-        } else {
-            this.setText("");
-        }
-
-        this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
-        this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-
-        return this;
     }
 }

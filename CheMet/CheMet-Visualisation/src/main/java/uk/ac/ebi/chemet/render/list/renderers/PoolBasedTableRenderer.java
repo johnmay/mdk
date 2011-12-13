@@ -1,7 +1,7 @@
 /**
- * DefaultRenderer.java
+ * PoolBasedListRenderer.java
  *
- * 2011.10.06
+ * 2011.12.12
  *
  * This file is part of the CheMet library
  * 
@@ -18,32 +18,22 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.chemet.render.table.renderers;
+package uk.ac.ebi.chemet.render.list.renderers;
 
-import com.explodingpixels.macwidgets.MacFontUtils;
-import java.awt.Component;
-import javax.swing.JLabel;
-import javax.swing.JTable;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 import javax.swing.table.TableCellRenderer;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
- * @name    DefaultRenderer - 2011.10.06 <br>
- *          Class description
+ *          PoolBasedListRenderer - 2011.12.12 <br>
+ *          Interface description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class DefaultRenderer extends JLabel implements TableCellRenderer {
+public interface PoolBasedTableRenderer<O>
+        extends TableCellRenderer {
 
-    public DefaultRenderer() {
-        setFont(ViewUtilities.VERDANA_PLAIN_11);
-        setOpaque(true);
-    }
-
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        setText(value.toString());
-        
-        return this;
-    }
+    public void checkIn(O object);
 }
