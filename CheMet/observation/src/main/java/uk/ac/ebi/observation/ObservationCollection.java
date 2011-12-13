@@ -206,7 +206,7 @@ public class ObservationCollection {
         }
     }
 
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in, AnnotatedEntity entity) throws IOException, ClassNotFoundException {
 
 
         int nTaskOptions = in.readInt();
@@ -224,6 +224,7 @@ public class ObservationCollection {
             Byte index = in.readByte();
             for (int j = 0; j < n; j++) {
                 Observation observation = factory.readExternal(index, in, sources);
+                observation.setEntity(entity);
                 typeMap.put(index, observation);
                 sourceMap.put(observation.getSource(), observation);
             }
@@ -250,6 +251,6 @@ public class ObservationCollection {
         }
         return true;
     }
-
+    
 
 }
