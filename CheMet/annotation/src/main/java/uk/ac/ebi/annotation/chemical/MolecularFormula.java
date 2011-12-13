@@ -63,7 +63,7 @@ public class MolecularFormula
      */
     public MolecularFormula(IMolecularFormula formula) {
         this.formula = formula;
-        setValue(MolecularFormulaManipulator.getString(formula));
+        super.setValue(MolecularFormulaManipulator.getString(formula));
     }
 
     /**

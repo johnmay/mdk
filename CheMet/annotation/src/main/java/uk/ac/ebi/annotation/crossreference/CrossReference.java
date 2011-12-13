@@ -137,7 +137,10 @@ public class CrossReference<E extends Identifier>
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        IdentifierFactory.getInstance().write(out, identifier);     
+        IdentifierFactory.getInstance().write(out, identifier);
+        if (!observations.isEmpty()) {
+            LOGGER.error("Attached observations are not saved");
+        }
     }
 
     @Override
