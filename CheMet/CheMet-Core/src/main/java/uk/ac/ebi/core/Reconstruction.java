@@ -18,12 +18,12 @@ import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.core.reconstruction.ReconstructionContents;
 import uk.ac.ebi.core.reconstruction.ReconstructionProperites;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 import javax.swing.JOptionPane;
+import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.Genome;
 
@@ -62,7 +62,8 @@ public class Reconstruction
      * @param id The identifier of the project
      * @param org The organism identifier
      */
-    public Reconstruction(ReconstructionIdentifier id, Taxonomy org) {
+    public Reconstruction(ReconstructionIdentifier id,
+                          Taxonomy org) {
         super(id, org.getCommonName(), org.getCode());
         taxonomy = org;
         reactions = new ReactionList();
@@ -171,24 +172,20 @@ public class Reconstruction
      * Saves the project and it's data
      * @return if the project was saved
      */
-    public boolean save() {
+    public boolean save() throws IOException {
         if (container != null) {
-            try {
-                ObjectOutput out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(
-                        new File(container, "recon.extern.gzip"))));
-                this.writeExternal(out);
-                out.close();
-                return true;
-            } catch (FileNotFoundException ex) {
-                logger.error("error saving project", ex);
-            } catch (IOException ex) {
-                logger.error("error saving project", ex);
-            }
+
+            ObjectOutput out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(
+                    new File(container, "recon.extern.gzip"))));
+            this.writeExternal(out);
+            out.close();
+            return true;
+
         }
         return false;
     }
 
-    public void saveAsProject(File projectRoot) {
+    public void saveAsProject(File projectRoot) throws IOException {
 
         if (!projectRoot.getPath().endsWith("mnb")) {
             projectRoot = new File(projectRoot.getPath() + ".mnb");
