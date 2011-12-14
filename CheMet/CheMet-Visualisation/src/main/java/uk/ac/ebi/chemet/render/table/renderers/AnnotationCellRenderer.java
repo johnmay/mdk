@@ -21,6 +21,7 @@
 package uk.ac.ebi.chemet.render.table.renderers;
 
 import com.google.common.base.Joiner;
+import java.awt.Color;
 import java.awt.Component;
 import java.util.Collection;
 import javax.swing.JLabel;
@@ -39,7 +40,7 @@ import uk.ac.ebi.interfaces.Annotation;
  * @author  $Author$ (this version)
  */
 public class AnnotationCellRenderer
-        extends TableCellRenderingPool<JLabel, Object> {
+        extends DefaultRenderer {
 
     private boolean html = false;
     private String token = ", ";
@@ -54,26 +55,22 @@ public class AnnotationCellRenderer
     }
 
     @Override
-    public boolean setup(JLabel component,
-                         Object value) {
+    public Component getTableCellRendererComponent(JTable table,
+                                                   Object value,
+                                                   boolean isSelected,
+                                                   boolean hasFocus,
+                                                   int row,
+                                                   int column) {
+
         String text = value instanceof Collection
                       ? Joiner.on(token).join((Collection) value)
                       : value.toString();
 
 
-        component.setText(html ? ViewUtilities.htmlWrapper(text) : text);
+        setText(html ? ViewUtilities.htmlWrapper(text) : text);
+        setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+        setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
 
-        return true;
-
-    }
-
-    @Override
-    public JLabel create() {
-        return LabelFactory.newLabel("empty");
-    }
-
-    @Override
-    public void expire(JLabel component) {
-        // do nothing
+        return this;
     }
 }

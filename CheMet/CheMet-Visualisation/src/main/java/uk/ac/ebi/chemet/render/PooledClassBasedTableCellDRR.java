@@ -25,6 +25,7 @@ import java.util.List;
 import javax.swing.table.TableCellRenderer;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.render.list.renderers.PoolBasedListRenderer;
+import uk.ac.ebi.chemet.render.list.renderers.PoolBasedTableRenderer;
 
 /**
  *          PooledClassBasedListCellDRR - 2011.12.12 <br>
@@ -37,14 +38,14 @@ public class PooledClassBasedTableCellDRR
         extends ClassBasedTableCellDDR {
 
     private static final Logger LOGGER = Logger.getLogger(PooledClassBasedTableCellDRR.class);
-    List<PoolBasedListRenderer> pools = new ArrayList<PoolBasedListRenderer>();
+    List<PoolBasedTableRenderer> pools = new ArrayList<PoolBasedTableRenderer>();
 
     @Override
     public void setRenderer(Class<?> aClass,
                             TableCellRenderer renderer) {
 
-        if (renderer instanceof PoolBasedListRenderer) {
-            pools.add((PoolBasedListRenderer) renderer);
+        if (renderer instanceof PoolBasedTableRenderer) {
+            pools.add((PoolBasedTableRenderer) renderer);
         }
 
         super.setRenderer(aClass, renderer);
@@ -52,7 +53,7 @@ public class PooledClassBasedTableCellDRR
     }
 
     public void checkIn(Object object) {
-        for (PoolBasedListRenderer pool : pools) {
+        for (PoolBasedTableRenderer pool : pools) {
             pool.checkIn(object);
         }
     }

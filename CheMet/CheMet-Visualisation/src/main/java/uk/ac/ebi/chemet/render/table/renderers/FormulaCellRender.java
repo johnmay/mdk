@@ -47,6 +47,8 @@ public class FormulaCellRender
                                                    int row,
                                                    int column) {
 
+
+
         if (value instanceof Collection) {
             Collection collection = (Collection) value;
             if (!collection.isEmpty()) {
@@ -54,7 +56,7 @@ public class FormulaCellRender
             } else {
                 this.setText("");
             }
-        } else if (value instanceof MolecularFormula) {
+        } else if (value instanceof MolecularFormula && ((MolecularFormula) value).getFormula() != null) {
             this.setText(ViewUtilities.htmlWrapper(((MolecularFormula) value).toHTML()));
         } else {
             this.setText("");

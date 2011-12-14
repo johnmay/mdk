@@ -20,11 +20,12 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
-import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.Component;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
-import uk.ac.ebi.chemet.render.list.renderers.TableCellRenderingPool;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.Descriptor;
 
 /**
  *          AnnotationDescriptionRenderer - 2011.12.13 <br>
@@ -34,28 +35,29 @@ import uk.ac.ebi.interfaces.Annotation;
  * @author  $Author$ (this version)
  */
 public class AnnotationDescriptionRenderer
-        extends TableCellRenderingPool<JLabel, Annotation> {
+        extends DefaultRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(AnnotationDescriptionRenderer.class);
 
     public AnnotationDescriptionRenderer() {
+        setHorizontalAlignment(SwingConstants.RIGHT);
     }
 
     @Override
-    public JLabel create() {
-        return LabelFactory.newFormLabel("empty");
-    }
+    public Component getTableCellRendererComponent(JTable table,
+                                                   Object value,
+                                                   boolean isSelected,
+                                                   boolean hasFocus,
+                                                   int row,
+                                                   int column) {
+        Descriptor descriptor = (Descriptor) value;
 
-    @Override
-    public void expire(JLabel component) {
-        // do nothing
-    }
+        setText(descriptor.getShortDescription());
+        setToolTipText(descriptor.getLongDescription());
+        setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+        setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
 
-    @Override
-    public boolean setup(JLabel label,
-                         Annotation annotation) {
-        label.setText(annotation.getShortDescription());
-        label.setToolTipText(annotation.getLongDescription());
-        return true;
+        return this;
+
     }
 }

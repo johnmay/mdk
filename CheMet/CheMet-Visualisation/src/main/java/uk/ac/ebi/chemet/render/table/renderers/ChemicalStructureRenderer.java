@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.util.Arrays;
@@ -61,10 +62,12 @@ public class ChemicalStructureRenderer
         if (collection.iterator().hasNext()) {
             try {
                 ChemicalStructure structure = collection.iterator().next();
-                this.setIcon(new ImageIcon(MoleculeRenderer.getInstance().getImage(structure.getMolecule(),
-                                                                                   new Rectangle(0, 0,
-                                                                                                 table.getRowHeight(row),
-                                                                                                 table.getRowHeight(row)))));
+                this.setBackground(isSelected ? table.getSelectionBackground() : table.getSelectionForeground());
+                this.setIcon(new ImageIcon(
+                        MoleculeRenderer.getInstance().getImage(structure.getMolecule(),
+                                                                new Rectangle(0, 0,
+                                                                              table.getRowHeight(row),
+                                                                              table.getRowHeight(row)))));
             } catch (CDKException ex) {
                 System.err.println("Unable to render molecule: " + ex.getMessage());
             }
