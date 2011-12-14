@@ -166,7 +166,7 @@ public abstract class AbstractAnnotatedEntity
      * @return whether the underlying collection was modified
      */
     public boolean removeObservation(Observation observation) {
-        observation.setEntity(null); 
+        observation.setEntity(null);
         return observations.remove(observation);
     }
 
@@ -229,8 +229,14 @@ public abstract class AbstractAnnotatedEntity
         for (Byte index : annotations.keySet()) {
             out.writeInt(annotations.get(index).size());
             out.writeByte(index);
-            for (Annotation annotation : annotations.get(index)) {
-                annotation.writeExternal(out);
+            try {
+                for (Annotation annotation : annotations.get(index)) {
+                    annotation.writeExternal(out);
+                }
+            } catch (IOException ex) {
+                // XXX
+                throw new IOException(
+                        "Could not save, annotation on entity " + this + " : " + ex.getMessage() + " caused an error");
             }
         }
     }

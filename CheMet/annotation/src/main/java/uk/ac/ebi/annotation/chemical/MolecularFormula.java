@@ -111,7 +111,7 @@ public class MolecularFormula
      * @return
      */
     public String toHTML() {
-        return MolecularFormulaManipulator.getHTML(formula);
+        return formula != null ? MolecularFormulaManipulator.getHTML(formula) : "";
     }
 
     /**

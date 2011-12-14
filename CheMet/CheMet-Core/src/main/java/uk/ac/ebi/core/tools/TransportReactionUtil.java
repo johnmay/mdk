@@ -80,7 +80,7 @@ public class TransportReactionUtil {
             for (Participant<T, ?, Compartment> p2 : transportReaction.getProductParticipants()) {
                 if (comparator.compare(p1.getMolecule(), p2.getMolecule()) == 0) {
                     mappings.put(p1, p2);
-                }                
+                }
             }
         }
 

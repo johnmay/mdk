@@ -68,35 +68,6 @@ public class ChemicalStructure
         return molecule;
     }
 
-
-    public static void main(String[] args) {
-
-//      System.out.println(new ChemicalStructure().getShortDescription());
-//
-        new ChemicalStructure();
-
-        System.out.print("timer start..");
-
-        long astart = System.currentTimeMillis();
-        for( int i = 0 ; i < 1000000 ; i++ ) {
-            new ChemicalStructure().getShortDescription();
-        }
-        long aend = System.currentTimeMillis();
-        System.out.println("done");
-
-        System.out.println(aend - astart + "(ms)");
-        long bstart = System.currentTimeMillis();
-        for( int i = 0 ; i < 1000000 ; i++ ) {
-            new ChemicalStructure().getShortDescription();
-        }
-        long bend = System.currentTimeMillis();
-        System.out.println("done");
-
-        System.out.println(bend - bstart + "(ms)");
-
-    }
-
-
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
 
@@ -111,7 +82,6 @@ public class ChemicalStructure
             out.writeUTF(stringWriter.toString());
 
         } catch( Exception ex ) {
-            ex.printStackTrace();
             throw new IOException("Unable to write IAtomContainer: " + ex.getMessage());
         }
 

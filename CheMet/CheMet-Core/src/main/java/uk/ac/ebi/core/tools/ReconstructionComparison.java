@@ -58,19 +58,19 @@ public class ReconstructionComparison {
     private boolean hydrogen; // remove hydrogen
     private static MolecularHashFactory HASH_FACTORY = MolecularHashFactory.getInstance();
 
-    public ReconstructionComparison(Reconstruction... recons) {
+    public ReconstructionComparison(Set<AtomSeed> methods,
+                                    boolean hydrogen,
+                                    Reconstruction... recons) {
         if (recons.length < 1) {
             throw new InvalidParameterException("At least two reconstructons should be provided");
         }
         this.recons = recons;
-
-
+        this.methods = methods;
+        this.hydrogen = hydrogen;
 
         for (Reconstruction recon : recons) {
-
             for (Metabolite m : recon.getMetabolites()) {
                 if (m.hasStructureAssociated()) {
-
                     IAtomContainer mol = m.getFirstChemicalStructure().getMolecule();
                     mol = mol.getAtomCount() > 1 && hydrogen ? mol : AtomContainerManipulator.removeHydrogens(mol);
                     MolecularHash hash = HASH_FACTORY.getHash(mol, methods);
@@ -90,13 +90,16 @@ public class ReconstructionComparison {
     }
 
     public Map<Metabolite, Integer> getMoleculeHashMap(Reconstruction recon) {
+        HASH_FACTORY.setSeedWithMoleculeSize(true);
         Map<Metabolite, Integer> map = new HashMap<Metabolite, Integer>();
+        LOGGER.debug("Generating hash code: " + methods);
         for (Metabolite m : recon.getMetabolites()) {
             if (m.hasStructureAssociated()) {
                 IAtomContainer mol = m.getFirstChemicalStructure().getMolecule();
                 mol = mol.getAtomCount() > 1 && hydrogen ? mol : AtomContainerManipulator.removeHydrogens(mol);
                 MolecularHash hash = HASH_FACTORY.getHash(mol, methods);
                 map.put(m, hash.hash);
+                LOGGER.debug(m + " hash = " + hash.hash);
             }
         }
         return map;
@@ -120,11 +123,4 @@ public class ReconstructionComparison {
 
     }
 
-    public void setMethods(Set<AtomSeed> methods) {
-        this.methods = methods;
-    }
-
-    public void setIncludeHydrogens(boolean hydrogen) {
-        this.hydrogen = hydrogen;
-    }
 }
