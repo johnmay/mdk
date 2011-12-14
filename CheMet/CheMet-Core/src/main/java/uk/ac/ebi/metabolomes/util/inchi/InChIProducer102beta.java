@@ -12,7 +12,10 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.isomorphism.matchers.QueryAtomContainer;
+import org.openscience.cdk.isomorphism.matchers.QueryChemObject;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
 
 /**
  *
@@ -25,29 +28,33 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
  */
 public class InChIProducer102beta extends InChIProducer {
 
-    private Logger logger = Logger.getLogger(InChIProducer102beta.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(InChIProducer102beta.class);
     private List<INCHI_OPTION> inchiOptions;
     // TODO Handle exceptions
     @Override
     public InChIResult calculateInChI(IAtomContainer mol) {
         this.result = new InChIResult();
-        try {
-            typeMoleculeForInChI(mol);
-        }catch(CDKException e) {
-            logger.error("Could not type atoms in molecule "+mol.getID(), e);
-            //return null;
-        }catch(NullPointerException ex) {
-            logger.error("Null pointer exception produced downwards by CDK when handling molecule "+mol.getID(),ex);
+        if(mol instanceof QueryChemObject) {
+            LOGGER.warn("Tried to calculate an InChI for a QueryAtomContainer type of molecule... avoiding it.");
             return null;
         }
         try {
+            typeMoleculeForInChI(mol);
+        } catch(CDKException e) {
+            LOGGER.error("Could not type atoms in molecule "+mol.getID(), e);
+            //return null;
+        } catch(NullPointerException ex) {
+            LOGGER.error("Null pointer exception produced downwards by CDK when handling molecule "+mol.getID(),ex);
+            return null;
+        } 
+        try {
             addHydrogensToMolecule(mol);
         }catch(CDKException e) {
-            logger.error("Could not add hydrogens to molecule "+mol.getID(), e);
+            LOGGER.error("Could not add hydrogens to molecule "+mol.getID(), e);
             AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
             //return null;
         }catch(NullPointerException ex) {
-            logger.error("Null pointer exception produced downwards by CDK when handling molecule "+mol.getID(),ex);
+            LOGGER.error("Null pointer exception produced downwards by CDK when handling molecule "+mol.getID(),ex);
             return null;
         }
 
@@ -61,10 +68,10 @@ public class InChIProducer102beta extends InChIProducer {
                 else
                     cdkGenerator = factory.getInChIGenerator(mol);
             } catch (CDKException ex) {
-                logger.error("Could not initialize inchi factory or generator for "+mol.getID(), ex);
+                LOGGER.error("Could not initialize inchi factory or generator for "+mol.getID(), ex);
                 return null;
             } catch (IllegalArgumentException e) {
-                logger.error("JNI InChI couldn't handle molecule "+mol.getID()+" , IllegalArgument",e);
+                LOGGER.error("JNI InChI couldn't handle molecule "+mol.getID()+" , IllegalArgument",e);
                 return null;
             }
 
@@ -75,19 +82,19 @@ public class InChIProducer102beta extends InChIProducer {
                 try {
                     inchiKey= cdkGenerator.getInchiKey();
                 }catch(CDKException e) {
-                    logger.error("Could not get inchiKey from molecule "+mol.getID(), e);
+                    LOGGER.error("Could not get inchiKey from molecule "+mol.getID(), e);
                     return null;
                 }
                 if(inchiKey!=null)
                     this.result.setInchiKey(inchiKey);
                 else
-                    logger.error("InchiKey is null for molecule "+mol.getID());
+                    LOGGER.error("InchiKey is null for molecule "+mol.getID());
                     
                 String auxInfo = cdkGenerator.getAuxInfo();
                 if(auxInfo!=null)
                     this.result.setAuxInfo(auxInfo);
                 else
-                    logger.error("AuxInfo is null for molecule "+mol.getID());
+                    LOGGER.error("AuxInfo is null for molecule "+mol.getID());
                 
 
                 return result;
