@@ -30,7 +30,8 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AbbreviationAccessor implements EntityAccessor {
+public class AbbreviationAccessor
+        implements EntityValueAccessor {
 
     public String getName() {
         return "Abbreviation";
@@ -41,6 +42,10 @@ public class AbbreviationAccessor implements EntityAccessor {
     }
 
     public Class getColumnClass() {
+        return String.class;
+    }
+
+    public Class getValueClass() {
         return String.class;
     }
 }

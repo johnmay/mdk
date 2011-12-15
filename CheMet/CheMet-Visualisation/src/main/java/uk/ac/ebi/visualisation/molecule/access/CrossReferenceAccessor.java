@@ -31,7 +31,8 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class CrossReferenceAccessor implements EntityAccessor {
+public class CrossReferenceAccessor
+        implements EntityValueAccessor {
 
     public String getName() {
         return "Cross Reference";
@@ -42,6 +43,10 @@ public class CrossReferenceAccessor implements EntityAccessor {
     }
 
     public Class getColumnClass() {
+        return String.class;
+    }
+
+    public Class getValueClass() {
         return String.class;
     }
 }

@@ -1,7 +1,7 @@
 /**
- * EntityAccessor.java
+ * EntityMutator.java
  *
- * 2011.11.24
+ * 2011.12.15
  *
  * This file is part of the CheMet library
  * 
@@ -20,22 +20,23 @@
  */
 package uk.ac.ebi.visualisation.molecule.access;
 
-import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 /**
- *          EntityAccessor - 2011.11.24 <br>
- *          Class description
+ *          EntityMutator - 2011.12.15 <br>
+ *          Interface description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface EntityAccessor {
+public interface EntityValueMutator<V> {
 
-    public String getName();
-
-    public Object getValue(AnnotatedEntity entity);
-
-    public Class  getColumnClass();
-
+    /**
+     * Set the value of the entity
+     * @param entity
+     * @param value
+     * @return
+     */
+    public boolean setValue(AnnotatedEntity entity,
+                            V value);
 }

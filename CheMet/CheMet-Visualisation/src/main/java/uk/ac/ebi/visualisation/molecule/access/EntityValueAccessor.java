@@ -1,5 +1,5 @@
 /**
- * NameAccessor.java
+ * EntityAccessor.java
  *
  * 2011.11.24
  *
@@ -24,28 +24,27 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 /**
- *          NameAccessor - 2011.11.24 <br>
- *          Access the name of the entity
+ *          EntityAccessor - 2011.11.24 <br>
+ *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class NameAccessor
-        implements EntityValueAccessor {
+public interface EntityValueAccessor {
 
-    public String getName() {
-        return "Name";
-    }
+    @Deprecated
+    public String getName();
 
-    public Object getValue(AnnotatedEntity entity) {
-        return entity.getName();
-    }
+    /**
+     * Access the value
+     */
+    public Object getValue(AnnotatedEntity entity);
 
-    public Class getColumnClass() {
-        return String.class;
-    }
+    /**
+     * Access the class of the value
+     */
+    public Class getValueClass();
 
-    public Class getValueClass() {
-        return String.class;
-    }
+    @Deprecated
+    public Class getColumnClass();
 }
