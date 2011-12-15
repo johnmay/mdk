@@ -37,7 +37,7 @@ import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.visualisation.molecule.access.EntityAccessor;
+import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 
 /**
  *          MoleculeTableModel - 2011.10.31 <br>
@@ -50,9 +50,9 @@ public class MoleculeTableModel extends DefaultTableModel {
 
     private List<Metabolite> metabolites = new ArrayList();
     private Map<Metabolite, CandidateEntry> map = new HashMap();
-    private List<EntityAccessor> columns = new ArrayList<EntityAccessor>();
+    private List<EntityValueAccessor> columns = new ArrayList<EntityValueAccessor>();
 
-    public MoleculeTableModel(EntityAccessor... accessors) {
+    public MoleculeTableModel(EntityValueAccessor... accessors) {
         columns = Arrays.asList(accessors);
     }
 
