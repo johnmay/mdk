@@ -25,7 +25,6 @@ import org.apache.lucene.analysis.Analyzer;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -115,17 +114,21 @@ public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implem
 
     public void update() throws IOException {
         LinkedList<Document> docs = new LinkedList();
+        // write the index
+        Directory index = new SimpleFSDirectory(getLocal());
+        IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, new KeywordAnalyzer()));
         try {
             docs.addAll(getKEGGOrthologyUniProtDocsForFile(locationTrEMBL));
+            writer.addDocuments(docs);
+            docs.clear();
             docs.addAll(getKEGGOrthologyUniProtDocsForFile(locationSwissProt));
+            writer.addDocuments(docs);
         } catch (XMLStreamException e) {
             LOGGER.error("Problems parsing uniprot XML:", e);
         }
 
-        // write the index
-        Directory index = new SimpleFSDirectory(getLocal());
-        IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, new KeywordAnalyzer()));
-        writer.addDocuments(docs);
+        
+        
         writer.close();
         index.close();
 
