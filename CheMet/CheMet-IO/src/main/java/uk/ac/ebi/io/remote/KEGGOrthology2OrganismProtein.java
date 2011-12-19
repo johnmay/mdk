@@ -30,6 +30,7 @@ import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.prefs.Preferences;
+import java.util.zip.GZIPInputStream;
 import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.KeywordAnalyzer;
@@ -78,7 +79,7 @@ public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implem
     private List<Document> getKEGGOrthologyUniProtDocsForFile(String location) throws XMLStreamException, IOException {
         UniProtAnnoationLoader loader = new UniProtAnnoationLoader();
         setRemote(location);
-        loader.update(getRemote().openStream());
+        loader.update(new GZIPInputStream(getRemote().openStream()));
         Multimap<UniProtIdentifier, Identifier> map = loader.getMap();
         LinkedList<Document> docs = new LinkedList();
         for (UniProtIdentifier uniProtIdentifier : map.keySet()) {
