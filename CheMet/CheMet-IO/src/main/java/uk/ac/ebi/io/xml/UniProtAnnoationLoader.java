@@ -48,12 +48,14 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
 import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.resource.classification.KEGGOrthology;
+import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 /**
  * @name    UniprotAnnotations - 2011.10.13 <br>
- *          Class description
+ *          Currently includes EC, KO (KEGG orthology annotations) and Taxonomy ID.
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -253,6 +255,13 @@ public class UniProtAnnoationLoader implements Externalizable {
                 String type = xmlr.getAttributeValue(i);
                 if (type.equals("EC")) {
                     return new ECNumber(accession);
+                } else if(type.equals("KO")) {
+                    // <dbReference type="KO" id="K11440" key="35"/>
+                    return new KEGGOrthology(accession);
+                } else if(type.equals("NCBI Taxonomy")) {
+                    Taxonomy tax = new Taxonomy();
+                    tax.setAccession(accession);
+                    return tax;
                 }
             }
         }

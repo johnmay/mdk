@@ -33,10 +33,13 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.services.CrossReferenceQueryService;
+import uk.ac.ebi.io.remote.KEGGOrthology2OrganismProtein;
+import uk.ac.ebi.io.remote.KEGGOrthology2OrganismProtein.KEGGOrthologyOrgProtLuceneFields;
 import uk.ac.ebi.io.remote.UniProtCrossRefs;
 import uk.ac.ebi.io.remote.UniProtCrossRefs.UniprotCrossRefsLuceneFields;
 import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.classification.KEGGOrthology;
+import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
 
@@ -47,16 +50,15 @@ import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
  * @author  pmoreno
  * @author  $Author$ (this version)
  */
-public class UniProtCrossReferenceService
-        extends UniProtQueryService
-        implements CrossReferenceQueryService<UniProtIdentifier>  {
+public class KEGGOrthology2OrganismProteinService
+        extends AbstractQueryService  {
 
-    private static final Logger LOGGER = Logger.getLogger(UniProtCrossReferenceService.class);
+    private static final Logger LOGGER = Logger.getLogger(KEGGOrthology2OrganismProteinService.class);
     private IndexSearcher searcher;
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
 
-    private UniProtCrossReferenceService() {
-        super(new UniProtCrossRefs());
+    private KEGGOrthology2OrganismProteinService() {
+        super(new KEGGOrthology2OrganismProtein());
         setMaxResults(100);
         try {
             searcher = new IndexSearcher(getDirectory(), true);
@@ -65,34 +67,33 @@ public class UniProtCrossReferenceService
         }
     }
 
-    public static UniProtCrossReferenceService getInstance() {
-        return UniProtCrossReferenceServiceHolder.INSTANCE;
+    public static KEGGOrthology2OrganismProteinService getInstance() {
+        return KEGGOrthology2OrganismProtServiceHolder.INSTANCE;
     }
 
-    public Collection<Identifier> getCrossReferences(UniProtIdentifier identifier) {
-        Query queryPubChemComp = new TermQuery(new Term(UniprotCrossRefsLuceneFields.UniprotAcc.toString(), identifier.getAccession()));
-        return search(queryPubChemComp);
+    public Collection<Identifier> getKEGGKOFamilies(UniProtIdentifier identifier) {
+        Query queryUniprotID = new TermQuery(new Term(KEGGOrthologyOrgProtLuceneFields.UniprotAcc.toString(), identifier.getAccession()));
+        return search(queryUniprotID);
     }
 
-    @Override
     public UniProtIdentifier getIdentifier() {
         return new TrEMBLIdentifier();
     }
 
-    public Collection<UniProtIdentifier> getReverseCrossReferences(Identifier identifier) {
-        Query queryExtDB = new TermQuery(new Term(UniprotCrossRefsLuceneFields.ExtDB.toString(), identifier.getShortDescription()));
-        Query queryExtID = new TermQuery(new Term(UniprotCrossRefsLuceneFields.ExtID.toString(), identifier.getAccession()));
+    public Collection<UniProtIdentifier> getUniProtIdentifiersForProteinFamilyOrganism(KEGGOrthology familyIdentifier, Taxonomy taxIdentifier) {
+        Query queryFamily = new TermQuery(new Term(KEGGOrthologyOrgProtLuceneFields.KEGGOrthologyFamily.toString(), familyIdentifier.getShortDescription()));
+        Query queryTax = new TermQuery(new Term(KEGGOrthologyOrgProtLuceneFields.TaxID.toString(), taxIdentifier.getAccession()));
         
         BooleanQuery query = new BooleanQuery();
-        query.add(queryExtDB, BooleanClause.Occur.MUST);
-        query.add(queryExtID, BooleanClause.Occur.MUST);
+        query.add(queryFamily, BooleanClause.Occur.MUST);
+        query.add(queryTax, BooleanClause.Occur.MUST);
         
         return reverseSearch(query);
     }
 
-    private static class UniProtCrossReferenceServiceHolder {
+    private static class KEGGOrthology2OrganismProtServiceHolder {
 
-        private static final UniProtCrossReferenceService INSTANCE = new UniProtCrossReferenceService();
+        private static final KEGGOrthology2OrganismProteinService INSTANCE = new KEGGOrthology2OrganismProteinService();
     }
 
     private Collection<UniProtIdentifier> reverseSearch(Query query) {
@@ -104,7 +105,7 @@ public class UniProtCrossReferenceService
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc scoreDoc : hits) {
                 UniProtIdentifier ident = getIdentifier();
-                ident.setAccession(getValue(scoreDoc, UniprotCrossRefsLuceneFields.UniprotAcc.toString()));
+                ident.setAccession(getValue(scoreDoc, KEGGOrthologyOrgProtLuceneFields.UniprotAcc.toString()));
                 ids.add(ident);
             }
         } catch (IOException ex) {
@@ -122,9 +123,11 @@ public class UniProtCrossReferenceService
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc scoreDoc : hits) {
-                Identifier ident = FACTORY.ofSynonym(getValue(scoreDoc, UniprotCrossRefsLuceneFields.ExtDB.toString()));
-                ident.setAccession(getValue(scoreDoc, UniprotCrossRefsLuceneFields.ExtID.toString()));
-                ids.add(ident);
+                // this should be with values.
+                for (String value : getValues(scoreDoc, KEGGOrthologyOrgProtLuceneFields.KEGGOrthologyFamily.toString())) {
+                    KEGGOrthology orthIdent = new KEGGOrthology(value);
+                    ids.add(orthIdent);
+                }
             }
         } catch (IOException ex) {
             LOGGER.error("Error occur whilst searching with query " + query);

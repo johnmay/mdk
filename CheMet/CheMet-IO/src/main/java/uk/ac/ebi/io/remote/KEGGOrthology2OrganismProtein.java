@@ -25,8 +25,10 @@ import org.apache.lucene.analysis.Analyzer;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.prefs.Preferences;
 import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
@@ -42,19 +44,23 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.xml.UniProtAnnoationLoader;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.resource.classification.KEGGOrthology;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 /**
- *          UniProtCrossRefs - 2011.12.10 <br>
- *          Creates a lucene index for the uniprot cross references. Includes EC Numbers.
+ *          KEGGOrthology2OrganismProtein - 2011.12.19 <br>
+ *          Creates a lucene index for the KEGG KO Orthology families pointing towards UniProt accessions and the organism
+ *          of the protein. It is based on the uniprot download. 
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class UniProtCrossRefs extends AbstrastRemoteResource implements RemoteResource, LuceneService {
+public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implements RemoteResource, LuceneService {
 
-    private static final Logger LOGGER = Logger.getLogger(UniProtCrossRefs.class);
-    private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.xml.gz";
+    private static final Logger LOGGER = Logger.getLogger(KEGGOrthology2OrganismProtein.class);
+    private static final String locationTrEMBL = "ftp://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.xml.gz";
+    private static final String locationSwissProt = "ftp://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz";
+    // we should probably use both TrEMBL and Swissprot.
     private Analyzer analzyer;
 
     public Analyzer getAnalzyer() {
@@ -68,38 +74,49 @@ public class UniProtCrossRefs extends AbstrastRemoteResource implements RemoteRe
             throw new UnsupportedOperationException("Index can not fail to open! unsupported");
         }
     }
+
+    private List<Document> getKEGGOrthologyUniProtDocsForFile(String location) throws XMLStreamException, IOException {
+        UniProtAnnoationLoader loader = new UniProtAnnoationLoader();
+        setRemote(location);
+        loader.update(getRemote().openStream());
+        Multimap<UniProtIdentifier, Identifier> map = loader.getMap();
+        LinkedList<Document> docs = new LinkedList();
+        for (UniProtIdentifier uniProtIdentifier : map.keySet()) {
+            Document doc = new Document();
+            doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.UniprotAcc.toString(), uniProtIdentifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            for (Identifier identifier : map.get(uniProtIdentifier)) {
+                if(identifier instanceof Taxonomy) {
+                    doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.TaxID.toString(), identifier.getAccession(),Field.Store.YES,Field.Index.NOT_ANALYZED));
+                } else if(identifier instanceof KEGGOrthology) {
+                    doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.KEGGOrthologyFamily.toString(),identifier.getAccession(),Field.Store.YES,Field.Index.NOT_ANALYZED));
+                }
+            }
+            if(doc.getFields().size()<3)
+                continue;
+            docs.add(doc);
+        }
+        return docs;
+    }
     
     private void init() {
         this.analzyer = new KeywordAnalyzer();
     }
 
-    public enum UniprotCrossRefsLuceneFields {
+    public enum KEGGOrthologyOrgProtLuceneFields {
 
-        UniprotAcc, ExtDB, ExtID;
+        UniprotAcc, KEGGOrthologyFamily, TaxID;
     }
 
-    public UniProtCrossRefs() {
-        super(location, getFile());
+    public KEGGOrthology2OrganismProtein() {
+        super(locationTrEMBL, getFile());
         init();
     }
 
     public void update() throws IOException {
         LinkedList<Document> docs = new LinkedList();
         try {
-            UniProtAnnoationLoader loader = new UniProtAnnoationLoader();
-            loader.update();
-            Multimap<UniProtIdentifier, Identifier> map = loader.getMap();
-            for (UniProtIdentifier uniProtIdentifier : map.keySet()) {
-                for (Identifier identifier : map.get(uniProtIdentifier)) {
-                    if(identifier instanceof Taxonomy)
-                        continue;
-                    Document doc = new Document();
-                    doc.add(new Field(UniprotCrossRefsLuceneFields.UniprotAcc.toString(), uniProtIdentifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                    doc.add(new Field(UniprotCrossRefsLuceneFields.ExtDB.toString(), identifier.getShortDescription(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                    doc.add(new Field(UniprotCrossRefsLuceneFields.ExtID.toString(), identifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                    docs.add(doc);
-                }
-            }
+            docs.addAll(getKEGGOrthologyUniProtDocsForFile(locationTrEMBL));
+            docs.addAll(getKEGGOrthologyUniProtDocsForFile(locationSwissProt));
         } catch (XMLStreamException e) {
             LOGGER.error("Problems parsing uniprot XML:", e);
         }
@@ -117,16 +134,16 @@ public class UniProtCrossRefs extends AbstrastRemoteResource implements RemoteRe
         String defaultFile = System.getProperty("user.home")
                 + File.separator + "databases"
                 + File.separator + "indexes"
-                + File.separator + "uniprot-crossref";
-        Preferences prefs = Preferences.userNodeForPackage(UniProtCrossRefs.class);
-        return new File(prefs.get("uniprot.crossrefs.path", defaultFile));
+                + File.separator + "keggorthology-uniprot";
+        Preferences prefs = Preferences.userNodeForPackage(KEGGOrthology2OrganismProtein.class);
+        return new File(prefs.get("keggorthology.uniprot.links.path", defaultFile));
     }
 
     public String getDescription() {
-        return "Uniprot Cross-references";
+        return "KEGG Orthology to UniProt links";
     }
     
     public static void main(String[] args) throws MalformedURLException, IOException {
-        new UniProtCrossRefs().update();
+        new KEGGOrthology2OrganismProtein().update();
     }
 }
