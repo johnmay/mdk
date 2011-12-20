@@ -81,7 +81,7 @@ public class KEGGOrthology2OrganismProteinService
     }
 
     public Collection<UniProtIdentifier> getUniProtIdentifiersForProteinFamilyOrganism(KEGGOrthology familyIdentifier, Taxonomy taxIdentifier) {
-        Query queryFamily = new TermQuery(new Term(KEGGOrthologyOrgProtLuceneFields.KEGGOrthologyFamily.toString(), familyIdentifier.getShortDescription()));
+        Query queryFamily = new TermQuery(new Term(KEGGOrthologyOrgProtLuceneFields.KEGGOrthologyFamily.toString(), familyIdentifier.getAccession()));
         Query queryTax = new TermQuery(new Term(KEGGOrthologyOrgProtLuceneFields.TaxID.toString(), taxIdentifier.getAccession()));
         
         BooleanQuery query = new BooleanQuery();

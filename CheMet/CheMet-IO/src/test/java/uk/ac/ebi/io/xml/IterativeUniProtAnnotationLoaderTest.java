@@ -4,12 +4,7 @@
  */
 package uk.ac.ebi.io.xml;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import org.codehaus.stax2.XMLStreamReader2;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
