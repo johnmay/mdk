@@ -44,6 +44,8 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.xml.UniProtAnnoationLoader;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.io.xml.IterativeUniProtAnnotationLoader;
+import uk.ac.ebi.io.xml.IterativeUniProtAnnotationLoader.UniProtEntry;
 import uk.ac.ebi.resource.classification.KEGGOrthology;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
@@ -76,28 +78,32 @@ public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implem
     }
 
     private List<Document> getKEGGOrthologyUniProtDocsForFile(String location) throws XMLStreamException, IOException {
-        UniProtAnnoationLoader loader = new UniProtAnnoationLoader();
+        IterativeUniProtAnnotationLoader loader = new IterativeUniProtAnnotationLoader();
         setRemote(location);
         loader.update(new GZIPInputStream(getRemote().openStream()));
-        Multimap<UniProtIdentifier, Identifier> map = loader.getMap();
+        UniProtEntry entry = loader.nextEntry();
         LinkedList<Document> docs = new LinkedList();
-        for (UniProtIdentifier uniProtIdentifier : map.keySet()) {
+        while (entry != null) {
             Document doc = new Document();
+            UniProtIdentifier uniProtIdentifier = entry.getUniProtIdentifier();
             doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.UniprotAcc.toString(), uniProtIdentifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            for (Identifier identifier : map.get(uniProtIdentifier)) {
-                if(identifier instanceof Taxonomy) {
-                    doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.TaxID.toString(), identifier.getAccession(),Field.Store.YES,Field.Index.NOT_ANALYZED));
-                } else if(identifier instanceof KEGGOrthology) {
-                    doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.KEGGOrthologyFamily.toString(),identifier.getAccession(),Field.Store.YES,Field.Index.NOT_ANALYZED));
+            for (Identifier identifier : entry.getIdentifiers()) {
+                if (identifier instanceof Taxonomy) {
+                    doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.TaxID.toString(), identifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                } else if (identifier instanceof KEGGOrthology) {
+                    doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.KEGGOrthologyFamily.toString(), identifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }
             }
-            if(doc.getFields().size()<3)
+            entry = loader.nextEntry();
+            if (doc.getFields().size() < 3) {
                 continue;
+            }
             docs.add(doc);
         }
+        loader.close();
         return docs;
     }
-    
+
     private void init() {
         this.analzyer = new KeywordAnalyzer();
     }
@@ -113,22 +119,19 @@ public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implem
     }
 
     public void update() throws IOException {
-        LinkedList<Document> docs = new LinkedList();
+        List<Document> docs;
         // write the index
         Directory index = new SimpleFSDirectory(getLocal());
         IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, new KeywordAnalyzer()));
         try {
-            docs.addAll(getKEGGOrthologyUniProtDocsForFile(locationTrEMBL));
+            docs = getKEGGOrthologyUniProtDocsForFile(locationTrEMBL);
             writer.addDocuments(docs);
             docs.clear();
-            docs.addAll(getKEGGOrthologyUniProtDocsForFile(locationSwissProt));
+            docs = getKEGGOrthologyUniProtDocsForFile(locationSwissProt);
             writer.addDocuments(docs);
         } catch (XMLStreamException e) {
             LOGGER.error("Problems parsing uniprot XML:", e);
         }
-
-        
-        
         writer.close();
         index.close();
 
@@ -146,7 +149,7 @@ public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implem
     public String getDescription() {
         return "KEGG Orthology to UniProt links";
     }
-    
+
     public static void main(String[] args) throws MalformedURLException, IOException {
         new KEGGOrthology2OrganismProtein().update();
     }
