@@ -254,14 +254,14 @@ public class UniProtAnnoationLoader implements Externalizable {
                 String type = xmlr.getAttributeValue(i);
                 if (type.equals("EC")) {
                     return new ECNumber(accession);
-                } else if(type.equals("KO")) {
+                } /*else if(type.equals("KO")) {
                     // <dbReference type="KO" id="K11440" key="35"/>
                     return new KEGGOrthology(accession);
                 } else if(type.equals("NCBI Taxonomy")) {
                     Taxonomy tax = new Taxonomy();
                     tax.setAccession(accession);
                     return tax;
-                }
+                }*/
             }
         }
 
