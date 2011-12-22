@@ -98,5 +98,11 @@ public class KEGGOrthology2OrganismProteinServiceTest {
             assertNotNull(uniProtIdentifier);
             System.out.println("Uniprot ID:"+uniProtIdentifier.getAccession());
         }
+        KEGGOrthology identOrth = new KEGGOrthology("K01509");
+        Taxonomy taxIdentHuman = new Taxonomy();
+        taxIdentHuman.setAccession("9606");
+        for (UniProtIdentifier uniProtIdentifier : instance.getUniProtIdentifiersForProteinFamilyOrganism(identOrth, taxIdentHuman)) {
+            System.out.println("Uniprot ID:"+uniProtIdentifier.getAccession());
+        }
     }
 }

@@ -20,8 +20,6 @@
  */
 package uk.ac.ebi.io.xml;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,7 +29,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -47,10 +44,10 @@ import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 /**
- * @name    UniprotAnnotations - 2011.10.13 <br>
+ * @name    IterativeUniprotAnnotationLoader - 2011.10.13 <br>
  *          Currently includes EC, KO (KEGG orthology annotations) and Taxonomy ID.
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
+ * @author  pmoreno
  * @author  $Author$ (this version)
  */
 public class IterativeUniProtAnnotationLoader {

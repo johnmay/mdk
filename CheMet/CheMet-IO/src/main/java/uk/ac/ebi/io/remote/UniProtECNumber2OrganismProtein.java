@@ -44,7 +44,7 @@ import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.io.xml.IterativeUniProtAnnotationLoader;
 import uk.ac.ebi.io.xml.IterativeUniProtAnnotationLoader.UniProtEntry;
-import uk.ac.ebi.resource.classification.KEGGOrthology;
+import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 /**
@@ -55,9 +55,9 @@ import uk.ac.ebi.resource.organism.Taxonomy;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implements RemoteResource, LuceneService {
+public class UniProtECNumber2OrganismProtein extends AbstrastRemoteResource implements RemoteResource, LuceneService {
 
-    private static final Logger LOGGER = Logger.getLogger(KEGGOrthology2OrganismProtein.class);
+    private static final Logger LOGGER = Logger.getLogger(UniProtECNumber2OrganismProtein.class);
     private static final String locationTrEMBL = "ftp://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.xml.gz";
     private static final String locationSwissProt = "ftp://ftp.ebi.ac.uk/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.xml.gz";
     // we should probably use both TrEMBL and Swissprot.
@@ -75,7 +75,7 @@ public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implem
         }
     }
 
-    private List<Document> getKEGGOrthologyUniProtDocsForFile(String location) throws XMLStreamException, IOException {
+    private List<Document> getUniProtECNum2OrgLinkDocsFromFile(String location) throws XMLStreamException, IOException {
         IterativeUniProtAnnotationLoader loader = new IterativeUniProtAnnotationLoader();
         setRemote(location);
         loader.update(new GZIPInputStream(getRemote().openStream()));
@@ -84,12 +84,12 @@ public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implem
         while (entry != null) {
             Document doc = new Document();
             UniProtIdentifier uniProtIdentifier = entry.getUniProtIdentifier();
-            doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.UniprotAcc.toString(), uniProtIdentifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.add(new Field(UniProtECNumber2OrgProtLuceneFields.UniprotAcc.toString(), uniProtIdentifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             for (Identifier identifier : entry.getIdentifiers()) {
                 if (identifier instanceof Taxonomy) {
-                    doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.TaxID.toString(), identifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                } else if (identifier instanceof KEGGOrthology) {
-                    doc.add(new Field(KEGGOrthologyOrgProtLuceneFields.KEGGOrthologyFamily.toString(), identifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                    doc.add(new Field(UniProtECNumber2OrgProtLuceneFields.TaxID.toString(), identifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                } else if (identifier instanceof ECNumber) {
+                    doc.add(new Field(UniProtECNumber2OrgProtLuceneFields.ECNumber.toString(), identifier.getAccession(), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 } 
             }
             entry = loader.nextEntry();
@@ -106,12 +106,12 @@ public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implem
         this.analzyer = new KeywordAnalyzer();
     }
 
-    public enum KEGGOrthologyOrgProtLuceneFields {
+    public enum UniProtECNumber2OrgProtLuceneFields {
 
-        UniprotAcc, KEGGOrthologyFamily, TaxID;
+        UniprotAcc, ECNumber, TaxID;
     }
 
-    public KEGGOrthology2OrganismProtein() {
+    public UniProtECNumber2OrganismProtein() {
         super(locationTrEMBL, getFile());
         init();
     }
@@ -122,10 +122,10 @@ public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implem
         Directory index = new SimpleFSDirectory(getLocal());
         IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, new KeywordAnalyzer()));
         try {
-            docs = getKEGGOrthologyUniProtDocsForFile(locationTrEMBL);
+            docs = getUniProtECNum2OrgLinkDocsFromFile(locationTrEMBL);
             writer.addDocuments(docs);
             docs.clear();
-            docs = getKEGGOrthologyUniProtDocsForFile(locationSwissProt);
+            docs = getUniProtECNum2OrgLinkDocsFromFile(locationSwissProt);
             writer.addDocuments(docs);
         } catch (XMLStreamException e) {
             LOGGER.error("Problems parsing uniprot XML:", e);
@@ -139,16 +139,16 @@ public class KEGGOrthology2OrganismProtein extends AbstrastRemoteResource implem
         String defaultFile = System.getProperty("user.home")
                 + File.separator + "databases"
                 + File.separator + "indexes"
-                + File.separator + "keggorthology-uniprot";
-        Preferences prefs = Preferences.userNodeForPackage(KEGGOrthology2OrganismProtein.class);
-        return new File(prefs.get("keggorthology.uniprot.links.path", defaultFile));
+                + File.separator + "uniprot-ec-organism";
+        Preferences prefs = Preferences.userNodeForPackage(UniProtECNumber2OrganismProtein.class);
+        return new File(prefs.get("uniprot.ecnumber.organism.path", defaultFile));
     }
 
     public String getDescription() {
-        return "KEGG Orthology to UniProt links";
+        return "UniProt EC number to Organism link";
     }
 
     public static void main(String[] args) throws MalformedURLException, IOException {
-        new KEGGOrthology2OrganismProtein().update();
+        new UniProtECNumber2OrganismProtein().update();
     }
 }
