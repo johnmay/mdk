@@ -69,7 +69,7 @@ public class UniProtECNumber2OrganismProteinService
         return UniProtECNumber2OrganismProtServiceHolder.INSTANCE;
     }
 
-    public Collection<Identifier> getKEGGKOFamilies(UniProtIdentifier identifier) {
+    public Collection<Identifier> getECNumbers(UniProtIdentifier identifier) {
         Query queryUniprotID = new TermQuery(new Term(UniProtECNumber2OrgProtLuceneFields.UniprotAcc.toString(), identifier.getAccession()));
         return search(queryUniprotID);
     }
