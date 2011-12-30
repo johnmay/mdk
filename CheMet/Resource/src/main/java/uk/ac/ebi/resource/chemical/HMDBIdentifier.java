@@ -21,8 +21,6 @@
 package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 /**
  * @name    HMDBIdentifier - 2011.10.12 <br>
@@ -31,7 +29,7 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class HMDBIdentifier extends AbstractIdentifier {
+public class HMDBIdentifier extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(HMDBIdentifier.class);
 

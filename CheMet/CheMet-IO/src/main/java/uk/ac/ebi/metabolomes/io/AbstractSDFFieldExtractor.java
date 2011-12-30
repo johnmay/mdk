@@ -24,8 +24,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import uk.ac.ebi.metabolomes.io.FieldExtractor;
-import uk.ac.ebi.metabolomes.io.SDFRecord;
 
 /**
  * @name    NewClass

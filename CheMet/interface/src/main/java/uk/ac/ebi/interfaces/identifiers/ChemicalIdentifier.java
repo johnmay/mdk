@@ -27,6 +27,6 @@ package uk.ac.ebi.interfaces.identifiers;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface ChemicalIdentifier {
+public interface ChemicalIdentifier extends Identifier{
 
 }
