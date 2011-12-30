@@ -23,7 +23,6 @@ package uk.ac.ebi.io.service;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
-import javax.swing.text.StyledEditorKit.BoldAction;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
