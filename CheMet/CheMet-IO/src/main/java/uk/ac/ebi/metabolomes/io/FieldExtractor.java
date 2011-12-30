@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.metabolomes.io;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -23,5 +24,7 @@ public interface FieldExtractor {
     public String getProposedIdentifier();
 
     public SDFRecord getRecordFor(String xid);
+    
+    public Iterator<SDFRecord> getSDFRecordsIterator();
     
 }

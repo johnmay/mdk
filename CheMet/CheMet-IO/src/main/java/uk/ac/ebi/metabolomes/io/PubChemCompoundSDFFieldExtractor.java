@@ -20,11 +20,8 @@
  */
 package uk.ac.ebi.metabolomes.io;
 
-import java.util.List;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.io.FieldExtractor;
-import uk.ac.ebi.metabolomes.io.SDFRecord;
 
 /**
  * @name    PubChemSDFFieldExtractor
@@ -42,6 +39,7 @@ public class PubChemCompoundSDFFieldExtractor extends AbstractSDFFieldExtractor 
     private boolean nextLineID=false;
     private boolean nextLineName=false;
     private boolean nextLineSyn=false;
+    private boolean nextLineInChI=false;
 
     
     public PubChemCompoundSDFFieldExtractor() {
@@ -59,12 +57,17 @@ public class PubChemCompoundSDFFieldExtractor extends AbstractSDFFieldExtractor 
         } else if(nextLineSyn) {
             this.currentRecord.addSynonym(line);
             nextLineSyn=false;
+        } else if(nextLineInChI) {
+            this.currentRecord.setInChI(line);
+            nextLineInChI=false;
         } else {
             
             if(line.startsWith("> <PUBCHEM_COMPOUND_CID>"))
                 nextLineID=true;
             else if(line.startsWith("> <PUBCHEM_IUPAC_TRADITIONAL_NAME>"))
                 nextLineName=true;
+            else if(line.startsWith("> <PUBCHEM_IUPAC_INCHI>"))
+                nextLineInChI=true;
             else if(pubchemSyns.matcher(line).find())
                 nextLineSyn=true;
             

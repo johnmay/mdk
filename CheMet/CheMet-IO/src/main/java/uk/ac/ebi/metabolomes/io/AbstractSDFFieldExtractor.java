@@ -22,6 +22,7 @@ package uk.ac.ebi.metabolomes.io;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -79,6 +80,10 @@ public abstract class AbstractSDFFieldExtractor implements FieldExtractor {
             return this.archivedRecords.get(xid);
         }
         return new SDFRecord();
+    }
+    
+    public Iterator<SDFRecord> getSDFRecordsIterator() {
+        return this.archivedRecords.values().iterator();
     }
 
     SDFRecord getNewCurrentRecord() {
