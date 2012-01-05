@@ -16,8 +16,10 @@
  */
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,11 +30,11 @@ import java.util.Map;
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public class StoichiometricMatrix<M , R>
-        extends AbstractReactionMatrix<Double , M , R> {
+public class StoichiometricMatrix<M, R>
+        extends AbstractReactionMatrix<Double, M, R> {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( StoichiometricMatrix.class );
-    private Map<Integer , ReactionDirection> reversibilityMap = new HashMap<Integer , ReactionDirection>();
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(StoichiometricMatrix.class);
+    private Map<Integer, ReactionDirection> reversibilityMap = new HashMap<Integer, ReactionDirection>();
     private HashSet<M> extraCellular = new HashSet<M>();
 
     public enum ReactionDirection {
@@ -52,58 +54,91 @@ public class StoichiometricMatrix<M , R>
     /**
      * {@inheritDoc}
      */
-    public StoichiometricMatrix( int n , int m ) {
-        super( n , m );
+    public StoichiometricMatrix(int n, int m) {
+        super(n, m);
     }
 
     @Override
-    public boolean addReaction( R reaction , M[] newMolecules , Double[] values ) {
+    public boolean addReaction(R reaction, M[] newMolecules, Double[] values) {
 
 
-        boolean modified = super.addReaction( reaction , newMolecules , values );
-        if ( modified ) {
+        boolean modified = super.addReaction(reaction, newMolecules, values);
+        if (modified) {
             int index = getReactionCount() - 1;
-            reversibilityMap.put( index , ReactionDirection.UNKNOWN );
+            reversibilityMap.put(index, ReactionDirection.UNKNOWN);
             // quick hack for extra-cellular metabolites
-            if ( values.length == 1 ) {
+            if (values.length == 1) {
                 extraCellular.add(newMolecules[0]);
             }
         }
         return modified;
     }
 
-    public boolean addReaction( R reaction , M[] newMolecules , Double[] values , Boolean isReversible ) {
+    public boolean addReaction(R reaction, M[] newMolecules, Double[] values, Boolean isReversible) {
 
 
-        if ( isReversible == null ) {
-            return this.addReaction( reaction , newMolecules , values );
+        if (isReversible == null) {
+            return this.addReaction(reaction, newMolecules, values);
         }
-        boolean modified = super.addReaction( reaction , newMolecules , values );
-        if ( modified ) {
+        boolean modified = super.addReaction(reaction, newMolecules, values);
+        if (modified) {
             int index = getReactionCount() - 1;
 
             // quick hack for extra-cellular metabolites
-            if ( values.length == 1 ) {
-                extraCellular.add( newMolecules[0] );
+            if (values.length == 1) {
+                extraCellular.add(newMolecules[0]);
             }
 
             // add to reversibility sets the index of the last added reaction
-            if ( isReversible ) {
-                reversibilityMap.put( index , ReactionDirection.REVERSIBLE );
-            } else if ( isReversible == Boolean.FALSE ) {
-                reversibilityMap.put( index , ReactionDirection.IRREVERSIBLE );
+            if (isReversible) {
+                reversibilityMap.put(index, ReactionDirection.REVERSIBLE);
+            } else if (isReversible == Boolean.FALSE) {
+                reversibilityMap.put(index, ReactionDirection.IRREVERSIBLE);
             }
         }
         return modified;
     }
 
-    public boolean isExtraCellular( M molecule ) {
-        return extraCellular.contains( molecule );
+    public boolean isExtraCellular(M molecule) {
+        return extraCellular.contains(molecule);
     }
 
     @Override
-    public Double get( int i , int j ) {
-        Double value = super.get( i , j );
+    public Double get(int i, int j) {
+        Double value = super.get(i, j);
         return value == null ? 0 : value;
+    }
+
+    /**
+     * Merges this matrix with the specified other matrix
+     * @param other
+     * @return 
+     */
+    public StoichiometricMatrix<M, R> merge(StoichiometricMatrix<M, R> other) {
+
+        List<Double> coefs = new ArrayList<Double>();
+        List<M> molecules = new ArrayList<M>();
+
+        for (int j = 0; j < other.getReactionCount(); j++) {
+            
+            Object[] tmpCoefs = other.getColumn(j);
+            
+            for (int i = 0; i < tmpCoefs.length; i++) {
+                if (tmpCoefs[i] != null) {
+                    coefs.add((Double)tmpCoefs[i]);
+                    molecules.add(other.getMolecule(i));
+                }
+            }
+
+            this.addReaction(other.getReaction(j),
+                             (M[]) molecules.toArray(),
+                             coefs.toArray(new Double[0]));
+            
+            coefs.clear();
+            molecules.clear();
+        }
+
+        return this;
+
     }
 }

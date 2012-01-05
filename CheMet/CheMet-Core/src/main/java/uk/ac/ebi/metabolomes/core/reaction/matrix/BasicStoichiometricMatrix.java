@@ -26,9 +26,9 @@ import java.util.Arrays;
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
 public class BasicStoichiometricMatrix
-        extends StoichiometricMatrix<String , String> {
+        extends StoichiometricMatrix<String, String> {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger( BasicStoichiometricMatrix.class );
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(BasicStoichiometricMatrix.class);
     private Integer reactionCount = 0;
 
     public BasicStoichiometricMatrix() {
@@ -37,54 +37,68 @@ public class BasicStoichiometricMatrix
     /**
      * {@inheritDoc}
      */
-    public BasicStoichiometricMatrix( int n , int m ) {
-        super( n , m );
+    public BasicStoichiometricMatrix(int n, int m) {
+        super(n, m);
     }
 
-    public void addReaction( String[] substrates ,
-                             String[] products ) {
-        Double[] values = new Double[ substrates.length + products.length ];
-        String[] molecules = new String[ values.length ];
-        for ( int i = 0; i < substrates.length; i++ ) {
+    public void addReaction(String[] substrates,
+                            String[] products) {
+        String fluxChar = substrates.length == 0 || products.length == 0 ? "b" : "v";
+        addReaction(fluxChar + ++reactionCount, substrates, products);
+    }
+
+    public void addReaction(String rxn,
+                            String[] substrates,
+                            String[] products) {
+        Double[] values = new Double[substrates.length + products.length];
+        String[] molecules = new String[values.length];
+        for (int i = 0; i < substrates.length; i++) {
             values[i] = -1d;
         }
-        for ( int i = substrates.length; i < values.length; i++ ) {
+        for (int i = substrates.length; i < values.length; i++) {
             values[i] = 1d;
         }
-        System.arraycopy( substrates , 0 , molecules , 0 , substrates.length );
-        System.arraycopy( products , 0 , molecules , substrates.length , products.length );
-        String fluxChar = substrates.length == 0 || products.length == 0 ? "b" : "v";
-        addReaction( fluxChar + ++reactionCount , molecules , values );
+        System.arraycopy(substrates, 0, molecules, 0, substrates.length);
+        System.arraycopy(products, 0, molecules, substrates.length, products.length);
+        addReaction(rxn, molecules, values);
     }
 
-    public void addReaction( String reaction ) {
-        String[] compounds = reaction.split( " => " );
-        addReaction( compounds[0] , compounds[1] );
+    public void addReaction(String reaction) {
+        String[] compounds = reaction.split(" => ");
+        addReaction(compounds[0], compounds[1]);
     }
 
-    public void addReaction( String substrates , String products ) {
-        addReaction( substrates.split( " \\+ " ) , products.split( " \\+ " ) );
+    public void addReactionWithName(String name, String reaction) {
+        String[] compounds = reaction.split(" => ");
+        addReactionWithName(name, compounds[0], compounds[1]);
     }
 
-    public static void main( String[] args ) {
+    public void addReaction(String substrates, String products) {
+        addReaction(substrates.split(" \\+ "), products.split(" \\+ "));
+    }
+    public void addReactionWithName(String name, String substrates, String products) {
+        addReaction(name, substrates.split(" \\+ "), products.split(" \\+ "));
+    }
+
+    public static void main(String[] args) {
 
 
         BasicStoichiometricMatrix s = new BasicStoichiometricMatrix();
 
         // internal reactions
-        s.addReaction( "A => B" );
-        s.addReaction( "B => C" );
-        s.addReaction( "C => D" );
+        s.addReaction("A => B");
+        s.addReaction("B => C");
+        s.addReaction("C => D");
         // exchange reactions
-        s.addReaction( new String[]{} , new String[]{ "A" } );
-        s.addReaction( new String[]{ "D" } , new String[]{} );
+        s.addReaction(new String[]{}, new String[]{"A"});
+        s.addReaction(new String[]{"D"}, new String[]{});
 
 
-        s.display( System.out , ' ' , "0" , null , 2 , 2 );
+        s.display(System.out, ' ', "0", null, 2, 2);
 
         Object[][] sfixed = s.getFixedMatrix();
-        for ( int i = 0; i < sfixed.length; i++ ) {
-            System.out.println( Arrays.asList( sfixed[i] ) );
+        for (int i = 0; i < sfixed.length; i++) {
+            System.out.println(Arrays.asList(sfixed[i]));
         }
 
     }

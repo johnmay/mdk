@@ -14,22 +14,8 @@
  */
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
+import java.io.*;
+import java.util.*;
 
 /**
  * Generic reaction matrix class
@@ -48,9 +34,9 @@ public abstract class AbstractReactionMatrix<T, M, R> {
     public int reactionCount = 0;
     // bi-directional hashmaps
     private LinkedHashMap<M, Integer> molecules = new LinkedHashMap<M, Integer>(10);
-    private LinkedHashMap<R, Integer> reactions = new LinkedHashMap<R, Integer>(10);
-    private LinkedHashMap<Integer, M> moleculesIHashMap = new LinkedHashMap<Integer, M>(10);
-    private LinkedHashMap<Integer, R> reactionsIHashMap = new LinkedHashMap<Integer, R>(10);
+    private List<R> reactions = new ArrayList<R>();
+    private LinkedHashMap<Integer, M> moleculeMap = new LinkedHashMap<Integer, M>(10);
+    private LinkedHashMap<Integer, R> reactionMap = new LinkedHashMap<Integer, R>(10);
     // fixed-matrix
     private T[][] matrix;
     private int maxMoleculeCapacity;
@@ -85,56 +71,46 @@ public abstract class AbstractReactionMatrix<T, M, R> {
                                M[] newMolecules,
                                T[] values) {
 
-        // if the reaction hasn't be added already (based on identifier)
-        if (!reactions.containsKey(reaction)) {
 
-            // ensure size of fixed matrix
-            {
-                if (reactionCount + 1 >= maxReactionCapacity) {
-                    maxReactionCapacity *= 2;
-                    for (int i = 0; i < matrix.length; i++) {
-                        matrix[i] = Arrays.copyOf(matrix[i], maxReactionCapacity);
-                    }
-                }
-
-
+        // ensure size of fixed matrix
+        if (reactionCount + 1 >= maxReactionCapacity) {
+            maxReactionCapacity *= 2;
+            for (int i = 0; i < matrix.length; i++) {
+                matrix[i] = Arrays.copyOf(matrix[i], maxReactionCapacity);
             }
-
-            // index
-            {
-                // add new molecules to hash if there are any new one
-                for (M m : newMolecules) {
-                    if (!molecules.containsKey(m)) {
-                        moleculesIHashMap.put(moleculeCount, m);
-                        molecules.put(m, moleculeCount++);
-                    }
-                }
-            }
-
-            // ensure space in the matrix
-            if (moleculeCount + 1 >= maxMoleculeCapacity) {
-                maxMoleculeCapacity *= 2;
-                matrix = Arrays.copyOf(matrix, maxMoleculeCapacity);
-                // null fill new metabolite rows
-                for (int i = matrix.length / 2; i < matrix.length; i++) {
-                    matrix[i] = (T[]) new Object[maxReactionCapacity];
-                }
-            }
-            // add the reaction to the fixed matrix
-            for (int i = 0; i < newMolecules.length; i++) {
-                matrix[molecules.get(newMolecules[i])][reactionCount] = values[i];
-            }
-
-            // index the reaction and add to the matrix
-            reactionsIHashMap.put(reactionCount, reaction);
-            reactions.put(reaction, reactionCount++);
-
-//            oldMatrix.add( new ArrayList<T>( Arrays.asList( reactionRow ) ) );
-            return true;
-        } else {
-            logger.debug("duplicated reactions for " + reaction.toString());
-            return false;
         }
+
+        // add new molecules to hash if there are any new one
+        for (M m : newMolecules) {
+            if (!molecules.containsKey(m)) {
+                moleculeMap.put(moleculeCount, m);
+                molecules.put(m, moleculeCount);
+                moleculeCount++;
+            }
+        }
+
+        // ensure space in the matrix
+        if (moleculeCount + 1 >= maxMoleculeCapacity) {
+            maxMoleculeCapacity *= 2;
+            matrix = Arrays.copyOf(matrix, maxMoleculeCapacity);
+            // null fill new metabolite rows
+            for (int i = matrix.length / 2; i < matrix.length; i++) {
+                matrix[i] = (T[]) new Object[maxReactionCapacity];
+            }
+        }
+        
+        // add the reaction to the fixed matrix
+        for (int i = 0; i < newMolecules.length; i++) {
+            matrix[molecules.get(newMolecules[i])][reactionCount] = values[i];
+        }
+
+        // index the reaction and add to the matrix
+        reactionMap.put(reactionCount, reaction);
+        reactions.add(reaction);
+        reactionCount++;
+        
+        return true;
+
     }
 
     public void display(PrintStream stream) {
@@ -169,17 +145,14 @@ public abstract class AbstractReactionMatrix<T, M, R> {
 
         String format = sep + " %" + maxReactionNameLength + "s";
         for (int i = 0; i < reactionCount; i++) {
-            stream.printf(format, reactionsIHashMap.get(i).toString());
+            stream.printf(format, reactionMap.get(i).toString());
         }
         stream.println();
-
-        Set<Entry<R, Integer>> reactionSet = reactions.entrySet();
-        Iterator<Entry<R, Integer>> reactionIterator = reactionSet.iterator();
 
         String molNameFormat = "%" + maxMolNameLength + "s";
         String valueFormat = sep + " %" + maxReactionNameLength + "s";
         for (int i = 0; i < moleculeCount; i++) {
-            stream.printf(molNameFormat, moleculesIHashMap.get(i));
+            stream.printf(molNameFormat, moleculeMap.get(i));
             for (int j = 0; j < reactionCount; j++) {
                 T value = matrix[i][j];
                 stream.printf(valueFormat, (value == null ? empty : value).toString());
@@ -219,17 +192,24 @@ public abstract class AbstractReactionMatrix<T, M, R> {
         return Arrays.copyOf(matrix[i], reactionCount);
     }
 
+    public T[] getRow(M m) {
+        return getRow(this.molecules.get(m));
+    }
+
     /**
      * Access to the values for a single reaction
      */
     public T[] getColumn(int j) {
-        Object[] copy = new Object[moleculeCount];
+        T[] copy = (T[]) new Object[moleculeCount];
         for (int i = 0; i < moleculeCount; i++) {
             copy[i] = matrix[i][j];
         }
-        return (T[]) copy;
+        return copy;
     }
 
+//    public T[] getColumn(R r) {
+//        return getColumn(reactionsOld.get(r));
+//    }
     /**
      * Counts the number of null objects in each column
      * @return Array of the null count for each column
@@ -257,8 +237,8 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      * Returns a fixed size array of the molecules
      * @return
      */
-    public Set<R> getReactions() {
-        return reactions.keySet();
+    public List<R> getReactions() {
+        return reactions;
     }
 
     public int getMoleculeCount() {
@@ -275,7 +255,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      * @return
      */
     public M getMolecule(int i) {
-        return moleculesIHashMap.get(i);
+        return moleculeMap.get(i);
     }
 
     /**
@@ -284,7 +264,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      * @return
      */
     public R getReaction(Integer i) {
-        return reactionsIHashMap.get(i);
+        return reactionMap.get(i);
     }
 
     /**
@@ -393,28 +373,30 @@ public abstract class AbstractReactionMatrix<T, M, R> {
         Set<M> highlyConnected = getHighlyConnectedMolecules(connectivityThreshhold);
         Set<M> workingMolecules = getMolecules();
 
-        for (M molecule : workingMolecules) {
-            if (highlyConnected.contains(molecule)) {
-                if (split) {
-                    Map<R, T> reactionMap = getReactions(molecule);
-                    for (R r : reactionMap.keySet()) {
-                        Object edge = edgeValues == null || edgeValues.isEmpty() ? matrix[molecules.get(molecule)][reactions.get(r)] : edgeValues.get(reactions.get(r));
-                        String newName = ticker++ + "-" + molecule.toString();
-                        writer.write(r + "\t" + edge.toString() + "\t" + newName + "\n");
-                        highlyConnectedMap.put(newName, molecule);
-                    }
-                } else {
-                    logger.debug("ignoring highly connected: " + highlyConnected);
-                }
-            } else {
-                Map<R, T> reactionMap = getReactions(molecule);
-                for (R r : reactionMap.keySet()) {
-                    Object edge = edgeValues == null || edgeValues.isEmpty() ? matrix[molecules.get(molecule)][reactions.get(r)] : edgeValues.get(reactions.get(r));
-                    writer.write(r + "\t" + edge.toString() + "\t" + molecule + "\n");
-                }
-            }
-        }
-        return highlyConnectedMap;
+        throw new UnsupportedOperationException("FIXME");
+
+//        for (M molecule : workingMolecules) {
+//            if (highlyConnected.contains(molecule)) {
+//                if (split) {
+//                    Map<R, T> reactionMap = getReactions(molecule);
+//                    for (R r : reactionMap.keySet()) {
+//                        Object edge = edgeValues == null || edgeValues.isEmpty() ? matrix[molecules.get(molecule)][reactionsOld.get(r)] : edgeValues.get(reactionsOld.get(r));
+//                        String newName = ticker++ + "-" + molecule.toString();
+//                        writer.write(r + "\t" + edge.toString() + "\t" + newName + "\n");
+//                        highlyConnectedMap.put(newName, molecule);
+//                    }
+//                } else {
+//                    logger.debug("ignoring highly connected: " + highlyConnected);
+//                }
+//            } else {
+//                Map<R, T> reactionMap = getReactions(molecule);
+//                for (R r : reactionMap.keySet()) {
+//                    Object edge = edgeValues == null || edgeValues.isEmpty() ? matrix[molecules.get(molecule)][reactionsOld.get(r)] : edgeValues.get(reactionsOld.get(r));
+//                    writer.write(r + "\t" + edge.toString() + "\t" + molecule + "\n");
+//                }
+//            }
+//        }
+//       return highlyConnectedMap;
     }
 
     public boolean containsMolecule(M molecule) {
