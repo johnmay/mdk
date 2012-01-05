@@ -4,17 +4,15 @@
  */
 package uk.ac.ebi.core;
 
-import com.google.common.base.Joiner;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.prefs.Preferences;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.Preference;
 
 /**
  * 
@@ -40,16 +38,16 @@ public class ReconstructionManager {
     private ReconstructionManager() {
 
         // get the recently open files, remove entries that don't exists
-        String filenames = Preferences.userNodeForPackage(this.getClass()).get("recent.files", "");
-        String[] names = filenames.split(File.pathSeparator);
+        Preference.RECENT_FILES.getList();
         List<String> valid = new ArrayList();
-        for (String file : names) {
+        for (String file : Preference.RECENT_FILES.getList()) {
             File f = new File(file);
             if (f.exists()) {
                 valid.add(f.getAbsolutePath());
             }
         }
         recent.addAll(valid.subList(0, Math.min(valid.size(), 10)));
+        Preference.RECENT_FILES.putList(valid); // having validated put the list back
 
 
     }
@@ -171,7 +169,7 @@ public class ReconstructionManager {
             recent.remove(path);
         }
         recent.add(path);
-        Preferences.userNodeForPackage(this.getClass()).put("recent.files", Joiner.on(File.pathSeparator).join(recent));
+        Preference.RECENT_FILES.putList(recent);
 
         // is it keyed? then just get the identifier and set it
         if (projectMap.containsKey(reconstruction.getIdentifier())) {
