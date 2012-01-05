@@ -12,7 +12,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
-import org.openscience.cdk.isomorphism.matchers.QueryChemObject;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 
