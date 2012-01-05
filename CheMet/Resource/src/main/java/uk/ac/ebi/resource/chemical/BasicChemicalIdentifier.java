@@ -26,6 +26,7 @@ import java.io.ObjectOutput;
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.Preference;
 
 /**
  *          BasicChemicalIdentifier – 2011.09.14 <br>
@@ -56,7 +57,7 @@ public class BasicChemicalIdentifier
 
     public static BasicChemicalIdentifier nextIdentifier() {
         Preferences.userNodeForPackage(BasicChemicalIdentifier.class).putLong("ticker", ++ticker);
-        return new BasicChemicalIdentifier(String.format("Met:{%07d}", ticker));
+        return new BasicChemicalIdentifier(String.format(Preference.CHEMICAL_IDENTIFIER_FORMAT.get(), ticker));
     }
 
     /**

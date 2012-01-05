@@ -22,6 +22,7 @@ package uk.ac.ebi.resource.reaction;
 
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.resource.Preference;
 
 /**
  *          BasicReactionIdentifier – 2011.09.26 <br>
@@ -53,6 +54,6 @@ public class BasicReactionIdentifier extends ReactionIdentifier {
 
     public static BasicReactionIdentifier nextIdentifier() {
         Preferences.userNodeForPackage(BasicReactionIdentifier.class).putLong("ticker", ++ticker);
-        return new BasicReactionIdentifier(String.format("Rxn:{%07d}", ticker));
+        return new BasicReactionIdentifier(String.format(Preference.REACTION_IDENTIFIER_FORMAT.get(), ticker));
     }
 }

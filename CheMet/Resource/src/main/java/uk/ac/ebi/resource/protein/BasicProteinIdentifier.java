@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.MetaboliteIdentifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
+import uk.ac.ebi.resource.Preference;
 
 /**
  *          BasicProteinIdentifier – 2011.09.14 <br>
@@ -47,7 +48,7 @@ public class BasicProteinIdentifier
     }
 
     public static Identifier nextIdentifier() {
-        return new BasicProteinIdentifier(String.format("protein_%05d", ++ticker));
+        return new BasicProteinIdentifier(String.format(Preference.PROTEIN_IDENTIFIER_FORMAT.get(), ++ticker));
     }
 
     /**

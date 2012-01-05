@@ -22,6 +22,7 @@ package uk.ac.ebi.resource.gene;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.Preference;
 
 /**
  *          BasicGeneIdentifier - 2011.10.17 <br>
@@ -48,7 +49,7 @@ public class BasicGeneIdentifier extends GeneIdentifier {
      * jvm instance
      */
     public static Identifier nextIdentifier() {
-        return new BasicGeneIdentifier(String.format("gene_%05d", ++ticker));
+        return new BasicGeneIdentifier(String.format(Preference.GENE_IDENTIFIER_FORMAT.get(), ++ticker));
     }
 
     public Identifier newInstance() {
