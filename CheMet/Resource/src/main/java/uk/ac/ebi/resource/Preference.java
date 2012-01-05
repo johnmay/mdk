@@ -59,8 +59,8 @@ public enum Preference {
     public List<String> getList() {
         String rawValue = get();
         List<String> values = new ArrayList<String>();
-        for (String value : rawValue.split(LIST_SEPERATOR_SPLIT)) {
-            values.add(value.replaceAll(LIST_SEPERATOR_ESCAPED, LIST_SEPERATOR));
+        for (String value : rawValue.split(LIST_SEPARATOR_SPLIT)) {
+            values.add(value.replaceAll(LIST_SEPARATOR_ESCAPED, LIST_SEPARATOR));
         }
         return values;
     }
@@ -98,9 +98,9 @@ public enum Preference {
     public void putList(List<String> values) {
         StringBuilder sb = new StringBuilder(values.size() * 14);
         for (String value : values) {
-            sb.append(value.replaceAll(LIST_SEPERATOR, LIST_SEPERATOR_ESCAPED));
+            sb.append(value.replaceAll(LIST_SEPARATOR, LIST_SEPARATOR_ESCAPED));
             if (value.equals(values.get(values.size() - 1))) {
-                sb.append(LIST_SEPERATOR);
+                sb.append(LIST_SEPARATOR);
             }
         }
         put(sb.toString());
