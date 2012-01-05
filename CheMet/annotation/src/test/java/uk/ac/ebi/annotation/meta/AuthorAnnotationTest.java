@@ -27,7 +27,7 @@ public class AuthorAnnotationTest extends TestCase {
 
         Annotation annotation = new AuthorAnnotation("Added during gap filling");
 
-        String expected = "@" + System.getProperty("user.name") + ' ' + "Added during gap filling";
+        String expected = "Added during gap filling";
 
         assertEquals(expected, annotation.toString());
 
