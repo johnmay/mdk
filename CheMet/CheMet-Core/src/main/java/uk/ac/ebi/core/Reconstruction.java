@@ -160,7 +160,8 @@ public class Reconstruction
     public static Reconstruction load(File container) throws IOException, ClassNotFoundException {
 
         File file = new File(container, "recon.extern.gzip");
-        ObjectInput in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+        ObjectInput in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file),
+                                                                   1024 * 8)); // 8 mb
         Reconstruction reconstruction = new Reconstruction();
         reconstruction.readExternal(in);
 

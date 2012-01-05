@@ -27,6 +27,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.AtomContainerSet;
+import org.openscience.cdk.ChemObject;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
@@ -53,6 +55,8 @@ public abstract class AbstractAnnotatedEntity
     private Rating rating = StarRating.ONE_STAR;
 
     public AbstractAnnotatedEntity() {
+        AtomContainerSet set = new AtomContainerSet();
+        set.addListener(set);
     }
 
     public AbstractAnnotatedEntity(Identifier identifier,

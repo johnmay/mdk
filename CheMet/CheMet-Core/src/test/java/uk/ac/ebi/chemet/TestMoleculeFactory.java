@@ -50,8 +50,6 @@ import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
 public class TestMoleculeFactory {
 
     private static final Logger LOGGER = Logger.getLogger(TestMoleculeFactory.class);
-    private static final InChI butan1olInChI = new InChI("InChI=1S/C4H10O/c1-2-3-4-5/h5H,2-4H2,1H3");
-    private static final InChI butan2olInChI = new InChI("InChI=1S/C4H10O/c1-3-4(2)5/h4-5H,3H2,1-2H3");
     private static final InChI but1ene = new InChI("InChI=1S/C4H8/c1-3-4-2/h3H,1,4H2,2H3");
     private static final InChI butane = new InChI("InChI=1S/C4H10/c1-3-4-2/h3-4H2,1-2H3");
 
@@ -111,28 +109,10 @@ public class TestMoleculeFactory {
     }
 
     public static IAtomContainer butan1ol() {
-        try {
-            IMolecule mol = CDKMoleculeBuilder.getInstance().buildFromInChI(butan1olInChI);
-            mol.setID("Butan-1-ol");
-            AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(mol);
-            return mol;
-        } catch (CDKException ex) {
-            java.util.logging.Logger.getLogger(TestMoleculeFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+       return loadMol("ChEBI_28885.mol", "Butan-1-ol", Boolean.FALSE);
     }
-
     public static IAtomContainer butan2ol() {
-        try {
-            IMolecule mol = CDKMoleculeBuilder.getInstance().buildFromInChI(butan2olInChI);
-            mol.setID("Butan-2-ol");
-
-            AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(mol);
-            return mol;
-        } catch (CDKException ex) {
-            java.util.logging.Logger.getLogger(TestMoleculeFactory.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+       return loadMol("ChEBI_35687.mol", "Butan-2-ol", Boolean.FALSE);
     }
 
     public static IAtomContainer adenine() {

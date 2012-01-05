@@ -214,10 +214,10 @@ public class AtomContainerReactionTest {
         System.out.printf("%-120s", "[TEST] Transposed compartments");
 
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant(adenine(), null, Compartment.CYTOPLASM);
-        r.addReactant(butan1ol(), null, Compartment.EXTRACELLULA);
-        r.addProduct(adenine(), null, Compartment.EXTRACELLULA);
-        r.addProduct(butan1ol(), null, Compartment.CYTOPLASM);
+        r.addReactant(adenine(), 1d, Compartment.CYTOPLASM);
+        r.addReactant(cyclohexane(), 1d, Compartment.EXTRACELLULA);
+        r.addProduct(adenine(), 1d, Compartment.EXTRACELLULA);
+        r.addProduct(cyclohexane(), 1d, Compartment.CYTOPLASM);
 
 //        System.out.printf( "\t\treactans: %10s %s\n" , r.getReactantParticipants().hashCode() , StringUtils.join( r.
 //                getReactantParticipants() , " + " ) );

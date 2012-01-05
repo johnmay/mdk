@@ -27,13 +27,14 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.interfaces.*;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.core.Compartment;
-import uk.ac.ebi.core.tools.MolecularHashCode;
+import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 
@@ -147,7 +148,7 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
     @Override
     public int hashCode() {
 
-        int hash = MolecularHashCode.hashCode(skeleton);
+        int hash = MolecularHashFactory.getInstance().getHash(skeleton).hash;
 
 //        int hash = 7;
 //
