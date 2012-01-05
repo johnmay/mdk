@@ -14,7 +14,7 @@ import java.util.prefs.Preferences;
  * @author johnmay
  */
 public enum Preference {
-    
+
     /* TEST */
     LIST_TEST(Type.TEST, Access.USER, new ArrayList<String>()),
     /* IO */
@@ -29,11 +29,9 @@ public enum Preference {
     CPLEX_PATH(Type.TOOL, Access.USER, ""),
     BLASTP_PATH(Type.TOOL, Access.USER, ""),
     BLASTP_VERSION(Type.TOOL, Access.USER, "");
-    
-    
-    public static final String LIST_SEPERATOR_SPLIT = "(?<!\\\\);";
-    public static final String LIST_SEPERATOR = ";";
-    public static final String LIST_SEPERATOR_ESCAPED = "\\\\;";
+    public static final String LIST_SEPARATOR_SPLIT = "(?<!\\\\);";
+    public static final String LIST_SEPARATOR = ";";
+    public static final String LIST_SEPARATOR_ESCAPED = "\\\\;";
     private String key;
     private Type type;
     private Access access;
@@ -53,15 +51,15 @@ public enum Preference {
     public String get() {
         return access.getPreferences().get(key, defaultValue.toString());
     }
-    
+
     /**
      * Access a list of string for the preference
      * @return 
      */
-    public List<String> getList(){
+    public List<String> getList() {
         String rawValue = get();
         List<String> values = new ArrayList<String>();
-        for(String value : rawValue.split(LIST_SEPERATOR_SPLIT)){
+        for (String value : rawValue.split(LIST_SEPERATOR_SPLIT)) {
             values.add(value.replaceAll(LIST_SEPERATOR_ESCAPED, LIST_SEPERATOR));
         }
         return values;
@@ -92,15 +90,18 @@ public enum Preference {
     public void put(String value) {
         access.getPreferences().put(key, value);
     }
-    
+
     /**
      * Puts a list into preferences
      * @param values 
      */
-    public void putList(List<String> values){
+    public void putList(List<String> values) {
         StringBuilder sb = new StringBuilder(values.size() * 14);
-        for(String value: values){
-            sb.append(value.replaceAll(LIST_SEPERATOR, LIST_SEPERATOR_ESCAPED)).append(LIST_SEPERATOR);
+        for (String value : values) {
+            sb.append(value.replaceAll(LIST_SEPERATOR, LIST_SEPERATOR_ESCAPED));
+            if (value.equals(values.get(values.size() - 1))) {
+                sb.append(LIST_SEPERATOR);
+            }
         }
         put(sb.toString());
     }
