@@ -164,4 +164,43 @@ public class CDKUtils {
     public static String amendCDKSmilesForPhosphateGroupLikeBug(String smilesToAmend) {
         return smilesBugAmender.amendSmiles(smilesToAmend);
     }
+
+    /**
+     * Visits all the molecules in a reaction and returns true if any of them
+     * is empty (no atoms).
+     * @param rxn
+     * @return
+     */
+    public static boolean rxnHasParticipantWithNoAtoms(IReaction rxn) {
+        IMoleculeSet mols = rxn.getProducts();
+        if (moleculeSetContainsEmptyMol(mols)) {
+            return true;
+        }
+
+        mols = rxn.getReactants();
+        if (moleculeSetContainsEmptyMol(mols)) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
+     * Visits all the molecules in a MoleculeSet and returns true if any of them
+     * is empty (has no atoms).
+     * @param mols
+     * @return
+     */
+    public static boolean moleculeSetContainsEmptyMol(IMoleculeSet mols) {
+        for (IAtomContainer mol : mols.molecules()) {
+            if (isMoleculeEmpty(mol)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isMoleculeEmpty(IAtomContainer mol) {
+        return mol.getAtomCount()==0;
+    }
 }
