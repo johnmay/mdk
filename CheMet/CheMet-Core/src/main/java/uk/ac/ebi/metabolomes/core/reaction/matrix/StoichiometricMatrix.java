@@ -66,45 +66,32 @@ public abstract class StoichiometricMatrix<M, R>
 
 
     @Override
-    public boolean addReaction(R reaction, M[] newMolecules, Double[] values) {
+    public int addReaction(R reaction, M[] newMolecules, Double[] values) {
 
 
-        boolean modified = super.addReaction(reaction, newMolecules, values);
-        if (modified) {
-            int index = getReactionCount() - 1;
-            reversibilityMap.put(index, ReactionDirection.UNKNOWN);
-            // quick hack for extra-cellular metabolites
-            if (values.length == 1) {
-                extraCellular.add(newMolecules[0]);
-            }
-        }
-        return modified;
+        int index = super.addReaction(reaction, newMolecules, values);
+        reversibilityMap.put(index, ReactionDirection.UNKNOWN);
+        return index;
+
     }
 
 
-    public boolean addReaction(R reaction, M[] newMolecules, Double[] values, Boolean isReversible) {
+    public int addReaction(R reaction, M[] newMolecules, Double[] values, Boolean isReversible) {
 
 
         if (isReversible == null) {
             return this.addReaction(reaction, newMolecules, values);
         }
-        boolean modified = super.addReaction(reaction, newMolecules, values);
-        if (modified) {
-            int index = getReactionCount() - 1;
+        int index = super.addReaction(reaction, newMolecules, values);
 
-            // quick hack for extra-cellular metabolites
-            if (values.length == 1) {
-                extraCellular.add(newMolecules[0]);
-            }
-
-            // add to reversibility sets the index of the last added reaction
-            if (isReversible) {
-                reversibilityMap.put(index, ReactionDirection.REVERSIBLE);
-            } else if (isReversible == Boolean.FALSE) {
-                reversibilityMap.put(index, ReactionDirection.IRREVERSIBLE);
-            }
+        // add to reversibility sets the index of the last added reaction
+        if (isReversible) {
+            reversibilityMap.put(index, ReactionDirection.REVERSIBLE);
+        } else if (isReversible == Boolean.FALSE) {
+            reversibilityMap.put(index, ReactionDirection.IRREVERSIBLE);
         }
-        return modified;
+
+        return index;
     }
 
 
@@ -127,12 +114,55 @@ public abstract class StoichiometricMatrix<M, R>
 
 
     /**
+     * Create a new composite of s1 and s2
+     */
+    public StoichiometricMatrix merge(StoichiometricMatrix<M, R> s1,
+                                      StoichiometricMatrix<M, R> s2) {
+
+        StoichiometricMatrix s = s1.newInstance(s1.getMoleculeCount() + s2.getMoleculeCount(),
+                                                s1.getReactionCount() + s2.getReactionCount());
+
+        for (int j = 0; j < s1.getReactionCount(); j++) {
+            s.addReaction(s1.getReaction(j), s1.getReactionMolecules(j), s1.getReactionValues(j));
+        }
+
+        for (int j = 0; j < s2.getReactionCount(); j++) {
+            s.addReaction(s2.getReaction(j), s2.getReactionMolecules(j), s2.getReactionValues(j));
+        }
+
+
+        return s;
+
+    }
+
+
+    public Integer[] add(StoichiometricMatrix<M, R> other) {
+
+        Integer[] indices = new Integer[other.getReactionCount()];
+
+        for (int j = 0; j < other.getReactionCount(); j++) {
+            indices[j] = addReaction(other.getReaction(j), other.getReactionMolecules(j), other.getReactionValues(j));
+        }
+
+
+        return indices;
+
+    }
+
+
+    public abstract StoichiometricMatrix<M, R> newInstance();
+
+
+    public abstract StoichiometricMatrix<M, R> newInstance(int n, int m);
+
+
+    /**
      * Merges this matrix with the specified other matrix
      *
      * @param other
      * @return
      */
-    public StoichiometricMatrix<M, R> merge(StoichiometricMatrix<M, R> other) {
+    public StoichiometricMatrix<M, R> oldMerger(StoichiometricMatrix<M, R> other) {
 
         List<Double> coefs = new ArrayList<Double>();
         List<M> localMols = new ArrayList<M>();

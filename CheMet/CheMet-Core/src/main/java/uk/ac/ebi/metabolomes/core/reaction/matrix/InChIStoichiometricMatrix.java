@@ -119,6 +119,8 @@ public class InChIStoichiometricMatrix
      *
      *
      *
+     *
+     *
 
      *
      * @param metabolite
@@ -126,10 +128,10 @@ public class InChIStoichiometricMatrix
      */
     public ArrayList<ECNumber> getReactionsProducingMolecule(InChI metabolite) {
         ArrayList<ECNumber> productionReactions = new ArrayList<ECNumber>();
-        Map<ECNumber, Double> reactions = getReactions(metabolite);
-        for (Entry<ECNumber, Double> e : reactions.entrySet()) {
+        Map<Integer, Double> reactions = getReactions(metabolite);
+        for (Entry<Integer, Double> e : reactions.entrySet()) {
             if (e.getValue() > 0.0) {
-                productionReactions.add(e.getKey());
+                productionReactions.add(getReaction(e.getKey()));
             }
         }
         return productionReactions;
@@ -149,6 +151,8 @@ public class InChIStoichiometricMatrix
      *
      *
      *
+     *
+     *
 
      *
      * @param metabolite
@@ -156,12 +160,24 @@ public class InChIStoichiometricMatrix
      */
     public ArrayList<ECNumber> getReactionsConsumingMolecule(InChI metabolite) {
         ArrayList<ECNumber> productionReactions = new ArrayList<ECNumber>();
-        Map<ECNumber, Double> reactions = getReactions(metabolite);
-        for (Entry<ECNumber, Double> e : reactions.entrySet()) {
+        Map<Integer, Double> reactions = getReactions(metabolite);
+        for (Entry<Integer, Double> e : reactions.entrySet()) {
             if (e.getValue() < 0.0) {
-                productionReactions.add(e.getKey());
+                productionReactions.add(getReaction(e.getKey()));
             }
         }
         return productionReactions;
+    }
+
+
+    @Override
+    public StoichiometricMatrix<InChI, ECNumber> newInstance() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    @Override
+    public StoichiometricMatrix<InChI, ECNumber> newInstance(int n, int m) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

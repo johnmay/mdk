@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.Genome;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.AbstractReactionMatrix;
 
 /**
  * Reconstruction.java
@@ -316,11 +317,11 @@ public class Reconstruction
         return BASE_TYPE;
     }
 
-    public void setMatix(StoichiometricMatrix<CompartmentalisedMetabolite, MetabolicReaction> matrix) {
+    public void setMatix(StoichiometricMatrix<CompartmentalisedMetabolite, ?> matrix) {
         this.matrix = matrix;
     }
 
-    public StoichiometricMatrix<CompartmentalisedMetabolite, MetabolicReaction> getMatrix() {
+    public StoichiometricMatrix<CompartmentalisedMetabolite, ?> getMatrix() {
         return matrix;
     }
 

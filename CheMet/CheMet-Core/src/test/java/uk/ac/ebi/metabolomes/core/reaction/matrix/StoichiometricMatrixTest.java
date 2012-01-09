@@ -49,9 +49,9 @@ public class StoichiometricMatrixTest {
     public void testDuplicate() {
         System.out.printf("[TEST] %-50s \n", "duplicate");
         BasicStoichiometricMatrix s = BasicStoichiometricMatrix.create();
-        assertTrue(s.addReaction("A + B => C + I"));
-        assertFalse(s.addReaction("A + B => C + I"));
-        assertTrue(s.addReaction("B + C => D")); // intersect molecules but no matching reaction
+        assertEquals(0, s.addReaction("A + B => C + I"));
+        assertEquals(0, s.addReaction("A + B => C + I"));
+        assertEquals(1, s.addReaction("B + C => D")); // intersect molecules but no matching reaction
         System.out.println("PASSED");
     }
 
@@ -158,7 +158,31 @@ public class StoichiometricMatrixTest {
         first.display(System.out);
         second.display(System.out);
 
-        first.merge(second).display(System.out);
+        first.merge(first, second).display();
+
+        System.out.println("PASSED");
+
+    }
+
+
+    @Test
+    public void testAdd() {
+        System.out.printf("[TEST] %-50s \n", "add");
+        BasicStoichiometricMatrix first = BasicStoichiometricMatrix.create();
+        BasicStoichiometricMatrix second = BasicStoichiometricMatrix.create();
+
+        first.addReactionWithName("v1", "A + B => C + D");
+        first.addReactionWithName("v2", "C => E + F");
+
+        second.addReactionWithName("v3", "D => F + G");
+        second.addReactionWithName("v1", "A + B => C + D");
+
+        first.display(System.out);
+        second.display(System.out);
+
+        Object[] expecteds = new Object[]{2, 0};
+
+        assertArrayEquals(expecteds, first.add(second));
 
         System.out.println("PASSED");
 

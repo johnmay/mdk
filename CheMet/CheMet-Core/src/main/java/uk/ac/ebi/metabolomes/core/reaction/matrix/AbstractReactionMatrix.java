@@ -162,17 +162,23 @@ public abstract class AbstractReactionMatrix<T, M, R> {
     public abstract Class<? extends T> getValueClass();
 
 
+    public abstract AbstractReactionMatrix<T, M, R> newInstance();
+
+
+    public abstract AbstractReactionMatrix<T, M, R> newInstance(int n, int m);
+
+
     /**
      * Add a reaction to the matrix
      *
      * @param reaction
      * @param newMolecules
      * @param values
-     * @return
+     * @return the index of the reaction
      */
-    public boolean addReaction(R reaction,
-                               M[] newMolecules,
-                               T[] values) {
+    public int addReaction(R reaction,
+                           M[] newMolecules,
+                           T[] values) {
 
 //        if (matrix == null) {  // don't want to check this every time
 //            init();
@@ -190,9 +196,9 @@ public abstract class AbstractReactionMatrix<T, M, R> {
         // add the reaction to the fixed matrix
         if (intersect) {
             // no new molecules, check for clash
-            Map<R, MutableInt> candidateReactions = new HashMap<R, MutableInt>(); // reuse
+            Map<Integer, MutableInt> candidateReactions = new HashMap<Integer, MutableInt>(); // reuse
             for (int i = 0; i < newMolecules.length; i++) {
-                for (Entry<R, T> e : getReactions(newMolecules[i]).entrySet()) {
+                for (Entry<Integer, T> e : getReactions(newMolecules[i]).entrySet()) {
                     if (values[i].equals(e.getValue())) {
                         if (!candidateReactions.containsKey(e.getKey())) {
                             candidateReactions.put(e.getKey(), new MutableInt());
@@ -202,10 +208,10 @@ public abstract class AbstractReactionMatrix<T, M, R> {
                 }
             }
             if (!candidateReactions.isEmpty()) {
-                for (Entry<R, MutableInt> e : candidateReactions.entrySet()) {
+                for (Entry<Integer, MutableInt> e : candidateReactions.entrySet()) {
                     if (e.getValue().intValue() == values.length) {
                         LOGGER.debug("Duplicate reaction");
-                        return false;
+                        return e.getKey();
                     }
                 }
             }
@@ -222,7 +228,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
         reactionMap.put(reaction, reactionCount);
         reactionCount++;
 
-        return true;
+        return reactionCount - 1;
 
     }
 
@@ -545,11 +551,33 @@ public abstract class AbstractReactionMatrix<T, M, R> {
     /**
      * Returns the reaction for a given position
      *
-     * @param i
+     * @param j
      * @return
      */
-    public R getReaction(Integer i) {
-        return reactions[i];
+    public R getReaction(Integer j) {
+        return reactions[j];
+    }
+
+
+    public T[] getReactionValues(Integer j) {
+        List<T> values = new ArrayList<T>();
+        for (int i = 0; i < moleculeCount; i++) {
+            if (matrix[i][j] != null) {
+                values.add(matrix[i][j]);
+            }
+        }
+        return values.toArray((T[]) Array.newInstance(getValueClass(), values.size()));
+    }
+
+
+    public M[] getReactionMolecules(Integer j) {
+        List<M> values = new ArrayList<M>();
+        for (int i = 0; i < moleculeCount; i++) {
+            if (matrix[i][j] != null) {
+                values.add(molecules[i]);
+            }
+        }
+        return values.toArray((M[]) Array.newInstance(getMoleculeClass(), values.size()));
     }
 
 
@@ -564,12 +592,12 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      * @param molecule
      * @return Map of the reaction to the value
      */
-    public Map<R, T> getReactions(M molecule) {
+    public Map<Integer, T> getReactions(M molecule) {
         Integer i = moleculeMap.get(molecule);
-        HashMap<R, T> subReactions = new HashMap<R, T>();
+        HashMap<Integer, T> subReactions = new HashMap<Integer, T>();
         for (int j = 0; j < reactionCount; j++) {
             if (matrix[i][j] != null) {
-                subReactions.put(getReaction(j), matrix[i][j]);
+                subReactions.put(j, matrix[i][j]);
             }
         }
         return subReactions;

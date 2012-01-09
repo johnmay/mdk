@@ -72,14 +72,14 @@ public class BasicStoichiometricMatrix
     }
 
 
-    public boolean addReaction(String[] substrates,
+    public int addReaction(String[] substrates,
                                String[] products) {
         String fluxChar = substrates.length == 0 || products.length == 0 ? "b" : "v";
         return addReaction(fluxChar + ++reactionCount, substrates, products);
     }
 
 
-    public boolean addReaction(String rxn,
+    public int addReaction(String rxn,
                                String[] substrates,
                                String[] products) {
         Double[] values = new Double[substrates.length + products.length];
@@ -96,27 +96,38 @@ public class BasicStoichiometricMatrix
     }
 
 
-    public boolean addReaction(String reaction) {
+    public int addReaction(String reaction) {
         String[] compounds = reaction.split(" => ");
         return addReaction(compounds[0], compounds[1]);
     }
 
 
-    public boolean addReactionWithName(String name, String reaction) {
+    public int addReactionWithName(String name, String reaction) {
         String[] compounds = reaction.split(" => ");
         return addReactionWithName(name, compounds[0], compounds[1]);
     }
 
 
-    public boolean addReaction(String substrates, String products) {
+    public int addReaction(String substrates, String products) {
         return addReaction(substrates.split(" \\+ "), products.split(" \\+ "));
     }
 
 
-    public boolean addReactionWithName(String name, String substrates, String products) {
+    public int addReactionWithName(String name, String substrates, String products) {
         return addReaction(name, substrates.split(" \\+ "), products.split(" \\+ "));
     }
 
+
+    @Override
+    public BasicStoichiometricMatrix newInstance() {
+        return BasicStoichiometricMatrix.create();
+    }
+    @Override
+    public BasicStoichiometricMatrix newInstance(int n, int m) {
+        return BasicStoichiometricMatrix.create(n, m);
+    }
+
+    
 
     public static void main(String[] args) {
 
@@ -140,4 +151,6 @@ public class BasicStoichiometricMatrix
         }
 
     }
+    
+    
 }

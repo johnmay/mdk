@@ -75,7 +75,7 @@ public class BasicInChIStoichiometricMatrix extends StoichiometricMatrix<InChI, 
     }
 
 
-    public boolean addReaction(String reactionName, BiochemicalReaction reaction, boolean reactantSideIsNegative) {
+    public int addReaction(String reactionName, BiochemicalReaction reaction, boolean reactantSideIsNegative) {
 
         List<InChI> reactants = reaction.getInchiReactants();
         List<InChI> products = reaction.getInchiProducts();
@@ -99,5 +99,17 @@ public class BasicInChIStoichiometricMatrix extends StoichiometricMatrix<InChI, 
 
         return addReaction(reactionName, newMolecules, values);
 
+    }
+
+
+    @Override
+    public StoichiometricMatrix<InChI, String> newInstance() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    @Override
+    public StoichiometricMatrix<InChI, String> newInstance(int n, int m) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
