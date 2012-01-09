@@ -4,12 +4,16 @@
  */
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
+import java.security.InvalidParameterException;
+import java.util.Arrays;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import uk.ac.ebi.core.util.Util;
+
 
 /**
  *
@@ -20,34 +24,134 @@ public class StoichiometricMatrixTest {
     public StoichiometricMatrixTest() {
     }
 
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
+
 
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
 
+
     @Before
     public void setUp() {
     }
 
+
     @After
     public void tearDown() {
     }
+
+
+    @Test
+    public void testDuplicate() {
+        System.out.printf("[TEST] %-50s \n", "duplicate");
+        BasicStoichiometricMatrix s = new BasicStoichiometricMatrix();
+        assertTrue(s.addReaction("A + B => C + I"));
+        assertFalse(s.addReaction("A + B => C + I"));
+        assertTrue(s.addReaction("B + C => D")); // intersect molecules but no matching reaction
+        System.out.println("PASSED");
+    }
+
+
+    @Test
+    public void testRemoveColumn() {
+        System.out.printf("[TEST] %-50s \n", "removeColumn");
+        BasicStoichiometricMatrix s = new BasicStoichiometricMatrix(1, 1);
+        s.addReaction("A + B => C + I");
+        s.addReaction("A + B => C + J");
+        s.addReaction("C + D => G");
+
+        String name = s.getReaction(0);
+
+        // remove first column        
+        s.removeColumn(0);
+
+        // should throw InvalidParameterException
+        {
+            assertTrue(s.getColumns(name).isEmpty());
+        }
+
+        {
+            Object[][] expecteds = new Object[][]{{-1.0, null},
+                                                  {-1.0, null},
+                                                  {1.0, -1.0},
+                                                  {null, null},
+                                                  {1.0, null},
+                                                  {null, -1.0},
+                                                  {null, 1.0}};
+
+            Object[][] actuals = s.getFixedMatrix();
+
+            assertArrayEquals(expecteds, actuals);
+
+        }
+
+
+    }
+
+
+    @Test
+    public void testRemoveRow() {
+        System.out.printf("[TEST] %-50s \n", "removeRow");
+        BasicStoichiometricMatrix s = new BasicStoichiometricMatrix(1, 1);
+        s.addReaction("A + B => C + I");
+        s.addReaction("B + C => D");
+
+        // remove C
+        s.removeRow(2);
+
+
+        // should throw InvalidParameterException
+        {
+            try {
+                s.getRow("C");
+            } catch (Exception e) {
+                assertEquals(InvalidParameterException.class, e.getClass());
+            }
+        }
+
+        {
+
+            s.display(System.out);
+            Object[][] expecteds = new Object[][]{
+                {-1.0, null},
+                {-1.0, -1.0},
+                {1.0, null},
+                {null, 1.0}
+            };
+
+            Object[][] actuals = s.getFixedMatrix();
+
+            assertArrayEquals(expecteds, actuals);
+        }
+
+        {
+            Object[] expecteds = new Object[]{"A", "B", "I", "D"};
+            Object[] actuals = s.getMolecules();
+
+            assertArrayEquals(expecteds, actuals);
+
+        }
+
+        System.out.println("PASSED");
+    }
+
 
     /**
      * Test of merge method, of class StoichiometricMatrix.
      */
     @Test
     public void testMerge() {
-        System.out.println("merge");
+        System.out.printf("[TEST] %-50s \n", "merge");
         BasicStoichiometricMatrix first = new BasicStoichiometricMatrix();
         BasicStoichiometricMatrix second = new BasicStoichiometricMatrix();
 
         first.addReactionWithName("v1", "A + B => C + D");
+        first.addReactionWithName("v1", "A + B => C + D");
         first.addReactionWithName("v2", "C => E + F");
-
 
         second.addReactionWithName("v3", "D => F + G");
         second.addReactionWithName("v1", "A + B => C + D");
@@ -57,6 +161,7 @@ public class StoichiometricMatrixTest {
 
         first.merge(second).display(System.out);
 
+        System.out.println("PASSED");
 
     }
 }

@@ -16,8 +16,6 @@
  */
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.Arrays;
 
 /**
@@ -41,13 +39,13 @@ public class BasicStoichiometricMatrix
         super(n, m);
     }
 
-    public void addReaction(String[] substrates,
+    public boolean addReaction(String[] substrates,
                             String[] products) {
         String fluxChar = substrates.length == 0 || products.length == 0 ? "b" : "v";
-        addReaction(fluxChar + ++reactionCount, substrates, products);
+        return addReaction(fluxChar + ++reactionCount, substrates, products);
     }
 
-    public void addReaction(String rxn,
+    public boolean addReaction(String rxn,
                             String[] substrates,
                             String[] products) {
         Double[] values = new Double[substrates.length + products.length];
@@ -60,24 +58,24 @@ public class BasicStoichiometricMatrix
         }
         System.arraycopy(substrates, 0, molecules, 0, substrates.length);
         System.arraycopy(products, 0, molecules, substrates.length, products.length);
-        addReaction(rxn, molecules, values);
+        return addReaction(rxn, molecules, values);
     }
 
-    public void addReaction(String reaction) {
+    public boolean addReaction(String reaction) {
         String[] compounds = reaction.split(" => ");
-        addReaction(compounds[0], compounds[1]);
+        return addReaction(compounds[0], compounds[1]);
     }
 
-    public void addReactionWithName(String name, String reaction) {
+    public boolean addReactionWithName(String name, String reaction) {
         String[] compounds = reaction.split(" => ");
-        addReactionWithName(name, compounds[0], compounds[1]);
+        return addReactionWithName(name, compounds[0], compounds[1]);
     }
 
-    public void addReaction(String substrates, String products) {
-        addReaction(substrates.split(" \\+ "), products.split(" \\+ "));
+    public boolean addReaction(String substrates, String products) {
+        return addReaction(substrates.split(" \\+ "), products.split(" \\+ "));
     }
-    public void addReactionWithName(String name, String substrates, String products) {
-        addReaction(name, substrates.split(" \\+ "), products.split(" \\+ "));
+    public boolean addReactionWithName(String name, String substrates, String products) {
+        return addReaction(name, substrates.split(" \\+ "), products.split(" \\+ "));
     }
 
     public static void main(String[] args) {

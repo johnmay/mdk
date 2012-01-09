@@ -117,7 +117,7 @@ public class StoichiometricMatrix<M, R>
     public StoichiometricMatrix<M, R> merge(StoichiometricMatrix<M, R> other) {
 
         List<Double> coefs = new ArrayList<Double>();
-        List<M> molecules = new ArrayList<M>();
+        List<M> localMols = new ArrayList<M>();
 
         for (int j = 0; j < other.getReactionCount(); j++) {
             
@@ -126,16 +126,16 @@ public class StoichiometricMatrix<M, R>
             for (int i = 0; i < tmpCoefs.length; i++) {
                 if (tmpCoefs[i] != null) {
                     coefs.add((Double)tmpCoefs[i]);
-                    molecules.add(other.getMolecule(i));
+                    localMols.add(other.getMolecule(i));
                 }
             }
 
             this.addReaction(other.getReaction(j),
-                             (M[]) molecules.toArray(),
+                             (M[]) localMols.toArray(),
                              coefs.toArray(new Double[0]));
             
             coefs.clear();
-            molecules.clear();
+            localMols.clear();
         }
 
         return this;
