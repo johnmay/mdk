@@ -48,7 +48,7 @@ public class StoichiometricMatrixTest {
     @Test
     public void testDuplicate() {
         System.out.printf("[TEST] %-50s \n", "duplicate");
-        BasicStoichiometricMatrix s = new BasicStoichiometricMatrix();
+        BasicStoichiometricMatrix s = BasicStoichiometricMatrix.create();
         assertTrue(s.addReaction("A + B => C + I"));
         assertFalse(s.addReaction("A + B => C + I"));
         assertTrue(s.addReaction("B + C => D")); // intersect molecules but no matching reaction
@@ -59,7 +59,7 @@ public class StoichiometricMatrixTest {
     @Test
     public void testRemoveColumn() {
         System.out.printf("[TEST] %-50s \n", "removeColumn");
-        BasicStoichiometricMatrix s = new BasicStoichiometricMatrix(1, 1);
+        BasicStoichiometricMatrix s = BasicStoichiometricMatrix.create(1, 1);
         s.addReaction("A + B => C + I");
         s.addReaction("A + B => C + J");
         s.addReaction("C + D => G");
@@ -89,14 +89,13 @@ public class StoichiometricMatrixTest {
 
         }
 
-
     }
 
 
     @Test
     public void testRemoveRow() {
         System.out.printf("[TEST] %-50s \n", "removeRow");
-        BasicStoichiometricMatrix s = new BasicStoichiometricMatrix(1, 1);
+        BasicStoichiometricMatrix s = BasicStoichiometricMatrix.create();
         s.addReaction("A + B => C + I");
         s.addReaction("B + C => D");
 
@@ -146,8 +145,8 @@ public class StoichiometricMatrixTest {
     @Test
     public void testMerge() {
         System.out.printf("[TEST] %-50s \n", "merge");
-        BasicStoichiometricMatrix first = new BasicStoichiometricMatrix();
-        BasicStoichiometricMatrix second = new BasicStoichiometricMatrix();
+        BasicStoichiometricMatrix first = BasicStoichiometricMatrix.create();
+        BasicStoichiometricMatrix second = BasicStoichiometricMatrix.create();
 
         first.addReactionWithName("v1", "A + B => C + D");
         first.addReactionWithName("v1", "A + B => C + D");
