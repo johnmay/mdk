@@ -18,6 +18,7 @@ package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
 import java.util.Arrays;
 
+
 /**
  * BasicStoichiometricMatrix.java – MetabolicDevelopmentKit – Jun 25, 2011
  *
@@ -27,27 +28,60 @@ public class BasicStoichiometricMatrix
         extends StoichiometricMatrix<String, String> {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(BasicStoichiometricMatrix.class);
+
     private Integer reactionCount = 0;
 
-    public BasicStoichiometricMatrix() {
+
+    protected BasicStoichiometricMatrix() {
     }
+
 
     /**
      * {@inheritDoc}
      */
-    public BasicStoichiometricMatrix(int n, int m) {
+    protected BasicStoichiometricMatrix(int n, int m) {
         super(n, m);
     }
 
+
+    @Override
+    public Class<? extends String> getReactionClass() {
+        return String.class;
+    }
+
+
+    @Override
+    public Class<? extends String> getMoleculeClass() {
+        return String.class;
+    }
+
+
+    @Override
+    public BasicStoichiometricMatrix init() {
+        return (BasicStoichiometricMatrix) super.init();
+    }
+
+
+    public static BasicStoichiometricMatrix create() {
+        return new BasicStoichiometricMatrix().init();
+    }
+
+
+    public static BasicStoichiometricMatrix create(int n, int m) {
+        return new BasicStoichiometricMatrix(n, m).init();
+    }
+
+
     public boolean addReaction(String[] substrates,
-                            String[] products) {
+                               String[] products) {
         String fluxChar = substrates.length == 0 || products.length == 0 ? "b" : "v";
         return addReaction(fluxChar + ++reactionCount, substrates, products);
     }
 
+
     public boolean addReaction(String rxn,
-                            String[] substrates,
-                            String[] products) {
+                               String[] substrates,
+                               String[] products) {
         Double[] values = new Double[substrates.length + products.length];
         String[] molecules = new String[values.length];
         for (int i = 0; i < substrates.length; i++) {
@@ -61,22 +95,28 @@ public class BasicStoichiometricMatrix
         return addReaction(rxn, molecules, values);
     }
 
+
     public boolean addReaction(String reaction) {
         String[] compounds = reaction.split(" => ");
         return addReaction(compounds[0], compounds[1]);
     }
+
 
     public boolean addReactionWithName(String name, String reaction) {
         String[] compounds = reaction.split(" => ");
         return addReactionWithName(name, compounds[0], compounds[1]);
     }
 
+
     public boolean addReaction(String substrates, String products) {
         return addReaction(substrates.split(" \\+ "), products.split(" \\+ "));
     }
+
+
     public boolean addReactionWithName(String name, String substrates, String products) {
         return addReaction(name, substrates.split(" \\+ "), products.split(" \\+ "));
     }
+
 
     public static void main(String[] args) {
 
@@ -92,7 +132,7 @@ public class BasicStoichiometricMatrix
         s.addReaction(new String[]{"D"}, new String[]{});
 
 
-        s.display(System.out, ' ', "0", null, 2, 2);
+        s.display(System.out, ' ', "0", 2, 2);
 
         Object[][] sfixed = s.getFixedMatrix();
         for (int i = 0; i < sfixed.length; i++) {

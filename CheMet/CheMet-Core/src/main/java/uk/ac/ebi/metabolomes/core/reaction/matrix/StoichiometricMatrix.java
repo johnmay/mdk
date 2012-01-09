@@ -22,20 +22,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+
 /**
- * StoichiometricMatrix.java – MetabolicDevelopmentKit – Jun 26, 2011
- * Class extends the abstract reaction matrix and stores the indices of which
- * reactions are reversible, irreversible or extracellular
- * Note custom objects should override the generic hashCode and equals methods
+ * StoichiometricMatrix.java – MetabolicDevelopmentKit – Jun 26, 2011 Class
+ * extends the abstract reaction matrix and stores the indices of which
+ * reactions are reversible, irreversible or extracellular Note custom objects
+ * should override the generic hashCode and equals methods
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public class StoichiometricMatrix<M, R>
+public abstract class StoichiometricMatrix<M, R>
         extends AbstractReactionMatrix<Double, M, R> {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(StoichiometricMatrix.class);
+
     private Map<Integer, ReactionDirection> reversibilityMap = new HashMap<Integer, ReactionDirection>();
+
     private HashSet<M> extraCellular = new HashSet<M>();
+
 
     public enum ReactionDirection {
 
@@ -44,19 +48,22 @@ public class StoichiometricMatrix<M, R>
         UNKNOWN
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public StoichiometricMatrix() {
-        super();
-    }
 
     /**
      * {@inheritDoc}
      */
-    public StoichiometricMatrix(int n, int m) {
+    protected StoichiometricMatrix() {
+        super();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    protected StoichiometricMatrix(int n, int m) {
         super(n, m);
     }
+
 
     @Override
     public boolean addReaction(R reaction, M[] newMolecules, Double[] values) {
@@ -73,6 +80,7 @@ public class StoichiometricMatrix<M, R>
         }
         return modified;
     }
+
 
     public boolean addReaction(R reaction, M[] newMolecules, Double[] values, Boolean isReversible) {
 
@@ -99,9 +107,11 @@ public class StoichiometricMatrix<M, R>
         return modified;
     }
 
+
     public boolean isExtraCellular(M molecule) {
         return extraCellular.contains(molecule);
     }
+
 
     @Override
     public Double get(int i, int j) {
@@ -109,10 +119,18 @@ public class StoichiometricMatrix<M, R>
         return value == null ? 0 : value;
     }
 
+
+    @Override
+    public Class<? extends Double> getValueClass() {
+        return Double.class;
+    }
+
+
     /**
      * Merges this matrix with the specified other matrix
+     *
      * @param other
-     * @return 
+     * @return
      */
     public StoichiometricMatrix<M, R> merge(StoichiometricMatrix<M, R> other) {
 
@@ -120,12 +138,12 @@ public class StoichiometricMatrix<M, R>
         List<M> localMols = new ArrayList<M>();
 
         for (int j = 0; j < other.getReactionCount(); j++) {
-            
+
             Object[] tmpCoefs = other.getColumn(j);
-            
+
             for (int i = 0; i < tmpCoefs.length; i++) {
                 if (tmpCoefs[i] != null) {
-                    coefs.add((Double)tmpCoefs[i]);
+                    coefs.add((Double) tmpCoefs[i]);
                     localMols.add(other.getMolecule(i));
                 }
             }
@@ -133,7 +151,7 @@ public class StoichiometricMatrix<M, R>
             this.addReaction(other.getReaction(j),
                              (M[]) localMols.toArray(),
                              coefs.toArray(new Double[0]));
-            
+
             coefs.clear();
             localMols.clear();
         }
