@@ -14,6 +14,8 @@
  */
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.io.FileWriter;
@@ -293,7 +295,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      * Writes the matrix on System.out PrintStream
      */
     public void display() {
-        display(System.out, ',');
+        display(System.out, ' ');
     }
 
 
@@ -303,7 +305,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      * @param stream Stream to write to
      */
     public void display(PrintStream stream) {
-        display(stream, ',');
+        display(stream, ' ');
     }
 
 
@@ -314,7 +316,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      * @param separator
      */
     public void display(PrintStream stream, char separator) {
-        display(stream, separator, " ", 5, 5);
+        display(stream, separator, " ", 4, 4);
     }
 
 
@@ -340,7 +342,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
         // write reactions
         String format = seperator + " %" + rxnNameLength + "s";
         for (int i = 0; i < reactionCount; i++) {
-            stream.printf(format, reactions[i].toString());
+            stream.printf(format, reactions[i]);
         }
         stream.println();
 
@@ -394,6 +396,34 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      */
     public T get(int i, int j) {
         return matrix[i][j];
+    }
+
+
+    /**
+     *
+     * Assigns the values from the specified 'other' matrix to this one. Note:
+     * the values are not deep copied
+     *
+     * @return reaction indices (of those added)
+     *
+     */
+    public BiMap<Integer, Integer> assign(AbstractReactionMatrix<T, M, R> other) {
+
+        // ensure there is enough space
+        this.ensure(getMoleculeCount() + other.getReactionCount(),
+                    getReactionCount() + other.getReactionCount());
+
+        BiMap<Integer, Integer> map = HashBiMap.create();
+
+        for (int j = 0; j < other.getReactionCount(); j++) {
+            map.put(j, this.addReaction(other.getReaction(j),
+                                        other.getReactionMolecules(j),
+                                        other.getReactionValues(j)));
+        }
+
+
+        return map;
+
     }
 
 
@@ -545,6 +575,11 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      */
     public M getMolecule(Integer i) {
         return molecules[i];
+    }
+
+
+    public Integer getIndex(M molecule) {
+        return moleculeMap.get(molecule);
     }
 
 

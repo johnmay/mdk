@@ -17,6 +17,8 @@
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
 import java.util.Arrays;
+import uk.ac.ebi.chemet.entities.reaction.Reaction;
+import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 
 
 /**
@@ -86,6 +88,24 @@ public class BasicStoichiometricMatrix
     }
 
 
+    public int addReaction(Reaction<String, Double, String> reaction) {
+
+        String[] metabolites = reaction.getAllReactionMolecules().toArray(new String[0]);
+        Double[] coefficients = reaction.getAllReactionCoefficients().toArray(new Double[0]);
+
+        for (int i = 0; i < reaction.getReactantCount(); i++) {
+            coefficients[i] = -coefficients[i];
+        }
+
+
+
+        return addReaction(reaction.getName(),
+                           metabolites,
+                           coefficients,
+                           reaction.getReversibility() == Reversibility.REVERSIBLE);
+    }
+
+
     public int addReaction(String rxn,
                            String[] substrates,
                            String[] products) {
@@ -107,7 +127,7 @@ public class BasicStoichiometricMatrix
         }
         System.arraycopy(substrates, 0, molecules, 0, substrates.length);
         System.arraycopy(products, 0, molecules, substrates.length, products.length);
-        return addReaction(rxn, molecules, values, true);
+        return addReaction(rxn, molecules, values, revserible);
     }
 
 
@@ -134,7 +154,7 @@ public class BasicStoichiometricMatrix
 
 
     public int addReaction(String substrates, String products, boolean reversible) {
-        return addReaction(substrates.split(" \\+ "), products.split(" \\+ "));
+        return addReaction(substrates.split(" \\+ "), products.split(" \\+ "), reversible);
     }
 
 
