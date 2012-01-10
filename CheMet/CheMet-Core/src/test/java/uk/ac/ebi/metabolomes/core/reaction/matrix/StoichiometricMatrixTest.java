@@ -46,6 +46,26 @@ public class StoichiometricMatrixTest {
 
 
     @Test
+    public void testAssign() {
+        BasicStoichiometricMatrix os = BasicStoichiometricMatrix.create();
+
+        os.addReaction("A => B", true);
+        os.addReaction("C => D", false);
+
+        BasicStoichiometricMatrix ns = BasicStoichiometricMatrix.create();
+
+        ns.addReaction("A => D", false);
+
+        ns.assign(os);
+
+        assertFalse(ns.isReversible(0));
+        assertTrue(ns.isReversible(1));
+        assertFalse(ns.isReversible(2));
+
+    }
+
+
+    @Test
     public void testDuplicate() {
         System.out.printf("[TEST] %-50s \n", "duplicate");
         BasicStoichiometricMatrix s = BasicStoichiometricMatrix.create();
@@ -58,6 +78,7 @@ public class StoichiometricMatrixTest {
 
     @Test
     public void testRemoveColumn() {
+
         System.out.printf("[TEST] %-50s \n", "removeColumn");
         BasicStoichiometricMatrix s = BasicStoichiometricMatrix.create(1, 1);
         s.addReaction("A + B => C + I");
@@ -166,8 +187,8 @@ public class StoichiometricMatrixTest {
 
 
     @Test
-    public void testAdd() {
-        System.out.printf("[TEST] %-50s \n", "add");
+    public void testAssign2() {
+        System.out.printf("[TEST] %-50s \n", "assign2");
         BasicStoichiometricMatrix first = BasicStoichiometricMatrix.create();
         BasicStoichiometricMatrix second = BasicStoichiometricMatrix.create();
 
@@ -181,8 +202,8 @@ public class StoichiometricMatrixTest {
         second.display(System.out);
 
         Object[] expecteds = new Object[]{2, 0};
-
-        assertArrayEquals(expecteds, first.add(second));
+        
+        assertArrayEquals(expecteds, first.assign(second).values().toArray());
 
         System.out.println("PASSED");
 
