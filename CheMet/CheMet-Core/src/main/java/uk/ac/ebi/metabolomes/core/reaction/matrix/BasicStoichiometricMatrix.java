@@ -73,15 +73,30 @@ public class BasicStoichiometricMatrix
 
 
     public int addReaction(String[] substrates,
-                               String[] products) {
+                           String[] products) {
+        return addReaction(substrates, products, true);
+    }
+
+
+    public int addReaction(String[] substrates,
+                           String[] products,
+                           boolean reversible) {
         String fluxChar = substrates.length == 0 || products.length == 0 ? "b" : "v";
-        return addReaction(fluxChar + ++reactionCount, substrates, products);
+        return addReaction(fluxChar + ++reactionCount, substrates, products, reversible);
     }
 
 
     public int addReaction(String rxn,
-                               String[] substrates,
-                               String[] products) {
+                           String[] substrates,
+                           String[] products) {
+        return addReaction(rxn, substrates, products, true);
+    }
+
+
+    public int addReaction(String rxn,
+                           String[] substrates,
+                           String[] products,
+                           boolean revserible) {
         Double[] values = new Double[substrates.length + products.length];
         String[] molecules = new String[values.length];
         for (int i = 0; i < substrates.length; i++) {
@@ -92,13 +107,18 @@ public class BasicStoichiometricMatrix
         }
         System.arraycopy(substrates, 0, molecules, 0, substrates.length);
         System.arraycopy(products, 0, molecules, substrates.length, products.length);
-        return addReaction(rxn, molecules, values);
+        return addReaction(rxn, molecules, values, true);
     }
 
 
     public int addReaction(String reaction) {
+        return addReaction(reaction, true);
+    }
+
+
+    public int addReaction(String reaction, boolean reversible) {
         String[] compounds = reaction.split(" => ");
-        return addReaction(compounds[0], compounds[1]);
+        return addReaction(compounds[0], compounds[1], reversible);
     }
 
 
@@ -109,6 +129,11 @@ public class BasicStoichiometricMatrix
 
 
     public int addReaction(String substrates, String products) {
+        return addReaction(substrates, products, true);
+    }
+
+
+    public int addReaction(String substrates, String products, boolean reversible) {
         return addReaction(substrates.split(" \\+ "), products.split(" \\+ "));
     }
 
@@ -122,12 +147,13 @@ public class BasicStoichiometricMatrix
     public BasicStoichiometricMatrix newInstance() {
         return BasicStoichiometricMatrix.create();
     }
+
+
     @Override
     public BasicStoichiometricMatrix newInstance(int n, int m) {
         return BasicStoichiometricMatrix.create(n, m);
     }
 
-    
 
     public static void main(String[] args) {
 
@@ -151,6 +177,4 @@ public class BasicStoichiometricMatrix
         }
 
     }
-    
-    
 }
