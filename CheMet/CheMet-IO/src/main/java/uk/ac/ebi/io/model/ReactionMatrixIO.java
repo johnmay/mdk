@@ -311,9 +311,12 @@ public class ReactionMatrixIO {
                         out.writeInt(value);
                     }
                 } else {
-                    out.writeInt(i);
-                    out.writeInt(j);
-                    out.writeDouble(s.get(i, j));
+                    double value = s.get(i, j);
+                    if (value != 0d) {
+                        out.writeInt(i);
+                        out.writeInt(j);
+                        out.writeDouble(value);
+                    }
                 }
 
             }

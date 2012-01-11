@@ -244,8 +244,9 @@ public abstract class AbstractReactionMatrix<T, M, R> {
             }
             if (!candidateReactions.isEmpty()) {
                 for (Entry<Integer, MutableInt> e : candidateReactions.entrySet()) {
-                    if (e.getValue().intValue() == values.length) {
-                        LOGGER.debug("Duplicate reaction");
+                    if (e.getValue().intValue() == values.length
+                        && getReactionValues(e.getKey()).length == values.length) {
+                        LOGGER.debug("Duplicate reaction: " + reactions[e.getKey()] + " and " + reaction);
                         return e.getKey();
                     }
                 }
@@ -281,8 +282,6 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      */
     public void ensure(int n, int m) {
 
-        LOGGER.debug("Ensuring capacity");
-
         boolean resized = false;
         if (n >= moleculeCapacity) {
             moleculeCapacity = 1 + (Math.max(n, moleculeCapacity) * 2);
@@ -291,6 +290,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
             resized = true;
         }
         if (resized || m >= reactionCapacity) {
+            LOGGER.debug("Expanding capacity...");
             reactionCapacity = 1 + Math.max(m, reactionCapacity) * 2;
             reactions = Arrays.copyOf(reactions, reactionCapacity);
             // null fill new metabolite rows
@@ -299,6 +299,8 @@ public abstract class AbstractReactionMatrix<T, M, R> {
                             ? (T[]) Array.newInstance(getValueClass(), reactionCapacity)
                             : Arrays.copyOf(matrix[i], reactionCapacity);
             }
+            LOGGER.debug("...new capacity:" + moleculeCapacity + "," + reactionCapacity);
+
         }
     }
 

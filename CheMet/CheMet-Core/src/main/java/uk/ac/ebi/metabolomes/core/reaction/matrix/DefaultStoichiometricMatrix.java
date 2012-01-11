@@ -62,7 +62,7 @@ public class DefaultStoichiometricMatrix
     public int addReaction(MetabolicReaction reaction) {
 
 
-        return addReaction(reaction.getName(),
+        return addReaction(reaction.getAbbreviation(),
                            getMetabolites(reaction),
                            getStoichiometries(reaction),
                            reaction.getReversibility() == Reversibility.REVERSIBLE);
