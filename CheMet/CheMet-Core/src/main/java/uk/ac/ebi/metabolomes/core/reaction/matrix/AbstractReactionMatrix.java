@@ -98,6 +98,8 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      */
     public int reactionCount = 0;
 
+    private int nonNullCount = 0;
+
 
     /**
      * Create a reaction matrix with default capacities
@@ -170,6 +172,37 @@ public abstract class AbstractReactionMatrix<T, M, R> {
     public abstract AbstractReactionMatrix<T, M, R> newInstance(int n, int m);
 
 
+    public boolean setMolecule(int i, M m) {
+        if (i < molecules.length) {
+            molecules[i] = m;
+            if (i >= moleculeCount) {
+                moleculeCount = i + 1;
+            }
+        }
+        return false;
+    }
+
+
+    public boolean setReaction(int j, R m) {
+        if (j < reactions.length) {
+            reactions[j] = m;
+            if (j >= reactionCount) {
+                reactionCount = j + 1;
+            }
+        }
+        return false;
+    }
+
+
+    public boolean setValue(int i, int j, T value) {
+        if (i < matrix.length && j < matrix[i].length && value != null) {
+            nonNullCount += matrix[i][j] == null ? 1 : 0;
+            matrix[i][j] = value;
+        }
+        return false;
+    }
+
+
     /**
      * Add a reaction to the matrix
      *
@@ -221,6 +254,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
 
         // set the values to the matrix
         for (int i = 0; i < newMolecules.length; i++) {
+            nonNullCount += values[i] != null ? 1 : 0;
             matrix[moleculeMap.get(newMolecules[i])][reactionCount] = values[i];
         }
 
@@ -432,10 +466,20 @@ public abstract class AbstractReactionMatrix<T, M, R> {
     }
 
 
+    public int getNonNullCount() {
+        return nonNullCount;
+    }
+
+
     /**
      * Removes the row at index i
      */
     public void removeRow(int i) {
+        for (int j = 0; j < reactionCount; j++) {
+            if (matrix[i][j] != null) {
+                nonNullCount--;
+            }
+        }
         System.arraycopy(matrix, i + 1, matrix, i, matrix.length - i - 1);
         moleculeCount--;
         System.arraycopy(molecules, i + 1, molecules, i, molecules.length - i - 1);
@@ -445,6 +489,9 @@ public abstract class AbstractReactionMatrix<T, M, R> {
 
     public void removeColumn(int j) {
         for (int i = 0; i < matrix.length; i++) {
+            if (matrix[i][j] != null) {
+                nonNullCount--;
+            }
             System.arraycopy(matrix[i], j + 1, matrix[i], j, matrix[i].length - j - 1);
         }
         reactionCount--;
