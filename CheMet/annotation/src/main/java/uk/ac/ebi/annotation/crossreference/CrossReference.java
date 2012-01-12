@@ -89,14 +89,6 @@ public class CrossReference<E extends Identifier>
     /**
      * @inheritDoc
      */
-    @Override
-    public Byte getIndex() {
-        return description.index;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public CrossReference getInstance() {
         return new CrossReference();
     }

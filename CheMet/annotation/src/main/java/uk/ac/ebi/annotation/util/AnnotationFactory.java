@@ -5,18 +5,17 @@
  *
  * This file is part of the CheMet library
  *
- * The CheMet library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * The CheMet library is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.annotation.util;
 
@@ -39,104 +38,89 @@ import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.Citation;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
+import uk.ac.ebi.annotation.model.FluxLowerBound;
+import uk.ac.ebi.annotation.model.FluxUpperBound;
 import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+
 
 /**
- *          AnnotationFactory – 2011.09.12 <br>
- *          Class description
+ * AnnotationFactory – 2011.09.12 <br> Class description
+ *
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @author johnmay
+ * @author $Author$ (this version)
  */
 public class AnnotationFactory {
 
     private static final Logger LOGGER = Logger.getLogger(AnnotationFactory.class);
-    private static final ChemicalStructure CHEMICAL_STRUCTURE = new ChemicalStructure();
-    private static final MolecularFormula FORMULA = new MolecularFormula();
-    private static final AuthorAnnotation AUTHOR_ANNOTATION = new AuthorAnnotation();
-    private static final CrossReference CROSS_REFERENCE = new CrossReference();
-    private static final Classification CLASSIFICATION = new Classification();
-    private static final EnzymeClassification ENZYME_CLASSIFICATION = new EnzymeClassification();
-    private static final ChEBICrossReference CHEBI_CROSS_REFERENCE = new ChEBICrossReference();
+
     // reflective map
     private static Constructor[] constructors = new Constructor[Byte.MAX_VALUE];
+
     private static Annotation[] instances = new Annotation[Byte.MAX_VALUE];
+
 
     public static AnnotationFactory getInstance() {
         return AnnotationFactoryHolder.INSTANCE;
     }
+
 
     private static class AnnotationFactoryHolder {
 
         private static AnnotationFactory INSTANCE = new AnnotationFactory();
     }
 
+
     private AnnotationFactory() {
         try {
-            for (Annotation annotation : Arrays.asList(CHEMICAL_STRUCTURE,
-                                                       FORMULA,
-                                                       AUTHOR_ANNOTATION,
-                                                       CROSS_REFERENCE,
-                                                       CLASSIFICATION,
-                                                       ENZYME_CLASSIFICATION, CHEBI_CROSS_REFERENCE, new KEGGCrossReference(),
+            for (Annotation annotation : Arrays.asList(new ChemicalStructure(),
+                                                       new MolecularFormula(),
+                                                       new AuthorAnnotation(),
+                                                       new CrossReference(),
+                                                       new Classification(),
+                                                       new EnzymeClassification(),
+                                                       new ChEBICrossReference(),
+                                                       new KEGGCrossReference(),
                                                        new Subsystem(),
                                                        new ExecutableParameter(),
                                                        new FileParameter(),
                                                        new Parameter(),
                                                        new Synonym(),
                                                        new Locus(),
-                                                       new Citation())) {
+                                                       new Citation(),
+                                                       new FluxLowerBound(),
+                                                       new FluxUpperBound())) {
 
                 constructors[annotation.getIndex()] = annotation.getClass().getConstructor();
                 instances[annotation.getIndex()] = annotation;
 
             }
         } catch (Exception e) {
+            e.printStackTrace();
+            for (int i = 0; i < instances.length; i++) {
+                if (instances != null) {
+                    System.out.println(instances[i].getClass().getSimpleName());
+                }
+            }
             LOGGER.error("Could not store annotation constructor in map");
         }
     }
 
-    /**
-     *
-     * Same is {@see ofIndex(Byte)} but uses if-else cascade to instantiate
-     *
-     * @param index
-     * @return
-     * @deprecated use {@see ofIndex(Byte)}
-     */
-    @Deprecated
-    public Annotation ofIndexCascade(int index) {
-
-
-        if (index == CHEMICAL_STRUCTURE.getIndex()) {
-            return new ChemicalStructure();
-        } else if (index == ENZYME_CLASSIFICATION.getIndex()) {
-            return new EnzymeClassification();
-        } else if (index == FORMULA.getIndex()) {
-            return new MolecularFormula();
-        } else if (index == CROSS_REFERENCE.getIndex()) {
-            return new CrossReference();
-        } else if (index == AUTHOR_ANNOTATION.getIndex()) {
-            return new AuthorAnnotation();
-        } else if (index == CLASSIFICATION.getIndex()) {
-            return new Classification();
-        } else if (index == CHEBI_CROSS_REFERENCE.getIndex()) {
-            return new Classification();
-        }
-
-        // todo throw error
-        return null;
-
-    }
 
     /**
      *
-     * Same is {@see ofIndex(Byte)} but uses reflection to instantiate
+     * Same is {
+     *
+     * @see ofIndex(Byte)} but uses reflection to instantiate
      *
      * @param index
+     *
      * @return
+     *
      * @deprecated
      *
      */
@@ -157,28 +141,36 @@ public class AnnotationFactory {
 
     }
 
+
     /**
      *
-     * Construct an empty annotation of the given class type. Note there is an overhead off using
-     * this method over {@ofIndex(Byte)} as the Byte index is first looked up in the
-     * AnnotationLoader. The average speed reduction is 1800 % slower (note this is still only about
-     * 1/3 second for 100 000 objects).
+     * Construct an empty annotation of the given class type. Note there is an
+     * overhead off using this method over {@ofIndex(Byte)} as the Byte index is
+     * first looked up in the AnnotationLoader. The average speed reduction is
+     * 1800 % slower (note this is still only about 1/3 second for 100 000
+     * objects).
      *
      * @param type
+     *
      * @return
      */
     public Annotation ofClass(Class type) {
         return ofIndex(AnnotationLoader.getInstance().getIndex(type));
     }
 
+
     /**
      *
-     * Construct an empty annotation given it's index. It the index returns a null pointer then an
-     * InvalidParameterException is thrown informing of the problematic index. The index is given
-     * in the uk.ac.ebi.annotation/AnnotationDescription.properties file which in turn is loaded by
-     * {@see AnnotationLoader}.
+     * Construct an empty annotation given it's index. It the index returns a
+     * null pointer then an InvalidParameterException is thrown informing of the
+     * problematic index. The index is given in the
+     * uk.ac.ebi.annotation/AnnotationDescription.properties file which in turn
+     * is loaded by {
+     *
+     * @see AnnotationLoader}.
      *
      * @param index
+     *
      * @return
      *
      */
@@ -194,12 +186,14 @@ public class AnnotationFactory {
                                             + index);
     }
 
+
     public Annotation readExternal(Byte index, ObjectInput in) throws IOException,
                                                                       ClassNotFoundException {
         Annotation ann = ofIndex(index);
         ann.readExternal(in);
         return ann;
     }
+
 
     public static void main(String[] args) {
 
@@ -215,7 +209,7 @@ public class AnnotationFactory {
 
                 long cStart = System.currentTimeMillis();
                 for (int i = 0; i < 1000000; i++) {
-                    Annotation annotation = AnnotationFactory.getInstance().ofIndexCascade(ann.getIndex());
+                //    Annotation annotation = AnnotationFactory.getInstance().ofIndexCascade(ann.getIndex());
                 }
                 long cEnd = System.currentTimeMillis();
                 System.out.println("time using cascade: " + (cEnd - cStart) + " (ms)");
@@ -225,7 +219,7 @@ public class AnnotationFactory {
 
                 long rStart = System.currentTimeMillis();
                 for (int i = 0; i < 1000000; i++) {
-                    Annotation annotation = AnnotationFactory.getInstance().ofIndex(ann.getIndex());
+                    Annotation annotation = AnnotationFactory.getInstance().ofIndexReflection(ann.getIndex());
                 }
                 long rEnd = System.currentTimeMillis();
                 System.out.println("time using reflections: " + (rEnd - rStart) + " (ms)");

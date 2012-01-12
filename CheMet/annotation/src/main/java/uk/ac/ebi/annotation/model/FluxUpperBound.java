@@ -1,7 +1,7 @@
 /**
- * AbstractSimpleAnnotation.java
+ * FluxUpperBound.java
  *
- * 2011.12.08
+ * 2012.01.12
  *
  * This file is part of the CheMet library
  *
@@ -17,42 +17,38 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.annotation;
+package uk.ac.ebi.annotation.model;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.base.AbstractValueAnnotation;
-import uk.ac.ebi.interfaces.StringAnnotation;
+import uk.ac.ebi.interfaces.Annotation;
 
 
 /**
- * AbstractSimpleAnnotation - 2011.12.08 <br> Class description
  *
- * @version $Rev$ : Last Changed $Date: 2011-12-09 08:10:03 +0000 (Fri, 09
- * Dec 2011) $
+ * FluxUpperBound 2012.01.12
+ *
+ * @version $Rev$ : Last Changed $Date$
  * @author johnmay
  * @author $Author$ (this version)
+ *
+ * Class description
+ *
  */
-public abstract class AbstractStringAnnotation
-        extends AbstractValueAnnotation<String>
-        implements StringAnnotation {
+public class FluxUpperBound extends FluxBound {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractStringAnnotation.class);
+    private static final Logger LOGGER = Logger.getLogger(FluxUpperBound.class);
 
 
-    public AbstractStringAnnotation() {
+    public FluxUpperBound() {
     }
 
 
-    public AbstractStringAnnotation(String value) {
+    public FluxUpperBound(Double value) {
         super(value);
     }
 
 
-    
-
-
-  
+    public FluxUpperBound getInstance() {
+        return new FluxUpperBound();
+    }
 }
