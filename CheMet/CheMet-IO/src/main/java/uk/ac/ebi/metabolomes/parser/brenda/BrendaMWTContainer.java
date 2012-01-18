@@ -18,6 +18,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Class for handling curated mappings of names to Brenda Tissue Ontology identifiers. Normal usage is to load the mappings
+ * file and then retrieve mappings by using the {@link #getIDsForName(java.lang.String) } method.
  *
  * @author pmoreno
  */
