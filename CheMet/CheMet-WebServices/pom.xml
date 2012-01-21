@@ -58,6 +58,16 @@
             <artifactId>ols-client</artifactId>
             <version>1.15</version>
             <type>jar</type>
+            <exclusions>
+                <exclusion>
+                <groupId>org.apache.axis</groupId>
+                <artifactId>axis</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>wsdl4j</groupId>
+                    <artifactId>wsdl4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>

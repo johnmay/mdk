@@ -24,7 +24,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.regex.Pattern;
-import javax.wsdl.PortType;
 import javax.xml.rpc.ServiceException;
 import org.apache.commons.cli.Option;
 import org.apache.log4j.Logger;
