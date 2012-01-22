@@ -91,6 +91,15 @@ public abstract class AbstrastRemoteResource implements RemoteResource {
     public URL getRemote() {
         return remote;
     }
+    
+    public URL getRemote(String location) {
+        try {
+            return new URL(location);
+        } catch(MalformedURLException ex) {
+            LOGGER.info("Malformed URL: " + ex.getMessage());
+            return null;
+        }
+    }
 
     public File getLocal() {
         return local;

@@ -94,6 +94,17 @@ public class PubChemCompoundNameService
         return new PubChemCompoundIdentifier();
     }
 
+    public Collection<PubChemCompoundIdentifier> searchForNameExcludeSynonyms(String name) {
+        Query qName = new TermQuery(nameTerm.createTerm(name));
+        Query qType = new TermQuery(typeTerm.createTerm(PCCompNameTypes.Name.toString()));
+        
+        BooleanQuery query = new BooleanQuery();
+        query.add(qName,Occur.MUST);
+        query.add(qType,Occur.MUST);
+        
+        return search(query);
+    }
+
     private static class PubChemCompoundNameServiceHolder {
 
         private static final PubChemCompoundNameService INSTANCE = new PubChemCompoundNameService();

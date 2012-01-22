@@ -54,6 +54,10 @@ public class ChEBIPrimaryOnlyNameService extends ChEBIQueryService
     public static ChEBIPrimaryOnlyNameService getInstance() {
         return ChEBIPrimaryOnlyNameServiceHolder.INSTANCE;
     }
+
+    public Collection<ChEBIIdentifier> searchForNameExcludeSynonyms(String name) {
+        return getOnlyPrimaryUniqueIdentifiers(nameService.searchForNameExcludeSynonyms(name));
+    }
     
     private static class ChEBIPrimaryOnlyNameServiceHolder {
 
@@ -69,7 +73,7 @@ public class ChEBIPrimaryOnlyNameService extends ChEBIQueryService
     }
 
     public Collection<ChEBIIdentifier> searchForName(String name) {
-        return getOnlyPrimaryUniqueIdentifiers(prioritizeNameOverSynonymResults(nameService.searchForName(name),name));
+        return getOnlyPrimaryUniqueIdentifiers(nameService.searchForName(name));
     }
     
     /**

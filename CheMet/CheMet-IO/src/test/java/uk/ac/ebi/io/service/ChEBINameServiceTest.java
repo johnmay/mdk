@@ -151,4 +151,18 @@ public class ChEBINameServiceTest {
         }
         assertEquals(expNumRes, results);
     }
+    
+    @Test
+    public void testSearchExcludeSyns_DRibose() {
+        System.out.println("Testing search name exclude synonyms for D-Ribose");
+        ChEBINameService instance = ChEBINameService.getInstance();
+        String query = "D-ribose";
+        Integer expNumRes = 1;
+        Collection<ChEBIIdentifier> res = instance.searchForNameExcludeSynonyms(query);
+        for (ChEBIIdentifier ident : res) {
+            assertNotNull(ident);
+            System.out.println(ident.toString());
+        }
+        assertEquals(expNumRes, (Integer)res.size());
+    }
 }

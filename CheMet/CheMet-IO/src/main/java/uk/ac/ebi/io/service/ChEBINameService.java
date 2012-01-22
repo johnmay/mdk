@@ -70,22 +70,38 @@ public class ChEBINameService
 
     public String getIUPACName(ChEBIIdentifier identifier) {
         try {
-            Query queryId = new TermQuery(idTerm.createTerm("CHEBI:"+identifier.getNumericPartOfAccession()));
+            Query queryId = new TermQuery(idTerm.createTerm("CHEBI:" + identifier.getNumericPartOfAccession()));
             Query queryType = new TermQuery(typeTerm.createTerm("IUPAC NAME"));
-            
+
             BooleanQuery query = new BooleanQuery();
             query.add(queryId, Occur.MUST);
             query.add(queryType, Occur.MUST);
-            
+
             TopScoreDocCollector collector = TopScoreDocCollector.create(1, true);
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
-            if(hits.length>0)
+            if (hits.length > 0) {
                 return getValue(hits[0], ChEBINames.ChEBINameLuceneFields.name.toString());
-        } catch(IOException ex) {
+            }
+        } catch (IOException ex) {
             LOGGER.info(ex.getMessage());
         }
         return null;
+    }
+
+    public Collection<ChEBIIdentifier> searchForNameExcludeSynonyms(String name) {
+        Query qName = new TermQuery(nameTerm.createTerm(name));
+        Query qTypeName = new TermQuery(typeTerm.createTerm("NAME"));
+        Query qTypeIUPAC = new TermQuery(typeTerm.createTerm("IUPAC NAME"));
+
+        BooleanQuery query = new BooleanQuery();
+        query.add(qName, Occur.MUST);
+        BooleanQuery subQueryType = new BooleanQuery();
+        subQueryType.add(qTypeName, Occur.SHOULD);
+        subQueryType.add(qTypeIUPAC, Occur.SHOULD);
+        query.add(subQueryType, Occur.MUST);
+        
+        return search(query);
     }
 
     private static class ChEBINameServiceHolder {
@@ -119,36 +135,37 @@ public class ChEBINameService
 
         return ids;
     }
-    
+
     public String getPreferredName(ChEBIIdentifier identifier) {
         try {
-            Query queryId = new TermQuery(idTerm.createTerm("CHEBI:"+identifier.getNumericPartOfAccession()));
+            Query queryId = new TermQuery(idTerm.createTerm("CHEBI:" + identifier.getNumericPartOfAccession()));
             Query queryType = new TermQuery(typeTerm.createTerm("NAME"));
-            
+
             BooleanQuery query = new BooleanQuery();
             query.add(queryId, Occur.MUST);
             query.add(queryType, Occur.MUST);
-            
+
             TopScoreDocCollector collector = TopScoreDocCollector.create(1, true);
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
-            if(hits.length>0)
+            if (hits.length > 0) {
                 return getValue(hits[0], ChEBINames.ChEBINameLuceneFields.name.toString());
-        } catch(IOException ex) {
+            }
+        } catch (IOException ex) {
             LOGGER.info(ex.getMessage());
         }
         return null;
     }
-    
+
     public Collection<String> getSynonyms(ChEBIIdentifier identifier) {
         try {
-            Query queryId = new TermQuery(idTerm.createTerm("CHEBI:"+identifier.getNumericPartOfAccession()));
+            Query queryId = new TermQuery(idTerm.createTerm("CHEBI:" + identifier.getNumericPartOfAccession()));
             Query queryType = new TermQuery(typeTerm.createTerm("SYNONYM"));
-            
+
             BooleanQuery query = new BooleanQuery();
             query.add(queryId, Occur.MUST);
             query.add(queryType, Occur.MUST);
-            
+
             TopScoreDocCollector collector = TopScoreDocCollector.create(50, true);
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
@@ -157,7 +174,7 @@ public class ChEBINameService
                 synonyms.add(getValue(scoreDoc, ChEBINames.ChEBINameLuceneFields.name.toString()));
             }
             return synonyms;
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             LOGGER.info(ex.getMessage());
         }
         return null;
@@ -165,7 +182,7 @@ public class ChEBINameService
 
     public Collection<String> getNames(ChEBIIdentifier identifier) {
         try {
-            Query q = new TermQuery(idTerm.createTerm("CHEBI:"+identifier.getNumericPartOfAccession()));
+            Query q = new TermQuery(idTerm.createTerm("CHEBI:" + identifier.getNumericPartOfAccession()));
 
             TopScoreDocCollector collector = TopScoreDocCollector.create(20, true);
             searcher.search(q, collector);

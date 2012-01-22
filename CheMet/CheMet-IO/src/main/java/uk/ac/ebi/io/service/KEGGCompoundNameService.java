@@ -21,6 +21,7 @@
 package uk.ac.ebi.io.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -71,6 +72,16 @@ public class KEGGCompoundNameService
 
     public Collection<String> getSynonyms(KEGGCompoundIdentifier identifier) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * Currently the KEGG index doesn't include synonyms explicitly, so no results are returned.
+     * 
+     * @param name
+     * @return 
+     */
+    public Collection<KEGGCompoundIdentifier> searchForNameExcludeSynonyms(String name) {
+        return new ArrayList<KEGGCompoundIdentifier>(0);
     }
 
     private static class KEGGCompoundNameServiceHolder {

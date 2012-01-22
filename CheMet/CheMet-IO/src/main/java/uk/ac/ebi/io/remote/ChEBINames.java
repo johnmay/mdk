@@ -53,12 +53,47 @@ import uk.ac.ebi.interfaces.services.LuceneService;
 public class ChEBINames
         extends AbstrastRemoteResource
         implements LuceneService, RemoteResource {
-
+    
     private static final Logger LOGGER = Logger.getLogger(ChEBINames.class);
     private Analyzer analzyer;
     private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names_3star.tsv";
     private static final String locationAllStars = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv";
-
+    private final String priorityCompounds = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv";
+    
+    /**
+     * The names.tsv file doesn't have the assigned ChEBI name, but the source name from which the name assigned is derived.
+     * For the case of different microspecies (different protonation/charges), the name in names.tsv (and surely in other cases
+     * as well) is not the most accurate one. The ChEBI name, as it appears in the web page, seems to be the one shown in
+     * compounds.tsv if not null. This method provides a map from Chebi numeric ids to the names in compounds.tsv, to override
+     * whenever available the ones in names.tsv
+     * 
+     * @return map of chebi numeric ids to names.
+     * @throws IOException 
+     */
+    private Map<Integer, String> getPriorityNames() throws IOException {
+        CSVReader reader = new CSVReader(new InputStreamReader(getRemote(priorityCompounds).openStream()), '\t', '\0');
+        String[] row = reader.readNext();
+        Map<String, Integer> map = createMap(row);
+        
+        Map<Integer, String> chebiId2Name = new HashMap<Integer, String>();
+        while ((row = reader.readNext()) != null) {
+            try {
+                int id = Integer.parseInt(row[map.get("ID")]);
+                String name = row[map.get("NAME")];
+                
+                if (name == null || name.equalsIgnoreCase("null")) {
+                    continue;
+                }
+                
+                chebiId2Name.put(id, name);
+            } catch (NumberFormatException e) {
+                LOGGER.warn("Error in source file, skipping line for supposed id : " + row[map.get("ID")]);
+            }
+        }
+        reader.close();
+        return chebiId2Name;
+    }
+    
     public enum ChEBINameLuceneFields {
 
         id, name, type;
@@ -87,21 +122,27 @@ public class ChEBINames
         }
         analzyer = new KeywordAnalyzer();
     }
-
+    
     public void update() throws IOException {
+        Map<Integer, String> chebiIds2PriorityName = getPriorityNames();
         CSVReader reader = new CSVReader(new InputStreamReader(getRemote().openStream()), '\t', '\0');
-
+        
         String[] row = reader.readNext();
         Map<String, Integer> map = createMap(row);
 
         //Map<Integer, Document> docs = new HashMap();
         List<Document> docs = new ArrayList<Document>();
         String currentId = "";
-
+        
         while ((row = reader.readNext()) != null) {
             int id = Integer.parseInt(row[map.get("COMPOUND_ID")]);
             String name = row[map.get("NAME")];
             String type = row[map.get("TYPE")];
+            // if we found a proper name, see if we can override it with names from chebiIds2priorityName.
+            if(type.equalsIgnoreCase("name")) {
+                if(chebiIds2PriorityName.containsKey(id))
+                    name = chebiIds2PriorityName.get(id);
+            }
             //Document doc = docs.get(id);
             //if (doc == null) {
             Document doc = new Document();
@@ -120,13 +161,13 @@ public class ChEBINames
         writer.addDocuments(docs);
         writer.close();
         index.close();
-
+        
     }
-
+    
     public Analyzer getAnalzyer() {
         return analzyer;
     }
-
+    
     public Directory getDirectory() {
         try {
             return new SimpleFSDirectory(getLocal());
@@ -134,7 +175,7 @@ public class ChEBINames
             throw new UnsupportedOperationException("Index can not fail to open! unsupported");
         }
     }
-
+    
     private Map<String, Integer> createMap(String[] row) {
         Map<String, Integer> map = new HashMap();
         for (int i = 0; i < row.length; i++) {
@@ -142,11 +183,11 @@ public class ChEBINames
         }
         return map;
     }
-
+    
     public static void main(String[] args) throws MalformedURLException, IOException {
         new ChEBINames(false).update();
     }
-
+    
     private static File getFile() {
         String defaultFile = System.getProperty("user.home")
                 + File.separator + "databases"
@@ -155,7 +196,7 @@ public class ChEBINames
         Preferences prefs = Preferences.userNodeForPackage(ChEBINames.class);
         return new File(prefs.get("chebi.name.path", defaultFile));
     }
-
+    
     public String getDescription() {
         return "ChEBI Names";
     }

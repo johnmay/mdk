@@ -85,4 +85,6 @@ public interface Identifier extends Descriptor {
     public Collection<String> getDatabaseSynonyms();
 
     public Resource getResource();
+    
+    public String toStringSummary();
 }

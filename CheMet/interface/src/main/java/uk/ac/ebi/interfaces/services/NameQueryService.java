@@ -37,6 +37,8 @@ public interface NameQueryService<I extends Identifier> extends QueryService<I> 
     public Collection<I> fuzzySearchForName(String name);
 
     public Collection<I> searchForName(String name);
+    
+    public Collection<I> searchForNameExcludeSynonyms(String name);
 
     public Collection<String> getNames(I identifier);
 
