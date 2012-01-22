@@ -31,27 +31,27 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
-import uk.ac.ebi.io.remote.ChEBISecondaryID2PrimaryID;
-import uk.ac.ebi.io.remote.ChEBISecondaryID2PrimaryID.ChEBISecondary2PrimaryLuceneFields;
+import uk.ac.ebi.io.remote.PubChemComp2ParentCompound;
+import uk.ac.ebi.io.remote.PubChemComp2ParentCompound.PubChemComp2ParentComp;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
- *          ChEBINameService - 2011.10.26 <br>
+ *          PubChemComp2ParentCompoundResolverService - 2011.10.26 <br>
  *          Singleton description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ChEBISecondary2PrimaryIDService
-        extends ChEBIQueryService implements SecondaryToPrimaryIDResolverService<ChEBIIdentifier>{
+public class PubChemComp2ParentCompoundResolverService
+        extends PubChemCompoundQueryService implements SecondaryToPrimaryIDResolverService<PubChemCompoundIdentifier>{
 
-    private static final Logger LOGGER = Logger.getLogger(ChEBISecondary2PrimaryIDService.class);
+    private static final Logger LOGGER = Logger.getLogger(PubChemComp2ParentCompoundResolverService.class);
     private IndexSearcher searcher;
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
 
-    private ChEBISecondary2PrimaryIDService() {
-        super(new ChEBISecondaryID2PrimaryID());
+    private PubChemComp2ParentCompoundResolverService() {
+        super(new PubChemComp2ParentCompound());
         try {
             searcher = new IndexSearcher(getDirectory(), true);
         } catch (IOException ex) {
@@ -59,7 +59,7 @@ public class ChEBISecondary2PrimaryIDService
         }
     }
 
-    public static ChEBISecondary2PrimaryIDService getInstance() {
+    public static PubChemComp2ParentCompoundResolverService getInstance() {
         return ChEBISecondary2PrimaryIDServiceHolder.INSTANCE;
     }
 
@@ -70,9 +70,9 @@ public class ChEBISecondary2PrimaryIDService
      * @return primaryIdentifier
      */
     @Override
-    public ChEBIIdentifier getPrimaryID(ChEBIIdentifier secondaryIdent) {
-        Query queryPubChemComp = new TermQuery(new Term(ChEBISecondary2PrimaryLuceneFields.ChebiIDSec.toString(), secondaryIdent.getNumericPartOfAccession()));
-        ChEBIIdentifier primary =  search(queryPubChemComp);
+    public PubChemCompoundIdentifier getPrimaryID(PubChemCompoundIdentifier secondaryIdent) {
+        Query queryPubChemComp = new TermQuery(new Term(PubChemComp2ParentComp.PubChemCompID.toString(), secondaryIdent.getAccession()));
+        PubChemCompoundIdentifier primary =  search(queryPubChemComp);
         if(primary==null)
             return secondaryIdent;
         else
@@ -80,27 +80,27 @@ public class ChEBISecondary2PrimaryIDService
     }
 
     @Override
-    public Collection<ChEBIIdentifier> getSecondaryIDsForPrimaryID(ChEBIIdentifier primaryIdentifier) {
-        Query query = new TermQuery(new Term(ChEBISecondary2PrimaryLuceneFields.ChebiIDPrim.toString(), primaryIdentifier.getAccession()));
+    public Collection<PubChemCompoundIdentifier> getSecondaryIDsForPrimaryID(PubChemCompoundIdentifier primaryIdentifier) {
+        Query query = new TermQuery(new Term(PubChemComp2ParentComp.ParentPChemCompID.toString(), primaryIdentifier.getAccession()));
         
         return reverseSearch(query);
     }
 
     private static class ChEBISecondary2PrimaryIDServiceHolder {
 
-        private static final ChEBISecondary2PrimaryIDService INSTANCE = new ChEBISecondary2PrimaryIDService();
+        private static final PubChemComp2ParentCompoundResolverService INSTANCE = new PubChemComp2ParentCompoundResolverService();
     }
 
-    private Collection<ChEBIIdentifier> reverseSearch(Query query) {
-        Collection<ChEBIIdentifier> ids = new HashSet<ChEBIIdentifier>();
+    private Collection<PubChemCompoundIdentifier> reverseSearch(Query query) {
+        Collection<PubChemCompoundIdentifier> ids = new HashSet<PubChemCompoundIdentifier>();
 
         try {
             TopScoreDocCollector collector = TopScoreDocCollector.create(getMaxResults(), true);
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc scoreDoc : hits) {
-                ChEBIIdentifier ident = getIdentifier();
-                ident.setAccession(getValue(scoreDoc, ChEBISecondary2PrimaryLuceneFields.ChebiIDSec.toString()));
+                PubChemCompoundIdentifier ident = getIdentifier();
+                ident.setAccession(getValue(scoreDoc, PubChemComp2ParentComp.PubChemCompID.toString()));
                 ids.add(ident);
             }
         } catch (IOException ex) {
@@ -110,15 +110,15 @@ public class ChEBISecondary2PrimaryIDService
         return ids;
     }
     
-    private ChEBIIdentifier search(Query query) {
+    private PubChemCompoundIdentifier search(Query query) {
 
         try {
             TopScoreDocCollector collector = TopScoreDocCollector.create(getMaxResults(), true);
             searcher.search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc scoreDoc : hits) {
-                ChEBIIdentifier ident = new ChEBIIdentifier();
-                ident.setAccession(getValue(scoreDoc, ChEBISecondary2PrimaryLuceneFields.ChebiIDPrim.toString()));
+                PubChemCompoundIdentifier ident = new PubChemCompoundIdentifier();
+                ident.setAccession(getValue(scoreDoc, PubChemComp2ParentComp.ParentPChemCompID.toString()));
                 return ident;
             }
         } catch (IOException ex) {

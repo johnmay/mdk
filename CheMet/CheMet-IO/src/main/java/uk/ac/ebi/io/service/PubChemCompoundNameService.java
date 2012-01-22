@@ -96,11 +96,15 @@ public class PubChemCompoundNameService
 
     public Collection<PubChemCompoundIdentifier> searchForNameExcludeSynonyms(String name) {
         Query qName = new TermQuery(nameTerm.createTerm(name));
-        Query qType = new TermQuery(typeTerm.createTerm(PCCompNameTypes.Name.toString()));
+        Query qTypeName = new TermQuery(typeTerm.createTerm(PCCompNameTypes.Name.toString()));
+        Query qTypeIUPAC = new TermQuery(typeTerm.createTerm(PCCompNameTypes.IUPACName.toString()));
         
         BooleanQuery query = new BooleanQuery();
-        query.add(qName,Occur.MUST);
-        query.add(qType,Occur.MUST);
+        query.add(qName, Occur.MUST);
+        BooleanQuery subQueryType = new BooleanQuery();
+        subQueryType.add(qTypeName, Occur.SHOULD);
+        subQueryType.add(qTypeIUPAC, Occur.SHOULD);
+        query.add(subQueryType, Occur.MUST);
         
         return search(query);
     }

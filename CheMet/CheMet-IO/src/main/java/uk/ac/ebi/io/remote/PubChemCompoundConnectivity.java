@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.prefs.Preferences;
 import java.util.zip.GZIPInputStream;
-import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.document.Document;
@@ -39,14 +38,11 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.metabolomes.io.PubChemCompoundSDFFieldExtractor;
 import uk.ac.ebi.metabolomes.io.SDFFieldReader;
 import uk.ac.ebi.metabolomes.io.SDFRecord;
 import uk.ac.ebi.metabolomes.util.inchi.InChIConnectivity;
-import uk.ac.ebi.resource.organism.Taxonomy;
 
 /**
  *          UniProtCrossRefs - 2011.12.10 <br>

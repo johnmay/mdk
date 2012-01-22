@@ -50,7 +50,7 @@ public class ChEBISecondary2PrimaryIDServiceTest {
     }
 
     /**
-     * Test of getPrimaryChEBIID method, of class ChEBISecondary2PrimaryIDService.
+     * Test of getPrimaryID method, of class ChEBISecondary2PrimaryIDService.
      */
     @Test
     public void testGetPrimaryChEBIID() {
@@ -58,7 +58,7 @@ public class ChEBISecondary2PrimaryIDServiceTest {
         ChEBIIdentifier secondaryIdent = new ChEBIIdentifier(11727);
         ChEBISecondary2PrimaryIDService instance = ChEBISecondary2PrimaryIDService.getInstance();
         ChEBIIdentifier expResult = new ChEBIIdentifier(36242);
-        ChEBIIdentifier result = instance.getPrimaryChEBIID(secondaryIdent);
+        ChEBIIdentifier result = instance.getPrimaryID(secondaryIdent);
         assertEquals(expResult, result);
     }
 

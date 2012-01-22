@@ -192,6 +192,18 @@ public class EUtilsWebServiceConnection {
     public Multimap<String, String> getPubChemCompoundFromPubChemSubstance(List<String> pubchemSubstanceIds) throws WebServiceException {
         return this.getDBToIDsFromDBFromIDs(pubchemSubstanceIds, EntrezDB.pcsubstance, EntrezDB.pccompound,"linkname","pcsubstance_pccompound_same");
     }
+    
+    public Multimap<String, String> getPubChemCompoundParentFromPubChemCompound(List<String> pubchemCompoundIds) throws WebServiceException {
+        return this.getDBToIDsFromDBFromIDs(pubchemCompoundIds, EntrezDB.pccompound, EntrezDB.pccompound, "linkname", "pccompound_pccompound_parent");
+    }
+    
+    public Multimap<String, String> getPubChemCompoundParentFromPubChemCompoundIdents(List<PubChemCompoundIdentifier> pubChemCompoundIdentifiers) throws WebServiceException {
+        List<String> pubchemComps = new ArrayList<String>(pubChemCompoundIdentifiers.size());
+        for (PubChemCompoundIdentifier pubChemCompoundIdentifier : pubChemCompoundIdentifiers) {
+            pubchemComps.add(pubChemCompoundIdentifier.getAccession());
+        }
+        return this.getPubChemCompoundParentFromPubChemCompound(pubchemComps);
+    }
 
     /**
      * Uses ESummary to submit a list of pubchem substance ids, for which cross references will be retrieved (taken from

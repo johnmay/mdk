@@ -56,7 +56,9 @@ import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
  *          This class is slightly different to the other ones of its class in the sense that it doesn't build an index
  *          for the entire database of PubChem compounds, but only for a provided set. This should not be executed with 
  *          more than 5000 records at once, which is the suggested
- *          record limit for ELink at NCBI (ELink is part of the EUtils).
+ *          record limit for ELink at NCBI (ELink is part of the EUtils). A class for running the update, with a reasonable
+ *          collection of PubChem compound identifiers, can be found in uk.ac.ebi.metabolomes.exec in the MetabolomeInference
+ *          maven project.
  * @version $Rev$ : Last Changed $Date$
  * @author  pmoreno
  * @author  $Author$ (this version)

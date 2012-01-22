@@ -21,6 +21,7 @@
 package uk.ac.ebi.io.service;
 
 import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
  *          ChEBIQueryService - 2011.10.26 <br>
@@ -34,5 +35,9 @@ public class PubChemCompoundQueryService
 
     public PubChemCompoundQueryService(LuceneService service) {
         super(service);
+    }
+    
+    public PubChemCompoundIdentifier getIdentifier() {
+        return new PubChemCompoundIdentifier();
     }
 }

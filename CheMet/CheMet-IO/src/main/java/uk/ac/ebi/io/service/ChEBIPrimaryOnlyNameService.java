@@ -98,7 +98,7 @@ public class ChEBIPrimaryOnlyNameService extends ChEBIQueryService
     private Collection<ChEBIIdentifier> getOnlyPrimaryUniqueIdentifiers(Collection<ChEBIIdentifier> idents) {
         Set<ChEBIIdentifier> toRet = new HashSet<ChEBIIdentifier>();
         for (ChEBIIdentifier ident : idents) {
-            toRet.add(sec2PrimService.getPrimaryChEBIID(ident));
+            toRet.add(sec2PrimService.getPrimaryID(ident));
         }
         return toRet;
     }
