@@ -53,12 +53,13 @@ public class ChEBIIdentifier
      */
     public ChEBIIdentifier(String accession) {
         super(accession);
+        super.setAccession(super.getAccession().replaceFirst("ChEBI", "CHEBI"));
     }
 
     @Override
     public void setAccession(String accession) {
         if(accession.matches("^\\d+"))
-            accession = "ChEBI:"+accession;
+            accession = "CHEBI:"+accession;
         super.setAccession(accession);
     }
     /**
@@ -69,7 +70,7 @@ public class ChEBIIdentifier
      *
      */
     public ChEBIIdentifier(Integer accession) {
-        super("ChEBI:" + accession);
+        super("CHEBI:" + accession);
     }
 
     /**

@@ -87,6 +87,16 @@ public abstract class AbstractIdentifier
     public String toString() {
         return accession;
     }
+    
+    /**
+     * Returns a string summary of the Identifier, consisting of the short description of the database and the accession.
+     * Added to avoid changing the behaviour of toString().
+     * 
+     * @return dbName + accession. 
+     */
+    public String toStringSummary() {
+        return getShortDescription()+" "+getAccession();
+    }
 
     /**
      * @inheritDoc
