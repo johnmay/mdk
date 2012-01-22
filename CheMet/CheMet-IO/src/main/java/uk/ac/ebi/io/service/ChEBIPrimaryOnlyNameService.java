@@ -79,9 +79,13 @@ public class ChEBIPrimaryOnlyNameService extends ChEBIQueryService
     /**
      * When multiple results are retrieved, this method checks whether some results where obtained by comparing against
      * synonys compared to names. If this is the case, only the direct name results are kept.
+     * 
+     * This functionality is now provided by the {@link #searchForNameExcludeSynonyms(java.lang.String) } method. 
+     * This method is no longer necessary.
+     * 
      * @param searchForName
      * @return 
-     */
+     *
     private Collection<ChEBIIdentifier> prioritizeNameOverSynonymResults(Collection<ChEBIIdentifier> searchForName, String name) {
         Collection<ChEBIIdentifier> selectedByName = new ArrayList<ChEBIIdentifier>();
         for (ChEBIIdentifier chEBIIdentifier : searchForName) {
@@ -93,7 +97,7 @@ public class ChEBIPrimaryOnlyNameService extends ChEBIQueryService
             return selectedByName;
         else
             return searchForName;
-    }
+    }*/
     
     private Collection<ChEBIIdentifier> getOnlyPrimaryUniqueIdentifiers(Collection<ChEBIIdentifier> idents) {
         Set<ChEBIIdentifier> toRet = new HashSet<ChEBIIdentifier>();

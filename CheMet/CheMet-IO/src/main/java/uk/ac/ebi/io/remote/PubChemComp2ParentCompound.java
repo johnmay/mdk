@@ -47,6 +47,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.NoSuchDirectoryException;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
@@ -145,8 +146,13 @@ public class PubChemComp2ParentCompound extends AbstrastRemoteResource implement
         EUtilsWebServiceConnection euwsc = new EUtilsWebServiceConnection();
 
         Directory index = getDirectory();
-        if (index != null) {
-            searcher = new IndexSearcher(index);
+        try {
+            if (index != null) {
+                searcher = new IndexSearcher(index);
+            }
+        } catch (NoSuchDirectoryException e) {
+            // the directory doesn't exist yet.
+            searcher = null;
         }
 
         try {

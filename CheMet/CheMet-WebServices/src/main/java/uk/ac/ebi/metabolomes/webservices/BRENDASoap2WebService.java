@@ -22,7 +22,6 @@ package uk.ac.ebi.metabolomes.webservices;
 
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
-import java.util.List;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
 import org.apache.axis.client.Call;
@@ -42,7 +41,7 @@ import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 public class BRENDASoap2WebService {
 
     private static final Logger LOGGER = Logger.getLogger(BRENDASoap2WebService.class);
-    private final String ENDPOINT = "http://www.brenda-enzymes.org/soap2/index.php/brenda_server.php/brenda.wsdl/brenda_server.php";
+    private final String ENDPOINT = "http://www.brenda-enzymes.org/soap2/brenda_server.php";
     private final Service service = new Service();
 
     public String getLigandIdentifier(String ligandName) throws WebServiceException {

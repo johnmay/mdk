@@ -48,4 +48,14 @@ public class BRENDASoap2WebServiceTest {
         String result = instance.getLigandIdentifier(ligandName);
         assertEquals(expResult, result);
     }
+    
+    @Test
+    public void testGetLigandIdentifier_iditol() throws Exception {
+        System.out.println("getLigandIdentifier");
+        String ligandName = "L-Iditol";
+        BRENDASoap2WebService instance = new BRENDASoap2WebService();
+        String expResult = "12261";
+        String result = instance.getLigandIdentifier(ligandName);
+        assertEquals(expResult, result);
+    }
 }
