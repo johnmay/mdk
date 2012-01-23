@@ -13,6 +13,7 @@ import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import uk.ac.ebi.metabolomes.util.inchi.InChIMoleculeChecker.InChIMoleculeCheckerResult;
 
 
 /**
@@ -56,7 +57,9 @@ public class InChIProducer102beta extends InChIProducer {
             return null;
         }
 
-        if(checkMoleculeForInChI(mol)) {
+        InChIMoleculeCheckerResult resCheck = InChIMoleculeChecker.getInstance().checkMolecule(mol);
+
+        if(resCheck.isInChIFit()) {
             InChIGeneratorFactory factory=null;
             InChIGenerator cdkGenerator=null;
             try {
@@ -98,6 +101,11 @@ public class InChIProducer102beta extends InChIProducer {
                 return result;
             }
             return null;
+        } else {
+            if(resCheck.isGenericAtom())
+                LOGGER.trace("Skipping generic molecule");
+            else
+                LOGGER.trace("Molecule has null bonds, atoms or is emtpy");
         }
         return null;
     }

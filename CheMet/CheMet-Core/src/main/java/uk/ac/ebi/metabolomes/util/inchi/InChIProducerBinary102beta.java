@@ -14,6 +14,7 @@ import net.sf.jniinchi.INCHI_OPTION;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
+import uk.ac.ebi.metabolomes.util.inchi.InChIMoleculeChecker.InChIMoleculeCheckerResult;
 
 /**
  *
@@ -37,8 +38,13 @@ public class InChIProducerBinary102beta extends InChIProducer {
     public InChIResult calculateInChI(IAtomContainer mol) {
         if(inchiOptions==null)
             inchiOptions="";
-        if (!checkMoleculeForInChI(mol)) {
-            logger.warn("Molecule does not pass check for inchi");
+        
+        InChIMoleculeCheckerResult resCheck = InChIMoleculeChecker.getInstance().checkMolecule(mol);
+        if(!resCheck.isInChIFit()) {
+            if(resCheck.isGenericAtom())
+                logger.trace("Skipping generic molecule");
+            else
+                logger.trace("Molecule has null bonds, atoms or is emtpy");
             return null;
         }
         File tmpDir = new File(tmp + File.separator + "dir" + Math.round(1000 * Math.random()));
