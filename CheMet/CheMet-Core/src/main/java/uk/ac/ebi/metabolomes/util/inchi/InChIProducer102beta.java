@@ -50,12 +50,12 @@ public class InChIProducer102beta extends InChIProducer {
             addHydrogensToMolecule(mol);
         }catch(CDKException e) {
             LOGGER.error("Could not add hydrogens to molecule "+mol.getID(), e);
-            AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
             //return null;
         }catch(NullPointerException ex) {
             LOGGER.error("Null pointer exception produced downwards by CDK when handling molecule "+mol.getID(),ex);
             return null;
         }
+        AtomContainerManipulator.convertImplicitToExplicitHydrogens(mol);
 
         InChIMoleculeCheckerResult resCheck = InChIMoleculeChecker.getInstance().checkMolecule(mol);
 

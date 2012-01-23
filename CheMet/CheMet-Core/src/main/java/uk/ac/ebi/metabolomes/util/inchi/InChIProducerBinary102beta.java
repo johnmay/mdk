@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.metabolomes.util.inchi;
 
+import com.google.common.io.Files;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -47,7 +48,10 @@ public class InChIProducerBinary102beta extends InChIProducer {
                 logger.trace("Molecule has null bonds, atoms or is emtpy");
             return null;
         }
-        File tmpDir = new File(tmp + File.separator + "dir" + Math.round(1000 * Math.random()));
+        // improve this
+        
+        //File tmpDir = new File(tmp + File.separator + "dir" + Math.round(1000 * Math.random()));
+        File tmpDir = Files.createTempDir();
         if (!tmpDir.mkdir()) {
             logger.error("Cannot create temporary directory");
             return null;

@@ -63,12 +63,16 @@ public class InChIMoleculeChecker {
             return false;
         }
 
+        if (checkForGenericAtoms(mol)) {
+            return false;
+        }
         if (checkForNullBonds(mol)) {
             return false;
         }
         if (checkForNullAtoms(mol)) {
             return false;
         }
+        
         return true;
     }
 
@@ -78,6 +82,7 @@ public class InChIMoleculeChecker {
         res.emptyMol = (mol.getAtomCount() == 0);
         res.bondNull = checkForNullBonds(mol);
         res.atomNull = checkForNullAtoms(mol);
+        res.genericAtom = checkForGenericAtoms(mol);
         
         return res;
     }
@@ -87,10 +92,16 @@ public class InChIMoleculeChecker {
             if (a == null) {
                 return true;
             }
-            if (a instanceof PseudoAtom) {
+            
+        }
+        return false;
+    }
+    
+    private boolean checkForGenericAtoms(IAtomContainer mol) {
+        for (IAtom atom : mol.atoms()) {
+            if(atom instanceof PseudoAtom)
                 return true;
-            }
-            String className = a.getClass().getName();
+            String className = atom.getClass().getName();
             if (className.equalsIgnoreCase("org.openscience.cdk.PseudoAtom")) {
                 return true;
             }
@@ -154,7 +165,7 @@ public class InChIMoleculeChecker {
         }
         
         public boolean isInChIFit() {
-            return genericAtom || bondNull || atomNull || emptyMol;
+            return !(genericAtom || bondNull || atomNull || emptyMol);
         }
     }
 }
