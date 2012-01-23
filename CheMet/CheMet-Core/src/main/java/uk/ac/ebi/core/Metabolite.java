@@ -41,7 +41,7 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
  */
 public class Metabolite
         extends AbstractAnnotatedEntity
-        implements Externalizable {
+        implements uk.ac.ebi.interfaces.entities.Metabolite, Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(Metabolite.class);
     private boolean generic = false;
