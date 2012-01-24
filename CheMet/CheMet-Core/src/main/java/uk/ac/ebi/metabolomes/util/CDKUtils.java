@@ -7,19 +7,17 @@ package uk.ac.ebi.metabolomes.util;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.PseudoAtom;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMoleculeSet;
-import org.openscience.cdk.interfaces.IReaction;
+import org.openscience.cdk.interfaces.*;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
 
 /**
  *
@@ -29,11 +27,13 @@ public class CDKUtils {
 
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(CDKUtils.class);
 
+
     /**
-     * Visits all the atoms in an IAtomContainer and returns true if any
-     * of them is an instance of the PseudoAtom class.
+     * Visits all the atoms in an IAtomContainer and returns true if any of them
+     * is an instance of the PseudoAtom class.
      *
      * @param mol to check whether it is generic or not.
+     *
      * @return true is molecule has a PseudoAtom
      */
     public static boolean isMoleculeGeneric(IAtomContainer mol) {
@@ -45,10 +45,13 @@ public class CDKUtils {
         return false;
     }
 
+
     /**
-     * Visits all the molecules in a reaction and returns true if any of them
-     * is generic (has a PseudoAtom).
+     * Visits all the molecules in a reaction and returns true if any of them is
+     * generic (has a PseudoAtom).
+     *
      * @param rxn
+     *
      * @return
      */
     public static boolean isRxnGeneric(IReaction rxn) {
@@ -65,10 +68,13 @@ public class CDKUtils {
         return false;
     }
 
+
     /**
      * Visits all the molecules in a MoleculeSet and returns true if any of them
      * is generic (has a PseudoAtom).
+     *
      * @param mols
+     *
      * @return
      */
     public static boolean moleculeSetContainsGenericMol(IMoleculeSet mols) {
@@ -81,8 +87,10 @@ public class CDKUtils {
     }
 
     /*
-     * Creates a shallow copy and removes pseudo atoms from the provided molecule
+     * Creates a shallow copy and removes pseudo atoms from the provided
+     * molecule
      */
+
     public static IAtomContainer removePseudoAtoms(IAtomContainer molecule) {
 
         // first make a shallow copy
@@ -96,12 +104,14 @@ public class CDKUtils {
         return copiedAtomContainer;
     }
 
+
     public static IAtomContainer setBondOrderSums(IAtomContainer atomContainer) {
         for (IAtom atom : AtomContainerManipulator.getAtomArray(atomContainer)) {
             atom.setBondOrderSum(AtomContainerManipulator.getBondOrderSum(atomContainer, atom));
         }
         return atomContainer;
     }
+
 
     public static IAtomContainer mdlMolV2000Txt2CDKObject(String mol) throws CDKException, IOException {
         IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
@@ -111,7 +121,9 @@ public class CDKUtils {
         reader.close();
         return auxMol;
     }
+
     private static final Map<String, Integer> symbolToOuterElectronCount = new HashMap();
+
 
     static {
         symbolToOuterElectronCount.put("H", 1);
@@ -122,9 +134,11 @@ public class CDKUtils {
         symbolToOuterElectronCount.put("S", 6);
     }
 
+
     /**
      * Sets the non-bonded valence electrons for each atom. The property
      * "nb-valence-electrons" is set for each atom
+     *
      * @param molecule
      */
     public static void setNonBondedValenceElectronCount(IAtomContainer molecule) {
@@ -134,6 +148,7 @@ public class CDKUtils {
         }
 
     }
+
 
     public static Integer getNonBondedValenceElectronCount(IAtomContainer molecule, IAtom atom) {
 
@@ -153,22 +168,28 @@ public class CDKUtils {
         }
         return 0;
     }
-    
+
     private final static SmilesBugAmender smilesBugAmender = new SmilesBugAmender();
+
+
     /**
      * Looks for certain patterns of SMILES and uniforms them.
-     * 
+     *
      * @param smilesToAmend
+     *
      * @return correctedSmiles
      */
     public static String amendCDKSmilesForPhosphateGroupLikeBug(String smilesToAmend) {
         return smilesBugAmender.amendSmiles(smilesToAmend);
     }
 
+
     /**
-     * Visits all the molecules in a reaction and returns true if any of them
-     * is empty (no atoms).
+     * Visits all the molecules in a reaction and returns true if any of them is
+     * empty (no atoms).
+     *
      * @param rxn
+     *
      * @return
      */
     public static boolean rxnHasParticipantWithNoAtoms(IReaction rxn) {
@@ -184,11 +205,14 @@ public class CDKUtils {
 
         return false;
     }
-    
+
+
     /**
      * Visits all the molecules in a MoleculeSet and returns true if any of them
      * is empty (has no atoms).
+     *
      * @param mols
+     *
      * @return
      */
     public static boolean moleculeSetContainsEmptyMol(IMoleculeSet mols) {
@@ -200,7 +224,52 @@ public class CDKUtils {
         return false;
     }
 
+
     private static boolean isMoleculeEmpty(IAtomContainer mol) {
-        return mol.getAtomCount()==0;
+        return mol.getAtomCount() == 0;
+    }
+
+
+    /**
+     * Similar to 
+     * {@see IAtomContainer#removeAtomAndConnectedElectronContainers(IAtom)} but
+     * returns a list of the atoms that the molecule was connected to
+     * @param molecule
+     * @param atom
+     *
+     * @return
+     */
+    public static List<IAtom> removeAtomAndGetConnected(IAtomContainer molecule, IAtom atom) {
+
+        List<IAtom> atoms = molecule.getConnectedAtomsList(atom);       
+      
+        molecule.removeAtomAndConnectedElectronContainers(atom);
+
+        return atoms;
+    }
+
+
+    /**
+     * This method is similar to 
+     * {@see IAtomContainer#removeAtomAndConnectedElectronContainers(IAtom)}
+     * however the method returns a single atom. If the atom to remove is
+     * connected to more then one a RuntimeException is thrown
+     * 
+     * 
+     * @param molecule
+     * @param atom
+     *
+     * @return
+     */
+    public static IAtom removeAtom(IAtomContainer molecule, IAtom atom) {
+
+        List<IAtom> connected = removeAtomAndGetConnected(molecule, atom);
+               
+        if (connected.size() != 1) {
+            throw new UnsupportedOperationException("There must be exactly 1 connected atom");
+        }
+
+        return connected.iterator().next();
+
     }
 }
