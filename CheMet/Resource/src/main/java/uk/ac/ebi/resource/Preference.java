@@ -128,11 +128,12 @@ public enum Preference {
         StringBuilder sb = new StringBuilder(values.size() * 14);
         for (String value : values) {
             sb.append(value.replaceAll(LIST_SEPARATOR, LIST_SEPARATOR_ESCAPED));
-            if (value.equals(values.get(values.size() - 1))) {
+            if (!value.equals(values.get(values.size() - 1))) {
                 sb.append(LIST_SEPARATOR);
             }
         }
         put(sb.toString());
+        System.out.println("putting list:" + sb.toString());
     }
 
 
