@@ -109,7 +109,7 @@ public class ViewUtilities {
                                     String description) {
 
         java.net.URL imageURL = ViewUtilities.class.getResource(path);
-
+        
         if (imageURL != null) {
             return new ImageIcon(imageURL, description);
         } else {

@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.chemet.render.reconciliation.modules;
+package uk.ac.ebi.render.reconciliation.modules;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import java.awt.Desktop;
@@ -29,7 +29,7 @@ import uk.ac.ebi.chemet.render.factory.ButtonFactory;
 import uk.ac.ebi.chemet.render.factory.FieldFactory;
 import uk.ac.ebi.chemet.render.factory.PanelFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.renderers.ReconciliationComponent;
+import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
 
 
 /**
@@ -44,7 +44,7 @@ import uk.ac.ebi.interfaces.renderers.ReconciliationComponent;
  *
  */
 public class GoogleSearch
-        implements ReconciliationComponent {
+        implements CrossreferenceModule {
 
     private static final Logger LOGGER = Logger.getLogger(GoogleSearch.class);
 

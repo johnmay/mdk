@@ -29,7 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import org.openscience.cdk.exception.CDKException;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
-import uk.ac.ebi.visualisation.molecule.MoleculeRenderer;
+import uk.ac.ebi.render.molecule.MoleculeRenderer;
 
 /**
  *          ChemicalStructureRenderer – 2011.09.29 <br>
