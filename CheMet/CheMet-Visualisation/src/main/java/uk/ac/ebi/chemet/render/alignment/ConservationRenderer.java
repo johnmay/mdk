@@ -22,15 +22,15 @@ package uk.ac.ebi.chemet.render.alignment;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.Rectangle; 
 import java.awt.geom.Rectangle2D;
 import java.text.StringCharacterIterator;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
-import uk.ac.ebi.chemet.render.ColorUtilities;
 
 /**
  * @name    ConservationRenderer - 2011.10.11 <br>
@@ -62,7 +62,7 @@ public class ConservationRenderer extends AlignmentRenderer {
     private void buildColorMap() {
         Color color = super.color.getMatchColor(null);
         for (int i = 0; i <= 10; i++) {
-            colorMap.put(i, ColorUtilities.shade(color, (1 - (i * 0.1f)) / 4));
+            colorMap.put(i, ColorUtility.shade(color, (1 - (i * 0.1f)) / 4));
         }
     }
 

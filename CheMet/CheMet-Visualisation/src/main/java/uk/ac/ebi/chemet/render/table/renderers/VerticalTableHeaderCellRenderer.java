@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.render.table.renderers;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.ui.VerticalLabelUI;
+import uk.ac.ebi.caf.component.ui.VerticalLabelUI;
 
 /**
  *          VerticalTableHeaderCellRenderer - 2011.11.25 <br>

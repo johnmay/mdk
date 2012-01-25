@@ -37,5 +37,10 @@
             <artifactId>guava</artifactId>
             <version>r09</version>
         </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-utility</artifactId>
+            <version>0.8-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

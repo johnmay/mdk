@@ -12,7 +12,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  *
  * @author johnmay
  */
-public interface ReconciliationComponent {
+public interface CrossreferenceModule {
 
     /**
      * Access a description of the module

@@ -223,6 +223,8 @@ public class PeptideFactory {
         L_TRP("aminoacid/L-Trp.mol", "L-tryptophan"),
         D_TRP("aminoacid/D-Trp.mol", "D-tryptophan"),;
 
+        private String displayName;
+
         private List<String> names;
 
         private IAtomContainer molecule;
@@ -247,6 +249,9 @@ public class PeptideFactory {
                              + name() + ": " + ex.getMessage());
             }
 
+            displayName = name().replaceAll("_", "-");
+            displayName = displayName.substring(0, 3) + displayName.substring(3).toLowerCase();
+
         }
 
 
@@ -267,6 +272,12 @@ public class PeptideFactory {
 
         public IAtom getNTerminal(IAtomContainer container) {
             return container.getAtom(getAtomIndex(molecule, "R", "N"));
+        }
+
+
+        @Override
+        public String toString() {
+            return displayName;
         }
     };
 }

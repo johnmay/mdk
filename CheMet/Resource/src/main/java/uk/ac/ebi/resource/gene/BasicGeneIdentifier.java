@@ -22,7 +22,7 @@ package uk.ac.ebi.resource.gene;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.Preference;
+import uk.ac.ebi.caf.utility.Preference;
 
 /**
  *          BasicGeneIdentifier - 2011.10.17 <br>

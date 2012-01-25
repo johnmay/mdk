@@ -20,13 +20,12 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
-import java.awt.Color;
 import java.awt.Component;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.factory.ButtonFactory;
+import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.chemet.render.list.renderers.TableCellRenderingPool;
 
 /**

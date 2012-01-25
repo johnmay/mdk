@@ -25,9 +25,9 @@ import java.awt.event.ActionEvent;
 import java.net.URI;
 import javax.swing.*;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.render.factory.ButtonFactory;
-import uk.ac.ebi.chemet.render.factory.FieldFactory;
-import uk.ac.ebi.chemet.render.factory.PanelFactory;
+import uk.ac.ebi.caf.component.factory.ButtonFactory;
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
 

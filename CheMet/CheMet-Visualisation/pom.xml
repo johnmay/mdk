@@ -89,5 +89,15 @@
             <artifactId>MacWidgets</artifactId>
             <version>0.10-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-utility</artifactId>
+            <version>0.8-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-component</artifactId>
+            <version>0.8-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

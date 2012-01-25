@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.MetaboliteIdentifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
-import uk.ac.ebi.resource.Preference;
+import uk.ac.ebi.caf.utility.Preference;
 
 /**
  *          BasicProteinIdentifier – 2011.09.14 <br>

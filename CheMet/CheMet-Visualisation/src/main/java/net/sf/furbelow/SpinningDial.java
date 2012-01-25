@@ -25,7 +25,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import uk.ac.ebi.chemet.render.ColorUtilities;
 
 /** Provides a spinning disk of hash marks. */
 public class SpinningDial

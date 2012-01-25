@@ -27,7 +27,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.interfaces.Theme;
+import uk.ac.ebi.caf.component.theme.Theme;
 import uk.ac.ebi.mnb.settings.Settings;
 
 /**

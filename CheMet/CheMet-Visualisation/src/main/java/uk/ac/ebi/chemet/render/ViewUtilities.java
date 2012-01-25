@@ -33,6 +33,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import uk.ac.ebi.caf.utility.TextUtility;
 
 /**
  * ViewUtils.java
@@ -161,10 +162,11 @@ public class ViewUtilities {
      * Wraps the text in {@code<html>..</html>} tags
      * @param html
      * @return
+     * @deprecated  use TextUtility
      */
+    @Deprecated
     public static String htmlWrapper(String html) {
-        StringBuilder sb = new StringBuilder(html.length() + 12);
-        return sb.append("<html>").append(html).append("</html>").toString();
+        return TextUtility.html(html);
     }
 
     /**

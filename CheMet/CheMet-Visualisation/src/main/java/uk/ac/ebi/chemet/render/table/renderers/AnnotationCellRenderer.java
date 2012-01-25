@@ -21,15 +21,10 @@
 package uk.ac.ebi.chemet.render.table.renderers;
 
 import com.google.common.base.Joiner;
-import java.awt.Color;
 import java.awt.Component;
 import java.util.Collection;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.chemet.render.factory.LabelFactory;
-import uk.ac.ebi.chemet.render.list.renderers.TableCellRenderingPool;
-import uk.ac.ebi.interfaces.Annotation;
 
 /**
  *          AnnotationCellRenderer – 2011.09.29 <br>

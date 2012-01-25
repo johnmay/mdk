@@ -25,8 +25,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.Preference;
+import uk.ac.ebi.caf.utility.Preference;
 
 /**
  *          BasicChemicalIdentifier – 2011.09.14 <br>

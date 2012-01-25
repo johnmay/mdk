@@ -21,13 +21,12 @@ import au.com.bytecode.opencsv.CSVWriter;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
-import org.omg.PortableInterceptor.NON_EXISTENT;
+import uk.ac.ebi.caf.utility.Preference;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.InChIStoichiometricMatrix;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.identifier.InChI;
-import uk.ac.ebi.resource.Preference;
 
 
 /**

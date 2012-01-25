@@ -20,24 +20,19 @@
  */
 package uk.ac.ebi.chemet.render.list.renderers;
 
-import com.jgoodies.forms.factories.Borders;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Rectangle;
-import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.chemet.render.alignment.AlignmentRenderer;
 import uk.ac.ebi.chemet.render.alignment.BasicAlignmentColor;
 import uk.ac.ebi.chemet.render.alignment.BlastConsensusScorer;
 import uk.ac.ebi.chemet.render.alignment.ConservationRenderer;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
-import uk.ac.ebi.chemet.render.ColorUtilities;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
@@ -51,8 +46,8 @@ public class LocalAlignmentListCellRenderer
         extends ListCellRenderingPool<JLabel, LocalAlignment> {
 
     private static final Logger LOGGER = Logger.getLogger(LocalAlignmentListCellRenderer.class);
-    private static final BasicAlignmentColor color = new BasicAlignmentColor(ColorUtilities.EMBL_PETROL,
-                                                                             ColorUtilities.EMBL_PETROL,
+    private static final BasicAlignmentColor color = new BasicAlignmentColor(ColorUtility.EMBL_PETROL,
+                                                                             ColorUtility.EMBL_PETROL,
                                                                              Color.lightGray);
     private final static ConservationRenderer COMPLEX_RENDERER = new ConservationRenderer(new Rectangle(0, 0, 750, 10),
                                                                                           color,

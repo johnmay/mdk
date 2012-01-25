@@ -25,8 +25,8 @@ import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import uk.ac.ebi.chemet.io.external.HomologySearchFactory;
-import uk.ac.ebi.interfaces.Theme;
-import uk.ac.ebi.mnb.view.theme.DefaultTheme;
+import uk.ac.ebi.caf.component.theme.Theme;
+import uk.ac.ebi.caf.component.theme.DefaultTheme;
 
 /**
  * ApplicationPreferences.java

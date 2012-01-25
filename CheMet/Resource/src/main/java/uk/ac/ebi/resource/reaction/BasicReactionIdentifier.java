@@ -22,7 +22,7 @@ package uk.ac.ebi.resource.reaction;
 
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.resource.Preference;
+import uk.ac.ebi.caf.utility.Preference;
 
 /**
  *          BasicReactionIdentifier – 2011.09.26 <br>

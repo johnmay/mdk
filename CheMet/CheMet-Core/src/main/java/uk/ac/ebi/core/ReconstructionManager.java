@@ -11,8 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import uk.ac.ebi.caf.utility.Preference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.Preference;
 
 /**
  * 
