@@ -11,6 +11,7 @@ import uk.ac.ebi.interfaces.identifiers.ChemicalIdentifier;
  *
  * @author pmoreno
  */
-public interface ChemicalConnectivityQueryService<I extends ChemicalIdentifier> extends QueryService<ChemicalIdentifier> {
+public interface ChemicalConnectivityQueryService<I extends ChemicalIdentifier> extends QueryService<I> {
     public Collection<I> getEntriesWithConnectivity(String connectivity);
+    public String getInChIConnectivity(I identifier);
 }

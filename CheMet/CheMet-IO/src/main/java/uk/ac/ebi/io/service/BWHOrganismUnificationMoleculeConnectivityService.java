@@ -66,7 +66,6 @@ public class BWHOrganismUnificationMoleculeConnectivityService
     }
 
     private static final Logger LOGGER = Logger.getLogger(BWHOrganismUnificationMoleculeConnectivityService.class);
-    private IndexSearcher searcher;
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
     private final Query collectionQuery;
 
@@ -78,6 +77,11 @@ public class BWHOrganismUnificationMoleculeConnectivityService
         } catch (IOException ex) {
             LOGGER.error("Problems loading directory", ex);
         }
+    }
+    
+    @Override
+    Query getCollectionQuery() {
+        return collectionQuery;
     }
 
     public static BWHOrganismUnificationMoleculeConnectivityService getInstance(Taxonomy tax, CollectionType type) {

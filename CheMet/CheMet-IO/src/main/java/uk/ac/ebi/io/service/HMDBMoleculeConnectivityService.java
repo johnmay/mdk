@@ -49,7 +49,6 @@ public class HMDBMoleculeConnectivityService
         extends MoleculeConnectivityQueryService implements ChemicalConnectivityQueryService<HMDBIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(HMDBMoleculeConnectivityService.class);
-    private IndexSearcher searcher;
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
     private final Query collectionQuery;
     private static final String COLLECTION = "HMDB";
@@ -76,6 +75,15 @@ public class HMDBMoleculeConnectivityService
         query.add(collectionQuery, Occur.MUST);
         
         return reverseSearch(query);
+    }
+    
+    @Override
+    Query getCollectionQuery() {
+        return collectionQuery;
+    }
+    
+    public String getInChIConnectivity(HMDBIdentifier identifier) {
+        return super.getInChIConnectivity(identifier);
     }
 
     private static class HMDBMoleculeConnectivityServiceHolder {

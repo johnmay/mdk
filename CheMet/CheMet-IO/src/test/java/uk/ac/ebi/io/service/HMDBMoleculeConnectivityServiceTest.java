@@ -64,6 +64,20 @@ public class HMDBMoleculeConnectivityServiceTest {
             System.out.println(hMDBIdentifier.getAccession());
         }
     }
+    
+    @Test
+    public void testgetInChIConnectivity() {
+        System.out.println("getInChIConnectivity");
+        HMDBIdentifier ident = new HMDBIdentifier("HMDB00909");
+        HMDBMoleculeConnectivityService instance = HMDBMoleculeConnectivityService.getInstance();
+        String conn = instance.getInChIConnectivity(ident);
+        String conExp = "InChI=1S/C8%O3/c9-7-3-1-6(2-4-7)5-8(10)11/";
+        System.out.println("Obtained con: "+conn);
+        System.out.println("Expected con: "+conExp);
+        assertNotNull(conn);
+        assertEquals(conExp, conn);
+    }
+
 
     /**
      * Test of getIdentifier method, of class HMDBMoleculeConnectivityService.

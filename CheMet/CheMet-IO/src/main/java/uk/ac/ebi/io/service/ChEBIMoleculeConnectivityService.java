@@ -32,6 +32,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
+import uk.ac.ebi.interfaces.identifiers.ChemicalIdentifier;
 import uk.ac.ebi.interfaces.services.ChemicalConnectivityQueryService;
 import uk.ac.ebi.io.remote.ChEBIMoleculeConnectivity;
 import uk.ac.ebi.io.remote.ChEBISecondaryID2PrimaryID.ChEBISecondary2PrimaryLuceneFields;
@@ -51,7 +52,6 @@ public class ChEBIMoleculeConnectivityService
         extends MoleculeConnectivityQueryService implements ChemicalConnectivityQueryService<ChEBIIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIMoleculeConnectivityService.class);
-    private IndexSearcher searcher;
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
     private final Query collectionQuery;
 
@@ -77,6 +77,15 @@ public class ChEBIMoleculeConnectivityService
         query.add(collectionQuery, Occur.MUST);
         
         return reverseSearch(query);
+    }
+
+    @Override
+    Query getCollectionQuery() {
+        return collectionQuery;
+    }
+    @Override
+    public String getInChIConnectivity(ChEBIIdentifier identifier) {
+        return super.getInChIConnectivity(identifier);
     }
 
     private static class ChEBIMoleculeConnectivityServiceHolder {

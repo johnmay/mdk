@@ -11,7 +11,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  *
  * @author pmoreno
  */
-public interface SecondaryToPrimaryIDResolverService<I extends Identifier> {
+public interface SecondaryToPrimaryIDResolverService<I extends Identifier> extends QueryService<I> {
 
     /**
      * The method takes an identifier, presumed to be a secondary Identifier of the database, looks for a primary id associated in the

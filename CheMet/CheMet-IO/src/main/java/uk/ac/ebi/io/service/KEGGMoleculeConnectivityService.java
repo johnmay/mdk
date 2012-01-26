@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
@@ -50,7 +49,6 @@ public class KEGGMoleculeConnectivityService
         extends MoleculeConnectivityQueryService implements ChemicalConnectivityQueryService<KEGGCompoundIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGMoleculeConnectivityService.class);
-    private IndexSearcher searcher;
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
     private final Query collectionQuery;
     private static final String COLLECTION = "KEGG";
@@ -82,6 +80,15 @@ public class KEGGMoleculeConnectivityService
     private static class KEGGMoleculeConnectivityServiceHolder {
 
         private static final KEGGMoleculeConnectivityService INSTANCE = new KEGGMoleculeConnectivityService();
+    }
+    
+    @Override
+    Query getCollectionQuery() {
+        return collectionQuery;
+    }
+    
+    public String getInChIConnectivity(KEGGCompoundIdentifier identifier) {
+        return super.getInChIConnectivity(identifier);
     }
 
     private Collection<KEGGCompoundIdentifier> reverseSearch(Query query) {

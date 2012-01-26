@@ -49,7 +49,6 @@ public class MetaCycMoleculeConnectivityService
         extends MoleculeConnectivityQueryService implements ChemicalConnectivityQueryService<BioCycChemicalIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(MetaCycMoleculeConnectivityService.class);
-    private IndexSearcher searcher;
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
     private final Query collectionQuery;
     private static final String COLLECTION = "BioCyc Chemical";
@@ -83,6 +82,15 @@ public class MetaCycMoleculeConnectivityService
         private static final MetaCycMoleculeConnectivityService INSTANCE = new MetaCycMoleculeConnectivityService();
     }
 
+    @Override
+    Query getCollectionQuery() {
+        return collectionQuery;
+    }
+    
+    public String getInChIConnectivity(BioCycChemicalIdentifier identifier) {
+        return super.getInChIConnectivity(identifier);
+    }    
+    
     private Collection<BioCycChemicalIdentifier> reverseSearch(Query query) {
         Collection<BioCycChemicalIdentifier> ids = new HashSet<BioCycChemicalIdentifier>();
 

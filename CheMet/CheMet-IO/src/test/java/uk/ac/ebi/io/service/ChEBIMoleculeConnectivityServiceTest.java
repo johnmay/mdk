@@ -63,6 +63,19 @@ public class ChEBIMoleculeConnectivityServiceTest {
             System.out.println(chEBIIdentifier.getAccession());
         }
     }
+    
+    @Test
+    public void testgetInChIConnectivity() {
+        System.out.println("getInChIConnectivity");
+        ChEBIIdentifier ident = new ChEBIIdentifier(2030);
+        ChEBIMoleculeConnectivityService instance = ChEBIMoleculeConnectivityService.getInstance();
+        String conn = instance.getInChIConnectivity(ident);
+        String conExp = "InChI=1S/C4%N4O/c5-3-2(4(6)9)7-1-8-3/";
+        System.out.println("Obtained con: "+conn);
+        System.out.println("Expected con: "+conExp);
+        assertNotNull(conn);
+        assertEquals(conExp, conn);
+    }
 
     /**
      * Test of getIdentifier method, of class ChEBIMoleculeConnectivityService.

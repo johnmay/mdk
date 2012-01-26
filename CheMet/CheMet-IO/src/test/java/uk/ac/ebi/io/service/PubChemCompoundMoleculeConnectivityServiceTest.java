@@ -68,6 +68,19 @@ public class PubChemCompoundMoleculeConnectivityServiceTest {
             System.out.println("ID: "+identifier.getAccession());
         }
     }
+    
+    @Test
+    public void testgetInChIConnectivity() {
+        System.out.println("getInChIConnectivity");
+        PubChemCompoundIdentifier ident = new PubChemCompoundIdentifier("151504");
+        PubChemCompoundMoleculeConnectivityService instance = PubChemCompoundMoleculeConnectivityService.getInstance();
+        String conn = instance.getInChIConnectivity(ident);
+        String conExp = "InChI=1S/C6%O6/c7-1-2-3(8)4(9)5(10)6(11)12-2/";
+        System.out.println("Obtained con: "+conn);
+        System.out.println("Expected con: "+conExp);
+        assertNotNull(conn);
+        assertEquals(conExp, conn);
+    }
 
     /**
      * Test of getIdentifier method, of class PubChemCompoundMoleculeConnectivityService.

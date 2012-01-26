@@ -25,6 +25,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -47,7 +49,6 @@ public class PubChemCompoundMoleculeConnectivityService
         extends MoleculeConnectivityQueryService implements ChemicalConnectivityQueryService<PubChemCompoundIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(PubChemCompoundMoleculeConnectivityService.class);
-    private IndexSearcher searcher;
     private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
 
     private PubChemCompoundMoleculeConnectivityService() {
@@ -72,6 +73,44 @@ public class PubChemCompoundMoleculeConnectivityService
     private static class PubChemCompoundMoleculeConnectivityServiceHolder {
 
         private static final PubChemCompoundMoleculeConnectivityService INSTANCE = new PubChemCompoundMoleculeConnectivityService();
+    }
+    
+    /**
+     * PubChem service doesn't use collections, as it is stored on a separate index to the other connectivity services.
+     * @return 
+     */
+    @Override
+    Query getCollectionQuery() {
+        return null;
+    }
+    
+    public String getInChIConnectivity(PubChemCompoundIdentifier identifier) {
+        Query queryId = new TermQuery(new Term(PChemCompConnectivityLuceneFields.CID.toString(), identifier.getAccession()));
+        //Query queryDb = new TermQuery(new Term(PChemCompConnectivityLuceneFields..toString(), identifier.getShortDescription()));
+        
+        BooleanQuery query = new BooleanQuery();
+        query.add(queryId,Occur.MUST);
+        //query.add(queryDb,Occur.MUST);
+        //if(getCollectionQuery()!=null)
+        //    query.add(getCollectionQuery(),Occur.MUST);
+        
+        return searchGetConnectivity(query);
+    }
+
+    @Override
+    String searchGetConnectivity(Query query) {
+        try {
+            TopScoreDocCollector collector = TopScoreDocCollector.create(getMaxResults(), true);
+            searcher.search(query, collector);
+            ScoreDoc[] hits = collector.topDocs().scoreDocs;
+            for (ScoreDoc scoreDoc : hits) {
+                return getValue(scoreDoc, PChemCompConnectivityLuceneFields.InChIConnectivity.toString());
+            }
+        } catch (IOException ex) {
+            LOGGER.error("Error occur whilst searching with query " + query, ex);
+        }
+
+        return null;
     }
 
     private Collection<PubChemCompoundIdentifier> reverseSearch(Query query) {
