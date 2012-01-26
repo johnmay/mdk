@@ -32,7 +32,6 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
-import uk.ac.ebi.interfaces.identifiers.ChemicalIdentifier;
 import uk.ac.ebi.interfaces.services.ChemicalConnectivityQueryService;
 import uk.ac.ebi.io.remote.ChEBIMoleculeConnectivity;
 import uk.ac.ebi.io.remote.ChEBISecondaryID2PrimaryID.ChEBISecondary2PrimaryLuceneFields;
