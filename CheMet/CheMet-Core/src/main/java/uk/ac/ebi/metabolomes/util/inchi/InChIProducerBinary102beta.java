@@ -24,7 +24,7 @@ import uk.ac.ebi.metabolomes.util.inchi.InChIMoleculeChecker.InChIMoleculeChecke
 public class InChIProducerBinary102beta extends InChIProducer {
 
     private final String path = System.getProperty("user.home") + System.getProperty("file.separator") + ".uk.ac.ebi.metabolomes" + System.getProperty("file.separator") + "bin/";
-    private final String tmp = System.getProperty("user.home") + System.getProperty("file.separator") + ".uk.ac.ebi.metabolomes" + System.getProperty("file.separator") + "tmp/";
+    //private final String tmp = System.getProperty("user.home") + System.getProperty("file.separator") + ".uk.ac.ebi.metabolomes" + System.getProperty("file.separator") + "tmp/";
     //private final String shellMol2InChi = "mol2InChI.sh";
     private final String shellMol2InChi = "mol2InChI_1.03.sh";
     private String inchiOptions;
