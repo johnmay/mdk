@@ -69,7 +69,8 @@ public class ChemicalStructureRenderer
                         MoleculeRenderer.getInstance().getImage(structure.getMolecule(),
                                                                 new Rectangle(0, 0,
                                                                               table.getRowHeight(row),
-                                                                              table.getRowHeight(row)))));
+                                                                              table.getRowHeight(row)),
+                                                                getBackground())));
             } catch (CDKException ex) {
                 System.err.println("Unable to render molecule: " + ex.getMessage());
             }

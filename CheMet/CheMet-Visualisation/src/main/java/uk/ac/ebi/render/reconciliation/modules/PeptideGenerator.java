@@ -26,6 +26,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.core.tools.PeptideFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -52,9 +53,15 @@ public class PeptideGenerator implements CrossreferenceModule {
 
 
     public PeptideGenerator() {
-        component = PanelFactory.createDialogPanel("p, 4dlu, p", "p");
-        component.add(new JComboBox(PeptideFactory.AminoAcid.values()), cc.xy(1, 1));
+
+        component = PanelFactory.createDialogPanel("p, 4dlu, p, 4dlu, 4dlu, p", "p");
+
+        component.add(LabelFactory.newFormLabel("N-Terminus:"), cc.xy(1, 1));
         component.add(new JComboBox(PeptideFactory.AminoAcid.values()), cc.xy(3, 1));
+
+        component.add(LabelFactory.newFormLabel("C-Terminus:"), cc.xy(5, 1));
+        component.add(new JComboBox(PeptideFactory.AminoAcid.values()), cc.xy(7, 1));
+
     }
 
 

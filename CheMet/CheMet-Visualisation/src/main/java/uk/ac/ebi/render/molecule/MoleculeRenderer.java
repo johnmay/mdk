@@ -47,6 +47,7 @@ import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.templates.MoleculeFactory;
 
+
 /**
  *          MoleculeRenderer – 2011.09.08 <br>
  *          Class description
@@ -57,9 +58,13 @@ import org.openscience.cdk.templates.MoleculeFactory;
 public class MoleculeRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(MoleculeRenderer.class);
+
     private AtomContainerRenderer renderer;
+
     private RendererModel model;
+
     private final StructureDiagramGenerator structureGenerator = new StructureDiagramGenerator();
+
 
     private MoleculeRenderer() {
         List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
@@ -70,16 +75,28 @@ public class MoleculeRenderer {
         model = renderer.getRenderer2DModel();
     }
 
+
     public static MoleculeRenderer getInstance() {
         return MoleculeRendererHolder.INSTANCE;
     }
+
 
     private static class MoleculeRendererHolder {
 
         private static final MoleculeRenderer INSTANCE = new MoleculeRenderer();
     }
 
+
     public BufferedImage getImage(IAtomContainer molecule, Rectangle bounds) throws CDKException {
+
+        return getImage(molecule, bounds, Color.WHITE);
+
+    }
+
+
+    public BufferedImage getImage(IAtomContainer molecule,
+                                  Rectangle bounds,
+                                  Color background) throws CDKException {
 
 
         BufferedImage img = new BufferedImage(bounds.width, bounds.height,
@@ -88,7 +105,7 @@ public class MoleculeRenderer {
         structureGenerator.setMolecule(new Molecule(molecule));
         structureGenerator.generateCoordinates();
         IMolecule moleculeWithXYZ = structureGenerator.getMolecule();
-        g2.setColor(Color.WHITE);
+        g2.setColor(background);
         g2.fill(bounds);
         renderer.paint(moleculeWithXYZ, new AWTDrawVisitor(g2), bounds, true);
         g2.dispose();
@@ -96,6 +113,7 @@ public class MoleculeRenderer {
         return img;
 
     }
+
 
     public static void main(String[] args) throws CDKException, IOException {
         MoleculeRenderer MOL_RENDERER = MoleculeRenderer.getInstance();
