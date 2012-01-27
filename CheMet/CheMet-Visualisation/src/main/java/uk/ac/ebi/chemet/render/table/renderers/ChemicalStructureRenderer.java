@@ -31,6 +31,7 @@ import org.openscience.cdk.exception.CDKException;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.render.molecule.MoleculeRenderer;
 
+
 /**
  *          ChemicalStructureRenderer – 2011.09.29 <br>
  *          
@@ -43,6 +44,7 @@ public class ChemicalStructureRenderer
 
     public ChemicalStructureRenderer() {
     }
+
 
     @Override
     public Component getTableCellRendererComponent(JTable table,
@@ -62,7 +64,7 @@ public class ChemicalStructureRenderer
         if (collection.iterator().hasNext()) {
             try {
                 ChemicalStructure structure = collection.iterator().next();
-                this.setBackground(isSelected ? table.getSelectionBackground() : table.getSelectionForeground());
+                this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
                 this.setIcon(new ImageIcon(
                         MoleculeRenderer.getInstance().getImage(structure.getMolecule(),
                                                                 new Rectangle(0, 0,
