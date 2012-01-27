@@ -42,7 +42,16 @@ import uk.ac.ebi.render.molecule.MoleculeRenderer;
 public class ChemicalStructureRenderer
         extends DefaultRenderer {
 
+    private MoleculeRenderer renderer;
+
+
     public ChemicalStructureRenderer() {
+        this(MoleculeRenderer.getInstance());
+    }
+
+
+    public ChemicalStructureRenderer(MoleculeRenderer renderer) {
+        this.renderer = renderer;
     }
 
 
@@ -66,11 +75,11 @@ public class ChemicalStructureRenderer
                 ChemicalStructure structure = collection.iterator().next();
                 this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
                 this.setIcon(new ImageIcon(
-                        MoleculeRenderer.getInstance().getImage(structure.getMolecule(),
-                                                                new Rectangle(0, 0,
-                                                                              table.getRowHeight(row),
-                                                                              table.getRowHeight(row)),
-                                                                getBackground())));
+                        renderer.getImage(structure.getMolecule(),
+                                          new Rectangle(0, 0,
+                                                        table.getRowHeight(row),
+                                                        table.getRowHeight(row)),
+                                          getBackground())));
             } catch (CDKException ex) {
                 System.err.println("Unable to render molecule: " + ex.getMessage());
             }

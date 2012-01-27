@@ -66,7 +66,7 @@ public class MoleculeRenderer {
     private final StructureDiagramGenerator structureGenerator = new StructureDiagramGenerator();
 
 
-    private MoleculeRenderer() {
+    protected MoleculeRenderer() {
         List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
         generators.add(new BasicSceneGenerator());
         generators.add(new BasicBondGenerator());
