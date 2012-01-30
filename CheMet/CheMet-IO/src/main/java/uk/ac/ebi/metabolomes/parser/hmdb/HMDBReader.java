@@ -75,6 +75,12 @@ public class HMDBReader extends BufferedReader {
             entry.setPubChemID(line);
         } else if (header.startsWith("tissue_location") && !line.startsWith(this.NA)) {
             entry.addTissue(line);
+        } else if (header.startsWith("cellular_location") && !line.startsWith(this.NA)) {
+            entry.addOrganelle(line);
+        } else if (header.startsWith("biofluid_location") && !line.startsWith(this.NA)) {
+            entry.addTissue(line);
+        } else if (header.startsWith("kegg_compound_id") && !line.startsWith(this.NA)) {
+            entry.setKEGGCompoundID(line);
         }
     }
 

@@ -6,6 +6,7 @@
 package uk.ac.ebi.metabolomes.parser.hmdb;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,21 +20,23 @@ public class HMDBEntry {
     private String hmdb_id;
     private String name;
     private List<String> synonyms;
-    private ArrayList<String> tissues;
+    private List<String> tissues;
+    private List<String> organelles;
     private String chebiID;
-    private String pubChemID;
+    private String pubChemCID;
     private String biocycID;
+    private String keggCompID;
     private String metlinID;
     private String cas;
     private String iupacName;
 
 
     public String getPubChemID() {
-        return pubChemID;
+        return pubChemCID;
     }
 
     public void setPubChemID(String pubChemID) {
-        this.pubChemID = pubChemID;
+        this.pubChemCID = pubChemID;
     }
 
     public String getChebiID() {
@@ -55,9 +58,10 @@ public class HMDBEntry {
         this.init();
     }
 
-    public void init() {
+    private void init() {
         this.tissues = new ArrayList<String>();
         this.synonyms = new ArrayList<String>();
+        this.organelles = new ArrayList<String>();
     }
  /*   public HMDBEntry(String hmdb_id, String synonyms) {
 
@@ -98,11 +102,11 @@ public class HMDBEntry {
     }
  
     public void addTissue(String tissue) {
-        this.tissues.add(tissue);
+        this.tissues.addAll(Arrays.asList(tissue.split("; ")));
     }
 
-    public String[] getTissues() {
-        return this.tissues.toArray(new String[this.tissues.size()]);
+    public List<String> getTissues() {
+        return this.tissues;
     }
 
     /**
@@ -160,6 +164,23 @@ public class HMDBEntry {
     public void setIupacName(String iupacName) {
         this.iupacName = iupacName;
     }
+
+    public void addOrganelle(String organelle) {
+        // Cytoplasm (Predicted from LogP); Extracellular; mitochondria; nucleus
+        this.organelles.addAll(Arrays.asList(organelle.split("; ")));
+    }
+    
+    public List<String> getOrganelles() {
+        return this.organelles;
+    }
+
+    void setKEGGCompoundID(String compID) {
+        this.keggCompID = compID;
+    }
+    
+    public String getKEGGCompoundID() {
+        return this.keggCompID;
+    } 
   
 }
 

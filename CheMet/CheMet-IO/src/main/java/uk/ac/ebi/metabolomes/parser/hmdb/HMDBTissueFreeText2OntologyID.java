@@ -39,7 +39,7 @@ public class HMDBTissueFreeText2OntologyID {
     }
     
     public HMDBTissueFreeText2OntologyID() {
-        this(HMDBTissueFreeText2OntologyID.class.getResourceAsStream("data/HMDB_Tissues2BTO_EFO_curated.txt"));
+        this(HMDBTissueFreeText2OntologyID.class.getResourceAsStream("data/HMDB_Tissues2BTO_EFO_curatedV2.txt"));
     }
     
     private void init() {

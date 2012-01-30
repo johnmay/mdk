@@ -61,14 +61,16 @@ public class OntologyLookUpService {
     
     public List<CandidateEntry> getRankedCandidates(String query, Integer maxRes) throws ServiceException, RemoteException {
         List<CandidateEntry> res = decider.getOrderedCandidates(query, this.getTermsPrefixed(query));
+        List<CandidateEntry> selectedToRemove = new ArrayList<CandidateEntry>();
         if(maxRes!=null && res.size()>maxRes) {
             int element=1;
             for(CandidateEntry entry : res) {
                 if(element>maxRes)
-                    res.remove(entry);
+                    selectedToRemove.add(entry);
                 element++;
             }
         }
+        res.removeAll(selectedToRemove);
         return res;
     }
     

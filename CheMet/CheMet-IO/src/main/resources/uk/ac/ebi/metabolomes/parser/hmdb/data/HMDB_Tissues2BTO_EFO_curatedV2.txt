@@ -1,0 +1,197 @@
+Adipose Tissue	BTO:0001487	adipose tissue	0
+Adipose Tissue	EFO:0000234	obsolete_adipose tissue	0
+Adrenal Cortex	BTO:0000045	adrenal cortex	0
+Adrenal Cortex	EFO:0000237	adrenal cortex	0
+Adrenal Gland	BTO:0000047	adrenal gland	0
+Adrenal Medulla	BTO:0000049	adrenal medulla	0
+Adrenal Medulla	EFO:0000852	adrenal medulla	0
+Amniotic Fluid	BTO:0000068	amniotic fluid	0
+Aorta	BTO:0000135	aorta	0
+Aorta	EFO:0000265	aorta	0
+Aqueous Humour	MA:0001236	aqueous humour	0
+Artery	BTO:0000573	artery	0
+Artery	EFO:0000814	artery	0
+Ascites Fluid	BTO:0000091	ascites fluid	0
+Basal Ganglia	MA:0000184	basal ganglia	0
+Beta Cell	BTO:0000783	pancreatic beta cell	11
+Bile	BTO:0000121	bile	0
+Bile Duct	BTO:0000122	bile duct	0
+Bladder	BTO:0000123	bladder	0
+Bladder	EFO:0000290	bladder	0
+blood	BTO:0000089	blood	0
+blood	EFO:0000296	blood	0
+Blood Platelet	BTO:0000132	blood platelet	0
+Blood Vessels	BTO:0001102	blood vessel	0
+Blood Vessels	EFO:0000817	blood vessel	0
+Bone	BTO:0000140	bone	0
+Bone	EFO:0000298	bone	0
+Bone Marrow	BTO:0000141	bone marrow	0
+Bone Marrow	EFO:0000868	bone marrow	0
+brain	BTO:0000142	brain	0
+brain	EFO:0000302	brain	0
+Breast Milk	ENVO:02000031	breast milk	0
+Caecum	BTO:0000166	caecum	0
+Caecum	EFO:0000850	caecum	0
+Cardiovascular System	BTO:0000088	cardiovascular system	0
+Cardiovascular System	EFO:0000791	cardiovascular system	0
+Cartilage	BTO:0000206	cartilage	0
+Cartilage	EFO:0000949	cartilage	0
+Caudate Nucleus	BTO:0000211	caudate nucleus	0
+Caudate Nucleus	EFO:0000907	caudate nucleus	0
+Central Nervous System	BTO:0000227	central nervous system	0
+Central Nervous System	EFO:0000908	central nervous system	0
+Cerebral Cortex	BTO:0000233	cerebral cortex	0
+Cerebral Cortex	EFO:0000328	cerebral cortex	0
+Cerebrospinal Fluid	BTO:0000237	cerebrospinal fluid	0
+Cerebrospinal Fluid	EFO:0000329	cerebrospinal fluid	0
+Cervical	EFO:0001408	cervical neck region	12
+Colon	BTO:0000269	colon	0
+Colon	EFO:0000361	colon	0
+Connective Tissue	BTO:0000421	connective tissue	0
+Cytoplasm	GO:0005737	cytoplasm	0
+Dermis	BTO:0000294	dermis	0
+Dermis	EFO:0000953	dermis	0
+Embryo	BTO:0000379	embryo	0
+Embryo	EFO:0001367	embryo	0
+endoplasmic reticulum	GO:0005783	endoplasmic reticulum	0
+Epidermis	BTO:0000404	epidermis	0
+Epidermis	EFO:0000954	epidermis	0
+Epithelium	BTO:0000416	epithelium	0
+Erythrocyte	BTO:0000424	erythrocyte	0
+Erythroleukemia	BTO:0000426	erythroleukemia cell	5
+Erythroleukemia	EFO:0003970	Mouse Erythroleukemia cell	11
+extracellular	FMA:70022	Extracellular space	6
+extracellular	FMA:9672	Extracellular matrix	7
+Extracellular	GO:0005615	extracellular space	6
+Eye Lens	SPD:0000397	eye lens	0
+Fetus	BTO:0000449	fetus	0
+Fetus	EFO:0001323	fetus	0
+Fibroblasts	BTO:0000452	fibroblast	1
+Fibroblasts	CL:0000057	fibroblast	1
+Gall Bladder	BTO:0000493	gall bladder	0
+Gall Bladder	EFO:0000853	gall bladder	0
+Gastrointestinal Tract	BTO:0000511	gastrointestinal tract	0
+Gingiva	BTO:0000519	gingiva	0
+Golgi apparatus	GO:0005794	Golgi apparatus	0
+Gonads	BTO:0000534	gonad	1
+Granulocytes	BTO:0000539	granulocyte	0
+Gum	BTO:0000519	gum	0
+Gum	EFO:0001925	gum	0
+Gut	BTO:0000545	gut	0
+Hair	BTO:0001501	hair	0
+Hair	EFO:0000958	hair	0
+heart	BTO:0000562	heart	0
+heart	EFO:0000815	heart	0
+Hepatocyte	BTO:0000575	hepatocyte	0
+Hippocampus	BTO:0000601	hippocampus	0
+Hippocampus	EFO:0000530	hippocampus	0
+Hypothalamus	BTO:0000614	hypothalamus	0
+Hypothalamus	EFO:0000107	hypothalamus	0
+Inner mitochondrial membrane	GO:0005743	Inner mitochondrial membrane	0
+Intestine	BTO:0000648	intestine	0
+Intestine	EFO:0000834	intestine	0
+Keratinocyte	BTO:0000667	keratinocyte	0
+Kidney	BTO:0000671	kidney	0
+Kidney	EFO:0000929	kidney	0
+Large Intestine	BTO:0000706	large intestine	0
+Large Intestine	EFO:0000840	large intestine	0
+Lens	BTO:0000723	lens	0
+Leukocyte	BTO:0000751	leukocyte	0
+Leukocyte	EFO:0000661	obsolete_polymorphonuclear leukocyte	27
+Liver	BTO:0000759	liver	0
+Liver	EFO:0000887	liver	0
+Lung	BTO:0000763	lung	0
+Lung	EFO:0000934	lung	0
+Lymph	BTO:0000855	lymph	0
+Lymph	EFO:0000871	lymph	0
+Lymph Node	BTO:0000784	lymph node	0
+Lymph Node	EFO:0000872	lymph node	0
+Lymphoblast	BTO:0000772	lymphoblast	0
+Lymphoblast	EFO:0000572	lymphoblast	0
+Lymphocyte	BTO:0000775	lymphocyte	0
+lysosome	GO:0005764	lysosome	0
+Mast Cell	BTO:0000830	mast cell	0
+Melanocyte	BTO:0000847	melanocyte	0
+Membrane	GO:0016020	membrane	0
+Membrane proteins	FMA:85554	Membrane protein of cell	52
+Membrane, mitochondria	FMA:66861	Mitochondrial membrane	20
+Membrane, mitochondria	GO:0031966	mitochondrial membrane	19
+mitochondria	GO:0005739	mitochondria	0
+Mouth	BTO:0001090	mouth	0
+Mouth	EFO:0000825	mouth structure	10
+Muscle	BTO:0000887	muscle	0
+Muscle	EFO:0001949	muscle	0
+Myelin	BTO:0000894	myelin	0
+Myocardium	BTO:0000901	myocardium	0
+Myocardium	EFO:0000819	myocardium	0
+Neuron	BTO:0000938	neuron	0
+Neuron	EFO:0002963	nervous system cell	14
+Neutrophil	BTO:0000130	neutrophil	0
+nucleus	GO:0005634	cell nucleus
+Oesophagus	BTO:0000959	oesophagus	0
+Ovary	BTO:0000975	ovary	0
+Ovary	EFO:0000973	animal ovary	7
+Pancreas	BTO:0000988	pancreas	0
+Pancreas	EFO:0000855	pancreas	0
+Parathyroid	BTO:0000997	parathyroid gland	6
+Parathyroid	BTO:0004712	parathyroid hormone secreting cell	23
+Pericardial Effusion	DOID:118	pericardial effusion	0
+Peroxisome	GO:0005777	peroxisome	0
+Pineal Gland	BTO:0001067	pineal gland	0
+Pineal Gland	EFO:0000865	pineal gland	0
+Placenta	BTO:0001078	placenta	0
+Placenta	EFO:0001407	placenta	0
+Plasma	BTO:0000131	blood plasma	6
+Plasma	EFO:0001905	blood plasma	6
+Platelet	BTO:0000132	blood platelet	6
+Prostate	BTO:0001129	prostate gland	6
+Prostate	EFO:0000858	prostate	0
+Red Blood Cell	BTO:0000424	red blood cell	0
+Red Blood Cell	CL:0000232	red blood cell	0
+Reticulocyte	BTO:0001173	reticulocyte	0
+Retina	BTO:0001175	retina	0
+Retina	EFO:0000832	retina structure	10
+Saliva	BTO:0001202	saliva	0
+Sciatic Nerve	BTO:0001221	sciatic nerve	0
+Sciatic Nerve	EFO:0001417	sciatic nerve	0
+Semen	BTO:0001230	semen	0
+Skeletal	BTO:0001486	skeletal system	7
+Skeletal	EFO:0000806	skeletal system	7
+Skeletal Muscle	BTO:0001103	skeletal muscle	0
+Skin	BTO:0001253	skin	0
+Skin	EFO:0000962	skin	0
+Small Intestine	BTO:0000651	small intestine	0
+Small Intestine	EFO:0000841	small intestine	0
+Smooth Muscle	BTO:0001260	smooth muscle	0
+Smooth Muscle	EFO:0000889	smooth muscle	0
+Sperm	BTO:0001230	sperm	0
+Spermatozoa	BTO:0001277	spermatozoan	1
+Spinal Cord	BTO:0001279	spinal cord	0
+Spinal Cord	EFO:0000110	spinal cord	0
+Spleen	BTO:0001281	spleen	0
+Spleen	EFO:0000869	spleen	0
+Stratum Corneum	BTO:0000344	stratum corneum	0
+Striatum	BTO:0001311	corpus striatum	7
+Striatum	EFO:0000381	corpus striatum	7
+Sweat	BTO:0001254	sweat	0
+T-Lymphocyte	BTO:0000775	lymphocyte	2
+Tears	ENVO:02000034	tears	0
+Teeth	FMA:75150	teeth	0
+Temporal Lobe	BTO:0001355	temporal lobe	0
+Temporal Lobe	EFO:0000917	temporal lobe	0
+Testes	BTO:0001363	testis	1
+Testes	EFO:0000984	testis	1
+Thalamus	BTO:0001365	thalamus	0
+Thalamus	EFO:0000910	thalamus	0
+Thyroid Gland	BTO:0001379	thyroid gland	0
+Tongue	BTO:0001385	tongue	0
+Tongue	EFO:0000833	tongue	0
+Umbilical cord	BTO:0001415	umbilical cord	0
+Umbilical cord	EFO:0001415	umbilical cord	0
+Urinary Bladder	BTO:0001418	urinary bladder	0
+Urinary Bladder	EFO:0000290	bladder	0
+Urine	BTO:0001419	urine	0
+Urine	EFO:0001939	urine	0
+Uterus	BTO:0001424	uterus	0
+Uterus	EFO:0000975	uterus	0
+Vitreous humor	BTO:0001451	vitreous humor	0
