@@ -24,7 +24,9 @@ import com.google.common.base.Joiner;
 import java.awt.Component;
 import java.util.Collection;
 import javax.swing.JTable;
+import uk.ac.ebi.caf.utility.TextUtility;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+
 
 /**
  *          AnnotationCellRenderer – 2011.09.29 <br>
@@ -38,16 +40,20 @@ public class AnnotationCellRenderer
         extends DefaultRenderer {
 
     private boolean html = false;
+
     private String token = ", ";
+
 
     public AnnotationCellRenderer() {
     }
+
 
     public AnnotationCellRenderer(boolean html,
                                   String token) {
         this.html = html;
         this.token = token;
     }
+
 
     @Override
     public Component getTableCellRendererComponent(JTable table,
@@ -62,7 +68,7 @@ public class AnnotationCellRenderer
                       : value.toString();
 
 
-        setText(html ? ViewUtilities.htmlWrapper(text) : text);
+        setText(html ? TextUtility.html(text) : text);
         setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
         setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
 

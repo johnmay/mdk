@@ -54,7 +54,7 @@ public class PeptideGenerator implements CrossreferenceModule {
 
     public PeptideGenerator() {
 
-        component = PanelFactory.createDialogPanel("p, 4dlu, p, 4dlu, 4dlu, p", "p");
+        component = PanelFactory.createDialogPanel("p, 4dlu, p, 4dlu, p, 4dlu, p", "p");
 
         component.add(LabelFactory.newFormLabel("N-Terminus:"), cc.xy(1, 1));
         component.add(new JComboBox(PeptideFactory.AminoAcid.values()), cc.xy(3, 1));

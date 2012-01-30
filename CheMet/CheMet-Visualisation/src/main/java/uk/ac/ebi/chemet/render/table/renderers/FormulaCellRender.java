@@ -22,10 +22,13 @@ package uk.ac.ebi.chemet.render.table.renderers;
 
 import java.awt.Component;
 import java.util.Collection;
+import java.util.Iterator;
 import javax.swing.JTable;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.caf.utility.TextUtility;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+
 
 /**
  * @name    FormulaCellRender - 2011.10.06 <br>
@@ -39,6 +42,13 @@ public class FormulaCellRender
 
     private static final Logger LOGGER = Logger.getLogger(FormulaCellRender.class);
 
+    private StringBuilder sb = new StringBuilder(50);
+
+
+    public FormulaCellRender() {
+    }
+
+
     @Override
     public Component getTableCellRendererComponent(JTable table,
                                                    Object value,
@@ -50,16 +60,23 @@ public class FormulaCellRender
 
 
         if (value instanceof Collection) {
-            Collection collection = (Collection) value;
-            if (!collection.isEmpty()) {
-                this.setText(ViewUtilities.htmlWrapper(((MolecularFormula) collection.iterator().next()).toHTML()));
-            } else {
-                this.setText("");
+
+            Collection<MolecularFormula> formulas = (Collection<MolecularFormula>) value;
+            sb.delete(0, sb.length());
+            Iterator<MolecularFormula> it = formulas.iterator();
+            while (it.hasNext()) {
+                sb.append(it.next().toHTML());
+                if (it.hasNext()) {
+                    sb.append(", ");
+                }
             }
-        } else if (value instanceof MolecularFormula && ((MolecularFormula) value).getFormula() != null) {
-            this.setText(ViewUtilities.htmlWrapper(((MolecularFormula) value).toHTML()));
+            this.setText(TextUtility.html(sb.toString()));
+
         } else {
-            this.setText("");
+
+            MolecularFormula formula = (MolecularFormula) value;
+            this.setText(TextUtility.html(formula.toHTML()));
+
         }
 
         this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());

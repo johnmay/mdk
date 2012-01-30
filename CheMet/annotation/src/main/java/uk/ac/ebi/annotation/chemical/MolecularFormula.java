@@ -31,6 +31,7 @@ import uk.ac.ebi.annotation.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 
+
 /**
  *          MolecularFormula – 2011.09.14 <br>
  *          Annotation of molecular formula
@@ -42,9 +43,14 @@ public class MolecularFormula
         extends AbstractStringAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(MolecularFormula.class);
+
     private IMolecularFormula formula;
+
+    private String html; // speeds up rendering
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
             MolecularFormula.class);
+
 
     /**
      *
@@ -53,6 +59,7 @@ public class MolecularFormula
      */
     public MolecularFormula() {
     }
+
 
     /**
      *
@@ -64,7 +71,9 @@ public class MolecularFormula
     public MolecularFormula(IMolecularFormula formula) {
         this.formula = formula;
         super.setValue(MolecularFormulaManipulator.getString(formula));
+        this.html = MolecularFormulaManipulator.getHTML(formula);
     }
+
 
     /**
      *
@@ -77,7 +86,9 @@ public class MolecularFormula
         super(formula);
         IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
         this.formula = MolecularFormulaManipulator.getMolecularFormula(formula, builder);
+        this.html = MolecularFormulaManipulator.getHTML(this.formula);
     }
+
 
     /**
      *
@@ -90,10 +101,12 @@ public class MolecularFormula
         return formula;
     }
 
+
     public void setFormula(IMolecularFormula formula) {
         this.formula = formula;
         super.setValue(MolecularFormulaManipulator.getString(formula));
     }
+
 
     public void setFormula(String formula) {
         IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
@@ -101,18 +114,21 @@ public class MolecularFormula
         this.formula = MolecularFormulaManipulator.getMolecularFormula(formula, builder);
     }
 
+
     @Override
     public void setValue(String value) {
         this.setFormula(value);
     }
+
 
     /**
      * Returns HTML formula
      * @return
      */
     public String toHTML() {
-        return formula != null ? MolecularFormulaManipulator.getHTML(formula) : "";
+        return html;
     }
+
 
     /**
      * @inheritDoc
@@ -122,6 +138,7 @@ public class MolecularFormula
         return description.shortDescription;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -129,6 +146,7 @@ public class MolecularFormula
     public String getLongDescription() {
         return description.longDescription;
     }
+
 
     /**
      * @inheritDoc
@@ -138,6 +156,7 @@ public class MolecularFormula
         return description.index;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -146,9 +165,11 @@ public class MolecularFormula
         return new MolecularFormula();
     }
 
+
     public MolecularFormula getInstance(String formula) {
         return new MolecularFormula(formula);
     }
+
 
     /**
      * @inheritDoc
@@ -158,6 +179,6 @@ public class MolecularFormula
         super.readExternal(in);
         IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
         this.formula = MolecularFormulaManipulator.getMolecularFormula(getValue(), builder);
-
+        this.html = MolecularFormulaManipulator.getHTML(formula);
     }
 }

@@ -25,6 +25,7 @@ import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
@@ -37,7 +38,7 @@ import uk.ac.ebi.chemet.render.ViewUtilities;
 public class DefaultRenderer extends JLabel implements TableCellRenderer {
 
     public DefaultRenderer() {
-        setFont(ViewUtilities.VERDANA_PLAIN_11);
+        setFont(ThemeManager.getInstance().getTheme().getBodyFont());
         setOpaque(true);
     }
 
