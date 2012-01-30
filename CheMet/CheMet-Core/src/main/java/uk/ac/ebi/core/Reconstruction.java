@@ -223,6 +223,11 @@ public class Reconstruction
     }
 
 
+    public Collection<EntityCollection> getSubsets() {
+        return subsets;
+    }
+
+
     /**
      * 
      * Removes a subset from the reconstruction. The subset should
