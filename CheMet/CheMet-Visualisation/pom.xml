@@ -17,7 +17,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cdk.version>1.4.5</cdk.version>
+        <cdk.render.version>1.4.5</cdk.render.version>
     </properties>
 
     <dependencies>
@@ -50,32 +50,32 @@
         <dependency>
             <artifactId>cdk-render</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <version>${cdk.version}</version>
+            <version>${cdk.render.version}</version>
         </dependency>
         <dependency>
             <artifactId>cdk-sdg</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <version>${cdk.version}</version>
+            <version>${cdk.render.version}</version>
         </dependency>
         <dependency>
             <artifactId>cdk-renderawt</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <version>${cdk.version}</version>
+            <version>${cdk.render.version}</version>
         </dependency>
         <dependency>
             <artifactId>cdk-renderbasic</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <version>${cdk.version}</version>
+            <version>${cdk.render.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-extra</artifactId>
-            <version>${cdk.version}</version>
+            <version>${cdk.render.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-core</artifactId>
-            <version>${cdk.version}</version>
+            <version>${cdk.render.version}</version>
         </dependency>
 
         <!-- Layout and Components -->
@@ -94,12 +94,12 @@
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
             <artifactId>caf-utility</artifactId>
-            <version>0.8</version>
+            <version>${caf.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
             <artifactId>caf-component</artifactId>
-            <version>0.8</version>
+            <version>${caf.version}</version>
         </dependency>
         
     </dependencies>

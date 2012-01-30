@@ -12,9 +12,11 @@
     <version>1.2-SNAPSHOT</version>
     <name>CheMet-IO</name>
     <url>http://maven.apache.org</url>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -87,10 +89,12 @@
             <artifactId>activation</artifactId>
             <version>1.1</version>
         </dependency>
+        
+        <!-- Core Application Framework -->
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
             <artifactId>caf-utility</artifactId>
-            <version>0.8</version>
+            <version>${caf.version}</version>
         </dependency>
     </dependencies>
     <build>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>CheMet</artifactId>
@@ -45,51 +45,62 @@
             <version>5.5</version>
         </dependency>
 
-        <!-- CDK 1.3.8 Modules -->
+        <!-- CDK Modules -->
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-smsd</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-core</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-reaction</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-inchi</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-standard</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-extra</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-pdb</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-log4j</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>cdk-data</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <type>jar</type>
+            <version>1.3.8-20110817.211404-3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-sdg</artifactId>
+            <version>${cdk.version}</version>
         </dependency>
 
         <!-- biojava -->
@@ -126,28 +137,16 @@
             <artifactId>chemet-observation</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <artifactId>cdk-data</artifactId>
-            <groupId>org.openscience.cdk</groupId>
-            <type>jar</type>
-            <version>1.3.8-20110817.211404-3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-isomorphism</artifactId>
-            <version>1.4.6-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-sdg</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
-        </dependency>
+        
+        <!-- Core Application Framework -->
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
             <artifactId>caf-utility</artifactId>
-            <version>0.8</version>
+            <version>${caf.version}</version>
         </dependency>
+        
     </dependencies>
+    
     <build>
         <plugins>
             <plugin>

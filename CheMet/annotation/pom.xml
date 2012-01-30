@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>CheMet</artifactId>
@@ -35,18 +35,18 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-interfaces</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-extra</artifactId>
-            <version>1.3.8-SNAPSHOT</version>
+            <version>${cdk.version}</version>
         </dependency>
     </dependencies>
 </project>
