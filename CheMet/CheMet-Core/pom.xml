@@ -119,7 +119,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>r09</version>
+            <version>11.0.1</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -145,7 +145,7 @@
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
             <artifactId>caf-utility</artifactId>
-            <version>0.8-SNAPSHOT</version>
+            <version>0.8</version>
         </dependency>
     </dependencies>
     <build>

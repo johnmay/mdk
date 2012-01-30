@@ -20,17 +20,14 @@
  */
 package uk.ac.ebi.render.molecule;
 
-import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
 import java.awt.Color;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.annotation.Synonym;
@@ -91,9 +88,23 @@ public class MoleculeTable extends JTable {
         final MoleculeTable table = new MoleculeTable(new NameAccessor(),
                                                       new ChemicalStructureAccessor());
 
+
+        table.setDefaultRenderer(ChemicalStructure.class,
+                                 new ChemicalStructureRenderer(CachedMoleculeRenderer.getInstance()));
+
+
         Metabolite m = new Metabolite("1", "123ta", "1,2,3-Tirazole");
         m.addAnnotation(new ChemicalStructure(MoleculeFactory.make123Triazole()));
-        table.getModel().set(Arrays.asList(m));
+
+        List<Metabolite> mols = new ArrayList();
+
+        for (int i = 0; i < 100; i++) {
+            mols.add(m);
+        }
+
+        table.getModel().set(mols);
+
+
         final JFrame frame = new JFrame();
 
         SwingUtilities.invokeLater(new Runnable() {

@@ -25,7 +25,10 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.MetaboliteIdentifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
-import uk.ac.ebi.caf.utility.Preference;
+import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.resource.ResourcePreferences;
+
 
 /**
  *          BasicProteinIdentifier – 2011.09.14 <br>
@@ -38,18 +41,24 @@ public class BasicProteinIdentifier
         extends AbstractProteinIdentifier implements ProteinIdentifier, MetaboliteIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicProteinIdentifier.class);
-    private static int ticker = 0;
+
 
     public BasicProteinIdentifier() {
     }
+
 
     public BasicProteinIdentifier(String accession) {
         super(accession);
     }
 
+
     public static Identifier nextIdentifier() {
-        return new BasicProteinIdentifier(String.format(Preference.PROTEIN_IDENTIFIER_FORMAT.get(), ++ticker));
+        StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_GENE_ID_FORMAT");
+        IncrementalPreference ticker = ResourcePreferences.getInstance().getPreference("BASIC_GENE_ID_TICK");
+
+        return new BasicProteinIdentifier(String.format(format.get(), ticker.get()));
     }
+
 
     /**
      * @inheritDoc
@@ -58,6 +67,7 @@ public class BasicProteinIdentifier
     public BasicProteinIdentifier newInstance() {
         return new BasicProteinIdentifier();
     }
+
 
     @Override
     public LinkedList<String> resolve(LinkedList<String> tokens) {
@@ -69,6 +79,7 @@ public class BasicProteinIdentifier
         return tokens;
 
     }
+
 
     @Override
     public String getHeaderCode() {

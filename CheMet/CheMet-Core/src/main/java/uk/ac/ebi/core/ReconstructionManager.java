@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import uk.ac.ebi.caf.utility.Preference;
+import uk.ac.ebi.caf.utility.preference.type.ListPreference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
@@ -34,20 +34,21 @@ public class ReconstructionManager {
                                                new LinkedHashMap();
     private Properties properties = new Properties();
     private LinkedList<String> recent = new LinkedList<String>();
+    
+    private ListPreference RECENT_FILES = CorePreferences.getInstance().getPreference("RECENT_RECONSTRUCTIONS");
 
     private ReconstructionManager() {
 
         // get the recently open files, remove entries that don't exists
-        Preference.RECENT_FILES.getList();
         List<String> valid = new ArrayList();
-        for (String file : Preference.RECENT_FILES.getList()) {
+        for (String file : RECENT_FILES.get()) {
             File f = new File(file);
             if (f.exists()) {
                 valid.add(f.getAbsolutePath());
             }
         }
         recent.addAll(valid.subList(0, Math.min(valid.size(), 10)));
-        Preference.RECENT_FILES.putList(valid); // having validated put the list back
+        RECENT_FILES.put(valid); // having validated put the list back
 
 
     }
@@ -169,7 +170,7 @@ public class ReconstructionManager {
             recent.remove(path);
         }
         recent.add(path);
-        Preference.RECENT_FILES.putList(recent);
+        RECENT_FILES.put(recent);
 
         // is it keyed? then just get the identifier and set it
         if (projectMap.containsKey(reconstruction.getIdentifier())) {

@@ -54,6 +54,7 @@ public class CachedMoleculeRenderer extends MoleculeRenderer {
         CachingKey key = new CachingKey(molecule, background, bounds);
 
         if (cache.containsKey(key)) {
+            System.out.println("using cache");
             return cache.get(key);
         }
 

@@ -23,9 +23,11 @@ package uk.ac.ebi.resource.chemical;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.utility.Preference;
+import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.resource.ResourcePreferences;
+
 
 /**
  *          BasicChemicalIdentifier – 2011.09.14 <br>
@@ -38,26 +40,36 @@ public class BasicChemicalIdentifier
         extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicChemicalIdentifier.class);
-    private static long ticker = Preferences.userNodeForPackage(BasicChemicalIdentifier.class).getLong("ticker", 0);
+
     private String shortDesc;
+
 
     public BasicChemicalIdentifier() {
         super();
     }
 
+
     public BasicChemicalIdentifier(String accession) {
         super(accession);
     }
+
 
     public BasicChemicalIdentifier(String accession, String shortDescription) {
         super(accession);
         this.shortDesc = shortDescription;
     }
 
+
     public static BasicChemicalIdentifier nextIdentifier() {
-        Preferences.userNodeForPackage(BasicChemicalIdentifier.class).putLong("ticker", ++ticker);
-        return new BasicChemicalIdentifier(String.format(Preference.CHEMICAL_IDENTIFIER_FORMAT.get(), ticker));
+
+
+        StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_CHEM_ID_FORMAT");
+        IncrementalPreference ticker = ResourcePreferences.getInstance().getPreference("BASIC_CHEM_ID_TICK");
+
+        return new BasicChemicalIdentifier(String.format(format.get(), ticker.get()));
+
     }
+
 
     /**
      * Sets the shortDescription of the class. This allows handling of chemical
@@ -69,6 +81,7 @@ public class BasicChemicalIdentifier
         this.shortDesc = shortDesc;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -76,6 +89,7 @@ public class BasicChemicalIdentifier
     public BasicChemicalIdentifier newInstance() {
         return new BasicChemicalIdentifier();
     }
+
 
     /**
      * Returns the short description as set ({@see setShortDescription(String)})
@@ -86,6 +100,7 @@ public class BasicChemicalIdentifier
     public String getShortDescription() {
         return this.shortDesc != null ? this.shortDesc : super.getShortDescription();
     }
+
 
     /**
      * @inheritDoc
@@ -99,6 +114,7 @@ public class BasicChemicalIdentifier
         }
     }
 
+
     /**
      * @inheritDoc
      */
@@ -110,5 +126,11 @@ public class BasicChemicalIdentifier
             out.writeUTF(shortDesc);
         }
         out.writeBoolean(false);
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(BasicChemicalIdentifier.nextIdentifier());
+        System.out.println(BasicChemicalIdentifier.nextIdentifier());
     }
 }

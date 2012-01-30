@@ -22,7 +22,10 @@ package uk.ac.ebi.resource.gene;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.caf.utility.Preference;
+import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.resource.ResourcePreferences;
+
 
 /**
  *          BasicGeneIdentifier - 2011.10.17 <br>
@@ -34,14 +37,16 @@ import uk.ac.ebi.caf.utility.Preference;
 public class BasicGeneIdentifier extends GeneIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicGeneIdentifier.class);
-    private static int ticker = 0;
+
 
     public BasicGeneIdentifier() {
     }
 
+
     public BasicGeneIdentifier(String accession) {
         super(accession);
     }
+
 
     /**
      * Convenience method for creating basic identifiers. It will return the
@@ -49,8 +54,14 @@ public class BasicGeneIdentifier extends GeneIdentifier {
      * jvm instance
      */
     public static Identifier nextIdentifier() {
-        return new BasicGeneIdentifier(String.format(Preference.GENE_IDENTIFIER_FORMAT.get(), ++ticker));
+        
+        StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_GENE_ID_FORMAT");
+        IncrementalPreference ticker = ResourcePreferences.getInstance().getPreference("BASIC_GENE_ID_TICK");
+
+        return new BasicGeneIdentifier(String.format(format.get(), ticker.get()));
+        
     }
+
 
     public Identifier newInstance() {
         return new BasicGeneIdentifier();
