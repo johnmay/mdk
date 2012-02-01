@@ -38,7 +38,7 @@ public class PeptideFactoryTest {
     public void testBondIndex() throws IOException, Exception {
         PeptideFactory factory = new PeptideFactory();
         {
-            Metabolite m = factory.generatePeptide(PeptideFactory.AminoAcid.D_ALA, PeptideFactory.AminoAcid.L_ALA, PeptideFactory.AminoAcid.L_ALA, PeptideFactory.AminoAcid.D_ALA);
+            Metabolite m = factory.generateMetabolite(PeptideFactory.AminoAcid.D_ALA, PeptideFactory.AminoAcid.L_ALA, PeptideFactory.AminoAcid.L_ALA, PeptideFactory.AminoAcid.D_ALA);
 
 
             File tmp = File.createTempFile("peptide", ".mol", new File("/tmp"));
@@ -49,7 +49,7 @@ public class PeptideFactoryTest {
         }
         {
             Metabolite m =
-                       factory.generatePeptide(PeptideFactory.AminoAcid.L_ILE, PeptideFactory.AminoAcid.D_ALA);
+                       factory.generateMetabolite(PeptideFactory.AminoAcid.L_ILE, PeptideFactory.AminoAcid.D_ALA);
 
             File tmp = File.createTempFile("peptide", ".mol", new File("/tmp"));
             MDLV2000Writer writer = new MDLV2000Writer(new FileWriter(tmp));

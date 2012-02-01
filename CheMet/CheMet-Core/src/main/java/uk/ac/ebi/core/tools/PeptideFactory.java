@@ -19,24 +19,21 @@
  */
 package uk.ac.ebi.core.tools;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.*;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
-import org.openscience.cdk.interfaces.IBond.Stereo;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
-import org.openscience.cdk.io.MDLV2000Writer;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.normalize.SMSDNormalizer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
@@ -61,8 +58,7 @@ public class PeptideFactory {
     private static final Logger LOGGER = Logger.getLogger(PeptideFactory.class);
 
 
-    public Metabolite generatePeptide(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
-
+    public IAtomContainer generateStructure(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
         IAtomContainer peptide = DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
 
 
@@ -77,13 +73,7 @@ public class PeptideFactory {
         // N terminus
         CDKUtils.removeAtom(peptide, aminoacids[0].getNTerminal(current));
 
-        StringBuilder nameBuilder = new StringBuilder(aminoacids.length * 5);
-        StringBuilder abbrvBuilder = new StringBuilder(aminoacids.length * 10);
-
         for (int i = 0; i < aminoacids.length; i++) {
-
-            nameBuilder.append(aminoacids[i].names.iterator().next());
-            abbrvBuilder.append(aminoacids[i].name());
 
 
             if (i + 1 < aminoacids.length) {
@@ -107,9 +97,6 @@ public class PeptideFactory {
 
                 peptide.addBond(new Bond(n, c));
 
-                nameBuilder.append("-");
-                abbrvBuilder.append("-");
-
             }
 
 
@@ -126,18 +113,87 @@ public class PeptideFactory {
 
         }
 
-        Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(),
-                                      abbrvBuilder.toString(),
-                                      nameBuilder.toString());
 
         // required to sort out stereo-chem
-        new StructureDiagramGenerator(new Molecule(peptide)).generateCoordinates();
+//        new StructureDiagramGenerator(new Molecule(peptide)).generateCoordinates();
 
-        m.addAnnotation(new ChemicalStructure(peptide));
+        return peptide;
+    }
 
-        System.out.println(m);
+
+    public Metabolite generateMetabolite(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
+
+        Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(),
+                                      generateAbbreviation(aminoacids),
+                                      generateName(aminoacids));
+
+        m.addAnnotation(new ChemicalStructure(generateStructure(aminoacids)));
 
         return m;
+
+    }
+
+
+    public String generateName(AminoAcid... aminoacids) {
+
+        StringBuilder nameBuilder = new StringBuilder(aminoacids.length * 5);
+
+        for (int i = 0; i < aminoacids.length; i++) {
+
+            nameBuilder.append(aminoacids[i].names.iterator().next());
+            if (i + 1 < aminoacids.length) {
+                nameBuilder.append("-");
+            }
+        }
+
+        return nameBuilder.toString();
+    }
+
+
+    public String generateAbbreviation(AminoAcid... aminoacids) {
+
+        StringBuilder abbrvBuilder = new StringBuilder(aminoacids.length * 10);
+
+        for (int i = 0; i < aminoacids.length; i++) {
+
+            abbrvBuilder.append(aminoacids[i].getDisplayName());
+            if (i + 1 < aminoacids.length) {
+                abbrvBuilder.append("-");
+            }
+        }
+
+        return abbrvBuilder.toString();
+    }
+
+
+    public AminoAcid[] guessPeptide(String name) {
+
+        String peptide = name.toLowerCase();
+
+        List<AminoAcid> aas = new ArrayList<AminoAcid>();
+
+        while (!peptide.isEmpty()) {
+
+            boolean found = false;
+            for (AminoAcid aa : AminoAcid.values()) {
+
+                Matcher matcher = aa.getPattern().matcher(peptide);
+                if (matcher.find() && matcher.start() == 0) {
+                    found = true;
+
+                    // add aa
+                    aas.add(aa);
+                    peptide = matcher.replaceFirst("");                  
+
+                }
+            }
+            if (!found) {
+                return aas.toArray(new AminoAcid[0]);
+            }
+
+        }
+        return aas.toArray(new AminoAcid[0]);
+
 
     }
 
@@ -164,7 +220,13 @@ public class PeptideFactory {
     }
 
 
-    public enum AminoAcid {
+    public static void main(String[] args) {
+        PeptideFactory f = new PeptideFactory();
+        System.out.println(Arrays.asList(f.guessPeptide("L-Ala-D-Ala-Gly")));
+    }
+
+
+    public static enum AminoAcid {
 
         /*
          * Positive
@@ -229,6 +291,8 @@ public class PeptideFactory {
 
         private IAtomContainer molecule;
 
+        private Pattern pattern;
+
 
         private AminoAcid(String resource, String... names) {
 
@@ -249,9 +313,27 @@ public class PeptideFactory {
                              + name() + ": " + ex.getMessage());
             }
 
-            displayName = name().replaceAll("_", "-");
-            displayName = displayName.substring(0, 3) + displayName.substring(3).toLowerCase();
 
+
+            displayName = name().replaceAll("_", "-");
+            displayName = name().equals("GLY") ? displayName.substring(0, 1) + displayName.substring(1).toLowerCase() : displayName.substring(0, 3) + displayName.substring(3).toLowerCase();
+
+
+            String stereo = displayName.substring(0, 1).toLowerCase();
+            String code = name().equals("GLY") ? "gly" : displayName.substring(2, 5).toLowerCase();
+
+            pattern = name().equals("GLY") ? Pattern.compile("(?:" + code + ")-?") : Pattern.compile("(?:" + stereo + "-" + code + "|" + code + ")-?");
+
+        }
+
+
+        public Pattern getPattern() {
+            return pattern;
+        }
+
+
+        public String getDisplayName() {
+            return displayName;
         }
 
 

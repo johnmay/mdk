@@ -21,14 +21,21 @@
 package uk.ac.ebi.render.reconciliation.modules;
 
 import com.jgoodies.forms.layout.CellConstraints;
-import java.util.Arrays;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.exception.CDKException;
+import uk.ac.ebi.annotation.Synonym;
+import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.core.tools.PeptideFactory;
+import uk.ac.ebi.core.tools.PeptideFactory.AminoAcid;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
 
@@ -51,16 +58,25 @@ public class PeptideGenerator implements CrossreferenceModule {
 
     private CellConstraints cc = new CellConstraints();
 
+    private PeptideFactory factory = new PeptideFactory();
+
+    private JComboBox[] boxes = new JComboBox[]{
+        new JComboBox(PeptideFactory.AminoAcid.values()),
+        new JComboBox(PeptideFactory.AminoAcid.values())
+    };
+
+    private Metabolite context;
+
 
     public PeptideGenerator() {
 
         component = PanelFactory.createDialogPanel("p, 4dlu, p, 4dlu, p, 4dlu, p", "p");
 
         component.add(LabelFactory.newFormLabel("N-Terminus:"), cc.xy(1, 1));
-        component.add(new JComboBox(PeptideFactory.AminoAcid.values()), cc.xy(3, 1));
+        component.add(boxes[0], cc.xy(3, 1));
 
         component.add(LabelFactory.newFormLabel("C-Terminus:"), cc.xy(5, 1));
-        component.add(new JComboBox(PeptideFactory.AminoAcid.values()), cc.xy(7, 1));
+        component.add(boxes[1], cc.xy(7, 1));
 
     }
 
@@ -76,6 +92,14 @@ public class PeptideGenerator implements CrossreferenceModule {
 
 
     public void setup(Metabolite metabolite) {
+        context = metabolite;
+
+        AminoAcid[] aa = factory.guessPeptide(context.getName());
+
+        for (int i = 0; i < boxes.length; i++) {
+            boxes[i].setSelectedItem(i < aa.length ? aa[i] : null);
+        }
+
     }
 
 
@@ -86,5 +110,26 @@ public class PeptideGenerator implements CrossreferenceModule {
 
     public void transferAnnotations() {
         // make the peptide
+
+        List<PeptideFactory.AminoAcid> aminoacids = new ArrayList<PeptideFactory.AminoAcid>(boxes.length);
+
+        for (JComboBox comboBox : boxes) {
+            aminoacids.add((PeptideFactory.AminoAcid) comboBox.getSelectedItem());
+        }
+
+        PeptideFactory.AminoAcid[] chain = aminoacids.toArray(new PeptideFactory.AminoAcid[0]);
+
+
+        try {
+            context.addAnnotation(new ChemicalStructure(factory.generateStructure(chain)));
+            context.addAnnotation(new Synonym(factory.generateName(chain)));
+            context.addAnnotation(new Synonym(factory.generateAbbreviation(chain)));
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(PeptideGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CDKException ex) {
+            java.util.logging.Logger.getLogger(PeptideGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(PeptideGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
