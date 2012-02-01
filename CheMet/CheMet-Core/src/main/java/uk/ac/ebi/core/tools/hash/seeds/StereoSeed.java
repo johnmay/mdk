@@ -70,13 +70,10 @@ public class StereoSeed implements AtomSeed {
 
         for (IBond bond : molecule.getConnectedBondsList(atom)) {
 
-            System.out.println(atom.getStereoParity());
-
             Stereo stereo = bond.getStereo();
 
             if (stereo != Stereo.NONE) {
 
-                System.out.println(stereo.name());
                 
                 int code = stereo.hashCode();
 
