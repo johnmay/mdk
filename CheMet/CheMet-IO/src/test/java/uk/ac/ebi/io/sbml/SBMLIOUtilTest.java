@@ -18,7 +18,7 @@ import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.reaction.MetaboliteParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
@@ -58,8 +58,8 @@ public class SBMLIOUtilTest {
         recon.addMetabolite(m2);
 
         MetabolicReaction rxn = new MetabolicReaction();
-        rxn.addReactant(new MetaboliteParticipant(m, 1.0, Compartment.CYTOPLASM));
-        rxn.addProduct(new MetaboliteParticipant(m2, 2.0, Compartment.EXTRACELLULA));
+        rxn.addReactant(new MetabolicParticipant(m, 1.0, Compartment.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipant(m2, 2.0, Compartment.EXTRACELLULA));
         rxn.addCrossReference(new ECNumber("1.1.1.1"));
         recon.addReaction(rxn);
 

@@ -53,7 +53,7 @@ import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.core.reaction.MetaboliteParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
@@ -210,7 +210,7 @@ public class SBMLReactionReader {
      * @throws MissingStructureException
      *
      */
-    public MetaboliteParticipant getMetaboliteParticipant(SpeciesReference speciesReference)
+    public MetabolicParticipant getMetaboliteParticipant(SpeciesReference speciesReference)
             throws UnknownCompartmentException {
 
         Species species = null;
@@ -262,7 +262,7 @@ public class SBMLReactionReader {
             speciesNameMap.put(metabolite.getName(), metabolite);
         }
 
-        return new MetaboliteParticipant(metabolite,
+        return new MetabolicParticipant(metabolite,
                                          coefficient,
                                          compartment);
     }

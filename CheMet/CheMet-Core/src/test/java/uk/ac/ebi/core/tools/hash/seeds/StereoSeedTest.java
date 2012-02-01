@@ -32,6 +32,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.chemet.TestMoleculeFactory;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 
+
 /**
  *
  * @author johnmay
@@ -41,13 +42,16 @@ public class StereoSeedTest {
     public StereoSeedTest() {
     }
 
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
 
+
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
+
 
     @Test
     public void testSeed() {
@@ -63,6 +67,38 @@ public class StereoSeedTest {
         factory.addSeedMethod(SeedFactory.getInstance().getSeed(StereoSeed.class));
 
         Assert.assertThat(factory.getHash(dalanine), CoreMatchers.not(factory.getHash(lalanine)));
+
+
+    }
+
+
+    @Test
+    public void testWithAlanine() {
+        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+
+        IAtomContainer lalanine = TestMoleculeFactory.loadMol("l_ala_one.mol", "L-Ala", Boolean.FALSE);
+        IAtomContainer lalanine_alt = TestMoleculeFactory.loadMol("l_ala_two.mol", "L-Ala", Boolean.FALSE);
+
+        System.out.println(lalanine);
+        System.out.println(lalanine_alt);
+
+        Set<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                 ConnectedAtomSeed.class,
+                                                                 BondOrderSumSeed.class,
+                                                                 StereoSeed.class);
+
+        System.out.println("monitor:");
+        System.out.println(
+                factory.getHash(lalanine, seeds));
+        System.out.println(
+                factory.getHash(lalanine_alt, seeds));
+        System.out.println("end");
+
+
+
+
+
+
 
 
     }
@@ -110,6 +146,7 @@ public class StereoSeedTest {
                              factory.getHash(mol2, seeds));
 
     }
+
 
     @Test
     public void testRotation() throws IOException, CDKException {

@@ -19,6 +19,7 @@
  */
 package uk.ac.ebi.annotation.util;
 
+import java.io.DataInput;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.lang.reflect.Constructor;

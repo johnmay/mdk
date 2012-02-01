@@ -35,7 +35,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
-import uk.ac.ebi.core.reaction.MetaboliteParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
@@ -497,14 +497,14 @@ public class Reaction<M, S, C>
 
         for (int i = 0; i < nReac; i++) {
 
-            Participant p = pClass.equals("MetaboliteParticipant") ? new MetaboliteParticipant()
+            Participant p = pClass.equals("MetaboliteParticipant") ? new MetabolicParticipant()
                             : new Participant();
             p.readExternal(in);
             reactants.add(p);
         }
         int nProd = in.readInt();
         for (int i = 0; i < nProd; i++) {
-            Participant p = pClass.equals("MetaboliteParticipant") ? new MetaboliteParticipant()
+            Participant p = pClass.equals("MetaboliteParticipant") ? new MetabolicParticipant()
                             : new Participant();
             p.readExternal(in);
             products.add(p);
@@ -520,10 +520,10 @@ public class Reaction<M, S, C>
 
         for (int i = 0; i < nReac; i++) {
 
-            Participant p = pClass.equals("MetaboliteParticipant") ? new MetaboliteParticipant()
+            Participant p = pClass.equals("MetaboliteParticipant") ? new MetabolicParticipant()
                             : new Participant();
-            if (p instanceof MetaboliteParticipant) {
-                ((MetaboliteParticipant) p).readExternal(in, metabolites);
+            if (p instanceof MetabolicParticipant) {
+                ((MetabolicParticipant) p).readExternal(in, metabolites);
             } else {
                 p.readExternal(in);
             }
@@ -531,10 +531,10 @@ public class Reaction<M, S, C>
         }
         int nProd = in.readInt();
         for (int i = 0; i < nProd; i++) {
-            Participant p = pClass.equals("MetaboliteParticipant") ? new MetaboliteParticipant()
+            Participant p = pClass.equals("MetaboliteParticipant") ? new MetabolicParticipant()
                             : new Participant();
-            if (p instanceof MetaboliteParticipant) {
-                ((MetaboliteParticipant) p).readExternal(in, metabolites);
+            if (p instanceof MetabolicParticipant) {
+                ((MetabolicParticipant) p).readExternal(in, metabolites);
             } else {
                 p.readExternal(in);
             }
@@ -563,16 +563,16 @@ public class Reaction<M, S, C>
         out.writeUTF(reactants.isEmpty() ? products.get(0).getClass().getSimpleName() : reactants.get(0).getClass().getSimpleName());
         out.writeInt(reactants.size());
         for (Participant p : reactants) {
-            if (p instanceof MetaboliteParticipant) {
-                ((MetaboliteParticipant) p).writeExternal(out, metabolites);
+            if (p instanceof MetabolicParticipant) {
+                ((MetabolicParticipant) p).writeExternal(out, metabolites);
             } else {
                 p.writeExternal(out);
             }
         }
         out.writeInt(products.size());
         for (Participant p : products) {
-            if (p instanceof MetaboliteParticipant) {
-                ((MetaboliteParticipant) p).writeExternal(out, metabolites);
+            if (p instanceof MetabolicParticipant) {
+                ((MetabolicParticipant) p).writeExternal(out, metabolites);
             } else {
                 p.writeExternal(out);
             }

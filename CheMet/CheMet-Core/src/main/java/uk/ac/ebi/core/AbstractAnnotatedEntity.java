@@ -93,6 +93,10 @@ public abstract class AbstractAnnotatedEntity
         return annotations.values();
     }
 
+    public ListMultimap<Byte, Annotation> getAnnotationMap(){
+        return annotations;
+    }
+    
     /**
      *
      * Accessor to all annotations of a given type

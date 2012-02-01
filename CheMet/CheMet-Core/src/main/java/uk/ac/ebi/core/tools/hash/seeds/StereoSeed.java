@@ -30,6 +30,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Stereo;
 import uk.ac.ebi.core.util.Util;
 
+
 /**
  *          StereoSeed - 2011.11.11 <br>
  *          The StereoSeed allows hashing of stereo-chemical features.
@@ -56,8 +57,10 @@ public class StereoSeed implements AtomSeed {
 
     private Map<Integer, MutableInt> occurrences = new HashMap();
 
+
     protected StereoSeed() {
     }
+
 
     public int seed(IAtomContainer molecule, IAtom atom) {
 
@@ -67,10 +70,14 @@ public class StereoSeed implements AtomSeed {
 
         for (IBond bond : molecule.getConnectedBondsList(atom)) {
 
+            System.out.println(atom.getStereoParity());
+
             Stereo stereo = bond.getStereo();
 
             if (stereo != Stereo.NONE) {
 
+                System.out.println(stereo.name());
+                
                 int code = stereo.hashCode();
 
                 /**

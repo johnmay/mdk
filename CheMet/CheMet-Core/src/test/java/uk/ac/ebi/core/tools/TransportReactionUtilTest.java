@@ -11,7 +11,7 @@ import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.core.reaction.MetaboliteParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 import uk.ac.ebi.resource.reaction.ReactionIdentifier;
@@ -44,11 +44,11 @@ public class TransportReactionUtilTest {
 
         MetabolicReaction rxn = new MetabolicReaction(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
-        rxn.addReactant(new MetaboliteParticipant(atp, Compartment.CYTOPLASM));
-        rxn.addReactant(new MetaboliteParticipant(alanine, Compartment.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipant(atp, Compartment.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipant(alanine, Compartment.CYTOPLASM));
 
-        rxn.addProduct(new MetaboliteParticipant(atp, Compartment.EXTRACELLULA));
-        rxn.addProduct(new MetaboliteParticipant(alanine, Compartment.EXTRACELLULA));
+        rxn.addProduct(new MetabolicParticipant(atp, Compartment.EXTRACELLULA));
+        rxn.addProduct(new MetabolicParticipant(alanine, Compartment.EXTRACELLULA));
 
         rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
 
@@ -69,11 +69,11 @@ public class TransportReactionUtilTest {
 
         MetabolicReaction rxn = new MetabolicReaction(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
-        rxn.addReactant(new MetaboliteParticipant(atp, Compartment.CYTOPLASM));
-        rxn.addReactant(new MetaboliteParticipant(alanine, Compartment.EXTRACELLULA));
+        rxn.addReactant(new MetabolicParticipant(atp, Compartment.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipant(alanine, Compartment.EXTRACELLULA));
 
-        rxn.addProduct(new MetaboliteParticipant(atp, Compartment.EXTRACELLULA));
-        rxn.addProduct(new MetaboliteParticipant(alanine, Compartment.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipant(atp, Compartment.EXTRACELLULA));
+        rxn.addProduct(new MetabolicParticipant(alanine, Compartment.CYTOPLASM));
 
         rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
 
@@ -92,11 +92,11 @@ public class TransportReactionUtilTest {
 
         MetabolicReaction rxn = new MetabolicReaction(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
-        rxn.addReactant(new MetaboliteParticipant(atp, Compartment.CYTOPLASM));
-        rxn.addReactant(new MetaboliteParticipant(alanine, Compartment.EXTRACELLULA));
+        rxn.addReactant(new MetabolicParticipant(atp, Compartment.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipant(alanine, Compartment.EXTRACELLULA));
 
-        rxn.addProduct(new MetaboliteParticipant(atp, Compartment.CYTOPLASM));
-        rxn.addProduct(new MetaboliteParticipant(alanine, Compartment.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipant(atp, Compartment.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipant(alanine, Compartment.CYTOPLASM));
 
         rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
 

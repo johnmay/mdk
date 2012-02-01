@@ -29,6 +29,7 @@ import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 import uk.ac.ebi.core.Metabolite;
 
+
 /**
  *          MetaboliteParticipant – 2011.09.27 <br>
  *          Class description
@@ -36,32 +37,37 @@ import uk.ac.ebi.core.Metabolite;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetaboliteParticipant extends Participant<Metabolite, Double, Compartment> {
+public class MetabolicParticipant extends Participant<Metabolite, Double, Compartment> {
 
-    private static final Logger LOGGER = Logger.getLogger(MetaboliteParticipant.class);
+    private static final Logger LOGGER = Logger.getLogger(MetabolicParticipant.class);
 
-    public MetaboliteParticipant() {
+
+    public MetabolicParticipant() {
     }
 
-    public MetaboliteParticipant(Metabolite molecule, Compartment compartment) {
+
+    public MetabolicParticipant(Metabolite molecule, Compartment compartment) {
         super(molecule, 1d, compartment);
     }
 
-    public MetaboliteParticipant(Metabolite molecule, Double coefficient, Compartment compartment) {
+
+    public MetabolicParticipant(Metabolite molecule, Double coefficient, Compartment compartment) {
         super(molecule, coefficient, compartment);
     }
 
-    public MetaboliteParticipant(Metabolite molecule, Double coefficient) {
-        super(molecule, coefficient);
+
+    public MetabolicParticipant(Metabolite molecule, Double coefficient) {
+        super(molecule, coefficient, Compartment.CYTOPLASM);
     }
 
-    public MetaboliteParticipant(Metabolite molecule) {
-        super(molecule);
+
+    public MetabolicParticipant(Metabolite molecule) {
+        super(molecule, 1d, Compartment.CYTOPLASM);
     }
+
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        System.out.print("reading external metabolite..");
         Metabolite m = new Metabolite();
         m.readExternal(in);
         System.out.println(m.getIdentifier());
@@ -70,6 +76,7 @@ public class MetaboliteParticipant extends Participant<Metabolite, Double, Compa
         setCompartment(Compartment.valueOf(in.readUTF()));
     }
 
+
     public void readExternal(ObjectInput in, MetaboliteCollection metabolites) throws IOException,
                                                                                       ClassNotFoundException {
         setMolecule(metabolites.get(in.readInt()));
@@ -77,14 +84,15 @@ public class MetaboliteParticipant extends Participant<Metabolite, Double, Compa
         setCompartment(Compartment.valueOf(in.readUTF()));
     }
 
+
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         System.out.print("writing external metabolite..");
         getMolecule().writeExternal(out);
-        System.out.println(getMolecule().getIdentifier());
         out.writeDouble(getCoefficient());
         out.writeUTF(getCompartment().name());
     }
+
 
     public void writeExternal(ObjectOutput out, MetaboliteCollection metabolites) throws IOException {
         out.writeInt(metabolites.indexOf(getMolecule()));

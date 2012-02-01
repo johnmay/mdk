@@ -14,7 +14,6 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.ac.ebi.core;
 
 import com.google.common.base.Objects;
@@ -36,14 +35,18 @@ public class AbstractReconstructionEntity implements Cloneable, Externalizable {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
-      AbstractReconstructionEntity.class);
+            AbstractReconstructionEntity.class);
+
     private Identifier identifier;
+
     private String abbreviation = "";
+
     private String name = "";
 
 
     public AbstractReconstructionEntity() {
     }
+
 
     /**
      * Full instantiation constructor
@@ -59,7 +62,6 @@ public class AbstractReconstructionEntity implements Cloneable, Externalizable {
         this.name = name;
     }
 
-    
 
     /**
      * Access the abbreviation of the entity. The abbreviation is normally a
@@ -70,6 +72,7 @@ public class AbstractReconstructionEntity implements Cloneable, Externalizable {
     public String getAbbreviation() {
         return abbreviation;
     }
+
 
     /**
      * Access the name of the entity
@@ -102,6 +105,12 @@ public class AbstractReconstructionEntity implements Cloneable, Externalizable {
         return identifier;
     }
 
+
+    public void setIdentifier(Identifier identifier) {
+        this.identifier = identifier;
+    }
+
+
 //    @Override
 //    public Object clone() throws CloneNotSupportedException {
 //        return super.clone();
@@ -126,12 +135,11 @@ public class AbstractReconstructionEntity implements Cloneable, Externalizable {
     }
 
 
- 
-
     @Override
     public int hashCode() {
         return Objects.hashCode(identifier, name, abbreviation);
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -153,6 +161,4 @@ public class AbstractReconstructionEntity implements Cloneable, Externalizable {
         }
         return true;
     }
-
-
 }

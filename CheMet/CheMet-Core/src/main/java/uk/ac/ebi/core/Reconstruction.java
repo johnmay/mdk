@@ -23,6 +23,7 @@ import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 
 /**
@@ -84,10 +85,21 @@ public class Reconstruction
         subsets = new ArrayList<EntityCollection>();
     }
 
+
+    public Reconstruction(Identifier identifier, String abbreviation, String name) {
+        super(identifier, abbreviation, name);
+        reactions = new ReactionList();
+        metabolites = new MetaboliteCollection();
+        products = new ProductCollection();
+        genome = new GenomeImplementation();
+        subsets = new ArrayList<EntityCollection>();
+    }
+
+
+
     /*
      * Default constructor
      */
-
     private Reconstruction() {
         metabolites = new MetaboliteCollection();
         reactions = new ReactionList();
@@ -436,5 +448,10 @@ public class Reconstruction
         logger.info("Loaded reaction into collection " + (end - start) + " ms");
 
 
+    }
+
+
+    public void setTaxonomy(Taxonomy taxonomy) {
+        this.taxonomy = taxonomy;
     }
 }

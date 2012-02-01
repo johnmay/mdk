@@ -22,6 +22,8 @@ package uk.ac.ebi.core;
 
 import java.util.HashMap;
 import java.util.Map;
+import uk.ac.ebi.chemet.entities.reaction.Reversibility;
+
 
 /**
  * @name    Compartment
@@ -35,27 +37,27 @@ import java.util.Map;
 public enum Compartment {
 
     // Organelles (prokaryotes)
-    CYTOPLASM("c", "Cytoplasm"),
-    PERIPLASM("p", "Periplasm"),
-    EXTRACELLULA("e", "Extracellular"),
+    CYTOPLASM("c", "Cytoplasm", (byte) 1),
+    PERIPLASM("p", "Periplasm", (byte) 1),
+    EXTRACELLULA("e", "Extracellular", (byte) 1),
     // Organelles (eukaryotes) and tissues/organs
-    FLAGELLUM("f", "Flagellum"),
-    GOLGI("g", "Golgi"),
-    CHLOROPLAST("h", "Chloroplast"),
-    EYESPOT("i", "Eyespot"),
-    APICOPLAST("a", "Apicoplast"),
-    LYSOSOME("l", "Lysosome"),
-    MITOCHONDRION("m", "Mitochondrion"),
-    NUCLEUS("n", "Nucleus"),
-    GLYOXYSOMES("o", "Glyoxysomes"),
-    ENDOPLASMIC_RETICULUM("r", "Endoplasmic Reticulum"),
-    PLASTID("s", "Plastid"),
-    THYLAKOID("t", "Thylakoid"),
-    VACUOLE("v", "Vacuole"),
-    GLYOXYSOME("w", "Glyoxysome"),
-    PEROXISOME("x", "Peroxisome"),
-    GLYCOSOME("y", "Glycosome"),
-    BLOOD("bl", "Blood"),
+    FLAGELLUM("f", "Flagellum", (byte) 1),
+    GOLGI("g", "Golgi", (byte) 1),
+    CHLOROPLAST("h", "Chloroplast", (byte) 1),
+    EYESPOT("i", "Eyespot", (byte) 1),
+    APICOPLAST("a", "Apicoplast", (byte) 1),
+    LYSOSOME("l", "Lysosome", (byte) 1),
+    MITOCHONDRION("m", "Mitochondrion", (byte) 1),
+    NUCLEUS("n", "Nucleus", (byte) 1),
+    GLYOXYSOMES("o", "Glyoxysomes", (byte) 1),
+    ENDOPLASMIC_RETICULUM("r", "Endoplasmic Reticulum", (byte) 1),
+    PLASTID("s", "Plastid", (byte) 1),
+    THYLAKOID("t", "Thylakoid", (byte) 1),
+    VACUOLE("v", "Vacuole", (byte) 1),
+    GLYOXYSOME("w", "Glyoxysome", (byte) 1),
+    PEROXISOME("x", "Peroxisome", (byte) 1),
+    GLYCOSOME("y", "Glycosome", (byte) 1),
+    BLOOD("bl", "Blood", (byte) 1),
     // Tissues (put in a different enumeration
     // Adibopcyte("a", ); // clashes with Apicoplast
     // Myocyte("m") // clashes with mitrochondrion
@@ -63,39 +65,54 @@ public enum Compartment {
 
     // Membranes
     GOLGI_MEMBRANE(
-    "gm", "Golgi Membrane"),
-    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane"),
-    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane"),
-    PLASMA_MEMBRANE("pm", "Plasma Membrane"),
-    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane"),
-    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane"),
-    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane"),
+    "gm", "Golgi Membrane", (byte) 1),
+    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane", (byte) 1),
+    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane", (byte) 1),
+    PLASMA_MEMBRANE("pm", "Plasma Membrane", (byte) 1),
+    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", (byte) 1),
+    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane", (byte) 1),
+    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", (byte) 1),
     // indicates compartment is unknown
-    UNKNOWN("xx", "Unknown Compartment");
+    UNKNOWN("xx", "Unknown Compartment", (byte) 1);
     // store the abbreviation 1/2 leter code and the textual description
-    private final int ranking;
+
+    private final byte index;
+
     private final String abbreviation;
+
     private final String description;
+
     private static final Map<String, Compartment> abbreviationMap = buildAbbreviationMap();
 
+
     private Compartment(String abbreviation,
-                        String description) {
+                        String description,
+                        byte index) {
         this.abbreviation = abbreviation;
         this.description = description;
-        this.ranking = Ticker.nextValue();
+        this.index = index;
     }
+
 
     public String getAbbreviation() {
         return abbreviation;
     }
 
+
     public String getDescription() {
         return description;
     }
 
+
     public int getRanking() {
-        return ranking;
+        return index;
     }
+
+
+    public int getIndex() {
+        return index;
+    }
+
 
     public static Compartment getCompartment(String description) {
         String description_lc = description.toLowerCase();
@@ -104,6 +121,7 @@ public enum Compartment {
         }
         return Compartment.UNKNOWN;
     }
+
 
     private static Map buildAbbreviationMap() {
         Map<String, Compartment> map = new HashMap<String, Compartment>();
@@ -116,15 +134,28 @@ public enum Compartment {
         return map;
     }
 
+
     @Override
     public String toString() {
         return "[" + abbreviation + "]";
     }
+
+
+    public static Compartment valueOf(byte index) {
+        for (Compartment compartment : values()) {
+            if (compartment.index == index) {
+                return compartment;
+            }
+        }
+        throw new UnsupportedOperationException("No reversibility of specified index");
+    }
 }
+
 
 class Ticker {
 
     public static int ticker = 0;
+
 
     public static int nextValue() {
         return ticker++;

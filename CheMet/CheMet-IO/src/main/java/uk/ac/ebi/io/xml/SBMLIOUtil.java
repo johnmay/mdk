@@ -44,7 +44,7 @@ import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.reaction.MetaboliteParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
@@ -162,7 +162,7 @@ public class SBMLIOUtil {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
-        Participant key = new MetaboliteParticipant(participant.getMolecule(), 1d, participant.getCompartment());
+        Participant key = new MetabolicParticipant(participant.getMolecule(), 1d, participant.getCompartment());
 
         // create a new entry if one doesn't exists
         if (speciesReferences.containsKey(key) == false) {

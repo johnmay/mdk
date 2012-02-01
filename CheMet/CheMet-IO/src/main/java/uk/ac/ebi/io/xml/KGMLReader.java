@@ -57,7 +57,7 @@ import org.w3c.dom.NodeList;
 import uk.ac.ebi.chemet.resource.XMLHelper;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.Metabolite;
-import uk.ac.ebi.core.reaction.MetaboliteParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 /**
@@ -147,10 +147,10 @@ public class KGMLReader {
                 rxn.addCrossReference(new BasicReactionIdentifier(name.substring(3)));
             }
             for(int id : reaction.getSubstrateIds() ){
-                rxn.addReactant(new MetaboliteParticipant(metabolites.get(id)));
+                rxn.addReactant(new MetabolicParticipant(metabolites.get(id)));
             }
             for(int id : reaction.getProductIds() ){
-                rxn.addProduct(new MetaboliteParticipant(metabolites.get(id)));
+                rxn.addProduct(new MetabolicParticipant(metabolites.get(id)));
             }
 
             reactions.add(rxn);
