@@ -20,11 +20,13 @@
  */
 package uk.ac.ebi.interfaces;
 
+import com.google.common.collect.ListMultimap;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.Set;
+
 
 /**
  * @name    AnnotatedEntity - 2011.10.10 <br>
@@ -37,6 +39,7 @@ public interface AnnotatedEntity extends ReconstructionEntity {
 
     public void addAnnotations(Collection<Annotation> annotations);
 
+
     /**
      *
      * Add an annotation to the reconstruction object
@@ -45,6 +48,7 @@ public interface AnnotatedEntity extends ReconstructionEntity {
      *
      */
     public void addAnnotation(Annotation annotation);
+
 
     /**
      *
@@ -55,6 +59,10 @@ public interface AnnotatedEntity extends ReconstructionEntity {
      */
     public Collection<Annotation> getAnnotations();
 
+
+    public ListMultimap<Byte, Annotation> getAnnotationMap();
+
+
     /**
      *
      * Accessor to all annotations of a given type
@@ -64,6 +72,7 @@ public interface AnnotatedEntity extends ReconstructionEntity {
      *
      */
     public <T> Collection<T> getAnnotations(final Class<T> type);
+
 
     /**
      *
@@ -76,6 +85,7 @@ public interface AnnotatedEntity extends ReconstructionEntity {
      */
     public Set<Annotation> getAnnotationsExtending(final Annotation base);
 
+
     /**
      *
      * {@see getAnnotationsExtending(Annotation)}
@@ -86,12 +96,14 @@ public interface AnnotatedEntity extends ReconstructionEntity {
      */
     public <T> Set<T> getAnnotationsExtending(final Class<T> type);
 
+
     /**
      * Remove an annotation from the entity
      * @param annotation
      * @return
      */
     public boolean removeAnnotation(final Annotation annotation);
+
 
     /**
      * Adds an observation to the descriptor
@@ -100,6 +112,7 @@ public interface AnnotatedEntity extends ReconstructionEntity {
      */
     public boolean addObservation(Observation observation);
 
+
     /**
      * Removes an observation to the descriptor
      * @param observation The observation to remove
@@ -107,17 +120,21 @@ public interface AnnotatedEntity extends ReconstructionEntity {
      */
     public boolean removeObservation(Observation observation);
 
+
     /**
      * Access the rating for this entity
      */
     public Rating getRating();
+
 
     /**
      * Set the rating for this entity
      */
     public void setRating(Rating rating);
 
+
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException;
+
 
     public void writeExternal(ObjectOutput out) throws IOException;
 }
