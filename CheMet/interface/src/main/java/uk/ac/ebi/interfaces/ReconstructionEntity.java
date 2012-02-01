@@ -22,6 +22,7 @@ package uk.ac.ebi.interfaces;
 
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
+
 /**
  * @name    ReconstructionEntity - 2011.10.10 <br>
  *          Interface description
@@ -33,13 +34,21 @@ public interface ReconstructionEntity {
 
     public String getName();
 
+
     public String getAbbreviation();
+
 
     public Identifier getIdentifier();
 
+
+    public void setIdentifier(Identifier identifier);
+
+
     public void setName(String name);
 
+
     public void setAbbreviation(String abbreviation);
+
 
     /**
      * Access a string representation of the entity's identifier
