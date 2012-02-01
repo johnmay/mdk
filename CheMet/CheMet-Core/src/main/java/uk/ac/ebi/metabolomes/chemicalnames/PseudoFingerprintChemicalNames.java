@@ -6,6 +6,7 @@ package uk.ac.ebi.metabolomes.chemicalnames;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -26,7 +27,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author pmoreno
  */
-public class PseudoFingerprintChemicalNames {
+public class PseudoFingerprintChemicalNames implements Comparator<String> {
    
     private static final Pattern alphanum = Pattern.compile("\\p{Punct}|\\p{Cntrl}");
     private static final Pattern plural = Pattern.compile("s$");
@@ -292,11 +293,27 @@ public class PseudoFingerprintChemicalNames {
         return c;
     }
     
+    /**
+     * Returns the levenshein distance between the compared keys for these strings.
+     * @param a
+     * @param b
+     * @return 
+     */
     public int lenvenshteinComparisonKeyed(String a, String b) {
         String keyA = this.key(a);
         String keyB = this.key(b);
         
         return StringUtils.getLevenshteinDistance(keyA, keyB);
+    }
+    
+    /**
+     * 
+     * @param a
+     * @param b
+     * @return 
+     */
+    public int compare(String a, String b) {
+        return this.key(a).compareTo(this.key(b));
     }
     
     /**
