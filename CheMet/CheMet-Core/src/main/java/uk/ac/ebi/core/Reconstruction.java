@@ -22,8 +22,8 @@ import javax.swing.JOptionPane;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.Genome;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 
@@ -113,8 +113,6 @@ public class Reconstruction
     public Reconstruction newInstance() {
         return new Reconstruction();
     }
-    
-    
 
 
     /**
@@ -227,7 +225,7 @@ public class Reconstruction
      * @param metabolite a new metabolite
      * 
      */
-    public void addMetabolite(Metabolite metabolite) {
+    public void addMetabolite(uk.ac.ebi.interfaces.entities.Metabolite metabolite) {
         metabolites.add(metabolite);
     }
 
@@ -437,7 +435,7 @@ public class Reconstruction
         metabolites = new MetaboliteCollection();
         int nMets = in.readInt();
         for (int i = 0; i < nMets; i++) {
-            Metabolite m = new Metabolite();
+            Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
             m.readExternal(in);
             metabolites.add(m);
         }

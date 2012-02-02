@@ -34,11 +34,12 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.tools.ReconstructionComparison;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;
+
 
 /**
  *          Comparisson - 2011.11.29 <br>
@@ -51,6 +52,7 @@ public class MetaboliteComparison {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteComparison.class);
 
+
     public enum TableData {
 
         PRESENCE, // x incates precense
@@ -59,11 +61,14 @@ public class MetaboliteComparison {
         ABBREVIATION, // metabolite abbreviation
         STRUCTURE   // displays the chemical structure
     };
+
     private ReconstructionComparison comparison;
+
 
     public MetaboliteComparison(ReconstructionComparison comparison) {
         this.comparison = comparison;
     }
+
 
     /**
      * Generates a comparison table
@@ -143,7 +148,7 @@ public class MetaboliteComparison {
                         if (sub.containsKey(recon)) {
                             for (Metabolite m : sub.get(recon)) {
                                 if (m.hasStructureAssociated()) {
-                                    structure.add(m.getFirstChemicalStructure());
+                                    structure.add(((uk.ac.ebi.core.Metabolite) m).getFirstChemicalStructure());
                                 }
                             }
                         }

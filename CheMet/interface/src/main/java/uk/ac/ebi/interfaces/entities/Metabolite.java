@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.interfaces.entities;
 
+import uk.ac.ebi.interfaces.MetaboliteClass;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 
@@ -13,11 +14,23 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
  */
 public interface Metabolite extends AnnotatedEntity {
 
-    public boolean isGeneric();
-
-
     public Double getCharge();
 
 
     public void setCharge(Double charge);
+
+
+    public void setGeneric(boolean readBoolean);
+
+
+    public boolean isGeneric();
+
+
+    public void setType(MetaboliteClass valueOf);
+
+
+    public MetaboliteClass getType();
+
+
+    public boolean hasStructureAssociated();
 }

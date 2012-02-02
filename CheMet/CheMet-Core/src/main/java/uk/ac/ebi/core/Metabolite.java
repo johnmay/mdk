@@ -28,7 +28,8 @@ import java.io.ObjectOutput;
 import java.util.Collection;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
-import uk.ac.ebi.core.metabolite.MetaboliteClass;
+import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
+import uk.ac.ebi.interfaces.MetaboliteClass;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
@@ -51,7 +52,7 @@ public class Metabolite
 
     private Double charge = 0d;
 
-    private MetaboliteClass type = MetaboliteClass.UNKNOWN;
+    private MetaboliteClass type = MetaboliteClassImplementation.UNKNOWN;
 
     public static final String BASE_TYPE = "Metabolite";
 
@@ -157,7 +158,7 @@ public class Metabolite
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
-        type = MetaboliteClass.valueOf(in.readUTF());
+        type = MetaboliteClassImplementation.valueOf(in.readByte());
         generic = in.readBoolean();
         charge = in.readDouble();
     }
@@ -169,7 +170,7 @@ public class Metabolite
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        out.writeUTF(type.name());
+        out.writeByte(type.getIndex());
         out.writeBoolean(generic);
         out.writeDouble(charge);
     }

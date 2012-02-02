@@ -4,12 +4,15 @@
  */
 package uk.ac.ebi.core.metabolite;
 
+import uk.ac.ebi.interfaces.MetaboliteClass;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  *
  * @author johnmay
  */
-public enum MetaboliteClass {
+public enum MetaboliteClassImplementation implements MetaboliteClass {
 
     PROTEIN("Protein", (byte) 1),
     NUCLEIC_ACID("Nucleic Acid", (byte) 2),
@@ -18,10 +21,10 @@ public enum MetaboliteClass {
 
     private String desc;
 
-    private Byte index;
+    private byte index;
 
 
-    private MetaboliteClass(String name, byte index) {
+    private MetaboliteClassImplementation(String name, byte index) {
         this.desc = name;
         this.index = index;
     }
@@ -33,13 +36,13 @@ public enum MetaboliteClass {
     }
 
 
-    public Byte getIndex() {
+    public byte getIndex() {
         return index;
     }
 
 
-    public static MetaboliteClass valueOf(Byte index) {
-        for (MetaboliteClass mc : values()) {
+    public static MetaboliteClassImplementation valueOf(Byte index) {
+        for (MetaboliteClassImplementation mc : values()) {
             if (mc.index == index) {
                 return mc;
             }

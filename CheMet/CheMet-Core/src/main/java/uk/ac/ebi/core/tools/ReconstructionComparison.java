@@ -30,15 +30,12 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.tools.hash.MolecularHash;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
-import uk.ac.ebi.core.tools.hash.seeds.AtomSeed;
-import uk.ac.ebi.core.tools.hash.seeds.AtomicNumberSeed;
-import uk.ac.ebi.core.tools.hash.seeds.BondOrderSumSeed;
-import uk.ac.ebi.core.tools.hash.seeds.ConnectedAtomSeed;
-import uk.ac.ebi.core.tools.hash.seeds.SeedFactory;
+import uk.ac.ebi.core.tools.hash.seeds.*;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  *          ReconstructionComparisson - 2011.11.28 <br>
@@ -50,13 +47,19 @@ import uk.ac.ebi.core.tools.hash.seeds.SeedFactory;
 public class ReconstructionComparison {
 
     private static final Logger LOGGER = Logger.getLogger(ReconstructionComparison.class);
+
     private Reconstruction[] recons;
+
     private Multimap<Reconstruction, Integer> metaboliteMap = ArrayListMultimap.create();
+
     private Set<AtomSeed> methods = SeedFactory.getInstance().getSeeds(BondOrderSumSeed.class,
                                                                        AtomicNumberSeed.class,
                                                                        ConnectedAtomSeed.class);
+
     private boolean hydrogen; // remove hydrogen
+
     private static MolecularHashFactory HASH_FACTORY = MolecularHashFactory.getInstance();
+
 
     public ReconstructionComparison(Set<AtomSeed> methods,
                                     boolean hydrogen,
@@ -71,7 +74,7 @@ public class ReconstructionComparison {
         for (Reconstruction recon : recons) {
             for (Metabolite m : recon.getMetabolites()) {
                 if (m.hasStructureAssociated()) {
-                    IAtomContainer mol = m.getFirstChemicalStructure().getMolecule();
+                    IAtomContainer mol = ((uk.ac.ebi.core.Metabolite) m).getFirstChemicalStructure().getMolecule();
                     mol = mol.getAtomCount() > 1 && hydrogen ? mol : AtomContainerManipulator.removeHydrogens(mol);
                     MolecularHash hash = HASH_FACTORY.getHash(mol, methods);
                     metaboliteMap.put(recon, hash.hash);
@@ -81,13 +84,16 @@ public class ReconstructionComparison {
 
     }
 
+
     public int getMetaboliteTotal(Reconstruction recon) {
         return new HashSet(metaboliteMap.get(recon)).size();
     }
 
+
     public Reconstruction[] getReconstructions() {
         return recons;
     }
+
 
     public Map<Metabolite, Integer> getMoleculeHashMap(Reconstruction recon) {
         HASH_FACTORY.setSeedWithMoleculeSize(true);
@@ -95,7 +101,7 @@ public class ReconstructionComparison {
         LOGGER.debug("Generating hash code: " + methods);
         for (Metabolite m : recon.getMetabolites()) {
             if (m.hasStructureAssociated()) {
-                IAtomContainer mol = m.getFirstChemicalStructure().getMolecule();
+                IAtomContainer mol = ((uk.ac.ebi.core.Metabolite) m).getFirstChemicalStructure().getMolecule();
                 mol = mol.getAtomCount() > 1 && hydrogen ? mol : AtomContainerManipulator.removeHydrogens(mol);
                 MolecularHash hash = HASH_FACTORY.getHash(mol, methods);
                 map.put(m, hash.hash);
@@ -104,6 +110,7 @@ public class ReconstructionComparison {
         }
         return map;
     }
+
 
     public int getMetaboliteInstersect(Reconstruction... recons) {
 
@@ -122,5 +129,4 @@ public class ReconstructionComparison {
         return metabolites.size();
 
     }
-
 }

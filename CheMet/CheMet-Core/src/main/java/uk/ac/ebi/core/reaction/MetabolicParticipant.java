@@ -23,6 +23,7 @@ package uk.ac.ebi.core.reaction;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.nio.channels.UnsupportedAddressTypeException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
@@ -79,9 +80,11 @@ public class MetabolicParticipant extends Participant<Metabolite, Double, Compar
 
     public void readExternal(ObjectInput in, MetaboliteCollection metabolites) throws IOException,
                                                                                       ClassNotFoundException {
-        setMolecule(metabolites.get(in.readInt()));
+        //setMolecule(metabolites.get(in.readInt()));
         setCoefficient(in.readDouble());
         setCompartment(Compartment.valueOf(in.readUTF()));
+        throw new UnsupportedOperationException("Use ReconstructionInputStream!");
+
     }
 
 

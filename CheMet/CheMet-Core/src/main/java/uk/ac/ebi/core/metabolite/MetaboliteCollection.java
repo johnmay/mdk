@@ -17,11 +17,9 @@
 
 package uk.ac.ebi.core.metabolite;
 
-import com.google.common.collect.Multimap;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
-import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.core.EntityList;
 
 
@@ -31,17 +29,17 @@ import uk.ac.ebi.core.EntityList;
  * @date May 15, 2011
  */
 public class MetaboliteCollection
-  extends EntityList<Metabolite>
+  extends EntityList<uk.ac.ebi.interfaces.entities.Metabolite>
   implements Serializable {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
       MetaboliteCollection.class);
-    HashSet<Metabolite> unique = new HashSet<Metabolite>();
+    HashSet<uk.ac.ebi.interfaces.entities.Metabolite> unique = new HashSet<uk.ac.ebi.interfaces.entities.Metabolite>();
 
 
     @Override
-    public boolean add(Metabolite e) {
+    public boolean add(uk.ac.ebi.interfaces.entities.Metabolite e) {
         if( unique.contains(e) ) {
             return false;
         }
@@ -51,8 +49,8 @@ public class MetaboliteCollection
 
 
     @Override
-    public boolean addAll(Collection<? extends Metabolite> c) {
-        for( Metabolite metabolite : c ) {
+    public boolean addAll(Collection<? extends uk.ac.ebi.interfaces.entities.Metabolite> c) {
+        for( uk.ac.ebi.interfaces.entities.Metabolite metabolite : c ) {
             boolean results = add(metabolite);
         }
         return true;
