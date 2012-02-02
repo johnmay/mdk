@@ -24,17 +24,24 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.interfaces.IMolecularFormula;
+import uk.ac.ebi.annotation.Source;
+import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
+import uk.ac.ebi.core.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.services.ChemicalDataQueryService;
 import uk.ac.ebi.interfaces.services.NameQueryService;
 import uk.ac.ebi.reconciliation.StringEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+
 
 /**
  *          CandidateFactory – 2011.09.22 <br>
@@ -46,13 +53,17 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 public class CandidateFactory<I extends Identifier> {
 
     private static final Logger LOGGER = Logger.getLogger(CandidateFactory.class);
+
     private final NameQueryService<I> service;
+
     private StringEncoder encoder;
+
 
     public CandidateFactory(NameQueryService<I> service, StringEncoder encoder) {
         this.service = service;
         this.encoder = encoder;
     }
+
 
     /**
      *
@@ -84,6 +95,55 @@ public class CandidateFactory<I extends Identifier> {
 
     }
 
+
+    /**
+     * Generates 'dummy' metabolites for a list of candidates that can easily be displayed
+     * in MoleculeTable (chemet-vis)
+     */
+    public List<uk.ac.ebi.interfaces.entities.Metabolite> getMetaboliteList(List<? extends CandidateEntry> candidates,
+                                                                            I xrefid,
+                                                                            ChemicalDataQueryService<I> dataservice,
+                                                                            String source) {
+
+        List<uk.ac.ebi.interfaces.entities.Metabolite> metabolites = new ArrayList<uk.ac.ebi.interfaces.entities.Metabolite>(candidates.size());
+
+        for (CandidateEntry candidate : candidates) {
+
+            I id = (I) xrefid.newInstance();
+            id.setAccession(candidate.getId());
+
+            Metabolite m = new Metabolite(id, "", "");
+            m.setName(candidate.getDescription());
+
+            m.setCharge(dataservice.getCharge(id));
+            Collection<IMolecularFormula> mfs = dataservice.getFormulas(id);
+            for (IMolecularFormula imf : mfs) {
+                m.addAnnotation(new MolecularFormula(imf));
+            }
+
+            m.addAnnotation(new Source(source));
+            
+            metabolites.add(m);
+
+        }
+
+        return metabolites;
+    }
+
+
+    public <T extends CandidateEntry> List<T> getSortedList(Multimap<Integer, T> map) {
+
+        List<T> entries = new ArrayList<T>();
+        List<Integer> scores = new ArrayList<Integer>(map.keySet());
+        Collections.sort(scores);
+        for (Integer score : scores) {
+            entries.addAll(map.get(score));
+        }
+        return entries;
+
+    }
+
+
     /**
      * Uses fuzzy match to search
      * @param name
@@ -107,6 +167,7 @@ public class CandidateFactory<I extends Identifier> {
         return map;
     }
 
+
     public CrossReference getCrossReference(CandidateEntry entry) {
         Identifier id = service.getIdentifier();
         id.setAccession(entry.getId());
@@ -118,6 +179,7 @@ public class CandidateFactory<I extends Identifier> {
         }
         return new CrossReference(id);
     }
+
 
     /**
      * Creates a multimap of possible candidates entries which are keyed by their distance
@@ -158,6 +220,7 @@ public class CandidateFactory<I extends Identifier> {
 //        System.out.println(factory.getSynonymCandidates("GTP"));
 //
 //    }
+
     public SynonymCandidateEntry getBestScore(String query, Collection<String> synonyms) {
 
         int score = Integer.MAX_VALUE;
@@ -181,10 +244,12 @@ public class CandidateFactory<I extends Identifier> {
         return new SynonymCandidateEntry("",
                                          index != -1 ? synonymList.get(index) : "",
                                          synonyms,
-                                         score, index);
+                                         score,
+                                         index);
 
 
     }
+
 
     /**
      * Calculates then Levenshtein distance for the query and subject strings using the set
@@ -198,6 +263,7 @@ public class CandidateFactory<I extends Identifier> {
         return StringUtils.getLevenshteinDistance(encodedQuery,
                                                   encoder.encode(subject));
     }
+
 
     public void setEncoder(StringEncoder encoder) {
         this.encoder = encoder;
