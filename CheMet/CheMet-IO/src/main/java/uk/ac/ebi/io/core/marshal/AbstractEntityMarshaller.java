@@ -43,21 +43,15 @@ public abstract class AbstractEntityMarshaller extends AbstractMarshaller implem
 
     private EntityMarshaller superclassMarshal;
 
-    private EntityFactory factory;
+
+    @Override
+    public void setEntityFactory(EntityFactory factory) {
+        superclassMarshal.setEntityFactory(factory);
+    }
 
 
     public EntityMarshaller getSuperclassMarshal() {
         return superclassMarshal;
-    }
-
-
-    public void setEntityFactory(EntityFactory factory) {
-        this.factory = factory;
-    }
-
-
-    public EntityFactory getEntityFactory() {
-        return factory;
     }
 
 

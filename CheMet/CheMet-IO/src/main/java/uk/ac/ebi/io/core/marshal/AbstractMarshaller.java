@@ -18,12 +18,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.ac.ebi.io.core.marshal;
-
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
+
 
 /**
  *
@@ -37,9 +37,21 @@ import uk.ac.ebi.caf.utility.version.Version;
  */
 public abstract class AbstractMarshaller {
 
-    private static final Logger LOGGER = Logger.getLogger( AbstractMarshaller.class );
+    private static final Logger LOGGER = Logger.getLogger(AbstractMarshaller.class);
 
     private Version v;
+
+    private EntityFactory factory;
+
+
+    public void setEntityFactory(EntityFactory factory) {
+        this.factory = factory;
+    }
+
+
+    public EntityFactory getEntityFactory() {
+        return factory;
+    }
 
 
     public AbstractMarshaller(Version v) {
@@ -50,5 +62,4 @@ public abstract class AbstractMarshaller {
     public Version getVersion() {
         return v;
     }
-
 }

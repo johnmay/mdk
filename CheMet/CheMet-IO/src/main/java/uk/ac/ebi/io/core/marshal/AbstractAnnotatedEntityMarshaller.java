@@ -44,9 +44,13 @@ public abstract class AbstractAnnotatedEntityMarshaller extends AbstractMarshall
 
     private static final Logger LOGGER = Logger.getLogger(AbstractAnnotatedEntityMarshaller.class);
 
-    private EntityFactory factory;
-
     private AnnotatedEntityMarshaller superclassMarshal;
+
+
+    @Override
+    public void setEntityFactory(EntityFactory factory) {
+        superclassMarshal.setEntityFactory(factory);
+    }
 
 
     public AnnotatedEntityMarshaller getSuperclassMarshal() {
@@ -56,16 +60,6 @@ public abstract class AbstractAnnotatedEntityMarshaller extends AbstractMarshall
 
     public void setSuperclassMarshal(AnnotatedEntityMarshaller superclassMarshal) {
         this.superclassMarshal = superclassMarshal;
-    }
-
-
-    public void setEntityFactory(EntityFactory factory) {
-        this.factory = factory;
-    }
-
-
-    public EntityFactory getEntityFactory() {
-        return factory;
     }
 
 
