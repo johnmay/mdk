@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.interfaces;
 
+import uk.ac.ebi.interfaces.entities.Entity;
 import com.google.common.collect.ListMultimap;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -35,7 +36,7 @@ import java.util.Set;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface AnnotatedEntity extends ReconstructionEntity {
+public interface AnnotatedEntity extends Entity {
 
     public void addAnnotations(Collection<Annotation> annotations);
 

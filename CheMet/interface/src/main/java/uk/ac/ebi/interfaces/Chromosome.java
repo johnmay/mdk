@@ -23,6 +23,7 @@ package uk.ac.ebi.interfaces;
 import java.io.Externalizable;
 import java.util.Collection;
 import java.util.List;
+import uk.ac.ebi.interfaces.entities.Entity;
 
 /**
  *          Chromosome – 2011.09.12 <br>
@@ -31,7 +32,7 @@ import java.util.List;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface Chromosome extends Externalizable {
+public interface Chromosome extends Entity {
 
     /**
      * A gene to the chromosome. This will set the circular reference for the gene

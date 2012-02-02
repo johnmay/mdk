@@ -28,6 +28,7 @@ import java.util.List;
 import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
 
+
 /**
  *          GeneProduct – 2011.09.12 <br>
  *          Class description
@@ -43,7 +44,9 @@ public interface GeneProduct extends AnnotatedEntity {
      */
     public Collection<Gene> getGenes();
 
+
     public boolean addGene(Gene gene);
+
 
     /**
      *
@@ -54,11 +57,13 @@ public interface GeneProduct extends AnnotatedEntity {
      */
     public String getName();
 
+
     /**
      * Returns the sequence of the gene product
      * @return a Sequence composed of either AminoAcidCompoundSet or RNACompoundSet
      */
     public List<? extends Sequence> getSequences();
+
 
     /**
      * Add a sequence for the product
@@ -66,17 +71,23 @@ public interface GeneProduct extends AnnotatedEntity {
      */
     public boolean addSequence(Sequence<? extends AbstractCompound> sequence);
 
+
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException;
+
 
     public void writeExternal(ObjectOutput out) throws IOException;
 
+
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException;
 
+
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException;
+
 
     /**
      * Returns a new instance of the current gene-product type
      * @return 
      */
+    @Override
     public GeneProduct newInstance();
 }

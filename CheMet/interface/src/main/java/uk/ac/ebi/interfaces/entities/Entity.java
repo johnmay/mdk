@@ -18,8 +18,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.interfaces;
+package uk.ac.ebi.interfaces.entities;
 
+import java.io.Externalizable;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 
@@ -30,7 +31,8 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface ReconstructionEntity {
+public interface Entity
+        extends Externalizable {
 
     public String getName();
 
@@ -61,4 +63,11 @@ public interface ReconstructionEntity {
      * @return
      */
     public String getBaseType();
+
+
+    /**
+     * Create a new instance of this entity
+     * @return e the new instance
+     */
+    public Entity newInstance();
 }

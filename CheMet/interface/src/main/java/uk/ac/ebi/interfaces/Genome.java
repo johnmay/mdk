@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Collection;
+import uk.ac.ebi.interfaces.entities.Entity;
+
 
 /**
  *          Genome - 2011.10.18 <br>
@@ -35,7 +37,8 @@ import java.util.Collection;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface Genome {
+public interface Genome
+        extends Entity {
 
     /**
      * Access to the collection of chromosomes for this genome
@@ -43,11 +46,13 @@ public interface Genome {
      */
     public Collection<Chromosome> getChromosomes();
 
+
     /**
      * Access a collection of all genes stored on all chromosomes
      * @return collection of genes
      */
     public Collection<Gene> getGenes();
+
 
     /**
      * Access a chromosome within the genome by it's number. Attempting to
@@ -58,12 +63,14 @@ public interface Genome {
      */
     public Chromosome getChromosome(int number);
 
+
     /**
      * Adds a chromosome to the genome.
      * @param chromosome The chromosome to add
      * @return whether the chromosome added replaces an existing entry
      */
     public boolean add(Chromosome chromosome);
+
 
     /**
      * Removes a chromosome from the genome.
@@ -72,6 +79,7 @@ public interface Genome {
      *         not present in the genome)
      */
     public boolean remove(Chromosome chromosome);
+
 
     /**
      * Convenience method to add a gene to the genome on the specified
@@ -83,11 +91,13 @@ public interface Genome {
      */
     public boolean add(int number, Gene gene);
 
+
     /**
      * Reads a genome from an input stream
      * @param in
      */
     public void read(ObjectInput in) throws IOException, ClassNotFoundException;
+
 
     /**
      * Writes the genome to an output stream
@@ -95,7 +105,9 @@ public interface Genome {
      */
     public void write(ObjectOutput out) throws IOException;
 
+
     public Gene getGene(int number, int index);
+
 
     public int[] getIndex(Gene gene);
 }
