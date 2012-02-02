@@ -124,6 +124,19 @@ public class Reconstruction
     }
 
 
+    @Override
+    public String getAccession() {
+        String accession = super.getAccession();
+        if (accession.contains("%m")) {
+            accession = accession.replaceAll("%m", Integer.toString(metabolites.size()));
+        }
+        if (accession.contains("%n")) {
+            accession = accession.replaceAll("%n", Integer.toString(reactions.size()));
+        }
+        return accession;
+    }
+
+
     /**
      * 
      * Access the genome of the reconstruction. The genome
@@ -323,65 +336,56 @@ public class Reconstruction
     /**
      * Loads a reconstruction from a given container
      */
-    public static Reconstruction load(File container) throws IOException, ClassNotFoundException {
-
-        File file = new File(container, "recon.extern.gzip");
-        ObjectInput in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file),
-                                                                   1024 * 8)); // 8 mb
-        Reconstruction reconstruction = new Reconstruction();
-        reconstruction.readExternal(in);
-
-        return reconstruction;
-
-    }
-
-
-    /**
-     * Saves the project and it's data
-     * @return if the project was saved
-     */
-    public boolean save() throws IOException {
-        if (container != null) {
-
-            ObjectOutput out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(
-                    new File(container, "recon.extern.gzip"))));
-            this.writeExternal(out);
-            out.close();
-            return true;
-
-        }
-        return false;
-    }
-
-
-    public void saveAsProject(File projectRoot) throws IOException {
-
-        if (!projectRoot.getPath().endsWith("mnb")) {
-            projectRoot = new File(projectRoot.getPath() + ".mnb");
-        }
-
-        // create folder
-        if (!projectRoot.exists()) {
-            logger.info("Saving project as " + projectRoot);
-            setContainer(projectRoot);
-            container.mkdir();
-            getDataDirectory().mkdir();
-            save();
-            //  setTmpDir();
-        } else if (projectRoot.equals(container)) {
-            save();
-        } else {
-            JOptionPane.showMessageDialog(null,
-                                          "Cannot overwrite a different project");
-        }
-    }
-
-
-    private File getDataDirectory() {
-        return new File(container, DATA_FOLDER_NAME);
-    }
-
-
+//    public static Reconstruction load(File container) throws IOException, ClassNotFoundException {
+//
+//        File file = new File(container, "recon.extern.gzip");
+//        ObjectInput in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file),
+//                                                                   1024 * 8)); // 8 mb
+//        Reconstruction reconstruction = new Reconstruction();
+//        reconstruction.readExternal(in);
+//
+//        return reconstruction;
+//
+//    }
+//    /**
+//     * Saves the project and it's data
+//     * @return if the project was saved
+//     */
+//    public boolean save() throws IOException {
+//        if (container != null) {
+//
+//            ObjectOutput out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(
+//                    new File(container, "recon.extern.gzip"))));
+//            this.writeExternal(out);
+//            out.close();
+//            return true;
+//
+//        }
+//        return false;
+//    }
+//
+//
+//    public void saveAsProject(File projectRoot) throws IOException {
+//
+//        if (!projectRoot.getPath().endsWith("mnb")) {
+//            projectRoot = new File(projectRoot.getPath() + ".mnb");
+//        }
+//
+//        // create folder
+//        if (!projectRoot.exists()) {
+//            logger.info("Saving project as " + projectRoot);
+//            setContainer(projectRoot);
+//            container.mkdir();
+//            getDataDirectory().mkdir();
+//            save();
+//            //  setTmpDir();
+//        } else if (projectRoot.equals(container)) {
+//            save();
+//        } else {
+//            JOptionPane.showMessageDialog(null,
+//                                          "Cannot overwrite a different project");
+//        }
+//    }
     public void writeExternal(ObjectOutput out) throws IOException {
 
         super.writeExternal(out);
