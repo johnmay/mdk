@@ -13,7 +13,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.util.ExternalReference;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 /**
@@ -78,9 +77,10 @@ public class ChEBIWebServiceConnectionTest {
     public void testGetCrossReferences_tobramycin() {
         System.out.println("testGetCrossReferences_tobramycin");
         try {
-            String chebiID_tobra = ""+28864;
-            for (ExternalReference externalReference : chebi.getCrossReferences(chebiID_tobra)) {
-                System.out.println(externalReference.getDbName()+"\t"+externalReference.getExternalID());
+            //String chebiID_tobra = ""+28864;
+            ChEBIIdentifier ident_tobra = new ChEBIIdentifier(28864);
+            for (CrossReference externalReference : chebi.getCrossReferences(ident_tobra)) {
+                System.out.println(externalReference.getShortDescription()+"\t"+externalReference.getIdentifier().getAccession());
             }
         } catch(UnfetchableEntry ex) {
             System.out.println(ex.getMessage());
@@ -91,9 +91,10 @@ public class ChEBIWebServiceConnectionTest {
     public void testGetCrossReferences_entryDrugBankCrossRef() {
         System.out.println("testGetCrossReferences_entryDrugBankCrossRef"); 
         try {
-            String chebiID_tobra = ""+4909; // etodolac
-            for (ExternalReference externalReference : chebi.getCrossReferences(chebiID_tobra)) {
-                System.out.println(externalReference.getDbName()+"\t"+externalReference.getExternalID());
+            //String chebiID_tobra = ""+4909; // etodolac
+            ChEBIIdentifier ident_etodolac = new ChEBIIdentifier(28864);
+            for (CrossReference externalReference : chebi.getCrossReferences(ident_etodolac)) {
+                System.out.println(externalReference.getShortDescription()+"\t"+externalReference.getIdentifier().getAccession());
             }
         } catch(UnfetchableEntry ex) {
             System.out.println(ex.getMessage());

@@ -39,9 +39,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.util.ExternalReference;
 import uk.ac.ebi.metabolomes.webservices.ICrossReferenceProvider;
 import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.chemical.BRNIdentifier;
+import uk.ac.ebi.resource.chemical.CASIdentifier;
+import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.EINECSIdentifier;
+import uk.ac.ebi.resource.chemical.EPAPesticideIdentifier;
+import uk.ac.ebi.resource.chemical.HSDBIdentifier;
+import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.resource.chemical.ZINCIdentifier;
 
 /**
  * @name    CactusChemical
@@ -175,10 +182,10 @@ public class CactusChemical implements ICrossReferenceProvider {
      */
     public List<CrossReference> getCrossReferences(Identifier identifier) {
         List<CrossReference> crossReferences = new ArrayList<CrossReference>();
-        for (ExternalReference externalReference : getCrossReferences(identifier.getAccession())) {
-            Identifier crIdent = factory.ofSynonym(externalReference.getDbName());
-            crIdent.setAccession(externalReference.getExternalID());
-            CrossReference ref = new CrossReference(crIdent);
+        for (Identifier externalReference : getCrossReferences(identifier.getAccession())) {
+            //Identifier crIdent = factory.ofSynonym(externalReference.getDbName());
+            //crIdent.setAccession(externalReference.getExternalID());
+            CrossReference ref = new CrossReference(externalReference);
             crossReferences.add(ref);
         }
         return crossReferences;
@@ -195,48 +202,56 @@ public class CactusChemical implements ICrossReferenceProvider {
      * @param query - a valid NCI/Cactvs structure identifier
      * @return a list of CrossReferences for selected databases
      */
-    public List<ExternalReference> getCrossReferences(String query) {
-        List<ExternalReference> results=new ArrayList<ExternalReference>();
+    public List<Identifier> getCrossReferences(String query) {
+        List<Identifier> results=new ArrayList<Identifier>();
         List<String> namesAndCrossRefs = this.getRepresentationForStructIdentifier(query, CactvsRepresentation.Names);
         for (String nameCR : namesAndCrossRefs) {
             Matcher matcher = chebiPat.matcher(nameCR);
             if(matcher.matches()) {
-                results.add(new ExternalReference("CHEBI", matcher.group(2)));
+                results.add(new ChEBIIdentifier(matcher.group(2)));
+                //results.add(new ExternalReference("CHEBI", matcher.group(2)));
                 continue;
             }
             matcher = keggCmpPat.matcher(nameCR);
             if(matcher.matches()) {
-                results.add(new ExternalReference("LIGAND-CPD", nameCR));
+                results.add(new KEGGCompoundIdentifier(nameCR));
+                //results.add(new ExternalReference("LIGAND-CPD", nameCR));
                 continue;
             }
             matcher = einecDBPat.matcher(nameCR);
             if(matcher.matches()) {
-                results.add(new ExternalReference("EINECS", matcher.group(1)));
+                results.add(new EINECSIdentifier(matcher.group(1)));
+                //results.add(new ExternalReference("EINECS", matcher.group(1)));
                 continue;
             }
             matcher = zincDBPat.matcher(nameCR);
             if(matcher.matches()) {
-                results.add(new ExternalReference("ZINC", matcher.group(1)));
+                results.add(new ZINCIdentifier(matcher.group(1)));
+                //results.add(new ExternalReference("ZINC", matcher.group(1)));
                 continue;
             }
             matcher = HSDBPat.matcher(nameCR);
             if(matcher.matches()) {
-                results.add(new ExternalReference("HSDB", matcher.group(1)));
+                results.add(new HSDBIdentifier(matcher.group(1)));
+                //results.add(new ExternalReference("HSDB", matcher.group(1)));
                 continue;
             }
             matcher = epaPesticidePat.matcher(nameCR);
             if(matcher.matches()) {
-                results.add(new ExternalReference("EPA_PESTICIDE", matcher.group(1)));
+                results.add(new EPAPesticideIdentifier(matcher.group(1)));
+                //results.add(new ExternalReference("EPA_PESTICIDE", matcher.group(1)));
                 continue;
             }
             matcher = BrnRegNumPat.matcher(nameCR);
             if(matcher.matches()) {
-                results.add(new ExternalReference("BRN", matcher.group(1)));
+                results.add(new BRNIdentifier(matcher.group(1)));
+                //results.add(new ExternalReference("BRN", matcher.group(1)));
                 continue;
             }
             matcher = casRegNumPat.matcher(nameCR);
             if(matcher.matches()) {
-                results.add(new ExternalReference("CAS", nameCR));
+                results.add(new CASIdentifier(nameCR));
+                //results.add(new ExternalReference("CAS", nameCR));
                 continue;
             }
         }

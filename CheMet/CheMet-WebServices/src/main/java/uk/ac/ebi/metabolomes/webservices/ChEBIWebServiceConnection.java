@@ -29,7 +29,7 @@ import uk.ac.ebi.chebi.webapps.chebiWS.model.*;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.util.ExternalReference;
+//import uk.ac.ebi.metabolomes.util.ExternalReference;
 import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
@@ -584,9 +584,9 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
     }
     
     
-    
-    public List<ExternalReference> getCrossReferences(String idVariablePart) {
-        List<ExternalReference> results=new ArrayList<ExternalReference>();
+    /*
+    public List<Identifier> getCrossReferences(String idVariablePart) {
+        List<Identifier> results=new ArrayList<ChemicalIdentifier>();
         try {
             Entity entity = client.getCompleteEntity("CHEBI:" + idVariablePart);
             List<DataItem> dbLinks = entity.getDatabaseLinks();
@@ -603,7 +603,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
         }
         return results;
         
-    }
+    }*/
 
     public List<CrossReference> getCrossReferences(Identifier query) {
         if(query instanceof ChEBIIdentifier)

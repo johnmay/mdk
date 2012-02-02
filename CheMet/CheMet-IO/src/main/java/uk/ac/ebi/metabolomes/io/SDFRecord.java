@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.util.ExternalReference;
 import uk.ac.ebi.resource.IdentifierFactory;
 
 /**
