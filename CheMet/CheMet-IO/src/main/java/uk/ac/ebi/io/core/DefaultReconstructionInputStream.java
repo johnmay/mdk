@@ -34,6 +34,7 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.io.ReconstructionInputStream;
+import uk.ac.ebi.resource.IdentifierFactory;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 
@@ -74,6 +75,7 @@ public class DefaultReconstructionInputStream
         this.marshalFactory = new MarshallFactory(new Version(readInt()), factory);
 
         // basic info
+        reconstruction.setIdentifier(IdentifierFactory.getInstance().read(this));
         reconstruction.setName(readUTF());
         reconstruction.setAbbreviation(readUTF());
 

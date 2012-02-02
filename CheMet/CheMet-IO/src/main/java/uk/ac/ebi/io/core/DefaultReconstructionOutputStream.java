@@ -34,6 +34,7 @@ import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.io.ReconstructionOutputStream;
+import uk.ac.ebi.resource.IdentifierFactory;
 
 
 /**
@@ -70,6 +71,7 @@ public class DefaultReconstructionOutputStream extends ObjectOutputStream implem
         writeInt(marshalFactory.getVersion().getIndex());
 
         // basic info (could delegate to EntityMarshaller)
+        IdentifierFactory.getInstance().write(this, reconstruction.getIdentifier());
         writeUTF(reconstruction.getName());
         writeUTF(reconstruction.getAbbreviation());
 
