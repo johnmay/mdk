@@ -27,10 +27,7 @@ import java.security.InvalidParameterException;
 import java.util.Arrays;
 import uk.ac.ebi.interfaces.Annotation;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AuthorAnnotation;
-import uk.ac.ebi.annotation.Locus;
-import uk.ac.ebi.annotation.Subsystem;
-import uk.ac.ebi.annotation.Synonym;
+import uk.ac.ebi.annotation.*;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
@@ -94,7 +91,8 @@ public class AnnotationFactory {
                                                        new Locus(),
                                                        new Citation(),
                                                        new FluxLowerBound(),
-                                                       new FluxUpperBound())) {
+                                                       new FluxUpperBound(),
+                                                       new Source())) {
 
                 constructors[annotation.getIndex()] = annotation.getClass().getConstructor();
                 instances[annotation.getIndex()] = annotation;
