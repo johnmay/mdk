@@ -5,7 +5,6 @@
 
 package uk.ac.ebi.metabolomes.util;
 
-import uk.ac.ebi.metabolomes.util.inchi.StdInChIGenerator;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;

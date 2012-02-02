@@ -5,15 +5,12 @@
 
 package uk.ac.ebi.metabolomes.util.inchi;
 
-import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 
 /**
  *
