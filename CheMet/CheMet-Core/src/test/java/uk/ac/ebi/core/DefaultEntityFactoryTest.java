@@ -42,7 +42,7 @@ public class DefaultEntityFactoryTest {
         Assert.assertEquals(GeneImplementation.class, gene.getClass());
         
         Metabolite metabolite = factory.newInstance(Metabolite.class);
-        Assert.assertEquals(uk.ac.ebi.core.Metabolite.class, metabolite.getClass());
+        Assert.assertEquals(uk.ac.ebi.core.MetaboliteImplementation.class, metabolite.getClass());
 
     }
 }

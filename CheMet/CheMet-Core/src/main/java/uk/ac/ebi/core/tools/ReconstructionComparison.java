@@ -74,7 +74,7 @@ public class ReconstructionComparison {
         for (Reconstruction recon : recons) {
             for (Metabolite m : recon.getMetabolites()) {
                 if (m.hasStructureAssociated()) {
-                    IAtomContainer mol = ((uk.ac.ebi.core.Metabolite) m).getFirstChemicalStructure().getMolecule();
+                    IAtomContainer mol = ((uk.ac.ebi.core.MetaboliteImplementation) m).getFirstChemicalStructure().getMolecule();
                     mol = mol.getAtomCount() > 1 && hydrogen ? mol : AtomContainerManipulator.removeHydrogens(mol);
                     MolecularHash hash = HASH_FACTORY.getHash(mol, methods);
                     metaboliteMap.put(recon, hash.hash);
@@ -101,7 +101,7 @@ public class ReconstructionComparison {
         LOGGER.debug("Generating hash code: " + methods);
         for (Metabolite m : recon.getMetabolites()) {
             if (m.hasStructureAssociated()) {
-                IAtomContainer mol = ((uk.ac.ebi.core.Metabolite) m).getFirstChemicalStructure().getMolecule();
+                IAtomContainer mol = ((uk.ac.ebi.core.MetaboliteImplementation) m).getFirstChemicalStructure().getMolecule();
                 mol = mol.getAtomCount() > 1 && hydrogen ? mol : AtomContainerManipulator.removeHydrogens(mol);
                 MolecularHash hash = HASH_FACTORY.getHash(mol, methods);
                 map.put(m, hash.hash);

@@ -268,8 +268,8 @@ public class ReactionRenderer {
         g2.drawString(compartment, (int) bounds.getWidth() - compartmentWidth, compartmentHeight);
 
 
-        if (((uk.ac.ebi.core.Metabolite) metabolite).getChemicalStructures().iterator().hasNext()) {
-            IAtomContainer atomContainer = ((uk.ac.ebi.core.Metabolite) metabolite).getChemicalStructures().iterator().next().
+        if (((uk.ac.ebi.core.MetaboliteImplementation) metabolite).getChemicalStructures().iterator().hasNext()) {
+            IAtomContainer atomContainer = ((uk.ac.ebi.core.MetaboliteImplementation) metabolite).getChemicalStructures().iterator().next().
                     getMolecule();
 
 

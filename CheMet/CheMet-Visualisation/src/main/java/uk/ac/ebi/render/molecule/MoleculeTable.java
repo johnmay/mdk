@@ -94,7 +94,7 @@ public class MoleculeTable extends JTable {
                                  new ChemicalStructureRenderer(CachedMoleculeRenderer.getInstance()));
 
 
-        Metabolite m = new uk.ac.ebi.core.Metabolite("1", "123ta", "1,2,3-Tirazole");
+        Metabolite m = new uk.ac.ebi.core.MetaboliteImplementation("1", "123ta", "1,2,3-Tirazole");
         m.addAnnotation(new ChemicalStructure(MoleculeFactory.make123Triazole()));
 
         List<Metabolite> mols = new ArrayList();

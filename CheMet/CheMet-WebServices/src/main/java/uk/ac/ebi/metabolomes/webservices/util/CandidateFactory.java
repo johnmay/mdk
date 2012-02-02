@@ -34,7 +34,7 @@ import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.ChemicalDataQueryService;
 import uk.ac.ebi.interfaces.services.NameQueryService;
@@ -112,7 +112,7 @@ public class CandidateFactory<I extends Identifier> {
             I id = (I) xrefid.newInstance();
             id.setAccession(candidate.getId());
 
-            Metabolite m = new Metabolite(id, "", "");
+            MetaboliteImplementation m = new MetaboliteImplementation(id, "", "");
             m.setName(candidate.getDescription());
 
             m.setCharge(dataservice.getCharge(id));

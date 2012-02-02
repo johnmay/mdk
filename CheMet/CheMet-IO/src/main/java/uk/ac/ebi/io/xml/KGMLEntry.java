@@ -32,7 +32,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
@@ -149,9 +149,9 @@ public class KGMLEntry {
         return null;
     }
 
-    public Metabolite createMetabolite() {
+    public MetaboliteImplementation createMetabolite() {
         String subName = name.substring(4);
-        Metabolite m = new Metabolite(new KEGGCompoundIdentifier(subName), subName, subName);
+        MetaboliteImplementation m = new MetaboliteImplementation(new KEGGCompoundIdentifier(subName), subName, subName);
         m.addAnnotation(new KEGGCrossReference(new KEGGCompoundIdentifier(subName)));
         return m;
     }

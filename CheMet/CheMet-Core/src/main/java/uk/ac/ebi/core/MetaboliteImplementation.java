@@ -42,11 +42,11 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class Metabolite
+public class MetaboliteImplementation
         extends AbstractAnnotatedEntity
         implements uk.ac.ebi.interfaces.entities.Metabolite, Externalizable {
 
-    private static final Logger LOGGER = Logger.getLogger(Metabolite.class);
+    private static final Logger LOGGER = Logger.getLogger(MetaboliteImplementation.class);
 
     private boolean generic = false;
 
@@ -57,11 +57,11 @@ public class Metabolite
     public static final String BASE_TYPE = "Metabolite";
 
 
-    public Metabolite() {
+    public MetaboliteImplementation() {
     }
 
 
-    public Metabolite(Identifier identifier, String abbreviation, String name) {
+    public MetaboliteImplementation(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
@@ -75,7 +75,7 @@ public class Metabolite
      * @param name
      * 
      */
-    public Metabolite(String accession, String abbreviation, String name) {
+    public MetaboliteImplementation(String accession, String abbreviation, String name) {
         super(new BasicChemicalIdentifier(accession), abbreviation, name);
     }
 
@@ -188,7 +188,7 @@ public class Metabolite
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Metabolite other = (Metabolite) obj;
+        final MetaboliteImplementation other = (MetaboliteImplementation) obj;
 
         if (super.equals(other) == false) {
             return false;
@@ -226,7 +226,7 @@ public class Metabolite
 
 
     public Entity newInstance() {
-        return new Metabolite();
+        return new MetaboliteImplementation();
     }
 
 

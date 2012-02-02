@@ -34,10 +34,10 @@ import org.apache.log4j.Logger;
 public class CompartmentalisedMetabolite {
 
     private static final Logger LOGGER = Logger.getLogger(CompartmentalisedMetabolite.class);
-    public final Metabolite metabolite;
+    public final MetaboliteImplementation metabolite;
     public final Compartment compartment;
 
-    public CompartmentalisedMetabolite(final Metabolite metabolite, Compartment compartment) {
+    public CompartmentalisedMetabolite(final MetaboliteImplementation metabolite, Compartment compartment) {
         this.metabolite = metabolite;
         this.compartment = compartment;
     }

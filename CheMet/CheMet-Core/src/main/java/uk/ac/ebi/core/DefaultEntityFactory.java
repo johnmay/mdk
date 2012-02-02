@@ -51,7 +51,7 @@ public class DefaultEntityFactory
 
         //entites.put(uk.ac.ebi.interfaces.entities.Metabolite.class, new Metabolite());
 
-        for (Entity entity : Arrays.asList(new Metabolite(),
+        for (Entity entity : Arrays.asList(new MetaboliteImplementation(),
                                            new MetabolicReaction(),
                                            new ProteinProduct(),
                                            new RibosomalRNA(),

@@ -83,7 +83,7 @@ public class MoleculeTableModel extends DefaultTableModel {
         for (SynonymCandidateEntry candidate : candidates) {
 
             String accession = candidate.getId();
-            Metabolite m = new uk.ac.ebi.core.Metabolite("", "", candidate.getDescription());
+            Metabolite m = new uk.ac.ebi.core.MetaboliteImplementation("", "", candidate.getDescription());
 
             m.setName(candidate.getDesc());
 

@@ -16,7 +16,7 @@ import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
@@ -47,12 +47,12 @@ public class SBMLIOUtilTest {
                                          UnsupportedEncodingException {
         Reconstruction recon = new Reconstruction(new ReconstructionIdentifier("mnb-project"),
                                                   new Taxonomy());
-        Metabolite m = new Metabolite(new BasicChemicalIdentifier("m2"), null, null);
+        MetaboliteImplementation m = new MetaboliteImplementation(new BasicChemicalIdentifier("m2"), null, null);
         m.setName("molecule name");
         m.addCrossReference(new ChEBIIdentifier("CHEBI:12435"));
         recon.addMetabolite(m);
 
-        Metabolite m2 = new Metabolite(new BasicChemicalIdentifier("m2"), null, null);
+        MetaboliteImplementation m2 = new MetaboliteImplementation(new BasicChemicalIdentifier("m2"), null, null);
         m2.setName("different molecule");
         m2.addCrossReference(new ChEBIIdentifier("CHEBI:12436"));
         recon.addMetabolite(m2);

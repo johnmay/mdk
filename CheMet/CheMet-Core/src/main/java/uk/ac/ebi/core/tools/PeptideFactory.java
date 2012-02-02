@@ -37,7 +37,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.normalize.SMSDNormalizer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
@@ -121,9 +121,9 @@ public class PeptideFactory {
     }
 
 
-    public Metabolite generateMetabolite(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
+    public MetaboliteImplementation generateMetabolite(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
 
-        Metabolite m = new Metabolite(BasicChemicalIdentifier.nextIdentifier(),
+        MetaboliteImplementation m = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(),
                                       generateAbbreviation(aminoacids),
                                       generateName(aminoacids));
 

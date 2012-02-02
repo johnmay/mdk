@@ -10,7 +10,7 @@ import org.junit.Test;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
@@ -39,8 +39,8 @@ public class TransportReactionUtilTest {
 
         System.out.print("testGetClassification_SYMPORT ");
 
-        Metabolite atp = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
-        Metabolite alanine = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
+        MetaboliteImplementation atp = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
+        MetaboliteImplementation alanine = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
 
         MetabolicReaction rxn = new MetabolicReaction(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
@@ -64,8 +64,8 @@ public class TransportReactionUtilTest {
         System.out.print("testGetClassification_ANTIPORT ");
 
 
-        Metabolite atp = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
-        Metabolite alanine = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
+        MetaboliteImplementation atp = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
+        MetaboliteImplementation alanine = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
 
         MetabolicReaction rxn = new MetabolicReaction(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
@@ -87,8 +87,8 @@ public class TransportReactionUtilTest {
         System.out.print("testGetClassification_UNIPORT ");
 
 
-        Metabolite atp = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
-        Metabolite alanine = new Metabolite(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
+        MetaboliteImplementation atp = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
+        MetaboliteImplementation alanine = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
 
         MetabolicReaction rxn = new MetabolicReaction(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 

@@ -52,7 +52,7 @@ import uk.ac.ebi.resource.MIRIAMLoader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
@@ -99,8 +99,8 @@ public class SBMLReactionReader {
     private AbstractParticipantFilter filter;
     //
     private Map<SpeciesReference, Species> speciesRefMap = new HashMap<SpeciesReference, Species>();
-    private Map<Species, Metabolite> speciesMap = new HashMap<Species, Metabolite>();
-    private Map<String, Metabolite> speciesNameMap = new HashMap<String, Metabolite>();
+    private Map<Species, MetaboliteImplementation> speciesMap = new HashMap<Species, MetaboliteImplementation>();
+    private Map<String, MetaboliteImplementation> speciesNameMap = new HashMap<String, MetaboliteImplementation>();
 
     /**
      * Construct an SBML reaction reader using an input stream. This constructor
@@ -238,7 +238,7 @@ public class SBMLReactionReader {
 
         Double coefficient = speciesReference.getStoichiometry();
 
-        Metabolite metabolite = null;
+        MetaboliteImplementation metabolite = null;
 
         if (speciesMap.containsKey(species)) {
             metabolite = speciesMap.get(species);
@@ -246,7 +246,7 @@ public class SBMLReactionReader {
             LOGGER.info("Using existing species with the same name:" + species.getName());
             metabolite = speciesNameMap.get(species.getName());
         } else {
-            metabolite = new Metabolite(new BasicChemicalIdentifier(species.getId()),
+            metabolite = new MetaboliteImplementation(new BasicChemicalIdentifier(species.getId()),
                                         species.getMetaId(),
                                         species.getName());
 
