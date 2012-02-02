@@ -84,38 +84,4 @@ public class MoleculeTable extends JTable {
         return getModel().getEntities(getSelectedRows());
     }
 
-
-    public static void main(String[] args) {
-        final MoleculeTable table = new MoleculeTable(new NameAccessor(),
-                                                      new ChemicalStructureAccessor());
-
-
-        table.setDefaultRenderer(ChemicalStructure.class,
-                                 new ChemicalStructureRenderer(CachedMoleculeRenderer.getInstance()));
-
-
-        Metabolite m = new uk.ac.ebi.core.MetaboliteImplementation("1", "123ta", "1,2,3-Tirazole");
-        m.addAnnotation(new ChemicalStructure(MoleculeFactory.make123Triazole()));
-
-        List<Metabolite> mols = new ArrayList();
-
-        for (int i = 0; i < 100; i++) {
-            mols.add(m);
-        }
-
-        table.getModel().set(mols);
-
-
-        final JFrame frame = new JFrame();
-
-        SwingUtilities.invokeLater(new Runnable() {
-
-            public void run() {
-                frame.add(new JScrollPane(table));
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
-            }
-        });
-    }
 }

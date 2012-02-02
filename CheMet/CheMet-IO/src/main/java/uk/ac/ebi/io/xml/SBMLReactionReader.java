@@ -23,10 +23,8 @@ package uk.ac.ebi.io.xml;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.xml.stream.XMLStreamException;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -52,8 +50,9 @@ import uk.ac.ebi.resource.MIRIAMLoader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
@@ -62,6 +61,7 @@ import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
+
 
 /**
  * SBMLReactionReader – 2011.08.15
@@ -86,21 +86,35 @@ import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 public class SBMLReactionReader {
 
     private static final Logger LOGGER = Logger.getLogger(SBMLReactionReader.class);
+
     private static final SBMLReader reader = new SBMLReader();
     // web service clients
+
     private final CachedChemicalWS chebiWS = new CachedChemicalWS(new ChEBIWebServiceConnection());
+
     private final CachedChemicalWS keggWS = new CachedChemicalWS(new KeggCompoundWebServiceConnection());
     // sbml storage
+
     private final SBMLDocument document;
+
     private final Model model;
     // iterator location and max
+
     private Integer reactionIndex = -1;
+
     private final Integer reactionCount;
+
     private AbstractParticipantFilter filter;
     //
+
     private Map<SpeciesReference, Species> speciesRefMap = new HashMap<SpeciesReference, Species>();
-    private Map<Species, MetaboliteImplementation> speciesMap = new HashMap<Species, MetaboliteImplementation>();
-    private Map<String, MetaboliteImplementation> speciesNameMap = new HashMap<String, MetaboliteImplementation>();
+
+    private Map<Species, Metabolite> speciesMap = new HashMap<Species, Metabolite>();
+
+    private Map<String, Metabolite> speciesNameMap = new HashMap<String, Metabolite>();
+
+    private EntityFactory factory;
+
 
     /**
      * Construct an SBML reaction reader using an input stream. This constructor
@@ -109,9 +123,11 @@ public class SBMLReactionReader {
      * @param stream
      * @throws XMLStreamException
      */
-    public SBMLReactionReader(InputStream stream) throws XMLStreamException {
+    public SBMLReactionReader(InputStream stream, EntityFactory factory) throws XMLStreamException {
         this(reader.readSBMLFromStream(stream));
+        this.factory = factory;
     }
+
 
     /**
      * Construct an SBML reaction reader using an input stream using a specified participant
@@ -125,6 +141,7 @@ public class SBMLReactionReader {
         this(reader.readSBMLFromStream(stream), filter);
     }
 
+
     /**
      *
      * This constructor uses an empty {@see AcceptAllFilter} (i.e. accept all participants)
@@ -136,12 +153,14 @@ public class SBMLReactionReader {
         this(document, new AcceptAllFilter());
     }
 
+
     public SBMLReactionReader(SBMLDocument document, AbstractParticipantFilter filter) {
         this.document = document;
         this.model = document.getModel();
         this.reactionCount = model.getNumReactions();
         this.filter = filter;
     }
+
 
     /**
      *
@@ -174,6 +193,7 @@ public class SBMLReactionReader {
 
     }
 
+
     public MetabolicReaction getMetabolicReaction(Reaction sbmlReaction)
             throws UnknownCompartmentException {
 
@@ -196,6 +216,7 @@ public class SBMLReactionReader {
         return reaction;
 
     }
+
 
     /**
      *
@@ -224,7 +245,7 @@ public class SBMLReactionReader {
         if (species == null) {
             species = model.getSpecies(speciesReference.getId());
         }
-        if(species == null){
+        if (species == null) {
             LOGGER.error("ERROR!");
         }
 
@@ -238,7 +259,7 @@ public class SBMLReactionReader {
 
         Double coefficient = speciesReference.getStoichiometry();
 
-        MetaboliteImplementation metabolite = null;
+        Metabolite metabolite = null;
 
         if (speciesMap.containsKey(species)) {
             metabolite = speciesMap.get(species);
@@ -246,9 +267,10 @@ public class SBMLReactionReader {
             LOGGER.info("Using existing species with the same name:" + species.getName());
             metabolite = speciesNameMap.get(species.getName());
         } else {
-            metabolite = new MetaboliteImplementation(new BasicChemicalIdentifier(species.getId()),
-                                        species.getMetaId(),
-                                        species.getName());
+            metabolite = factory.newInstance(Metabolite.class,
+                                             new BasicChemicalIdentifier(species.getId()),
+                                             species.getMetaId(),
+                                             species.getName());
 
             metabolite.setCharge(((Integer) species.getCharge()).doubleValue());
 
@@ -263,9 +285,10 @@ public class SBMLReactionReader {
         }
 
         return new MetabolicParticipant(metabolite,
-                                         coefficient,
-                                         compartment);
+                                        coefficient,
+                                        compartment);
     }
+
 
     /**
      *
@@ -303,6 +326,7 @@ public class SBMLReactionReader {
 
         return reaction;
     }
+
 
     /**
      *
@@ -355,6 +379,7 @@ public class SBMLReactionReader {
 
     }
 
+
     /**
      *
      * Constructs and IAtomContainer from the given SBML chemical {@see Species} using RDF MIRIAM annotations
@@ -401,9 +426,11 @@ public class SBMLReactionReader {
 
     }
 
+
     public boolean hasNext() {
         return reactionIndex + 1 < reactionCount;
     }
+
 
     public AtomContainerReaction next() throws UnknownCompartmentException,
                                                AbsentAnnotationException,
@@ -417,6 +444,7 @@ public class SBMLReactionReader {
         return reaction;
 
     }
+
 
     public MetabolicReaction nextMetabolicReaction() throws UnknownCompartmentException {
         reactionIndex++;

@@ -148,7 +148,8 @@ public class MetaboliteComparison {
                         if (sub.containsKey(recon)) {
                             for (Metabolite m : sub.get(recon)) {
                                 if (m.hasStructureAssociated()) {
-                                    structure.add(((uk.ac.ebi.core.MetaboliteImplementation) m).getFirstChemicalStructure());
+                                    structure.add(m.hasStructureAssociated() ? m.getAnnotations(ChemicalStructure.class).iterator().next()
+                                                  : null);
                                 }
                             }
                         }

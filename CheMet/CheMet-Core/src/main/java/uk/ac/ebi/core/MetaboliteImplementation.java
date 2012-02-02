@@ -31,6 +31,7 @@ import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
 import uk.ac.ebi.interfaces.MetaboliteClass;
 import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
@@ -44,7 +45,7 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
  */
 public class MetaboliteImplementation
         extends AbstractAnnotatedEntity
-        implements uk.ac.ebi.interfaces.entities.Metabolite, Externalizable {
+        implements Metabolite {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteImplementation.class);
 

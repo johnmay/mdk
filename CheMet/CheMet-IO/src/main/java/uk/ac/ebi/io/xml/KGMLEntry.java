@@ -32,9 +32,10 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.core.MetaboliteImplementation;
-import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
+import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+
 
 /**
  *          KGMLEntry – 2011.09.16 <br>
@@ -46,10 +47,15 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 public class KGMLEntry {
 
     public final int id;
+
     public final String name;
+
     private final String type;
+
     private final KGMLGraphics[] graphics;
+
     private static final Logger LOGGER = Logger.getLogger(KGMLEntry.class);
+
 
     public KGMLEntry(int id, String name, String type, KGMLGraphics[] graphics) {
         this.id = id;
@@ -58,26 +64,32 @@ public class KGMLEntry {
         this.graphics = graphics;
     }
 
+
     public KGMLGraphics[] getGraphics() {
         return graphics;
     }
+
 
     public KGMLGraphics getFirstGraphics() {
         return graphics.length > 0 ? graphics[0] : null;
     }
 
+
     public Point2D getPoint() {
         return graphics.length > 0 ? getFirstGraphics().getPoint() : new Point2D.Double(0, 0);
     }
+
 
     public Point2D getPoint(double scaleX, double scaleY) {
         Point2D p = getPoint();
         return new Point2D.Double(p.getX() * scaleX, p.getY() * scaleY);
     }
 
+
     public Color getForeground() {
         return graphics.length > 0 ? getFirstGraphics().getForeground() : Color.GRAY;
     }
+
 
     /**
      * Creates a new instance from a KGML node passed with W3C XML
@@ -101,6 +113,7 @@ public class KGMLEntry {
                              attrMap.getNamedItem("type").getTextContent(),
                              graphics.toArray(new KGMLGraphics[0]));
     }
+
 
     public static KGMLEntry newInstance(XMLStreamReader2 xmlr) throws XMLStreamException {
 
@@ -149,9 +162,10 @@ public class KGMLEntry {
         return null;
     }
 
-    public MetaboliteImplementation createMetabolite() {
+
+    public Metabolite createMetabolite() {
         String subName = name.substring(4);
-        MetaboliteImplementation m = new MetaboliteImplementation(new KEGGCompoundIdentifier(subName), subName, subName);
+        Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class, new KEGGCompoundIdentifier(subName), subName, subName);
         m.addAnnotation(new KEGGCrossReference(new KEGGCompoundIdentifier(subName)));
         return m;
     }

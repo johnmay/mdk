@@ -21,6 +21,8 @@
 package uk.ac.ebi.core;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  *          CompartmentalisedMetabolite - 2011.12.05 <br>
@@ -34,13 +36,17 @@ import org.apache.log4j.Logger;
 public class CompartmentalisedMetabolite {
 
     private static final Logger LOGGER = Logger.getLogger(CompartmentalisedMetabolite.class);
-    public final MetaboliteImplementation metabolite;
+
+    public final Metabolite metabolite;
+
     public final Compartment compartment;
 
-    public CompartmentalisedMetabolite(final MetaboliteImplementation metabolite, Compartment compartment) {
+
+    public CompartmentalisedMetabolite(final Metabolite metabolite, Compartment compartment) {
         this.metabolite = metabolite;
         this.compartment = compartment;
     }
+
 
     @Override
     public int hashCode() {
@@ -49,6 +55,7 @@ public class CompartmentalisedMetabolite {
         hash = 67 * hash + (this.compartment != null ? this.compartment.hashCode() : 0);
         return hash;
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -67,6 +74,7 @@ public class CompartmentalisedMetabolite {
         }
         return true;
     }
+
 
     @Override
     public String toString() {

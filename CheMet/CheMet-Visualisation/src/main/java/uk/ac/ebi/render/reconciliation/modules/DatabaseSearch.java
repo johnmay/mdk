@@ -39,6 +39,7 @@ import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
 import uk.ac.ebi.io.service.ChEBIChemicalDataService;
@@ -134,8 +135,7 @@ public class DatabaseSearch
 
 
     }
-    
-    
+
 
     public String getDescription() {
         return "Database Search";
@@ -199,7 +199,8 @@ public class DatabaseSearch
         List<Metabolite> metabolites = factory.getMetaboliteList(factory.getSortedList(map),
                                                                  new ChEBIIdentifier(),
                                                                  ChEBIChemicalDataService.getInstance(),
-                                                                 "ChEBI");
+                                                                 "ChEBI",
+                                                                 DefaultEntityFactory.getInstance());
 
         getCandidateTable().getModel().set(metabolites);
 

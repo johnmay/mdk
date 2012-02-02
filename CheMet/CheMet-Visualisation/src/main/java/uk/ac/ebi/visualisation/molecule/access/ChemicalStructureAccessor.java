@@ -22,8 +22,8 @@ package uk.ac.ebi.visualisation.molecule.access;
 
 import java.util.ArrayList;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
 /**
@@ -44,14 +44,14 @@ public class ChemicalStructureAccessor
     }
 
 
-    public Object getValue(MetaboliteImplementation entity) {
-        return entity.getChemicalStructures();
+    public Object getValue(Metabolite entity) {
+        return entity.hasStructureAssociated() ? entity.getAnnotations(ChemicalStructure.class).iterator().next() : null;
     }
 
 
     public Object getValue(AnnotatedEntity entity) {
-        if (entity instanceof MetaboliteImplementation) {
-            return getValue((MetaboliteImplementation) entity);
+        if (entity instanceof Metabolite) {
+            return getValue((Metabolite) entity);
         }
         return new ArrayList();
     }

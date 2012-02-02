@@ -37,6 +37,7 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 
+
 /**
  *          MoleculeTableModel - 2011.10.31 <br>
  *          Class description
@@ -47,12 +48,16 @@ import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 public class MoleculeTableModel extends DefaultTableModel {
 
     private List<Metabolite> metabolites = new ArrayList();
+
     private Map<Metabolite, CandidateEntry> map = new HashMap();
+
     private List<EntityValueAccessor> columns = new ArrayList<EntityValueAccessor>();
+
 
     public MoleculeTableModel(EntityValueAccessor... accessors) {
         columns = Arrays.asList(accessors);
     }
+
 
     public void set(List<Metabolite> metabolites) {
 
@@ -72,48 +77,23 @@ public class MoleculeTableModel extends DefaultTableModel {
 
     }
 
+
     @Override
     public String getColumnName(int column) {
         return columns.get(column).getName();
     }
 
-    public void setCandidates(Collection<SynonymCandidateEntry> candidates) {
-        map.clear();
-        List<Metabolite> tmp = new ArrayList();
-        for (SynonymCandidateEntry candidate : candidates) {
-
-            String accession = candidate.getId();
-            Metabolite m = new uk.ac.ebi.core.MetaboliteImplementation("", "", candidate.getDescription());
-
-            m.setName(candidate.getDesc());
-
-            if (accession.startsWith("ChEBI") || accession.startsWith("CHEBI")) {
-                m.addAnnotation(new ChEBICrossReference(new ChEBIIdentifier(accession)));
-            } else if (accession.startsWith("C")) {
-                m.addAnnotation(new KEGGCrossReference(new KEGGCompoundIdentifier(accession)));
-            } else {
-                throw new UnsupportedOperationException("Need to add new identifier!");
-            }
-
-            for (String synonym : candidate.getSynonyms()) {
-                m.addAnnotation(new Synonym(synonym));
-            }
-
-            map.put(m, candidate);
-            tmp.add(m);
-
-        }
-        set(tmp);
-    }
 
     public CandidateEntry getCandidate(Metabolite m) {
         return map.get(m);
     }
 
+
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         return columns.get(columnIndex).getColumnClass();
     }
+
 
     public Collection<Metabolite> getEntities(int[] index) {
         List<Metabolite> aggregateList = new ArrayList();

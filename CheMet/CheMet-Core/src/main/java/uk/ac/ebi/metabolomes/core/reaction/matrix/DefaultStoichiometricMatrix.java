@@ -13,6 +13,7 @@ import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
 /**
@@ -72,7 +73,7 @@ public class DefaultStoichiometricMatrix
     public CompartmentalisedMetabolite[] getMetabolites(MetabolicReaction rxn) {
 
         List<CompartmentalisedMetabolite> list = new ArrayList<CompartmentalisedMetabolite>();
-        for (Participant<MetaboliteImplementation, ?, Compartment> p : rxn.getAllReactionParticipants()) {
+        for (Participant<Metabolite, ?, Compartment> p : rxn.getAllReactionParticipants()) {
             list.add(new CompartmentalisedMetabolite(p.getMolecule(), p.getCompartment()));
         }
 

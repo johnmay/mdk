@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>CheMet</artifactId>
@@ -19,6 +19,11 @@
    
 
     <dependencies>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-io</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -60,8 +65,8 @@
             <type>jar</type>
             <exclusions>
                 <exclusion>
-                <groupId>org.apache.axis</groupId>
-                <artifactId>axis</artifactId>
+                    <groupId>org.apache.axis</groupId>
+                    <artifactId>axis</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>wsdl4j</groupId>
@@ -79,17 +84,6 @@
             <groupId>ae3.service.webservices</groupId>
             <artifactId>arrayexpress-ws</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>CheMet-Core</artifactId>
-            <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>biojava3-core</artifactId>
-                    <groupId>org.biojava</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
@@ -126,6 +120,26 @@
             <groupId>gov.nih.nlm.ncbi.pubchem</groupId>
             <artifactId>pubchem-ws</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>chemet-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>chemet-resource</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>chemet-annotation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CheMet-Core</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

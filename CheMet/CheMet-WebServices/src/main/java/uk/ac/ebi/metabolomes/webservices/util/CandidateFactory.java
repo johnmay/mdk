@@ -34,7 +34,8 @@ import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.ChemicalDataQueryService;
 import uk.ac.ebi.interfaces.services.NameQueryService;
@@ -100,10 +101,11 @@ public class CandidateFactory<I extends Identifier> {
      * Generates 'dummy' metabolites for a list of candidates that can easily be displayed
      * in MoleculeTable (chemet-vis)
      */
-    public List<uk.ac.ebi.interfaces.entities.Metabolite> getMetaboliteList(List<? extends CandidateEntry> candidates,
-                                                                            I xrefid,
-                                                                            ChemicalDataQueryService<I> dataservice,
-                                                                            String source) {
+    public List<Metabolite> getMetaboliteList(List<? extends CandidateEntry> candidates,
+                                              I xrefid,
+                                              ChemicalDataQueryService<I> dataservice,
+                                              String source,
+                                              EntityFactory factory) {
 
         List<uk.ac.ebi.interfaces.entities.Metabolite> metabolites = new ArrayList<uk.ac.ebi.interfaces.entities.Metabolite>(candidates.size());
 
@@ -112,7 +114,7 @@ public class CandidateFactory<I extends Identifier> {
             I id = (I) xrefid.newInstance();
             id.setAccession(candidate.getId());
 
-            MetaboliteImplementation m = new MetaboliteImplementation(id, "", "");
+            Metabolite m = factory.newInstance(Metabolite.class, id, "", "");
             m.setName(candidate.getDescription());
 
             m.setCharge(dataservice.getCharge(id));
@@ -122,7 +124,7 @@ public class CandidateFactory<I extends Identifier> {
             }
 
             m.addAnnotation(new Source(source));
-            
+
             metabolites.add(m);
 
         }
