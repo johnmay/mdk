@@ -12,9 +12,12 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
  * @author johnmay
  */
 public interface Metabolite extends AnnotatedEntity {
-    
-    
-    public boolean isGeneric();       
-    
-    
+
+    public boolean isGeneric();
+
+
+    public Double getCharge();
+
+
+    public void setCharge(Double charge);
 }
