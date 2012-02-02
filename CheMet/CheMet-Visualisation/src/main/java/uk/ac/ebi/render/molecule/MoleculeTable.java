@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.render.molecule;
 
+import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,9 +33,10 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;
+import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.visualisation.molecule.access.ChemicalStructureAccessor;
 import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
@@ -56,13 +58,12 @@ public class MoleculeTable extends JTable {
 
     public MoleculeTable(EntityValueAccessor... accessors) {
         super(new MoleculeTableModel(accessors));
+        
+        setUI(new ITunesTableUI());
 
-        setDefaultRenderer(Synonym.class, new AnnotationCellRenderer(true, "<br>"));
+        setDefaultRenderer(Synonym.class, new AnnotationCellRenderer(false, ","));
         setDefaultRenderer(ChemicalStructure.class, new ChemicalStructureRenderer());
-
-        setSelectionBackground(lightGreen);
-        setSelectionForeground(Color.BLACK);
-
+        setDefaultRenderer(Annotation.class, new AnnotationCellRenderer(false, ","));
 
     }
 
@@ -93,7 +94,7 @@ public class MoleculeTable extends JTable {
                                  new ChemicalStructureRenderer(CachedMoleculeRenderer.getInstance()));
 
 
-        Metabolite m = new Metabolite("1", "123ta", "1,2,3-Tirazole");
+        Metabolite m = new uk.ac.ebi.core.Metabolite("1", "123ta", "1,2,3-Tirazole");
         m.addAnnotation(new ChemicalStructure(MoleculeFactory.make123Triazole()));
 
         List<Metabolite> mols = new ArrayList();

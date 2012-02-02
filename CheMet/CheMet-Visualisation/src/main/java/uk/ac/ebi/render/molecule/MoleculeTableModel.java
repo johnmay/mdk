@@ -28,11 +28,9 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import uk.ac.ebi.annotation.Synonym;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
@@ -85,7 +83,7 @@ public class MoleculeTableModel extends DefaultTableModel {
         for (SynonymCandidateEntry candidate : candidates) {
 
             String accession = candidate.getId();
-            Metabolite m = new Metabolite("", "", candidate.getDescription());
+            Metabolite m = new uk.ac.ebi.core.Metabolite("", "", candidate.getDescription());
 
             m.setName(candidate.getDesc());
 
