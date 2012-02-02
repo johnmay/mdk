@@ -46,7 +46,10 @@ public abstract class AbstractEntityMarshaller extends AbstractMarshaller implem
 
     @Override
     public void setEntityFactory(EntityFactory factory) {
-        superclassMarshal.setEntityFactory(factory);
+        if (superclassMarshal != null) {
+            superclassMarshal.setEntityFactory(factory);
+        }
+        super.setEntityFactory(factory);
     }
 
 

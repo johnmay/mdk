@@ -79,6 +79,7 @@ public class MarshallFactory {
             if (version.getIndex() >= entityMarshal.getVersion().getIndex()) {
                 AbstractEntityMarshaller copy = (AbstractEntityMarshaller) entityMarshal.newInstance();
                 copy.setSuperclassMarshal(superclass);
+                copy.setEntityFactory(factory);
                 return copy;
             }
         }
@@ -91,6 +92,7 @@ public class MarshallFactory {
             if (version.getIndex() >= entityMarshal.getVersion().getIndex()) {
                 AbstractAnnotatedEntityMarshaller copy = (AbstractAnnotatedEntityMarshaller) entityMarshal.newInstance();
                 copy.setSuperclassMarshal(superclass);
+                copy.setEntityFactory(factory);
                 return copy;
             }
         }
@@ -98,7 +100,7 @@ public class MarshallFactory {
     }
 
 
-    public EntityMarshaller getMetaboliteMarshall() {
+    public EntityMarshaller getMetaboliteMarshaller() {
         for (AnnotatedEntityMarshaller metaboliteMarshall : metaboliteMarshalls) {
             if (version.getIndex() >= metaboliteMarshall.getVersion().getIndex()) {
                 EntityMarshaller marshaller = getEntityMarshal(getAnnotatedEntityMarshal(metaboliteMarshall));

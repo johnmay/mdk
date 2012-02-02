@@ -49,7 +49,10 @@ public abstract class AbstractAnnotatedEntityMarshaller extends AbstractMarshall
 
     @Override
     public void setEntityFactory(EntityFactory factory) {
-        superclassMarshal.setEntityFactory(factory);
+        if (superclassMarshal != null) {
+            superclassMarshal.setEntityFactory(factory);
+        }
+        super.setEntityFactory(factory);
     }
 
 

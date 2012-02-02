@@ -122,7 +122,7 @@ public class DefaultReconstructionInputStream
             return metaboliteMap.get(index);
         }
 
-        Metabolite m = (Metabolite) marshalFactory.getMetaboliteMarshall().read(this);
+        Metabolite m = (Metabolite) marshalFactory.getMetaboliteMarshaller().read(this);
 
         metaboliteMap.put(index, m);
 

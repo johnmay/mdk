@@ -86,7 +86,7 @@ public class DefaultReconstructionOutputStream extends ObjectOutputStream implem
         reconstruction.getProducts().writeExternal(this, reconstruction.getGenome());
 
         // metabolites
-        EntityMarshaller metaboliteMarshaller = marshalFactory.getMetaboliteMarshall();
+        EntityMarshaller metaboliteMarshaller = marshalFactory.getMetaboliteMarshaller();
         MetaboliteCollection mc = reconstruction.getMetabolites();
         System.out.println(mc.size());
         writeInt(mc.size());
@@ -120,7 +120,7 @@ public class DefaultReconstructionOutputStream extends ObjectOutputStream implem
 
 
         this.writeInt(metaboliteCount);
-        marshalFactory.getMetaboliteMarshall().write(this, metabolite);
+        marshalFactory.getMetaboliteMarshaller().write(this, metabolite);
 
         metaboliteMap.put(metabolite, metaboliteCount);
 
