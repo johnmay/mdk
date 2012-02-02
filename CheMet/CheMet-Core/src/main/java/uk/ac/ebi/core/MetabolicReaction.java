@@ -36,6 +36,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.core.reaction.ReactionType;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
 /**

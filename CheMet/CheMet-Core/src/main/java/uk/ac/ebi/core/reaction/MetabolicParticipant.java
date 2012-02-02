@@ -27,8 +27,10 @@ import java.nio.channels.UnsupportedAddressTypeException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 
 /**
@@ -69,7 +71,7 @@ public class MetabolicParticipant extends Participant<Metabolite, Double, Compar
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        Metabolite m = new Metabolite();
+        Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
         m.readExternal(in);
         System.out.println(m.getIdentifier());
         setMolecule(m);

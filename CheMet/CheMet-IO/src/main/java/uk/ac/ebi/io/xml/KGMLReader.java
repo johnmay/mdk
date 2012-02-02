@@ -56,9 +56,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import uk.ac.ebi.chemet.resource.XMLHelper;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
+
 
 /**
  *          KGMLReader – 2011.09.16 <br>
@@ -70,9 +71,13 @@ import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 public class KGMLReader {
 
     private static final Logger LOGGER = Logger.getLogger(KGMLReader.class);
+
     private InputStream in;
+
     private Collection<KGMLEntry> entires = new ArrayList();
+
     private Collection<KGMLReaction> rxns = new ArrayList();
+
 
     public KGMLReader(InputStream in) throws XMLStreamException {
         this.in = in;
@@ -102,6 +107,7 @@ public class KGMLReader {
 
     }
 
+
     public Map<Integer, KGMLEntry> getEntries() {
         Map<Integer, KGMLEntry> entryMap = new HashMap();
         for (KGMLEntry entry : entires) {
@@ -119,6 +125,7 @@ public class KGMLReader {
         return entryMap;
     }
 
+
     public Collection<KGMLReaction> getKGMLReactions() {
 //        NodeList nodeList = doc.getElementsByTagName("reaction");
 //        List<KGMLReaction> entries = new ArrayList(nodeList.getLength());
@@ -129,6 +136,7 @@ public class KGMLReader {
 //        return entries;
         return rxns;
     }
+
 
     public Collection<MetabolicReaction> getReactions() {
         Collection<MetabolicReaction> reactions = new ArrayList();
@@ -143,13 +151,13 @@ public class KGMLReader {
             MetabolicReaction rxn = new MetabolicReaction(new BasicReactionIdentifier(Integer.toString(rxnEntry.id)),
                                                           names[0].substring(3),
                                                           names[0].substring(3));
-            for(String name: names){
+            for (String name : names) {
                 rxn.addCrossReference(new BasicReactionIdentifier(name.substring(3)));
             }
-            for(int id : reaction.getSubstrateIds() ){
+            for (int id : reaction.getSubstrateIds()) {
                 rxn.addReactant(new MetabolicParticipant(metabolites.get(id)));
             }
-            for(int id : reaction.getProductIds() ){
+            for (int id : reaction.getProductIds()) {
                 rxn.addProduct(new MetabolicParticipant(metabolites.get(id)));
             }
 
@@ -160,6 +168,7 @@ public class KGMLReader {
         return reactions;
     }
 
+
     public Map<Integer, Metabolite> getMetabolites() {
         Map<Integer, Metabolite> entryMap = new HashMap();
         for (KGMLEntry entry : entires) {
@@ -167,6 +176,7 @@ public class KGMLReader {
         }
         return entryMap;
     }
+
 
     public static void main(String[] args) throws FileNotFoundException, XMLStreamException {
 
@@ -269,8 +279,12 @@ public class KGMLReader {
         frame.setVisible(true);
 
     }
+
     private static List<Line2D> edges;
+
     private static List<Color> edgeColors;
+
     private static List<Shape> nodes;
+
     private static List<Color> nodeColors;
 }

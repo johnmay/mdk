@@ -28,8 +28,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+
 
 /**
  * @name    ReactionSet - 2011.10.04 <br>
@@ -41,14 +42,18 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 public final class ReactionList extends ArrayList<MetabolicReaction> implements Collection<MetabolicReaction> {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionList.class);
+
     private Multimap<Identifier, MetabolicReaction> participantMap = ArrayListMultimap.create();
+
 
     public ReactionList() {
     }
 
+
     public ReactionList(Collection<MetabolicReaction> reactions) {
         super(reactions);
     }
+
 
     @Override
     public boolean add(MetabolicReaction rxn) {
@@ -61,6 +66,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
         return super.add(rxn);
 
     }
+
 
     @Override
     public boolean addAll(Collection<? extends MetabolicReaction> rxns) {
@@ -75,6 +81,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
 
     }
 
+
     public boolean remove(MetabolicReaction rxn) {
         for (Metabolite m : rxn.getAllReactionMolecules()) {
             participantMap.get(m.getIdentifier()).remove(rxn);
@@ -84,6 +91,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
         }
         return super.remove(rxn);
     }
+
 
     @Override
     public boolean removeAll(Collection<?> rxns) {
@@ -98,6 +106,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
 
     }
 
+
     /**
      * Returns a list of reactions that contain Metabolite m
      * If not mapping is found an empty collection is returned
@@ -105,6 +114,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     public Collection<MetabolicReaction> getReactions(Metabolite m) {
         return participantMap.get(m.getIdentifier());
     }
+
 
     public void rebuildParticipantMap() {
         participantMap.clear();
@@ -114,6 +124,4 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
             }
         }
     }
-
-  
 }

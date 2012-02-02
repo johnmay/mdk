@@ -42,10 +42,11 @@ import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.Compartment;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+
 
 /**
  *          SBMLIOUtil – 2011.09.27 <br>
@@ -57,25 +58,34 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 public class SBMLIOUtil {
 
     private static final Logger LOGGER = Logger.getLogger(SBMLIOUtil.class);
+
     public final int level;
+
     public final int version;
+
     private long metaIdticker = 0;
+
     private Map<Participant, SpeciesReference> speciesReferences = new HashMap();
+
     private Map<Compartment, org.sbml.jsbml.Compartment> compartmentMap = new EnumMap<Compartment, org.sbml.jsbml.Compartment>(Compartment.class);
+
 
     public SBMLIOUtil(int level, int version) {
         this.level = level;
         this.version = version;
     }
 
+
     public SBMLIOUtil() {
         this(2, 2);
     }
+
 
     private String nextMetaId() {
         metaIdticker++;
         return Long.toString(metaIdticker);
     }
+
 
     public SBMLDocument getDocument(Reconstruction reconstruction) {
 
@@ -90,6 +100,7 @@ public class SBMLIOUtil {
         return doc;
 
     }
+
 
     public Reaction addReaction(Model model, MetabolicReaction rxn) {
 
@@ -111,7 +122,7 @@ public class SBMLIOUtil {
 
         sbmlRxn.setReversible(rxn.getReversibility() == Reversibility.REVERSIBLE ? true : false);
 
-        if(rxn.getReversibility() == Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT){
+        if (rxn.getReversibility() == Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT) {
             rxn.transpose();
             rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
         }
@@ -157,6 +168,7 @@ public class SBMLIOUtil {
 
     }
 
+
     public SpeciesReference getSpeciesReference(Model model,
                                                 Participant<Metabolite, Double, Compartment> participant) {
 
@@ -178,6 +190,7 @@ public class SBMLIOUtil {
         return srefCopy;
 
     }
+
 
     /**
      * Creates a new species in the given model adding
@@ -224,6 +237,7 @@ public class SBMLIOUtil {
 
         return sr;
     }
+
 
     public org.sbml.jsbml.Compartment getCompartment(Model model, Participant<?, ?, Compartment> participant) {
 

@@ -53,11 +53,12 @@ import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.Compartment;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
 import uk.ac.ebi.core.tools.TransportReactionUtil.*;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
+
 
 /**
  *          ReactionRenderer – 2011.09.27 <br>
@@ -69,15 +70,19 @@ import uk.ac.ebi.core.reaction.MetabolicParticipant;
 public class ReactionRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionRenderer.class);
+
     private AtomContainerRenderer renderer =
                                   new AtomContainerRenderer(
             Arrays.asList(new BasicSceneGenerator(),
                           new BasicBondGenerator(),
                           new BasicAtomGenerator()),
             new AWTFontManager());
+
     private StructureDiagramGenerator sdg = new StructureDiagramGenerator();
+
     private Map<TransportReactionUtil.Classification, ImageIcon> tClassMap = new EnumMap<TransportReactionUtil.Classification, ImageIcon>(
             TransportReactionUtil.Classification.class);
+
 
     public ReactionRenderer() {
 
@@ -87,6 +92,7 @@ public class ReactionRenderer {
         tClassMap.put(Classification.UNIPORTER, ViewUtilities.getIcon("images/classification/uniport.png"));
 
     }
+
 
     public ImageIcon renderTransportReaction(Reaction<Metabolite, Double, Compartment> rxn) {
 
@@ -109,6 +115,7 @@ public class ReactionRenderer {
         return null;
 
     }
+
 
     /**
      * Draws a transport uniporter reaction
@@ -149,6 +156,7 @@ public class ReactionRenderer {
 
     }
 
+
     public void drawCompartmentSeperator(Graphics2D g2,
                                          Rectangle bounds) {
 
@@ -183,6 +191,7 @@ public class ReactionRenderer {
 
 
     }
+
 
     public ImageIcon getReaction(Reaction<Metabolite, Double, Compartment> rxn) {
 
@@ -245,6 +254,7 @@ public class ReactionRenderer {
 
     }
 
+
     public void drawMolecule(Graphics2D g2,
                              Rectangle2D bounds,
                              MetabolicParticipant p) {
@@ -258,8 +268,8 @@ public class ReactionRenderer {
         g2.drawString(compartment, (int) bounds.getWidth() - compartmentWidth, compartmentHeight);
 
 
-        if (metabolite.getChemicalStructures().iterator().hasNext()) {
-            IAtomContainer atomContainer = metabolite.getChemicalStructures().iterator().next().
+        if (((uk.ac.ebi.core.Metabolite) metabolite).getChemicalStructures().iterator().hasNext()) {
+            IAtomContainer atomContainer = ((uk.ac.ebi.core.Metabolite) metabolite).getChemicalStructures().iterator().next().
                     getMolecule();
 
 
@@ -283,6 +293,7 @@ public class ReactionRenderer {
 
     }
 
+
     public void drawPlus(Graphics2D g2,
                          Rectangle2D bounds) {
         double length = (bounds.getWidth() / 2) * 0.8;
@@ -300,11 +311,13 @@ public class ReactionRenderer {
 
     }
 
+
     public void drawArrow(Graphics2D g2,
                           Rectangle2D bounds,
                           Reversibility reversibility) {
         drawArrow(g2, bounds, reversibility, 1f);
     }
+
 
     public void drawArrow(Graphics2D g2,
                           Rectangle2D bounds,
@@ -330,9 +343,11 @@ public class ReactionRenderer {
 
     }
 
+
     public ImageIcon getTransportClassificationIcon(TransportReactionUtil.Classification classification) {
         return tClassMap.get(classification);
     }
+
 
     public static void main(String[] args) throws IOException {
         BufferedImage img = new BufferedImage(100, 100, BufferedImage.TYPE_4BYTE_ABGR);

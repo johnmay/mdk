@@ -31,7 +31,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.Compartment;
-import uk.ac.ebi.core.Metabolite;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  *          TransportReactionClassifier - 2011.12.12 <br>
@@ -45,6 +46,7 @@ public class TransportReactionUtil {
 
     private static final Logger LOGGER = Logger.getLogger(TransportReactionUtil.class);
 
+
     public enum Classification {
 
         SYMPORTER,
@@ -52,6 +54,7 @@ public class TransportReactionUtil {
         UNIPORTER,
         UNKNOWN;
     };
+
 
     /**
      * Uses a simple direct object reference comparison for mapping
@@ -70,6 +73,7 @@ public class TransportReactionUtil {
         });
     }
 
+
     public static <T> BiMap<Participant<T, ?, Compartment>, Participant<T, ?, Compartment>> getMappings(
             Reaction<T, ?, Compartment> transportReaction,
             Comparator<T> comparator) {
@@ -87,6 +91,7 @@ public class TransportReactionUtil {
         return mappings;
     }
 
+
     /**
      * Classifies the provided MetabolicReaction
      */
@@ -99,6 +104,7 @@ public class TransportReactionUtil {
         return getClassification(getMappings(transportReaction));
 
     }
+
 
     private static <T> Classification getClassification(
             BiMap<Participant<T, ?, Compartment>, Participant<T, ?, Compartment>> mappings) {
