@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.render.reconciliation.modules;
+package uk.ac.ebi.render.crossreference.modules;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import java.awt.Desktop;

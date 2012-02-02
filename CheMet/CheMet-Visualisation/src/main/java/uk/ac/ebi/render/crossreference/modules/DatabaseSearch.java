@@ -18,27 +18,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.render.reconciliation.modules;
+package uk.ac.ebi.render.crossreference.modules;
 
 import com.google.common.collect.Multimap;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
+import java.util.Collection;
 import java.util.List;
-import java.util.TimerTask;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.Source;
+import uk.ac.ebi.annotation.Synonym;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.chemet.render.components.MetaboliteMatchIndication;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
@@ -71,11 +75,15 @@ public class DatabaseSearch
 
     private JComponent component;
 
+    private MetaboliteMatchIndication match = new MetaboliteMatchIndication();
+
     private MoleculeTable table;
 
     private JTextField field;
 
     private JCheckBox fuzzy;
+
+    private Metabolite context;
 
     private Timer timer = new Timer(500, new ActionListener() {
 
@@ -90,14 +98,14 @@ public class DatabaseSearch
     public DatabaseSearch() {
 
         component = PanelFactory.createDialogPanel();
-        component.setLayout(new BoxLayout(component, BoxLayout.PAGE_AXIS));
+        component.setLayout(new FormLayout("p", "p, 4dlu, p"));
 
         field = FieldFactory.newField(25);
         fuzzy = new JCheckBox("Fuzzy Search");
         table = new MoleculeTable(new NameAccessor(),
                                   new AccessionAccessor(),
                                   new AnnotationAccess(new Source()));
-        table.setPreferredSize(new Dimension(300, 484));
+        table.setPreferredSize(new Dimension(300, 185));
         table.setBackground(component.getBackground());
         table.setSelectionBackground(component.getBackground().brighter());
         table.setSelectionForeground(ThemeManager.getInstance().getTheme().getForeground());
@@ -125,13 +133,30 @@ public class DatabaseSearch
                 timer.restart();
             }
         });
+        field.addFocusListener(new FocusAdapter() {
+
+            public void focusGained(FocusEvent e) {
+                timer.restart();
+            }
+        });
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+            public void valueChanged(ListSelectionEvent e) {
+                Collection<Metabolite> entites = table.getSelectedEntities();
+                if (entites.isEmpty()) {
+                    return;
+                }
+                Metabolite m = entites.iterator().next();
+                match.setSubject(m);
+            }
+        });
 
 
 
+        CellConstraints cc = new CellConstraints();
+        component.add(match.getComponent(), cc.xy(1, 1, cc.CENTER, cc.CENTER)); // visual inspector
 
-        // component.add(); // visual inspector
-
-        component.add(getSearchOptions()); // search options
+        component.add(getSearchOptions(), cc.xy(1, 3, cc.CENTER, cc.CENTER)); // search options
 
 
     }
@@ -153,13 +178,14 @@ public class DatabaseSearch
     public final JComponent getSearchOptions() {
 
         JComponent options = Box.createHorizontalBox();
-        JComponent config = PanelFactory.createDialogPanel("right:p, 4dlu, p", "p, 4dlu, p");
+        JComponent config = PanelFactory.createDialogPanel("p:grow, 4dlu, p:grow", "p, 4dlu, p, 4dlu, p");
 
         options.add(config); // search box and database selection
 
         JScrollPane pane = new JScrollPane(getCandidateTable());
         pane.setBorder(Borders.EMPTY_BORDER);
-        table.setPreferredSize(new Dimension(300, 484));
+        pane.setPreferredSize(new Dimension(300, 185));
+        pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         options.add(pane); // display candidates
 
@@ -168,6 +194,12 @@ public class DatabaseSearch
         config.add(LabelFactory.newFormLabel("Query"), cc.xy(1, 1));
         config.add(field, cc.xy(3, 1));
         config.add(fuzzy, cc.xyw(1, 3, 3));
+        config.add(ButtonFactory.newButton(new AbstractAction("Assign") {
+
+            public void actionPerformed(ActionEvent e) {
+                transferAnnotations();
+            }
+        }), cc.xy(1, 5));
 
         return options;
     }
@@ -182,7 +214,7 @@ public class DatabaseSearch
 
     public void updateTable(String name) {
 
-        if (name.isEmpty()) {
+        if (name.isEmpty() || !component.isVisible()) {
             return;
         }
 
@@ -204,12 +236,18 @@ public class DatabaseSearch
 
         getCandidateTable().getModel().set(metabolites);
 
+
     }
 
 
     public void setup(Metabolite metabolite) {
 
         field.setText(metabolite.getName());
+
+        match.setQuery(metabolite);
+
+        this.context = metabolite;
+
 
     }
 
@@ -220,5 +258,16 @@ public class DatabaseSearch
 
 
     public void transferAnnotations() {
+
+        for (Metabolite metabolte : table.getSelectedEntities()) {
+
+            if (!context.getName().equals(metabolte.getName())) {
+                context.addAnnotation(new Synonym(metabolte.getName()));
+            }
+
+            context.addAnnotation(new CrossReference(metabolte.getIdentifier()));
+
+        }
+
     }
 }
