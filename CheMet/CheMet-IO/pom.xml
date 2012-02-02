@@ -10,7 +10,7 @@
     <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>CheMet-IO</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <name>CheMet-IO</name>
+    <name>IO</name>
     <url>http://maven.apache.org</url>
     
     <properties>
