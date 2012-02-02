@@ -101,7 +101,7 @@ public class MarshallFactory {
     public EntityMarshaller getMetaboliteMarshall() {
         for (AnnotatedEntityMarshaller metaboliteMarshall : metaboliteMarshalls) {
             if (version.getIndex() >= metaboliteMarshall.getVersion().getIndex()) {
-
+                metaboliteMarshall.setEntityFactory(factory);
                 return getEntityMarshal(getAnnotatedEntityMarshal(metaboliteMarshall));
             }
         }
@@ -112,7 +112,7 @@ public class MarshallFactory {
     public EntityMarshaller getReactionMarshaller() {
         for (AnnotatedEntityMarshaller rxnMarshaller : reactionMarshalls) {
             if (version.getIndex() >= rxnMarshaller.getVersion().getIndex()) {
-
+                rxnMarshaller.setEntityFactory(factory);
                 return getEntityMarshal(getAnnotatedEntityMarshal(rxnMarshaller));
             }
         }
