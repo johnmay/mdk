@@ -29,8 +29,10 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.core.metabolite.MetaboliteClass;
+import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+
 
 /**
  *          Metabolite – 2011.09.05 <br>
@@ -44,17 +46,24 @@ public class Metabolite
         implements uk.ac.ebi.interfaces.entities.Metabolite, Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(Metabolite.class);
+
     private boolean generic = false;
+
     private Double charge = 0d;
+
     private MetaboliteClass type = MetaboliteClass.UNKNOWN;
+
     public static final String BASE_TYPE = "Metabolite";
+
 
     public Metabolite() {
     }
 
+
     public Metabolite(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
+
 
     /**
      *
@@ -69,6 +78,7 @@ public class Metabolite
         super(new BasicChemicalIdentifier(accession), abbreviation, name);
     }
 
+
     /**
      *
      * Accessor to whether the molecule is generic (contains one or more -R groups)
@@ -79,6 +89,7 @@ public class Metabolite
         return generic;
     }
 
+
     /**
      *
      * Sets whether the molecule is generic (has -R group)
@@ -88,24 +99,27 @@ public class Metabolite
         this.generic = generic;
     }
 
+
     /**
      *
      * Access the charge of this molecule
      *
      * @return
      */
-    public Double getCharge(){
+    public Double getCharge() {
         return charge;
     }
+
 
     /**
      *
      * Molecule charge mutator
      *
      */
-    public void setCharge(Double charge){
+    public void setCharge(Double charge) {
         this.charge = charge;
     }
+
 
     /**
      *
@@ -118,9 +132,11 @@ public class Metabolite
         return getChemicalStructures().iterator().hasNext();
     }
 
+
     public Collection<ChemicalStructure> getChemicalStructures() {
         return super.getAnnotations(ChemicalStructure.class);
     }
+
 
     /**
      *
@@ -134,6 +150,7 @@ public class Metabolite
         return getChemicalStructures().iterator().next();
     }
 
+
     /**
      * @inheritDoc
      */
@@ -145,6 +162,7 @@ public class Metabolite
         charge = in.readDouble();
     }
 
+
     /**
      * @inheritDoc
      */
@@ -155,6 +173,7 @@ public class Metabolite
         out.writeBoolean(generic);
         out.writeDouble(charge);
     }
+
 
     /**
      * @inheritDoc
@@ -184,6 +203,7 @@ public class Metabolite
         return true;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -193,13 +213,21 @@ public class Metabolite
         return Objects.hashCode(hash, generic, type);
     }
 
+
     public MetaboliteClass getType() {
         return type;
     }
 
+
     public void setType(MetaboliteClass type) {
         this.type = type;
     }
+
+
+    public Entity newInstance() {
+        return new Metabolite();
+    }
+
 
     @Override
     public String getBaseType() {

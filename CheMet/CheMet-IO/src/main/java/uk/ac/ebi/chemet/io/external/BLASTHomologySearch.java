@@ -30,9 +30,11 @@ import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.interfaces.GeneProduct;
 import uk.ac.ebi.interfaces.TaskOptions;
+import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.blast.BlastReader;
 import uk.ac.ebi.observation.parameters.TaskOption;
+
 
 /**
  * @name    BLASTHomologySearch - 2011.10.10 <br>
@@ -44,11 +46,15 @@ import uk.ac.ebi.observation.parameters.TaskOption;
 public class BLASTHomologySearch extends RunnableTask {
 
     private static final Logger LOGGER = Logger.getLogger(BLASTHomologySearch.class);
+
     private Map<String, GeneProduct> map;
+
     private String cmd;
+
 
     public BLASTHomologySearch() {
     }
+
 
     /**
      *
@@ -65,6 +71,7 @@ public class BLASTHomologySearch extends RunnableTask {
 
     }
 
+
     @Override
     public void prerun() {
 
@@ -72,6 +79,7 @@ public class BLASTHomologySearch extends RunnableTask {
         LOGGER.info("executing: " + cmd);
 
     }
+
 
     @Override
     public void run() {
@@ -101,6 +109,7 @@ public class BLASTHomologySearch extends RunnableTask {
 
     }
 
+
     @Override
     public void postrun() {
         try {
@@ -120,7 +129,7 @@ public class BLASTHomologySearch extends RunnableTask {
             }
 
             // check for missing output... and outfmt..
-            if(output == null || format == null){
+            if (output == null || format == null) {
                 throw new InvalidParameterException("Output or format missing");
             }
 
@@ -136,5 +145,10 @@ public class BLASTHomologySearch extends RunnableTask {
             setErrorStatus();
         }
 
+    }
+
+
+    public BLASTHomologySearch newInstance() {
+        return new BLASTHomologySearch();
     }
 }

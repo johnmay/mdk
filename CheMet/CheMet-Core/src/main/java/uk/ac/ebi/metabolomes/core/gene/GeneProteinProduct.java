@@ -17,6 +17,7 @@ package uk.ac.ebi.metabolomes.core.gene;
 
 import java.io.Externalizable;
 import java.io.Serializable;
+import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.UniqueIdentifier;
 
@@ -73,6 +74,11 @@ public class GeneProteinProduct
         setSequence(sequence);
         setSequenceLength(sequence.length());
         // TODO put description in the details setDescription( description );
+    }
+
+
+    public Entity newInstance() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 

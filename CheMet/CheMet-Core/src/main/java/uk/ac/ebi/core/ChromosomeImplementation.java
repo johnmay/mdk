@@ -31,7 +31,9 @@ import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
+
 
 /**
  *          ChromosomeImplementation - 2011.10.17 <br>
@@ -44,21 +46,28 @@ import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 public class ChromosomeImplementation extends AbstractAnnotatedEntity implements Chromosome, Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(ChromosomeImplementation.class);
+
     public static final String BASE_TYPE = "Chromosome";
+
     private ChromosomeSequence sequence;
+
     private List<Gene> genes = new ArrayList();
+
 
     public ChromosomeImplementation() {
     }
+
 
     protected ChromosomeImplementation(ObjectInput in) throws IOException, ClassNotFoundException {
         readExternal(in);
     }
 
+
     public ChromosomeImplementation(int number, ChromosomeSequence sequence) {
         super(new ChromosomeIdentifier(number), "CH:" + number, "Choromsome " + number);
         this.sequence = sequence;
     }
+
 
     /**
      * @inheritDoc
@@ -68,6 +77,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
         gene.setSequence(sequence.getSubSequence(gene.getStart(), gene.getEnd()));
         return genes.add(gene);
     }
+
 
     /**
      * @inheritDoc
@@ -80,6 +90,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
         return changed;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -87,12 +98,14 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
         return genes;
     }
 
+
     /**
      * @inheritDoc
      */
     public int getChromosomeNumber() {
         return ((ChromosomeIdentifier) getIdentifier()).getNumber();
     }
+
 
     /**
      * @inheritDoc
@@ -102,6 +115,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
         gene.setSequence(null);
         return genes.remove(gene);
     }
+
 
     /**
      * @inheritDoc
@@ -114,6 +128,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
         return changed;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -121,6 +136,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
     public String getBaseType() {
         return BASE_TYPE;
     }
+
 
     /**
      * @inheritDoc
@@ -140,6 +156,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
 
     }
 
+
     /**
      * @inheritDoc
      */
@@ -154,5 +171,10 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
             gene.writeExternal(out);
         }
 
+    }
+
+
+    public Chromosome newInstance() {
+        return new ChromosomeImplementation();
     }
 }

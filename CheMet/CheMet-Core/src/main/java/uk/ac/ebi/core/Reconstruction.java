@@ -23,6 +23,7 @@ import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 
@@ -107,6 +108,13 @@ public class Reconstruction
         products = new ProductCollection();
         subsets = new ArrayList<EntityCollection>();
     }
+
+
+    public Reconstruction newInstance() {
+        return new Reconstruction();
+    }
+    
+    
 
 
     /**

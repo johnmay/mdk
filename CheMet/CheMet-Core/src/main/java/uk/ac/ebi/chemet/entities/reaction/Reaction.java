@@ -39,6 +39,8 @@ import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
+import uk.ac.ebi.interfaces.entities.Entity;
+
 
 /**
  * Reaction –  2011.08.08
@@ -66,15 +68,22 @@ public class Reaction<M, S, C>
 //    transient private List<S> productStoichiometries = new ArrayList<S>();
 //    transient private List<C> reactantCompartments = new ArrayList<C>();
 //    transient private List<C> productCompartments = new ArrayList<C>();
+
     public static final String BASE_TYPE = "Reaction";
     // flags whether the reaction is generic or not
+
     transient private Boolean generic = false;
     // new class
+
     private List<Participant<M, S, C>> reactants;
+
     private List<Participant<M, S, C>> products;
     // whether the reaction is reversible
+
     private Reversibility reversibility = Reversibility.UNKNOWN;
+
     private AbstractParticipantFilter filter = new AcceptAllFilter(); // accepts all
+
 
     /**
      * Constructor for a generic reaction. The constructor must provide a comparator for
@@ -88,11 +97,13 @@ public class Reaction<M, S, C>
         products = new LinkedList<Participant<M, S, C>>();
     }
 
+
     public Reaction(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
         reactants = new LinkedList<Participant<M, S, C>>();
         products = new LinkedList<Participant<M, S, C>>();
     }
+
 
     /**
      * Constructor to build a reaction and use the provided filter to trim down included molecules.
@@ -104,6 +115,7 @@ public class Reaction<M, S, C>
         this();
         this.filter = filter;
     }
+
 
     /**
      *
@@ -117,6 +129,7 @@ public class Reaction<M, S, C>
         this.reversibility = reversibility;
     }
 
+
     /**
      *
      * Accessor for the reversibility of the reaction
@@ -127,6 +140,7 @@ public class Reaction<M, S, C>
     public Reversibility getReversibility() {
         return reversibility;
     }
+
 
     /**
      * Accessor for all the reactant compartments of the reaction
@@ -140,6 +154,7 @@ public class Reaction<M, S, C>
         return compartments;
     }
 
+
     /**
      * Accessor for all the reactant coefficients of the reaction
      * @return Fixed size array of reactant coefficients
@@ -151,6 +166,7 @@ public class Reaction<M, S, C>
         }
         return coefficients;
     }
+
 
     /**
      * Accessor for all the reactants of the reaction
@@ -164,9 +180,11 @@ public class Reaction<M, S, C>
         return molecules;
     }
 
+
     public List<Participant<M, S, C>> getReactantParticipants() {
         return Collections.unmodifiableList(reactants);
     }
+
 
     /**
      * Add a reactant (left side) to the reaction
@@ -178,6 +196,7 @@ public class Reaction<M, S, C>
         }
         this.reactants.add(participant);
     }
+
 
     /**
      * Accessor for all the product compartments of the reaction
@@ -191,6 +210,7 @@ public class Reaction<M, S, C>
         return compartments;
     }
 
+
     /**
      * Accessor for all the product coefficients of the reaction
      * @return Fixed size array of coefficients
@@ -202,6 +222,7 @@ public class Reaction<M, S, C>
         }
         return coefficients;
     }
+
 
     /**
      * Accessor for all the products of the reaction
@@ -215,9 +236,11 @@ public class Reaction<M, S, C>
         return molecules;
     }
 
+
     public List<Participant<M, S, C>> getProductParticipants() {
         return Collections.unmodifiableList(products);
     }
+
 
     /**
      * Add a product (right side) to the reaction
@@ -230,6 +253,7 @@ public class Reaction<M, S, C>
         this.products.add(participant);
     }
 
+
     /**
      * Accessor to all the reaction molecules
      * @return shallow copy combined list of all products (ordered reactant, product)
@@ -239,6 +263,7 @@ public class Reaction<M, S, C>
         allMolecules.addAll(getProductMolecules());
         return allMolecules;
     }
+
 
     /**
      * Accessor to all the reaction participants
@@ -250,6 +275,7 @@ public class Reaction<M, S, C>
         return participants;
     }
 
+
     /**
      * Accessor to all the reaction compartments
      * @return shallow copy combined list of all coefficients (ordered reactant, product)
@@ -259,6 +285,7 @@ public class Reaction<M, S, C>
         allMolecules.addAll(getProductStoichiometries());
         return allMolecules;
     }
+
 
     /**
      * Accessor to all the reaction compartments
@@ -270,6 +297,7 @@ public class Reaction<M, S, C>
         return allMolecules;
     }
 
+
     /**
      * Accessor for the number of reactants
      * @return
@@ -277,6 +305,7 @@ public class Reaction<M, S, C>
     public int getReactantCount() {
         return reactants.size();
     }
+
 
     /**
      * Accessor for the number of products
@@ -286,6 +315,7 @@ public class Reaction<M, S, C>
         return products.size();
     }
 
+
     /**
      * Accessor to query whether the reaction is generic
      * @return t/f
@@ -293,6 +323,7 @@ public class Reaction<M, S, C>
     public Boolean isGeneric() {
         return generic;
     }
+
 
     /**
      * Indicate that this reaction contains GenericMolecules. This influences the
@@ -302,6 +333,7 @@ public class Reaction<M, S, C>
     public void setGeneric(Boolean generic) {
         this.generic = generic;
     }
+
 
     /**
      * Transposes the sides of the reaction. The method switches the reactants
@@ -314,6 +346,7 @@ public class Reaction<M, S, C>
         products = tmp;
     }
 
+
     /**
      * Determines whether any reaction participants
      * change compartment
@@ -323,6 +356,12 @@ public class Reaction<M, S, C>
         Set<C> uniqueCompartments = new HashSet<C>(this.getAllReactionCompartments());
         return uniqueCompartments.size() > 1;
     }
+
+
+    public Reaction newInstance() {
+        return new Reaction();
+    }
+
 
     /**
      * Calculates the hash code for the reaction in it's current state. As the molecules need to be sorted
@@ -355,6 +394,7 @@ public class Reaction<M, S, C>
         return hash;
 
     }
+
 
     /**
      * Check equality of reactions based on state. Reactions are considered equals if their reactants and products
@@ -441,6 +481,7 @@ public class Reaction<M, S, C>
 
     }
 
+
     /**
      * A simple hack that checks will be improved in future. Checks whether the unsorted lists are equal
      * @param query
@@ -468,6 +509,7 @@ public class Reaction<M, S, C>
 
     }
 
+
     /**
      *
      * Displays the objects stored in the reaction in string form prefixed with the stoichiometric
@@ -487,6 +529,7 @@ public class Reaction<M, S, C>
 
         return sb.toString();
     }
+
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
@@ -510,6 +553,7 @@ public class Reaction<M, S, C>
             products.add(p);
         }
     }
+
 
     public void readExternal(ObjectInput in, MetaboliteCollection metabolites) throws IOException,
                                                                                       ClassNotFoundException {
@@ -542,6 +586,7 @@ public class Reaction<M, S, C>
         }
     }
 
+
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
@@ -556,6 +601,7 @@ public class Reaction<M, S, C>
             p.writeExternal(out);
         }
     }
+
 
     public void writeExternal(ObjectOutput out, MetaboliteCollection metabolites) throws IOException {
         super.writeExternal(out);
@@ -578,6 +624,7 @@ public class Reaction<M, S, C>
             }
         }
     }
+
 
     @Override
     public String getBaseType() {

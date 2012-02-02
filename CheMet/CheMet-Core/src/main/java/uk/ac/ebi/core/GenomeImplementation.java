@@ -33,6 +33,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.Genome;
+import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
  *          GenomeImplementation - 2011.10.18 <br>
@@ -129,6 +131,8 @@ public class GenomeImplementation implements Genome {
         }
 
     }
+    
+    
 
     /**
      * Access a gene for the given index on the given chromosome
@@ -147,5 +151,60 @@ public class GenomeImplementation implements Genome {
             return new int[]{c.getChromosomeNumber(), index};
         }
         return new int[]{-1, -1};
+    }
+
+
+    public String getName() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public String getAbbreviation() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public Identifier getIdentifier() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public void setIdentifier(Identifier identifier) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public void setName(String name) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public void setAbbreviation(String abbreviation) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public String getAccession() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public String getBaseType() {
+        return "Genome";
+    }
+
+
+    public Entity newInstance() {
+        return new GenomeImplementation();
+    }
+
+
+    public void writeExternal(ObjectOutput out) throws IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

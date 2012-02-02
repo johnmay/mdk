@@ -110,6 +110,14 @@ public class GeneImplementation extends AbstractAnnotatedEntity implements Gene 
         return BASE_TYPE;
     }
 
+
+    public Gene newInstance() {
+        return new GeneImplementation();
+    }
+    
+    
+    
+
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
