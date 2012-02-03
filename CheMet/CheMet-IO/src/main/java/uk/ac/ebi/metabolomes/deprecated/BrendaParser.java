@@ -1,12 +1,12 @@
-package uk.ac.ebi.metabolomes.parser;
+package uk.ac.ebi.metabolomes.deprecated;
 
 import java.util.*;
 import java.util.regex.*;
 //import java.util.HashMap;
 import java.io.*;
 
-import uk.ac.ebi.metabolomes.bioObjects.*;
 
+@Deprecated
 public class BrendaParser {
 
     // OLD BRENDA PARSER, just left here for copy-paste of some useful regexp,

@@ -6,10 +6,8 @@
 package uk.ac.ebi.metabolomes.parser.brenda;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
-import uk.ac.ebi.metabolomes.bioObjects.Reaction;
 
 /**
  *
