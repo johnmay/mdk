@@ -33,7 +33,10 @@ import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.ExactMass;
+import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.annotation.chemical.SMILES;
 import uk.ac.ebi.annotation.crossreference.Citation;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.annotation.model.FluxLowerBound;
@@ -92,7 +95,10 @@ public class AnnotationFactory {
                                                        new Citation(),
                                                        new FluxLowerBound(),
                                                        new FluxUpperBound(),
-                                                       new Source())) {
+                                                       new Source(),
+                                                       new ExactMass(),
+                                                       new SMILES(),
+                                                       new InChI())) {
 
                 constructors[annotation.getIndex()] = annotation.getClass().getConstructor();
                 instances[annotation.getIndex()] = annotation;

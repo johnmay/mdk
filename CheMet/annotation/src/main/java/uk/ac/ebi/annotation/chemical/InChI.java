@@ -22,6 +22,8 @@ package uk.ac.ebi.annotation.chemical;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AbstractStringAnnotation;
+import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;
 
 /**
@@ -33,34 +35,36 @@ import uk.ac.ebi.interfaces.Annotation;
  * @brief   ...class description...
  *
  */
-public class InChIAnnotation extends AbstractStringAnnotation {
+public class InChI extends AbstractStringAnnotation {
     
-    private static final Logger LOGGER = Logger.getLogger(InChIAnnotation.class);
+    private static final Logger LOGGER = Logger.getLogger(InChI.class);
     
-
-    public InChIAnnotation() {
+    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+            InChI.class);
+    
+    public InChI() {
     }
     
-    public InChIAnnotation(String inchi) {
+    public InChI(String inchi) {
         super.setValue(inchi);
     }
     
     public Annotation getInstance() {
-        return new InChIAnnotation();
+        return new InChI();
     }
 
     public Annotation getInstance(String value) {
-        return new InChIAnnotation(value);
+        return new InChI(value);
     }
 
     @Override
     public String getShortDescription() {
-        return "InChI";
+        return description.shortDescription;
     }
 
     @Override
     public String getLongDescription() {
-        return "The IUPAC International Chemical Identifier ";
+        return description.longDescription;
     }
     
     

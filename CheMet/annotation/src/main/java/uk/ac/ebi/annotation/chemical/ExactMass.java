@@ -21,7 +21,9 @@
 package uk.ac.ebi.annotation.chemical;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AbstractStringAnnotation;
+import uk.ac.ebi.annotation.AbstractFloatAnnotation;
+import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;
 
 /**
@@ -33,34 +35,36 @@ import uk.ac.ebi.interfaces.Annotation;
  * @brief   ...class description...
  *
  */
-public class SMILESAnnotation extends AbstractStringAnnotation {
+public class ExactMass extends AbstractFloatAnnotation {
     
-    private static final Logger LOGGER = Logger.getLogger(SMILESAnnotation.class);
+    private static final Logger LOGGER = Logger.getLogger(ExactMass.class);
     
-
-    public SMILESAnnotation() {
+    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+            ExactMass.class);
+    
+    public ExactMass() {
     }
     
-    public SMILESAnnotation(String smiles) {
-        super.setValue(smiles);
+    public ExactMass(Float exactMass) {
+        super.setValue(exactMass);
     }
     
     public Annotation getInstance() {
-        return new SMILESAnnotation();
+        return new ExactMass();
     }
 
-    public Annotation getInstance(String value) {
-        return new SMILESAnnotation(value);
+    public Annotation getInstance(Float exactMass) {
+        return new ExactMass(exactMass);
     }
 
     @Override
     public String getShortDescription() {
-        return "SMILES";
+        return description.shortDescription;
     }
 
     @Override
     public String getLongDescription() {
-        return "The simplified molecular-input line-entry specification";
+        return description.longDescription;
     }
     
     

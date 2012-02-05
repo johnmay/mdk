@@ -1,5 +1,5 @@
 /**
- * SMILESAnnotation.java
+ * SMILES.java
  *
  * 2012.02.03
  *
@@ -21,12 +21,13 @@
 package uk.ac.ebi.annotation.chemical;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AbstractFloatAnnotation;
 import uk.ac.ebi.annotation.AbstractStringAnnotation;
+import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;
 
 /**
- * @name    SMILESAnnotation
+ * @name    SMILES
  * @date    2012.02.03
  * @version $Rev$ : Last Changed $Date$
  * @author  pmoreno
@@ -34,34 +35,36 @@ import uk.ac.ebi.interfaces.Annotation;
  * @brief   ...class description...
  *
  */
-public class ExactMassAnnotation extends AbstractFloatAnnotation {
+public class SMILES extends AbstractStringAnnotation {
     
-    private static final Logger LOGGER = Logger.getLogger(ExactMassAnnotation.class);
+    private static final Logger LOGGER = Logger.getLogger(SMILES.class);
     
+    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+            SMILES.class);
 
-    public ExactMassAnnotation() {
+    public SMILES() {
     }
     
-    public ExactMassAnnotation(Float exactMass) {
-        super.setValue(exactMass);
+    public SMILES(String smiles) {
+        super.setValue(smiles);
     }
     
     public Annotation getInstance() {
-        return new ExactMassAnnotation();
+        return new SMILES();
     }
 
-    public Annotation getInstance(Float exactMass) {
-        return new ExactMassAnnotation(exactMass);
+    public Annotation getInstance(String value) {
+        return new SMILES(value);
     }
 
     @Override
     public String getShortDescription() {
-        return "Exact Mass";
+        return description.shortDescription;
     }
 
     @Override
     public String getLongDescription() {
-        return "The exact mass is the sum of the masses of the atoms in a molecule using the most abundant isotope for each element.";
+        return description.longDescription;
     }
     
     
