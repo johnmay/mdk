@@ -48,7 +48,7 @@ import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.resource.MIRIAMLoader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
@@ -252,7 +252,7 @@ public class SBMLReactionReader {
         org.sbml.jsbml.Compartment sbmlCompartment = species.getCompartmentInstance();
 
 
-        Compartment compartment = Compartment.getCompartment(sbmlCompartment == null
+        CompartmentImplementation compartment = CompartmentImplementation.getCompartment(sbmlCompartment == null
                                                              ? ""
                                                              : sbmlCompartment.getId());
 
@@ -354,11 +354,11 @@ public class SBMLReactionReader {
         org.sbml.jsbml.Compartment sbmlCompartment = species.getCompartmentInstance();
 
 
-        Compartment compartment = Compartment.getCompartment(sbmlCompartment == null
+        CompartmentImplementation compartment = CompartmentImplementation.getCompartment(sbmlCompartment == null
                                                              ? ""
                                                              : sbmlCompartment.getId());
 
-        if (compartment == Compartment.UNKNOWN) {
+        if (compartment == CompartmentImplementation.UNKNOWN) {
             throw new UnknownCompartmentException("Compartment " + species.getCompartmentInstance().
                     getId()
                                                   + " was not identifiable");

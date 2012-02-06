@@ -6,7 +6,7 @@ package uk.ac.ebi.chemet.entities.reaction;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IMolecule;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,11 +32,11 @@ public class AtomContainerReactionTest {
     public static void setUpClass() throws Exception {
         // query
         q1 = new AtomContainerReaction();
-        q1.addReactant(_123Triazole(), 1d, Compartment.EXTRACELLULA);
-        q1.addReactant(adenine(), 2d, Compartment.CYTOPLASM);
-        q1.addProduct(benzene(), 2d, Compartment.MITOCHONDRIAL_MEMBRANE);
-        q1.addProduct(cyclohexane(), 1d, Compartment.CYTOPLASM);
-        q1.addProduct(butan1ol(), 2d, Compartment.CYTOPLASM);
+        q1.addReactant(_123Triazole(), 1d, CompartmentImplementation.EXTRACELLULA);
+        q1.addReactant(adenine(), 2d, CompartmentImplementation.CYTOPLASM);
+        q1.addProduct(benzene(), 2d, CompartmentImplementation.MITOCHONDRIAL_MEMBRANE);
+        q1.addProduct(cyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
+        q1.addProduct(butan1ol(), 2d, CompartmentImplementation.CYTOPLASM);
     }
 
     @AfterClass
@@ -54,11 +54,11 @@ public class AtomContainerReactionTest {
         System.out.printf("%-120s", "[TEST] Reaction with transposed direction");
 
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant(benzene(), 2d, Compartment.MITOCHONDRIAL_MEMBRANE);
-        r.addReactant(cyclohexane(), 1d, Compartment.CYTOPLASM);
-        r.addReactant(butan1ol(), 2d, Compartment.CYTOPLASM);
-        r.addProduct(_123Triazole(), 1d, Compartment.EXTRACELLULA);
-        r.addProduct(adenine(), 2d, Compartment.CYTOPLASM);
+        r.addReactant(benzene(), 2d, CompartmentImplementation.MITOCHONDRIAL_MEMBRANE);
+        r.addReactant(cyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
+        r.addReactant(butan1ol(), 2d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(_123Triazole(), 1d, CompartmentImplementation.EXTRACELLULA);
+        r.addProduct(adenine(), 2d, CompartmentImplementation.CYTOPLASM);
 
 
         assertEquals("FAILED", q1.hashCode(), r.hashCode());
@@ -74,11 +74,11 @@ public class AtomContainerReactionTest {
 
         // same total molecules but on different sides
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant(benzene(), 2d, Compartment.MITOCHONDRIAL_MEMBRANE);
-        r.addProduct(cyclohexane(), 1d, Compartment.CYTOPLASM);
-        r.addReactant(_123Triazole(), 1d, Compartment.EXTRACELLULA);
-        r.addProduct(adenine(), 2d, Compartment.CYTOPLASM);
-        r.addProduct(butan1ol(), 2d, Compartment.CYTOPLASM);
+        r.addReactant(benzene(), 2d, CompartmentImplementation.MITOCHONDRIAL_MEMBRANE);
+        r.addProduct(cyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
+        r.addReactant(_123Triazole(), 1d, CompartmentImplementation.EXTRACELLULA);
+        r.addProduct(adenine(), 2d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(butan1ol(), 2d, CompartmentImplementation.CYTOPLASM);
 
         //  System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
         //  System.out.printf( "\t\tr: %10s %s\n" , r3.hashCode() , r3 );
@@ -96,11 +96,11 @@ public class AtomContainerReactionTest {
 
         // different sides one molecule stays the same side
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant(benzene(), 2d, Compartment.MITOCHONDRIAL_MEMBRANE);
-        r.addReactant(cyclohexane(), 1d, Compartment.CYTOPLASM);
-        r.addProduct(_123Triazole(), 1d, Compartment.EXTRACELLULA);
-        r.addProduct(adenine(), 2d, Compartment.CYTOPLASM);
-        r.addProduct(butan1ol(), 2d, Compartment.CYTOPLASM); // stays same but others move
+        r.addReactant(benzene(), 2d, CompartmentImplementation.MITOCHONDRIAL_MEMBRANE);
+        r.addReactant(cyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(_123Triazole(), 1d, CompartmentImplementation.EXTRACELLULA);
+        r.addProduct(adenine(), 2d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(butan1ol(), 2d, CompartmentImplementation.CYTOPLASM); // stays same but others move
 
         // System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
         // System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
@@ -122,11 +122,11 @@ public class AtomContainerReactionTest {
 
         // one different mol
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addProduct(benzene(), 2d, Compartment.MITOCHONDRIAL_MEMBRANE);
-        r.addProduct(cyclohexane(), 1d, Compartment.CYTOPLASM);
-        r.addProduct(butan1ol(), 2d, Compartment.CYTOPLASM);
-        r.addReactant(_124Triazole(), 1d, Compartment.EXTRACELLULA); // difference
-        r.addReactant(adenine(), 2d, Compartment.CYTOPLASM);
+        r.addProduct(benzene(), 2d, CompartmentImplementation.MITOCHONDRIAL_MEMBRANE);
+        r.addProduct(cyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(butan1ol(), 2d, CompartmentImplementation.CYTOPLASM);
+        r.addReactant(_124Triazole(), 1d, CompartmentImplementation.EXTRACELLULA); // difference
+        r.addReactant(adenine(), 2d, CompartmentImplementation.CYTOPLASM);
 
 //        System.out.printf( "\tvq: %10s %s\n" , q1.hashCode() , q1 );
 //        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
@@ -146,11 +146,11 @@ public class AtomContainerReactionTest {
 
         // one different mol (isomer)
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant(_123Triazole(), 1d, Compartment.EXTRACELLULA); // difference
-        r.addReactant(adenine(), 2d, Compartment.CYTOPLASM);
-        r.addProduct(benzene(), 2d, Compartment.MITOCHONDRIAL_MEMBRANE);
-        r.addProduct(cyclohexane(), 1d, Compartment.CYTOPLASM);
-        r.addProduct(butan2ol(), 2d, Compartment.CYTOPLASM); // butan-2-ol ≠ butan-1-ol
+        r.addReactant(_123Triazole(), 1d, CompartmentImplementation.EXTRACELLULA); // difference
+        r.addReactant(adenine(), 2d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(benzene(), 2d, CompartmentImplementation.MITOCHONDRIAL_MEMBRANE);
+        r.addProduct(cyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(butan2ol(), 2d, CompartmentImplementation.CYTOPLASM); // butan-2-ol ≠ butan-1-ol
 
 //        System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
 //        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
@@ -170,11 +170,11 @@ public class AtomContainerReactionTest {
 
         // one molecule with different stoichiometry
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant(MoleculeFactory.make123Triazole(), 2d, Compartment.EXTRACELLULA); // different stoichiometry
-        r.addReactant(MoleculeFactory.makeAdenine(), 2d, Compartment.CYTOPLASM);
-        r.addProduct(MoleculeFactory.makeBenzene(), 2d, Compartment.MITOCHONDRIAL_MEMBRANE);
-        r.addProduct(MoleculeFactory.makeCyclohexane(), 1d, Compartment.CYTOPLASM);
-        r.addProduct(butan1ol(), 2d, Compartment.CYTOPLASM);
+        r.addReactant(MoleculeFactory.make123Triazole(), 2d, CompartmentImplementation.EXTRACELLULA); // different stoichiometry
+        r.addReactant(MoleculeFactory.makeAdenine(), 2d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(MoleculeFactory.makeBenzene(), 2d, CompartmentImplementation.MITOCHONDRIAL_MEMBRANE);
+        r.addProduct(MoleculeFactory.makeCyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(butan1ol(), 2d, CompartmentImplementation.CYTOPLASM);
 
 //        System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
 //        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
@@ -192,11 +192,11 @@ public class AtomContainerReactionTest {
 
         // one molecule with different compartment
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant(_123Triazole(), 2d, Compartment.CYTOPLASM); // different compartment
-        r.addReactant(adenine(), 2d, Compartment.CYTOPLASM);
-        r.addProduct(benzene(), 2d, Compartment.MITOCHONDRIAL_MEMBRANE);
-        r.addProduct(cyclohexane(), 1d, Compartment.CYTOPLASM);
-        r.addProduct(butan1ol(), 2d, Compartment.CYTOPLASM);
+        r.addReactant(_123Triazole(), 2d, CompartmentImplementation.CYTOPLASM); // different compartment
+        r.addReactant(adenine(), 2d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(benzene(), 2d, CompartmentImplementation.MITOCHONDRIAL_MEMBRANE);
+        r.addProduct(cyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
+        r.addProduct(butan1ol(), 2d, CompartmentImplementation.CYTOPLASM);
 
         //  System.out.printf( "\t\tq: %10s %s\n" , q1.hashCode() , q1 );
         //  System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );
@@ -214,10 +214,10 @@ public class AtomContainerReactionTest {
         System.out.printf("%-120s", "[TEST] Transposed compartments");
 
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant(adenine(), 1d, Compartment.CYTOPLASM);
-        r.addReactant(cyclohexane(), 1d, Compartment.EXTRACELLULA);
-        r.addProduct(adenine(), 1d, Compartment.EXTRACELLULA);
-        r.addProduct(cyclohexane(), 1d, Compartment.CYTOPLASM);
+        r.addReactant(adenine(), 1d, CompartmentImplementation.CYTOPLASM);
+        r.addReactant(cyclohexane(), 1d, CompartmentImplementation.EXTRACELLULA);
+        r.addProduct(adenine(), 1d, CompartmentImplementation.EXTRACELLULA);
+        r.addProduct(cyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
 
 //        System.out.printf( "\t\treactans: %10s %s\n" , r.getReactantParticipants().hashCode() , StringUtils.join( r.
 //                getReactantParticipants() , " + " ) );

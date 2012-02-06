@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.entities.reaction.participant;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
@@ -33,11 +33,11 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
  * @brief   ...class description...
  *
  */
-public class InChIParticipant extends Participant<InChI , Double , Compartment> {
+public class InChIParticipant extends Participant<InChI , Double , CompartmentImplementation> {
 
     private static final Logger LOGGER = Logger.getLogger( InChIParticipant.class );
 
-    public InChIParticipant( InChI molecule , Double coefficient , Compartment compartment ) {
+    public InChIParticipant( InChI molecule , Double coefficient , CompartmentImplementation compartment ) {
         super( molecule , coefficient , compartment );
     }
 
@@ -60,7 +60,7 @@ public class InChIParticipant extends Participant<InChI , Double , Compartment> 
      * @return
      */
     @Override
-    public int compareTo( Participant<InChI , Double , Compartment> o ) {
+    public int compareTo( Participant<InChI , Double , CompartmentImplementation> o ) {
         int coefComparison = ( ( Comparable ) this.coefficient ).compareTo( o.coefficient );
         if ( coefComparison != 0 ) {
             return coefComparison;

@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
@@ -72,7 +72,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
             MetabolicParticipant p = new MetabolicParticipant();
             p.setCoefficient(in.readDouble());
-            p.setCompartment(Compartment.valueOf(in.readByte()));
+            p.setCompartment(CompartmentImplementation.valueOf(in.readByte()));
             p.setMolecule((Metabolite) in.getMetabolite(in.readInt()));
 
             rxn.addReactant(p);
@@ -84,7 +84,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
             MetabolicParticipant p = new MetabolicParticipant();
             p.setCoefficient(in.readDouble());
-            p.setCompartment(Compartment.valueOf(in.readByte()));
+            p.setCompartment(CompartmentImplementation.valueOf(in.readByte()));
             p.setMolecule((Metabolite) in.getMetabolite(in.readInt()));
 
             rxn.addProduct(p);
@@ -104,7 +104,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
         out.writeInt(rxn.getReactantCount());
 
-        for (Participant<Metabolite, Double, Compartment> p : rxn.getReactantParticipants()) {
+        for (Participant<Metabolite, Double, CompartmentImplementation> p : rxn.getReactantParticipants()) {
             out.writeDouble(p.getCoefficient());
             out.writeByte(p.getCompartment().getRanking());
             out.writeIndex(p.getMolecule());
@@ -112,7 +112,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
         out.writeInt(rxn.getProductCount());
 
-        for (Participant<Metabolite, Double, Compartment> p : rxn.getProductParticipants()) {
+        for (Participant<Metabolite, Double, CompartmentImplementation> p : rxn.getProductParticipants()) {
             out.writeDouble(p.getCoefficient());
             out.writeByte(p.getCompartment().getRanking());
             out.writeIndex(p.getMolecule());

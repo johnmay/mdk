@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.entities.reaction;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.InChIParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
@@ -57,10 +57,10 @@ public class ReactionExample {
 
         // InChIs
         InChIReaction inchiReaction = new InChIReaction();
-        inchiReaction.addReactant( new Participant<InChI , Double , Compartment>( new InChI( "InChI=1S/A..." ) ) );
+        inchiReaction.addReactant( new Participant<InChI , Double , CompartmentImplementation>( new InChI( "InChI=1S/A..." ) ) );
         inchiReaction.addReactant( new InChIParticipant( new InChI( "InChI=1S/B..." ) ) );
         inchiReaction.addProduct( new InChIParticipant( "InChI=1S/C..." ) );
-        inchiReaction.addProduct( new InChIParticipant( new InChI( "InChI=1S/D..." ) , 1.0 , Compartment.CYTOPLASM ) );
+        inchiReaction.addProduct( new InChIParticipant( new InChI( "InChI=1S/D..." ) , 1.0 , CompartmentImplementation.CYTOPLASM ) );
 
         /* Adding Generics
         Note: All molecules have implict H's added and then converted

@@ -9,7 +9,7 @@ import java.util.List;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.core.MetaboliteImplementation;
@@ -73,7 +73,7 @@ public class DefaultStoichiometricMatrix
     public CompartmentalisedMetabolite[] getMetabolites(MetabolicReaction rxn) {
 
         List<CompartmentalisedMetabolite> list = new ArrayList<CompartmentalisedMetabolite>();
-        for (Participant<Metabolite, ?, Compartment> p : rxn.getAllReactionParticipants()) {
+        for (Participant<Metabolite, ?, CompartmentImplementation> p : rxn.getAllReactionParticipants()) {
             list.add(new CompartmentalisedMetabolite(p.getMolecule(), p.getCompartment()));
         }
 

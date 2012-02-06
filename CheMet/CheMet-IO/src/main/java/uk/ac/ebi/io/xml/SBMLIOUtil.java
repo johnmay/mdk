@@ -40,7 +40,7 @@ import org.w3c.dom.Document;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
@@ -67,7 +67,7 @@ public class SBMLIOUtil {
 
     private Map<Participant, SpeciesReference> speciesReferences = new HashMap();
 
-    private Map<Compartment, org.sbml.jsbml.Compartment> compartmentMap = new EnumMap<Compartment, org.sbml.jsbml.Compartment>(Compartment.class);
+    private Map<CompartmentImplementation, org.sbml.jsbml.Compartment> compartmentMap = new EnumMap<CompartmentImplementation, org.sbml.jsbml.Compartment>(CompartmentImplementation.class);
 
 
     public SBMLIOUtil(int level, int version) {
@@ -127,10 +127,10 @@ public class SBMLIOUtil {
             rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
         }
 
-        for (Participant<Metabolite, Double, Compartment> p : rxn.getReactantParticipants()) {
+        for (Participant<Metabolite, Double, CompartmentImplementation> p : rxn.getReactantParticipants()) {
             sbmlRxn.addReactant(getSpeciesReference(model, p));
         }
-        for (Participant<Metabolite, Double, Compartment> p : rxn.getProductParticipants()) {
+        for (Participant<Metabolite, Double, CompartmentImplementation> p : rxn.getProductParticipants()) {
             sbmlRxn.addProduct(getSpeciesReference(model, p));
 
         }
@@ -170,7 +170,7 @@ public class SBMLIOUtil {
 
 
     public SpeciesReference getSpeciesReference(Model model,
-                                                Participant<Metabolite, Double, Compartment> participant) {
+                                                Participant<Metabolite, Double, CompartmentImplementation> participant) {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
@@ -199,7 +199,7 @@ public class SBMLIOUtil {
      * @return
      */
     public SpeciesReference addSpecies(Model model,
-                                       Participant<Metabolite, Double, Compartment> participant) {
+                                       Participant<Metabolite, Double, CompartmentImplementation> participant) {
 
         Species species = new Species(level, version);
 
@@ -239,7 +239,7 @@ public class SBMLIOUtil {
     }
 
 
-    public org.sbml.jsbml.Compartment getCompartment(Model model, Participant<?, ?, Compartment> participant) {
+    public org.sbml.jsbml.Compartment getCompartment(Model model, Participant<?, ?, CompartmentImplementation> participant) {
 
         if (compartmentMap.containsKey(participant.getCompartment())) {
             return compartmentMap.get(participant.getCompartment());

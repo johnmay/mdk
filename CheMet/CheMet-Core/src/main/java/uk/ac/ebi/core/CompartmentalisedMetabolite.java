@@ -39,10 +39,10 @@ public class CompartmentalisedMetabolite {
 
     public final Metabolite metabolite;
 
-    public final Compartment compartment;
+    public final CompartmentImplementation compartment;
 
 
-    public CompartmentalisedMetabolite(final Metabolite metabolite, Compartment compartment) {
+    public CompartmentalisedMetabolite(final Metabolite metabolite, CompartmentImplementation compartment) {
         this.metabolite = metabolite;
         this.compartment = compartment;
     }

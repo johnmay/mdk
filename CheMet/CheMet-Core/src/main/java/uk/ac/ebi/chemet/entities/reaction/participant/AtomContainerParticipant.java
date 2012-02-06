@@ -33,7 +33,7 @@ import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
@@ -52,7 +52,7 @@ import uk.ac.ebi.metabolomes.util.CDKUtils;
  *
  *
  */
-public class AtomContainerParticipant extends Participant<IAtomContainer , Double , Compartment> {
+public class AtomContainerParticipant extends Participant<IAtomContainer , Double , CompartmentImplementation> {
 
     private static final Logger LOGGER = Logger.getLogger( AtomContainerParticipant.class );
     private static AtomContainerComparator comparator = new AtomContainerComparator();
@@ -62,7 +62,7 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
 
 
     public AtomContainerParticipant( IAtomContainer molecule , Double coefficient ,
-                                     Compartment compartment ) {
+                                     CompartmentImplementation compartment ) {
 
         super( molecule , coefficient , compartment );
         skeleton = AtomContainerManipulator.removeHydrogens( molecule );
@@ -181,7 +181,7 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
      * @return
      *
      */
-    public boolean equals( Participant<IAtomContainer , Double , Compartment> other ) {
+    public boolean equals( Participant<IAtomContainer , Double , CompartmentImplementation> other ) {
 
         if ( other instanceof AtomContainerParticipant == false ) {
             return false;
@@ -290,7 +290,7 @@ public class AtomContainerParticipant extends Participant<IAtomContainer , Doubl
      *
      */
     @Override
-    public int compareTo( Participant<IAtomContainer , Double , Compartment> o ) {
+    public int compareTo( Participant<IAtomContainer , Double , CompartmentImplementation> o ) {
 
         if ( this.coefficient != null && o.coefficient != null ) {
             int coefComparison = this.coefficient.compareTo( o.coefficient );

@@ -61,8 +61,8 @@ public class SBMLIOUtilTest {
         recon.addMetabolite(m2);
 
         MetabolicReaction rxn = new MetabolicReaction();
-        rxn.addReactant(new MetabolicParticipant(m, 1.0, Compartment.CYTOPLASM));
-        rxn.addProduct(new MetabolicParticipant(m2, 2.0, Compartment.EXTRACELLULA));
+        rxn.addReactant(new MetabolicParticipant(m, 1.0, CompartmentImplementation.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipant(m2, 2.0, CompartmentImplementation.EXTRACELLULA));
         rxn.addCrossReference(new ECNumber("1.1.1.1"));
         recon.addReaction(rxn);
 

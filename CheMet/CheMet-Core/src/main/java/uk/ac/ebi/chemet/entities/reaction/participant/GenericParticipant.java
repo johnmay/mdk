@@ -25,7 +25,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 /**
@@ -43,7 +43,7 @@ public class GenericParticipant extends AtomContainerParticipant {
     private static AtomContainerComparator comparator = new AtomContainerComparator();
     protected IAtomContainer trimmedMolecule;
 
-    public GenericParticipant( IAtomContainer molecule , Double coefficient , Compartment compartment ) {
+    public GenericParticipant( IAtomContainer molecule , Double coefficient , CompartmentImplementation compartment ) {
         super( molecule , coefficient , compartment );
         trimmedMolecule = CDKUtils.removePseudoAtoms( molecule );
     }
@@ -69,7 +69,7 @@ public class GenericParticipant extends AtomContainerParticipant {
     }
 
     @Override
-    public boolean equals( Participant<IAtomContainer , Double , Compartment> other ) {
+    public boolean equals( Participant<IAtomContainer , Double , CompartmentImplementation> other ) {
 
         // other is also of Generic.. so we check raw
         // similarity instead of checking substructure

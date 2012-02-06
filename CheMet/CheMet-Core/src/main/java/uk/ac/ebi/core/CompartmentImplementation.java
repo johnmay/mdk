@@ -22,7 +22,9 @@ package uk.ac.ebi.core;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
+import uk.ac.ebi.interfaces.reaction.Compartment;
 
 
 /**
@@ -34,7 +36,8 @@ import uk.ac.ebi.chemet.entities.reaction.Reversibility;
  * @brief   Enumeration of existing metabolic compartments
  *
  */
-public enum Compartment {
+public enum CompartmentImplementation
+        implements Compartment {
 
     // Organelles (prokaryotes)
     CYTOPLASM("c", "Cytoplasm", (byte) 1),
@@ -44,7 +47,6 @@ public enum Compartment {
     FLAGELLUM("f", "Flagellum", (byte) 4),
     GOLGI("g", "Golgi", (byte) 5),
     CHLOROPLAST("h", "Chloroplast", (byte) 6),
-    EYESPOT("i", "Eyespot", (byte) 7),
     APICOPLAST("a", "Apicoplast", (byte) 8),
     LYSOSOME("l", "Lysosome", (byte) 9),
     MITOCHONDRION("m", "Mitochondrion", (byte) 10),
@@ -57,6 +59,7 @@ public enum Compartment {
     GLYOXYSOME("w", "Glyoxysome", (byte) 17),
     PEROXISOME("x", "Peroxisome", (byte) 18),
     GLYCOSOME("y", "Glycosome", (byte) 19),
+    // tissues
     BLOOD("bl", "Blood", (byte) 20),
     // Tissues (put in a different enumeration
     // Adibopcyte("a", ); // clashes with Apicoplast
@@ -82,12 +85,12 @@ public enum Compartment {
 
     private final String description;
 
-    private static final Map<String, Compartment> abbreviationMap = buildAbbreviationMap();
+    private static final Map<String, CompartmentImplementation> abbreviationMap = buildAbbreviationMap();
 
 
-    private Compartment(String abbreviation,
-                        String description,
-                        byte index) {
+    private CompartmentImplementation(String abbreviation,
+                                      String description,
+                                      byte index) {
         this.abbreviation = abbreviation;
         this.description = description;
         this.index = index;
@@ -114,18 +117,18 @@ public enum Compartment {
     }
 
 
-    public static Compartment getCompartment(String description) {
+    public static CompartmentImplementation getCompartment(String description) {
         String description_lc = description.toLowerCase();
         if (abbreviationMap.containsKey(description_lc)) {
             return abbreviationMap.get(description_lc);
         }
-        return Compartment.UNKNOWN;
+        return CompartmentImplementation.UNKNOWN;
     }
 
 
     private static Map buildAbbreviationMap() {
-        Map<String, Compartment> map = new HashMap<String, Compartment>();
-        for (Compartment c : values()) {
+        Map<String, CompartmentImplementation> map = new HashMap<String, CompartmentImplementation>();
+        for (CompartmentImplementation c : values()) {
             map.put("[" + c.getAbbreviation() + "]", c);
             map.put(c.getAbbreviation(), c);
             map.put(c.getDescription(), c);
@@ -141,13 +144,18 @@ public enum Compartment {
     }
 
 
-    public static Compartment valueOf(byte index) {
-        for (Compartment compartment : values()) {
+    public static CompartmentImplementation valueOf(byte index) {
+        for (CompartmentImplementation compartment : values()) {
             if (compartment.index == index) {
                 return compartment;
             }
         }
-        throw new UnsupportedOperationException("No reversibility of specified index");
+        throw new UnsupportedOperationException("No compartment of specified index");
+    }
+
+
+    public Set<String> getSynonyms() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
 

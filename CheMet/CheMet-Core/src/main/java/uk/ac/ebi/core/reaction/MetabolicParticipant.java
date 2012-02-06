@@ -25,7 +25,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.nio.channels.UnsupportedAddressTypeException;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
@@ -40,7 +40,7 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetabolicParticipant extends Participant<Metabolite, Double, Compartment> {
+public class MetabolicParticipant extends Participant<Metabolite, Double, CompartmentImplementation> {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicParticipant.class);
 
@@ -49,23 +49,23 @@ public class MetabolicParticipant extends Participant<Metabolite, Double, Compar
     }
 
 
-    public MetabolicParticipant(Metabolite molecule, Compartment compartment) {
+    public MetabolicParticipant(Metabolite molecule, CompartmentImplementation compartment) {
         super(molecule, 1d, compartment);
     }
 
 
-    public MetabolicParticipant(Metabolite molecule, Double coefficient, Compartment compartment) {
+    public MetabolicParticipant(Metabolite molecule, Double coefficient, CompartmentImplementation compartment) {
         super(molecule, coefficient, compartment);
     }
 
 
     public MetabolicParticipant(Metabolite molecule, Double coefficient) {
-        super(molecule, coefficient, Compartment.CYTOPLASM);
+        super(molecule, coefficient, CompartmentImplementation.CYTOPLASM);
     }
 
 
     public MetabolicParticipant(Metabolite molecule) {
-        super(molecule, 1d, Compartment.CYTOPLASM);
+        super(molecule, 1d, CompartmentImplementation.CYTOPLASM);
     }
 
 
@@ -76,7 +76,7 @@ public class MetabolicParticipant extends Participant<Metabolite, Double, Compar
         System.out.println(m.getIdentifier());
         setMolecule(m);
         setCoefficient(in.readDouble());
-        setCompartment(Compartment.valueOf(in.readUTF()));
+        setCompartment(CompartmentImplementation.valueOf(in.readUTF()));
     }
 
 
@@ -84,7 +84,7 @@ public class MetabolicParticipant extends Participant<Metabolite, Double, Compar
                                                                                       ClassNotFoundException {
         //setMolecule(metabolites.get(in.readInt()));
         setCoefficient(in.readDouble());
-        setCompartment(Compartment.valueOf(in.readUTF()));
+        setCompartment(CompartmentImplementation.valueOf(in.readUTF()));
         throw new UnsupportedOperationException("Use ReconstructionInputStream!");
 
     }

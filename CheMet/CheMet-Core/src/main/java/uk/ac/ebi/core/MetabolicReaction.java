@@ -46,7 +46,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetabolicReaction extends Reaction<Metabolite, Double, Compartment> {
+public class MetabolicReaction extends Reaction<Metabolite, Double, CompartmentImplementation> {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicReaction.class);
 

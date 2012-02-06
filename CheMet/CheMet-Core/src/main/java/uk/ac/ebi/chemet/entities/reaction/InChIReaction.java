@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.entities.reaction;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.filter.InChIFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.InChIParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
@@ -37,7 +37,7 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
  *
  */
 public class InChIReaction
-        extends Reaction<InChI , Double , Compartment> {
+        extends Reaction<InChI , Double , CompartmentImplementation> {
 
     private static final Logger LOGGER = Logger.getLogger( InChIReaction.class );
 
@@ -47,11 +47,11 @@ public class InChIReaction
         super(filter);
     }
 
-    public void addReactant( InChI inChI , Double d , Compartment compartment ) {
+    public void addReactant( InChI inChI , Double d , CompartmentImplementation compartment ) {
         super.addReactant( new InChIParticipant( inChI , d , compartment ) );
     }
 
-    public void addProduct( InChI inChI , Double d , Compartment compartment ) {
+    public void addProduct( InChI inChI , Double d , CompartmentImplementation compartment ) {
         super.addProduct( new InChIParticipant( inChI , d , compartment ) );
     }
 }

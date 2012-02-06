@@ -30,7 +30,7 @@ import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 
@@ -45,7 +45,7 @@ import uk.ac.ebi.metabolomes.util.CDKUtils;
  *
  */
 public class AtomContainerReaction
-  extends Reaction<IAtomContainer , Double , Compartment> {
+  extends Reaction<IAtomContainer , Double , CompartmentImplementation> {
 
 
     public AtomContainerReaction() {
@@ -62,7 +62,7 @@ public class AtomContainerReaction
     private static final Logger LOGGER = Logger.getLogger( AtomContainerReaction.class );
 
 
-    public void addReactant( IAtomContainer molecule , Double coef , Compartment compartment ) {
+    public void addReactant( IAtomContainer molecule , Double coef , CompartmentImplementation compartment ) {
         if ( CDKUtils.isMoleculeGeneric( molecule ) ) {
             addReactant( new GenericParticipant( molecule , coef , compartment ) );
         } else {
@@ -71,7 +71,7 @@ public class AtomContainerReaction
     }
 
 
-    public void addProduct( IAtomContainer molecule , Double coef , Compartment compartment ) {
+    public void addProduct( IAtomContainer molecule , Double coef , CompartmentImplementation compartment ) {
         if ( CDKUtils.isMoleculeGeneric( molecule ) ) {
             addProduct( new GenericParticipant( molecule , coef , compartment ) );
         } else {
@@ -126,7 +126,7 @@ public class AtomContainerReaction
         IReaction reaction = DefaultChemObjectBuilder.getInstance().newInstance( IReaction.class );
 
         // add the reactants
-        Iterator<Participant<IAtomContainer , Double , Compartment>> reIt =
+        Iterator<Participant<IAtomContainer , Double , CompartmentImplementation>> reIt =
                                                                      getReactantParticipants().
           iterator();
         while ( reIt.hasNext() ) {
@@ -135,7 +135,7 @@ public class AtomContainerReaction
         }
 
         // add the producta
-        Iterator<Participant<IAtomContainer , Double , Compartment>> prIt = getProductParticipants().
+        Iterator<Participant<IAtomContainer , Double , CompartmentImplementation>> prIt = getProductParticipants().
           iterator();
         while ( prIt.hasNext() ) {
             AtomContainerParticipant p = ( AtomContainerParticipant ) prIt.next();
@@ -179,7 +179,7 @@ public class AtomContainerReaction
 //    }
 
     @Override
-    public void addReactant( Participant<IAtomContainer , Double , Compartment> participant ) {
+    public void addReactant( Participant<IAtomContainer , Double , CompartmentImplementation> participant ) {
         super.addReactant( participant );
     }
 

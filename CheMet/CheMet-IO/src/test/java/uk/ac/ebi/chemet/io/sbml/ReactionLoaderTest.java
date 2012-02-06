@@ -5,7 +5,7 @@
 package uk.ac.ebi.chemet.io.sbml;
 
 import uk.ac.ebi.io.xml.SBMLReactionReader;
-import uk.ac.ebi.core.Compartment;
+import uk.ac.ebi.core.CompartmentImplementation;
 import java.io.InputStream;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -44,8 +44,8 @@ public class ReactionLoaderTest {
             while (reactionReader.hasNext()) {
                 AtomContainerReaction r = reactionReader.next();
                 assertEquals(2, r.getAllReactionParticipants().size());
-                assertEquals(Compartment.EXTRACELLULA, r.getReactantCompartments().get(0));
-                assertEquals(Compartment.CYTOPLASM, r.getProductCompartments().get(0));
+                assertEquals(CompartmentImplementation.EXTRACELLULA, r.getReactantCompartments().get(0));
+                assertEquals(CompartmentImplementation.CYTOPLASM, r.getProductCompartments().get(0));
             }
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
