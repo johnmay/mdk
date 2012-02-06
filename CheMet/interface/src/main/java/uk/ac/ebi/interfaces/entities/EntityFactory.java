@@ -56,4 +56,17 @@ public interface EntityFactory {
                                             Identifier identifier,
                                             String name,
                                             String abbr);
+
+
+    /**
+     * 
+     * Access the entity class of the specified entity. This is used for
+     * internal interface referencing e.g. MetaboliteImplementation
+     * will return Metabolite.
+     * 
+     * @param c
+     * @return 
+     * 
+     */
+    public Class<? extends Entity> getEntityClass(Class<? extends Entity> c);
 }

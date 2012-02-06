@@ -46,6 +46,8 @@ public class DefaultEntityFactory
 
     private Map<Class, Entity> entites = new HashMap<Class, Entity>();
 
+    private final Map<Class, Class> ENTITY_INTERFACE_MAP = new HashMap<Class, Class>(20);
+
 
     private DefaultEntityFactory() {
 
@@ -60,11 +62,8 @@ public class DefaultEntityFactory
                                            new ChromosomeImplementation(),
                                            new GenomeImplementation())) {
 
-            for (Class c : entity.getClass().getInterfaces()) {
-                if (Entity.class.isAssignableFrom(c)) {
-                    entites.put(c, entity);
-                }
-            }
+            entites.put(getEntityClass(entity.getClass()), entity);
+
         }
 
     }
@@ -92,6 +91,29 @@ public class DefaultEntityFactory
         entity.setAbbreviation(abbr);
 
         return entity;
+
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public Class<? extends Entity> getEntityClass(Class<? extends Entity> c) {
+
+        if (ENTITY_INTERFACE_MAP.containsKey(c)) {
+            return ENTITY_INTERFACE_MAP.get(c);
+        }
+
+        for (Class i : c.getInterfaces()) {
+            if (Entity.class.isAssignableFrom(c)) {
+                ENTITY_INTERFACE_MAP.put(c, i);
+                return i;
+            }
+        }
+
+        LOGGER.warn("No direct interface found for " + c);
+
+        return Entity.class;
 
     }
 
