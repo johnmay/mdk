@@ -34,9 +34,6 @@ public interface Metabolite extends AnnotatedEntity {
     public MetaboliteClass getType();
 
 
-    @Deprecated
-    public boolean hasStructureAssociated();
-    
     /**
      * Method replaces hasStructureAssociated to be more direct
      * @return 

@@ -24,8 +24,8 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.lang.String;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -147,9 +147,11 @@ public class MetaboliteComparison {
                         List<AtomContainerAnnotation> structure = new ArrayList();
                         if (sub.containsKey(recon)) {
                             for (Metabolite m : sub.get(recon)) {
-                                if (m.hasStructureAssociated()) {
-                                    structure.add(m.hasStructureAssociated() ? m.getAnnotations(AtomContainerAnnotation.class).iterator().next()
-                                                  : null);
+                                if (m.hasStructure()) {
+                                    Collection<AtomContainerAnnotation> collection = m.getAnnotationsExtending(AtomContainerAnnotation.class);
+                                    if (!collection.isEmpty()) {
+                                        structure.add(collection.iterator().next());
+                                    }
                                 }
                             }
                         }

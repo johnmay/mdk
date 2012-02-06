@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.BeforeClass;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
 /**
@@ -38,22 +39,22 @@ public class PeptideFactoryTest {
     public void testBondIndex() throws IOException, Exception {
         PeptideFactory factory = new PeptideFactory();
         {
-            MetaboliteImplementation m = factory.generateMetabolite(PeptideFactory.AminoAcid.D_ALA, PeptideFactory.AminoAcid.L_ALA, PeptideFactory.AminoAcid.L_ALA, PeptideFactory.AminoAcid.D_ALA);
+            Metabolite m = factory.generateMetabolite(PeptideFactory.AminoAcid.D_ALA, PeptideFactory.AminoAcid.L_ALA, PeptideFactory.AminoAcid.L_ALA, PeptideFactory.AminoAcid.D_ALA);
 
 
             File tmp = File.createTempFile("peptide", ".mol", new File("/tmp"));
             MDLV2000Writer writer = new MDLV2000Writer(new FileWriter(tmp));
-            writer.write(m.getFirstChemicalStructure().getMolecule());
+            writer.write(m.getStructures().iterator().next().getStructure());
             writer.close();
             System.out.println(tmp);
         }
         {
-            MetaboliteImplementation m =
-                       factory.generateMetabolite(PeptideFactory.AminoAcid.L_ILE, PeptideFactory.AminoAcid.D_ALA);
+            Metabolite m =
+                                     factory.generateMetabolite(PeptideFactory.AminoAcid.L_ILE, PeptideFactory.AminoAcid.D_ALA);
 
             File tmp = File.createTempFile("peptide", ".mol", new File("/tmp"));
             MDLV2000Writer writer = new MDLV2000Writer(new FileWriter(tmp));
-            writer.write(m.getFirstChemicalStructure().getMolecule());
+            writer.write(m.getStructures().iterator().next().getStructure());
             writer.close();
             System.out.println(tmp);
         }

@@ -37,7 +37,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;
 import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.visualisation.molecule.access.ChemicalStructureAccessor;
+import uk.ac.ebi.visualisation.molecule.access.AtomContainerAnnotationAccessor;
 import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
 

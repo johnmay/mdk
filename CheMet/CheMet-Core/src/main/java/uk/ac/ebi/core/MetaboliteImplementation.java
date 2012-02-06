@@ -125,36 +125,6 @@ public class MetaboliteImplementation
 
 
     /**
-     *
-     * Queries whether the metabolite entry has any {@see ChemicalStructure} attached
-     *
-     * @return
-     * 
-     */
-    public boolean hasStructureAssociated() {
-        return getChemicalStructures().iterator().hasNext();
-    }
-
-
-    public Collection<AtomContainerAnnotation> getChemicalStructures() {
-        return super.getAnnotations(AtomContainerAnnotation.class);
-    }
-
-
-    /**
-     *
-     * Returns the first chemical structure (note. should be used in conjunction with
-     * {@see hasStructureAssociated()})
-     *
-     * @return
-     * 
-     */
-    public AtomContainerAnnotation getFirstChemicalStructure() {
-        return getChemicalStructures().iterator().next();
-    }
-
-
-    /**
      * @inheritDoc
      */
     public Class<? extends Entity> getEntityClass() {
