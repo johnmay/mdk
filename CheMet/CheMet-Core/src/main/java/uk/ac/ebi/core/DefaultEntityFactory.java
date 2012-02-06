@@ -98,7 +98,7 @@ public class DefaultEntityFactory
     /**
      * @inheritDoc
      */
-    public Class<? extends Entity> getEntityClass(Class<? extends Entity> c) {
+    public final Class<? extends Entity> getEntityClass(Class<? extends Entity> c) {
 
         if (ENTITY_INTERFACE_MAP.containsKey(c)) {
             return ENTITY_INTERFACE_MAP.get(c);
