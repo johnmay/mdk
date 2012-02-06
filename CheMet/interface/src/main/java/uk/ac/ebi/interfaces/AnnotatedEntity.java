@@ -65,6 +65,23 @@ public interface AnnotatedEntity extends Entity {
 
 
     /**
+     * Determine whether the entity has the specific annotation
+     * @param annotation
+     * @return 
+     */
+    public boolean hasAnnotation(Annotation annotation);
+
+
+    /**
+     * Determine whether the entity has the specific annotation
+     * using the class of that annotation
+     * @param c
+     * @return 
+     */
+    public boolean hasAnnotation(Class<? extends Annotation> c);
+
+
+    /**
      *
      * Accessor to all annotations of a given type
      *
