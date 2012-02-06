@@ -49,7 +49,7 @@ import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
@@ -270,7 +270,7 @@ public class ReactionRenderer {
 
 
         if (metabolite.hasStructureAssociated()) {
-            IAtomContainer atomContainer = metabolite.getAnnotations(ChemicalStructure.class).iterator().next().
+            IAtomContainer atomContainer = metabolite.getAnnotations(AtomContainerAnnotation.class).iterator().next().
                     getMolecule();
 
 

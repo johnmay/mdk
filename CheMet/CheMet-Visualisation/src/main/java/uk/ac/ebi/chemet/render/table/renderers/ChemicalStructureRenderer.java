@@ -28,7 +28,7 @@ import java.util.Collection;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import org.openscience.cdk.exception.CDKException;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.render.molecule.MoleculeRenderer;
 
 
@@ -63,7 +63,7 @@ public class ChemicalStructureRenderer
                                                    int row,
                                                    int column) {
 
-        Collection<ChemicalStructure> collection = value instanceof Collection ? (Collection) value : Arrays.asList(
+        Collection<AtomContainerAnnotation> collection = value instanceof Collection ? (Collection) value : Arrays.asList(
                 value);
 
         if (table.getColumnModel().getColumn(column).getPreferredWidth() != table.getRowHeight(row)) {
@@ -72,7 +72,7 @@ public class ChemicalStructureRenderer
 
         if (collection.iterator().hasNext()) {
             try {
-                ChemicalStructure structure = collection.iterator().next();
+                AtomContainerAnnotation structure = collection.iterator().next();
                 this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
                 this.setIcon(new ImageIcon(
                         renderer.getImage(structure.getMolecule(),

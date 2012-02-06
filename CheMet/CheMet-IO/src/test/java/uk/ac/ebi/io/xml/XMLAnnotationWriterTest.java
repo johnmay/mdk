@@ -24,7 +24,7 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import uk.ac.ebi.annotation.Synonym;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
@@ -119,7 +119,7 @@ public class XMLAnnotationWriterTest {
     public void testVisit_ChemicalStructure() throws ParserConfigurationException, TransformerConfigurationException, TransformerException {
 
         IAtomContainer molecule = MoleculeFactory.makeAdenine();
-        ChemicalStructure structure = new ChemicalStructure(molecule);
+        AtomContainerAnnotation structure = new AtomContainerAnnotation(molecule);
 
         DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = dbfac.newDocumentBuilder();

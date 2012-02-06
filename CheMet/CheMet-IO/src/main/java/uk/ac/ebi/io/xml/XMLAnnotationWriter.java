@@ -88,8 +88,8 @@ public class XMLAnnotationWriter implements AnnotationVisitor {
             return visit((StringAnnotation) annotation);
         } else if (annotation instanceof CrossReference) {
             return visit((CrossReference) annotation);
-        } else if (annotation instanceof ChemicalStructure) {
-            return visit((ChemicalStructure) annotation);
+        } else if (annotation instanceof AtomContainerAnnotation) {
+            return visit((AtomContainerAnnotation) annotation);
         }
         return null;
     }
@@ -139,7 +139,7 @@ public class XMLAnnotationWriter implements AnnotationVisitor {
      * @param structure
      * @return
      */
-    public Element visit(ChemicalStructure structure) {
+    public Element visit(AtomContainerAnnotation structure) {
 
         Element element = create(structure);
 

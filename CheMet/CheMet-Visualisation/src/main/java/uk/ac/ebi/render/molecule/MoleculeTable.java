@@ -32,7 +32,7 @@ import javax.swing.SwingUtilities;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.annotation.Synonym;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;
@@ -62,7 +62,7 @@ public class MoleculeTable extends JTable {
         setUI(new ITunesTableUI());
 
         setDefaultRenderer(Synonym.class, new AnnotationCellRenderer(false, ","));
-        setDefaultRenderer(ChemicalStructure.class, new ChemicalStructureRenderer());
+        setDefaultRenderer(AtomContainerAnnotation.class, new ChemicalStructureRenderer());
         setDefaultRenderer(Annotation.class, new AnnotationCellRenderer(false, ","));
 
     }

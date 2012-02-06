@@ -1,4 +1,3 @@
-
 /**
  * ChemicalStructure.java
  *
@@ -26,6 +25,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.annotation.Annotation;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Molecule;
@@ -36,6 +36,7 @@ import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 
 
 /**
@@ -45,28 +46,47 @@ import uk.ac.ebi.core.Description;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ChemicalStructure
-  extends AbstractAnnotation {
+public class AtomContainerAnnotation
+        extends AbstractAnnotation
+        implements ChemicalStructure {
 
-    private static final Logger LOGGER = Logger.getLogger(ChemicalStructure.class);
+    private static final Logger LOGGER = Logger.getLogger(AtomContainerAnnotation.class);
+
     private IAtomContainer molecule;
     // todo:
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
-      ChemicalStructure.class);
+            AtomContainerAnnotation.class);
 
 
-    public ChemicalStructure() {
+    public AtomContainerAnnotation() {
     }
 
 
-    public ChemicalStructure(IAtomContainer molecule) {
+    public AtomContainerAnnotation(IAtomContainer molecule) {
         this.molecule = molecule;
     }
 
-
+    /**
+     * Use {@see getStructure()}
+     * @return
+     * @deprecated
+     */
+    @Deprecated
     public IAtomContainer getMolecule() {
         return molecule;
     }
+
+
+    public IAtomContainer getStructure() {
+        return this.molecule;
+    }
+
+
+    public void setStructure(IAtomContainer structure) {
+        this.molecule = structure;
+    }
+
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
@@ -81,7 +101,7 @@ public class ChemicalStructure
 
             out.writeUTF(stringWriter.toString());
 
-        } catch( Exception ex ) {
+        } catch (Exception ex) {
             throw new IOException("Unable to write IAtomContainer: " + ex.getMessage());
         }
 
@@ -99,7 +119,7 @@ public class ChemicalStructure
             reader.read(molecule);
             reader.close();
 
-        } catch( CDKException ex ) {
+        } catch (CDKException ex) {
 
             throw new IOException("Unable to read IAtomContainer: " + ex.getMessage());
         }
@@ -144,13 +164,7 @@ public class ChemicalStructure
      * @inheritDoc
      */
     @Override
-    public ChemicalStructure getInstance() {
-        return new ChemicalStructure();
+    public AtomContainerAnnotation getInstance() {
+        return new AtomContainerAnnotation();
     }
-
-
-
-
-
 }
-

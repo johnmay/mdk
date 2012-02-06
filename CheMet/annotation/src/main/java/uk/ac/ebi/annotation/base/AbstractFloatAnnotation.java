@@ -17,11 +17,11 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.annotation;
+package uk.ac.ebi.annotation.base;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.base.AbstractValueAnnotation;
-import uk.ac.ebi.interfaces.IntegerAnnotation;
+import uk.ac.ebi.interfaces.FloatAnnotation;
 
 
 /**
@@ -32,18 +32,18 @@ import uk.ac.ebi.interfaces.IntegerAnnotation;
  * @author johnmay
  * @author $Author$ (this version)
  */
-public abstract class AbstractIntegertAnnotation
-        extends AbstractValueAnnotation<Integer>
-        implements IntegerAnnotation {
+public abstract class AbstractFloatAnnotation
+        extends AbstractValueAnnotation<Float>
+        implements FloatAnnotation {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractIntegertAnnotation.class);
+    private static final Logger LOGGER = Logger.getLogger(AbstractFloatAnnotation.class);
 
 
-    public AbstractIntegertAnnotation() {
+    public AbstractFloatAnnotation() {
     }
 
 
-    public AbstractIntegertAnnotation(Integer value) {
+    public AbstractFloatAnnotation(Float value) {
         super(value);
     }
 

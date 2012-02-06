@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import uk.ac.ebi.annotation.Synonym;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.core.tools.PeptideFactory;
@@ -121,7 +121,7 @@ public class PeptideGenerator implements CrossreferenceModule {
 
 
         try {
-            context.addAnnotation(new ChemicalStructure(factory.generateStructure(chain)));
+            context.addAnnotation(new AtomContainerAnnotation(factory.generateStructure(chain)));
             context.addAnnotation(new Synonym(factory.generateName(chain)));
             context.addAnnotation(new Synonym(factory.generateAbbreviation(chain)));
         } catch (IOException ex) {

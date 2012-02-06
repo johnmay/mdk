@@ -32,7 +32,7 @@ import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.annotation.crossreference.Classification;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.ExactMass;
 import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
@@ -78,7 +78,7 @@ public class AnnotationFactory {
 
     private AnnotationFactory() {
         try {
-            for (Annotation annotation : Arrays.asList(new ChemicalStructure(),
+            for (Annotation annotation : Arrays.asList(new AtomContainerAnnotation(),
                                                        new MolecularFormula(),
                                                        new AuthorAnnotation(),
                                                        new CrossReference(),

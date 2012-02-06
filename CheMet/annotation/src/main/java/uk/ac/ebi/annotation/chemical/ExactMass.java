@@ -21,7 +21,7 @@
 package uk.ac.ebi.annotation.chemical;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AbstractFloatAnnotation;
+import uk.ac.ebi.annotation.base.AbstractFloatAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;

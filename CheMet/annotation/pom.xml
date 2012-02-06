@@ -48,5 +48,10 @@
             <artifactId>cdk-extra</artifactId>
             <version>${cdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-inchi</artifactId>
+            <version>1.3.8-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

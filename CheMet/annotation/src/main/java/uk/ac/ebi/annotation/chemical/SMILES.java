@@ -21,10 +21,12 @@
 package uk.ac.ebi.annotation.chemical;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AbstractStringAnnotation;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 
 /**
  * @name    SMILES
@@ -35,7 +37,9 @@ import uk.ac.ebi.interfaces.Annotation;
  * @brief   ...class description...
  *
  */
-public class SMILES extends AbstractStringAnnotation {
+public class SMILES
+    extends AbstractStringAnnotation
+    implements ChemicalStructure {
     
     private static final Logger LOGGER = Logger.getLogger(SMILES.class);
     
@@ -65,6 +69,16 @@ public class SMILES extends AbstractStringAnnotation {
     @Override
     public String getLongDescription() {
         return description.longDescription;
+    }
+
+
+    public IAtomContainer getStructure() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public void setStructure(IAtomContainer structure) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     

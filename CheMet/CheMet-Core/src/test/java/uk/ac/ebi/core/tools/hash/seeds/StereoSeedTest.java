@@ -8,11 +8,13 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import javax.vecmath.Point3d;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.hamcrest.CoreMatchers;
 import org.junit.AfterClass;
@@ -20,14 +22,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.Assert;
 import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.surface.NeighborList;
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.*;
 import org.openscience.cdk.interfaces.IBond.Stereo;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.layout.StructureDiagramGenerator;
+import org.openscience.cdk.stereo.StereoTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.chemet.TestMoleculeFactory;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
@@ -73,26 +74,76 @@ public class StereoSeedTest {
 
 
     @Test
-    public void testWithAlanine() {
+    public void testWithAlanine() throws Exception {
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
-        IAtomContainer lalanine = TestMoleculeFactory.loadMol("l_ala_one.mol", "L-Ala", Boolean.FALSE);
-        IAtomContainer lalanine_alt = TestMoleculeFactory.loadMol("l_ala_two.mol", "L-Ala", Boolean.FALSE);
+        IAtomContainer lAlaUp = TestMoleculeFactory.loadMol("l-ala-up.mol", "L-Ala", Boolean.FALSE);
+        IAtomContainer lAlaDown = TestMoleculeFactory.dAlanine();//TestMoleculeFactory.loadMol("l-ala-down.mol", "L-Ala", Boolean.FALSE);
 
-        System.out.println(lalanine);
-        System.out.println(lalanine_alt);
+        System.out.println(lAlaUp);
+        System.out.println(lAlaDown);
+
+        {
+            List<IAtom> atoms = Arrays.asList(AtomContainerManipulator.getAtomArray(lAlaUp));
+
+            for (IAtom atom : atoms) {
+                System.out.println(atom.getSymbol());
+                for (IAtom a2 : lAlaUp.getConnectedAtomsList(atom)) {
+                    System.out.println("\t" + a2.getSymbol() + ":" + atoms.indexOf(a2));
+                }
+            }
+
+
+            for (int i : Arrays.asList(0, 1, 2, 5)) {
+                lAlaUp.getAtom(i).setPoint3d(new Point3d(lAlaUp.getAtom(i).getPoint2d().x, lAlaUp.getAtom(i).getPoint2d().y, 0));
+            }
+            System.out.println(StereoTool.getStereo(lAlaUp.getAtom(0),
+                                                    lAlaUp.getAtom(1),
+                                                    lAlaUp.getAtom(2),
+                                                    lAlaUp.getAtom(5)));
+
+        }
+
+        {
+            List<IAtom> atoms = Arrays.asList(AtomContainerManipulator.getAtomArray(lAlaDown));
+
+            for (IAtom atom : atoms) {
+                System.out.println(atom.getSymbol());
+                for (IAtom a2 : lAlaDown.getConnectedAtomsList(atom)) {
+                    System.out.println("\t" + a2.getSymbol() + ":" + atoms.indexOf(a2));
+                }
+            }
+            
+            new StructureDiagramGenerator(new Molecule(lAlaDown)).generateCoordinates();
+            
+            for (int i : Arrays.asList(1, 0, 5, 4, 6)) {
+                lAlaDown.getAtom(i).setPoint3d(new Point3d(lAlaDown.getAtom(i).getPoint2d().x,
+                                                           lAlaDown.getAtom(i).getPoint2d().y,
+                                                           0));
+            }
+            System.out.println(StereoTool.getStereo(lAlaDown.getAtom(6),
+                                                    lAlaDown.getAtom(0),
+                                                    lAlaDown.getAtom(5),
+                                                    lAlaDown.getAtom(4)));
+
+        }
+
+
 
         Set<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
                                                                  ConnectedAtomSeed.class,
                                                                  BondOrderSumSeed.class,
                                                                  StereoSeed.class);
 
-        System.out.println("monitor:");
+
         System.out.println(
-                factory.getHash(lalanine, seeds));
+                "monitor:");
         System.out.println(
-                factory.getHash(lalanine_alt, seeds));
-        System.out.println("end");
+                factory.getHash(lAlaUp, seeds));
+        System.out.println(
+                factory.getHash(lAlaDown, seeds));
+        System.out.println(
+                "end");
 
 
 
@@ -126,7 +177,6 @@ public class StereoSeedTest {
             mol2 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
             reader.close();
         }
-
         Assert.assertNotNull("Failed to loaded C00129.mol from resource", mol1);
         Assert.assertNotNull("Failed to loaded C00235.mol from resource", mol2);
 

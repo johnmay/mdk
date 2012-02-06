@@ -38,26 +38,26 @@ public enum Compartment {
 
     // Organelles (prokaryotes)
     CYTOPLASM("c", "Cytoplasm", (byte) 1),
-    PERIPLASM("p", "Periplasm", (byte) 1),
-    EXTRACELLULA("e", "Extracellular", (byte) 1),
+    PERIPLASM("p", "Periplasm", (byte) 2),
+    EXTRACELLULA("e", "Extracellular", (byte) 3),
     // Organelles (eukaryotes) and tissues/organs
-    FLAGELLUM("f", "Flagellum", (byte) 1),
-    GOLGI("g", "Golgi", (byte) 1),
-    CHLOROPLAST("h", "Chloroplast", (byte) 1),
-    EYESPOT("i", "Eyespot", (byte) 1),
-    APICOPLAST("a", "Apicoplast", (byte) 1),
-    LYSOSOME("l", "Lysosome", (byte) 1),
-    MITOCHONDRION("m", "Mitochondrion", (byte) 1),
-    NUCLEUS("n", "Nucleus", (byte) 1),
-    GLYOXYSOMES("o", "Glyoxysomes", (byte) 1),
-    ENDOPLASMIC_RETICULUM("r", "Endoplasmic Reticulum", (byte) 1),
-    PLASTID("s", "Plastid", (byte) 1),
-    THYLAKOID("t", "Thylakoid", (byte) 1),
-    VACUOLE("v", "Vacuole", (byte) 1),
-    GLYOXYSOME("w", "Glyoxysome", (byte) 1),
-    PEROXISOME("x", "Peroxisome", (byte) 1),
-    GLYCOSOME("y", "Glycosome", (byte) 1),
-    BLOOD("bl", "Blood", (byte) 1),
+    FLAGELLUM("f", "Flagellum", (byte) 4),
+    GOLGI("g", "Golgi", (byte) 5),
+    CHLOROPLAST("h", "Chloroplast", (byte) 6),
+    EYESPOT("i", "Eyespot", (byte) 7),
+    APICOPLAST("a", "Apicoplast", (byte) 8),
+    LYSOSOME("l", "Lysosome", (byte) 9),
+    MITOCHONDRION("m", "Mitochondrion", (byte) 10),
+    NUCLEUS("n", "Nucleus", (byte) 11),
+    GLYOXYSOMES("o", "Glyoxysomes", (byte) 12),
+    ENDOPLASMIC_RETICULUM("r", "Endoplasmic Reticulum", (byte) 13),
+    PLASTID("s", "Plastid", (byte) 14),
+    THYLAKOID("t", "Thylakoid", (byte) 15),
+    VACUOLE("v", "Vacuole", (byte) 16),
+    GLYOXYSOME("w", "Glyoxysome", (byte) 17),
+    PEROXISOME("x", "Peroxisome", (byte) 18),
+    GLYCOSOME("y", "Glycosome", (byte) 19),
+    BLOOD("bl", "Blood", (byte) 20),
     // Tissues (put in a different enumeration
     // Adibopcyte("a", ); // clashes with Apicoplast
     // Myocyte("m") // clashes with mitrochondrion
@@ -65,15 +65,15 @@ public enum Compartment {
 
     // Membranes
     GOLGI_MEMBRANE(
-    "gm", "Golgi Membrane", (byte) 1),
-    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane", (byte) 1),
-    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane", (byte) 1),
-    PLASMA_MEMBRANE("pm", "Plasma Membrane", (byte) 1),
-    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", (byte) 1),
-    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane", (byte) 1),
-    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", (byte) 1),
+    "gm", "Golgi Membrane", (byte) 21),
+    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane", (byte) 22),
+    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane", (byte) 23),
+    PLASMA_MEMBRANE("pm", "Plasma Membrane", (byte) 23),
+    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", (byte) 25),
+    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane", (byte) 26),
+    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", (byte) 27),
     // indicates compartment is unknown
-    UNKNOWN("xx", "Unknown Compartment", (byte) 1);
+    UNKNOWN("xx", "Unknown Compartment", (byte) 28);
     // store the abbreviation 1/2 leter code and the textual description
 
     private final byte index;

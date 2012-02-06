@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.annotation;
 
+import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
 
 /**

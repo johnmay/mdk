@@ -33,7 +33,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.tools.ReconstructionComparison;
@@ -144,11 +144,11 @@ public class MetaboliteComparison {
 
                     case STRUCTURE:
 
-                        List<ChemicalStructure> structure = new ArrayList();
+                        List<AtomContainerAnnotation> structure = new ArrayList();
                         if (sub.containsKey(recon)) {
                             for (Metabolite m : sub.get(recon)) {
                                 if (m.hasStructureAssociated()) {
-                                    structure.add(m.hasStructureAssociated() ? m.getAnnotations(ChemicalStructure.class).iterator().next()
+                                    structure.add(m.hasStructureAssociated() ? m.getAnnotations(AtomContainerAnnotation.class).iterator().next()
                                                   : null);
                                 }
                             }
@@ -170,7 +170,7 @@ public class MetaboliteComparison {
             public Class<?> getColumnClass(int columnIndex) {
                 switch (type) {
                     case STRUCTURE:
-                        return ChemicalStructure.class;
+                        return AtomContainerAnnotation.class;
                     case NAME:
                         return List.class;
                     case ABBREVIATION:
@@ -183,7 +183,7 @@ public class MetaboliteComparison {
         table.setModel(model);
         table.setDefaultRenderer(List.class, new AnnotationCellRenderer());
         if (type == TableData.STRUCTURE) {
-            table.setDefaultRenderer(ChemicalStructure.class, new ChemicalStructureRenderer());
+            table.setDefaultRenderer(AtomContainerAnnotation.class, new ChemicalStructureRenderer());
             table.setRowHeight(64);
         }
 

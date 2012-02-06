@@ -20,11 +20,20 @@
  */
 package uk.ac.ebi.annotation.chemical;
 
+import java.util.logging.Level;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AbstractStringAnnotation;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.inchi.InChIGenerator;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
+
 
 /**
  * @name    SMILESAnnotation
@@ -35,37 +44,100 @@ import uk.ac.ebi.interfaces.Annotation;
  * @brief   ...class description...
  *
  */
-public class InChI extends AbstractStringAnnotation {
-    
+public class InChI
+        extends AbstractStringAnnotation
+        implements ChemicalStructure {
+
     private static final Logger LOGGER = Logger.getLogger(InChI.class);
-    
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
             InChI.class);
-    
+
+    private IAtomContainer structure;
+
+
     public InChI() {
     }
-    
+
+
     public InChI(String inchi) {
         super.setValue(inchi);
     }
-    
+
+
     public Annotation getInstance() {
         return new InChI();
     }
 
+
     public Annotation getInstance(String value) {
         return new InChI(value);
     }
+
+
+    @Override
+    public void setValue(String value) {
+        super.setValue(value);
+        generateStructure();
+    }
+
 
     @Override
     public String getShortDescription() {
         return description.shortDescription;
     }
 
+
     @Override
     public String getLongDescription() {
         return description.longDescription;
     }
-    
-    
+
+
+    @Override
+    public Byte getIndex() {
+        return description.index;
+    }
+
+
+    public IAtomContainer getStructure() {
+
+        if (structure == null) {
+            generateStructure();
+        }
+
+        return structure;
+
+    }
+
+
+    /**
+     * Generate the structure from the stored InChI value
+     */
+    private void generateStructure() {
+
+        if (getValue().isEmpty()) {
+            return;
+        }
+
+        try {
+            InChIGeneratorFactory inchiFactory = InChIGeneratorFactory.getInstance();
+            InChIToStructure inchi2structure = inchiFactory.getInChIToStructure(getValue(), DefaultChemObjectBuilder.getInstance());
+            structure = inchi2structure.getAtomContainer();
+        } catch (CDKException ex) {
+            LOGGER.error("Unable to generate structure from provided inchi: " + ex.getMessage());
+        }
+
+    }
+
+
+    public void setStructure(IAtomContainer structure) {
+        try {
+            InChIGeneratorFactory inchiFactory = InChIGeneratorFactory.getInstance();
+            InChIGenerator inchiGenerator = inchiFactory.getInChIGenerator(structure);
+            setValue(inchiGenerator.getInchi());
+        } catch (CDKException ex) {
+            LOGGER.error("Unable to generate InChI from provided structure: " + ex.getMessage());
+        }
+    }
 }

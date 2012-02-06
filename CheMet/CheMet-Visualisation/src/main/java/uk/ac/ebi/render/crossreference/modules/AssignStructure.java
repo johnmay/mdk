@@ -39,7 +39,7 @@ import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -189,7 +189,7 @@ public class AssignStructure
         MDLV2000Reader reader = new MDLV2000Reader(new StringReader(area.getText()));
         IMolecule molecule = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
         reader.close();
-        metabolite.addAnnotation(new ChemicalStructure(molecule));
+        metabolite.addAnnotation(new AtomContainerAnnotation(molecule));
     }
 
 
@@ -197,7 +197,7 @@ public class AssignStructure
         MDLV3000Reader reader = new MDLV3000Reader(new StringReader(area.getText()));
         IMolecule molecule = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
         reader.close();
-        metabolite.addAnnotation(new ChemicalStructure(molecule));
+        metabolite.addAnnotation(new AtomContainerAnnotation(molecule));
     }
 
 
@@ -212,6 +212,6 @@ public class AssignStructure
         if (status != INCHI_RET.OKAY) {
             throw new InvalidParameterException("Unable to parse InCHI for " + metabolite.getName() + ": " + structureGenerator.getMessage());
         }
-        metabolite.addAnnotation(new ChemicalStructure(structureGenerator.getAtomContainer()));
+        metabolite.addAnnotation(new AtomContainerAnnotation(structureGenerator.getAtomContainer()));
     }
 }

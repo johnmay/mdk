@@ -28,7 +28,6 @@ import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainerSet;
-import org.openscience.cdk.ChemObject;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
@@ -38,6 +37,7 @@ import uk.ac.ebi.interfaces.Rating;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.observation.ObservationCollection;
+
 
 /**
  * AnnotatedEntity.java – MetabolicDevelopmentKit – Jun 23, 2011
@@ -50,14 +50,19 @@ public abstract class AbstractAnnotatedEntity
                    AnnotatedEntity {
 
     private transient static final Logger logger = Logger.getLogger(AbstractAnnotatedEntity.class);
+
     private ListMultimap<Byte, Annotation> annotations = ArrayListMultimap.create();
+
     private ObservationCollection observations = new ObservationCollection();
+
     private Rating rating = StarRating.ONE_STAR;
+
 
     public AbstractAnnotatedEntity() {
         AtomContainerSet set = new AtomContainerSet();
         set.addListener(set);
     }
+
 
     public AbstractAnnotatedEntity(Identifier identifier,
                                    String abbreviation,
@@ -65,11 +70,13 @@ public abstract class AbstractAnnotatedEntity
         super(identifier, abbreviation, name);
     }
 
+
     public void addAnnotations(Collection<Annotation> annotations) {
         for (Annotation annotation : annotations) {
             addAnnotation(annotation);
         }
     }
+
 
     /**
      *
@@ -82,6 +89,7 @@ public abstract class AbstractAnnotatedEntity
         annotations.put(annotation.getIndex(), annotation);
     }
 
+
     /**
      *
      * Accessor to all the annotations currently stored
@@ -93,10 +101,22 @@ public abstract class AbstractAnnotatedEntity
         return annotations.values();
     }
 
-    public ListMultimap<Byte, Annotation> getAnnotationMap(){
+
+    public boolean hasAnnotation(Class<? extends Annotation> c) {
+        return annotations.containsKey(AnnotationLoader.getInstance().getIndex(c));
+    }
+
+
+    public boolean hasAnnotation(Annotation annotation) {
+        return annotations.containsKey(annotation.getIndex());
+    }
+
+
+    public ListMultimap<Byte, Annotation> getAnnotationMap() {
         return annotations;
     }
-    
+
+
     /**
      *
      * Accessor to all annotations of a given type
@@ -109,6 +129,7 @@ public abstract class AbstractAnnotatedEntity
         return (Collection<T>) annotations.get(AnnotationLoader.getInstance().getIndex(type));
     }
 
+
     /**
      *
      * Accessor to all annotations extending a given type. For example if you provide a CrossReference
@@ -118,28 +139,35 @@ public abstract class AbstractAnnotatedEntity
      * @param type
      * @return
      */
-    public Set<Annotation> getAnnotationsExtending(final Annotation base) {
-        Set<Annotation> annotationSubset = new HashSet<Annotation>();
+    public <T extends Annotation> Set<T> getAnnotationsExtending(final T base) {
+        Set<T> annotationSubset = new HashSet<T>();
         for (Annotation annotation : getAnnotations()) {
             if (base.getClass().isInstance(annotation)) {
-                annotationSubset.add(annotation);
+                annotationSubset.add((T) annotation);
             }
         }
         return annotationSubset;
     }
 
+
     /**
      *
      * {@see getAnnotationsExtending(Annotation)}
      *
-     * @param type
+     * @param c
      * @return
      *
      */
-    public <T> Set<T> getAnnotationsExtending(final Class<T> type) {
-        Annotation base = AnnotationFactory.getInstance().ofClass(type);
-        return (Set<T>) getAnnotationsExtending(base);
+    public <T extends Annotation> Set<T> getAnnotationsExtending(final Class<T> c) {
+        Set<T> annotationSubset = new HashSet<T>();
+        for (Annotation annotation : getAnnotations()) {
+            if (c.isAssignableFrom(annotation.getClass())) {
+                annotationSubset.add((T) annotation);
+            }
+        }
+        return annotationSubset;
     }
+
 
     /**
      * Remove an annotation from the entity
@@ -150,6 +178,7 @@ public abstract class AbstractAnnotatedEntity
         return annotations.get(annotation.getIndex()).remove(annotation);
     }
 
+
     /**
      * Accessor to the stored observations
      * @return unmodifiable ObservationCollection
@@ -157,6 +186,7 @@ public abstract class AbstractAnnotatedEntity
     public ObservationCollection getObservationCollection() {
         return observations;
     }
+
 
     /**
      * Adds an observation to the descriptor
@@ -168,6 +198,7 @@ public abstract class AbstractAnnotatedEntity
         return observations.add(observation);
     }
 
+
     /**
      * Removes an observation to the descriptor
      * @param observation The observation to remove
@@ -177,6 +208,7 @@ public abstract class AbstractAnnotatedEntity
         observation.setEntity(null);
         return observations.remove(observation);
     }
+
 
     /**
      *
@@ -189,13 +221,16 @@ public abstract class AbstractAnnotatedEntity
         return annotations.put(xref.getIndex(), xref);
     }
 
+
     public Rating getRating() {
         return rating;
     }
 
+
     public void setRating(Rating rating) {
         this.rating = rating;
     }
+
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
@@ -220,6 +255,7 @@ public abstract class AbstractAnnotatedEntity
         }
 
     }
+
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
@@ -249,11 +285,13 @@ public abstract class AbstractAnnotatedEntity
         }
     }
 
+
     @Override
     public int hashCode() {
         int hash = super.hashCode();
         return Objects.hashCode(hash, annotations, observations);
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -280,6 +318,7 @@ public abstract class AbstractAnnotatedEntity
 //        }
         return true;
     }
+
 
     public abstract String getBaseType();
 }

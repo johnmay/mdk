@@ -26,9 +26,11 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Collection;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.ChemicalStructure;
+import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
 import uk.ac.ebi.interfaces.MetaboliteClass;
+import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -134,8 +136,8 @@ public class MetaboliteImplementation
     }
 
 
-    public Collection<ChemicalStructure> getChemicalStructures() {
-        return super.getAnnotations(ChemicalStructure.class);
+    public Collection<AtomContainerAnnotation> getChemicalStructures() {
+        return super.getAnnotations(AtomContainerAnnotation.class);
     }
 
 
@@ -147,7 +149,7 @@ public class MetaboliteImplementation
      * @return
      * 
      */
-    public ChemicalStructure getFirstChemicalStructure() {
+    public AtomContainerAnnotation getFirstChemicalStructure() {
         return getChemicalStructures().iterator().next();
     }
 
@@ -241,5 +243,21 @@ public class MetaboliteImplementation
     @Override
     public String getBaseType() {
         return BASE_TYPE;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public boolean hasStructure() {
+        return super.hasAnnotation(AtomContainerAnnotation.class) || super.hasAnnotation(InChI.class);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public Collection<ChemicalStructure> getStructures() {
+        return getAnnotationsExtending(ChemicalStructure.class);
     }
 }

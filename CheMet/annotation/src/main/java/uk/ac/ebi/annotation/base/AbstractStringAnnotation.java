@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.annotation;
+package uk.ac.ebi.annotation.base;
 
 import java.io.IOException;
 import java.io.ObjectInput;
