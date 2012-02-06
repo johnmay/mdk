@@ -36,7 +36,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  *
- *          Singleton description
+ *          Provides centralised entity creation.
  *
  */
 public class DefaultEntityFactory
@@ -50,8 +50,6 @@ public class DefaultEntityFactory
 
 
     private DefaultEntityFactory() {
-
-        //entites.put(uk.ac.ebi.interfaces.entities.Metabolite.class, new Metabolite());
 
         for (Entity entity : Arrays.asList(new MetaboliteImplementation(),
                                            new MetabolicReaction(),
@@ -74,11 +72,17 @@ public class DefaultEntityFactory
     }
 
 
+    /**
+     * @inheritDoc
+     */
     public <E extends Entity> E newInstance(Class<E> c) {
         return (E) entites.get(c).newInstance();
     }
 
 
+    /**
+     * @inheritDoc
+     */
     public <E extends Entity> E newInstance(Class<E> c,
                                             Identifier identifier,
                                             String name,
