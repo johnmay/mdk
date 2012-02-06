@@ -33,8 +33,8 @@ import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.ProteinProduct;
-import uk.ac.ebi.core.RibosomalRNA;
-import uk.ac.ebi.core.TransferRNA;
+import uk.ac.ebi.core.RibosomalRNAImplementation;
+import uk.ac.ebi.core.TransferRNAImplementation;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Genome;
@@ -246,8 +246,8 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
             int nProds = in.readInt();
             GeneProduct base = baseType.equals("Protein") ? new ProteinProduct()
-                               : baseType.equals("rRNA") ? new RibosomalRNA()
-                                 : baseType.equals("tRNA") ? new TransferRNA()
+                               : baseType.equals("rRNA") ? new RibosomalRNAImplementation()
+                                 : baseType.equals("tRNA") ? new TransferRNAImplementation()
                                    : null;
             for (int j = 0; j < nProds; j++) {
                 GeneProduct product = base.newInstance();

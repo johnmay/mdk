@@ -39,7 +39,7 @@ import org.biojava3.core.sequence.Strand;
 import org.biojava3.core.sequence.template.Sequence;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.core.RNAProduct;
+import uk.ac.ebi.core.AbstractRNAProduct;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 
@@ -117,7 +117,7 @@ public class ENAXMLReader {
         // resolve the RNA product sequences without sequences
         DNASequence genome = new DNASequence(getGenomeString());
         for (GeneProduct product : products) {
-            if (product instanceof RNAProduct) {
+            if (product instanceof AbstractRNAProduct) {
                 Collection<Gene> pGenes = product.getGenes();
                 for (Gene gene : pGenes) {
                     Sequence seq = genome.getSubSequence(gene.getStart(), gene.getEnd());

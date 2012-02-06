@@ -36,9 +36,9 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.GeneImplementation;
 import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.core.ProteinProduct;
-import uk.ac.ebi.core.RNAProduct;
-import uk.ac.ebi.core.RibosomalRNA;
-import uk.ac.ebi.core.TransferRNA;
+import uk.ac.ebi.core.AbstractRNAProduct;
+import uk.ac.ebi.core.RibosomalRNAImplementation;
+import uk.ac.ebi.core.TransferRNAImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -213,11 +213,11 @@ public class ENAFeatureParser {
 
     }
 
-    private RNAProduct getRNA() {
+    private AbstractRNAProduct getRNA() {
         if (isRNA()) {
-            return new RibosomalRNA(BasicRNAIdentifier.nextIdentifier(), getLocusTag(), getProduct());
+            return new RibosomalRNAImplementation(BasicRNAIdentifier.nextIdentifier(), getLocusTag(), getProduct());
         } else if (isTRNA()) {
-            return new TransferRNA(BasicRNAIdentifier.nextIdentifier(), getLocusTag(), getProduct());
+            return new TransferRNAImplementation(BasicRNAIdentifier.nextIdentifier(), getLocusTag(), getProduct());
         }
         return null;
     }

@@ -22,6 +22,7 @@ package uk.ac.ebi.core;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.interfaces.entities.RibosomalRNA;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
@@ -31,15 +32,15 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class TransferRNA extends RNAProduct {
+public class RibosomalRNAImplementation extends AbstractRNAProduct implements RibosomalRNA{
 
-    private static final Logger LOGGER = Logger.getLogger(TransferRNA.class);
-    public static final String BASE_TYPE = "tRNA";
+    private static final Logger LOGGER = Logger.getLogger(RibosomalRNAImplementation.class);
+    public static final String BASE_TYPE = "rRNA";
 
-    public TransferRNA() {
+    public RibosomalRNAImplementation() {
     }
 
-    public TransferRNA(Identifier identifier, String abbreviation, String name) {
+    public RibosomalRNAImplementation(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
@@ -49,6 +50,6 @@ public class TransferRNA extends RNAProduct {
     }
 
     public GeneProduct newInstance() {
-        return new TransferRNA();
+        return new RibosomalRNAImplementation();
     }
 }

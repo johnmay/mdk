@@ -38,16 +38,16 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class RNAProduct extends AbstractGeneProduct {
+public abstract class AbstractRNAProduct extends AbstractGeneProduct {
 
-    private static final Logger LOGGER = Logger.getLogger(RNAProduct.class);
+    private static final Logger LOGGER = Logger.getLogger(AbstractRNAProduct.class);
     public static final String BASE_TYPE = "RNA";
     private List<RNASequence> sequences = new ArrayList();
 
-    public RNAProduct() {
+    public AbstractRNAProduct() {
     }
 
-    public RNAProduct(Identifier identifier, String abbreviation, String name) {
+    public AbstractRNAProduct(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
