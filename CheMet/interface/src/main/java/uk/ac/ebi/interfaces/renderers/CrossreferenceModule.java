@@ -41,5 +41,5 @@ public interface CrossreferenceModule {
     public boolean canTransferAnnotations();
 
 
-    public void transferAnnotations();
+    public void transferAnnotations() throws Exception;
 }
