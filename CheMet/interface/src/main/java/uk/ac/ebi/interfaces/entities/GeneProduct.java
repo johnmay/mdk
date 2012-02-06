@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.interfaces;
+package uk.ac.ebi.interfaces.entities;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -27,6 +27,9 @@ import java.util.Collection;
 import java.util.List;
 import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.Genome;
 
 
 /**

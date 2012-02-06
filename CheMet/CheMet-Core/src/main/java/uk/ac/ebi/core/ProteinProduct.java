@@ -31,7 +31,7 @@ import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.compound.AminoAcidCompound;
 import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
@@ -42,7 +42,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.interfaces.ProteinProduct {
+public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.interfaces.entities.ProteinProduct {
 
     private static final Logger LOGGER = Logger.getLogger(ProteinProduct.class);
     public static final String BASE_TYPE = "Protein";

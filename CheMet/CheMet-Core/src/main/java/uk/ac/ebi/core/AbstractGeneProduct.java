@@ -29,7 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 

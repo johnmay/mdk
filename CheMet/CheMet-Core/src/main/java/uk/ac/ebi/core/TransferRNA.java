@@ -21,7 +21,7 @@
 package uk.ac.ebi.core;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**

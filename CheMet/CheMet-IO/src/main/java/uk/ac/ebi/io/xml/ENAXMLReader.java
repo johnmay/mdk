@@ -41,7 +41,7 @@ import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.core.RNAProduct;
 import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 
 /**
  *          ENAXMLReader - 2011.10.16 <br>

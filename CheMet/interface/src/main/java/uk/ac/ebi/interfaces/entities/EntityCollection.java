@@ -22,7 +22,6 @@ package uk.ac.ebi.interfaces.entities;
 
 import java.util.Collection;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.GeneProduct;
 
 /**
  * EntityCollection - 2011.10.14 <br>

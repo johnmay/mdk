@@ -38,7 +38,7 @@ import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.chemet.exceptions.MissingPreferencesException;
 import uk.ac.ebi.core.HomologyDatabaseManager;
 import uk.ac.ebi.core.ProteinProduct;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.resource.TaskIdentifier;
 
 /**

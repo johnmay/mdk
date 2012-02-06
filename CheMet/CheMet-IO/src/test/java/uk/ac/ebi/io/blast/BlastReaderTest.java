@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.ac.ebi.chemet.io.external.BLASTHomologySearch;
-import uk.ac.ebi.interfaces.GeneProduct;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.observation.parameters.TaskDescription;
 
