@@ -21,7 +21,6 @@
 package uk.ac.ebi.core;
 
 import com.google.common.base.Objects;
-import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -150,6 +149,14 @@ public class MetaboliteImplementation
      */
     public ChemicalStructure getFirstChemicalStructure() {
         return getChemicalStructures().iterator().next();
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public Class<? extends Entity> getEntityClass() {
+        return Metabolite.class;
     }
 
 
