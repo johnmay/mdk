@@ -73,8 +73,8 @@ public class IdentifierEditor extends JComponent {
 
         setLayout(new FormLayout("pref, 4dlu, pref", "p"));
 
-        for (Identifier identifier : ID_FACTORY.getSupportedIdentifiers()) {
-            idMap.put(identifier.getShortDescription(), identifier.getIndex());
+        for (Identifier facotryIdentifier : ID_FACTORY.getSupportedIdentifiers()) {
+            idMap.put(facotryIdentifier.getShortDescription(), facotryIdentifier.getIndex());
         }
 
         idNames = new ArrayList<String>(idMap.keySet());;
