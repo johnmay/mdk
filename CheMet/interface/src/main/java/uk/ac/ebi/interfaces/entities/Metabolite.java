@@ -4,8 +4,10 @@
  */
 package uk.ac.ebi.interfaces.entities;
 
+import java.util.Collection;
 import uk.ac.ebi.interfaces.MetaboliteClass;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 
 
 /**
@@ -32,5 +34,19 @@ public interface Metabolite extends AnnotatedEntity {
     public MetaboliteClass getType();
 
 
+    @Deprecated
     public boolean hasStructureAssociated();
+    
+    /**
+     * Method replaces hasStructureAssociated to be more direct
+     * @return 
+     */
+    public boolean hasStructure();
+    
+    /**
+     * Convenience method for accessing all associated chemical structures
+     * @return 
+     */
+    public Collection<ChemicalStructure> getStructures();
+    
 }

@@ -84,7 +84,7 @@ public interface AnnotatedEntity extends Entity {
      * @param type
      * @return
      */
-    public Set<Annotation> getAnnotationsExtending(final Annotation base);
+    public <T extends Annotation> Set<T> getAnnotationsExtending(final T base);
 
 
     /**
@@ -95,7 +95,7 @@ public interface AnnotatedEntity extends Entity {
      * @return
      *
      */
-    public <T> Set<T> getAnnotationsExtending(final Class<T> type);
+    public <T extends Annotation> Set<T> getAnnotationsExtending(final Class<T> c);
 
 
     /**
