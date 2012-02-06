@@ -25,11 +25,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.*;
+import java.security.InvalidParameterException;
 import java.util.logging.Level;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import net.sf.jniinchi.INCHI_RET;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.inchi.InChIToStructure;
+import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.MDLV3000Reader;
+import uk.ac.ebi.annotation.chemical.ChemicalStructure;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -59,6 +69,8 @@ public class AssignStructure
     private final JTextArea area;
 
     private final JButton browse;
+
+    private Metabolite metabolite;
 
     private String defaultText = "Paste InCHI, SMILES or Mol file here";
 
@@ -147,6 +159,7 @@ public class AssignStructure
 
     public void setup(Metabolite metabolite) {
         area.setText(defaultText);
+        this.metabolite = metabolite;
     }
 
 
@@ -155,7 +168,50 @@ public class AssignStructure
     }
 
 
-    public void transferAnnotations() {
+    public void transferAnnotations() throws Exception {
+
+        String formatName = (String) this.format.getSelectedItem();
+
         // parse the structure
+        if (formatName.equals("Mol (v2000)")) {
+            transferMDLV2000();
+        } else if (formatName.equals("InChI")) {
+            transferInChi();
+        } else if (formatName.equals("SMILES")) {
+            // todo
+        } else if (formatName.equals("Mol (v3000)")) {
+            transferMDLV3000();
+        }
+    }
+
+
+    public void transferMDLV2000() throws IOException, CDKException {
+        MDLV2000Reader reader = new MDLV2000Reader(new StringReader(area.getText()));
+        IMolecule molecule = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+        reader.close();
+        metabolite.addAnnotation(new ChemicalStructure(molecule));
+    }
+
+
+    public void transferMDLV3000() throws IOException, CDKException {
+        MDLV3000Reader reader = new MDLV3000Reader(new StringReader(area.getText()));
+        IMolecule molecule = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+        reader.close();
+        metabolite.addAnnotation(new ChemicalStructure(molecule));
+    }
+
+
+    public void transferInChi() throws CDKException {
+        String inchi = area.getText().replaceAll("\n", "").trim();
+        if (inchi.isEmpty()) {
+            return;
+        }
+        InChIGeneratorFactory inchifactory = InChIGeneratorFactory.getInstance();
+        InChIToStructure structureGenerator = inchifactory.getInChIToStructure(inchi, DefaultChemObjectBuilder.getInstance());
+        INCHI_RET status = structureGenerator.getReturnStatus();
+        if (status != INCHI_RET.OKAY) {
+            throw new InvalidParameterException("Unable to parse InCHI for " + metabolite.getName() + ": " + structureGenerator.getMessage());
+        }
+        metabolite.addAnnotation(new ChemicalStructure(structureGenerator.getAtomContainer()));
     }
 }
