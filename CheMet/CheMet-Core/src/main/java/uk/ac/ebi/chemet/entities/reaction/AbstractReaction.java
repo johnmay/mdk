@@ -21,29 +21,16 @@
 package uk.ac.ebi.chemet.entities.reaction;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ListMultimap;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.*;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 import uk.ac.ebi.core.util.Util;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.Rating;
-import uk.ac.ebi.interfaces.entities.Reaction;
-import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.interfaces.reaction.Participant;
-import uk.ac.ebi.interfaces.reaction.ReactionType;
 
 
 /**
@@ -78,7 +65,7 @@ public class AbstractReaction<P extends Participant>
     private List<P> products;
     // whether the reaction is reversible
 
-    private DirectionImplementation reversibility = DirectionImplementation.UNKNOWN;
+    private Direction direction = DirectionImplementation.BIDIRECTIONAL;
 
     private AbstractParticipantFilter filter = new AcceptAllFilter(); // accepts all
 
@@ -123,20 +110,19 @@ public class AbstractReaction<P extends Participant>
      * @param reversibility The reaction reversibility
      *
      */
-    public void setReversibility(DirectionImplementation reversibility) {
-        this.reversibility = reversibility;
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
 
     /**
-     *
-     * Accessor for the reversibility of the reaction
+     * Get the direction of the reaction
      *
      * @return Reaction reversibility enumeration
      *
      */
-    public DirectionImplementation getReversibility() {
-        return reversibility;
+    public Direction getDirection() {
+        return direction;
     }
 
 
@@ -264,6 +250,8 @@ public class AbstractReaction<P extends Participant>
         allMolecules.addAll(getProductMolecules());
         return allMolecules;
     }
+
+
     /**
      * Accessor to all the reaction participants
      * @return shallow copy combined list of all products (ordered reactant, product)
@@ -343,6 +331,7 @@ public class AbstractReaction<P extends Participant>
         reactants = products;
         products = tmp;
     }
+
 
     public AbstractReaction newInstance() {
         return new AbstractReaction();
@@ -544,7 +533,7 @@ public class AbstractReaction<P extends Participant>
     public String toString() {
         StringBuilder sb = new StringBuilder(40);
 
-        sb.append(Joiner.on(" + ").join(reactants)).append(' ').append(reversibility).append(' ').
+        sb.append(Joiner.on(" + ").join(reactants)).append(' ').append(direction).append(' ').
                 append(Joiner.on(" + ").join(products));
 
 

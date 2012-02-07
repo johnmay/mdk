@@ -54,7 +54,7 @@ public class TransportReactionUtilTest {
         rxn.addProduct(new MetabolicParticipant(atp, CompartmentImplementation.EXTRACELLULA));
         rxn.addProduct(new MetabolicParticipant(alanine, CompartmentImplementation.EXTRACELLULA));
 
-        rxn.setReversibility(DirectionImplementation.FORWARD);
+        rxn.setDirection(DirectionImplementation.FORWARD);
 
         System.out.println(rxn + " : " + TransportReactionUtil.getClassification(rxn));
 
@@ -80,7 +80,7 @@ public class TransportReactionUtilTest {
         rxn.addProduct(new MetabolicParticipant(atp, CompartmentImplementation.EXTRACELLULA));
         rxn.addProduct(new MetabolicParticipant(alanine, CompartmentImplementation.CYTOPLASM));
 
-        rxn.setReversibility(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
+        rxn.setDirection(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
 
         System.out.println(rxn + " : " + TransportReactionUtil.getClassification(rxn));
 
@@ -105,7 +105,7 @@ public class TransportReactionUtilTest {
         rxn.addProduct(new MetabolicParticipant(atp, CompartmentImplementation.CYTOPLASM));
         rxn.addProduct(new MetabolicParticipant(alanine, CompartmentImplementation.CYTOPLASM));
 
-        rxn.setReversibility(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
+        rxn.setDirection(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
 
         System.out.println(rxn + " : " + TransportReactionUtil.getClassification(rxn));
         assertEquals(TransportReactionUtil.Classification.UNIPORTER, TransportReactionUtil.getClassification(rxn));

@@ -211,7 +211,7 @@ public class SBMLReactionReader {
         }
 
         // set the reversibility
-        reaction.setReversibility(sbmlReaction.isReversible() ? DirectionImplementation.REVERSIBLE : DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
+        reaction.setDirection(sbmlReaction.isReversible() ? DirectionImplementation.REVERSIBLE : DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
 
         return reaction;
 
@@ -320,7 +320,7 @@ public class SBMLReactionReader {
         }
 
         // set the reversibility
-        reaction.setReversibility(sbmlReaction.isReversible() ? DirectionImplementation.REVERSIBLE : DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
+        reaction.setDirection(sbmlReaction.isReversible() ? DirectionImplementation.REVERSIBLE : DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
 
         // TODO(johnmay): Add Enzyme annotations and modifiers
 

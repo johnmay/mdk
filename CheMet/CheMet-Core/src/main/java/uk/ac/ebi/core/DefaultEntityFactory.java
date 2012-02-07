@@ -149,6 +149,18 @@ public class DefaultEntityFactory
     }
 
 
+    public Class<? extends Entity> getClass(String className) {
+
+        for (Class<? extends Entity> entityClass : entites.keySet()) {
+            if (entityClass.getName().equals(className)) {
+                return entityClass;
+            }
+        }
+
+        return null;
+    }
+
+
     private static class DefaultEntityFactoryHolder {
 
         private static final DefaultEntityFactory INSTANCE = new DefaultEntityFactory();

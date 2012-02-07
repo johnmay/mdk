@@ -6,7 +6,6 @@ package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
 import java.util.ArrayList;
 import java.util.List;
-import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
@@ -66,7 +65,7 @@ public class DefaultStoichiometricMatrix
         return addReaction(reaction.getAbbreviation(),
                            getMetabolites(reaction),
                            getStoichiometries(reaction),
-                           reaction.getReversibility() == DirectionImplementation.REVERSIBLE);
+                           reaction.getDirection().isReversible());
     }
 
 

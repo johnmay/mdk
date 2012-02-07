@@ -42,4 +42,7 @@ public interface Direction {
 
 
     public boolean isReversible();
+
+
+    public byte getIndex();
 }

@@ -50,9 +50,6 @@ import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
-import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
 import uk.ac.ebi.core.tools.TransportReactionUtil.*;
@@ -60,6 +57,7 @@ import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.interfaces.reaction.Direction;
 
 
 /**
@@ -147,7 +145,7 @@ public class ReactionRenderer {
 
         drawCompartmentSeperator(g2, new Rectangle(128, 0, 128, 128));
 
-        drawArrow(g2, new Rectangle(128, 0, 128, 128), rxn.getReversibility(), 1.25f);
+        drawArrow(g2, new Rectangle(128, 0, 128, 128), rxn.getDirection(), 1.25f);
 
         drawMolecule(g2, new Rectangle(256, 0, 128, 128),
                      (MetabolicParticipant) right);
@@ -234,7 +232,7 @@ public class ReactionRenderer {
 
         bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
                                         0, 128, 128);
-        drawArrow(g2, bounds, rxn.getReversibility());
+        drawArrow(g2, bounds, rxn.getDirection());
         List<MetabolicParticipant> products = rxn.getProductParticipants();
         for (int i = 0; i < products.size(); i++) {
             bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
@@ -316,14 +314,14 @@ public class ReactionRenderer {
 
     public void drawArrow(Graphics2D g2,
                           Rectangle2D bounds,
-                          DirectionImplementation reversibility) {
-        drawArrow(g2, bounds, reversibility, 1f);
+                          Direction direction) {
+        drawArrow(g2, bounds, direction, 1f);
     }
 
 
     public void drawArrow(Graphics2D g2,
                           Rectangle2D bounds,
-                          DirectionImplementation reversibility,
+                          Direction direction,
                           float scale) {
         double length = (bounds.getWidth() / 2) * 0.8;
 
@@ -333,13 +331,13 @@ public class ReactionRenderer {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 
-        String direction = reversibility.toString();
+        String symbol = direction.getSymbol();
         g2.setFont(ViewUtilities.DEFAULT_BODY_FONT.deriveFont(34.0f * scale));
-        Rectangle2D sBounds = g2.getFontMetrics().getStringBounds(direction, g2);
+        Rectangle2D sBounds = g2.getFontMetrics().getStringBounds(symbol, g2);
         int width = (int) sBounds.getWidth();
         int height = (int) sBounds.getHeight();
 
-        g2.drawString(direction, (int) bounds.getCenterX() - (width / 2),
+        g2.drawString(symbol, (int) bounds.getCenterX() - (width / 2),
                       (int) bounds.getCenterY() + (height / 2));
 
 

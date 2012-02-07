@@ -91,7 +91,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
             rxn.addProduct(p);
         }
 
-        rxn.setReversibility(DirectionImplementation.valueOf(in.readByte()));
+        rxn.setDirection(DirectionImplementation.valueOf(in.readByte()));
 
         return rxn;
 
@@ -119,7 +119,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
             out.writeIndex(p.getMolecule());
         }
 
-        out.writeByte(rxn.getReversibility().getIndex());
+        out.writeByte(rxn.getDirection().getIndex());
 
     }
 }

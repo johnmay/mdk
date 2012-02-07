@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.ProteinProduct;
 import uk.ac.ebi.core.RibosomalRNAImplementation;
 import uk.ac.ebi.core.TransferRNAImplementation;
@@ -40,6 +41,9 @@ import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
+
 
 /**
  * @name    ProductCollection - 2011.10.07 <br>
@@ -51,13 +55,26 @@ import uk.ac.ebi.interfaces.Observation;
 public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct>, Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(ProductCollection.class);
+
     private List<GeneProduct> productList = new ArrayList();
-    private ArrayListMultimap<String, GeneProduct> products = ArrayListMultimap.create();
+
+    private ArrayListMultimap<Class<? extends Entity>, GeneProduct> products = ArrayListMultimap.create();
+
     private ArrayListMultimap<String, GeneProduct> accessionMap = ArrayListMultimap.create();
     // could use identifier but accession should be unique
 
+    private EntityFactory factory;
+
+
     public ProductCollection() {
+        this(DefaultEntityFactory.getInstance());
     }
+
+
+    public ProductCollection(EntityFactory factory) {
+        this.factory = factory;
+    }
+
 
     /**
      * Add a single gene product
@@ -65,10 +82,11 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
      * @return
      */
     public boolean add(GeneProduct product) {
-       products.put(product.getBaseType(), product);
-       accessionMap.put(product.getAccession(), product);
-       return true;
+        products.put(factory.getEntityClass(product.getClass()), product);
+        accessionMap.put(product.getAccession(), product);
+        return true;
     }
+
 
     /**
      * Adds a collection of gene products
@@ -83,25 +101,31 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         return changed;
     }
 
+
     public boolean addAnnotation(Identifier id, Annotation annotation) {
         return addAnnotation(id.getAccession(), annotation);
     }
+
 
     public boolean addAnnotation(String accession, Annotation annotation) {
         throw new UnsupportedOperationException();
     }
 
+
     public boolean addAnnotations(Identifier id, Collection<Annotation> annotations) {
         return addAnnotations(id.getAccession(), annotations);
     }
+
 
     public boolean addAnnotations(String accession, Collection<Annotation> annotations) {
         throw new UnsupportedOperationException();
     }
 
+
     public boolean addObservation(Identifier id, Observation observation) {
         return addObservation(id.getAccession(), observation);
     }
+
 
     /**
      *
@@ -127,9 +151,11 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         return false;
     }
 
+
     public boolean addObservations(Identifier id, Collection<Observation> observations) {
         return addObservations(id.getAccession(), observations);
     }
+
 
     /**
      * Adds an observation to product(s) matching the specified accession. If there are multiple products with the
@@ -150,9 +176,11 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         return false;
     }
 
-    public List<GeneProduct> get(String accession){
+
+    public List<GeneProduct> get(String accession) {
         return accessionMap.get(accession);
     }
+
 
     /**
      * Returns an iterator for all products
@@ -162,49 +190,61 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         return products.values().iterator();
     }
 
+
     public int size() {
         return products.values().size();
     }
+
 
     public boolean isEmpty() {
         return products.isEmpty();
     }
 
+
     public boolean contains(Object o) {
         return products.values().contains(o);
     }
+
 
     public Object[] toArray() {
         return products.values().toArray();
     }
 
+
     public <T> T[] toArray(T[] a) {
         return products.values().toArray(a);
     }
 
-    public List<GeneProduct> getAll(String basetype) {
-        return products.get(basetype);
+
+    public List<GeneProduct> getAll(Class<? extends GeneProduct> c) {
+        return products.get(c);
     }
+
 
     public boolean remove(Object o) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
     public boolean containsAll(Collection<?> c) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     public boolean removeAll(Collection<?> c) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
     public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
     public void clear() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     /**
      * @inheritDoc
@@ -213,6 +253,7 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         throw new NotSerializableException();
     }
 
+
     /**
      * @inheritDoc
      */
@@ -220,15 +261,16 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         throw new NotSerializableException();
     }
 
+
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
-        Set<String> types = products.keySet();
+        Set<Class<? extends Entity>> types = products.keySet();
 
         out.writeInt(types.size()); // number of types
 
-        for (String type : types) {
+        for (Class<? extends Entity> type : types) {
             Collection<GeneProduct> ps = products.get(type);
 
-            out.writeUTF(type);
+            out.writeUTF(type.getName());
             out.writeInt(ps.size());
 
             for (GeneProduct product : ps) {
@@ -238,6 +280,7 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         }
     }
 
+
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
         int nTypes = in.readInt();
         for (int i = 0; i < nTypes; i++) {
@@ -245,16 +288,13 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
             String baseType = in.readUTF();
 
             int nProds = in.readInt();
-            GeneProduct base = baseType.equals("Protein") ? new ProteinProduct()
-                               : baseType.equals("rRNA") ? new RibosomalRNAImplementation()
-                                 : baseType.equals("tRNA") ? new TransferRNAImplementation()
-                                   : null;
+            GeneProduct base = (GeneProduct) factory.newInstance(factory.getClass(baseType));
             for (int j = 0; j < nProds; j++) {
                 GeneProduct product = base.newInstance();
                 product.readExternal(in, genome);
                 productList.add(product);
                 accessionMap.put(product.getAccession(), product);
-                products.put(product.getBaseType(), product);
+                products.put(factory.getEntityClass(base.getClass()), product);
             }
 
         }

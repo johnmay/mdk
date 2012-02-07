@@ -81,4 +81,7 @@ public interface EntityFactory {
      * 
      */
     public Class<? extends Entity> getRootClass(Class<? extends Entity> c);
+
+
+    public Class<? extends Entity> getClass(String className);
 }
