@@ -84,8 +84,6 @@ public class IdentifierEditor extends JComponent {
         field = FieldFactory.newField(14);
         type = ComboBoxFactory.newComboBox(idNames);
 
-        System.out.println(type.getPreferredSize());
-
         type.setPreferredSize(new Dimension(150, 27));
 
         type.setBackground(ThemeManager.getInstance().getTheme().getDialogBackground());
