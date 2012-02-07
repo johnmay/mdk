@@ -44,8 +44,8 @@ public class ReactionLoaderTest {
             while (reactionReader.hasNext()) {
                 AtomContainerReaction r = reactionReader.next();
                 assertEquals(2, r.getAllReactionParticipants().size());
-                assertEquals(CompartmentImplementation.EXTRACELLULA, r.getReactantCompartments().get(0));
-                assertEquals(CompartmentImplementation.CYTOPLASM, r.getProductCompartments().get(0));
+                assertEquals(CompartmentImplementation.EXTRACELLULA, r.getReactantParticipants().get(0).getCompartment());
+                assertEquals(CompartmentImplementation.CYTOPLASM, r.getReactantParticipants().get(0).getCompartment());
             }
         } catch (Exception ex) {
             System.err.println(ex.getMessage());

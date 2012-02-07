@@ -41,23 +41,23 @@ public enum Organelle implements Compartment {
     PERIPLASM("p", "Periplasm", (byte) 2),
     EXTRACELLULA("e", "Extracellular", (byte) 3),
     // Eukaryotes
-    GOLGI("g", "Golgi", (byte) 5),
-    LYSOSOME("l", "Lysosome", (byte) 9),
-    GLYCOSOME("y", "Glycosome", (byte) 19),
-    GLYOXYSOME("w", "Glyoxysome", (byte) 17),
-    PEROXISOME("x", "Peroxisome", (byte) 18),
-    MITOCHONDRION("m", "Mitochondrion", (byte) 10),
-    NUCLEUS("n", "Nucleus", (byte) 11),
-    ENDOPLASMIC_RETICULUM("r", "Endoplasmic Reticulum", (byte) 13),
+    GOLGI("g", "Golgi", (byte) 4),
+    LYSOSOME("l", "Lysosome", (byte) 5),
+    GLYCOSOME("y", "Glycosome", (byte) 6),
+    GLYOXYSOME("w", "Glyoxysome", (byte) 7),
+    PEROXISOME("x", "Peroxisome", (byte) 8),
+    MITOCHONDRION("m", "Mitochondrion", (byte) 9),
+    NUCLEUS("n", "Nucleus", (byte) 10),
+    ENDOPLASMIC_RETICULUM("r", "Endoplasmic Reticulum", (byte) 11),
     // Plants
-    CHLOROPLAST("h", "Chloroplast", (byte) 6),
-    APICOPLAST("a", "Apicoplast", (byte) 8),
-    GLYOXYSOMES("o", "Glyoxysomes", (byte) 12),
-    PLASTID("s", "Plastid", (byte) 14),
-    THYLAKOID("t", "Thylakoid", (byte) 15),
-    VACUOLE("v", "Vacuole", (byte) 16),
+    CHLOROPLAST("h", "Chloroplast", (byte) 12),
+    APICOPLAST("a", "Apicoplast", (byte) 13),
+    GLYOXYSOMES("o", "Glyoxysomes", (byte) 14),
+    PLASTID("s", "Plastid", (byte) 15),
+    THYLAKOID("t", "Thylakoid", (byte) 16),
+    VACUOLE("v", "Vacuole", (byte) 17),
     // mixed
-    FLAGELLUM("f", "Flagellum", (byte) 4),;
+    FLAGELLUM("f", "Flagellum", (byte) 18),;
 
     private final String abbreviation;
 
@@ -86,5 +86,10 @@ public enum Organelle implements Compartment {
 
     public Set<String> getSynonyms() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public int getRanking() {
+        return index;
     }
 }

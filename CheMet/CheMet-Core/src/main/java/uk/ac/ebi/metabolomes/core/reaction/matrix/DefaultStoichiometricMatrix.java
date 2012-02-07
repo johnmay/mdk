@@ -6,12 +6,14 @@ package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
 import java.util.ArrayList;
 import java.util.List;
-import uk.ac.ebi.chemet.entities.reaction.Reversibility;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.reaction.Compartment;
 
 
 /**
@@ -64,14 +66,14 @@ public class DefaultStoichiometricMatrix
         return addReaction(reaction.getAbbreviation(),
                            getMetabolites(reaction),
                            getStoichiometries(reaction),
-                           reaction.getReversibility() == Reversibility.REVERSIBLE);
+                           reaction.getReversibility() == DirectionImplementation.REVERSIBLE);
     }
 
 
     public CompartmentalisedMetabolite[] getMetabolites(MetabolicReaction rxn) {
 
         List<CompartmentalisedMetabolite> list = new ArrayList<CompartmentalisedMetabolite>();
-        for (Participant<Metabolite, ?, CompartmentImplementation> p : rxn.getAllReactionParticipants()) {
+        for (MetabolicParticipant p : rxn.getAllReactionParticipants()) {
             list.add(new CompartmentalisedMetabolite(p.getMolecule(), p.getCompartment()));
         }
 
@@ -83,18 +85,16 @@ public class DefaultStoichiometricMatrix
 
         Double[] coefs = new Double[rxn.getAllReactionParticipants().size()];
         int i = 0;
-        for (Double d : rxn.getReactantStoichiometries()) {
+        for (Double d : (List<Double>) rxn.getReactantStoichiometries()) {
             coefs[i++] = -d;
         }
-        for (Double d : rxn.getProductStoichiometries()) {
+        for (Double d : (List<Double>) rxn.getProductStoichiometries()) {
             coefs[i++] = +d;
         }
 
         return coefs;
     }
 
-
-   
 
     @Override
     public StoichiometricMatrix<CompartmentalisedMetabolite, String> newInstance() {

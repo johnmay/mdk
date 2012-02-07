@@ -36,7 +36,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLReader;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 
 
 /**
@@ -146,7 +146,7 @@ public class BasicFilter extends AbstractParticipantFilter {
      *
      */
     @Override
-    public boolean reject( Participant p ) {
+    public boolean reject( ParticipantImplementation p ) {
         if ( p instanceof AtomContainerParticipant ) {
             return reject( new AtomContainerParticipant( ( IAtomContainer ) p.getMolecule() ) );
         }

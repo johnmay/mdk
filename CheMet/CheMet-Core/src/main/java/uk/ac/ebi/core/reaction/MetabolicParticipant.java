@@ -23,14 +23,14 @@ package uk.ac.ebi.core.reaction;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.nio.channels.UnsupportedAddressTypeException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
+import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 
 
 /**
@@ -40,7 +40,8 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetabolicParticipant extends Participant<Metabolite, Double, CompartmentImplementation> {
+public class MetabolicParticipant 
+    extends ParticipantImplementation<Metabolite, Double, Compartment> {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicParticipant.class);
 
@@ -54,7 +55,7 @@ public class MetabolicParticipant extends Participant<Metabolite, Double, Compar
     }
 
 
-    public MetabolicParticipant(Metabolite molecule, Double coefficient, CompartmentImplementation compartment) {
+    public MetabolicParticipant(Metabolite molecule, Double coefficient, Compartment compartment) {
         super(molecule, coefficient, compartment);
     }
 
@@ -69,39 +70,5 @@ public class MetabolicParticipant extends Participant<Metabolite, Double, Compar
     }
 
 
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
-        m.readExternal(in);
-        System.out.println(m.getIdentifier());
-        setMolecule(m);
-        setCoefficient(in.readDouble());
-        setCompartment(CompartmentImplementation.valueOf(in.readUTF()));
-    }
-
-
-    public void readExternal(ObjectInput in, MetaboliteCollection metabolites) throws IOException,
-                                                                                      ClassNotFoundException {
-        //setMolecule(metabolites.get(in.readInt()));
-        setCoefficient(in.readDouble());
-        setCompartment(CompartmentImplementation.valueOf(in.readUTF()));
-        throw new UnsupportedOperationException("Use ReconstructionInputStream!");
-
-    }
-
-
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        System.out.print("writing external metabolite..");
-        getMolecule().writeExternal(out);
-        out.writeDouble(getCoefficient());
-        out.writeUTF(getCompartment().name());
-    }
-
-
-    public void writeExternal(ObjectOutput out, MetaboliteCollection metabolites) throws IOException {
-        out.writeInt(metabolites.indexOf(getMolecule()));
-        out.writeDouble(getCoefficient());
-        out.writeUTF(getCompartment().name());
-    }
+   
 }

@@ -38,13 +38,13 @@ public enum Membrane implements Compartment {
 
     // Membranes
     GOLGI_MEMBRANE(
-    "gm", "Golgi Membrane", (byte) 1),
-    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane", (byte) 2),
-    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane", (byte) 3),
-    PLASMA_MEMBRANE("pm", "Plasma Membrane", (byte) 4),
-    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", (byte) 5),
-    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane", (byte) 26),
-    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", (byte) 6);
+    "gm", "Golgi Membrane", (byte) 20),
+    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane", (byte) 21),
+    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane", (byte) 22),
+    PLASMA_MEMBRANE("pm", "Plasma Membrane", (byte) 23),
+    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", (byte) 24),
+    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane", (byte) 25),
+    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", (byte) 26);
 
     private final String abbreviation;
 
@@ -73,5 +73,10 @@ public enum Membrane implements Compartment {
 
     public Set<String> getSynonyms() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public int getRanking() {
+        return index;
     }
 }

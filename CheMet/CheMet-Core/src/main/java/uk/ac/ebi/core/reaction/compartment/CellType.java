@@ -36,9 +36,9 @@ import uk.ac.ebi.interfaces.reaction.Compartment;
  */
 public enum CellType implements Compartment {
 
-    ADIPOCYTE("a", "Adibopcyte", (byte) 2),
-    MYOCYTE("m", "Myocyte", (byte) 3),
-    HEPATOCYTE("h", "Hepatocyte", (byte) 4);
+    ADIPOCYTE("a", "Adibopcyte", (byte) 40),
+    MYOCYTE("m", "Myocyte", (byte) 41),
+    HEPATOCYTE("h", "Hepatocyte", (byte) 42);
 
     private final String abbreviation;
 
@@ -67,5 +67,10 @@ public enum CellType implements Compartment {
 
     public Set<String> getSynonyms() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public int getRanking() {
+        return index;
     }
 }

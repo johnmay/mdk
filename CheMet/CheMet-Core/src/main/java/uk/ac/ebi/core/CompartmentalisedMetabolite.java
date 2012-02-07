@@ -22,6 +22,7 @@ package uk.ac.ebi.core;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.reaction.Compartment;
 
 
 /**
@@ -39,10 +40,10 @@ public class CompartmentalisedMetabolite {
 
     public final Metabolite metabolite;
 
-    public final CompartmentImplementation compartment;
+    public final Compartment compartment;
 
 
-    public CompartmentalisedMetabolite(final Metabolite metabolite, CompartmentImplementation compartment) {
+    public CompartmentalisedMetabolite(final Metabolite metabolite, Compartment compartment) {
         this.metabolite = metabolite;
         this.compartment = compartment;
     }

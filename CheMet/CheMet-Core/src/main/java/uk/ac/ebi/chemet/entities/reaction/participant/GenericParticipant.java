@@ -69,7 +69,7 @@ public class GenericParticipant extends AtomContainerParticipant {
     }
 
     @Override
-    public boolean equals( Participant<IAtomContainer , Double , CompartmentImplementation> other ) {
+    public boolean equals( ParticipantImplementation<IAtomContainer , Double , CompartmentImplementation> other ) {
 
         // other is also of Generic.. so we check raw
         // similarity instead of checking substructure

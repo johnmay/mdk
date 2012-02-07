@@ -49,15 +49,17 @@ import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.chemet.entities.reaction.Reversibility;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
 import uk.ac.ebi.core.tools.TransportReactionUtil.*;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 
 
 /**
@@ -94,9 +96,9 @@ public class ReactionRenderer {
     }
 
 
-    public ImageIcon renderTransportReaction(Reaction<Metabolite, Double, CompartmentImplementation> rxn) {
+    public ImageIcon renderTransportReaction(AbstractReaction<MetabolicParticipant> rxn) {
 
-        if (!rxn.isTransport()) {
+        if (!TransportReactionUtil.isTransport(rxn)) {
             throw new InvalidParameterException("Provided reaction is not a transport reaction");
         }
 
@@ -122,13 +124,13 @@ public class ReactionRenderer {
      * @param rxn
      * @return
      */
-    public ImageIcon renderUniporterReaction(Reaction<Metabolite, Double, CompartmentImplementation> rxn) {
+    public ImageIcon renderUniporterReaction(AbstractReaction<MetabolicParticipant> rxn) {
 
-        BiMap<Participant<Metabolite, ?, CompartmentImplementation>, Participant<Metabolite, ?, CompartmentImplementation>> mapping = TransportReactionUtil.getMappings(
+        BiMap<CompartmentalisedParticipant<Metabolite, ?, Compartment>, CompartmentalisedParticipant<Metabolite, ?, Compartment>> mapping = TransportReactionUtil.getMappings(
                 rxn);
 
-        Participant<Metabolite, ?, CompartmentImplementation> left = mapping.keySet().iterator().next();
-        Participant<Metabolite, ?, CompartmentImplementation> right = mapping.get(left);
+        CompartmentalisedParticipant<Metabolite, ?, Compartment> left = mapping.keySet().iterator().next();
+        CompartmentalisedParticipant<Metabolite, ?, Compartment> right = mapping.get(left);
 
         int n = mapping.size();
 
@@ -193,7 +195,7 @@ public class ReactionRenderer {
     }
 
 
-    public ImageIcon getReaction(Reaction<Metabolite, Double, CompartmentImplementation> rxn) {
+    public ImageIcon getReaction(AbstractReaction<MetabolicParticipant> rxn) {
 
         int n = rxn.getAllReactionParticipants().size();
 
@@ -213,7 +215,7 @@ public class ReactionRenderer {
 
         Rectangle2D bounds = new Rectangle2D.Double(-128, 0, 128, 128);
 
-        List<Participant<Metabolite, Double, CompartmentImplementation>> reactants = rxn.getReactantParticipants();
+        List<MetabolicParticipant> reactants = rxn.getReactantParticipants();
         for (int i = 0; i < reactants.size(); i++) {
 
             bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
@@ -233,7 +235,7 @@ public class ReactionRenderer {
         bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
                                         0, 128, 128);
         drawArrow(g2, bounds, rxn.getReversibility());
-        List<Participant<Metabolite, Double, CompartmentImplementation>> products = rxn.getProductParticipants();
+        List<MetabolicParticipant> products = rxn.getProductParticipants();
         for (int i = 0; i < products.size(); i++) {
             bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
                                             0, 128, 128);
@@ -314,14 +316,14 @@ public class ReactionRenderer {
 
     public void drawArrow(Graphics2D g2,
                           Rectangle2D bounds,
-                          Reversibility reversibility) {
+                          DirectionImplementation reversibility) {
         drawArrow(g2, bounds, reversibility, 1f);
     }
 
 
     public void drawArrow(Graphics2D g2,
                           Rectangle2D bounds,
-                          Reversibility reversibility,
+                          DirectionImplementation reversibility,
                           float scale) {
         double length = (bounds.getWidth() / 2) * 0.8;
 

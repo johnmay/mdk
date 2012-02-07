@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.entities.reaction.filter;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 
 /**
  * @name    AbstractParticipantFilter
@@ -36,6 +36,6 @@ public abstract class AbstractParticipantFilter {
 
     private static final Logger LOGGER = Logger.getLogger( AbstractParticipantFilter.class );
 
-    public abstract boolean reject( Participant p );
+    public abstract boolean reject( ParticipantImplementation p );
 
 }

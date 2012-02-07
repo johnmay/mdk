@@ -22,7 +22,11 @@ package uk.ac.ebi.chemet.entities.reaction.participant;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentImplementation;
+import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.interfaces.reaction.Participant;
 import uk.ac.ebi.metabolomes.identifier.InChI;
+
 
 /**
  * @name    InChIParticipant
@@ -33,24 +37,28 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
  * @brief   ...class description...
  *
  */
-public class InChIParticipant extends Participant<InChI , Double , CompartmentImplementation> {
+public class InChIParticipant extends ParticipantImplementation<InChI, Double, Compartment> {
 
-    private static final Logger LOGGER = Logger.getLogger( InChIParticipant.class );
+    private static final Logger LOGGER = Logger.getLogger(InChIParticipant.class);
 
-    public InChIParticipant( InChI molecule , Double coefficient , CompartmentImplementation compartment ) {
-        super( molecule , coefficient , compartment );
+
+    public InChIParticipant(InChI molecule, Double coefficient, Compartment compartment) {
+        super(molecule, coefficient, compartment);
     }
 
-    public InChIParticipant( InChI molecule , Double coefficient ) {
-        super( molecule , coefficient );
+
+    public InChIParticipant(InChI molecule, Double coefficient) {
+        super(molecule, coefficient);
     }
 
-    public InChIParticipant( InChI molecule ) {
-        super( molecule );
+
+    public InChIParticipant(InChI molecule) {
+        super(molecule);
     }
 
-    public InChIParticipant( String inchi ) {
-        super( new InChI( inchi ) );
+
+    public InChIParticipant(String inchi) {
+        super(new InChI(inchi));
     }
 
 
@@ -60,15 +68,17 @@ public class InChIParticipant extends Participant<InChI , Double , CompartmentIm
      * @return
      */
     @Override
-    public int compareTo( Participant<InChI , Double , CompartmentImplementation> o ) {
-        int coefComparison = ( ( Comparable ) this.coefficient ).compareTo( o.coefficient );
-        if ( coefComparison != 0 ) {
+    public int compareTo(Participant<InChI, Double> o) {
+        int coefComparison = ((Comparable) this.coefficient).compareTo(o.getCoefficient());
+        if (coefComparison != 0) {
             return coefComparison;
         }
-        int compComparison = ( ( Comparable ) this.compartment ).compareTo( o.compartment );
-        if ( compComparison != 0 ) {
-            return compComparison;
+        if (o instanceof CompartmentalisedParticipant) {
+            int compComparison = ((Comparable) this.compartment).compareTo(((CompartmentalisedParticipant) o).getCompartment());
+            if (compComparison != 0) {
+                return compComparison;
+            }
         }
-        return ( ( Comparable ) this.molecule ).compareTo( o.molecule );
+        return ((Comparable) this.molecule).compareTo(o.getMolecule());
     }
 }

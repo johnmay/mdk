@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.participant.InChIParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
@@ -54,7 +54,7 @@ public class InChIFilter extends AbstractParticipantFilter {
     }
 
     @Override
-    public boolean reject( Participant p ) {
+    public boolean reject( ParticipantImplementation p ) {
         if ( p instanceof InChIParticipant ) {
             return reject( ( InChIParticipant ) p );
         }

@@ -32,13 +32,13 @@ public class GenericParticipantTest {
 
         System.out.printf( "%-120s" , "[TEST] Primary Alchol (removed R) equals 5ß-cholestane-3α,7α,26-triol" );
 
-        Participant primaryAlochol = new GenericParticipant( primary_alcohol_no_r() );
-        Participant alcoholImpl = new AtomContainerParticipant( _5bcholestane3a7a26triol() );
+        ParticipantImplementation primaryAlochol = new GenericParticipant( primary_alcohol_no_r() );
+        ParticipantImplementation alcoholImpl = new AtomContainerParticipant( _5bcholestane3a7a26triol() );
 
         assertEquals( true , primaryAlochol.equals( alcoholImpl ) );
         assertEquals( true , alcoholImpl.equals( primaryAlochol ) );
 
-        Participant primaryAlocholR = new GenericParticipant( primary_alcohol() );
+        ParticipantImplementation primaryAlocholR = new GenericParticipant( primary_alcohol() );
 
         assertEquals( true , primaryAlochol.equals( alcoholImpl ) );
         assertEquals( true , primaryAlocholR.equals( alcoholImpl ) );
@@ -54,8 +54,8 @@ public class GenericParticipantTest {
         System.out.printf( "%-120s" , "[TEST] Aldehyde (removed R) equals  _3a7adihydroxy5Bcholestan26al" );
 
 
-        Participant aldehyde = new GenericParticipant( aldehyde_no_r() );
-        Participant aldehydeImpl = new AtomContainerParticipant( _3a7adihydroxy5Bcholestan26al() );
+        ParticipantImplementation aldehyde = new GenericParticipant( aldehyde_no_r() );
+        ParticipantImplementation aldehydeImpl = new AtomContainerParticipant( _3a7adihydroxy5Bcholestan26al() );
 
         assertEquals( true , aldehyde.equals( aldehydeImpl ) );
         assertEquals( true , aldehydeImpl.equals( aldehyde ) );
@@ -68,8 +68,8 @@ public class GenericParticipantTest {
 
         System.out.printf( "%-120s" , "[TEST] Aldehyde (removed R) equals Aldehyde (removed R)" );
 
-        Participant aldehyde = new GenericParticipant( aldehyde_no_r() );
-        Participant aldehyde2 = new GenericParticipant( aldehyde_no_r() );
+        ParticipantImplementation aldehyde = new GenericParticipant( aldehyde_no_r() );
+        ParticipantImplementation aldehyde2 = new GenericParticipant( aldehyde_no_r() );
 
         assertEquals( aldehyde , aldehyde2 );
         assertEquals( aldehyde2 , aldehyde );
@@ -84,8 +84,8 @@ public class GenericParticipantTest {
 
         System.out.printf( "%-120s" , "[TEST] Aldehyde (removed R) does not equal Primary Alcohol (removed R)" );
 
-        Participant aldehyde = new GenericParticipant( aldehyde_no_r() );
-        Participant primaryAlochol = new GenericParticipant( primary_alcohol_no_r() );
+        ParticipantImplementation aldehyde = new GenericParticipant( aldehyde_no_r() );
+        ParticipantImplementation primaryAlochol = new GenericParticipant( primary_alcohol_no_r() );
 
         assertNotSame( aldehyde , primaryAlochol );
         assertNotSame( primaryAlochol , aldehyde );

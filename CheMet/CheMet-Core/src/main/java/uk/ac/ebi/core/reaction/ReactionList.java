@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -58,7 +58,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     @Override
     public boolean add(MetabolicReaction rxn) {
 
-        for (Participant<Metabolite, ?, ?> m : rxn.getAllReactionParticipants()) {
+        for (ParticipantImplementation<Metabolite, ?, ?> m : rxn.getAllReactionParticipants()) {
             participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
         }
 
@@ -119,7 +119,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     public void rebuildParticipantMap() {
         participantMap.clear();
         for (MetabolicReaction rxn : this) {
-            for (Participant<Metabolite, ?, ?> m : rxn.getAllReactionParticipants()) {
+            for (ParticipantImplementation<Metabolite, ?, ?> m : rxn.getAllReactionParticipants()) {
                 participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
             }
         }

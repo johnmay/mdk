@@ -17,8 +17,11 @@
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
 import java.util.Arrays;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.chemet.entities.reaction.Reversibility;
+import java.util.List;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.interfaces.reaction.Participant;
 
 
 /**
@@ -88,10 +91,10 @@ public class BasicStoichiometricMatrix
     }
 
 
-    public int addReaction(Reaction<String, Double, String> reaction) {
+    public int addReaction(AbstractReaction<? extends Participant<String, Double>> reaction) {
 
-        String[] metabolites = reaction.getAllReactionMolecules().toArray(new String[0]);
-        Double[] coefficients = reaction.getAllReactionCoefficients().toArray(new Double[0]);
+        String[] metabolites = ((List<String>) reaction.getAllReactionMolecules()).toArray(new String[0]);
+        Double[] coefficients = ((List<Double>) reaction.getAllReactionCoefficients()).toArray(new Double[0]);
 
         for (int i = 0; i < reaction.getReactantCount(); i++) {
             coefficients[i] = -coefficients[i];
@@ -102,7 +105,7 @@ public class BasicStoichiometricMatrix
         return addReaction(reaction.getName(),
                            metabolites,
                            coefficients,
-                           reaction.getReversibility() == Reversibility.REVERSIBLE);
+                           reaction.getReversibility() == DirectionImplementation.REVERSIBLE);
     }
 
 

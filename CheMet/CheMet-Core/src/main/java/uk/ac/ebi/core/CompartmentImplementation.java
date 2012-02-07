@@ -23,7 +23,7 @@ package uk.ac.ebi.core;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import uk.ac.ebi.chemet.entities.reaction.Reversibility;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 
 

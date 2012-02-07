@@ -10,7 +10,7 @@ import java.util.Collection;
 
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
@@ -221,7 +221,7 @@ public class Reconstruction
     public void addReaction(MetabolicReaction reaction) {
         reactions.add(reaction);
 
-        for (Participant<Metabolite, ?, ?> p : reaction.getAllReactionParticipants()) {
+        for (ParticipantImplementation<Metabolite, ?, ?> p : reaction.getAllReactionParticipants()) {
             if (metabolites.contains(p.getMolecule()) == false) {
                 addMetabolite(p.getMolecule());
             }
@@ -388,74 +388,74 @@ public class Reconstruction
 //    }
     public void writeExternal(ObjectOutput out) throws IOException {
 
-        super.writeExternal(out);
-
-        out.writeUTF(container.getAbsolutePath());
-
-        taxonomy.writeExternal(out);
-
-
-        // genome
-        genome.write(out);
-
-        // products
-        products.writeExternal(out, genome);
-
-        // metabolites
-        out.writeInt(metabolites.size());
-        for (Metabolite metabolite : metabolites) {
-            metabolite.writeExternal(out);
-        }
-
-        // reactions
-        out.writeInt(reactions.size());
-        for (MetabolicReaction reaction : reactions) {
-            reaction.writeExternal(out, metabolites, products);
-            // already writen so don't need to write
-        }
+//        super.writeExternal(out);
+//
+//        out.writeUTF(container.getAbsolutePath());
+//
+//        taxonomy.writeExternal(out);
+//
+//
+//        // genome
+//        genome.write(out);
+//
+//        // products
+//        products.writeExternal(out, genome);
+//
+//        // metabolites
+//        out.writeInt(metabolites.size());
+//        for (Metabolite metabolite : metabolites) {
+//            metabolite.writeExternal(out);
+//        }
+//
+//        // reactions
+//        out.writeInt(reactions.size());
+//        for (MetabolicReaction reaction : reactions) {
+//            reaction.writeExternal(out, metabolites, products);
+//            // already writen so don't need to write
+//        }
 
     }
 
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
-
-        container = new File(in.readUTF());
-
-        // ids
-        taxonomy = new Taxonomy();
-        taxonomy.readExternal(in);
-
-        // genome
-        genome.read(in);
-
-        // products
-        products = new ProductCollection();
-        products.readExternal(in, genome);
-
-
-
-        // metabolites
-        metabolites = new MetaboliteCollection();
-        int nMets = in.readInt();
-        for (int i = 0; i < nMets; i++) {
-            Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
-            m.readExternal(in);
-            metabolites.add(m);
-        }
-
-        // reactions
-        reactions = new ReactionList();
-
-        long start = System.currentTimeMillis();
-        int nRxns = in.readInt();
-        for (int i = 0; i < nRxns; i++) {
-            MetabolicReaction r = new MetabolicReaction();
-            r.readExternal(in, metabolites, products);
-            reactions.add(r);
-        }
-        long end = System.currentTimeMillis();
-        logger.info("Loaded reaction into collection " + (end - start) + " ms");
+//        super.readExternal(in);
+//
+//        container = new File(in.readUTF());
+//
+//        // ids
+//        taxonomy = new Taxonomy();
+//        taxonomy.readExternal(in);
+//
+//        // genome
+//        genome.read(in);
+//
+//        // products
+//        products = new ProductCollection();
+//        products.readExternal(in, genome);
+//
+//
+//
+//        // metabolites
+//        metabolites = new MetaboliteCollection();
+//        int nMets = in.readInt();
+//        for (int i = 0; i < nMets; i++) {
+//            Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
+//            m.readExternal(in);
+//            metabolites.add(m);
+//        }
+//
+//        // reactions
+//        reactions = new ReactionList();
+//
+//        long start = System.currentTimeMillis();
+//        int nRxns = in.readInt();
+//        for (int i = 0; i < nRxns; i++) {
+//            MetabolicReaction r = new MetabolicReaction();
+//            r.readExternal(in, metabolites, products);
+//            reactions.add(r);
+//        }
+//        long end = System.currentTimeMillis();
+//        logger.info("Loaded reaction into collection " + (end - start) + " ms");
 
 
     }

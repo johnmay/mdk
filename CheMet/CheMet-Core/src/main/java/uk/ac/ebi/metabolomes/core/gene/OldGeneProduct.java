@@ -11,7 +11,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 
 
@@ -30,7 +30,7 @@ public abstract class OldGeneProduct
                                                            org.apache.log4j.Logger.getLogger(
       OldGeneProduct.class);
     private ProductType type;
-    private List<Reaction> reactions = new ArrayList();
+    private List<AbstractReaction> reactions = new ArrayList();
     private String sequence; // have to store as simple string as BioJava3 ProteinSequence is not serializable and we want to store the object it to disk :-)
     private Integer sequenceLength;
     public static final String BASE_TYPE = "Product";
@@ -86,12 +86,12 @@ public abstract class OldGeneProduct
 
     // reaction
 
-    public boolean addReaction(Reaction reaction) {
+    public boolean addReaction(AbstractReaction reaction) {
         return reactions.add(reaction);
     }
 
 
-    public boolean removeReaction(Reaction reaction) {
+    public boolean removeReaction(AbstractReaction reaction) {
         return reactions.remove(reaction);
     }
 
@@ -100,7 +100,7 @@ public abstract class OldGeneProduct
      * Returns reactions associated with this gene product
      * @return
      */
-    public List<Reaction> getReactions() {
+    public List<AbstractReaction> getReactions() {
         return reactions;
     }
     // metabolies?

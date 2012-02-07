@@ -28,8 +28,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.List;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -46,7 +46,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetabolicReaction extends Reaction<Metabolite, Double, CompartmentImplementation> {
+public class MetabolicReaction extends AbstractReaction<MetabolicParticipant> {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicReaction.class);
 
@@ -90,31 +90,41 @@ public class MetabolicReaction extends Reaction<Metabolite, Double, CompartmentI
     }
 
 
-    public void readExternal(ObjectInput in, MetaboliteCollection metabolites, ProductCollection products) throws IOException, ClassNotFoundException {
-        super.readExternal(in, metabolites);
-        if (in.readBoolean()) {
-            int n = in.readInt();
-            while (n > modifiers.size()) {
-                String baseType = in.readUTF();
-                modifiers.add(products.getAll(baseType).get(in.readInt()));
-            }
+    public List<Metabolite> getAllReactionMolecules() {
+        List<Metabolite> molecules = new ArrayList<Metabolite>();
+        for (MetabolicParticipant p : getReactantParticipants()) {
+            molecules.add(p.getMolecule());
         }
-        type = (ReactionType) in.readObject();
-    }
-
-
-    public void writeExternal(ObjectOutput out, MetaboliteCollection metabolites, ProductCollection products) throws IOException {
-        super.writeExternal(out, metabolites);
-
-        out.writeBoolean(!modifiers.isEmpty());
-        if (!modifiers.isEmpty()) {
-            out.writeInt(modifiers.size());
-            for (GeneProduct product : modifiers) {
-                out.writeUTF(product.getBaseType());
-                out.writeInt(products.getAll(product.getBaseType()).indexOf(product));
-            }
+        for (MetabolicParticipant p : getProductParticipants()) {
+            molecules.add(p.getMolecule());
         }
-        out.writeObject(type);
-
+        return molecules;
     }
+//    public void readExternal(ObjectInput in, MetaboliteCollection metabolites, ProductCollection products) throws IOException, ClassNotFoundException {
+//        super.readExternal(in, metabolites);
+//        if (in.readBoolean()) {
+//            int n = in.readInt();
+//            while (n > modifiers.size()) {
+//                String baseType = in.readUTF();
+//                modifiers.add(products.getAll(baseType).get(in.readInt()));
+//            }
+//        }
+//        type = (ReactionType) in.readObject();
+//    }
+//
+//
+//    public void writeExternal(ObjectOutput out, MetaboliteCollection metabolites, ProductCollection products) throws IOException {
+//        super.writeExternal(out, metabolites);
+//
+//        out.writeBoolean(!modifiers.isEmpty());
+//        if (!modifiers.isEmpty()) {
+//            out.writeInt(modifiers.size());
+//            for (GeneProduct product : modifiers) {
+//                out.writeUTF(product.getBaseType());
+//                out.writeInt(products.getAll(product.getBaseType()).indexOf(product));
+//            }
+//        }
+//        out.writeObject(type);
+//
+//    }
 }

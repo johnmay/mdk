@@ -23,8 +23,8 @@ package uk.ac.ebi.io.core.marshal.versions;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.chemet.entities.reaction.Reversibility;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -33,6 +33,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.io.ReconstructionInputStream;
 import uk.ac.ebi.interfaces.io.ReconstructionOutputStream;
 import uk.ac.ebi.interfaces.io.marshal.EntityMarshaller;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.io.core.marshal.AbstractAnnotatedEntityMarshaller;
 
 
@@ -90,7 +91,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
             rxn.addProduct(p);
         }
 
-        rxn.setReversibility(Reversibility.valueOf(in.readByte()));
+        rxn.setReversibility(DirectionImplementation.valueOf(in.readByte()));
 
         return rxn;
 
@@ -104,7 +105,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
         out.writeInt(rxn.getReactantCount());
 
-        for (Participant<Metabolite, Double, CompartmentImplementation> p : rxn.getReactantParticipants()) {
+        for (MetabolicParticipant p : rxn.getReactantParticipants()) {
             out.writeDouble(p.getCoefficient());
             out.writeByte(p.getCompartment().getRanking());
             out.writeIndex(p.getMolecule());
@@ -112,7 +113,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
         out.writeInt(rxn.getProductCount());
 
-        for (Participant<Metabolite, Double, CompartmentImplementation> p : rxn.getProductParticipants()) {
+        for (MetabolicParticipant p : rxn.getProductParticipants()) {
             out.writeDouble(p.getCoefficient());
             out.writeByte(p.getCompartment().getRanking());
             out.writeIndex(p.getMolecule());

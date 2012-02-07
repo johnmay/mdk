@@ -37,7 +37,7 @@ import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
-import uk.ac.ebi.chemet.entities.reaction.Reversibility;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
@@ -211,7 +211,7 @@ public class SBMLReactionReader {
         }
 
         // set the reversibility
-        reaction.setReversibility(sbmlReaction.isReversible() ? Reversibility.REVERSIBLE : Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
+        reaction.setReversibility(sbmlReaction.isReversible() ? DirectionImplementation.REVERSIBLE : DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
 
         return reaction;
 
@@ -320,7 +320,7 @@ public class SBMLReactionReader {
         }
 
         // set the reversibility
-        reaction.setReversibility(sbmlReaction.isReversible() ? Reversibility.REVERSIBLE : Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
+        reaction.setReversibility(sbmlReaction.isReversible() ? DirectionImplementation.REVERSIBLE : DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
 
         // TODO(johnmay): Add Enzyme annotations and modifiers
 

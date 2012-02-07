@@ -55,4 +55,7 @@ public interface Compartment {
      * @return 
      */
     public Set<String> getSynonyms();
+
+
+    public int getRanking();
 }

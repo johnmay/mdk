@@ -28,10 +28,12 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.CompartmentImplementation;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
+import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 
 
 /**
@@ -62,8 +64,8 @@ public class TransportReactionUtil {
      * @param transportReaction
      * @return
      */
-    public static <T> BiMap<Participant<T, ?, CompartmentImplementation>, Participant<T, ?, CompartmentImplementation>> getMappings(
-            Reaction<T, ?, CompartmentImplementation> transportReaction) {
+    public static <T> BiMap<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?, Compartment>> getMappings(
+            AbstractReaction<? extends CompartmentalisedParticipant<T, ?, Compartment>> transportReaction) {
         return getMappings(transportReaction, new Comparator<T>() {
 
             public int compare(T o1,
@@ -74,14 +76,14 @@ public class TransportReactionUtil {
     }
 
 
-    public static <T> BiMap<Participant<T, ?, CompartmentImplementation>, Participant<T, ?, CompartmentImplementation>> getMappings(
-            Reaction<T, ?, CompartmentImplementation> transportReaction,
+    public static <T> BiMap<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?, Compartment>> getMappings(
+            AbstractReaction<? extends CompartmentalisedParticipant<T, ?, Compartment>> transportReaction,
             Comparator<T> comparator) {
 
-        BiMap<Participant<T, ?, CompartmentImplementation>, Participant<T, ?, CompartmentImplementation>> mappings = HashBiMap.create();
+        BiMap<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?, Compartment>> mappings = HashBiMap.create();
 
-        for (Participant<T, ?, CompartmentImplementation> p1 : transportReaction.getReactantParticipants()) {
-            for (Participant<T, ?, CompartmentImplementation> p2 : transportReaction.getProductParticipants()) {
+        for (CompartmentalisedParticipant<T, ?, Compartment> p1 : transportReaction.getReactantParticipants()) {
+            for (CompartmentalisedParticipant<T, ?, Compartment> p2 : transportReaction.getProductParticipants()) {
                 if (comparator.compare(p1.getMolecule(), p2.getMolecule()) == 0) {
                     mappings.put(p1, p2);
                 }
@@ -95,30 +97,44 @@ public class TransportReactionUtil {
     /**
      * Classifies the provided MetabolicReaction
      */
-    public static Classification getClassification(Reaction<Metabolite, ?, CompartmentImplementation> transportReaction) {
+    public static Classification getClassification(AbstractReaction<? extends CompartmentalisedParticipant<Metabolite, ?, Compartment>> rxn) {
 
-        if (!transportReaction.isTransport()) {
+        if (!isTransport(rxn)) {
             return Classification.UNKNOWN;
         }
 
-        return getClassification(getMappings(transportReaction));
+
+        return getClassification(getMappings(rxn));
+
 
     }
 
 
+    public static boolean isTransport(AbstractReaction<? extends CompartmentalisedParticipant<?, ?, Compartment>> rxn) {
+        Set uniqueCompartments = new HashSet();
+        for (CompartmentalisedParticipant p : rxn.getReactantParticipants()) {
+            uniqueCompartments.add(p.getCompartment());
+        }
+        for (CompartmentalisedParticipant p : rxn.getProductParticipants()) {
+            uniqueCompartments.add(p.getCompartment());
+        }
+        return uniqueCompartments.size() > 1;
+    }
+
+
     private static <T> Classification getClassification(
-            BiMap<Participant<T, ?, CompartmentImplementation>, Participant<T, ?, CompartmentImplementation>> mappings) {
+            BiMap<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?, Compartment>> mappings) {
 
         int total = 0;
         Set<Integer> movement = new HashSet<Integer>();
 
-        for (Entry<Participant<T, ?, CompartmentImplementation>, Participant<T, ?, CompartmentImplementation>> entry : mappings.entrySet()) {
+        for (Entry<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?, Compartment>> entry : mappings.entrySet()) {
 
-            Participant<?, ?, CompartmentImplementation> p1 = entry.getKey();
-            Participant<?, ?, CompartmentImplementation> p2 = entry.getValue();
+            CompartmentalisedParticipant<?, ?, Compartment> p1 = entry.getKey();
+            CompartmentalisedParticipant<?, ?, Compartment> p2 = entry.getValue();
 
-            CompartmentImplementation c1 = p1.getCompartment();
-            CompartmentImplementation c2 = p2.getCompartment();
+            Compartment c1 = p1.getCompartment();
+            Compartment c2 = p2.getCompartment();
 
             int value = c1.getRanking() > c2.getRanking() ? -1
                         : c1.getRanking() < c2.getRanking() ? +1 : 0;

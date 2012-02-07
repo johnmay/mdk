@@ -15,6 +15,8 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
 import static uk.ac.ebi.chemet.TestMoleculeFactory.*;
 import static org.junit.Assert.*;
+import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
+
 
 /**
  *
@@ -23,10 +25,13 @@ import static org.junit.Assert.*;
 public class AtomContainerReactionTest {
 
     private static AtomContainerReaction q1;
+
     private static Integer i = 1;
+
 
     public AtomContainerReactionTest() {
     }
+
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -39,13 +44,16 @@ public class AtomContainerReactionTest {
         q1.addProduct(butan1ol(), 2d, CompartmentImplementation.CYTOPLASM);
     }
 
+
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
 
+
     @Test
     public void testSomeMethod() {
     }
+
 
     @Test
     public void testEqualsDifferentSides() {
@@ -66,6 +74,7 @@ public class AtomContainerReactionTest {
 
         System.out.println("PASSED");
     }
+
 
     @Test
     public void testEqualsDifferentOrganisation() {
@@ -88,6 +97,7 @@ public class AtomContainerReactionTest {
         System.out.println("PASSED");
 
     }
+
 
     @Test
     public void testEqualsDifferentOrg2() {
@@ -115,6 +125,7 @@ public class AtomContainerReactionTest {
 
     }
 
+
     @Test
     public void testEqualsOneDifferentMol() {
 
@@ -138,6 +149,7 @@ public class AtomContainerReactionTest {
         System.out.println("PASSED");
 
     }
+
 
     @Test
     public void testEqualsOneDiffIsomer() {
@@ -163,6 +175,7 @@ public class AtomContainerReactionTest {
 
     }
 
+
     @Test
     public void testEqualsDiffCoef() {
 
@@ -184,6 +197,7 @@ public class AtomContainerReactionTest {
 
         System.out.println("PASSED");
     }
+
 
     @Test
     public void testEqualsDiffComp() {
@@ -208,6 +222,7 @@ public class AtomContainerReactionTest {
 
     }
 
+
     @Test
     public void testEqualsTransComp() {
 
@@ -230,6 +245,7 @@ public class AtomContainerReactionTest {
         System.out.println("PASSED");
 
     }
+
 
     @Test
     public void testEqualsMissingCoefComp() {
@@ -262,6 +278,7 @@ public class AtomContainerReactionTest {
         System.out.println("PASSED");
     }
 
+
     @Test
     public void testEqualsDiffBonds() {
 
@@ -290,6 +307,7 @@ public class AtomContainerReactionTest {
         System.out.println("PASSED");
     }
 
+
     @Test
     public void testGenericADH() {
         System.out.printf("%-120s", "[TEST] Testing generic reaction Alcohol Dehydrogenase");
@@ -297,19 +315,19 @@ public class AtomContainerReactionTest {
         /** only with products no coef or compartments **/
         // query
         AtomContainerReaction generic = new AtomContainerReaction();
-        generic.addReactant(primary_alcohol());
-        generic.addReactant(nad_plus());
-        generic.addProduct(aldehyde());
-        generic.addProduct(hydron());
-        generic.addProduct(nadh());
+        generic.addReactant(new AtomContainerParticipant(primary_alcohol()));
+        generic.addReactant(new AtomContainerParticipant(nad_plus()));
+        generic.addProduct(new AtomContainerParticipant(aldehyde()));
+        generic.addProduct(new AtomContainerParticipant(hydron()));
+        generic.addProduct(new AtomContainerParticipant(nadh()));
 
         // different sides
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant(_5bcholestane3a7a26triol());
-        r.addReactant(nad_plus());
-        r.addProduct(_3a7adihydroxy5Bcholestan26al());
-        r.addProduct(hydron());
-        r.addProduct(nadh());
+        r.addReactant(new AtomContainerParticipant(_5bcholestane3a7a26triol()));
+        r.addReactant(new AtomContainerParticipant(nad_plus()));
+        r.addProduct(new AtomContainerParticipant(_3a7adihydroxy5Bcholestan26al()));
+        r.addProduct(new AtomContainerParticipant(hydron()));
+        r.addProduct(new AtomContainerParticipant(nadh()));
 
 //        System.out.printf( "\t\tq: %10s %s\n" , generic.hashCode() , generic );
 //        System.out.printf( "\t\tr: %10s %s\n" , r.hashCode() , r );

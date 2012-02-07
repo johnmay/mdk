@@ -1,4 +1,3 @@
-
 /**
  * AtomContainerReaction.java
  *
@@ -29,7 +28,7 @@ import org.openscience.cdk.interfaces.*;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
@@ -45,74 +44,51 @@ import uk.ac.ebi.metabolomes.util.CDKUtils;
  *
  */
 public class AtomContainerReaction
-  extends Reaction<IAtomContainer , Double , CompartmentImplementation> {
-
+        extends AbstractReaction<AtomContainerParticipant> {
 
     public AtomContainerReaction() {
     }
 
 
+    public AtomContainerReaction(AbstractParticipantFilter filter) {
+        super(filter);
+    }
+
+    private static final Logger LOGGER = Logger.getLogger(AtomContainerReaction.class);
+
+
+    public void addReactant(IAtomContainer molecule, Double coef, CompartmentImplementation compartment) {
+        if (CDKUtils.isMoleculeGeneric(molecule)) {
+            addReactant(new GenericParticipant(molecule, coef, compartment));
+        } else {
+            addReactant(new AtomContainerParticipant(molecule, coef, compartment));
+        }
+    }
+
+
+    public void addProduct(IAtomContainer molecule, Double coef, CompartmentImplementation compartment) {
+        if (CDKUtils.isMoleculeGeneric(molecule)) {
+            addProduct(new GenericParticipant(molecule, coef, compartment));
+        } else {
+            addProduct(new AtomContainerParticipant(molecule, coef, compartment));
+        }
+    }
+
     
 
-    public AtomContainerReaction( AbstractParticipantFilter filter ) {
-        super( filter );
-    }
-
-
-    private static final Logger LOGGER = Logger.getLogger( AtomContainerReaction.class );
-
-
-    public void addReactant( IAtomContainer molecule , Double coef , CompartmentImplementation compartment ) {
-        if ( CDKUtils.isMoleculeGeneric( molecule ) ) {
-            addReactant( new GenericParticipant( molecule , coef , compartment ) );
-        } else {
-            addReactant( new AtomContainerParticipant( molecule , coef , compartment ) );
+    public void addReactant(AtomContainerParticipant p) {
+        if (p instanceof GenericParticipant) {
+            super.setGeneric(Boolean.TRUE);
         }
+        super.addReactant(p);
     }
 
 
-    public void addProduct( IAtomContainer molecule , Double coef , CompartmentImplementation compartment ) {
-        if ( CDKUtils.isMoleculeGeneric( molecule ) ) {
-            addProduct( new GenericParticipant( molecule , coef , compartment ) );
-        } else {
-            addProduct( new AtomContainerParticipant( molecule , coef , compartment ) );
+    public void addProduct(AtomContainerParticipant p) {
+        if (p instanceof GenericParticipant) {
+            super.setGeneric(Boolean.TRUE);
         }
-    }
-
-
-    public void addReactant( IAtomContainer molecule , Double coef ) {
-        addReactant( molecule , coef , null );
-    }
-
-
-    public void addProduct( IAtomContainer molecule , Double coef ) {
-        addProduct( molecule , coef , null );
-    }
-
-
-    public void addReactant( IAtomContainer molecule ) {
-        addReactant( molecule , null , null );
-    }
-
-
-    public void addProduct( IAtomContainer molecule ) {
-        addProduct( molecule , null , null );
-    }
-
-
-    public void addReactant( AtomContainerParticipant p ) {
-        if ( p instanceof GenericParticipant ) {
-            super.setGeneric( Boolean.TRUE );
-        }
-        super.addReactant( p );
-    }
-
-
-    public void addProduct( AtomContainerParticipant p ) {
-        if ( p instanceof GenericParticipant ) {
-            super.setGeneric( Boolean.TRUE );
-        }
-        super.addProduct( p );
+        super.addProduct(p);
     }
 
 
@@ -123,23 +99,23 @@ public class AtomContainerReaction
      */
     public IReaction getCDKReaction() {
 
-        IReaction reaction = DefaultChemObjectBuilder.getInstance().newInstance( IReaction.class );
+        IReaction reaction = DefaultChemObjectBuilder.getInstance().newInstance(IReaction.class);
 
         // add the reactants
-        Iterator<Participant<IAtomContainer , Double , CompartmentImplementation>> reIt =
-                                                                     getReactantParticipants().
-          iterator();
-        while ( reIt.hasNext() ) {
-            AtomContainerParticipant p = ( AtomContainerParticipant ) reIt.next();
-            reaction.addReactant( new Molecule( p.getMolecule() ) );
+        Iterator<AtomContainerParticipant> reIt =
+                                           getReactantParticipants().
+                iterator();
+        while (reIt.hasNext()) {
+            AtomContainerParticipant p = reIt.next();
+            reaction.addReactant(new Molecule(p.getMolecule()));
         }
 
         // add the producta
-        Iterator<Participant<IAtomContainer , Double , CompartmentImplementation>> prIt = getProductParticipants().
-          iterator();
-        while ( prIt.hasNext() ) {
-            AtomContainerParticipant p = ( AtomContainerParticipant ) prIt.next();
-            reaction.addProduct( new Molecule( p.getMolecule() ) );
+        Iterator<AtomContainerParticipant> prIt = getProductParticipants().
+                iterator();
+        while (prIt.hasNext()) {
+            AtomContainerParticipant p = (AtomContainerParticipant) prIt.next();
+            reaction.addProduct(new Molecule(p.getMolecule()));
         }
 
         return reaction;
@@ -177,12 +153,9 @@ public class AtomContainerReaction
 //            super.addProduct( ims.getMolecule( i ) );
 //        }
 //    }
-
-    @Override
-    public void addReactant( Participant<IAtomContainer , Double , CompartmentImplementation> participant ) {
-        super.addReactant( participant );
-    }
-
-
+//
+//    @Override
+//    public void addReactant(ParticipantImplementation<IAtomContainer, Double, CompartmentImplementation> participant) {
+//        super.addReactant(participant);
+//    }
 }
-

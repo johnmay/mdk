@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.filter.InChIFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.InChIParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**
@@ -37,7 +37,7 @@ import uk.ac.ebi.metabolomes.identifier.InChI;
  *
  */
 public class InChIReaction
-        extends Reaction<InChI , Double , CompartmentImplementation> {
+        extends AbstractReaction<InChIParticipant> {
 
     private static final Logger LOGGER = Logger.getLogger( InChIReaction.class );
 

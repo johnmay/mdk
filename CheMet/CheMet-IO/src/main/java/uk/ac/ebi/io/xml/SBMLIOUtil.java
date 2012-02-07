@@ -20,12 +20,8 @@
  */
 package uk.ac.ebi.io.xml;
 
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.Model;
@@ -33,19 +29,16 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
-import org.sbml.jsbml.xml.XMLNamespaces;
-import org.sbml.jsbml.xml.XMLNode;
-import org.sbml.jsbml.xml.XMLTriple;
-import org.w3c.dom.Document;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.chemet.entities.reaction.Reversibility;
-import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
-import uk.ac.ebi.core.CompartmentImplementation;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 
 
 /**
@@ -65,9 +58,9 @@ public class SBMLIOUtil {
 
     private long metaIdticker = 0;
 
-    private Map<Participant, SpeciesReference> speciesReferences = new HashMap();
+    private Map<CompartmentalisedParticipant, SpeciesReference> speciesReferences = new HashMap();
 
-    private Map<CompartmentImplementation, org.sbml.jsbml.Compartment> compartmentMap = new EnumMap<CompartmentImplementation, org.sbml.jsbml.Compartment>(CompartmentImplementation.class);
+    private Map<Compartment, org.sbml.jsbml.Compartment> compartmentMap = new HashMap<Compartment, org.sbml.jsbml.Compartment>();
 
 
     public SBMLIOUtil(int level, int version) {
@@ -120,17 +113,17 @@ public class SBMLIOUtil {
             sbmlRxn.setId(accession);
         }
 
-        sbmlRxn.setReversible(rxn.getReversibility() == Reversibility.REVERSIBLE ? true : false);
+        sbmlRxn.setReversible(rxn.getReversibility() == DirectionImplementation.REVERSIBLE ? true : false);
 
-        if (rxn.getReversibility() == Reversibility.IRREVERSIBLE_RIGHT_TO_LEFT) {
+        if (rxn.getReversibility() == DirectionImplementation.IRREVERSIBLE_RIGHT_TO_LEFT) {
             rxn.transpose();
-            rxn.setReversibility(Reversibility.IRREVERSIBLE_LEFT_TO_RIGHT);
+            rxn.setReversibility(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
         }
 
-        for (Participant<Metabolite, Double, CompartmentImplementation> p : rxn.getReactantParticipants()) {
+        for (MetabolicParticipant p : rxn.getReactantParticipants()) {
             sbmlRxn.addReactant(getSpeciesReference(model, p));
         }
-        for (Participant<Metabolite, Double, CompartmentImplementation> p : rxn.getProductParticipants()) {
+        for (MetabolicParticipant p : rxn.getProductParticipants()) {
             sbmlRxn.addProduct(getSpeciesReference(model, p));
 
         }
@@ -170,11 +163,11 @@ public class SBMLIOUtil {
 
 
     public SpeciesReference getSpeciesReference(Model model,
-                                                Participant<Metabolite, Double, CompartmentImplementation> participant) {
+                                                CompartmentalisedParticipant<Metabolite, Double, Compartment> participant) {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
-        Participant key = new MetabolicParticipant(participant.getMolecule(), 1d, participant.getCompartment());
+        ParticipantImplementation key = new MetabolicParticipant(participant.getMolecule(), 1d, participant.getCompartment());
 
         // create a new entry if one doesn't exists
         if (speciesReferences.containsKey(key) == false) {
@@ -199,7 +192,7 @@ public class SBMLIOUtil {
      * @return
      */
     public SpeciesReference addSpecies(Model model,
-                                       Participant<Metabolite, Double, CompartmentImplementation> participant) {
+                                       CompartmentalisedParticipant<Metabolite, Double, Compartment> participant) {
 
         Species species = new Species(level, version);
 
@@ -239,7 +232,7 @@ public class SBMLIOUtil {
     }
 
 
-    public org.sbml.jsbml.Compartment getCompartment(Model model, Participant<?, ?, CompartmentImplementation> participant) {
+    public org.sbml.jsbml.Compartment getCompartment(Model model, CompartmentalisedParticipant<?, ?, Compartment> participant) {
 
         if (compartmentMap.containsKey(participant.getCompartment())) {
             return compartmentMap.get(participant.getCompartment());
