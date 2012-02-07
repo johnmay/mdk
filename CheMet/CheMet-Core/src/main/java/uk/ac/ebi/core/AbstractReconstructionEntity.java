@@ -21,6 +21,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.IdentifierFactory;
@@ -31,7 +32,7 @@ import uk.ac.ebi.resource.IdentifierFactory;
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public class AbstractReconstructionEntity implements Cloneable, Externalizable {
+public abstract class AbstractReconstructionEntity implements Entity, Cloneable, Externalizable {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(

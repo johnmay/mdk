@@ -69,4 +69,16 @@ public interface EntityFactory {
      * 
      */
     public Class<? extends Entity> getEntityClass(Class<? extends Entity> c);
+
+
+    /**
+     * 
+     * Access the root class of an entity. For example RibsomalRNA, TransferRNA
+     * and ProteinProduct will all be GeneProduct's
+     * 
+     * @param c
+     * @return 
+     * 
+     */
+    public Class<? extends Entity> getRootClass(Class<? extends Entity> c);
 }

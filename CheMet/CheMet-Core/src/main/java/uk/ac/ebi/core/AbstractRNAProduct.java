@@ -29,7 +29,9 @@ import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.RNASequence;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.Genome;
+import uk.ac.ebi.interfaces.entities.RNAProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+
 
 /**
  * @name    RNAProduct - 2011.10.07 <br>
@@ -38,31 +40,39 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class AbstractRNAProduct extends AbstractGeneProduct {
+public abstract class AbstractRNAProduct extends AbstractGeneProduct implements RNAProduct {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractRNAProduct.class);
+
     public static final String BASE_TYPE = "RNA";
+
     private List<RNASequence> sequences = new ArrayList();
+
 
     public AbstractRNAProduct() {
     }
+
 
     public AbstractRNAProduct(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
+
     public List<RNASequence> getSequences() {
         return sequences;
     }
+
 
     public boolean addSequence(Sequence sequence) {
         return this.sequences.add((RNASequence) sequence);
     }
 
+
     @Override
     public String getBaseType() {
         return this.BASE_TYPE;
     }
+
 
     @Override
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
@@ -72,6 +82,7 @@ public abstract class AbstractRNAProduct extends AbstractGeneProduct {
             sequences.add(SequenceSerializer.readRNASequence(in));
         }
     }
+
 
     @Override
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {

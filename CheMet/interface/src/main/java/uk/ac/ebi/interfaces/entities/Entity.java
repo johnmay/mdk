@@ -31,8 +31,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface Entity
-        extends Externalizable {
+public interface Entity {
 
     public String getName();
 

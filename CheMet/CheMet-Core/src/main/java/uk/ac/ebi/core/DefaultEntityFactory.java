@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -104,12 +105,17 @@ public class DefaultEntityFactory
      */
     public final Class<? extends Entity> getEntityClass(Class<? extends Entity> c) {
 
+        if (c.isInterface()
+            && Entity.class.isAssignableFrom(c)) {
+            return c;
+        }
+
         if (ENTITY_INTERFACE_MAP.containsKey(c)) {
             return ENTITY_INTERFACE_MAP.get(c);
         }
 
         for (Class i : c.getInterfaces()) {
-            if (Entity.class.isAssignableFrom(c)) {
+            if (Entity.class.isAssignableFrom(i)) {
                 ENTITY_INTERFACE_MAP.put(c, i);
                 return i;
             }
@@ -117,8 +123,29 @@ public class DefaultEntityFactory
 
         LOGGER.warn("No direct interface found for " + c);
 
-        return Entity.class;
+        return null;
 
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public Class<? extends Entity> getRootClass(Class<? extends Entity> c) {
+
+        while (getEntityClass(getSuperClass(c)) != AnnotatedEntity.class) {
+            c = getSuperClass(c);
+        }
+
+        return getEntityClass(c);
+    }
+
+
+    private Class<? extends Entity> getSuperClass(Class<? extends Entity> c) {
+        if (c.isInterface()) {
+            return (Class<? extends Entity>) c.getInterfaces()[0]; // can only have one
+        }
+        return (Class<? extends Entity>) c.getSuperclass();
     }
 
 

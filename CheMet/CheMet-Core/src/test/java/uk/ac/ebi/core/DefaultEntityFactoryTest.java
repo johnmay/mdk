@@ -9,8 +9,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.BeforeClass;
 import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.*;
 
 
 /**
@@ -49,11 +48,27 @@ public class DefaultEntityFactoryTest {
 
     @Test
     public void testGetEntityClass() {
-        
+
         EntityFactory factory = DefaultEntityFactory.getInstance();
 
         Assert.assertEquals(Gene.class, factory.getEntityClass(GeneImplementation.class));
         Assert.assertEquals(Metabolite.class, factory.getEntityClass(MetaboliteImplementation.class));
+
+    }
+
+
+    @Test
+    public void testGetRootEntityClass() {
+
+        System.out.println("testGetRootEntityClass");
+        EntityFactory factory = DefaultEntityFactory.getInstance();
+
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(RibosomalRNA.class));
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(RibosomalRNAImplementation.class));
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(TransferRNA.class));
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(TransferRNAImplementation.class));
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(ProteinProduct.class));
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(Multimer.class));
 
     }
 }

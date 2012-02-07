@@ -20,10 +20,13 @@
  */
 package uk.ac.ebi.interfaces;
 
-import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.List;
 import uk.ac.ebi.interfaces.entities.Entity;
+
 
 /**
  *          Chromosome – 2011.09.12 <br>
@@ -42,6 +45,7 @@ public interface Chromosome extends Entity {
      */
     public boolean add(Gene gene);
 
+
     /**
      * Iteratively add genes to the chromosome
      * @param genes
@@ -49,7 +53,9 @@ public interface Chromosome extends Entity {
      */
     public boolean addAll(Collection<? extends Gene> genes);
 
+
     public boolean remove(Gene gene);
+
 
     /**
      * Removes all genes and their references back to this chromosome. Note
@@ -59,6 +65,7 @@ public interface Chromosome extends Entity {
      */
     public boolean removeAll(Collection<? extends Gene> genes);
 
+
     /**
      *
      * Returns all the genes on this chromosome
@@ -67,11 +74,17 @@ public interface Chromosome extends Entity {
      */
     public List<Gene> getGenes();
 
+
     /**
      *
      * Access the number of the chromosome
      *
      */
     public int getChromosomeNumber();
-    
+
+
+    public void readExternal(ObjectInput out) throws ClassNotFoundException, IOException;
+
+
+    public void writeExternal(ObjectOutput out) throws IOException;
 }
