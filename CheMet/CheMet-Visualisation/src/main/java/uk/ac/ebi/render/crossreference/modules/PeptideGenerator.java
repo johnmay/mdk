@@ -34,8 +34,10 @@ import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.tools.PeptideFactory;
 import uk.ac.ebi.core.tools.PeptideFactory.AminoAcid;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
 
@@ -58,7 +60,7 @@ public class PeptideGenerator implements CrossreferenceModule {
 
     private CellConstraints cc = new CellConstraints();
 
-    private PeptideFactory factory = new PeptideFactory();
+    private PeptideFactory factory;
 
     private JComboBox[] boxes = new JComboBox[]{
         new JComboBox(PeptideFactory.AminoAcid.values()),
@@ -68,7 +70,9 @@ public class PeptideGenerator implements CrossreferenceModule {
     private Metabolite context;
 
 
-    public PeptideGenerator() {
+    public PeptideGenerator(EntityFactory factory) {
+
+        this.factory = new PeptideFactory(factory);
 
         component = PanelFactory.createDialogPanel("p, 4dlu, p, 4dlu, p, 4dlu, p", "p");
 

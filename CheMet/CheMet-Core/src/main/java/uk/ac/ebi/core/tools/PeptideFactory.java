@@ -37,7 +37,8 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.normalize.SMSDNormalizer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
@@ -56,6 +57,13 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 public class PeptideFactory {
 
     private static final Logger LOGGER = Logger.getLogger(PeptideFactory.class);
+
+    private EntityFactory factory;
+
+
+    public PeptideFactory(EntityFactory factory) {
+        this.factory = factory;
+    }
 
 
     public IAtomContainer generateStructure(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
@@ -121,11 +129,12 @@ public class PeptideFactory {
     }
 
 
-    public MetaboliteImplementation generateMetabolite(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
+    public Metabolite generateMetabolite(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
 
-        MetaboliteImplementation m = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(),
-                                      generateAbbreviation(aminoacids),
-                                      generateName(aminoacids));
+        Metabolite m = factory.newInstance(Metabolite.class,
+                                           BasicChemicalIdentifier.nextIdentifier(),
+                                           generateName(aminoacids),
+                                           generateAbbreviation(aminoacids));
 
         m.addAnnotation(new AtomContainerAnnotation(generateStructure(aminoacids)));
 
@@ -183,7 +192,7 @@ public class PeptideFactory {
 
                     // add aa
                     aas.add(aa);
-                    peptide = matcher.replaceFirst("");                  
+                    peptide = matcher.replaceFirst("");
 
                 }
             }
@@ -218,13 +227,6 @@ public class PeptideFactory {
 
         throw new InvalidParameterException("No match found!");
     }
-
-
-    public static void main(String[] args) {
-        PeptideFactory f = new PeptideFactory();
-        System.out.println(Arrays.asList(f.guessPeptide("L-Ala-D-Ala-Gly")));
-    }
-
 
     public static enum AminoAcid {
 

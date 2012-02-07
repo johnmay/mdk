@@ -6,13 +6,11 @@ package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
 import java.util.ArrayList;
 import java.util.List;
-import uk.ac.ebi.chemet.entities.reaction.Reaction;
 import uk.ac.ebi.chemet.entities.reaction.Reversibility;
 import uk.ac.ebi.chemet.entities.reaction.participant.Participant;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 

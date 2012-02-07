@@ -11,7 +11,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.BeforeClass;
 import org.openscience.cdk.io.MDLV2000Writer;
-import uk.ac.ebi.core.MetaboliteImplementation;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -37,7 +37,7 @@ public class PeptideFactoryTest {
 
     @Test
     public void testBondIndex() throws IOException, Exception {
-        PeptideFactory factory = new PeptideFactory();
+        PeptideFactory factory = new PeptideFactory(DefaultEntityFactory.getInstance());
         {
             Metabolite m = factory.generateMetabolite(PeptideFactory.AminoAcid.D_ALA, PeptideFactory.AminoAcid.L_ALA, PeptideFactory.AminoAcid.L_ALA, PeptideFactory.AminoAcid.D_ALA);
 
@@ -50,7 +50,7 @@ public class PeptideFactoryTest {
         }
         {
             Metabolite m =
-                                     factory.generateMetabolite(PeptideFactory.AminoAcid.L_ILE, PeptideFactory.AminoAcid.D_ALA);
+                       factory.generateMetabolite(PeptideFactory.AminoAcid.L_ILE, PeptideFactory.AminoAcid.D_ALA);
 
             File tmp = File.createTempFile("peptide", ".mol", new File("/tmp"));
             MDLV2000Writer writer = new MDLV2000Writer(new FileWriter(tmp));
