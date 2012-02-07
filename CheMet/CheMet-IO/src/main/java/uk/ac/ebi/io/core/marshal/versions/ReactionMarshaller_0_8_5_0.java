@@ -24,16 +24,16 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.io.ReconstructionInputStream;
 import uk.ac.ebi.interfaces.io.ReconstructionOutputStream;
 import uk.ac.ebi.interfaces.io.marshal.EntityMarshaller;
-import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.io.core.marshal.AbstractAnnotatedEntityMarshaller;
 
 
@@ -65,13 +65,13 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
     @Override
     public AnnotatedEntity read(ReconstructionInputStream in) throws IOException, ClassNotFoundException {
 
-        MetabolicReaction rxn = new MetabolicReaction();
+        MetabolicReactionImplementation rxn = new MetabolicReactionImplementation();
 
         int reactantCount = in.readInt();
 
         for (int i = 0; i < reactantCount; i++) {
 
-            MetabolicParticipant p = new MetabolicParticipant();
+            MetabolicParticipantImplementation p = new MetabolicParticipantImplementation();
             p.setCoefficient(in.readDouble());
             p.setCompartment(CompartmentImplementation.valueOf(in.readByte()));
             p.setMolecule((Metabolite) in.getMetabolite(in.readInt()));
@@ -83,7 +83,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
         for (int i = 0; i < productCount; i++) {
 
-            MetabolicParticipant p = new MetabolicParticipant();
+            MetabolicParticipantImplementation p = new MetabolicParticipantImplementation();
             p.setCoefficient(in.readDouble());
             p.setCompartment(CompartmentImplementation.valueOf(in.readByte()));
             p.setMolecule((Metabolite) in.getMetabolite(in.readInt()));
@@ -105,7 +105,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
         out.writeInt(rxn.getReactantCount());
 
-        for (MetabolicParticipant p : rxn.getReactantParticipants()) {
+        for (MetabolicParticipant p : rxn.getReactants()) {
             out.writeDouble(p.getCoefficient());
             out.writeByte(p.getCompartment().getRanking());
             out.writeIndex(p.getMolecule());
@@ -113,7 +113,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
         out.writeInt(rxn.getProductCount());
 
-        for (MetabolicParticipant p : rxn.getProductParticipants()) {
+        for (MetabolicParticipant p : rxn.getProducts()) {
             out.writeDouble(p.getCoefficient());
             out.writeByte(p.getCompartment().getRanking());
             out.writeIndex(p.getMolecule());

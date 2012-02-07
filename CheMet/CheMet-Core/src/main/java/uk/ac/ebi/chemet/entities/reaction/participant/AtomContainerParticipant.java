@@ -32,9 +32,8 @@ import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
+import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.interfaces.reaction.Participant;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
@@ -54,7 +53,7 @@ import uk.ac.ebi.metabolomes.util.CDKUtils;
  *
  *
  */
-public class AtomContainerParticipant extends ParticipantImplementation<IAtomContainer, Double, CompartmentImplementation> {
+public class AtomContainerParticipant extends ParticipantImplementation<IAtomContainer, Double, Compartment> {
 
     private static final Logger LOGGER = Logger.getLogger(AtomContainerParticipant.class);
 
@@ -68,7 +67,7 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
 
 
     public AtomContainerParticipant(IAtomContainer molecule, Double coefficient,
-                                    CompartmentImplementation compartment) {
+                                    Compartment compartment) {
 
         super(molecule, coefficient, compartment);
         skeleton = AtomContainerManipulator.removeHydrogens(molecule);
@@ -184,7 +183,10 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
      * @return
      *
      */
-    public boolean equals(ParticipantImplementation<IAtomContainer, Double, CompartmentImplementation> other) {
+    @Override
+    public boolean equals(CompartmentalisedParticipant<IAtomContainer, Double, Compartment> other) {
+
+        LOGGER.debug("equals()");
 
         if (other instanceof AtomContainerParticipant == false) {
             return false;
@@ -205,18 +207,18 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
         }
 
 
-        if (this.coefficient != other.coefficient
-            && (this.coefficient == null || !this.coefficient.equals(other.coefficient))) {
+        if (this.coefficient != other.getCoefficient()
+            && (this.coefficient == null || !this.coefficient.equals(other.getCoefficient()))) {
             LOGGER.debug("Coefficients are not equal");
 
             return false;
         }
-        if (this.compartment != other.compartment
-            && (this.compartment == null || !this.compartment.equals(other.compartment))) {
+        if (this.compartment != other.getCompartment()
+            && (this.compartment == null || !this.compartment.equals(other.getCompartment()))) {
             LOGGER.debug("Compartments are not equal");
             return false;
         }
-        if (this.molecule == other.molecule) {
+        if (this.molecule == other.getMolecule()) {
             return true;
         }
 
@@ -234,7 +236,7 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
             // for single atom cases
             if (this.molecule.getAtomCount() == 1) {
                 IAtom queryAtom = this.molecule.getAtom(0);
-                IAtom otherAtom = other.molecule.getAtom(0);
+                IAtom otherAtom = other.getMolecule().getAtom(0);
 
                 if (queryAtom.getSymbol() != otherAtom.getSymbol() && (queryAtom.getSymbol()
                                                                        != null
@@ -256,7 +258,7 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
 
             Isomorphism isoChecker = new Isomorphism(Algorithm.DEFAULT, true);
             isoChecker.init(this.molecule,
-                            other.molecule,
+                            other.getMolecule(),
                             true,
                             true);
             isoChecker.setChemFilters(false, false, false);
@@ -265,7 +267,7 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
 
         } catch (Exception ex) {
             System.out.println(this.molecule.getID());
-            System.out.println(other.molecule.getID());
+            System.out.println(other.getMolecule().getID());
             LOGGER.error("Could not compare molecule: " + ex.getMessage());
             ex.printStackTrace();
         }
@@ -300,9 +302,11 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
             }
         }
         if (o instanceof CompartmentalisedParticipant) {
-            CompartmentalisedParticipant<IAtomContainer, Double, CompartmentImplementation> co = (CompartmentalisedParticipant<IAtomContainer, Double, CompartmentImplementation>) o;
+            CompartmentalisedParticipant<IAtomContainer, Double, Compartment> co = (CompartmentalisedParticipant<IAtomContainer, Double, Compartment>) o;
             if (this.compartment != null && co.getCompartment() != null) {
-                int compComparison = this.compartment.compareTo(co.getCompartment());
+                Integer c1rank = this.compartment.getRanking();
+                Integer c2rank = co.getCompartment().getRanking();
+                int compComparison = c1rank.compareTo(c2rank);
                 if (compComparison != 0) {
                     return compComparison;
                 }

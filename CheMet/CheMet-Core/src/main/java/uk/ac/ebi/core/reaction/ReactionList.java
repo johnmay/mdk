@@ -24,12 +24,13 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.reaction.Participant;
 
 
 /**
@@ -50,7 +51,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     }
 
 
-    public ReactionList(Collection<MetabolicReaction> reactions) {
+    public ReactionList(Collection<MetabolicReactionImplementation> reactions) {
         super(reactions);
     }
 
@@ -58,7 +59,10 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     @Override
     public boolean add(MetabolicReaction rxn) {
 
-        for (ParticipantImplementation<Metabolite, ?, ?> m : rxn.getAllReactionParticipants()) {
+        for (MetabolicParticipant m : rxn.getReactants()) {
+            participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
+        }
+        for (MetabolicParticipant m : rxn.getProducts()) {
             participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
         }
 
@@ -82,7 +86,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     }
 
 
-    public boolean remove(MetabolicReaction rxn) {
+    public boolean remove(MetabolicReactionImplementation rxn) {
         for (Metabolite m : rxn.getAllReactionMolecules()) {
             participantMap.get(m.getIdentifier()).remove(rxn);
             if (participantMap.get(m.getIdentifier()).isEmpty()) {
@@ -99,7 +103,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
         boolean changed = false;
 
         for (Object reaction : rxns) {
-            changed = remove((MetabolicReaction) reaction) || changed;
+            changed = remove((MetabolicReactionImplementation) reaction) || changed;
         }
 
         return changed;
@@ -119,7 +123,10 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     public void rebuildParticipantMap() {
         participantMap.clear();
         for (MetabolicReaction rxn : this) {
-            for (ParticipantImplementation<Metabolite, ?, ?> m : rxn.getAllReactionParticipants()) {
+            for (MetabolicParticipant m : rxn.getReactants()) {
+                participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
+            }
+            for (MetabolicParticipant m : rxn.getProducts()) {
                 participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
             }
         }

@@ -28,6 +28,7 @@ import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.util.Util;
+import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.interfaces.reaction.Participant;
@@ -50,7 +51,8 @@ import uk.ac.ebi.interfaces.reaction.Participant;
  * @param   <C> The compartment class type (can be a string e.g. [e] or Enumeration) overide hashCode/equals
  */
 public class AbstractReaction<P extends Participant>
-        extends AbstractAnnotatedEntity {
+        extends AbstractAnnotatedEntity
+        implements Reaction<P> {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractReaction.class);
 
@@ -172,15 +174,20 @@ public class AbstractReaction<P extends Participant>
     }
 
 
+    public List<P> getReactants() {
+        return Collections.unmodifiableList(reactants);
+    }
+
+
     /**
      * Add a reactant (left side) to the reaction
      * @param product The reactant to add
      */
-    public void addReactant(P participant) {
+    public boolean addReactant(P participant) {
 //        if (filter.reject(participant)) {
 //            return;
 //        }
-        this.reactants.add(participant);
+        return this.reactants.add(participant);
     }
 
 
@@ -229,15 +236,28 @@ public class AbstractReaction<P extends Participant>
     }
 
 
+    public List<P> getProducts() {
+        return Collections.unmodifiableList(products);
+    }
+
+
+    public List<P> getParticipants() {
+        List<P> participants = new ArrayList<P>();
+        participants.addAll(getReactantParticipants());
+        participants.addAll(getProductParticipants());
+        return participants;
+    }
+
+
     /**
      * Add a product (right side) to the reaction
      * @param product The product to add
      */
-    public void addProduct(P participant) {
+    public boolean addProduct(P participant) {
 //        if (filter.reject(participant)) {
 //            return;
 //        }
-        this.products.add(participant);
+        return this.products.add(participant);
     }
 
 
@@ -299,6 +319,11 @@ public class AbstractReaction<P extends Participant>
      */
     public int getProductCount() {
         return products.size();
+    }
+
+
+    public int getParticipantCount() {
+        return getReactantCount() + getProductCount();
     }
 
 
@@ -476,6 +501,7 @@ public class AbstractReaction<P extends Participant>
             }
 
         } else {
+            System.out.println("Using generic comparisson");
             // XXX May be a quicker way but for not this works
             if (genericEquals(queryReactants, otherReactants) && genericEquals(queryProducts,
                                                                                otherProducts)) {
@@ -504,19 +530,28 @@ public class AbstractReaction<P extends Participant>
             return false;
         }
 
-        Set<P> matched = new HashSet<P>();
-        for (P participant : query) {
+        for (P p : query) {
 
-            if (other.contains(participant) == Boolean.FALSE) {
-                // System.out.println( "No match for: " + participant + " in " + other );
+            if (containedIn(other, p) == Boolean.FALSE) {
                 return false;
             }
 
-            other.remove(participant);
+            other.remove(p);
         }
 
         return true;
 
+    }
+
+
+    public Boolean containedIn(List<P> list, P other) {
+        for (P p : list) {
+            if (other.equals(p)) {
+                return true;
+            }
+        }
+        // return list.contains(this); // this doens't work for some reason
+        return false;
     }
 
 

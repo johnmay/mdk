@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -6,13 +6,11 @@ package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
 import java.util.ArrayList;
 import java.util.List;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
-import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.reaction.Participant;
 
 
 /**
@@ -72,7 +70,7 @@ public class DefaultStoichiometricMatrix
     public CompartmentalisedMetabolite[] getMetabolites(MetabolicReaction rxn) {
 
         List<CompartmentalisedMetabolite> list = new ArrayList<CompartmentalisedMetabolite>();
-        for (MetabolicParticipant p : rxn.getAllReactionParticipants()) {
+        for (MetabolicParticipant p : rxn.getParticipants()) {
             list.add(new CompartmentalisedMetabolite(p.getMolecule(), p.getCompartment()));
         }
 
@@ -82,13 +80,13 @@ public class DefaultStoichiometricMatrix
 
     public Double[] getStoichiometries(MetabolicReaction rxn) {
 
-        Double[] coefs = new Double[rxn.getAllReactionParticipants().size()];
+        Double[] coefs = new Double[rxn.getParticipants().size()];
         int i = 0;
-        for (Double d : (List<Double>) rxn.getReactantStoichiometries()) {
-            coefs[i++] = -d;
+        for (Participant<?, Double> p : rxn.getReactants()) {
+            coefs[i++] = -p.getCoefficient();
         }
-        for (Double d : (List<Double>) rxn.getProductStoichiometries()) {
-            coefs[i++] = +d;
+        for (Participant<?, Double> p : rxn.getProducts()) {
+            coefs[i++] = +p.getCoefficient();
         }
 
         return coefs;

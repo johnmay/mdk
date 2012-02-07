@@ -54,7 +54,9 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
 import uk.ac.ebi.core.tools.TransportReactionUtil.*;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.interfaces.reaction.Direction;
@@ -94,7 +96,7 @@ public class ReactionRenderer {
     }
 
 
-    public ImageIcon renderTransportReaction(AbstractReaction<MetabolicParticipant> rxn) {
+    public ImageIcon renderTransportReaction(AbstractReaction<MetabolicParticipantImplementation> rxn) {
 
         if (!TransportReactionUtil.isTransport(rxn)) {
             throw new InvalidParameterException("Provided reaction is not a transport reaction");
@@ -122,7 +124,7 @@ public class ReactionRenderer {
      * @param rxn
      * @return
      */
-    public ImageIcon renderUniporterReaction(AbstractReaction<MetabolicParticipant> rxn) {
+    public ImageIcon renderUniporterReaction(AbstractReaction<MetabolicParticipantImplementation> rxn) {
 
         BiMap<CompartmentalisedParticipant<Metabolite, ?, Compartment>, CompartmentalisedParticipant<Metabolite, ?, Compartment>> mapping = TransportReactionUtil.getMappings(
                 rxn);
@@ -141,14 +143,14 @@ public class ReactionRenderer {
         g2.fill(new Rectangle(0, 0, width, height));
 
         drawMolecule(g2, new Rectangle(0, 0, 128, 128),
-                     (MetabolicParticipant) left);
+                     (MetabolicParticipantImplementation) left);
 
         drawCompartmentSeperator(g2, new Rectangle(128, 0, 128, 128));
 
         drawArrow(g2, new Rectangle(128, 0, 128, 128), rxn.getDirection(), 1.25f);
 
         drawMolecule(g2, new Rectangle(256, 0, 128, 128),
-                     (MetabolicParticipant) right);
+                     (MetabolicParticipantImplementation) right);
 
         g2.dispose();
 
@@ -193,9 +195,10 @@ public class ReactionRenderer {
     }
 
 
-    public ImageIcon getReaction(AbstractReaction<MetabolicParticipant> rxn) {
+    public ImageIcon getReaction(
+            Reaction<MetabolicParticipant> rxn) {
 
-        int n = rxn.getAllReactionParticipants().size();
+        int n = rxn.getParticipants().size();
 
         if (n == 0) {
             return new ImageIcon();
@@ -213,14 +216,14 @@ public class ReactionRenderer {
 
         Rectangle2D bounds = new Rectangle2D.Double(-128, 0, 128, 128);
 
-        List<MetabolicParticipant> reactants = rxn.getReactantParticipants();
+        List<MetabolicParticipant> reactants = rxn.getReactants();
         for (int i = 0; i < reactants.size(); i++) {
 
             bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
                                             0, 128, 128);
             BufferedImage subImage = new BufferedImage(128, 128, BufferedImage.TYPE_4BYTE_ABGR);
             drawMolecule((Graphics2D) subImage.getGraphics(), new Rectangle(0, 0, 128, 128),
-                         (MetabolicParticipant) reactants.get(i));
+                         (MetabolicParticipantImplementation) reactants.get(i));
             g2.drawImage(subImage, (int) bounds.getX(), (int) bounds.getY(), null);
 
             if (i + 1 < reactants.size()) {
@@ -233,13 +236,13 @@ public class ReactionRenderer {
         bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
                                         0, 128, 128);
         drawArrow(g2, bounds, rxn.getDirection());
-        List<MetabolicParticipant> products = rxn.getProductParticipants();
+        List<MetabolicParticipant> products = rxn.getProducts();
         for (int i = 0; i < products.size(); i++) {
             bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
                                             0, 128, 128);
             BufferedImage subImage = new BufferedImage(128, 128, BufferedImage.TYPE_4BYTE_ABGR);
             drawMolecule((Graphics2D) subImage.getGraphics(), new Rectangle(0, 0, 128, 128),
-                         (MetabolicParticipant) products.get(i));
+                         (MetabolicParticipantImplementation) products.get(i));
             g2.drawImage(subImage, (int) bounds.getX(), (int) bounds.getY(), null);
             if (i + 1 < products.size()) {
                 bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
@@ -257,7 +260,7 @@ public class ReactionRenderer {
 
     public void drawMolecule(Graphics2D g2,
                              Rectangle2D bounds,
-                             MetabolicParticipant p) {
+                             MetabolicParticipantImplementation p) {
 
         Metabolite metabolite = p.getMolecule();
         g2.setColor(Color.LIGHT_GRAY);

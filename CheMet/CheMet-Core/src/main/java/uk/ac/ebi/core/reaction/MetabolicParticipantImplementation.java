@@ -28,6 +28,7 @@ import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
@@ -40,35 +41,33 @@ import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetabolicParticipant 
-    extends ParticipantImplementation<Metabolite, Double, Compartment> {
+public class MetabolicParticipantImplementation
+        extends ParticipantImplementation<Metabolite, Double, Compartment>
+        implements MetabolicParticipant {
 
-    private static final Logger LOGGER = Logger.getLogger(MetabolicParticipant.class);
+    private static final Logger LOGGER = Logger.getLogger(MetabolicParticipantImplementation.class);
 
 
-    public MetabolicParticipant() {
+    public MetabolicParticipantImplementation() {
     }
 
 
-    public MetabolicParticipant(Metabolite molecule, CompartmentImplementation compartment) {
+    public MetabolicParticipantImplementation(Metabolite molecule, CompartmentImplementation compartment) {
         super(molecule, 1d, compartment);
     }
 
 
-    public MetabolicParticipant(Metabolite molecule, Double coefficient, Compartment compartment) {
+    public MetabolicParticipantImplementation(Metabolite molecule, Double coefficient, Compartment compartment) {
         super(molecule, coefficient, compartment);
     }
 
 
-    public MetabolicParticipant(Metabolite molecule, Double coefficient) {
+    public MetabolicParticipantImplementation(Metabolite molecule, Double coefficient) {
         super(molecule, coefficient, CompartmentImplementation.CYTOPLASM);
     }
 
 
-    public MetabolicParticipant(Metabolite molecule) {
+    public MetabolicParticipantImplementation(Metabolite molecule) {
         super(molecule, 1d, CompartmentImplementation.CYTOPLASM);
     }
-
-
-   
 }

@@ -16,7 +16,7 @@ import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.core.*;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
@@ -60,9 +60,9 @@ public class SBMLIOUtilTest {
         m.addAnnotation(new ChEBICrossReference(new ChEBIIdentifier("CHEBI:12436")));
         recon.addMetabolite(m2);
 
-        MetabolicReaction rxn = new MetabolicReaction();
-        rxn.addReactant(new MetabolicParticipant(m, 1.0, CompartmentImplementation.CYTOPLASM));
-        rxn.addProduct(new MetabolicParticipant(m2, 2.0, CompartmentImplementation.EXTRACELLULA));
+        MetabolicReactionImplementation rxn = new MetabolicReactionImplementation();
+        rxn.addReactant(new MetabolicParticipantImplementation(m, 1.0, CompartmentImplementation.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipantImplementation(m2, 2.0, CompartmentImplementation.EXTRACELLULA));
         rxn.addCrossReference(new ECNumber("1.1.1.1"));
         recon.addReaction(rxn);
 

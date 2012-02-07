@@ -35,7 +35,7 @@ import javax.swing.UIManager;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.AbstractReactionMatrix;
 import uk.ac.ebi.chemet.render.table.renderers.VerticalTableHeaderCellRenderer;
 import uk.ac.ebi.chemet.render.ViewUtilities;
@@ -64,8 +64,8 @@ public class MatrixPane extends JScrollPane {
         String[] rxns = new String[matrix.getReactionCount()];
         for (int i = 0; i < rxns.length; i++) {
             Object rxn = matrix.getReaction(i);
-            if (rxn instanceof MetabolicReaction) {
-                rxns[i] = ((MetabolicReaction) rxn).getAbbreviation();
+            if (rxn instanceof MetabolicReactionImplementation) {
+                rxns[i] = ((MetabolicReactionImplementation) rxn).getAbbreviation();
             } else {
                 rxns[i] = "rxn" + i;
             }

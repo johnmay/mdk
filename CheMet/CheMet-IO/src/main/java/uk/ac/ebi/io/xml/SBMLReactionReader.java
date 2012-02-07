@@ -49,8 +49,8 @@ import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.resource.MIRIAMLoader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.core.MetabolicReaction;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -194,10 +194,10 @@ public class SBMLReactionReader {
     }
 
 
-    public MetabolicReaction getMetabolicReaction(Reaction sbmlReaction)
+    public MetabolicReactionImplementation getMetabolicReaction(Reaction sbmlReaction)
             throws UnknownCompartmentException {
 
-        MetabolicReaction reaction = new MetabolicReaction(new BasicReactionIdentifier(sbmlReaction.getId()),
+        MetabolicReactionImplementation reaction = new MetabolicReactionImplementation(new BasicReactionIdentifier(sbmlReaction.getId()),
                                                            sbmlReaction.getMetaId(),
                                                            sbmlReaction.getName());
         LOGGER.info("Reading reaction " + reaction);
@@ -231,7 +231,7 @@ public class SBMLReactionReader {
      * @throws MissingStructureException
      *
      */
-    public MetabolicParticipant getMetaboliteParticipant(SpeciesReference speciesReference)
+    public MetabolicParticipantImplementation getMetaboliteParticipant(SpeciesReference speciesReference)
             throws UnknownCompartmentException {
 
         Species species = null;
@@ -284,7 +284,7 @@ public class SBMLReactionReader {
             speciesNameMap.put(metabolite.getName(), metabolite);
         }
 
-        return new MetabolicParticipant(metabolite,
+        return new MetabolicParticipantImplementation(metabolite,
                                         coefficient,
                                         compartment);
     }
@@ -446,7 +446,7 @@ public class SBMLReactionReader {
     }
 
 
-    public MetabolicReaction nextMetabolicReaction() throws UnknownCompartmentException {
+    public MetabolicReactionImplementation nextMetabolicReaction() throws UnknownCompartmentException {
         reactionIndex++;
         Reaction sbmlReaction = model.getReaction(reactionIndex);
 

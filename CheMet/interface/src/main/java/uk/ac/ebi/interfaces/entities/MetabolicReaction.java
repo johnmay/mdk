@@ -1,5 +1,5 @@
 /**
- * CompartmentalisedParticipant.java
+ * MetabolicReaction.java
  *
  * 2012.02.07
  *
@@ -18,25 +18,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.interfaces.reaction;
+package uk.ac.ebi.interfaces.entities;
 
-import org.apache.log4j.Logger;
+import java.util.Collection;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 
 
 /**
  *
- *          CompartmentalisedParticipant 2012.02.07
+ *          MetabolicReaction 2012.02.07
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  *
- *          Interface describes and extension to a normal reaction participant
+ *          Class description
  *
  */
-public interface CompartmentalisedParticipant<M, S extends Number, C>
-        extends Participant<M, S> {
+public interface MetabolicReaction extends Reaction<MetabolicParticipant> {
 
-    public C getCompartment();
-    
-    
+    public void addModifier(GeneProduct product);
+
+
+    public Collection<? extends AnnotatedEntity> getModifiers();
 }

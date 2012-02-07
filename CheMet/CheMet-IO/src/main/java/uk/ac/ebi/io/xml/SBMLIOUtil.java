@@ -32,10 +32,11 @@ import org.sbml.jsbml.SpeciesReference;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.core.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
@@ -120,10 +121,10 @@ public class SBMLIOUtil {
             rxn.setDirection(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
         }
 
-        for (MetabolicParticipant p : rxn.getReactantParticipants()) {
+        for (MetabolicParticipant p : rxn.getReactants()) {
             sbmlRxn.addReactant(getSpeciesReference(model, p));
         }
-        for (MetabolicParticipant p : rxn.getProductParticipants()) {
+        for (MetabolicParticipant p : rxn.getProducts()) {
             sbmlRxn.addProduct(getSpeciesReference(model, p));
 
         }
@@ -167,7 +168,7 @@ public class SBMLIOUtil {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
-        ParticipantImplementation key = new MetabolicParticipant(participant.getMolecule(), 1d, participant.getCompartment());
+        ParticipantImplementation key = new MetabolicParticipantImplementation(participant.getMolecule(), 1d, participant.getCompartment());
 
         // create a new entry if one doesn't exists
         if (speciesReferences.containsKey(key) == false) {

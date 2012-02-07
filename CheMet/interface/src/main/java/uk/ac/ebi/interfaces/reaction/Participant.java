@@ -28,4 +28,7 @@ public interface Participant<M, S extends Number> extends Comparable<Participant
 
 
     public M getMolecule();
+
+
+    public void setMolecule(M molecule);
 }

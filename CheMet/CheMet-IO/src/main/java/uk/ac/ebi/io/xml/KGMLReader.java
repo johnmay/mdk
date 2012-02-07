@@ -55,9 +55,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import uk.ac.ebi.chemet.resource.XMLHelper;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
+import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 
@@ -138,8 +138,8 @@ public class KGMLReader {
     }
 
 
-    public Collection<MetabolicReaction> getReactions() {
-        Collection<MetabolicReaction> reactions = new ArrayList();
+    public Collection<MetabolicReactionImplementation> getReactions() {
+        Collection<MetabolicReactionImplementation> reactions = new ArrayList();
         Map<Integer, Metabolite> metabolites = getMetabolites();
         Map<Integer, KGMLEntry> entries = getEntries();
 
@@ -148,17 +148,17 @@ public class KGMLReader {
             KGMLEntry rxnEntry = entries.get(reaction.id);
 
             String[] names = rxnEntry.name.split(" ");
-            MetabolicReaction rxn = new MetabolicReaction(new BasicReactionIdentifier(Integer.toString(rxnEntry.id)),
-                                                          names[0].substring(3),
-                                                          names[0].substring(3));
+            MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(new BasicReactionIdentifier(Integer.toString(rxnEntry.id)),
+                                                                                      names[0].substring(3),
+                                                                                      names[0].substring(3));
             for (String name : names) {
                 rxn.addCrossReference(new BasicReactionIdentifier(name.substring(3)));
             }
             for (int id : reaction.getSubstrateIds()) {
-                rxn.addReactant(new MetabolicParticipant(metabolites.get(id)));
+                rxn.addReactant(new MetabolicParticipantImplementation(metabolites.get(id)));
             }
             for (int id : reaction.getProductIds()) {
-                rxn.addProduct(new MetabolicParticipant(metabolites.get(id)));
+                rxn.addProduct(new MetabolicParticipantImplementation(metabolites.get(id)));
             }
 
             reactions.add(rxn);

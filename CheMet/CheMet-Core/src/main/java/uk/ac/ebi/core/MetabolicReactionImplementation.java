@@ -20,22 +20,16 @@
  */
 package uk.ac.ebi.core;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.core.metabolite.MetaboliteCollection;
-import uk.ac.ebi.core.reaction.MetabolicParticipant;
 import uk.ac.ebi.core.reaction.ReactionType;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -46,20 +40,22 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetabolicReaction extends AbstractReaction<MetabolicParticipant> {
+public class MetabolicReactionImplementation
+        extends AbstractReaction<MetabolicParticipant>
+        implements MetabolicReaction {
 
-    private static final Logger LOGGER = Logger.getLogger(MetabolicReaction.class);
+    private static final Logger LOGGER = Logger.getLogger(MetabolicReactionImplementation.class);
 
     private List<GeneProduct> modifiers = new ArrayList();
 
     private ReactionType type = ReactionType.ENZYMATIC;
 
 
-    public MetabolicReaction() {
+    public MetabolicReactionImplementation() {
     }
 
 
-    public MetabolicReaction(Identifier identifier, String abbreviation, String name) {
+    public MetabolicReactionImplementation(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
@@ -85,8 +81,8 @@ public class MetabolicReaction extends AbstractReaction<MetabolicParticipant> {
 
 
     @Override
-    public MetabolicReaction newInstance() {
-        return new MetabolicReaction();
+    public MetabolicReactionImplementation newInstance() {
+        return new MetabolicReactionImplementation();
     }
 
 

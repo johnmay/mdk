@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.core.MetabolicReaction;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -108,7 +108,7 @@ public class DefaultReconstructionInputStream
         int nReactions = readInt();
         System.out.println(nReactions);
         while (nReactions-- > 0) {
-            reconstruction.addReaction((MetabolicReaction) rxnMarshaller.read(this));
+            reconstruction.addReaction((MetabolicReactionImplementation) rxnMarshaller.read(this));
         }
 
 

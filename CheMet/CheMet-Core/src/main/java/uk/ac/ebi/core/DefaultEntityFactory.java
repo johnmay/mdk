@@ -53,7 +53,7 @@ public class DefaultEntityFactory
     private DefaultEntityFactory() {
 
         for (Entity entity : Arrays.asList(new MetaboliteImplementation(),
-                                           new MetabolicReaction(),
+                                           new MetabolicReactionImplementation(),
                                            new ProteinProduct(),
                                            new RibosomalRNAImplementation(),
                                            new TransferRNAImplementation(),

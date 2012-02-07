@@ -4,18 +4,20 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.interfaces.IMolecule;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentImplementation;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.templates.MoleculeFactory;
-import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
 import static uk.ac.ebi.chemet.TestMoleculeFactory.*;
 import static org.junit.Assert.*;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
+import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
+import uk.ac.ebi.core.Organelle;
+import uk.ac.ebi.core.reaction.Membrane;
 
 
 /**
@@ -37,11 +39,14 @@ public class AtomContainerReactionTest {
     public static void setUpClass() throws Exception {
         // query
         q1 = new AtomContainerReaction();
-        q1.addReactant(_123Triazole(), 1d, CompartmentImplementation.EXTRACELLULA);
-        q1.addReactant(adenine(), 2d, CompartmentImplementation.CYTOPLASM);
-        q1.addProduct(benzene(), 2d, CompartmentImplementation.MITOCHONDRIAL_MEMBRANE);
-        q1.addProduct(cyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
-        q1.addProduct(butan1ol(), 2d, CompartmentImplementation.CYTOPLASM);
+
+        q1.addReactant(_123Triazole(), 1d, Organelle.EXTRACELLULA);
+        q1.addReactant(adenine(), 2d, Organelle.CYTOPLASM);
+
+        q1.addProduct(benzene(), 2d, Membrane.MITOCHONDRIAL_MEMBRANE);
+        q1.addProduct(cyclohexane(), 1d, Organelle.CYTOPLASM);
+        q1.addProduct(butan1ol(), 2d, Organelle.CYTOPLASM);
+
     }
 
 
@@ -62,12 +67,13 @@ public class AtomContainerReactionTest {
         System.out.printf("%-120s", "[TEST] Reaction with transposed direction");
 
         AtomContainerReaction r = new AtomContainerReaction();
-        r.addReactant(benzene(), 2d, CompartmentImplementation.MITOCHONDRIAL_MEMBRANE);
-        r.addReactant(cyclohexane(), 1d, CompartmentImplementation.CYTOPLASM);
-        r.addReactant(butan1ol(), 2d, CompartmentImplementation.CYTOPLASM);
-        r.addProduct(_123Triazole(), 1d, CompartmentImplementation.EXTRACELLULA);
-        r.addProduct(adenine(), 2d, CompartmentImplementation.CYTOPLASM);
 
+        r.addReactant(benzene(), 2d, Membrane.MITOCHONDRIAL_MEMBRANE);
+        r.addReactant(cyclohexane(), 1d, Organelle.CYTOPLASM);
+        r.addReactant(butan1ol(), 2d, Organelle.CYTOPLASM);
+
+        r.addProduct(_123Triazole(), 1d, Organelle.EXTRACELLULA);
+        r.addProduct(adenine(), 2d, Organelle.CYTOPLASM);
 
         assertEquals("FAILED", q1.hashCode(), r.hashCode());
         assertEquals("FAILED", q1, r);
@@ -312,12 +318,16 @@ public class AtomContainerReactionTest {
     public void testGenericADH() {
         System.out.printf("%-120s", "[TEST] Testing generic reaction Alcohol Dehydrogenase");
 
+//        Logger.getLogger(GenericParticipant.class).setLevel(Level.ALL);
+//        Logger.getLogger(AtomContainerParticipant.class).setLevel(Level.ALL);
+//        Logger.getLogger(ParticipantImplementation.class).setLevel(Level.ALL);
+
         /** only with products no coef or compartments **/
         // query
         AtomContainerReaction generic = new AtomContainerReaction();
-        generic.addReactant(new AtomContainerParticipant(primary_alcohol()));
+        generic.addReactant(primary_alcohol(), null, null);
         generic.addReactant(new AtomContainerParticipant(nad_plus()));
-        generic.addProduct(new AtomContainerParticipant(aldehyde()));
+        generic.addProduct(aldehyde(), null, null);
         generic.addProduct(new AtomContainerParticipant(hydron()));
         generic.addProduct(new AtomContainerParticipant(nadh()));
 

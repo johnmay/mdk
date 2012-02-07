@@ -28,8 +28,7 @@ import org.openscience.cdk.interfaces.*;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.core.CompartmentImplementation;
+import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 
@@ -57,7 +56,7 @@ public class AtomContainerReaction
     private static final Logger LOGGER = Logger.getLogger(AtomContainerReaction.class);
 
 
-    public void addReactant(IAtomContainer molecule, Double coef, CompartmentImplementation compartment) {
+    public void addReactant(IAtomContainer molecule, Double coef, Compartment compartment) {
         if (CDKUtils.isMoleculeGeneric(molecule)) {
             addReactant(new GenericParticipant(molecule, coef, compartment));
         } else {
@@ -66,7 +65,7 @@ public class AtomContainerReaction
     }
 
 
-    public void addProduct(IAtomContainer molecule, Double coef, CompartmentImplementation compartment) {
+    public void addProduct(IAtomContainer molecule, Double coef, Compartment compartment) {
         if (CDKUtils.isMoleculeGeneric(molecule)) {
             addProduct(new GenericParticipant(molecule, coef, compartment));
         } else {
@@ -74,21 +73,22 @@ public class AtomContainerReaction
         }
     }
 
-    
 
-    public void addReactant(AtomContainerParticipant p) {
+    @Override
+    public boolean addReactant(AtomContainerParticipant p) {
         if (p instanceof GenericParticipant) {
             super.setGeneric(Boolean.TRUE);
         }
-        super.addReactant(p);
+        return super.addReactant(p);
     }
 
 
-    public void addProduct(AtomContainerParticipant p) {
+    @Override
+    public boolean addProduct(AtomContainerParticipant p) {
         if (p instanceof GenericParticipant) {
             super.setGeneric(Boolean.TRUE);
         }
-        super.addProduct(p);
+        return super.addProduct(p);
     }
 
 

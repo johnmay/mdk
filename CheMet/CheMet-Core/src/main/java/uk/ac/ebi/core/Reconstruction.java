@@ -8,8 +8,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
@@ -18,12 +16,13 @@ import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
-import javax.swing.JOptionPane;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.entities.EntityCollection;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 
@@ -221,7 +220,12 @@ public class Reconstruction
     public void addReaction(MetabolicReaction reaction) {
         reactions.add(reaction);
 
-        for (ParticipantImplementation<Metabolite, ?, ?> p : reaction.getAllReactionParticipants()) {
+        for (MetabolicParticipant p : reaction.getReactants()) {
+            if (metabolites.contains(p.getMolecule()) == false) {
+                addMetabolite(p.getMolecule());
+            }
+        }
+        for (MetabolicParticipant p : reaction.getProducts()) {
             if (metabolites.contains(p.getMolecule()) == false) {
                 addMetabolite(p.getMolecule());
             }
@@ -387,7 +391,6 @@ public class Reconstruction
 //        }
 //    }
     public void writeExternal(ObjectOutput out) throws IOException {
-
 //        super.writeExternal(out);
 //
 //        out.writeUTF(container.getAbsolutePath());
@@ -413,7 +416,6 @@ public class Reconstruction
 //            reaction.writeExternal(out, metabolites, products);
 //            // already writen so don't need to write
 //        }
-
     }
 
 
@@ -456,8 +458,6 @@ public class Reconstruction
 //        }
 //        long end = System.currentTimeMillis();
 //        logger.info("Loaded reaction into collection " + (end - start) + " ms");
-
-
     }
 
 

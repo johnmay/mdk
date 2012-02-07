@@ -134,13 +134,15 @@ public class ParticipantImplementation<M, S extends Number, C>
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
+            LOGGER.debug("Object null");
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!obj.getClass().isInstance(this)) {
+            LOGGER.debug("Classes not equal");
             return false;
         }
-        final ParticipantImplementation<M, S, C> other =
-                                                 (ParticipantImplementation<M, S, C>) obj;
+        final CompartmentalisedParticipant<M, S, C> other =
+                                                    (CompartmentalisedParticipant<M, S, C>) obj;
 
         return equals(other);
     }
@@ -163,24 +165,26 @@ public class ParticipantImplementation<M, S extends Number, C>
     }
 
 
-    public boolean equals(ParticipantImplementation<M, S, C> other) {
-        if (this.molecule != other.molecule && (this.molecule == null || !this.molecule.equals(
-                                                other.molecule))) {
+    public boolean equals(CompartmentalisedParticipant<M, S, C> other) {
+
+
+        if (this.molecule != other.getMolecule() && (this.molecule == null || !this.molecule.equals(
+                                                     other.getMolecule()))) {
             return false;
         }
-        if (this.coefficient != other.coefficient
-            && (this.coefficient == null || !this.coefficient.equals(other.coefficient))) {
+        if (this.coefficient != other.getCoefficient()
+            && (this.coefficient == null || !this.coefficient.equals(other.getCoefficient()))) {
             return false;
         }
-        if (this.compartment != other.compartment
-            && (this.compartment == null || !this.compartment.equals(other.compartment))) {
+        if (this.compartment != other.getCompartment()
+            && (this.compartment == null || !this.compartment.equals(other.getCompartment()))) {
             return false;
         }
         return true;
     }
 
 
-    public int compareTo(Participant<M,S> o) {
+    public int compareTo(Participant<M, S> o) {
 
 
 
@@ -207,7 +211,4 @@ public class ParticipantImplementation<M, S extends Number, C>
 
         return 0;
     }
-
-
-
 }

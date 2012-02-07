@@ -37,7 +37,7 @@ import uk.ac.ebi.interfaces.reaction.ReactionType;
  *          Interface describes a reaction
  *
  */
-public interface Reaction<P extends Participant<?, ?>>
+public interface Reaction<P extends Participant>
         extends AnnotatedEntity {
 
     public List<P> getReactants();
@@ -46,18 +46,17 @@ public interface Reaction<P extends Participant<?, ?>>
     public List<P> getProducts();
 
 
+    public List<P> getParticipants();
+
+
     public boolean addReactant(P participant);
 
 
     public boolean addProduct(P participant);
 
 
-    public boolean removeReactant(P participant);
-
-
-    public boolean removeProduct(P participant);
-
-
+    // public boolean removeReactant(P participant);
+    // public boolean removeProduct(P participant);
     public int getReactantCount();
 
 
@@ -67,17 +66,11 @@ public interface Reaction<P extends Participant<?, ?>>
     public int getParticipantCount();
 
 
-    /**
-     * Transport, Generic, Exchange, Metabolic (default)
-     */
-    public ReactionType getType();
-
-
-    public void setType(ReactionType type);
-
-
     public Direction getDirection();
 
 
     public void setDirection(Direction direction);
+
+
+    public void transpose();
 }
