@@ -120,7 +120,7 @@ public class MetaboliteMatchIndication {
         formula.setQuality(MatchIndication.Quality.Bad);
 
         List<MolecularFormula> queryMfs = new ArrayList(query.getAnnotationsExtending(MolecularFormula.class));
-        List<MolecularFormula> subjectMfs = new ArrayList(query.getAnnotationsExtending(MolecularFormula.class));
+        List<MolecularFormula> subjectMfs = new ArrayList(subject.getAnnotationsExtending(MolecularFormula.class));
 
         formula.setLeft("N/A");
         formula.setRight("N/A");
