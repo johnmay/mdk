@@ -24,9 +24,11 @@ import java.awt.Component;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.chemet.render.list.renderers.TableCellRenderingPool;
+
 
 /**
  *          ActionButtonCellRenderer - 2011.12.13 <br>
@@ -39,23 +41,28 @@ public class ActionButtonCellRenderer
         extends TableCellRenderingPool<JButton, Action> {
 
     private static final Logger LOGGER = Logger.getLogger(ActionButtonCellRenderer.class);
+
     private boolean visible = true;
 
-    public ActionButtonCellRenderer(boolean allowBackgroundChange) {
+    private int alignment = SwingConstants.CENTER;
+
+
+    public ActionButtonCellRenderer(boolean allowBackgroundChange, int alignment) {
         super(allowBackgroundChange);
+        this.alignment = alignment;
     }
 
-    public ActionButtonCellRenderer() {
-    }
 
     @Override
     public JButton create() {
-        return ButtonFactory.newCleanButton(null);
+        return ButtonFactory.newCleanButton(null, alignment);
     }
+
 
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+
 
     @Override
     public Component getTableCellRendererComponent(JTable table,
@@ -75,12 +82,14 @@ public class ActionButtonCellRenderer
 
     }
 
+
     @Override
     public boolean setup(JButton component,
                          Action object) {
         component.setAction(object);
         return true;
     }
+
 
     @Override
     public void expire(JButton component) {
