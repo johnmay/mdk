@@ -92,6 +92,7 @@ import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
  * @cdk.bug     1794439
  */
 @TestClass("org.openscience.cdk.io.PDBReaderV2Test")
+@Deprecated
 public class PDBReaderV2 extends DefaultChemObjectReader {
 
 	private LoggingTool logger;

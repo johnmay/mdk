@@ -32,6 +32,7 @@ import java.util.Map;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
+
 /**
  * GeneProductCollection.java
  * A class to handle storage of collections of the different GeneProducts
@@ -39,22 +40,31 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author johnmay
  * @date Apr 28, 2011
  */
+@Deprecated
 public class OldGeneProductCollection
         implements Externalizable {
 
     private transient static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(OldGeneProductCollection.class);
+
     private ArrayList<OldGeneProduct> geneProducts;
+
     private ArrayList<GeneProteinProduct> proteinProducts;
+
     private HashMap<Identifier, GeneProteinProduct> proteinProductIdentifierMap;
+
     private HashMap<Identifier, OldGeneProduct> productIdentifierMap;
     //
+
     private Multimap<Class, OldGeneProduct> productMap = ArrayListMultimap.create();
+
     private Map<String, OldGeneProduct> accessionMap = new HashMap();
+
     private Map<Identifier, OldGeneProduct> identifierMap = new HashMap();
     // get from class
     // add observation
     //  ... observations
     // add annotation and annotations
+
 
     /**
      * Constructor instantiates the underlying lists
@@ -66,6 +76,7 @@ public class OldGeneProductCollection
         productIdentifierMap = new HashMap<Identifier, OldGeneProduct>();
     }
 
+
     /**
      * Add the other collection of gene products to this one
      * @param productCollection another collection of gene products
@@ -73,6 +84,7 @@ public class OldGeneProductCollection
     public AbstractIdentifier[] addAll(OldGeneProductCollection productCollection) {
         return addAll(productCollection.getAllProducts());
     }
+
 
     /**
      * Add all the gene products to the collection
@@ -90,6 +102,7 @@ public class OldGeneProductCollection
         return clashingIdentifiers.toArray(new AbstractIdentifier[0]);
     }
 
+
     /**
      * Add all the protein products to the collection
      * @param geneProducts
@@ -104,6 +117,7 @@ public class OldGeneProductCollection
         return clashingIdentifiers.toArray(new AbstractIdentifier[0]);
     }
 
+
     /**
      * Add a product to the collection
      * @param product A product extending the abstract GeneProduct class
@@ -117,17 +131,18 @@ public class OldGeneProductCollection
 
         geneProducts.add(product);
         productIdentifierMap.put(product.getIdentifier(),
-                (GeneProteinProduct) product);
+                                 (GeneProteinProduct) product);
 
         if (product instanceof GeneProteinProduct) {
             proteinProducts.add((GeneProteinProduct) product);
             // add to hash map to we can look it up quickly
             proteinProductIdentifierMap.put(product.getIdentifier(),
-                    (GeneProteinProduct) product);
+                                            (GeneProteinProduct) product);
         }
 
         return Boolean.TRUE;
     }
+
 
     /**
      * Accessor for the total number of products stored
@@ -137,6 +152,7 @@ public class OldGeneProductCollection
         return geneProducts.size();
     }
 
+
     /**
      * Accessor for the number of protein products stored
      * @return The number of protein products
@@ -144,6 +160,7 @@ public class OldGeneProductCollection
     public int numberOfProteinProducts() {
         return proteinProducts.size();
     }
+
 
     /**
      * Accessor for fixed size array of all gene products stored in collection
@@ -153,6 +170,7 @@ public class OldGeneProductCollection
         return geneProducts.toArray(new OldGeneProduct[0]);
     }
 
+
     /**
      * Accessor for fixed size array of all protein products stored in collection
      * @return fixed size GeneProteinProduct[] array
@@ -160,6 +178,7 @@ public class OldGeneProductCollection
     public GeneProteinProduct[] getProteinProducts() {
         return geneProducts.toArray(new GeneProteinProduct[0]);
     }
+
 
     /**
      * Fetch a protein product from the collection when provided with the identifier
@@ -179,9 +198,11 @@ public class OldGeneProductCollection
         return newProduct;
     }
 
+
     public void write(File file) throws FileNotFoundException, IOException {
         write(file, this);
     }
+
 
     public static OldGeneProductCollection readCollection(File file) {
         ObjectInput ois = null;
@@ -200,6 +221,7 @@ public class OldGeneProductCollection
         return new OldGeneProductCollection();
     }
 
+
     public static void write(File file, OldGeneProductCollection collection) throws
             FileNotFoundException, IOException {
         ObjectOutput oos = new ObjectOutputStream(new FileOutputStream(file));
@@ -207,9 +229,11 @@ public class OldGeneProductCollection
         oos.close();
     }
 
+
     public int indexof(OldGeneProduct product) {
         return geneProducts.indexOf(product);
     }
+
 
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(geneProducts.size());
@@ -217,6 +241,7 @@ public class OldGeneProductCollection
             geneProduct.writeExternal(out);
         }
     }
+
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 

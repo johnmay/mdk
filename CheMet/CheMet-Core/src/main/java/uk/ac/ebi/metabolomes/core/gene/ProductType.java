@@ -14,10 +14,13 @@
  */
 package uk.ac.ebi.metabolomes.core.gene;
 
+
 /**
  *
  * @author johnmay
  */
+@Deprecated
 public enum ProductType {
-    PROTEIN , RRNA , TRNA
+
+    PROTEIN, RRNA, TRNA
 }

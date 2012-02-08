@@ -4,9 +4,9 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IReaction;
 import org.openscience.cdk.interfaces.IReactionSet;
 
+
+@Deprecated
 public interface IBiochemicalPathway extends IReactionSet {
 
-	public IReaction[] getConnectedReactionsThroughMetabolite(IReaction currentReac, IAtomContainer mol);
-	
-	
+    public IReaction[] getConnectedReactionsThroughMetabolite(IReaction currentReac, IAtomContainer mol);
 }

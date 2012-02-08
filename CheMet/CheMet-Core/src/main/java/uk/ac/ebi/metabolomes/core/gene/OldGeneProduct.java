@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package uk.ac.ebi.metabolomes.core.gene;
 
 import java.io.Externalizable;
@@ -22,17 +21,23 @@ import uk.ac.ebi.core.AbstractAnnotatedEntity;
  * @author johnmay
  * @date Apr 4, 2011
  */
+@Deprecated
 public abstract class OldGeneProduct
-  extends AbstractAnnotatedEntity
-  implements Externalizable {
+        extends AbstractAnnotatedEntity
+        implements Externalizable {
 
     private transient static final org.apache.log4j.Logger logger =
                                                            org.apache.log4j.Logger.getLogger(
-      OldGeneProduct.class);
+            OldGeneProduct.class);
+
     private ProductType type;
+
     private List<AbstractReaction> reactions = new ArrayList();
+
     private String sequence; // have to store as simple string as BioJava3 ProteinSequence is not serializable and we want to store the object it to disk :-)
+
     private Integer sequenceLength;
+
     public static final String BASE_TYPE = "Product";
 
 
@@ -123,10 +128,4 @@ public abstract class OldGeneProduct
         out.write(sequenceLength);
 //        out.writeObject(type);
     }
-
-
-
-
-
 }
-
