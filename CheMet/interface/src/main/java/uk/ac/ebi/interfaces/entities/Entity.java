@@ -58,13 +58,6 @@ public interface Entity {
 
 
     /**
-     * Returns the base type of the entity e.g. Metabolite, Reaction, Gene, Gene-product
-     * @return
-     */
-    public String getBaseType();
-
-
-    /**
      * Create a new instance of this entity
      * @return e the new instance
      */

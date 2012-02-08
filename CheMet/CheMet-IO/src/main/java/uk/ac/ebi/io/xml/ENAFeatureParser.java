@@ -35,7 +35,7 @@ import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.core.GeneImplementation;
 import uk.ac.ebi.core.IdentifierSet;
-import uk.ac.ebi.core.ProteinProduct;
+import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.core.AbstractRNAProduct;
 import uk.ac.ebi.core.RibosomalRNAImplementation;
 import uk.ac.ebi.core.TransferRNAImplementation;
@@ -199,9 +199,9 @@ public class ENAFeatureParser {
         return null;
     }
 
-    private ProteinProduct getCodingSequence() {
+    private ProteinProductImplementation getCodingSequence() {
 
-        ProteinProduct cds = new ProteinProduct(getProteinIdentifier(), getLocusTag(), getProduct());
+        ProteinProductImplementation cds = new ProteinProductImplementation(getProteinIdentifier(), getLocusTag(), getProduct());
 
         for (Identifier identifier : identifiers.getIdentifiers()) {
             cds.addAnnotation(new CrossReference(identifier));

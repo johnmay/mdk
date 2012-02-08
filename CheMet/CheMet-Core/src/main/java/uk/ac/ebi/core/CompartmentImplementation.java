@@ -33,8 +33,9 @@ import uk.ac.ebi.interfaces.reaction.Compartment;
  * @author  johnmay
  * @author  $Author$ (this version)
  * @brief   Enumeration of existing metabolic compartments
- *
+ * @Deprecated, use individual comparment classes {@see Organelle, CellType}
  */
+@Deprecated
 public enum CompartmentImplementation
         implements Compartment {
 
