@@ -21,11 +21,14 @@
 package uk.ac.ebi.io.core.marshal.versions;
 
 import java.io.IOException;
+import java.util.Arrays;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.core.Organelle;
+import uk.ac.ebi.core.reaction.Membrane;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -34,6 +37,7 @@ import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.io.ReconstructionInputStream;
 import uk.ac.ebi.interfaces.io.ReconstructionOutputStream;
 import uk.ac.ebi.interfaces.io.marshal.EntityMarshaller;
+import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.io.core.marshal.AbstractAnnotatedEntityMarshaller;
 
 
@@ -47,18 +51,34 @@ import uk.ac.ebi.io.core.marshal.AbstractAnnotatedEntityMarshaller;
  *          Class description
  *
  */
-public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshaller {
+public class ReactionMarshaller_0_8_5_1 extends AbstractAnnotatedEntityMarshaller {
 
-    private static final Logger LOGGER = Logger.getLogger(ReactionMarshaller_0_8_5_0.class);
+    private static final Logger LOGGER = Logger.getLogger(ReactionMarshaller_0_8_5_1.class);
 
 
-    public ReactionMarshaller_0_8_5_0() {
-        super(new Version(0, 8, 5, 0));
+    public ReactionMarshaller_0_8_5_1() {
+        super(new Version(0, 8, 5, 1));
     }
 
 
     public EntityMarshaller newInstance() {
-        return new ReactionMarshaller_0_8_5_0();
+        return new ReactionMarshaller_0_8_5_1();
+    }
+
+
+    public Compartment getCompartment(byte index) {
+        
+        for (Compartment[] compartments : Arrays.asList((Compartment[]) Organelle.values(),
+                                                        (Compartment[]) Membrane.values())) {
+            for (Compartment comparment : compartments) {
+                if (comparment.getRanking() == index) {
+                    return comparment;
+                }
+            }
+        }             
+        
+        return Organelle.CYTOPLASM;
+        
     }
 
 
@@ -73,7 +93,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
             MetabolicParticipantImplementation p = new MetabolicParticipantImplementation();
             p.setCoefficient(in.readDouble());
-            p.setCompartment(CompartmentImplementation.valueOf(in.readByte()).getMapping());
+            p.setCompartment(getCompartment(in.readByte()));
             p.setMolecule((Metabolite) in.getMetabolite(in.readInt()));
 
             rxn.addReactant(p);
@@ -85,7 +105,7 @@ public class ReactionMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshalle
 
             MetabolicParticipantImplementation p = new MetabolicParticipantImplementation();
             p.setCoefficient(in.readDouble());
-            p.setCompartment(CompartmentImplementation.valueOf(in.readByte()).getMapping());
+            p.setCompartment(getCompartment(in.readByte()));
             p.setMolecule((Metabolite) in.getMetabolite(in.readInt()));
 
             rxn.addProduct(p);

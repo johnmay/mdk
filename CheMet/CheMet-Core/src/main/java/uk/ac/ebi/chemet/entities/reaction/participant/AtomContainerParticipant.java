@@ -304,8 +304,8 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
         if (o instanceof CompartmentalisedParticipant) {
             CompartmentalisedParticipant<IAtomContainer, Double, Compartment> co = (CompartmentalisedParticipant<IAtomContainer, Double, Compartment>) o;
             if (this.compartment != null && co.getCompartment() != null) {
-                Integer c1rank = this.compartment.getRanking();
-                Integer c2rank = co.getCompartment().getRanking();
+                Byte c1rank = this.compartment.getRanking();
+                Byte c2rank = co.getCompartment().getRanking();
                 int compComparison = c1rank.compareTo(c2rank);
                 if (compComparison != 0) {
                     return compComparison;

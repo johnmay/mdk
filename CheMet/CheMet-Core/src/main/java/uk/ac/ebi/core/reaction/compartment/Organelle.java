@@ -89,7 +89,7 @@ public enum Organelle implements Compartment {
     }
 
 
-    public int getRanking() {
+    public byte getRanking() {
         return index;
     }
 }

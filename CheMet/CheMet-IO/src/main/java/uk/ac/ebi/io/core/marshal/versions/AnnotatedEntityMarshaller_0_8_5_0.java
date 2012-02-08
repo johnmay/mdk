@@ -55,7 +55,8 @@ public class AnnotatedEntityMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMa
 
     public EntityMarshaller newInstance() {
         return new AnnotatedEntityMarshaller_0_8_5_0();
-    }
+    } 
+    
 
 
     @Override

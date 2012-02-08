@@ -136,10 +136,7 @@ public abstract class RunnableTask
         return new Thread(this);
     }
 
-    @Override
-    public String getBaseType() {
-        return BASE_TYPE;
-    }
+  
 
     /**
      * Returns the command that will be executed on the command line. If no command is provided then

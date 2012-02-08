@@ -89,6 +89,8 @@ public class DefaultReconstructionOutputStream extends ObjectOutputStream implem
 
         // metabolites
         EntityMarshaller metaboliteMarshaller = marshalFactory.getMetaboliteMarshaller();
+        LOGGER.debug("Metabolite marshaller: " + metaboliteMarshaller.getVersion());
+
         MetaboliteCollection mc = reconstruction.getMetabolites();
         System.out.println(mc.size());
         writeInt(mc.size());
@@ -98,6 +100,9 @@ public class DefaultReconstructionOutputStream extends ObjectOutputStream implem
 
         // reactions     
         EntityMarshaller rxnMarshaller = marshalFactory.getReactionMarshaller();
+
+        LOGGER.debug("Reaction marshaller: " + rxnMarshaller.getVersion());
+
         ReactionList rl = reconstruction.getReactions();
         System.out.println(rl.size());
         writeInt(rl.size());

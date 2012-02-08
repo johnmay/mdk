@@ -36,7 +36,7 @@ import uk.ac.ebi.interfaces.reaction.Compartment;
  */
 public enum Tissue implements Compartment {
 
-    BLOOD("bl", "Blood", (byte) 60),;
+    BLOOD("bl", "Blood", (byte) -128),;
 
     private final String abbreviation;
 
@@ -68,7 +68,7 @@ public enum Tissue implements Compartment {
     }
 
 
-    public int getRanking() {
+    public byte getRanking() {
         return index;
     }
 }

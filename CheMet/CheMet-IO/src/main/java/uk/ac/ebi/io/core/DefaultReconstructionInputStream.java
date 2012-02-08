@@ -105,6 +105,8 @@ public class DefaultReconstructionInputStream
         // reactions
         EntityMarshaller rxnMarshaller = marshalFactory.getReactionMarshaller();
 
+        LOGGER.debug("Reaction Marshaller: " + rxnMarshaller.getVersion());
+
         int nReactions = readInt();
         System.out.println(nReactions);
         while (nReactions-- > 0) {

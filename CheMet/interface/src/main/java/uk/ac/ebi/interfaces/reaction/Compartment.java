@@ -57,5 +57,5 @@ public interface Compartment {
     public Set<String> getSynonyms();
 
 
-    public int getRanking();
+    public byte getRanking();
 }

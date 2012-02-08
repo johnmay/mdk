@@ -26,10 +26,7 @@ import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.io.core.marshal.AbstractAnnotatedEntityMarshaller;
 import uk.ac.ebi.io.core.marshal.AbstractEntityMarshaller;
-import uk.ac.ebi.io.core.marshal.versions.AnnotatedEntityMarshaller_0_8_5_0;
-import uk.ac.ebi.io.core.marshal.versions.EntityMarshaller_0_8_5_0;
-import uk.ac.ebi.io.core.marshal.versions.MetaboliteMarshaller_0_8_5_0;
-import uk.ac.ebi.io.core.marshal.versions.ReactionMarshaller_0_8_5_0;
+import uk.ac.ebi.io.core.marshal.versions.*;
 
 
 /**
@@ -44,7 +41,7 @@ import uk.ac.ebi.io.core.marshal.versions.ReactionMarshaller_0_8_5_0;
  */
 public class MarshallFactory {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MarshallFactory.class);
+    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(MarshallFactory.class);
 
     private Version version;
 
@@ -58,7 +55,9 @@ public class MarshallFactory {
         new MetaboliteMarshaller_0_8_5_0()};
 
     private AnnotatedEntityMarshaller[] reactionMarshalls = new AnnotatedEntityMarshaller[]{
-        new ReactionMarshaller_0_8_5_0()};
+        new ReactionMarshaller_0_8_5_1(),
+        new ReactionMarshaller_0_8_5_0()
+    };
 
     private EntityFactory factory;
 
@@ -114,7 +113,9 @@ public class MarshallFactory {
 
 
     public EntityMarshaller getReactionMarshaller() {
+        LOGGER.debug("Finding reaction version");
         for (AnnotatedEntityMarshaller rxnMarshaller : reactionMarshalls) {
+            LOGGER.debug(version + " >= " + rxnMarshaller.getVersion() + "?");
             if (version.getIndex() >= rxnMarshaller.getVersion().getIndex()) {
                 EntityMarshaller marshaller = getEntityMarshal(getAnnotatedEntityMarshal(rxnMarshaller));
                 marshaller.setEntityFactory(factory);

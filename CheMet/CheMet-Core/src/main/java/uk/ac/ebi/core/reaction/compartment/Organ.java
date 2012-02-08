@@ -36,7 +36,7 @@ import uk.ac.ebi.interfaces.reaction.Compartment;
  */
 public enum Organ implements Compartment {
 
-    EYESPOT("i", "Eyespot", (byte) 80);
+    EYESPOT("i", "Eyespot", (byte) 60);
 
     private final String abbreviation;
 
@@ -68,7 +68,7 @@ public enum Organ implements Compartment {
     }
 
 
-    public int getRanking() {
+    public byte getRanking() {
         return index;
     }
 }

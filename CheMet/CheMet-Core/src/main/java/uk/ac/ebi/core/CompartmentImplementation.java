@@ -23,6 +23,8 @@ package uk.ac.ebi.core;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import uk.ac.ebi.core.reaction.Membrane;
+import uk.ac.ebi.core.reaction.Tissue;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 
 
@@ -33,50 +35,50 @@ import uk.ac.ebi.interfaces.reaction.Compartment;
  * @author  johnmay
  * @author  $Author$ (this version)
  * @brief   Enumeration of existing metabolic compartments
- * @Deprecated, use individual comparment classes {@see Organelle, CellType}
+ * @Deprecated, use individual comparment classes {@see Organelle, CellType}. This 
+ *  class should be maintained for mapping to the new types {@see getMapping()}
  */
 @Deprecated
 public enum CompartmentImplementation
         implements Compartment {
 
     // Organelles (prokaryotes)
-    CYTOPLASM("c", "Cytoplasm", (byte) 1),
-    PERIPLASM("p", "Periplasm", (byte) 2),
-    EXTRACELLULA("e", "Extracellular", (byte) 3),
+    CYTOPLASM("c", "Cytoplasm", (byte) 1, Organelle.CYTOPLASM),
+    PERIPLASM("p", "Periplasm", (byte) 2, Organelle.PERIPLASM),
+    EXTRACELLULA("e", "Extracellular", (byte) 3, Organelle.EXTRACELLULA),
     // Organelles (eukaryotes) and tissues/organs
-    FLAGELLUM("f", "Flagellum", (byte) 4),
-    GOLGI("g", "Golgi", (byte) 5),
-    CHLOROPLAST("h", "Chloroplast", (byte) 6),
-    APICOPLAST("a", "Apicoplast", (byte) 8),
-    LYSOSOME("l", "Lysosome", (byte) 9),
-    MITOCHONDRION("m", "Mitochondrion", (byte) 10),
-    NUCLEUS("n", "Nucleus", (byte) 11),
-    GLYOXYSOMES("o", "Glyoxysomes", (byte) 12),
-    ENDOPLASMIC_RETICULUM("r", "Endoplasmic Reticulum", (byte) 13),
-    PLASTID("s", "Plastid", (byte) 14),
-    THYLAKOID("t", "Thylakoid", (byte) 15),
-    VACUOLE("v", "Vacuole", (byte) 16),
-    GLYOXYSOME("w", "Glyoxysome", (byte) 17),
-    PEROXISOME("x", "Peroxisome", (byte) 18),
-    GLYCOSOME("y", "Glycosome", (byte) 19),
+    FLAGELLUM("f", "Flagellum", (byte) 4, Organelle.FLAGELLUM),
+    GOLGI("g", "Golgi", (byte) 5, Organelle.GOLGI),
+    CHLOROPLAST("h", "Chloroplast", (byte) 6, Organelle.CHLOROPLAST),
+    APICOPLAST("a", "Apicoplast", (byte) 8, Organelle.APICOPLAST),
+    LYSOSOME("l", "Lysosome", (byte) 9, Organelle.LYSOSOME),
+    MITOCHONDRION("m", "Mitochondrion", (byte) 10, Organelle.MITOCHONDRION),
+    NUCLEUS("n", "Nucleus", (byte) 11, Organelle.NUCLEUS),
+    GLYOXYSOMES("o", "Glyoxysomes", (byte) 12, Organelle.GLYOXYSOMES),
+    ENDOPLASMIC_RETICULUM("r", "Endoplasmic Reticulum", (byte) 13, Organelle.ENDOPLASMIC_RETICULUM),
+    PLASTID("s", "Plastid", (byte) 14, Organelle.PLASTID),
+    THYLAKOID("t", "Thylakoid", (byte) 15, Organelle.THYLAKOID),
+    VACUOLE("v", "Vacuole", (byte) 16, Organelle.VACUOLE),
+    GLYOXYSOME("w", "Glyoxysome", (byte) 17, Organelle.GLYOXYSOME),
+    PEROXISOME("x", "Peroxisome", (byte) 18, Organelle.PEROXISOME),
+    GLYCOSOME("y", "Glycosome", (byte) 19, Organelle.GLYCOSOME),
     // tissues
-    BLOOD("bl", "Blood", (byte) 20),
+    BLOOD("bl", "Blood", (byte) 20, Tissue.BLOOD),
     // Tissues (put in a different enumeration
     // Adibopcyte("a", ); // clashes with Apicoplast
     // Myocyte("m") // clashes with mitrochondrion
     // Hepatocyte("h"); // no clash
 
     // Membranes
-    GOLGI_MEMBRANE(
-    "gm", "Golgi Membrane", (byte) 21),
-    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane", (byte) 22),
-    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane", (byte) 23),
-    PLASMA_MEMBRANE("pm", "Plasma Membrane", (byte) 23),
-    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", (byte) 25),
-    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane", (byte) 26),
-    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", (byte) 27),
+    GOLGI_MEMBRANE("gm", "Golgi Membrane", (byte) 21, Membrane.GOLGI_MEMBRANE),
+    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane", (byte) 22, Membrane.NUCLEAR_MEMBRANE),
+    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane", (byte) 23, Membrane.NUCLEAR_MEMBRANE),
+    PLASMA_MEMBRANE("pm", "Plasma Membrane", (byte) 23, Membrane.PLASMA_MEMBRANE),
+    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", (byte) 25, Membrane.ENDOPLASMIC_RETICULUM_MEMBRANE),
+    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane", (byte) 26, Membrane.VACUOLAR_MEMBRANE),
+    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", (byte) 27, Membrane.PEROXISOMAL_MEMBRANE),
     // indicates compartment is unknown
-    UNKNOWN("xx", "Unknown Compartment", (byte) 28);
+    UNKNOWN("xx", "Unknown Compartment", (byte) 28, null);
     // store the abbreviation 1/2 leter code and the textual description
 
     private final byte index;
@@ -87,13 +89,17 @@ public enum CompartmentImplementation
 
     private static final Map<String, CompartmentImplementation> abbreviationMap = buildAbbreviationMap();
 
+    private Compartment mapping;
+
 
     private CompartmentImplementation(String abbreviation,
                                       String description,
-                                      byte index) {
+                                      byte index,
+                                      Compartment mapping) {
         this.abbreviation = abbreviation;
         this.description = description;
         this.index = index;
+        this.mapping = mapping;
     }
 
 
@@ -107,7 +113,7 @@ public enum CompartmentImplementation
     }
 
 
-    public int getRanking() {
+    public byte getRanking() {
         return index;
     }
 
@@ -156,6 +162,11 @@ public enum CompartmentImplementation
 
     public Set<String> getSynonyms() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+
+    public Compartment getMapping() {
+        return mapping;
     }
 }
 
