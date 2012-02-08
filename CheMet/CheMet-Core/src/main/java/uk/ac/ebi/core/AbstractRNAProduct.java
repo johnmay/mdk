@@ -44,8 +44,6 @@ public abstract class AbstractRNAProduct extends AbstractGeneProduct implements 
 
     private static final Logger LOGGER = Logger.getLogger(AbstractRNAProduct.class);
 
-    public static final String BASE_TYPE = "RNA";
-
     private List<RNASequence> sequences = new ArrayList();
 
 
@@ -65,12 +63,6 @@ public abstract class AbstractRNAProduct extends AbstractGeneProduct implements 
 
     public boolean addSequence(Sequence sequence) {
         return this.sequences.add((RNASequence) sequence);
-    }
-
-
-    @Override
-    public String getBaseType() {
-        return this.BASE_TYPE;
     }
 
 

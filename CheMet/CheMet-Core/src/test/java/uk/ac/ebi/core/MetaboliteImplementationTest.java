@@ -58,7 +58,7 @@ public class MetaboliteImplementationTest {
 
 
     @Test
-    public void getStructures() {
+    public void testGetStructures() {
 
         Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
 

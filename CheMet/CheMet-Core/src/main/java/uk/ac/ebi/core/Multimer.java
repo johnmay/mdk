@@ -94,10 +94,6 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
         return subunits.add(subunit);
     }
 
-    @Override
-    public String getBaseType() {
-        return BASE_TYPE;
-    }
 
     /**
      * Returns a collection (list) of all genes of the subunits

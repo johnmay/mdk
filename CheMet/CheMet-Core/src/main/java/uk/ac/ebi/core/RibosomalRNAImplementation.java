@@ -25,6 +25,7 @@ import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.RibosomalRNA;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
+
 /**
  *          RibsomalRNA - 2011.10.17 <br>
  *          Class description
@@ -32,22 +33,19 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class RibosomalRNAImplementation extends AbstractRNAProduct implements RibosomalRNA{
+public class RibosomalRNAImplementation extends AbstractRNAProduct implements RibosomalRNA {
 
     private static final Logger LOGGER = Logger.getLogger(RibosomalRNAImplementation.class);
-    public static final String BASE_TYPE = "rRNA";
+
 
     public RibosomalRNAImplementation() {
     }
+
 
     public RibosomalRNAImplementation(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
-    @Override
-    public String getBaseType() {
-        return BASE_TYPE;
-    }
 
     public GeneProduct newInstance() {
         return new RibosomalRNAImplementation();

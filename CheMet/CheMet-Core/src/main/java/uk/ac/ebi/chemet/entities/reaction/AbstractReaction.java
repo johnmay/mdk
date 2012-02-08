@@ -28,27 +28,43 @@ import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
 import uk.ac.ebi.core.AbstractAnnotatedEntity;
 import uk.ac.ebi.core.util.Util;
-import uk.ac.ebi.interfaces.entities.Reaction;
+import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.reaction.Direction;
-import uk.ac.ebi.interfaces.reaction.Participant;
+import uk.ac.ebi.interfaces.reaction.*;
 
 
 /**
- * Reaction –  2011.08.08
+ * AbstractReaction –  2011.08.08 <br>
  *
- *          Generic reaction class allows the the specification of a reaction
- *          storing the molecule (M), stoichiometry (S) and compartment (C)
- *          Note that the molecule comparator is given in the constructor, this is because common molecule
- *          object (i.e. IAtomContainer) does not implement comparable. We extends MetabolicReconstructionObject so
- *          we can add annotations/observations to the reaction
+ *          A base reaction class that allows the specification of different
+ *          types of participant. Two important participant types are
+ *          {@see Participant} and {@see CompartmentalisedParticipant}. Due
+ *          to the verboseness of the later when provided with the three 
+ *          parameter types like {@see MetabolicParticipant} are usable. <br><br>
+ *          
+ *          {@code Reaction<Participant<String,Integer>> rxn = new AbstractReaction<Participant<String,Integer>>(); } <br><br>
+ *          {@code rxn.addReactant(new ParticipantImplementation<String,Integer>("NAD+",1));                        } <br>
+ *          {@code rxn.addReactant(new ParticipantImplementation<String,Integer>("primary-alcohol",1));             } <br><br>
+ *          {@code rxn.addProduct(new ParticipantImplementation<String,Integer>("NADH",1));                         } <br>
+ *          {@code rxn.addProduct(new ParticipantImplementation<String,Integer>("H+",1));                           } <br>
+ *          {@code rxn.addProduct(new ParticipantImplementation<String,Integer>("aldehyde",1));                     } <br>
+ *  
+ *          <br>
+ * 
+ *          If you intend to use this library's {@see Metabolite} and
+ *          {@see Compartment} implementations please use the concrete
+ *          class {@see MetabolicReaction}.
+ * 
+ *          <pre>
+ * 
+ *          </pre> 
+ *                   
  *
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
- * @param   <M> The molecule class type (IAtomContainer, String, etc. ) should overide hashCode/equals
- * @param   <S> The stoichiometry class type (normally int or double) should overide hashCode/equals
- * @param   <C> The compartment class type (can be a string e.g. [e] or Enumeration) overide hashCode/equals
+ * @param   <P> Reaction participant type
  */
 public class AbstractReaction<P extends Participant>
         extends AbstractAnnotatedEntity
@@ -56,7 +72,6 @@ public class AbstractReaction<P extends Participant>
 
     private static final Logger LOGGER = Logger.getLogger(AbstractReaction.class);
 
-    public static final String BASE_TYPE = "Reaction";
     // flags whether the reaction is generic or not
 
     transient private Boolean generic = false;
@@ -575,9 +590,4 @@ public class AbstractReaction<P extends Participant>
         return sb.toString();
     }
 
-
-    @Override
-    public String getBaseType() {
-        return BASE_TYPE;
-    }
 }

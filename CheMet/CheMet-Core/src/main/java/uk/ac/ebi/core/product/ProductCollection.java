@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.ProteinProduct;
+import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.core.RibosomalRNAImplementation;
 import uk.ac.ebi.core.TransferRNAImplementation;
 import uk.ac.ebi.interfaces.Annotation;

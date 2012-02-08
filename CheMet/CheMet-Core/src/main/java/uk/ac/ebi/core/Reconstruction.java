@@ -293,14 +293,6 @@ public class Reconstruction
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public String getBaseType() {
-        return BASE_TYPE;
-    }
-
 
     /** Holding methods (likely to change) **/
     public void setMatix(StoichiometricMatrix<CompartmentalisedMetabolite, ?> matrix) {

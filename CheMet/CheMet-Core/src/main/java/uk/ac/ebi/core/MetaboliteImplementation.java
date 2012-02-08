@@ -210,11 +210,6 @@ public class MetaboliteImplementation
     }
 
 
-    @Override
-    public String getBaseType() {
-        return BASE_TYPE;
-    }
-
 
     /**
      * @inheritDoc

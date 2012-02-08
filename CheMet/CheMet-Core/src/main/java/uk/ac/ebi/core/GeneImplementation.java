@@ -30,6 +30,7 @@ import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
+
 /**
  *          GeneImplementation - 2011.10.17 <br>
  *          An implementation of the Gene interface
@@ -40,19 +41,26 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 public class GeneImplementation extends AbstractAnnotatedEntity implements Gene {
 
     private static final Logger LOGGER = Logger.getLogger(GeneImplementation.class);
-    public static final String BASE_TYPE = "Gene";
+
     private int start;
+
     private int end;
+
     private Strand strand;
+
     private Sequence sequence;
+
     private Chromosome chromosome;
+
 
     public GeneImplementation() {
     }
 
+
     public GeneImplementation(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
+
 
     public GeneImplementation(Identifier identifier, String abbreviation, String name, int start, int end, Strand strand) {
         super(identifier, abbreviation, name);
@@ -61,70 +69,75 @@ public class GeneImplementation extends AbstractAnnotatedEntity implements Gene 
         this.strand = strand;
     }
 
+
     public Chromosome getChromosome() {
         return chromosome;
     }
+
 
     public void setChromosome(Chromosome chromosome) {
         this.chromosome = chromosome;
     }
 
+
     public Strand getStrand() {
         return strand;
     }
+
 
     public void setStrand(Strand strand) {
         this.strand = strand;
     }
 
+
     public int getStart() {
         return start;
     }
+
 
     public void setStart(int start) {
         this.start = start;
     }
 
+
     public int getEnd() {
         return end;
     }
+
 
     public void setEnd(int end) {
         this.end = end;
     }
 
+
     public int getLength() {
         return sequence.getLength();
     }
+
 
     public Sequence getSequence() {
         return sequence;
     }
 
+
     public void setSequence(Sequence sequence) {
         this.sequence = sequence;
-    }
-
-    @Override
-    public String getBaseType() {
-        return BASE_TYPE;
     }
 
 
     public Gene newInstance() {
         return new GeneImplementation();
     }
-    
-    
-    
+
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
         start = in.readInt();
         end = in.readInt();
-        strand = (Strand)in.readObject();
+        strand = (Strand) in.readObject();
     }
+
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {

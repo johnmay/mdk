@@ -4,12 +4,12 @@
  */
 package uk.ac.ebi.chemet.util;
 
-import uk.ac.ebi.core.util.CDKMoleculeBuilder;
 import junit.framework.TestCase;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
+import uk.ac.ebi.core.util.CDKMoleculeBuilder;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 /**

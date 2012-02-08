@@ -47,8 +47,6 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
 
     private static final Logger LOGGER = Logger.getLogger(ChromosomeImplementation.class);
 
-    public static final String BASE_TYPE = "Chromosome";
-
     private ChromosomeSequence sequence;
 
     private List<Gene> genes = new ArrayList();
@@ -126,15 +124,6 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
             changed = remove(gene) || changed;
         }
         return changed;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public String getBaseType() {
-        return BASE_TYPE;
     }
 
 

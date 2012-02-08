@@ -24,15 +24,13 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
-import org.biojava3.core.sequence.compound.AminoAcidCompound;
-import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Genome;
+import uk.ac.ebi.interfaces.entities.ProteinProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
@@ -42,16 +40,18 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.interfaces.entities.ProteinProduct {
+public class ProteinProductImplementation
+    extends AbstractGeneProduct
+    implements ProteinProduct {
 
-    private static final Logger LOGGER = Logger.getLogger(ProteinProduct.class);
-    public static final String BASE_TYPE = "Protein";
+    private static final Logger LOGGER = Logger.getLogger(ProteinProductImplementation.class);
+
     private List<ProteinSequence> sequences = new ArrayList();
 
-    public ProteinProduct() {
+    public ProteinProductImplementation() {
     }
 
-    public ProteinProduct(Identifier identifier, String abbreviation, String name) {
+    public ProteinProductImplementation(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
@@ -63,16 +63,9 @@ public class ProteinProduct extends AbstractGeneProduct implements uk.ac.ebi.int
         return this.sequences.add((ProteinSequence) sequence);
     }
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public String getBaseType() {
-        return ProteinProduct.BASE_TYPE;
-    }
 
     public GeneProduct newInstance() {
-        return new ProteinProduct();
+        return new ProteinProductImplementation();
     }
 
     @Override

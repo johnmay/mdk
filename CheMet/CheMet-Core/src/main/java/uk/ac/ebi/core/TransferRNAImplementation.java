@@ -25,6 +25,7 @@ import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.TransferRNA;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
+
 /**
  *          RibsomalRNA - 2011.10.17 <br>
  *          Class description
@@ -35,19 +36,16 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 public class TransferRNAImplementation extends AbstractRNAProduct implements TransferRNA {
 
     private static final Logger LOGGER = Logger.getLogger(TransferRNAImplementation.class);
-    public static final String BASE_TYPE = "tRNA";
+
 
     public TransferRNAImplementation() {
     }
+
 
     public TransferRNAImplementation(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
-    @Override
-    public String getBaseType() {
-        return BASE_TYPE;
-    }
 
     public GeneProduct newInstance() {
         return new TransferRNAImplementation();

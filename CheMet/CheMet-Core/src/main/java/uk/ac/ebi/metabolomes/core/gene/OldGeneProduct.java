@@ -125,10 +125,7 @@ public abstract class OldGeneProduct
     }
 
 
-    @Override
-    public String getBaseType() {
-        return BASE_TYPE;
-    }
+
 
 
 }

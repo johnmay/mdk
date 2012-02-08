@@ -54,7 +54,7 @@ public class DefaultEntityFactory
 
         for (Entity entity : Arrays.asList(new MetaboliteImplementation(),
                                            new MetabolicReactionImplementation(),
-                                           new ProteinProduct(),
+                                           new ProteinProductImplementation(),
                                            new RibosomalRNAImplementation(),
                                            new TransferRNAImplementation(),
                                            new GeneImplementation(),

@@ -319,6 +319,4 @@ public abstract class AbstractAnnotatedEntity
         return true;
     }
 
-
-    public abstract String getBaseType();
 }
