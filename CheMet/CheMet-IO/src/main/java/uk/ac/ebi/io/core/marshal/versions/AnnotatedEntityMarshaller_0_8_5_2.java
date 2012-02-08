@@ -28,6 +28,7 @@ import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.core.StarRating;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.Rating;
 import uk.ac.ebi.interfaces.io.ReconstructionInputStream;
 import uk.ac.ebi.interfaces.io.ReconstructionOutputStream;
 import uk.ac.ebi.interfaces.io.marshal.EntityMarshaller;
@@ -44,18 +45,18 @@ import uk.ac.ebi.io.core.marshal.AbstractAnnotatedEntityMarshaller;
  *          Class description
  *
  */
-public class AnnotatedEntityMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMarshaller {
+public class AnnotatedEntityMarshaller_0_8_5_2 extends AbstractAnnotatedEntityMarshaller {
 
-    private static final Logger LOGGER = Logger.getLogger(AnnotatedEntityMarshaller_0_8_5_0.class);
+    private static final Logger LOGGER = Logger.getLogger(AnnotatedEntityMarshaller_0_8_5_2.class);
 
 
-    public AnnotatedEntityMarshaller_0_8_5_0() {
-        super(new Version(0, 8, 5, 0));
+    public AnnotatedEntityMarshaller_0_8_5_2() {
+        super(new Version(0, 8, 5, 2));
     }
 
 
     public EntityMarshaller newInstance() {
-        return new AnnotatedEntityMarshaller_0_8_5_0();
+        return new AnnotatedEntityMarshaller_0_8_5_2();
     }
 
 
@@ -64,11 +65,10 @@ public class AnnotatedEntityMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMa
 
         AnnotatedEntity entity = getSuperclassMarshal().read(in);
 
-//        setRatin = (Rating) in.readObject();
 
 //        observations = new ObservationCollection();
 //        observations.readExternal(in, this);
-        entity.setRating(StarRating.NO_RATING);
+        entity.setRating(StarRating.getRating(in.readByte()));
 
         int i = in.readInt();
 
@@ -90,6 +90,8 @@ public class AnnotatedEntityMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMa
     public void write(ReconstructionOutputStream out, AnnotatedEntity entity) throws IOException {
 
         getSuperclassMarshal().write(out, entity);
+
+        out.writeByte(entity.getRating().getScore());
 
         //out.writeObject(rating);
 

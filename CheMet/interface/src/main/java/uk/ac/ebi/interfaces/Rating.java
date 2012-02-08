@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.interfaces;
 
+
 /**
  *          Rating - 2011.12.09 <br>
  *          Interface description
@@ -29,4 +30,5 @@ package uk.ac.ebi.interfaces;
  */
 public interface Rating {
 
+    public byte getScore();
 }

@@ -49,6 +49,7 @@ public class MarshallFactory {
         new EntityMarshaller_0_8_5_0()};
 
     private AbstractAnnotatedEntityMarshaller[] annotatedEntityMarshalls = new AbstractAnnotatedEntityMarshaller[]{
+        new AnnotatedEntityMarshaller_0_8_5_2(),
         new AnnotatedEntityMarshaller_0_8_5_0()};
 
     private AnnotatedEntityMarshaller[] metaboliteMarshalls = new AnnotatedEntityMarshaller[]{

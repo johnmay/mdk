@@ -22,6 +22,7 @@ package uk.ac.ebi.core;
 
 import uk.ac.ebi.interfaces.Rating;
 
+
 /**
  *          Rating - 2011.12.09 <br>
  *          Class defines a rating for an entity
@@ -31,10 +32,34 @@ import uk.ac.ebi.interfaces.Rating;
  */
 public enum StarRating implements Rating {
 
-    ONE_STAR,
-    TWO_STARS,
-    THREE_STARS,
-    FOUR_STARS,
-    FIVE_STARS,
-    NO_RATING;
+    ONE_STAR((byte) 1),
+    TWO_STARS((byte) 2),
+    THREE_STARS((byte) 3),
+    FOUR_STARS((byte) 4),
+    FIVE_STARS((byte) 5),
+    NO_RATING((byte) 0);
+
+    private byte score;
+
+
+    private StarRating(byte score) {
+        this.score = score;
+    }
+
+
+    public byte getScore() {
+        return score;
+    }
+    
+    
+    
+    public  static Rating getRating(byte score){
+        for(Rating rating : StarRating.values()){
+            if(rating.getScore() == score){
+                return rating;
+            }
+        }
+        return NO_RATING;
+    }
+    
 }
