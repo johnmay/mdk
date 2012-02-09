@@ -112,7 +112,7 @@ public class AnnotatedEntityMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMa
             } catch (IOException ex) {
                 // XXX
                 throw new IOException(
-                        "Could not save, annotation on entity " + this + " : " + ex.getMessage() + " caused an error");
+                        "Unable to save, " + AnnotationFactory.getInstance().ofIndex(index).getShortDescription() + " annotation on  " + entity.getIdentifier() + " caused an error: " + ex.getMessage());
             }
         }
     }

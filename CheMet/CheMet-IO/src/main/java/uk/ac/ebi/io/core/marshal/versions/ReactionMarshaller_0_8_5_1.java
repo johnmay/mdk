@@ -25,12 +25,11 @@ import java.util.Arrays;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
-import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.core.Organelle;
 import uk.ac.ebi.core.reaction.Membrane;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.core.reaction.compartment.Organelle;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
@@ -67,7 +66,7 @@ public class ReactionMarshaller_0_8_5_1 extends AbstractAnnotatedEntityMarshalle
 
 
     public Compartment getCompartment(byte index) {
-        
+
         for (Compartment[] compartments : Arrays.asList((Compartment[]) Organelle.values(),
                                                         (Compartment[]) Membrane.values())) {
             for (Compartment comparment : compartments) {
@@ -75,10 +74,10 @@ public class ReactionMarshaller_0_8_5_1 extends AbstractAnnotatedEntityMarshalle
                     return comparment;
                 }
             }
-        }             
-        
+        }
+
         return Organelle.CYTOPLASM;
-        
+
     }
 
 
