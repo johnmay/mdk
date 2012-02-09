@@ -75,7 +75,11 @@ public class FormulaCellRender
         } else {
 
             MolecularFormula formula = (MolecularFormula) value;
-            this.setText(TextUtility.html(formula.toHTML()));
+            if (formula.getFormula() != null) {
+                this.setText(TextUtility.html(formula.toHTML()));
+            } else {
+                this.setText(formula.toString());
+            }
 
         }
 

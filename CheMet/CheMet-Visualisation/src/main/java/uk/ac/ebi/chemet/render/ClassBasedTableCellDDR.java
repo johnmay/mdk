@@ -96,7 +96,7 @@ public class ClassBasedTableCellDDR
         if (cr == null) {
             cr = explicitRenderers.get(Object.class);
         }
-
+        
         Component component = cr.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
         return component;
