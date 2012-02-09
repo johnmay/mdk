@@ -19,9 +19,7 @@
  */
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
-import java.util.List;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.core.reaction.BiochemicalReaction;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 
@@ -74,32 +72,7 @@ public class BasicInChIStoichiometricMatrix extends StoichiometricMatrix<InChI, 
         return InChI.class;
     }
 
-
-    public int addReaction(String reactionName, BiochemicalReaction reaction, boolean reactantSideIsNegative) {
-
-        List<InChI> reactants = reaction.getInchiReactants();
-        List<InChI> products = reaction.getInchiProducts();
-        List<Double> reactantCoefs = reaction.getInChIReactantCoefficients();
-        List<Double> productsCoefs = reaction.getInChIProductCoefficients();
-
-        InChI[] newMolecules = new InChI[reactants.size() + products.size()];
-        System.arraycopy(reactants.toArray(new InChI[0]), 0, newMolecules, 0, reactants.size());
-        System.arraycopy(products.toArray(new InChI[0]), 0, newMolecules, reactants.size(), products.size());
-
-        Double[] values = new Double[newMolecules.length];
-        System.arraycopy(reactantCoefs.toArray(new Double[0]), 0, values, 0, reactantCoefs.size());
-        System.arraycopy(productsCoefs.toArray(new Double[0]), 0, values, reactantCoefs.size(), productsCoefs.size());
-
-        // if the reactant side is specified as negative.. make it so
-        if (reactantSideIsNegative == false) {
-            for (int i = 0; i < reactantCoefs.size(); i++) {
-                values[i] = -values[i];
-            }
-        }
-
-        return addReaction(reactionName, newMolecules, values);
-
-    }
+    
 
 
     @Override

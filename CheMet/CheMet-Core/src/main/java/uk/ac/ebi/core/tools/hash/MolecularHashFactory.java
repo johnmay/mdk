@@ -204,7 +204,7 @@ public class MolecularHashFactory {
         Arrays.sort(completedSeeds);
 
 
-        return new MolecularHash(hash, atomSeeds);
+        return new MolecularHash(hash, precursorSeeds);
 
     }
 

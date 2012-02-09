@@ -3,7 +3,7 @@
  *
  * 2011.11.09
  *
- * This file is part of the CheMet library
+ * This file is part of the Metabolic Development Kit
  * 
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,10 +22,8 @@ package uk.ac.ebi.core.tools;
 
 import java.util.EnumMap;
 import java.util.HashMap;
-import org.openscience.cdk.AtomType;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
