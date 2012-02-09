@@ -50,6 +50,7 @@ public enum Organ implements Compartment {
                   byte index) {
         this.abbreviation = abbreviation;
         this.description = description;
+        this.index = index;
     }
 
 
@@ -70,5 +71,11 @@ public enum Organ implements Compartment {
 
     public byte getRanking() {
         return index;
+    }
+
+
+    @Override
+    public String toString() {
+        return getAbbreviation();
     }
 }

@@ -88,7 +88,7 @@ public class TransportReactionUtil {
                 }
             }
         }
-
+        
         return mappings;
     }
 
@@ -137,7 +137,7 @@ public class TransportReactionUtil {
 
             int value = c1.getRanking() > c2.getRanking() ? -1
                         : c1.getRanking() < c2.getRanking() ? +1 : 0;
-
+            
             if (value != 0) {
                 movement.add(value);
                 total++;

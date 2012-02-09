@@ -52,6 +52,7 @@ public enum CellType implements Compartment {
                      byte index) {
         this.abbreviation = abbreviation;
         this.description = description;
+        this.index = index;
     }
 
 
@@ -73,4 +74,10 @@ public enum CellType implements Compartment {
     public byte getRanking() {
         return index;
     }
+    
+        @Override
+    public String toString() {
+        return getAbbreviation();
+    }
+
 }

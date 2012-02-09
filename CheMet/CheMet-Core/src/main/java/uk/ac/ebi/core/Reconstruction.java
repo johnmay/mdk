@@ -323,7 +323,7 @@ public class Reconstruction
 
     public File getContainer() {
         if (container == null) {
-            container = new File(System.getProperty("user.home") + File.separator + getIdentifier() + PROJECT_FILE_EXTENSION);
+            container = new File(System.getProperty("user.home") + File.separator + getAccession() + PROJECT_FILE_EXTENSION);
         }
         return container;
     }

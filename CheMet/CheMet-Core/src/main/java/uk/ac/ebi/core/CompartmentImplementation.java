@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import uk.ac.ebi.core.reaction.Membrane;
 import uk.ac.ebi.core.reaction.Tissue;
+import uk.ac.ebi.core.reaction.compartment.Organelle;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 
 

@@ -28,6 +28,7 @@ import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
+import uk.ac.ebi.core.reaction.compartment.Organelle;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.reaction.Compartment;
@@ -52,7 +53,7 @@ public class MetabolicParticipantImplementation
     }
 
 
-    public MetabolicParticipantImplementation(Metabolite molecule, CompartmentImplementation compartment) {
+    public MetabolicParticipantImplementation(Metabolite molecule, Compartment compartment) {
         super(molecule, 1d, compartment);
     }
 
@@ -63,11 +64,11 @@ public class MetabolicParticipantImplementation
 
 
     public MetabolicParticipantImplementation(Metabolite molecule, Double coefficient) {
-        super(molecule, coefficient, CompartmentImplementation.CYTOPLASM);
+        super(molecule, coefficient, Organelle.CYTOPLASM);
     }
 
 
     public MetabolicParticipantImplementation(Metabolite molecule) {
-        super(molecule, 1d, CompartmentImplementation.CYTOPLASM);
+        super(molecule, 1d, Organelle.CYTOPLASM);
     }
 }

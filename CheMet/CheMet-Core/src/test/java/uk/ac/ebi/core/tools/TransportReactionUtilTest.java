@@ -15,8 +15,10 @@ import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 import static org.junit.Assert.*;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
+import uk.ac.ebi.core.reaction.compartment.Organelle;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.reaction.Compartment;
 
 
 /**
@@ -49,11 +51,11 @@ public class TransportReactionUtilTest {
 
         MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
-        rxn.addReactant(new MetabolicParticipantImplementation(atp, CompartmentImplementation.CYTOPLASM));
-        rxn.addReactant(new MetabolicParticipantImplementation(alanine, CompartmentImplementation.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
 
-        rxn.addProduct(new MetabolicParticipantImplementation(atp, CompartmentImplementation.EXTRACELLULA));
-        rxn.addProduct(new MetabolicParticipantImplementation(alanine, CompartmentImplementation.EXTRACELLULA));
+        rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.EXTRACELLULA));
+        rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULA));
 
         rxn.setDirection(DirectionImplementation.FORWARD);
 
@@ -75,11 +77,11 @@ public class TransportReactionUtilTest {
 
         MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
-        rxn.addReactant(new MetabolicParticipantImplementation(atp, CompartmentImplementation.CYTOPLASM));
-        rxn.addReactant(new MetabolicParticipantImplementation(alanine, CompartmentImplementation.EXTRACELLULA));
+        rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULA));
 
-        rxn.addProduct(new MetabolicParticipantImplementation(atp, CompartmentImplementation.EXTRACELLULA));
-        rxn.addProduct(new MetabolicParticipantImplementation(alanine, CompartmentImplementation.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.EXTRACELLULA));
+        rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
 
         rxn.setDirection(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
 
@@ -100,11 +102,11 @@ public class TransportReactionUtilTest {
 
         MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
-        rxn.addReactant(new MetabolicParticipantImplementation(atp, CompartmentImplementation.CYTOPLASM));
-        rxn.addReactant(new MetabolicParticipantImplementation(alanine, CompartmentImplementation.EXTRACELLULA));
+        rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULA));
 
-        rxn.addProduct(new MetabolicParticipantImplementation(atp, CompartmentImplementation.CYTOPLASM));
-        rxn.addProduct(new MetabolicParticipantImplementation(alanine, CompartmentImplementation.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
 
         rxn.setDirection(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
 

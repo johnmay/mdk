@@ -125,7 +125,7 @@ public class ParticipantImplementation<M, S extends Number, C>
         }
         sb.append(this.molecule);
         if (this.compartment != null) {
-            sb.append(' ').append(this.compartment.toString());
+            sb.append(" [").append(this.compartment.toString()).append("]");
         }
         return sb.toString();
     }

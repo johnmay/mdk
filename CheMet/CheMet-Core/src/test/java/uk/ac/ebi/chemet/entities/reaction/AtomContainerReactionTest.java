@@ -4,8 +4,6 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentImplementation;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -14,10 +12,8 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import static uk.ac.ebi.chemet.TestMoleculeFactory.*;
 import static org.junit.Assert.*;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.core.Organelle;
 import uk.ac.ebi.core.reaction.Membrane;
+import uk.ac.ebi.core.reaction.compartment.Organelle;
 
 
 /**

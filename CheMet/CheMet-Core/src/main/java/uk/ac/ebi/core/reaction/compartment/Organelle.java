@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.core;
+package uk.ac.ebi.core.reaction.compartment;
 
 import java.util.Set;
 import uk.ac.ebi.interfaces.reaction.Compartment;
@@ -71,6 +71,7 @@ public enum Organelle implements Compartment {
                       byte index) {
         this.abbreviation = abbreviation;
         this.description = description;
+        this.index = index;
     }
 
 
@@ -92,4 +93,12 @@ public enum Organelle implements Compartment {
     public byte getRanking() {
         return index;
     }
+
+
+    @Override
+    public String toString() {
+        return getAbbreviation();
+    }
+    
+    
 }
