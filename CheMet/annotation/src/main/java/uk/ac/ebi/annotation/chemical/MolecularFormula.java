@@ -71,7 +71,9 @@ public class MolecularFormula
     public MolecularFormula(IMolecularFormula formula) {
         this.formula = formula;
         super.setValue(MolecularFormulaManipulator.getString(formula));
-        this.html = MolecularFormulaManipulator.getHTML(formula);
+        if (formula != null) {
+            this.html = MolecularFormulaManipulator.getHTML(formula);
+        }
     }
 
 
@@ -86,7 +88,9 @@ public class MolecularFormula
         super(formula);
         IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
         this.formula = MolecularFormulaManipulator.getMolecularFormula(formula, builder);
-        this.html = MolecularFormulaManipulator.getHTML(this.formula);
+        if (this.formula != null)
+            this.html = MolecularFormulaManipulator.getHTML(this.formula);
+        
     }
 
 
