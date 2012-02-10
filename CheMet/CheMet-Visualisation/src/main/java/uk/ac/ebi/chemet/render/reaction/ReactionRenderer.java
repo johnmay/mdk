@@ -257,6 +257,7 @@ public class ReactionRenderer {
 
         Metabolite metabolite = p.getMolecule();
         String compartment = "[" + p.getCompartment().getAbbreviation() + "]";
+        g2.setColor(Color.LIGHT_GRAY);
         g2.setFont(ViewUtilities.DEFAULT_MONO_SPACE_FONT.deriveFont(11.0f));
         int compartmentWidth = g2.getFontMetrics().stringWidth(compartment);
         int compartmentHeight = g2.getFontMetrics().getHeight();
