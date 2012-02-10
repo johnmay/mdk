@@ -22,6 +22,10 @@ package uk.ac.ebi.annotation;
 
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.interfaces.entities.Reaction;
 
 /**
  *          Subsystem – 2011.09.26 <br>
@@ -30,6 +34,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context(value={Gene.class, GeneProduct.class, Reaction.class})
 public class Locus
         extends AbstractStringAnnotation {
 

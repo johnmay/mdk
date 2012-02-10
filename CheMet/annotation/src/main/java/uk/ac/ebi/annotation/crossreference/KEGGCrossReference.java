@@ -23,7 +23,10 @@ package uk.ac.ebi.annotation.crossreference;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+
 
 /**
  * @name    KEGGCrossReference - 2011.10.03 <br>
@@ -32,18 +35,23 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context(Metabolite.class)
 public class KEGGCrossReference extends CrossReference<KEGGCompoundIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCrossReference.class);
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
             KEGGCrossReference.class);
+
 
     public KEGGCrossReference() {
     }
 
+
     public KEGGCrossReference(KEGGCompoundIdentifier identifier) {
         super(identifier);
     }
+
 
     /**
      * @inheritDoc
@@ -53,6 +61,7 @@ public class KEGGCrossReference extends CrossReference<KEGGCompoundIdentifier> {
         return description.shortDescription;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -61,6 +70,7 @@ public class KEGGCrossReference extends CrossReference<KEGGCompoundIdentifier> {
         return description.longDescription;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -68,6 +78,7 @@ public class KEGGCrossReference extends CrossReference<KEGGCompoundIdentifier> {
     public Byte getIndex() {
         return description.index;
     }
+
 
     /**
      * @inheritDoc

@@ -25,6 +25,9 @@ import uk.ac.ebi.annotation.base.AbstractFloatAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  * @name    SMILESAnnotation
@@ -35,37 +38,42 @@ import uk.ac.ebi.interfaces.Annotation;
  * @brief   ...class description...
  *
  */
+@Context(Metabolite.class)
 public class ExactMass extends AbstractFloatAnnotation {
-    
+
     private static final Logger LOGGER = Logger.getLogger(ExactMass.class);
-    
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
             ExactMass.class);
-    
+
+
     public ExactMass() {
     }
-    
+
+
     public ExactMass(Float exactMass) {
         super.setValue(exactMass);
     }
-    
+
+
     public Annotation getInstance() {
         return new ExactMass();
     }
 
+
     public Annotation getInstance(Float exactMass) {
         return new ExactMass(exactMass);
     }
+
 
     @Override
     public String getShortDescription() {
         return description.shortDescription;
     }
 
+
     @Override
     public String getLongDescription() {
         return description.longDescription;
     }
-    
-    
 }

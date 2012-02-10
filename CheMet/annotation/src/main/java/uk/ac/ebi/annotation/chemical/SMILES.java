@@ -27,6 +27,8 @@ import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 
 /**
  * @name    SMILES
@@ -37,6 +39,7 @@ import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
  * @brief   ...class description...
  *
  */
+@Context(Metabolite.class)
 public class SMILES
     extends AbstractStringAnnotation
     implements ChemicalStructure {

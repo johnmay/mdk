@@ -22,6 +22,9 @@ package uk.ac.ebi.annotation;
 
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Reaction;
+
 
 /**
  *          Subsystem – 2011.09.26 <br>
@@ -30,21 +33,26 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context(Reaction.class)
 public class Subsystem
         extends AbstractStringAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(Subsystem.class);
 
+
     public Subsystem() {
     }
+
 
     public Subsystem(String subsystem) {
         super(subsystem);
     }
 
+
     public Subsystem getInstance() {
         return new Subsystem();
     }
+
 
     public Subsystem getInstance(String subsystem) {
         return new Subsystem(subsystem);

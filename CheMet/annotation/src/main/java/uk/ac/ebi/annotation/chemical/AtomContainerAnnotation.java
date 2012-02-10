@@ -25,9 +25,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.lang.annotation.Annotation;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -37,6 +35,9 @@ import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.ProteinProduct;
 
 
 /**
@@ -46,6 +47,7 @@ import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context(Metabolite.class)
 public class AtomContainerAnnotation
         extends AbstractAnnotation
         implements ChemicalStructure {
@@ -66,6 +68,7 @@ public class AtomContainerAnnotation
     public AtomContainerAnnotation(IAtomContainer molecule) {
         this.molecule = molecule;
     }
+
 
     /**
      * Use {@see getStructure()}
@@ -129,7 +132,7 @@ public class AtomContainerAnnotation
 
     @Override
     public String toString() {
-        return getShortDescription() + ": " + molecule.toString();
+        return getShortDescription() + ": " + molecule != null ? molecule.toString() : " null";
     }
 
 

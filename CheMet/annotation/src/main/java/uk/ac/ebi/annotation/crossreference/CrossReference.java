@@ -32,6 +32,7 @@ import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
@@ -44,6 +45,7 @@ import uk.ac.ebi.resource.IdentifierFactory;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context
 public class CrossReference<E extends Identifier>
         extends AbstractAnnotation
         implements ObservationBasedAnnotation {
@@ -68,8 +70,8 @@ public class CrossReference<E extends Identifier>
     @Override
     public String toString() {
         return identifier.toString();
-    }
-
+    }   
+    
     /**
      * @inheritDoc
      */

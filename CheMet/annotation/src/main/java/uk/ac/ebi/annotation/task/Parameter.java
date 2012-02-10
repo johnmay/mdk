@@ -25,6 +25,9 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AbstractAnnotation;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  * @name    Parameter - 2011.10.13 <br>
@@ -33,16 +36,23 @@ import uk.ac.ebi.annotation.AbstractAnnotation;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context
 public class Parameter extends AbstractAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(Parameter.class);
+
     private String name;
+
     private String description;
+
     private String flag;
+
     private String value;
+
 
     public Parameter() {
     }
+
 
     public Parameter(String name, String description, String flag, String value) {
         this.name = name;
@@ -51,27 +61,33 @@ public class Parameter extends AbstractAnnotation {
         this.value = value;
     }
 
+
     @Override
     public String getShortDescription() {
         return name;
     }
+
 
     @Override
     public String getLongDescription() {
         return description;
     }
 
+
     public String getFlag() {
         return flag;
     }
+
 
     public Object getValue() {
         return value;
     }
 
+
     public Parameter getInstance() {
         return new Parameter();
     }
+
 
     @Override
     public String toString() {
@@ -87,6 +103,7 @@ public class Parameter extends AbstractAnnotation {
         flag = in.readUTF();
         value = in.readUTF();
     }
+
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {

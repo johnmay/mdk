@@ -1,4 +1,3 @@
-
 /**
  * EnzymeClassification.java
  *
@@ -23,8 +22,10 @@ package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.resource.classification.ECNumber;
 
 
@@ -35,12 +36,14 @@ import uk.ac.ebi.resource.classification.ECNumber;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context(value = {GeneProduct.class, Reaction.class})
 public class EnzymeClassification
-  extends Classification<ECNumber> {
+        extends Classification<ECNumber> {
 
     private static final Logger LOGGER = Logger.getLogger(EnzymeClassification.class);
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
-      EnzymeClassification.class);
+            EnzymeClassification.class);
 
 
     public EnzymeClassification() {
@@ -86,7 +89,4 @@ public class EnzymeClassification
     public EnzymeClassification getInstance() {
         return new EnzymeClassification();
     }
-
-
 }
-

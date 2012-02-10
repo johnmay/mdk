@@ -23,6 +23,7 @@ package uk.ac.ebi.annotation;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.annotation.Context;
 
 
 /**
@@ -35,6 +36,7 @@ import uk.ac.ebi.interfaces.Annotation;
  *          Source annotation describes where the entity came from (e.g. ChEBI Database)
  *
  */
+@Context
 public class Source extends AbstractStringAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(Source.class);

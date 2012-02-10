@@ -1,4 +1,3 @@
-
 /**
  * ChEBICrossReference.java
  *
@@ -25,6 +24,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 
@@ -35,12 +36,14 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context(Metabolite.class)
 public class ChEBICrossReference
-  extends CrossReference<ChEBIIdentifier> {
+        extends CrossReference<ChEBIIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBICrossReference.class);
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
-      ChEBICrossReference.class);
+            ChEBICrossReference.class);
 
 
     public ChEBICrossReference() {
@@ -86,7 +89,4 @@ public class ChEBICrossReference
     public ChEBICrossReference getInstance() {
         return new ChEBICrossReference();
     }
-
-
 }
-

@@ -1,4 +1,3 @@
-
 /**
  * AuthorAnnotation.java
  *
@@ -27,6 +26,7 @@ import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.annotation.Context;
 
 
 /**
@@ -36,14 +36,18 @@ import uk.ac.ebi.core.Description;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context
 public class AuthorAnnotation
-  extends AbstractAnnotation {
+        extends AbstractAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(AuthorAnnotation.class);
+
     private String author;
+
     private String annotation;
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
-      AuthorAnnotation.class);
+            AuthorAnnotation.class);
 
 
     public AuthorAnnotation() {
@@ -160,7 +164,4 @@ public class AuthorAnnotation
     public AuthorAnnotation getInstance() {
         return new AuthorAnnotation();
     }
-
-
 }
-

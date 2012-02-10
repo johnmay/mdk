@@ -19,33 +19,30 @@
  */
 package uk.ac.ebi.annotation.util;
 
-import java.io.DataInput;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.lang.reflect.Constructor;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import uk.ac.ebi.interfaces.Annotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.*;
-import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
-import uk.ac.ebi.annotation.crossreference.Classification;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.annotation.chemical.ExactMass;
-import uk.ac.ebi.annotation.chemical.InChI;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.chemical.SMILES;
+import uk.ac.ebi.annotation.crossreference.*;
+import uk.ac.ebi.annotation.chemical.*;
 import uk.ac.ebi.annotation.crossreference.Citation;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.annotation.model.FluxLowerBound;
-import uk.ac.ebi.annotation.model.FluxUpperBound;
+import uk.ac.ebi.annotation.model.*;
 import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.annotation.Context;
 
 
 /**
@@ -62,7 +59,9 @@ public class AnnotationFactory {
     // reflective map
     private static Constructor[] constructors = new Constructor[Byte.MAX_VALUE];
 
-    private static Annotation[] instances = new Annotation[Byte.MAX_VALUE];
+    private static Map<Byte, Annotation> instances = new HashMap<Byte, Annotation>();
+
+    private ListMultimap<Class, Annotation> contextMap = ArrayListMultimap.create();
 
 
     public static AnnotationFactory getInstance() {
@@ -77,42 +76,35 @@ public class AnnotationFactory {
 
 
     private AnnotationFactory() {
-        try {
-            for (Annotation annotation : Arrays.asList(new AtomContainerAnnotation(),
-                                                       new MolecularFormula(),
-                                                       new AuthorAnnotation(),
-                                                       new CrossReference(),
-                                                       new Classification(),
-                                                       new EnzymeClassification(),
-                                                       new ChEBICrossReference(),
-                                                       new KEGGCrossReference(),
-                                                       new Subsystem(),
-                                                       new ExecutableParameter(),
-                                                       new FileParameter(),
-                                                       new Parameter(),
-                                                       new Synonym(),
-                                                       new Locus(),
-                                                       new Citation(),
-                                                       new FluxLowerBound(),
-                                                       new FluxUpperBound(),
-                                                       new Source(),
-                                                       new ExactMass(),
-                                                       new SMILES(),
-                                                       new InChI())) {
 
-                constructors[annotation.getIndex()] = annotation.getClass().getConstructor();
-                instances[annotation.getIndex()] = annotation;
+        for (Annotation annotation : Arrays.asList(new AtomContainerAnnotation(),
+                                                   new MolecularFormula(),
+                                                   new AuthorAnnotation(),
+                                                   new CrossReference(),
+                                                   new Classification(),
+                                                   new EnzymeClassification(),
+                                                   new ChEBICrossReference(),
+                                                   new KEGGCrossReference(),
+                                                   new Subsystem(),
+                                                   new ExecutableParameter(),
+                                                   new FileParameter(),
+                                                   new Parameter(),
+                                                   new Synonym(),
+                                                   new Locus(),
+                                                   new Citation(),
+                                                   new FluxLowerBound(),
+                                                   new FluxUpperBound(),
+                                                   new Source(),
+                                                   new ExactMass(),
+                                                   new SMILES(),
+                                                   new InChI())) {
 
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            for (int i = 0; i < instances.length; i++) {
-                if (instances != null) {
-                    System.out.println(instances[i].getClass().getSimpleName());
-                }
-            }
-            LOGGER.error("Could not store annotation constructor in map");
+            instances.put(annotation.getIndex(), annotation);
+
         }
+
+
+
     }
 
 
@@ -143,6 +135,75 @@ public class AnnotationFactory {
         } catch (Exception ex) {
             throw new InvalidParameterException("Unable to construct: " + ex.getMessage());
         }
+
+    }
+
+
+    /**
+     * 
+     * Access a list of annotations that are specific to the
+     * provided entity class. Note: the annotations contained
+     * with in the list should only be used to construct
+     * new entities and not to store information. The instances
+     * instead of the classes are returned to avoid extra object
+     * creation.
+     * 
+     * @param  entity instance of the entity you which to get context
+     *                annotations for
+     * 
+     * @return List of annotations that can be added to that class which
+     *         are intended for new instantiation only
+     *         
+     * 
+     */
+    public List<Annotation> ofContext(AnnotatedEntity entity) {
+        return ofContext(entity.getClass());
+    }
+
+
+    /**
+     * 
+     * Access a list of annotations that are specific to the
+     * provided entity class. Note: the annotations contained
+     * with in the list should only be used to construct
+     * new entities and not to store information. The instances
+     * instead of the classes are returned to avoid extra object
+     * creation.
+     * 
+     * @param  entityClass class of the entity you which to get context
+     *                     annotations for
+     * 
+     * @return List of annotations that can be added to that class which
+     *         are intended for new instantiation only
+     *         
+     * 
+     */
+    public List<Annotation> ofContext(Class<? extends AnnotatedEntity> entityClass) {
+
+        if (contextMap.containsKey(entityClass)) {
+            return contextMap.get(entityClass);
+        }
+
+        List<Annotation> annotations = new ArrayList<Annotation>();
+
+        for (Annotation annotation : instances.values()) {
+            Context context = annotation.getClass().getAnnotation(Context.class);
+
+            if (context == null) {
+                LOGGER.warn("No @Context for " + annotation.getClass().getSimpleName());
+                continue;
+            }
+
+            for (Class c : context.value()) {
+                if (c.isAssignableFrom(entityClass)) {
+                    annotations.add(annotation);
+                }
+            }
+        }
+
+        contextMap.putAll(entityClass, annotations);
+
+        return annotations;
 
     }
 
@@ -179,9 +240,9 @@ public class AnnotationFactory {
      * @return
      *
      */
-    public Annotation ofIndex(int index) {
+    public Annotation ofIndex(byte index) {
 
-        Annotation annotation = instances[index];
+        Annotation annotation = instances.get(index);
 
         if (annotation != null) {
             return annotation.getInstance();
@@ -208,13 +269,13 @@ public class AnnotationFactory {
         long instanceAvg = 0;
         long cascadeAvg = 0;
 
-        for (Annotation ann : instances) {
+        for (Annotation ann : instances.values()) {
 
             if (ann != null) {
 
                 long cStart = System.currentTimeMillis();
                 for (int i = 0; i < 1000000; i++) {
-                //    Annotation annotation = AnnotationFactory.getInstance().ofIndexCascade(ann.getIndex());
+                    //    Annotation annotation = AnnotationFactory.getInstance().ofIndexCascade(ann.getIndex());
                 }
                 long cEnd = System.currentTimeMillis();
                 System.out.println("time using cascade: " + (cEnd - cStart) + " (ms)");

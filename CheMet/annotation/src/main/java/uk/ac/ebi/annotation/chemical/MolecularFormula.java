@@ -30,6 +30,8 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
 /**
@@ -39,6 +41,7 @@ import uk.ac.ebi.core.Description;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context(Metabolite.class)
 public class MolecularFormula
         extends AbstractStringAnnotation {
 

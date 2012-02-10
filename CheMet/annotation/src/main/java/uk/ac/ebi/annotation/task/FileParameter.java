@@ -22,6 +22,7 @@ package uk.ac.ebi.annotation.task;
 
 import java.io.File;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.annotation.Context;
 
 /**
  * @name    FileParameter - 2011.10.13 <br>
@@ -30,6 +31,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context
 public class FileParameter extends Parameter {
 
     private static final Logger LOGGER = Logger.getLogger(FileParameter.class);

@@ -22,6 +22,8 @@ package uk.ac.ebi.annotation;
 
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.annotation.Context;
+
 
 /**
  *          SynonymAnnotation - 2011.10.24 <br>
@@ -30,20 +32,25 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context
 public class Synonym extends AbstractStringAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(Synonym.class);
 
+
     public Synonym() {
     }
+
 
     public Synonym(String synonym) {
         super(synonym);
     }
 
+
     public Synonym getInstance() {
         return new Synonym();
     }
+
 
     public Synonym getInstance(String synonym) {
         return new Synonym(synonym);

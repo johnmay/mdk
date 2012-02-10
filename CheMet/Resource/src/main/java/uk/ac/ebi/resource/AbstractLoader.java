@@ -1,4 +1,3 @@
-
 /**
  * AbstractLoader.java
  *
@@ -37,19 +36,22 @@ import uk.ac.ebi.core.Description;
  * @author  $Author$ (this version)
  */
 public abstract class AbstractLoader
-  extends Properties
-  implements DescriptionLoader {
+        extends Properties
+        implements DescriptionLoader {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractLoader.class);
+
     public static final String SHORT_DESCRIPTION = ".ShortDescription";
+
     public static final String LONG_DESCRIPTION = ".LongDescription";
+
     public static final String INDEX = ".Index";
 
 
     public AbstractLoader(InputStream stream) {
         try {
             super.load(stream);
-        } catch( IOException ex ) {
+        } catch (IOException ex) {
             LOGGER.error("Could not load annotation descriptions " + ex.getMessage());
         }
     }
@@ -67,11 +69,11 @@ public abstract class AbstractLoader
 
     /**
      * Return the index of a given class
-     * @param clazz
+     * @param c
      * @return
      */
-    public Byte getIndex(Class clazz) {
-        return Byte.parseByte(getProperty(clazz.getSimpleName() + INDEX));
+    public Byte getIndex(Class c) {
+        return Byte.parseByte(getProperty(c.getSimpleName() + INDEX));
     }
 
 
@@ -79,16 +81,13 @@ public abstract class AbstractLoader
      * Returns a bundled description object with the short description, long description and index
      * as public static final variables
      *
-     * @param clazz
+     * @param c
      * @return
      *
      */
-    public Description getMetaInfo(Class clazz) {
-        return new Description(getShortDescription(clazz),
-                               getLongDescription(clazz),
-                               getIndex(clazz));
+    public Description getMetaInfo(Class c) {
+        return new Description(getShortDescription(c),
+                               getLongDescription(c),
+                               getIndex(c));
     }
-
-
 }
-

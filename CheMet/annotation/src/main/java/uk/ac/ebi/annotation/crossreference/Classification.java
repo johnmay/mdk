@@ -1,4 +1,3 @@
-
 /**
  * Classification.java
  *
@@ -25,6 +24,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 
@@ -35,12 +36,14 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context
 public class Classification<E extends AbstractIdentifier>
-  extends CrossReference<E> {
+        extends CrossReference<E> {
 
     private static final Logger LOGGER = Logger.getLogger(Classification.class);
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
-      Classification.class);
+            Classification.class);
 
 
     public Classification() {
@@ -86,7 +89,4 @@ public class Classification<E extends AbstractIdentifier>
     public Classification getInstance() {
         return new Classification();
     }
-
-
 }
-

@@ -23,6 +23,8 @@ package uk.ac.ebi.annotation.task;
 import java.io.File;
 import java.security.InvalidParameterException;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Reaction;
 
 /**
  * @name    ExecutableParameter - 2011.10.13 <br>
@@ -31,6 +33,7 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context
 public class ExecutableParameter extends FileParameter {
 
     public ExecutableParameter() {

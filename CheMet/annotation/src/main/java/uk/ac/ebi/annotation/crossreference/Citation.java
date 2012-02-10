@@ -23,7 +23,9 @@ package uk.ac.ebi.annotation.crossreference;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+
 
 /**
  *          Citation - 2011.10.28 <br>
@@ -33,17 +35,33 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Context
 public class Citation extends CrossReference<Identifier> {
 
     private static final Logger LOGGER = Logger.getLogger(Citation.class);
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
             Citation.class);
+
 
     public Citation() {
     }
 
+
     public Citation(Identifier identifier) {
         super(identifier);
+    }
+
+
+    @Override
+    public String getShortDescription() {
+        return description.shortDescription;
+    }
+
+
+    @Override
+    public String getLongDescription() {
+        return description.longDescription;
     }
 
 
@@ -54,6 +72,7 @@ public class Citation extends CrossReference<Identifier> {
     public Byte getIndex() {
         return description.index;
     }
+
 
     @Override
     public Citation getInstance() {
