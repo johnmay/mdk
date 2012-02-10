@@ -80,8 +80,6 @@ public class ReactionRenderer {
                           new BasicAtomGenerator()),
             new AWTFontManager());
 
-    private StructureDiagramGenerator sdg = new StructureDiagramGenerator();
-
     private Map<TransportReactionUtil.Classification, ImageIcon> tClassMap = new EnumMap<TransportReactionUtil.Classification, ImageIcon>(
             TransportReactionUtil.Classification.class);
 
@@ -195,8 +193,7 @@ public class ReactionRenderer {
     }
 
 
-    public ImageIcon getReaction(
-            Reaction<MetabolicParticipant> rxn) {
+    public ImageIcon getReaction(Reaction<MetabolicParticipant> rxn) {
 
         int n = rxn.getParticipants().size();
 
@@ -275,15 +272,8 @@ public class ReactionRenderer {
             IAtomContainer atomContainer = metabolite.getStructures().iterator().next().
                     getStructure();
 
-
-            sdg.setMolecule(new Molecule(atomContainer));
-            try {
-                sdg.generateCoordinates();
-                renderer.paint(sdg.getMolecule(), new AWTDrawVisitor(g2), bounds, true);
-                g2.dispose();
-            } catch (CDKException ex) {
-                ex.printStackTrace();
-            }
+            renderer.paint(atomContainer, new AWTDrawVisitor(g2), bounds, true);
+            g2.dispose();
         } else {
             g2.setColor(Color.LIGHT_GRAY);
             g2.setFont(ViewUtilities.DEFAULT_BODY_FONT.deriveFont(18.0f));
