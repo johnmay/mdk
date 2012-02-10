@@ -22,6 +22,8 @@ package uk.ac.ebi.resource.structure;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
+
 
 /**
  *          PDBIdentifier - 2011.10.17 <br>
@@ -30,16 +32,20 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@MIRIAMIdentifier(mir = 20)
 public class PDBIdentifier extends StructuralIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(PDBIdentifier.class);
 
+
     public PDBIdentifier() {
     }
+
 
     public PDBIdentifier(String accession) {
         super(accession);
     }
+
 
     public Identifier newInstance() {
         return new PDBIdentifier();

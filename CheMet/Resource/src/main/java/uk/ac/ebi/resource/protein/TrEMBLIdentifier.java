@@ -23,6 +23,8 @@ package uk.ac.ebi.resource.protein;
 import java.util.LinkedList;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
+
 
 /**
  *          TrEMBLIdentifier – 2011.09.14 <br>
@@ -31,19 +33,24 @@ import uk.ac.ebi.resource.IdentifierDescription;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@MIRIAMIdentifier(mir = 5)
 public class TrEMBLIdentifier
         extends UniProtIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(TrEMBLIdentifier.class);
+
     private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
             TrEMBLIdentifier.class);
+
 
     public TrEMBLIdentifier() {
     }
 
+
     public TrEMBLIdentifier(String identifier) {
         super(identifier);
     }
+
 
     /**
      * @inheritDoc
@@ -53,6 +60,7 @@ public class TrEMBLIdentifier
         return new TrEMBLIdentifier();
     }
 
+
     /**
      * @inheritDoc
      */
@@ -61,10 +69,12 @@ public class TrEMBLIdentifier
         return DESCRIPTION.index;
     }
 
+
     @Override
     public UniProtIdentifier.Status getStatus() {
         return UniProtIdentifier.Status.UNREVIEWED;
     }
+
 
     @Override
     public LinkedList<String> resolve(LinkedList<String> tokens) {
@@ -77,6 +87,7 @@ public class TrEMBLIdentifier
         return tokens;
 
     }
+
 
     /**
      * @inheritDoc

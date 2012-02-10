@@ -24,6 +24,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
+
 
 /**
  * @name    KEGGDrugIdentifier
@@ -34,11 +36,14 @@ import uk.ac.ebi.resource.IdentifierDescription;
  * @brief   ...class description...
  *
  */
-public class KEGGDrugIdentifier extends ChemicalIdentifier{
-    
+@MIRIAMIdentifier(mir = 25)
+public class KEGGDrugIdentifier extends ChemicalIdentifier {
+
     private static final Logger LOGGER = Logger.getLogger(KEGGDrugIdentifier.class);
+
     private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
-      KEGGDrugIdentifier.class);
+            KEGGDrugIdentifier.class);
+
 
     public KEGGDrugIdentifier() {
     }
@@ -56,8 +61,9 @@ public class KEGGDrugIdentifier extends ChemicalIdentifier{
     public KEGGDrugIdentifier newInstance() {
         return new KEGGDrugIdentifier();
     }
-    
-        /**
+
+
+    /**
      * @inheritDoc
      */
     @Override

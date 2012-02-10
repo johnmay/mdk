@@ -23,6 +23,7 @@ package uk.ac.ebi.resource.protein;
 import java.util.LinkedList;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
 
 /**
  *          SwissProtIdentifier – 2011.09.14 <br>
@@ -31,6 +32,7 @@ import uk.ac.ebi.resource.IdentifierDescription;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@MIRIAMIdentifier(mir=5)
 public class SwissProtIdentifier
         extends UniProtIdentifier {
 

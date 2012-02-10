@@ -18,6 +18,7 @@ package uk.ac.ebi.resource;
 
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import java.io.InputStream;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ import uk.ac.ebi.chemet.resource.XMLHelper;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
+
 /**
  * MIRIAMLoader.java – MetabolicDevelopmentKit – Jun 25, 2011
  *
@@ -39,10 +41,15 @@ public class MIRIAMLoader {
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
             MIRIAMLoader.class);
+
     private Map<String, MIRIAMEntry> nameEntryMap = new HashMap<String, MIRIAMEntry>(50);
+
     private Map<String, MIRIAMEntry> urnEntryMap = new HashMap<String, MIRIAMEntry>(50);
+
     private Map<Resource, Identifier> idMap = new HashMap<Resource, Identifier>(50);
-    private MIRIAMEntry[] mirs = new MIRIAMEntry[300];
+
+    private Map<Integer, MIRIAMEntry> mirMap = new HashMap<Integer, MIRIAMEntry>(500);
+
 
     /**
      * Singleton Accessor
@@ -51,14 +58,17 @@ public class MIRIAMLoader {
         return MIRIAMResourcesHolder.INSTANCE;
     }
 
+
     private static class MIRIAMResourcesHolder {
 
         private static final MIRIAMLoader INSTANCE = new MIRIAMLoader();
     }
 
+
     private MIRIAMLoader() {
         load();
     }
+
 
     private void load() {
 
@@ -74,14 +84,14 @@ public class MIRIAMLoader {
             return;
         }
 
-        // default entry
-        mirs[0] = new MIRIAMEntry("MIR:00000000",
-                                  ".+",
-                                  "N/A",
-                                  "None MIRIAM Entry",
-                                  "",
-                                  "http://www.google.com/search?q=$id",
-                                  new ArrayList());
+        // default entry '0'
+        mirMap.put(0, new MIRIAMEntry("MIR:00000000",
+                                      ".+",
+                                      "N/A",
+                                      "None MIRIAM Entry",
+                                      "",
+                                      "http://www.google.com/search?q=$id",
+                                      new ArrayList()));
 
         Node datatypeNode = xmlDocument.getLastChild().getFirstChild();
 
@@ -94,7 +104,7 @@ public class MIRIAMLoader {
                         definition = null, url = null;
 
                 String id = datatypeNode.getAttributes().getNamedItem("id").getNodeValue();
-                Short mir = Short.parseShort(id.substring(4));
+                int mir = Integer.parseInt(id.substring(4));
                 String pattern = datatypeNode.getAttributes().getNamedItem("pattern").getNodeValue();
                 List<String> synonyms = new ArrayList();
 
@@ -121,7 +131,7 @@ public class MIRIAMLoader {
 
                 // add to the map
                 MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn, url, synonyms);
-                mirs[mir] = entry;
+                mirMap.put(mir, entry);
                 nameEntryMap.put(name.toLowerCase(),
                                  entry);
                 urnEntryMap.put(entry.getBaseURN(), entry);
@@ -133,12 +143,14 @@ public class MIRIAMLoader {
 
     }
 
+
     private String getURL(Node node) {
         if (node.getNodeName().equals("resource") == false) {
             return "";
         }
         return node.getChildNodes().item(5).getTextContent();
     }
+
 
     /**
      * Access a MIRIAM resource entry by it's name, such as, 'chebi'.
@@ -153,9 +165,14 @@ public class MIRIAMLoader {
         return null;
     }
 
-    public MIRIAMEntry getEntry(Short mir) {
-        return mirs[mir];
+
+    public MIRIAMEntry getEntry(int mir) {
+        if (!mirMap.containsKey(mir)) {
+            throw new InvalidParameterException("No MIRIAM entry for mir:" + mir);
+        }
+        return mirMap.get(mir);
     }
+
 
     /**
      * Converts a provided URN into a string identifier
@@ -165,6 +182,7 @@ public class MIRIAMLoader {
     public static String getAccession(String urn) {
         return urn.substring(urn.lastIndexOf(":") + 1).replace("%3A", ":");
     }
+
 
     public Identifier getIdentifier(String urn) {
 
@@ -179,12 +197,14 @@ public class MIRIAMLoader {
 
         // get a new instance of the identifier and set the accession if not null
         Identifier id = idMap.get(urnEntryMap.get(urnPart)).newInstance();
-        
-        if(id != null) id.setAccession(getAccession(urn)); // could throw exception for missing URN
 
+        if (id != null) {
+            id.setAccession(getAccession(urn)); // could throw exception for missing URN
+        }
         return id;
 
     }
+
 
     public static void main(String[] args) {
         long start = System.currentTimeMillis();

@@ -21,6 +21,8 @@
 package uk.ac.ebi.resource.classification;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
+
 
 /**
  *          GeneOntologyTerm – 2011.09.14 <br>
@@ -29,17 +31,21 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@MIRIAMIdentifier(mir = 11)
 public class InterPro
         extends ClassificationIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(InterPro.class);
 
+
     public InterPro() {
     }
+
 
     public InterPro(String accession) {
         super(accession);
     }
+
 
     /**
      * @inheritDoc

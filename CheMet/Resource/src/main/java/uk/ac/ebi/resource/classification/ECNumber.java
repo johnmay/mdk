@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.PrintStream;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
+
 
 /**
  * ECNumber.java
@@ -27,14 +29,20 @@ import java.io.PrintStream;
  * @author johnmay
  * @date Mar 11, 2011
  */
+@MIRIAMIdentifier(mir = 4)
 public class ECNumber
         extends ClassificationIdentifier implements Comparable<ECNumber> {
 
     private int enzymeClass;
+
     private int enzymeSubClass;
+
     private int enzymeSubSubClass;
+
     private int enzymeEntry;
+
     private boolean preliminary = false;
+
     /**
      * Value to indicate compared values have no match (see. {@link #compare(ECNumber ec1)}) <br/>
      *
@@ -46,6 +54,7 @@ public class ECNumber
      * </pre>
      */
     public static final int MATCHING_NONE = 0;
+
     /**
      * Value to indicate compared values are matching at the class level (see. {@link #compare(ECNumber ec1)}) <br/>
      *
@@ -59,6 +68,7 @@ public class ECNumber
      * </pre>
      */
     public static final int MATCHING_CLASS = 1;
+
     /**
      * Value to indicate compared values are matching at the class level (see. {@link #compare(ECNumber ec1)}) <br/>
      *
@@ -72,6 +82,7 @@ public class ECNumber
      * </pre>
      */
     public static final int MATCHING_SUBCLASS = 2;
+
     /**
      * Value to indicate compared values are matching at the class level (see. {@link #compare(ECNumber ec1)}) <br/>
      *
@@ -85,6 +96,7 @@ public class ECNumber
      * </pre>
      */
     public static final int MATCHING_SUB_SUBCLASS = 3;
+
     /**
      * Value to indicate compared values are matching at the entry level (see. {@link #compare(ECNumber ec1)}) <br/>
      *
@@ -98,16 +110,19 @@ public class ECNumber
      * </pre>
      */
     public static final int MATCHING_ENTRY = 4;
+
     /**
      *
      */
     public static final String EC_SEPERATOR = "\\.";
+
 
     /**
      * Default constructor
      */
     public ECNumber() {
     }
+
 
     /**
      * Construct a new entry from an EC accession
@@ -117,6 +132,7 @@ public class ECNumber
     public ECNumber(String ecNumber) {
         setAccession(ecNumber);
     }
+
 
     @Override
     public void setAccession(String accession) {
@@ -136,6 +152,7 @@ public class ECNumber
 
     }
 
+
     /**
      *
      * @param enzymeClass
@@ -149,6 +166,7 @@ public class ECNumber
         this.enzymeSubSubClass = enzymeSubSubClass;
         this.enzymeEntry = enzymeEntry;
     }
+
 
     /**
      * Converts a string to the int ident, 0 represents a '-' in the EC number
@@ -169,6 +187,7 @@ public class ECNumber
         }
     }
 
+
     private String removePrefix(String value, int start) {
         if (start > value.length()) {
             return "-.-.-.-";
@@ -178,15 +197,18 @@ public class ECNumber
                 value, start + 1);
     }
 
+
     private String removePostfix(String value, int end) {
         // walkbackwards until we find ending in .- or .1 .n1 etc..
         return value.substring(0, end).matches(".*?[-0-9]") ? value.substring(0, end)
                : removePostfix(value, end - 1);
     }
 
+
     private String StringToIdent(int value) {
         return value > 0 ? Integer.toString(value) : "-";
     }
+
 
     /**
      * prints the enzyme number to the provided stream
@@ -196,6 +218,7 @@ public class ECNumber
         stream.print(this.toString());
     }
 
+
     /**
      *
      * @param ec
@@ -204,6 +227,7 @@ public class ECNumber
     public int compare(ECNumber ec) {
         return this.compare(this, ec);
     }
+
 
     /**
      *
@@ -216,6 +240,7 @@ public class ECNumber
         int[] ec2ValueArray = ec2.getValueArray();
         return compareValues(ec1ValueArray, ec2ValueArray, 0, MATCHING_NONE);
     }
+
 
     /**
      * Recursive function to find the depth at which entries match
@@ -236,6 +261,7 @@ public class ECNumber
                : matchLevel;
     }
 
+
     /**
      * Prints out the EC number including any preliminary tags
      * @return
@@ -248,6 +274,7 @@ public class ECNumber
                + "." + (preliminary ? "n" : "") + StringToIdent(enzymeEntry);
     }
 
+
     private int[] getValueArray() {
         return new int[]{
                     enzymeClass,
@@ -255,6 +282,7 @@ public class ECNumber
                     enzymeSubSubClass,
                     enzymeEntry};
     }
+
 
     /**
      * Returns whether this EC number is preliminary (e.g. 1.1.1.n1)
@@ -264,6 +292,7 @@ public class ECNumber
         return preliminary;
     }
 
+
     /**
      * Sets whether this EC is preliminary or not
      * @param preliminary
@@ -271,6 +300,7 @@ public class ECNumber
     public void setPreliminary(boolean preliminary) {
         this.preliminary = preliminary;
     }
+
 
     /**
      * Creates an array of multiple EC Numbers found in the string (splitting on ';')
@@ -290,6 +320,7 @@ public class ECNumber
 
     }
 
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -300,6 +331,7 @@ public class ECNumber
         hash = 67 * hash + (this.preliminary ? 3 : 5);
         return hash;
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -328,6 +360,7 @@ public class ECNumber
         return true;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -335,6 +368,7 @@ public class ECNumber
     public ECNumber newInstance() {
         return new ECNumber();
     }
+
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
@@ -346,6 +380,7 @@ public class ECNumber
         super.setAccession(this.toString());
     }
 
+
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeInt(enzymeClass);
@@ -354,6 +389,7 @@ public class ECNumber
         out.writeInt(enzymeEntry);
         out.writeBoolean(preliminary);
     }
+
 
     public int compareTo(ECNumber o) {
 
@@ -373,17 +409,21 @@ public class ECNumber
         return 0;
     }
 
+
     public int getEnzymeClass() {
         return enzymeClass;
     }
+
 
     public int getEnzymeSubClass() {
         return enzymeSubClass;
     }
 
+
     public int getEnzymeSubSubClass() {
         return enzymeSubSubClass;
     }
+
 
     public int getEnzymeEntry() {
         return enzymeEntry;

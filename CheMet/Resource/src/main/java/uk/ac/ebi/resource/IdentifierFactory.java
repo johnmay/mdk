@@ -22,16 +22,7 @@ import java.io.ObjectOutput;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.IdentifierSet;
@@ -41,42 +32,17 @@ import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.metabolomes.resource.Resource;
-import uk.ac.ebi.resource.chemical.BRNIdentifier;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
-import uk.ac.ebi.resource.chemical.BioCycChemicalIdentifier;
-import uk.ac.ebi.resource.chemical.CASIdentifier;
-import uk.ac.ebi.resource.chemical.CHEMBLIdentifier;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.resource.chemical.ChemIDplusIdentifier;
-import uk.ac.ebi.resource.chemical.ChemSpiderIdentifier;
-import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
-import uk.ac.ebi.resource.chemical.EINECSIdentifier;
-import uk.ac.ebi.resource.chemical.EPAPesticideIdentifier;
-import uk.ac.ebi.resource.chemical.GmelinRegistryIdentifier;
-import uk.ac.ebi.resource.chemical.HMDBIdentifier;
-import uk.ac.ebi.resource.chemical.HSDBIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGDrugIdentifier;
-import uk.ac.ebi.resource.chemical.KeggGlycanIdentifier;
-import uk.ac.ebi.resource.chemical.LIPIDMapsIdentifier;
-import uk.ac.ebi.resource.chemical.PDBChemIdentifier;
-import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
-import uk.ac.ebi.resource.chemical.PubChemSubstanceIdentifier;
-import uk.ac.ebi.resource.chemical.UMBBDIdentifier;
-import uk.ac.ebi.resource.chemical.ZINCIdentifier;
-import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.resource.classification.GeneOntologyAnnotation;
-import uk.ac.ebi.resource.classification.InterPro;
+import uk.ac.ebi.resource.chemical.*;
+import uk.ac.ebi.resource.classification.*;
 import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
 import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
-import uk.ac.ebi.resource.protein.SwissProtIdentifier;
-import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
+import uk.ac.ebi.resource.protein.*;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 import uk.ac.ebi.resource.rna.BasicRNAIdentifier;
 import uk.ac.ebi.resource.structure.HSSPIdentifier;
 import uk.ac.ebi.resource.structure.PDBIdentifier;
+
 
 /**
  * IdentifierFactory.java
@@ -88,8 +54,11 @@ import uk.ac.ebi.resource.structure.PDBIdentifier;
 public class IdentifierFactory {
 
     private static final Logger logger = Logger.getLogger(IdentifierFactory.class);
+
     private static final String IDENTIFIER_MAPPING_FILE = "IdentifierResourceMapping.properties";
+
     private static final Identifier[] identifiers = new Identifier[Byte.MAX_VALUE];
+
     private List<Identifier> supportedIdentifiers = new ArrayList<Identifier>(Arrays.asList(
             new ChEBIIdentifier(),
             new KEGGCompoundIdentifier(),
@@ -110,6 +79,7 @@ public class IdentifierFactory {
             new DrugBankIdentifier(),
             new HMDBIdentifier(),
             new InterPro(),
+            new GeneOntologyTerm(),
             new GeneOntologyAnnotation(),
             new HSSPIdentifier(),
             new PDBIdentifier(),
@@ -118,6 +88,7 @@ public class IdentifierFactory {
             new ZINCIdentifier(),
             new EPAPesticideIdentifier(),
             new BRNIdentifier(),
+            new BRENDAChemicalIdentifier(),
             new CASIdentifier(),
             new GmelinRegistryIdentifier(),
             new UMBBDIdentifier(),
@@ -125,17 +96,23 @@ public class IdentifierFactory {
             new CHEMBLIdentifier(),
             new BioCycChemicalIdentifier(),
             new KeggGlycanIdentifier(),
+            new KEGGOrthology(),
             new ChemSpiderIdentifier(),
             new PubChemCompoundIdentifier(),
             new PubChemSubstanceIdentifier(),
             new ChemIDplusIdentifier(),
             new InChI()));
+
     private Map<String, Identifier> synonyms = new HashMap();
+
     private List<SequenceIdentifier> proteinIdentifiers = new ArrayList(Arrays.asList(new BasicProteinIdentifier(),
                                                                                       new TrEMBLIdentifier(),
                                                                                       new SwissProtIdentifier()));
+
     private Map<String, SequenceIdentifier> proteinIdMap = new HashMap();
+
     private List<String> synonymExclusions = Arrays.asList("uniprotkb");
+
 
     /**
      * Access a subset of all available identifiers that the accession matches
@@ -147,12 +124,13 @@ public class IdentifierFactory {
         List<Identifier> subset = new ArrayList<Identifier>();
         for (Identifier identifier : supportedIdentifiers) {
             Pattern pattern = identifier.getResource().getCompiledPattern();
-            if(pattern.matcher(accession).matches()){
+            if (pattern.matcher(accession).matches()) {
                 subset.add(identifier);
             }
         }
         return subset;
     }
+
 
     /**
      * Access a list of all available identifiers
@@ -161,6 +139,7 @@ public class IdentifierFactory {
     public List<Identifier> getSupportedIdentifiers() {
         return Collections.unmodifiableList(supportedIdentifiers);
     }
+
 
     private IdentifierFactory() {
 
@@ -204,14 +183,17 @@ public class IdentifierFactory {
 
     }
 
+
     public static class IdentifierFactoryHolder {
 
         public static IdentifierFactory INSTANCE = new IdentifierFactory();
     }
 
+
     public static IdentifierFactory getInstance() {
         return IdentifierFactoryHolder.INSTANCE;
     }
+
 
     /**
      * Resolves a sequence header e.g. sp|Q38483|EKFF_EKH to one of our identifiers
@@ -235,6 +217,7 @@ public class IdentifierFactory {
         return idSet;
 
     }
+
 
     /**
      * Builds an identifier given the accession
@@ -269,6 +252,7 @@ public class IdentifierFactory {
      * @return
      * @deprecated do not use
      */
+
     @Deprecated
     public static AbstractIdentifier getUncheckedIdentifier(Resource resource, String accession) {
 
@@ -288,6 +272,7 @@ public class IdentifierFactory {
         }
         return new BasicProteinIdentifier(accession);
     }
+
 
     /**
      * Builds a list of identifiers from a string that may
@@ -339,6 +324,7 @@ public class IdentifierFactory {
         return hitIdentifiers;
     }
 
+
     /**
      *
      * Returns and identifier
@@ -351,6 +337,7 @@ public class IdentifierFactory {
         return ofIndex(IdentifierLoader.getInstance().getIndex(type));
     }
 
+
     /**
      * Main factory method. this returns a new identifier of the given index. The indicies are specified in the
      * IdentifierDescription.propertiers file (see. src/main/resources)
@@ -360,6 +347,7 @@ public class IdentifierFactory {
     public Identifier ofIndex(Byte index) {
         return identifiers[index].newInstance();
     }
+
 
     /**
      * Create an identifier of the given synonym. for example "EC" for ECNumber.
@@ -379,6 +367,7 @@ public class IdentifierFactory {
         throw new InvalidParameterException("No matching identifier synonym found for: " + synonym);
     }
 
+
     /**
      *
      * Utility method for reading an identifier to an ObjectOutput
@@ -390,6 +379,7 @@ public class IdentifierFactory {
         return identifier;
     }
 
+
     /**
      *
      * Utility method for writing an identifier to an ObjectOutput
@@ -399,7 +389,10 @@ public class IdentifierFactory {
         out.writeByte(identifier.getIndex());
         identifier.writeExternal(out);
     }
+
     private static final String ID_SEPERATOR = "|";
+
     private static final String ID_ESCAPED_SEPERATOR = "\\|";
+
     private static final int DBID_MAX_LENGTH = 3;
 }

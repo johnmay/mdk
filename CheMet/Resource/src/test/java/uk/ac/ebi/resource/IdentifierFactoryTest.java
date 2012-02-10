@@ -12,17 +12,18 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.util.Set;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.junit.Test;
 import uk.ac.ebi.core.IdentifierSet;
+import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
+
 
 /**
  *
@@ -33,6 +34,7 @@ public class IdentifierFactoryTest extends TestCase {
     public IdentifierFactoryTest(String testName) {
         super(testName);
     }
+
 
     @Test
     public void testIndexLoading() {
@@ -56,6 +58,7 @@ public class IdentifierFactoryTest extends TestCase {
         }
     }
 
+
     @Test
     public void testSynonymLoading() {
         IdentifierFactory factory = IdentifierFactory.getInstance();
@@ -63,6 +66,7 @@ public class IdentifierFactoryTest extends TestCase {
         assertEquals(SwissProtIdentifier.class, factory.ofSynonym("Sprot").getClass());
         assertEquals(HMDBIdentifier.class, factory.ofSynonym("HMDB").getClass());
     }
+
 
     @Test
     public void testClassLoading() {
@@ -87,6 +91,27 @@ public class IdentifierFactoryTest extends TestCase {
         }
     }
 
+
+    @Test
+    public void testMapping() {
+        IdentifierFactory factory = IdentifierFactory.getInstance();
+        System.out.printf("%35s %-35s\n", "Class Name", "Mapped Description");
+
+        for (Identifier id : factory.getSupportedIdentifiers()) {
+            long start = System.currentTimeMillis();
+            Class c = id.getClass();
+
+            int mir = IdentifierLoader.getInstance().getMIR(c);
+
+            if (mir != 0) {
+                System.out.printf("%35s %-35s\n", c.getSimpleName(), id.getShortDescription());
+            }
+
+
+        }
+    }
+
+
     @Test
     public void sequenceHeaderResolution() {
         System.out.println("testSequenceHeaderResolution");
@@ -100,6 +125,7 @@ public class IdentifierFactoryTest extends TestCase {
 
     }
 
+
     @Test
     public void sequenceHeaderUnsupportedIdentifier() {
         System.out.println("testSequenceHeaderResolution");
@@ -112,6 +138,7 @@ public class IdentifierFactoryTest extends TestCase {
         Assert.assertTrue(ids.contains(new BasicProteinIdentifier("1.1.1.1")));
 
     }
+
 
     @Test
     public void testIO() throws IOException, ClassNotFoundException {
@@ -133,41 +160,51 @@ public class IdentifierFactoryTest extends TestCase {
 
     }
 
+
     @Test
     public void testGetInstance() {
     }
+
 
     @Test
     public void testResolveSequenceHeader() {
     }
 
+
     @Test
     public void testGetIdentifier() {
     }
+
 
     @Test
     public void testGetUncheckedIdentifier() {
     }
 
+
     @Test
     public void testGetIdentifiers() {
     }
+
 
     @Test
     public void testGetResouce() {
     }
 
+
     @Test
     public void testOfClass() {
     }
+
 
     @Test
     public void testOfIndex() {
     }
 
+
     @Test
     public void testRead() throws Exception {
     }
+
 
     @Test
     public void testWrite() throws Exception {

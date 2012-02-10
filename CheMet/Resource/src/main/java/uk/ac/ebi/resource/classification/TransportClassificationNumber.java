@@ -1,4 +1,3 @@
-
 /**
  * TransportClassificationNumber.java
  *
@@ -22,6 +21,7 @@
 package uk.ac.ebi.resource.classification;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
 
 
 /**
@@ -31,8 +31,9 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@MIRIAMIdentifier(mir = 40)
 public class TransportClassificationNumber
-  extends ClassificationIdentifier {
+        extends ClassificationIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(TransportClassificationNumber.class);
 
@@ -53,7 +54,4 @@ public class TransportClassificationNumber
     public TransportClassificationNumber newInstance() {
         return new TransportClassificationNumber();
     }
-
-
 }
-

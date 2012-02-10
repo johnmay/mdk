@@ -1,4 +1,3 @@
-
 /**
  * PubChemCompoundIdentifier.java
  *
@@ -25,6 +24,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierDescription;
 import uk.ac.ebi.resource.IdentifierLoader;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
 
 
 /**
@@ -34,12 +34,14 @@ import uk.ac.ebi.resource.IdentifierLoader;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@MIRIAMIdentifier(mir = 34)
 public class PubChemCompoundIdentifier
-  extends ChemicalIdentifier {
+        extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(PubChemCompoundIdentifier.class);
+
     private static final IdentifierDescription DESCRIPTION = IdentifierLoader.getInstance().getMetaInfo(
-      PubChemCompoundIdentifier.class);
+            PubChemCompoundIdentifier.class);
 
 
     public PubChemCompoundIdentifier() {
@@ -93,7 +95,4 @@ public class PubChemCompoundIdentifier
     public MIRIAMEntry getResource() {
         return DESCRIPTION.resource;
     }
-
-
 }
-

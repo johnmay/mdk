@@ -1,4 +1,3 @@
-
 /**
  * GeneOntologyTerm.java
  *
@@ -22,6 +21,7 @@
 package uk.ac.ebi.resource.classification;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
 
 
 /**
@@ -31,8 +31,9 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@MIRIAMIdentifier(mir = 22)
 public class GeneOntologyTerm
-  extends ClassificationIdentifier {
+        extends ClassificationIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(GeneOntologyTerm.class);
 
@@ -45,9 +46,6 @@ public class GeneOntologyTerm
         super(accession);
     }
 
-    
-
-
 
     /**
      * @inheritDoc
@@ -56,7 +54,4 @@ public class GeneOntologyTerm
     public GeneOntologyTerm newInstance() {
         return new GeneOntologyTerm();
     }
-
-
 }
-

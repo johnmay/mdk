@@ -20,6 +20,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
+
 
 /**
  * UniProtIdentifier.java
@@ -28,6 +30,7 @@ import uk.ac.ebi.resource.IdentifierDescription;
  * @author johnmay
  * @date Mar 21, 2011
  */
+@MIRIAMIdentifier(mir = 5)
 public abstract class UniProtIdentifier
         extends AbstractProteinIdentifier
         implements Externalizable {
@@ -35,21 +38,28 @@ public abstract class UniProtIdentifier
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
             UniProtIdentifier.class);
+
     private static final IdentifierDescription META_INFO = IDENTIFIER_LOADER.getMetaInfo(
             UniProtIdentifier.class);
+
     private static final String UNIPROT_ACCESSION_SCHEMA = "[A-Z][A-Z0-9]{5}";
+
     private static final String UNIPROT_WITH_SPECIES_ACCESSION_SCHEMA = UNIPROT_ACCESSION_SCHEMA
                                                                         + "_[A-Z]{5}";
+
 
     public enum Status {
 
         REVIEWED, UNREVIEWED
     };
+
     private String name = "";
+
 
     public UniProtIdentifier() {
         //  setResource( Resource.UNIPROT );
     }
+
 
     public UniProtIdentifier(String identifier, Boolean check) {
         this();
@@ -61,9 +71,11 @@ public abstract class UniProtIdentifier
         }
     }
 
+
     public UniProtIdentifier(String identifier) {
         this(identifier, Boolean.TRUE);
     }
+
 
     public final String parse(String identifier) {
         String parsedIdentifier = identifier;
@@ -92,17 +104,20 @@ public abstract class UniProtIdentifier
 
     }
 
+
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
         name = in.readUTF();
     }
 
+
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
         out.writeUTF(name);
     }
+
 
     /**
      * @inheritDoc
@@ -112,6 +127,7 @@ public abstract class UniProtIdentifier
         return META_INFO.shortDescription;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -119,6 +135,7 @@ public abstract class UniProtIdentifier
     public String getLongDescription() {
         return META_INFO.longDescription;
     }
+
 
     /**
      * @inheritDoc
@@ -128,6 +145,7 @@ public abstract class UniProtIdentifier
         return META_INFO.index;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -136,10 +154,12 @@ public abstract class UniProtIdentifier
         return META_INFO.resource;
     }
 
+
     /**
      * Returns the status of the entry
      */
     public abstract UniProtIdentifier.Status getStatus();
+
 
     public void setName(String name) {
         this.name = name;

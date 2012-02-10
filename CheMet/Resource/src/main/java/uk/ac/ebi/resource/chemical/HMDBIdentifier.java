@@ -21,6 +21,8 @@
 package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
+
 
 /**
  * @name    HMDBIdentifier - 2011.10.12 <br>
@@ -29,16 +31,20 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@MIRIAMIdentifier(mir = 51)
 public class HMDBIdentifier extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(HMDBIdentifier.class);
 
+
     public HMDBIdentifier() {
     }
+
 
     public HMDBIdentifier(String accession) {
         super(accession);
     }
+
 
     /**
      * @inheritDoc

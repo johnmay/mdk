@@ -23,6 +23,8 @@ package uk.ac.ebi.resource.chemical;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
+
 
 /**
  *
@@ -34,15 +36,19 @@ import uk.ac.ebi.resource.IdentifierDescription;
  * @author  $Author$ (this version)
  *
  */
+@MIRIAMIdentifier(mir = 2)
 public class ChEBIIdentifier
         extends ChemicalIdentifier implements Cloneable {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIIdentifier.class);
+
     private static final IdentifierDescription META_DATA = IDENTIFIER_LOADER.getMetaInfo(
             ChEBIIdentifier.class);
 
+
     public ChEBIIdentifier() {
     }
+
 
     /**
      *
@@ -56,12 +62,16 @@ public class ChEBIIdentifier
         super.setAccession(super.getAccession().replaceFirst("ChEBI", "CHEBI"));
     }
 
+
     @Override
     public void setAccession(String accession) {
-        if(accession.matches("^\\d+"))
-            accession = "CHEBI:"+accession;
+        if (accession.matches("^\\d+")) {
+            accession = "CHEBI:" + accession;
+        }
         super.setAccession(accession);
     }
+
+
     /**
      *
      * Convenience constructor using only the integer accession of a ChEBI accession
@@ -73,6 +83,7 @@ public class ChEBIIdentifier
         super("CHEBI:" + accession);
     }
 
+
     /**
      * @inheritDoc
      */
@@ -80,6 +91,7 @@ public class ChEBIIdentifier
     public ChEBIIdentifier newInstance() {
         return new ChEBIIdentifier();
     }
+
 
     /**
      * @inheritDoc
@@ -89,6 +101,7 @@ public class ChEBIIdentifier
         return META_DATA.index;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -96,6 +109,7 @@ public class ChEBIIdentifier
     public String getShortDescription() {
         return META_DATA.shortDescription;
     }
+
 
     /**
      * @inheritDoc
@@ -105,6 +119,7 @@ public class ChEBIIdentifier
         return META_DATA.longDescription;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -113,10 +128,13 @@ public class ChEBIIdentifier
         return META_DATA.resource;
     }
 
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
-    }    
+    }
+
+
     /**
      * Returns the numeric part of the CHEBI accession.
      * @return 
@@ -124,6 +142,7 @@ public class ChEBIIdentifier
     public String getNumericPartOfAccession() {
         return super.getAccession().replace("ChEBI:", "").replace("CHEBI:", "");
     }
+
 
     public Integer getValue() {
         return Integer.parseInt(getAccession().substring(6));

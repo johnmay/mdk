@@ -27,6 +27,7 @@ import uk.ac.ebi.interfaces.DescriptionLoader;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 
+
 /**
  *          IdentifierLoader – 2011.09.15 <br>
  *          Class description
@@ -39,22 +40,29 @@ public class IdentifierLoader
         implements DescriptionLoader {
 
     private static final String RESOURCE_NAME = "IdentifierDescription.properties";
+
     private static final String MIR_EXTENSION = ".MIR";
+
     private static final String SYNONYMS = ".Synonyms";
-    private static final MIRIAMLoader miriam = MIRIAMLoader.getInstance();
+
+    private static final MIRIAMLoader MIRIAM_LOADER = MIRIAMLoader.getInstance();
+
 
     private IdentifierLoader() {
         super(IdentifierLoader.class.getResourceAsStream(RESOURCE_NAME));
     }
+
 
     private static class IdentifierLoaderHolder {
 
         private static IdentifierLoader INSTANCE = new IdentifierLoader();
     }
 
+
     public static IdentifierLoader getInstance() {
         return IdentifierLoaderHolder.INSTANCE;
     }
+
 
     /**
      *
@@ -63,9 +71,19 @@ public class IdentifierLoader
      * @param type
      * @return
      */
-    public Short getMIR(Class<? extends AbstractIdentifier> type) {
+    public int getMIR(Class<? extends AbstractIdentifier> type) {
+
+        MIRIAMIdentifier miriam = type.getAnnotation(MIRIAMIdentifier.class);
+
+        if (miriam != null) {
+            return miriam.mir();
+        }
+
         return Short.parseShort(super.getProperty(type.getSimpleName() + MIR_EXTENSION));
+
+
     }
+
 
     /**
      *
@@ -75,9 +93,10 @@ public class IdentifierLoader
      * @return
      */
     public MIRIAMEntry getEntry(Class type) {
-        Short mir = getMIR(type);
-        return miriam.getEntry(mir);
+        int mir = getMIR(type);
+        return MIRIAM_LOADER.getEntry(mir);
     }
+
 
     /**
      * @inheritDoc
@@ -92,16 +111,17 @@ public class IdentifierLoader
             return super.getShortDescription(type);
         }
 
-        Short mir = getMIR(type);
+        int mir = getMIR(type);
 
         if (mir != 0) {
-            MIRIAMEntry entry = miriam.getEntry(mir);
-            return entry.getResourceName();
+            MIRIAMEntry entry = MIRIAM_LOADER.getEntry(mir);
+            return entry.getName();
         }
 
         return "";
 
     }
+
 
     /**
      * @inheritDoc
@@ -115,16 +135,17 @@ public class IdentifierLoader
             return super.getLongDescription(type);
         }
 
-        Short mir = getMIR(type);
+        int mir = getMIR(type);
 
         if (mir != 0) {
-            MIRIAMEntry entry = miriam.getEntry(mir);
-            return entry.getDefinition();
+            MIRIAMEntry entry = MIRIAM_LOADER.getEntry(mir);
+            return entry.getDescription();
         }
 
         return "";
 
     }
+
 
     /**
      * Access the synonyms for this identifier
@@ -135,11 +156,11 @@ public class IdentifierLoader
 
         String key = type.getSimpleName() + SYNONYMS;
 
-        Short mir = getMIR(type);
+        int mir = getMIR(type);
 
         Collection<String> synonyms = new ArrayList();
         if (mir != 0) {
-            synonyms.addAll(miriam.getEntry(mir).getSynonyms());
+            synonyms.addAll(MIRIAM_LOADER.getEntry(mir).getSynonyms());
         }
 
         if (super.containsKey(key)) {
@@ -148,6 +169,7 @@ public class IdentifierLoader
 
         return synonyms;
     }
+
 
     public IdentifierDescription getMetaInfo(Class type) {
         return new IdentifierDescription(getEntry(type),

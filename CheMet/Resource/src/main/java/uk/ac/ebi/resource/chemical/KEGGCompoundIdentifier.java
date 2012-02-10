@@ -23,6 +23,8 @@ package uk.ac.ebi.resource.chemical;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
+
 
 /**
  *
@@ -35,19 +37,24 @@ import uk.ac.ebi.resource.IdentifierDescription;
  * @author  $Author$ (this version)
  *
  */
+@MIRIAMIdentifier(mir = 13)
 public class KEGGCompoundIdentifier
         extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundIdentifier.class);
+
     private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
             KEGGCompoundIdentifier.class);
+
 
     public KEGGCompoundIdentifier() {
     }
 
+
     public KEGGCompoundIdentifier(String accession) {
         super(accession);
     }
+
 
     /**
      * @inheritDoc
@@ -57,6 +64,7 @@ public class KEGGCompoundIdentifier
         return new KEGGCompoundIdentifier();
     }
 
+
     /**
      * @inheritDoc
      */
@@ -64,6 +72,7 @@ public class KEGGCompoundIdentifier
     public Byte getIndex() {
         return DESCRIPTION.index;
     }
+
 
     /**
      * @inheritDoc
@@ -73,6 +82,7 @@ public class KEGGCompoundIdentifier
         return DESCRIPTION.shortDescription;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -81,6 +91,7 @@ public class KEGGCompoundIdentifier
         return DESCRIPTION.longDescription;
     }
 
+
     /**
      * @inheritDoc
      */
@@ -88,6 +99,7 @@ public class KEGGCompoundIdentifier
     public MIRIAMEntry getResource() {
         return DESCRIPTION.resource;
     }
+
 
     /**
      * Returns the numeric part of the compound id

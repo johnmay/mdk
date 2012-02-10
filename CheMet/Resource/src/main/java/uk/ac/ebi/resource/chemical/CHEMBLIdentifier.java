@@ -1,4 +1,3 @@
-
 /**
  * KEGGCompoundIdentifier.java
  *
@@ -24,6 +23,7 @@ package uk.ac.ebi.resource.chemical;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.MIRIAMIdentifier;
 
 
 /**
@@ -37,12 +37,14 @@ import uk.ac.ebi.resource.IdentifierDescription;
  * @author  $Author$ (this version)
  *
  */
+@MIRIAMIdentifier(mir = 84)
 public class CHEMBLIdentifier
-  extends ChemicalIdentifier {
+        extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(CHEMBLIdentifier.class);
+
     private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
-      CHEMBLIdentifier.class);
+            CHEMBLIdentifier.class);
 
 
     public CHEMBLIdentifier() {
@@ -97,7 +99,4 @@ public class CHEMBLIdentifier
     public MIRIAMEntry getResource() {
         return DESCRIPTION.resource;
     }
-
-
 }
-
