@@ -31,7 +31,11 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.Genome;
+import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.io.ReconstructionInputStream;
 import uk.ac.ebi.resource.IdentifierFactory;
@@ -54,7 +58,7 @@ public class DefaultReconstructionInputStream
 
     private static final Logger LOGGER = Logger.getLogger(DefaultReconstructionInputStream.class);
 
-    private MarshallFactory marshalFactory;
+    private MarshallFactoryImplementation marshalFactory;
 
     private int metaboliteCount = 0;
 
@@ -72,7 +76,7 @@ public class DefaultReconstructionInputStream
     public void read(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         // get the marshal factory for the correct version
-        this.marshalFactory = new MarshallFactory(new Version(readInt()), factory);
+        this.marshalFactory = new MarshallFactoryImplementation(new Version(readInt()), factory);
 
         // basic info
         reconstruction.setIdentifier(IdentifierFactory.getInstance().read(this));
@@ -89,10 +93,26 @@ public class DefaultReconstructionInputStream
 
         // genome
         reconstruction.getGenome().read(this);
+        genome = reconstruction.getGenome();
 
 
         // gene products
-        reconstruction.getProducts().readExternal(this, reconstruction.getGenome());
+        int nTypes = readInt();
+        System.out.println("nTypes:" + nTypes);
+        for (int i = 0; i < nTypes; i++) {
+
+            Class<Entity> c = (Class<Entity>) readObject();
+            System.out.println("\tClass:" + c);
+            int nProds = readInt();
+            System.out.println("\tnProducts:" + nProds);
+
+            EntityMarshaller marshaller = marshalFactory.getMarhsaller(c);
+
+            for (int j = 0; j < nProds; j++) {
+                reconstruction.getProducts().add((GeneProduct) marshaller.read(this));
+            }
+
+        }
 
         // metabolites
         int nMetabolites = readInt();
@@ -114,6 +134,13 @@ public class DefaultReconstructionInputStream
         }
 
 
+    }
+
+    private Genome genome;
+
+
+    public Gene getGene(int c, int g) {
+        return genome.getGene(c, g);
     }
 
 

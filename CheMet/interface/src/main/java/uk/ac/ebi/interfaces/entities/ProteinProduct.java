@@ -1,4 +1,3 @@
-
 /**
  * GeneProduct.java
  *
@@ -21,8 +20,9 @@
  */
 package uk.ac.ebi.interfaces.entities;
 
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-
+import java.util.List;
+import org.biojava3.core.sequence.ProteinSequence;
+import org.biojava3.core.sequence.template.Sequence;
 
 
 /**
@@ -33,5 +33,6 @@ import uk.ac.ebi.interfaces.entities.GeneProduct;
  * @author  $Author$ (this version)
  */
 public interface ProteinProduct extends GeneProduct {
-}
 
+    public List<ProteinSequence> getSequences();
+}

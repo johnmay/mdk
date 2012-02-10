@@ -1,4 +1,3 @@
-
 /**
  * GeneProduct.java
  *
@@ -21,8 +20,8 @@
  */
 package uk.ac.ebi.interfaces.entities;
 
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-
+import java.util.List;
+import org.biojava3.core.sequence.RNASequence;
 
 
 /**
@@ -34,6 +33,5 @@ import uk.ac.ebi.interfaces.entities.GeneProduct;
  */
 public interface RNAProduct extends GeneProduct {
 
-
+    public List<RNASequence> getSequences();
 }
-

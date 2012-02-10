@@ -62,7 +62,7 @@ public class AnnotatedEntityMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMa
     @Override
     public AnnotatedEntity read(ReconstructionInputStream in) throws IOException, ClassNotFoundException {
 
-        AnnotatedEntity entity = getSuperclassMarshal().read(in);
+        AnnotatedEntity entity = getParent().read(in);
 
 //        setRatin = (Rating) in.readObject();
 
@@ -89,7 +89,7 @@ public class AnnotatedEntityMarshaller_0_8_5_0 extends AbstractAnnotatedEntityMa
     @Override
     public void write(ReconstructionOutputStream out, AnnotatedEntity entity) throws IOException {
 
-        getSuperclassMarshal().write(out, entity);
+        getParent().write(out, entity);
 
         //out.writeObject(rating);
 

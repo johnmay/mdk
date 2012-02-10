@@ -23,6 +23,8 @@ package uk.ac.ebi.io.core.marshal;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.io.marshal.MarshallFactory;
+import uk.ac.ebi.io.core.MarshallFactoryImplementation;
 
 
 /**
@@ -42,6 +44,18 @@ public abstract class AbstractMarshaller {
     private Version v;
 
     private EntityFactory factory;
+
+    private MarshallFactory marshallers;
+
+
+    public void setMarshallFactory(MarshallFactory factory) {
+        this.marshallers = factory;
+    }
+
+
+    public MarshallFactory getMarshallFactory() {
+        return marshallers;
+    }
 
 
     public void setEntityFactory(EntityFactory factory) {

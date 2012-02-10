@@ -21,11 +21,7 @@
 package uk.ac.ebi.chemet.render.reaction;
 
 import com.google.common.collect.BiMap;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -260,7 +256,6 @@ public class ReactionRenderer {
                              MetabolicParticipantImplementation p) {
 
         Metabolite metabolite = p.getMolecule();
-        g2.setColor(Color.LIGHT_GRAY);
         String compartment = "[" + p.getCompartment().getAbbreviation() + "]";
         g2.setFont(ViewUtilities.DEFAULT_MONO_SPACE_FONT.deriveFont(11.0f));
         int compartmentWidth = g2.getFontMetrics().stringWidth(compartment);

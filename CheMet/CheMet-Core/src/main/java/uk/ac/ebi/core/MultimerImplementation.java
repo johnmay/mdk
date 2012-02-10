@@ -32,8 +32,10 @@ import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Genome;
+import uk.ac.ebi.interfaces.entities.Multimer;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
+
 
 /**
  *          Multimer - 2011.10.24 <br>
@@ -42,18 +44,23 @@ import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
+public class MultimerImplementation extends AbstractAnnotatedEntity implements Multimer {
 
-    private static final Logger LOGGER = Logger.getLogger(Multimer.class);
+    private static final Logger LOGGER = Logger.getLogger(MultimerImplementation.class);
+
     public static final String BASE_TYPE = "Multimer";
+
     private List<GeneProduct> subunits = new ArrayList();
 
-    public Multimer() {
+
+    public MultimerImplementation() {
     }
 
-    public Multimer(Identifier identifier, String abbreviation, String name) {
+
+    public MultimerImplementation(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
+
 
     /**
      * Creates a multimeric gene product from existing products. Note the copies
@@ -61,7 +68,7 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
      * will change the names of the products and vise-versa.
      * @param product
      */
-    public Multimer(GeneProduct... subunits) {
+    public MultimerImplementation(GeneProduct... subunits) {
 
         super(BasicProteinIdentifier.nextIdentifier(), null, null);
 
@@ -90,6 +97,7 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
 
     }
 
+
     public final boolean addSubunit(GeneProduct subunit) {
         return subunits.add(subunit);
     }
@@ -107,6 +115,7 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
         return genes;
     }
 
+
     /**
      * Throws an UnsupportedOperationException as the call to add a gene to a
      * multimeric product is ambiguous
@@ -114,6 +123,7 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
     public boolean addGene(Gene gene) {
         throw new UnsupportedOperationException("Unable to add a gene to a multimer");
     }
+
 
     public List<? extends Sequence> getSequences() {
         List<Sequence> sequences = new ArrayList();
@@ -123,17 +133,31 @@ public class Multimer extends AbstractAnnotatedEntity implements GeneProduct {
         return sequences;
     }
 
-    public boolean addSequence(Sequence<? extends AbstractCompound> sequence) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+    public List<GeneProduct> getSubunits() {
+        return subunits;
     }
+
+
+    public boolean removeSubunit(GeneProduct product) {
+        return subunits.remove(product);
+    }
+
+
+    public boolean addSequence(Sequence<? extends AbstractCompound> sequence) {
+        throw new UnsupportedOperationException("Can't add sequence to multimer");
+    }
+
 
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 
     public GeneProduct newInstance() {
         throw new UnsupportedOperationException("Not supported yet.");

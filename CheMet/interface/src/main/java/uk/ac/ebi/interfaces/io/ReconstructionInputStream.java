@@ -6,6 +6,8 @@ package uk.ac.ebi.interfaces.io;
 
 import java.io.IOException;
 import java.io.ObjectInput;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -16,4 +18,8 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 public interface ReconstructionInputStream extends ObjectInput {
 
     public Metabolite getMetabolite(int index) throws IOException, ClassNotFoundException;
+
+
+    public Gene getGene(int c, int g);
+
 }

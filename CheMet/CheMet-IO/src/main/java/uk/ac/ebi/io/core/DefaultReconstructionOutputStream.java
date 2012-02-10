@@ -20,19 +20,26 @@
  */
 package uk.ac.ebi.io.core;
 
+import com.google.common.collect.ListMultimap;
 import uk.ac.ebi.interfaces.io.marshal.EntityMarshaller;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.metabolite.MetaboliteCollection;
+import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.Genome;
+import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.io.ReconstructionOutputStream;
 import uk.ac.ebi.resource.IdentifierFactory;
 
@@ -51,7 +58,7 @@ public class DefaultReconstructionOutputStream extends ObjectOutputStream implem
 
     private static final Logger LOGGER = Logger.getLogger(DefaultReconstructionOutputStream.class);
 
-    private MarshallFactory marshalFactory;
+    private MarshallFactoryImplementation marshalFactory;
 
     private int metaboliteCount = 0;
 
@@ -60,7 +67,7 @@ public class DefaultReconstructionOutputStream extends ObjectOutputStream implem
 
     public DefaultReconstructionOutputStream(OutputStream out, Version version, EntityFactory factory) throws IOException {
         super(out);
-        this.marshalFactory = new MarshallFactory(version, factory);
+        this.marshalFactory = new MarshallFactoryImplementation(version, factory);
     }
 
 
@@ -83,9 +90,33 @@ public class DefaultReconstructionOutputStream extends ObjectOutputStream implem
 
         // genome (to migrate)
         reconstruction.getGenome().write(this);
+        genome = reconstruction.getGenome();
 
-        // gene products (to migrate)
-        reconstruction.getProducts().writeExternal(this, reconstruction.getGenome());
+        // Write Gene Products
+        ProductCollection products = reconstruction.getProducts();
+        ListMultimap<Class<? extends Entity>, GeneProduct> map = products.getMap();
+
+        writeInt(map.keySet().size());
+
+        for (Class<? extends Entity> c : map.keySet()) {
+
+            List<GeneProduct> gps = map.get(c);
+
+            writeObject(c);
+            writeInt(gps.size());
+
+            EntityMarshaller marhsaller = marshalFactory.getMarhsaller(c);
+
+            if (marhsaller == null) {
+                System.out.println("no marshaller for " + c);
+            }
+
+            for (GeneProduct gp : gps) {
+                marhsaller.write(this, gp);
+            }
+
+        }
+
 
         // metabolites
         EntityMarshaller metaboliteMarshaller = marshalFactory.getMetaboliteMarshaller();
@@ -111,6 +142,18 @@ public class DefaultReconstructionOutputStream extends ObjectOutputStream implem
         }
 
 
+    }
+
+    private Genome genome;
+
+
+    public int getChromosomeIndex(Gene gene) {
+        return genome.getIndex(gene)[0];
+    }
+
+
+    public int getGeneIndex(Gene gene) {
+        return genome.getIndex(gene)[1];
     }
 
 

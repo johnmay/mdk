@@ -58,7 +58,7 @@ public abstract class AbstractEntityMarshaller extends AbstractMarshaller implem
     }
 
 
-    public void setSuperclassMarshal(EntityMarshaller superclassMarshal) {
+    public void setParent(EntityMarshaller superclassMarshal) {
         this.superclassMarshal = superclassMarshal;
     }
 

@@ -68,7 +68,7 @@ public class DefaultEntityFactoryTest {
         Assert.assertEquals(GeneProduct.class, factory.getRootClass(TransferRNA.class));
         Assert.assertEquals(GeneProduct.class, factory.getRootClass(TransferRNAImplementation.class));
         Assert.assertEquals(GeneProduct.class, factory.getRootClass(ProteinProductImplementation.class));
-        Assert.assertEquals(GeneProduct.class, factory.getRootClass(Multimer.class));
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(MultimerImplementation.class));
 
     }
 }

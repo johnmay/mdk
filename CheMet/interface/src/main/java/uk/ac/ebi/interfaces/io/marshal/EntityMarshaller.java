@@ -52,6 +52,12 @@ public interface EntityMarshaller {
     public EntityFactory getEntityFactory();
 
 
+    public void setMarshallFactory(MarshallFactory facotry);
+
+
+    public MarshallFactory getMarshallFactory();
+
+
     public Version getVersion();
 
 

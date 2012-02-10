@@ -32,19 +32,10 @@ import java.util.Map;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface ProteinComplex
+public interface Multimer
   extends GeneProduct {
 
-    /**
-     *
-     * Access the subunits of the protein complex in a map where the key is the name
-     * of the subunit part.
-     *
-     * @return
-     */
-    public Map<String, GeneProduct> getSubunits();
-
-
+ 
     /**
      *
      * Mutator to add subunit to the complex. The name the protein is use as the name of subunit
@@ -52,12 +43,6 @@ public interface ProteinComplex
      */
     public boolean addSubunit(GeneProduct product);
 
-    /*
-     *
-     * Add a subunit with a specific name
-     *
-     */
-    public boolean addSubunit(String name, GeneProduct product);
 
     /**
      *
@@ -68,13 +53,6 @@ public interface ProteinComplex
      */
     public boolean removeSubunit(GeneProduct product);
 
-    /**
-     *
-     * Remove a subunit by name
-     *
-     *
-     */
-    public boolean removeSubunit(String name);
 
 
 

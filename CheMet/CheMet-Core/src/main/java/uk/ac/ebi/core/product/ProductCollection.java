@@ -21,6 +21,7 @@
 package uk.ac.ebi.core.product;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.NotSerializableException;
@@ -85,6 +86,11 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         products.put(factory.getEntityClass(product.getClass()), product);
         accessionMap.put(product.getAccession(), product);
         return true;
+    }
+
+
+    public ListMultimap<Class<? extends Entity>, GeneProduct> getMap() {
+        return products;
     }
 
 

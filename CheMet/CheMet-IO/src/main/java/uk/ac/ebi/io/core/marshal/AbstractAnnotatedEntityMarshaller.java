@@ -28,6 +28,7 @@ import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.io.ReconstructionOutputStream;
 import uk.ac.ebi.interfaces.io.marshal.AnnotatedEntityMarshaller;
+import uk.ac.ebi.io.core.MarshallFactoryImplementation;
 
 
 /**
@@ -56,13 +57,18 @@ public abstract class AbstractAnnotatedEntityMarshaller extends AbstractMarshall
     }
 
 
-    public AnnotatedEntityMarshaller getSuperclassMarshal() {
+    public AnnotatedEntityMarshaller getParent() {
         return superclassMarshal;
     }
 
 
-    public void setSuperclassMarshal(AnnotatedEntityMarshaller superclassMarshal) {
+    public void setParent(AnnotatedEntityMarshaller superclassMarshal) {
         this.superclassMarshal = superclassMarshal;
+    }
+
+
+    public boolean hasParent() {
+        return this.superclassMarshal != null;
     }
 
 

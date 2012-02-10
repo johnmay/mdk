@@ -59,7 +59,8 @@ public class DefaultEntityFactory
                                            new TransferRNAImplementation(),
                                            new GeneImplementation(),
                                            new ChromosomeImplementation(),
-                                           new GenomeImplementation())) {
+                                           new GenomeImplementation(),
+                                           new MultimerImplementation())) {
 
             entites.put(getEntityClass(entity.getClass()), entity);
 

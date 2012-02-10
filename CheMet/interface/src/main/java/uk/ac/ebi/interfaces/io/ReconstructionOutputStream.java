@@ -6,6 +6,7 @@ package uk.ac.ebi.interfaces.io;
 
 import java.io.IOException;
 import java.io.ObjectOutput;
+import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -16,4 +17,10 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 public interface ReconstructionOutputStream extends ObjectOutput {
 
     public void writeIndex(Metabolite molecule) throws IOException;
+
+
+    public int getChromosomeIndex(Gene gene);
+
+
+    public int getGeneIndex(Gene gene);
 }
