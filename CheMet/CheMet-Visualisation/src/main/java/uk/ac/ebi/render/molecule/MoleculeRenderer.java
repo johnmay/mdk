@@ -46,6 +46,8 @@ import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.templates.MoleculeFactory;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 
 
 /**
@@ -107,7 +109,17 @@ public class MoleculeRenderer {
 //        IMolecule moleculeWithXYZ = structureGenerator.getMolecule();
         g2.setColor(background);
         g2.fill(bounds);
-        renderer.paint(molecule, new AWTDrawVisitor(g2), bounds, true);
+        try {
+            renderer.paint(molecule, new AWTDrawVisitor(g2), bounds, true);
+        } catch (NullPointerException ex) {
+            LOGGER.error("Molecule has null coordinates!");
+            String unrendered = "no-coordinates";
+            g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(9.0f));
+            int width = g2.getFontMetrics().stringWidth(unrendered);
+            g2.setColor(Color.RED);
+            g2.drawString(unrendered, bounds.width / 2 - width / 2, bounds.height / 2);
+        }
+
         g2.dispose();
 
         return img;
