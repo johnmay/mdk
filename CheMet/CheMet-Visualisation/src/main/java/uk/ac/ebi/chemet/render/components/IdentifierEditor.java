@@ -56,7 +56,7 @@ public class IdentifierEditor extends JComponent {
 
     private JTextField field;
 
-    private String defaultText = "enter identifier";
+    private String DEFAULT_TEXT = "enter identifier";
 
     private static final IdentifierFactory ID_FACTORY = IdentifierFactory.getInstance();
 
@@ -93,14 +93,14 @@ public class IdentifierEditor extends JComponent {
         add(type, cc.xy(1, 1));
         add(field, cc.xy(3, 1));
 
-        field.setText(defaultText);
+        field.setText(DEFAULT_TEXT);
 
         // remove prompt when user clicks on the textfield
         field.addFocusListener(new FocusAdapter() {
 
             @Override
             public void focusGained(FocusEvent e) {
-                if (field.getText().equals(defaultText)) {
+                if (field.getText().equals(DEFAULT_TEXT)) {
                     field.setText("");
                 }
             }
@@ -135,7 +135,8 @@ public class IdentifierEditor extends JComponent {
      * @return 
      */
     public final boolean isFilled() {
-        return !field.getText().isEmpty();
+        return !field.getText().isEmpty()
+               && !field.getText().trim().equals(DEFAULT_TEXT);
     }
 
 

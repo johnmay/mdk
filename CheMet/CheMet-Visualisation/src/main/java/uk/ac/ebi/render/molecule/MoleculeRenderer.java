@@ -102,12 +102,12 @@ public class MoleculeRenderer {
         BufferedImage img = new BufferedImage(bounds.width, bounds.height,
                                               BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g2 = (Graphics2D) img.getGraphics();
-        structureGenerator.setMolecule(new Molecule(molecule));
-        structureGenerator.generateCoordinates();
-        IMolecule moleculeWithXYZ = structureGenerator.getMolecule();
+//        structureGenerator.setMolecule(new Molecule(molecule));
+//        structureGenerator.generateCoordinates();
+//        IMolecule moleculeWithXYZ = structureGenerator.getMolecule();
         g2.setColor(background);
         g2.fill(bounds);
-        renderer.paint(moleculeWithXYZ, new AWTDrawVisitor(g2), bounds, true);
+        renderer.paint(molecule, new AWTDrawVisitor(g2), bounds, true);
         g2.dispose();
 
         return img;
