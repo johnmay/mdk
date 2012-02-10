@@ -37,7 +37,7 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  * @author  $Author$ (this version)
  *
  */
-@MIRIAMIdentifier(mir = 71)
+@MIRIAMIdentifier
 public class BRENDAChemicalIdentifier
         extends ChemicalIdentifier {
 
