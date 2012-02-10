@@ -19,13 +19,16 @@
  */
 package uk.ac.ebi.render.crossreference.modules;
 
+import com.google.common.base.Joiner;
 import com.jgoodies.forms.layout.CellConstraints;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.net.URI;
+import java.net.URLEncoder;
 import javax.swing.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
+import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -54,20 +57,35 @@ public class GoogleSearch
 
     private final JButton search;
 
+    private final JCheckBox restrict = CheckBoxFactory.newCheckBox("Restrict search", "Restricts the search results to a chemical databases; " + Joiner.on(", ").join(SITES));
+
     private static final String GOOGLE_SEARCH_FORMAT = "http://www.google.com/search?ie=UTF-8&q=%s";
+
+    private static final String[] SITES = new String[]{
+        "site:ebi.ac.uk/chebi",
+        "site:pubchem.ncbi.nlm.nih.gov",
+        "site:metacyc.org",
+        "site:ebi.ac.uk/chembl",
+        "site:hmdb.ca",
+        "site:molecular-networks.com/biopath",
+        "site:chemspider.com"
+    };
 
 
     public GoogleSearch() {
 
-        component = PanelFactory.createDialogPanel("p, 4dlu, p", "p");
+        component = PanelFactory.createDialogPanel("left:p:grow, 4dlu, min", "p, 4dlu, p");
         field = FieldFactory.newField(30);
         search = ButtonFactory.newButton("Search", new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
-                String query = field.getText();
-                String address = String.format(GOOGLE_SEARCH_FORMAT, query);
-
                 try {
+
+                    String text = field.getText() + (restrict.isSelected() ? " " + Joiner.on(" OR ").join(SITES) : "");
+
+                    String query = URLEncoder.encode(text, "UTF-8");
+                    String address = String.format(GOOGLE_SEARCH_FORMAT, query);
+
                     Desktop.getDesktop().browse(new URI(address));
                 } catch (Exception ex) {
                     LOGGER.error("Unable to open browser: " + ex.getMessage());
@@ -75,10 +93,12 @@ public class GoogleSearch
             }
         });
 
-        CellConstraints cc = new CellConstraints();
+        restrict.setSelected(true);
 
-        component.add(field, cc.xy(1, 1));
+        CellConstraints cc = new CellConstraints();
+        component.add(restrict, cc.xy(1, 1));
         component.add(search, cc.xy(3, 1));
+        component.add(field, cc.xyw(1, 3, 3));
 
     }
 
