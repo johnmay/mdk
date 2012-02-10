@@ -28,7 +28,9 @@ import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+
 
 /**
  * @name    SMILES
@@ -40,34 +42,42 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  *
  */
 @Context(Metabolite.class)
+@Descriptor(brief       = "SMILES",
+            description = "The simplified molecular-input line-entry specification representation of chemical structure")
 public class SMILES
-    extends AbstractStringAnnotation
-    implements ChemicalStructure {
-    
+        extends AbstractStringAnnotation
+        implements ChemicalStructure {
+
     private static final Logger LOGGER = Logger.getLogger(SMILES.class);
-    
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
             SMILES.class);
 
+
     public SMILES() {
     }
-    
+
+
     public SMILES(String smiles) {
         super.setValue(smiles);
     }
-    
+
+
     public Annotation getInstance() {
         return new SMILES();
     }
+
 
     public Annotation getInstance(String value) {
         return new SMILES(value);
     }
 
+
     @Override
     public String getShortDescription() {
         return description.shortDescription;
     }
+
 
     @Override
     public String getLongDescription() {
@@ -83,6 +93,4 @@ public class SMILES
     public void setStructure(IAtomContainer structure) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-    
 }

@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
@@ -36,6 +37,8 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  * @author  $Author$ (this version)
  */
 @Context(Metabolite.class)
+@Descriptor(brief = "KEGG Compound Crossreference",
+            description = "A crossreference that specifically links to the KEGG Compound database")
 public class KEGGCrossReference extends CrossReference<KEGGCompoundIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCrossReference.class);

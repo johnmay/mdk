@@ -33,10 +33,12 @@ import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
 import uk.ac.ebi.resource.IdentifierFactory;
+
 
 /**
  *          CrossReference – 2011.09.14 <br>
@@ -46,32 +48,42 @@ import uk.ac.ebi.resource.IdentifierFactory;
  * @author  $Author$ (this version)
  */
 @Context
+@Descriptor(brief = "Crossreference",
+            description = "A crossreference to an alternative identifier")
 public class CrossReference<E extends Identifier>
         extends AbstractAnnotation
         implements ObservationBasedAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(CrossReference.class);
+
     private E identifier;
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
             CrossReference.class);
+
     private List<Observation> observations = new ArrayList();
+
 
     public CrossReference() {
     }
+
 
     public CrossReference(E identifier) {
         this.identifier = identifier;
     }
 
+
     public E getIdentifier() {
         return identifier;
     }
 
+
     @Override
     public String toString() {
         return identifier.toString();
-    }   
-    
+    }
+
+
     /**
      * @inheritDoc
      */
@@ -79,6 +91,7 @@ public class CrossReference<E extends Identifier>
     public String getShortDescription() {
         return identifier != null ? identifier.getShortDescription() : description.shortDescription;
     }
+
 
     /**
      * @inheritDoc
@@ -88,12 +101,14 @@ public class CrossReference<E extends Identifier>
         return identifier != null ? identifier.getLongDescription() : description.longDescription;
     }
 
+
     /**
      * @inheritDoc
      */
     public CrossReference getInstance() {
         return new CrossReference();
     }
+
 
     /**
      * @inheritDoc
@@ -102,6 +117,7 @@ public class CrossReference<E extends Identifier>
         return Collections.unmodifiableList(observations);
     }
 
+
     /**
      * @inheritDoc
      */
@@ -109,12 +125,14 @@ public class CrossReference<E extends Identifier>
         return observations.add(observation);
     }
 
+
     /**
      * @inheritDoc
      */
     public boolean addObservations(Collection<Observation> observations) {
         return this.observations.addAll(observations);
     }
+
 
     /**
      * @inheritDoc
@@ -124,6 +142,7 @@ public class CrossReference<E extends Identifier>
         super.readExternal(in);
         identifier = (E) IdentifierFactory.getInstance().read(in);
     }
+
 
     /**
      * @inheritDoc
@@ -137,10 +156,12 @@ public class CrossReference<E extends Identifier>
         }
     }
 
+
     @Override
     public Object accept(AnnotationVisitor visitor) {
         return visitor.visit(this);
     }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -156,6 +177,7 @@ public class CrossReference<E extends Identifier>
         }
         return true;
     }
+
 
     @Override
     public int hashCode() {

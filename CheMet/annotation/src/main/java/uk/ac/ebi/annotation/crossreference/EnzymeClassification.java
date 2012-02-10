@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.resource.classification.ECNumber;
@@ -37,6 +38,8 @@ import uk.ac.ebi.resource.classification.ECNumber;
  * @author  $Author$ (this version)
  */
 @Context(value = {GeneProduct.class, Reaction.class})
+@Descriptor(brief = "Enzyme Classification",
+            description = "A crossreference to the Enzyme Classification (E.C.) number")
 public class EnzymeClassification
         extends Classification<ECNumber> {
 

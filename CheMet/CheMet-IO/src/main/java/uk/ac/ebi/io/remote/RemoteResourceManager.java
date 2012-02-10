@@ -46,7 +46,8 @@ public class RemoteResourceManager {
                                                                                          new KEGGCompoundNames(),
                                                                                          new KEGGCompoundMols(),
                                                                                          new PubChemCompoundNames(),
-                                                                                         new PubChemCompoundCrossRefs()));
+                                                                                         new PubChemCompoundCrossRefs(),
+                                                                                         new UniProtCrossRefs()));
 
     private RemoteResourceManager() {
     }

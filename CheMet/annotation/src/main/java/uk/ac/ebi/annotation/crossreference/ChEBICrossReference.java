@@ -25,6 +25,7 @@ import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
@@ -37,6 +38,8 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
  * @author  $Author$ (this version)
  */
 @Context(Metabolite.class)
+@Descriptor(brief       = "ChEBI Crossreference",
+            description = "A crossreference specific to the ChEBI database")
 public class ChEBICrossReference
         extends CrossReference<ChEBIIdentifier> {
 

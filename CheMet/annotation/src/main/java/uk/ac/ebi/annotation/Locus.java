@@ -24,6 +24,7 @@ import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.Reaction;
 
@@ -35,6 +36,8 @@ import uk.ac.ebi.interfaces.entities.Reaction;
  * @author  $Author$ (this version)
  */
 @Context(value={Gene.class, GeneProduct.class, Reaction.class})
+@Descriptor(brief = "Locus",
+            description = "The gene locus/association")
 public class Locus
         extends AbstractStringAnnotation {
 

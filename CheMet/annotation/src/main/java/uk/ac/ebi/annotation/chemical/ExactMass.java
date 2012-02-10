@@ -26,6 +26,7 @@ import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -39,6 +40,8 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  *
  */
 @Context(Metabolite.class)
+@Descriptor(brief = "Exact Mass",
+            description = "DThe exact mass is the sum of the masses of the atoms in a molecule using the most abundant isotope for each element")
 public class ExactMass extends AbstractFloatAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(ExactMass.class);

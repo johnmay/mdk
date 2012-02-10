@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 
 
 /**
@@ -37,6 +38,8 @@ import uk.ac.ebi.interfaces.annotation.Context;
  * @author  $Author$ (this version)
  */
 @Context
+@Descriptor(brief       = "Author Annotation",
+            description = "Short description that has been added by an author")
 public class AuthorAnnotation
         extends AbstractAnnotation {
 

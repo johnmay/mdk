@@ -31,6 +31,7 @@ import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -42,6 +43,8 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @author  $Author$ (this version)
  */
 @Context(Metabolite.class)
+@Descriptor(brief = "Molecular Formula",
+            description = "The chemical formula of a metabolite")
 public class MolecularFormula
         extends AbstractStringAnnotation {
 
@@ -91,9 +94,10 @@ public class MolecularFormula
         super(formula);
         IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
         this.formula = MolecularFormulaManipulator.getMolecularFormula(formula, builder);
-        if (this.formula != null)
+        if (this.formula != null) {
             this.html = MolecularFormulaManipulator.getHTML(this.formula);
-        
+        }
+
     }
 
 

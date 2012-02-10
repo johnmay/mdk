@@ -34,6 +34,7 @@ import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -47,6 +48,8 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  *
  */
 @Context(Metabolite.class)
+@Descriptor(brief = "InChI",
+            description = "The IUPAC International Chemical Identifier string representation of chemical structure")
 public class InChI
         extends AbstractStringAnnotation
         implements ChemicalStructure {

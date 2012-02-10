@@ -36,6 +36,7 @@ import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.entities.ProteinProduct;
 
@@ -48,6 +49,8 @@ import uk.ac.ebi.interfaces.entities.ProteinProduct;
  * @author  $Author$ (this version)
  */
 @Context(Metabolite.class)
+@Descriptor(brief = "Chemical Structure",
+            description = "The chemical structure of the metabolite")
 public class AtomContainerAnnotation
         extends AbstractAnnotation
         implements ChemicalStructure {

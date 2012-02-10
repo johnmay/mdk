@@ -22,6 +22,7 @@ package uk.ac.ebi.annotation.model;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.Reaction;
 
 
@@ -37,6 +38,8 @@ import uk.ac.ebi.interfaces.entities.Reaction;
  *
  */
 @Context(Reaction.class)
+@Descriptor(brief = "Flux Upper Bound",
+            description = "An upper bound for reaction flux")
 public class FluxUpperBound extends FluxBound {
 
     private static final Logger LOGGER = Logger.getLogger(FluxUpperBound.class);

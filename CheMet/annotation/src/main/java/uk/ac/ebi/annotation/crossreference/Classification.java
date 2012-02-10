@@ -22,11 +22,11 @@ package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.classification.ClassificationIdentifier;
 
 
 /**
@@ -37,7 +37,9 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author  $Author$ (this version)
  */
 @Context
-public class Classification<E extends AbstractIdentifier>
+@Descriptor(brief = "Classification",
+            description = "A crossreference that specifically links to a classiciation identifier")
+public class Classification<E extends Identifier>
         extends CrossReference<E> {
 
     private static final Logger LOGGER = Logger.getLogger(Classification.class);

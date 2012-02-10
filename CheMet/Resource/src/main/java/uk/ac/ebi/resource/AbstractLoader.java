@@ -26,6 +26,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.DescriptionLoader;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 
 
 /**
@@ -57,13 +58,28 @@ public abstract class AbstractLoader
     }
 
 
-    public String getShortDescription(Class clazz) {
-        return getProperty(clazz.getSimpleName() + SHORT_DESCRIPTION);
+    public String getShortDescription(Class c) {
+        
+        Descriptor descriptor = (Descriptor) c.getAnnotation(Descriptor.class);
+
+        if (descriptor != null) {
+            return descriptor.brief();
+        }
+        
+        return getProperty(c.getSimpleName() + SHORT_DESCRIPTION);
+        
     }
 
 
-    public String getLongDescription(Class clazz) {
-        return getProperty(clazz.getSimpleName() + LONG_DESCRIPTION);
+    public String getLongDescription(Class c) {
+
+        Descriptor descriptor = (Descriptor) c.getAnnotation(Descriptor.class);
+
+        if (descriptor != null) {
+            return descriptor.description();
+        }
+
+        return getProperty(c.getSimpleName() + LONG_DESCRIPTION);
     }
 
 

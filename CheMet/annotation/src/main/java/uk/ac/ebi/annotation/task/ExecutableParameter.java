@@ -24,7 +24,9 @@ import java.io.File;
 import java.security.InvalidParameterException;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.Reaction;
+
 
 /**
  * @name    ExecutableParameter - 2011.10.13 <br>
@@ -34,10 +36,14 @@ import uk.ac.ebi.interfaces.entities.Reaction;
  * @author  $Author$ (this version)
  */
 @Context
-public class ExecutableParameter extends FileParameter {
+@Descriptor(brief = "Excutable",
+            description = "A parameter for an external task that describes the executable")
+public class ExecutableParameter
+        extends FileParameter {
 
     public ExecutableParameter() {
     }
+
 
     public ExecutableParameter(String name, String description, File file) {
         super(name, description, "", file);
@@ -46,6 +52,7 @@ public class ExecutableParameter extends FileParameter {
                                                 + " parameter with an non-executable file");
         }
     }
+
 
     public ExecutableParameter newInstance() {
         return new ExecutableParameter();

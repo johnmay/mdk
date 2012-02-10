@@ -120,6 +120,7 @@ public class ResourcePanel extends JPanel {
 
                     @Override
                     protected Object doInBackground() throws Exception {
+                        resource.getLocal().delete();
                         resource.update();
                         SwingUtilities.invokeLater(new Runnable() {
 
