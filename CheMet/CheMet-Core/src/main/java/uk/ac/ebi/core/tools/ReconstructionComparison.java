@@ -72,7 +72,7 @@ public class ReconstructionComparison {
         this.hydrogen = hydrogen;
 
         for (Reconstruction recon : recons) {
-            for (Metabolite m : recon.getMetabolites()) {
+            for (Metabolite m : recon.getMetabolome()) {
                 if (m.hasStructure()) {
                     IAtomContainer mol = m.getStructures().iterator().next().getStructure();
                     mol = mol.getAtomCount() > 1 && hydrogen ? mol : AtomContainerManipulator.removeHydrogens(mol);
@@ -99,7 +99,7 @@ public class ReconstructionComparison {
         HASH_FACTORY.setSeedWithMoleculeSize(true);
         Map<Metabolite, Integer> map = new HashMap<Metabolite, Integer>();
         LOGGER.debug("Generating hash code: " + methods);
-        for (Metabolite m : recon.getMetabolites()) {
+        for (Metabolite m : recon.getMetabolome()) {
             if (m.hasStructure()) {
                 IAtomContainer mol = m.getStructures().iterator().next().getStructure();
                 mol = mol.getAtomCount() > 1 && hydrogen ? mol : AtomContainerManipulator.removeHydrogens(mol);

@@ -27,7 +27,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.metabolite.MetaboliteCollection;
+import uk.ac.ebi.core.metabolite.Metabolome;
 import uk.ac.ebi.core.reaction.compartment.Organelle;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.Metabolite;

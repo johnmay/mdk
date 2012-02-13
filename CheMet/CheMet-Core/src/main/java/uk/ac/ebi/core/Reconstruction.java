@@ -11,7 +11,7 @@ import java.util.Collection;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
-import uk.ac.ebi.core.metabolite.MetaboliteCollection;
+import uk.ac.ebi.core.metabolite.Metabolome;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
@@ -61,7 +61,7 @@ public class Reconstruction
 
     private ReactionList reactions;
 
-    private MetaboliteCollection metabolites;
+    private Metabolome metabolites;
 
     private Collection<EntityCollection> subsets;
 
@@ -79,7 +79,7 @@ public class Reconstruction
         super(id, org.getCommonName(), org.getCode());
         taxonomy = org;
         reactions = new ReactionList();
-        metabolites = new MetaboliteCollection();
+        metabolites = new Metabolome();
         products = new ProductCollection();
         genome = new GenomeImplementation();
         subsets = new ArrayList<EntityCollection>();
@@ -89,7 +89,7 @@ public class Reconstruction
     public Reconstruction(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
         reactions = new ReactionList();
-        metabolites = new MetaboliteCollection();
+        metabolites = new Metabolome();
         products = new ProductCollection();
         genome = new GenomeImplementation();
         subsets = new ArrayList<EntityCollection>();
@@ -101,7 +101,7 @@ public class Reconstruction
      * Default constructor
      */
     private Reconstruction() {
-        metabolites = new MetaboliteCollection();
+        metabolites = new Metabolome();
         reactions = new ReactionList();
         genome = new GenomeImplementation();
         products = new ProductCollection();
@@ -203,7 +203,7 @@ public class Reconstruction
      * @return 
      * 
      */
-    public MetaboliteCollection getMetabolites() {
+    public Metabolome getMetabolome() {
         return metabolites;
     }
 

@@ -14,13 +14,13 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.ac.ebi.core.metabolite;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import uk.ac.ebi.core.EntityList;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
 /**
@@ -28,19 +28,19 @@ import uk.ac.ebi.core.EntityList;
  * @author johnmay
  * @date May 15, 2011
  */
-public class MetaboliteCollection
-  extends EntityList<uk.ac.ebi.interfaces.entities.Metabolite>
-  implements Serializable {
+public class Metabolome
+        extends EntityList<Metabolite> {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
-      MetaboliteCollection.class);
-    HashSet<uk.ac.ebi.interfaces.entities.Metabolite> unique = new HashSet<uk.ac.ebi.interfaces.entities.Metabolite>();
+            Metabolome.class);
+
+    HashSet<Metabolite> unique = new HashSet<Metabolite>();
 
 
     @Override
-    public boolean add(uk.ac.ebi.interfaces.entities.Metabolite e) {
-        if( unique.contains(e) ) {
+    public boolean add(Metabolite e) {
+        if (unique.contains(e)) {
             return false;
         }
         unique.add(e);
@@ -49,12 +49,37 @@ public class MetaboliteCollection
 
 
     @Override
-    public boolean addAll(Collection<? extends uk.ac.ebi.interfaces.entities.Metabolite> c) {
-        for( uk.ac.ebi.interfaces.entities.Metabolite metabolite : c ) {
+    public boolean addAll(Collection<? extends Metabolite> c) {
+        for (uk.ac.ebi.interfaces.entities.Metabolite metabolite : c) {
             boolean results = add(metabolite);
         }
         return true;
     }
 
-}
 
+    /**
+     * 
+     * Retrieves the metabolites that match the specified name.
+     * Note. this is not a search over the list (as the name can change)
+     * 
+     * @param name
+     * @return 
+     * 
+     */
+    public Collection<Metabolite> get(String name) {
+
+        String clean = name.trim().toLowerCase();
+
+        Collection<Metabolite> metabolites = new ArrayList<Metabolite>();
+
+        for (Metabolite metabolite : this) {
+            String cleanOther = metabolite.getName().trim().toLowerCase();
+            if (cleanOther.equals(clean)) {
+                metabolites.add(metabolite);
+            }
+        }
+
+        return metabolites;
+
+    }
+}

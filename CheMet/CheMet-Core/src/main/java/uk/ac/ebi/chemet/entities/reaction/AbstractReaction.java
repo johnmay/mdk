@@ -73,7 +73,6 @@ public class AbstractReaction<P extends Participant>
     private static final Logger LOGGER = Logger.getLogger(AbstractReaction.class);
 
     // flags whether the reaction is generic or not
-
     transient private Boolean generic = false;
     // new class
 
@@ -590,4 +589,9 @@ public class AbstractReaction<P extends Participant>
         return sb.toString();
     }
 
+
+    public void clear() {
+        reactants.clear();
+        products.clear();
+    }
 }

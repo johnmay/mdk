@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.metabolite.MetaboliteCollection;
+import uk.ac.ebi.core.metabolite.Metabolome;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.interfaces.Gene;
@@ -122,7 +122,7 @@ public class DefaultReconstructionOutputStream extends ObjectOutputStream implem
         EntityMarshaller metaboliteMarshaller = marshalFactory.getMetaboliteMarshaller();
         LOGGER.debug("Metabolite marshaller: " + metaboliteMarshaller.getVersion());
 
-        MetaboliteCollection mc = reconstruction.getMetabolites();
+        Metabolome mc = reconstruction.getMetabolome();
         System.out.println(mc.size());
         writeInt(mc.size());
         for (int i = 0; i < mc.size(); i++) {
