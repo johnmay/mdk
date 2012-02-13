@@ -88,7 +88,7 @@ public class Parameter extends AbstractAnnotation {
     }
 
 
-    public Parameter getInstance() {
+    public Parameter newInstance() {
         return new Parameter();
     }
 

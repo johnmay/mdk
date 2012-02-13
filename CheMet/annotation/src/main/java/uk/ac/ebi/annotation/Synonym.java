@@ -50,7 +50,7 @@ public class Synonym extends AbstractStringAnnotation {
     }
 
 
-    public Synonym getInstance() {
+    public Synonym newInstance() {
         return new Synonym();
     }
 

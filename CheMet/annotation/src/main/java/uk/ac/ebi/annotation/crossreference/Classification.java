@@ -88,7 +88,7 @@ public class Classification<E extends Identifier>
      * @inheritDoc
      */
     @Override
-    public Classification getInstance() {
+    public Classification newInstance() {
         return new Classification();
     }
 }

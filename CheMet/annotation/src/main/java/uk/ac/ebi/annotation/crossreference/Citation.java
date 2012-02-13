@@ -78,7 +78,7 @@ public class Citation extends CrossReference<Identifier> {
 
 
     @Override
-    public Citation getInstance() {
+    public Citation newInstance() {
         return new Citation();
     }
 }

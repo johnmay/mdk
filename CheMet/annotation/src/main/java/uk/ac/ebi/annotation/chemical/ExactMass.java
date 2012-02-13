@@ -59,7 +59,7 @@ public class ExactMass extends AbstractFloatAnnotation {
     }
 
 
-    public Annotation getInstance() {
+    public Annotation newInstance() {
         return new ExactMass();
     }
 

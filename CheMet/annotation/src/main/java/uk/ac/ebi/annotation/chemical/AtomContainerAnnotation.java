@@ -170,7 +170,7 @@ public class AtomContainerAnnotation
      * @inheritDoc
      */
     @Override
-    public AtomContainerAnnotation getInstance() {
+    public AtomContainerAnnotation newInstance() {
         return new AtomContainerAnnotation();
     }
 }

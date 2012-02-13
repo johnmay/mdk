@@ -71,7 +71,7 @@ public class InChI
     }
 
 
-    public Annotation getInstance() {
+    public Annotation newInstance() {
         return new InChI();
     }
 

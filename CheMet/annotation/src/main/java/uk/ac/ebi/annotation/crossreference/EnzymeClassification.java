@@ -89,7 +89,7 @@ public class EnzymeClassification
      * @inheritDoc
      */
     @Override
-    public EnzymeClassification getInstance() {
+    public EnzymeClassification newInstance() {
         return new EnzymeClassification();
     }
 }

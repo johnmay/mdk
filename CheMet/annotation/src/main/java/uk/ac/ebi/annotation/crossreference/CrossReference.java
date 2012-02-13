@@ -105,7 +105,7 @@ public class CrossReference<E extends Identifier>
     /**
      * @inheritDoc
      */
-    public CrossReference getInstance() {
+    public CrossReference newInstance() {
         return new CrossReference();
     }
 

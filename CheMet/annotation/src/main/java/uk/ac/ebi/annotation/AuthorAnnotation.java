@@ -164,7 +164,7 @@ public class AuthorAnnotation
      * @inheritDoc
      */
     @Override
-    public AuthorAnnotation getInstance() {
+    public AuthorAnnotation newInstance() {
         return new AuthorAnnotation();
     }
 }

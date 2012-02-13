@@ -87,7 +87,7 @@ public class KEGGCrossReference extends CrossReference<KEGGCompoundIdentifier> {
      * @inheritDoc
      */
     @Override
-    public KEGGCrossReference getInstance() {
+    public KEGGCrossReference newInstance() {
         return new KEGGCrossReference();
     }
 }

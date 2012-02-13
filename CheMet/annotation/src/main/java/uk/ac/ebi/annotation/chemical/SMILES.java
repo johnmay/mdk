@@ -63,7 +63,7 @@ public class SMILES
     }
 
 
-    public Annotation getInstance() {
+    public Annotation newInstance() {
         return new SMILES();
     }
 

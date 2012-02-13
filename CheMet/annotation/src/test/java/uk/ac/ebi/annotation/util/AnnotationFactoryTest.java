@@ -14,10 +14,15 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import static org.junit.Assert.*;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.InChI;
+import uk.ac.ebi.annotation.crossreference.*;
 import uk.ac.ebi.annotation.model.FluxLowerBound;
 import uk.ac.ebi.annotation.model.FluxUpperBound;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.resource.classification.TransportClassificationNumber;
 
 
 /**
@@ -94,5 +99,28 @@ public class AnnotationFactoryTest {
 
     @Test
     public void testMain() {
+    }
+
+
+    @Test
+    public void testOfContext_AnnotatedEntity() {
+    }
+
+
+    @Test
+    public void testOfContext_Class() {
+    }
+
+
+    @Test
+    public void testGetCrossReference() {
+
+        AnnotationFactory factory = AnnotationFactory.getInstance();
+
+        assertEquals(ChEBICrossReference.class, factory.getCrossReference(new ChEBIIdentifier()).getClass());
+        assertEquals(KEGGCrossReference.class, factory.getCrossReference(new KEGGCompoundIdentifier()).getClass());
+        assertEquals(Classification.class, factory.getCrossReference(new TransportClassificationNumber()).getClass());
+        assertEquals(EnzymeClassification.class, factory.getCrossReference(new ECNumber()).getClass());
+
     }
 }

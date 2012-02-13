@@ -89,7 +89,7 @@ public class ChEBICrossReference
      * @inheritDoc
      */
     @Override
-    public ChEBICrossReference getInstance() {
+    public ChEBICrossReference newInstance() {
         return new ChEBICrossReference();
     }
 }

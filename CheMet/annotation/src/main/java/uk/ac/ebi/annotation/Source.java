@@ -54,7 +54,7 @@ public class Source extends AbstractStringAnnotation {
     }
 
 
-    public Source getInstance() {
+    public Source newInstance() {
         return new Source();
     }
 

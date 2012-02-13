@@ -53,7 +53,7 @@ public class FluxLowerBound extends FluxBound {
     }
 
 
-    public FluxLowerBound getInstance() {
+    public FluxLowerBound newInstance() {
         return new FluxLowerBound();
     }
 }

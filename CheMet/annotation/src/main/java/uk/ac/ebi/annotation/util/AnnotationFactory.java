@@ -43,6 +43,11 @@ import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.resource.classification.ClassificationIdentifier;
+import uk.ac.ebi.resource.classification.ECNumber;
 
 
 /**
@@ -245,11 +250,41 @@ public class AnnotationFactory {
         Annotation annotation = instances.get(index);
 
         if (annotation != null) {
-            return annotation.getInstance();
+            return annotation.newInstance();
         }
 
         throw new InvalidParameterException("Unable to get instance of annotation with index: "
                                             + index);
+    }
+
+
+    /**
+     * 
+     * Builds a cross-reference from the identifier. The cross-reference is
+     * designated either a {@see ChEBICrossReference}, 
+     * {@see KEGGCompoundIdentifier}, {@see EnzymeClassification} or
+     * {@see Classification}. If no appropiate cross-reference is
+     * available then the default {@see CrossReference} class is return
+     * 
+     * 
+     * @param identifier
+     * @return 
+     * 
+     */
+    public CrossReference getCrossReference(Identifier identifier) {
+
+        if (identifier instanceof ChEBIIdentifier) {
+            return new ChEBICrossReference((ChEBIIdentifier) identifier);
+        } else if (identifier instanceof KEGGCompoundIdentifier) {
+            return new KEGGCrossReference((KEGGCompoundIdentifier) identifier);
+        } else if (identifier instanceof ECNumber) {
+            return new EnzymeClassification((ECNumber) identifier);
+        } else if (identifier instanceof ClassificationIdentifier) {
+            return new Classification(identifier);
+        }
+
+        return new CrossReference(identifier);
+
     }
 
 

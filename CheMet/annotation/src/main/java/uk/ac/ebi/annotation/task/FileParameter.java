@@ -64,7 +64,7 @@ public class FileParameter extends Parameter {
     }
 
     @Override
-    public FileParameter getInstance() {
+    public FileParameter newInstance() {
         return new FileParameter();
     }
 }

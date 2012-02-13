@@ -54,7 +54,7 @@ public class FluxUpperBound extends FluxBound {
     }
 
 
-    public FluxUpperBound getInstance() {
+    public FluxUpperBound newInstance() {
         return new FluxUpperBound();
     }
 }

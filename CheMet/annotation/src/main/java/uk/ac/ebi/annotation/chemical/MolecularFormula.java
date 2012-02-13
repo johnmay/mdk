@@ -172,7 +172,7 @@ public class MolecularFormula
      * @inheritDoc
      */
     @Override
-    public MolecularFormula getInstance() {
+    public MolecularFormula newInstance() {
         return new MolecularFormula();
     }
 

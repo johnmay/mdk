@@ -50,7 +50,7 @@ public class Locus
         super(locus);
     }
 
-    public Locus getInstance() {
+    public Locus newInstance() {
         return new Locus();
     }
 

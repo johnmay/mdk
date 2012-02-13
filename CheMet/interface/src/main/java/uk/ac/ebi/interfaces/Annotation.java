@@ -54,7 +54,7 @@ public interface Annotation
      * @return a new instance of the annotation
      *
      */
-    public Annotation getInstance();
+    public Annotation newInstance();
 
 
 }

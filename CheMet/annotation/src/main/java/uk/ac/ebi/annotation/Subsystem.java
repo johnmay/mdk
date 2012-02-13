@@ -52,7 +52,7 @@ public class Subsystem
     }
 
 
-    public Subsystem getInstance() {
+    public Subsystem newInstance() {
         return new Subsystem();
     }
 
