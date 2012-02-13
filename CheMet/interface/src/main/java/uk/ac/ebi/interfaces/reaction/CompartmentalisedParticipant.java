@@ -37,6 +37,7 @@ public interface CompartmentalisedParticipant<M, S extends Number, C>
         extends Participant<M, S> {
 
     public C getCompartment();
-    
-    
+
+
+    public void setCompartment(C c);
 }

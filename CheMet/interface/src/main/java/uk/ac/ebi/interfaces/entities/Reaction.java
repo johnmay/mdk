@@ -73,4 +73,11 @@ public interface Reaction<P extends Participant>
 
 
     public void transpose();
+
+
+    /**
+     * Empty reaction of participants and metabolites (preserve annotations
+     * and name, abbrev, direction etc.)
+     */
+    public void clear();
 }
