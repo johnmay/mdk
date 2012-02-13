@@ -25,11 +25,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.lang.reflect.Constructor;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import uk.ac.ebi.interfaces.Annotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.*;
@@ -67,6 +63,8 @@ public class AnnotationFactory {
     private static Map<Byte, Annotation> instances = new HashMap<Byte, Annotation>();
 
     private ListMultimap<Class, Annotation> contextMap = ArrayListMultimap.create();
+
+    private Map<Class, CrossReference> xrefMap = new HashMap<Class, CrossReference>();
 
 
     public static AnnotationFactory getInstance() {
@@ -108,6 +106,11 @@ public class AnnotationFactory {
 
         }
 
+        xrefMap.put(ECNumber.class, new EnzymeClassification());
+        xrefMap.put(ClassificationIdentifier.class, new Classification());
+        xrefMap.put(ChEBIIdentifier.class, new ChEBICrossReference());
+        xrefMap.put(KEGGCompoundIdentifier.class, new KEGGCrossReference());
+        xrefMap.put(Identifier.class, new CrossReference());
 
 
     }
@@ -273,18 +276,47 @@ public class AnnotationFactory {
      */
     public CrossReference getCrossReference(Identifier identifier) {
 
-        if (identifier instanceof ChEBIIdentifier) {
-            return new ChEBICrossReference((ChEBIIdentifier) identifier);
-        } else if (identifier instanceof KEGGCompoundIdentifier) {
-            return new KEGGCrossReference((KEGGCompoundIdentifier) identifier);
-        } else if (identifier instanceof ECNumber) {
-            return new EnzymeClassification((ECNumber) identifier);
-        } else if (identifier instanceof ClassificationIdentifier) {
-            return new Classification(identifier);
+        CrossReference xref = getCrossReference(identifier.getClass());
+
+        xref.setIdentifier(identifier);
+
+        return xref;
+
+
+    }
+
+
+    public CrossReference getCrossReference(Class<? extends Identifier> c) {
+
+
+        if (xrefMap.containsKey(c)) {
+            return xrefMap.get(c).newInstance();
         }
 
-        return new CrossReference(identifier);
+        List<Class> classes = new ArrayList<Class>();
 
+        Class sc = c.getSuperclass();
+
+        for (Class i : c.getInterfaces()) {
+            if (Identifier.class.isAssignableFrom(i.getClass())) {
+                classes.add(sc);
+            }
+        }
+
+        if (Identifier.class.isAssignableFrom(sc)) {
+            classes.add(sc);
+        }
+
+        Set<CrossReference> xrefs = new HashSet<CrossReference>();
+        for (Class c1 : classes) {
+            xrefs.add(getCrossReference(c1));
+        }
+
+        if (xrefs.size() > 1) {
+            LOGGER.error("More then one potential cross-reference, this should be resolved!");
+        }
+
+        return xrefs.isEmpty() ? new CrossReference() : xrefs.iterator().next();
     }
 
 

@@ -78,6 +78,11 @@ public class CrossReference<E extends Identifier>
     }
 
 
+    public void setIdentifier(E identifier) {
+        this.identifier = identifier;
+    }
+
+
     @Override
     public String toString() {
         return identifier.toString();
