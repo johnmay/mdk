@@ -13,14 +13,6 @@ import uk.ac.ebi.interfaces.reaction.Direction;
  */
 public enum DirectionImplementation implements Direction {
 
-    @Deprecated
-    REVERSIBLE("\u21CC", "<==>", (byte) 1, false),
-    @Deprecated
-    IRREVERSIBLE_LEFT_TO_RIGHT("\u2192", "-->", (byte) 2, false),
-    @Deprecated
-    IRREVERSIBLE_RIGHT_TO_LEFT("\u2190", "<--", (byte) 3, false),
-    @Deprecated
-    UNKNOWN("<?>", "<?>", (byte) 4, true),
     FORWARD("\u2192", "-->", (byte) 5, false),
     BACKWARD("\u2190", "<--", (byte) 6, false),
     BIDIRECTIONAL("\u21CC", "<==>", (byte) 7, true);

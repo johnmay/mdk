@@ -198,8 +198,8 @@ public class SBMLReactionReader {
             throws UnknownCompartmentException {
 
         MetabolicReactionImplementation reaction = new MetabolicReactionImplementation(new BasicReactionIdentifier(sbmlReaction.getId()),
-                                                           sbmlReaction.getMetaId(),
-                                                           sbmlReaction.getName());
+                                                                                       sbmlReaction.getMetaId(),
+                                                                                       sbmlReaction.getName());
         LOGGER.info("Reading reaction " + reaction);
 
         for (int i = 0; i < sbmlReaction.getNumReactants(); i++) {
@@ -211,7 +211,7 @@ public class SBMLReactionReader {
         }
 
         // set the reversibility
-        reaction.setDirection(sbmlReaction.isReversible() ? DirectionImplementation.REVERSIBLE : DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
+        reaction.setDirection(sbmlReaction.isReversible() ? DirectionImplementation.BIDIRECTIONAL : DirectionImplementation.FORWARD);
 
         return reaction;
 
@@ -253,8 +253,8 @@ public class SBMLReactionReader {
 
 
         CompartmentImplementation compartment = CompartmentImplementation.getCompartment(sbmlCompartment == null
-                                                             ? ""
-                                                             : sbmlCompartment.getId());
+                                                                                         ? ""
+                                                                                         : sbmlCompartment.getId());
 
 
         Double coefficient = speciesReference.getStoichiometry();
@@ -285,8 +285,8 @@ public class SBMLReactionReader {
         }
 
         return new MetabolicParticipantImplementation(metabolite,
-                                        coefficient,
-                                        compartment);
+                                                      coefficient,
+                                                      compartment);
     }
 
 
@@ -320,7 +320,7 @@ public class SBMLReactionReader {
         }
 
         // set the reversibility
-        reaction.setDirection(sbmlReaction.isReversible() ? DirectionImplementation.REVERSIBLE : DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
+        reaction.setDirection(sbmlReaction.isReversible() ? DirectionImplementation.BIDIRECTIONAL : DirectionImplementation.FORWARD);
 
         // TODO(johnmay): Add Enzyme annotations and modifiers
 
@@ -355,8 +355,8 @@ public class SBMLReactionReader {
 
 
         CompartmentImplementation compartment = CompartmentImplementation.getCompartment(sbmlCompartment == null
-                                                             ? ""
-                                                             : sbmlCompartment.getId());
+                                                                                         ? ""
+                                                                                         : sbmlCompartment.getId());
 
         if (compartment == CompartmentImplementation.UNKNOWN) {
             throw new UnknownCompartmentException("Compartment " + species.getCompartmentInstance().

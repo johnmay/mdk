@@ -56,7 +56,7 @@ public class ReactionExample {
             r.addProduct(new ParticipantImplementation<String, Integer, String>("C", 1));
             r.addProduct(new ParticipantImplementation<String, Integer, String>("D", 1));
             // set the reversibilty of the reaction (not used in comparisson)
-            r.setDirection(DirectionImplementation.REVERSIBLE);
+            r.setDirection(DirectionImplementation.BIDIRECTIONAL);
             System.out.println(r);
         }
 

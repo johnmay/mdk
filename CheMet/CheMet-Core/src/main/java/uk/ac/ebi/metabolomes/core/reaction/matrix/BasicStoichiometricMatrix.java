@@ -105,7 +105,7 @@ public class BasicStoichiometricMatrix
         return addReaction(reaction.getName(),
                            metabolites,
                            coefficients,
-                           reaction.getDirection() == DirectionImplementation.REVERSIBLE);
+                           reaction.getDirection().isReversible());
     }
 
 

@@ -114,11 +114,11 @@ public class SBMLIOUtil {
             sbmlRxn.setId(accession);
         }
 
-        sbmlRxn.setReversible(rxn.getDirection() == DirectionImplementation.REVERSIBLE ? true : false);
+        sbmlRxn.setReversible(rxn.getDirection() == DirectionImplementation.BIDIRECTIONAL ? true : false);
 
-        if (rxn.getDirection() == DirectionImplementation.IRREVERSIBLE_RIGHT_TO_LEFT) {
+        if (rxn.getDirection() == DirectionImplementation.BACKWARD) {
             rxn.transpose();
-            rxn.setDirection(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
+            rxn.setDirection(DirectionImplementation.FORWARD);
         }
 
         for (MetabolicParticipant p : rxn.getReactants()) {

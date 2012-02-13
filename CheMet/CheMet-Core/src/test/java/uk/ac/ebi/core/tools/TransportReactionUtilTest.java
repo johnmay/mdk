@@ -83,7 +83,7 @@ public class TransportReactionUtilTest {
         rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.EXTRACELLULA));
         rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
 
-        rxn.setDirection(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
+        rxn.setDirection(DirectionImplementation.FORWARD);
 
         System.out.println(rxn + " : " + TransportReactionUtil.getClassification(rxn));
 
@@ -108,7 +108,7 @@ public class TransportReactionUtilTest {
         rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
         rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
 
-        rxn.setDirection(DirectionImplementation.IRREVERSIBLE_LEFT_TO_RIGHT);
+        rxn.setDirection(DirectionImplementation.BACKWARD);
 
         System.out.println(rxn + " : " + TransportReactionUtil.getClassification(rxn));
         assertEquals(TransportReactionUtil.Classification.UNIPORTER, TransportReactionUtil.getClassification(rxn));
