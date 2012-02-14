@@ -76,7 +76,7 @@ public class IdentifierEditor extends JComponent {
         for (Identifier facotryIdentifier : ID_FACTORY.getSupportedIdentifiers()) {
             idMap.put(facotryIdentifier.getShortDescription(), facotryIdentifier.getIndex());
         }
-
+        
         idNames = new ArrayList<String>(idMap.keySet());;
 
         Collections.sort(idNames);
