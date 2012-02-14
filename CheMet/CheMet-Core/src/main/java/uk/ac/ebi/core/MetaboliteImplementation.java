@@ -21,12 +21,10 @@
 package uk.ac.ebi.core;
 
 import com.google.common.base.Objects;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.Collection;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
 import uk.ac.ebi.interfaces.MetaboliteClass;
@@ -51,8 +49,6 @@ public class MetaboliteImplementation
     private static final Logger LOGGER = Logger.getLogger(MetaboliteImplementation.class);
 
     private boolean generic = false;
-
-    private Double charge = 0d;
 
     private MetaboliteClass type = MetaboliteClassImplementation.UNKNOWN;
 
@@ -110,7 +106,10 @@ public class MetaboliteImplementation
      * @return
      */
     public Double getCharge() {
-        return charge;
+        if (hasAnnotation(Charge.class)) {
+            return getAnnotations(Charge.class).iterator().next().getValue();
+        }
+        return 0d;
     }
 
 
@@ -120,39 +119,11 @@ public class MetaboliteImplementation
      *
      */
     public void setCharge(Double charge) {
-        this.charge = charge;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    public Class<? extends Entity> getEntityClass() {
-        return Metabolite.class;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
-        type = MetaboliteClassImplementation.valueOf(in.readByte());
-        generic = in.readBoolean();
-        charge = in.readDouble();
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        super.writeExternal(out);
-        out.writeByte(type.getIndex());
-        out.writeBoolean(generic);
-        out.writeDouble(charge);
+        if (hasAnnotation(Charge.class)) {
+            getAnnotations(Charge.class).iterator().next().setValue(charge);
+        } else {
+            addAnnotation(new Charge(charge));
+        }
     }
 
 
@@ -208,7 +179,6 @@ public class MetaboliteImplementation
     public Entity newInstance() {
         return new MetaboliteImplementation();
     }
-
 
 
     /**
