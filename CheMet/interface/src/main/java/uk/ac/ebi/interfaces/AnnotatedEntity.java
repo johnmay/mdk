@@ -124,6 +124,13 @@ public interface AnnotatedEntity extends Entity {
 
 
     /**
+     * Provides access to the observation manager
+     * for this entity
+     */
+    public ObservationManager getObservationManager();
+
+
+    /**
      * Adds an observation to the descriptor
      * @param observation The new observation to add
      * @return whether the underlying collection was modified

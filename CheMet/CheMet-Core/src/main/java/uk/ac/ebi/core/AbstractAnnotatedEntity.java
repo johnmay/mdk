@@ -36,6 +36,7 @@ import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Rating;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.interfaces.ObservationManager;
 import uk.ac.ebi.observation.ObservationCollection;
 
 
@@ -188,6 +189,11 @@ public abstract class AbstractAnnotatedEntity
     }
 
 
+    public ObservationManager getObservationManager() {
+        return observations;
+    }
+
+
     /**
      * Adds an observation to the descriptor
      * @param observation The new observation to add
@@ -318,5 +324,4 @@ public abstract class AbstractAnnotatedEntity
 //        }
         return true;
     }
-
 }
