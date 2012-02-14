@@ -62,7 +62,9 @@
                 <artifactId>maven-license-plugin</artifactId>
                 <configuration>
                     <header>src/main/resources/license/header.txt</header>
-                </configuration>                
+                    <encoding>UTF-8</encoding>
+                </configuration>      
+                <version>1.9.0</version>
             </plugin>
         </plugins>
     </build>
