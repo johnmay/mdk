@@ -10,6 +10,7 @@ import org.openscience.cdk.Element;
 import org.openscience.cdk.Isotope;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -40,6 +41,7 @@ public class StructuralValidity {
 
     public static enum Category {
 
+        UNKNOWN,
         ERROR,
         WARNING,
         CORRECT
@@ -53,10 +55,13 @@ public class StructuralValidity {
 
     private static StructuralValidity error_both = new StructuralValidity(Category.ERROR, "The structure does not match the specified formula or charge");
 
+    private static StructuralValidity unknown = new StructuralValidity(Category.UNKNOWN, "The structural validitiy could not be determined");
+
     private final static Map<Category, Integer> CATEGORY_RANK = new EnumMap<Category, Integer>(Category.class);
 
 
     static {
+        CATEGORY_RANK.put(Category.UNKNOWN, 0);
         CATEGORY_RANK.put(Category.ERROR, 1);
         CATEGORY_RANK.put(Category.WARNING, 2);
         CATEGORY_RANK.put(Category.CORRECT, 3);
@@ -111,7 +116,7 @@ public class StructuralValidity {
      */
     public static StructuralValidity getValidity(Metabolite metabolite) {
 
-        StructuralValidity validity = error_both;
+        StructuralValidity validity = unknown;
 
         Charge charge = metabolite.hasAnnotation(Charge.class) ? metabolite.getAnnotations(Charge.class).iterator().next() : new Charge(0d);
 
@@ -179,24 +184,32 @@ public class StructuralValidity {
                                                  Charge charge) {
 
 
+        IAtomContainer molecule = AtomContainerManipulator.removeHydrogens(structure.getStructure());
+
         // calculate the charge difference
         // negative charge diff: structure has less protons
         // positive charge diff: structure has more protons
         Double otherCharge = 0d;
-        for (IAtom atom : AtomContainerManipulator.getAtomArray(structure.getStructure())) {
+        for (IAtom atom : AtomContainerManipulator.getAtomArray(molecule)) {
             otherCharge += atom.getFormalCharge();
         }
         Double chargeDifference = charge.getValue() - otherCharge;
         try {
-            CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance()).addImplicitHydrogens(structure.getStructure());
+            CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance()).addImplicitHydrogens(molecule);
         } catch (CDKException ex) {
-            LOGGER.error("Unable to add implicit hydrogens " + ex.getMessage());
+            try {
+                AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
+                CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance()).addImplicitHydrogens(molecule);
+            } catch (CDKException ex1) {
+                LOGGER.error("Unable to add implicit hydrogens " + ex.getMessage());
+            }
         }
-        AtomContainerManipulator.convertImplicitToExplicitHydrogens(structure.getStructure());
+
+        AtomContainerManipulator.convertImplicitToExplicitHydrogens(molecule);
 
         // complete correctness
         IMolecularFormula query = formula.getFormula();
-        IMolecularFormula subject = getMolecularFormula(structure.getStructure());
+        IMolecularFormula subject = getMolecularFormula(molecule);
 
         if (compareFormula(query, subject, false)) {
             return chargeDifference == 0 ? match : error_charge;

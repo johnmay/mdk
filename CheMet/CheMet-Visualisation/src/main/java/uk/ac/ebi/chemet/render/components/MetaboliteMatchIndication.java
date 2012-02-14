@@ -99,8 +99,8 @@ public class MetaboliteMatchIndication {
                           : MatchIndication.Quality.Bad);
 
 
-        double queryCharge = query.getCharge() == null ? 0 : query.getCharge();
-        double subjectCharge = subject.getCharge() == null ? 0 : subject.getCharge();
+        double queryCharge = query.getCharge();
+        double subjectCharge = subject.getCharge();
 
         charge.setRight(Double.toString(subjectCharge));
 
