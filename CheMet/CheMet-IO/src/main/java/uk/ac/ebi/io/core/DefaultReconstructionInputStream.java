@@ -98,13 +98,10 @@ public class DefaultReconstructionInputStream
 
         // gene products
         int nTypes = readInt();
-        System.out.println("nTypes:" + nTypes);
         for (int i = 0; i < nTypes; i++) {
 
             Class<Entity> c = (Class<Entity>) readObject();
-            System.out.println("\tClass:" + c);
             int nProds = readInt();
-            System.out.println("\tnProducts:" + nProds);
 
             EntityMarshaller marshaller = marshalFactory.getMarhsaller(c);
 
