@@ -5,6 +5,7 @@ import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.Unique;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -17,9 +18,10 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @author  $Author$ (this version)
  *
  */
+@Unique
+@Context(Metabolite.class)
 @Descriptor(brief       = "Charge",
             description = "The chare of this chemical")
-@Context(value = Metabolite.class)
 public class Charge
         extends AbstractDoubleAnnotation {
 

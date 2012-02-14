@@ -37,6 +37,7 @@ import uk.ac.ebi.interfaces.Rating;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.ObservationManager;
+import uk.ac.ebi.interfaces.annotation.Unique;
 import uk.ac.ebi.observation.ObservationCollection;
 
 
@@ -87,7 +88,14 @@ public abstract class AbstractAnnotatedEntity
      *
      */
     public void addAnnotation(Annotation annotation) {
+
+        // delegate to annotation manager
+        if (annotation.getClass().getAnnotation(Unique.class) != null) {
+            annotations.removeAll(annotation.getIndex());
+        }
+
         annotations.put(annotation.getIndex(), annotation);
+
     }
 
 

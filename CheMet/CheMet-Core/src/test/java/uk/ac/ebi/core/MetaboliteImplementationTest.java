@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.BeforeClass;
 import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -32,6 +33,19 @@ public class MetaboliteImplementationTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
+    }
+
+
+    @Test
+    public void testUniqueAnnotation() {
+
+        Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
+
+        m.addAnnotation(new Charge(1d));
+        m.addAnnotation(new Charge(2d));
+
+        System.out.println(m.getAnnotations());
+
     }
 
 
