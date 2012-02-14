@@ -20,6 +20,7 @@ import uk.ac.ebi.annotation.model.FluxUpperBound;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.classification.TransportClassificationNumber;
@@ -121,6 +122,7 @@ public class AnnotationFactoryTest {
         assertEquals(KEGGCrossReference.class, factory.getCrossReference(new KEGGCompoundIdentifier()).getClass());
         assertEquals(Classification.class, factory.getCrossReference(new TransportClassificationNumber()).getClass());
         assertEquals(EnzymeClassification.class, factory.getCrossReference(new ECNumber()).getClass());
+        assertEquals(CrossReference.class, factory.getCrossReference(new HMDBIdentifier()).getClass());
 
     }
 }
