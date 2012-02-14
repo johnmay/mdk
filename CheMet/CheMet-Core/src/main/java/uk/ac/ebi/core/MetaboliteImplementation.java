@@ -100,16 +100,14 @@ public class MetaboliteImplementation
 
 
     /**
-     *
-     * Access the charge of this molecule
+     * Access the charge annotation of this molecule
      *
      * @return
      */
     public Double getCharge() {
-        if (hasAnnotation(Charge.class)) {
-            return getAnnotations(Charge.class).iterator().next().getValue();
-        }
-        return 0d;
+        return hasAnnotation(Charge.class)
+               ? getAnnotations(Charge.class).iterator().next().getValue()
+               : 0d;
     }
 
 
@@ -119,11 +117,7 @@ public class MetaboliteImplementation
      *
      */
     public void setCharge(Double charge) {
-        if (hasAnnotation(Charge.class)) {
-            getAnnotations(Charge.class).iterator().next().setValue(charge);
-        } else {
-            addAnnotation(new Charge(charge));
-        }
+        addAnnotation(new Charge(charge));
     }
 
 

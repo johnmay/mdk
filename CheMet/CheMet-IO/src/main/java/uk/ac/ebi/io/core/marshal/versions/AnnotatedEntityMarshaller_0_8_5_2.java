@@ -70,13 +70,14 @@ public class AnnotatedEntityMarshaller_0_8_5_2 extends AbstractAnnotatedEntityMa
 //        observations.readExternal(in, this);
         entity.setRating(StarRating.getRating(in.readByte()));
 
-        int i = in.readInt();
+        int nAnn = in.readInt();
 
         AnnotationFactory annotationFactory = AnnotationFactory.getInstance();
-        while (entity.getAnnotations().size() < i) {
+        while (nAnn > 0) {
             int n = in.readInt();
             Byte index = in.readByte();
             for (int j = 0; j < n; j++) {
+                nAnn--;
                 entity.addAnnotation(annotationFactory.readExternal(index, in));
             }
         }
