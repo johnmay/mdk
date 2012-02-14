@@ -283,8 +283,8 @@ public class ReactionRenderer {
     }
 
 
-    public void drawPlus(Graphics2D g2,
-                         Rectangle2D bounds) {
+    public static void drawPlus(Graphics2D g2,
+                                Rectangle2D bounds) {
         double length = (bounds.getWidth() / 2) * 0.8;
 
         double centreX = (bounds.getWidth() / 2d) + bounds.getX();

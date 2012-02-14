@@ -22,12 +22,16 @@ package uk.ac.ebi.chemet.render.reaction;
 
 import java.awt.Window;
 import javax.swing.Box;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
+import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.reaction.Direction;
 
 
 /**
@@ -48,6 +52,8 @@ public class ReactionEditor {
 
     private ReactionSideEditor right;
 
+    private JComboBox direction = ComboBoxFactory.newComboBox(DirectionImplementation.values());
+
     private JComponent component;
 
     private MetabolicReaction rxn;
@@ -60,6 +66,7 @@ public class ReactionEditor {
         component = Box.createHorizontalBox();
 
         component.add(left.getComponent());
+        component.add(direction);
         component.add(right.getComponent());
 
         left.setSize(1);
@@ -89,6 +96,8 @@ public class ReactionEditor {
         for (MetabolicParticipant participant : left.getParticipants()) {
             rxn.addReactant(participant);
         }
+
+        rxn.setDirection((Direction) direction.getSelectedItem());
 
         for (MetabolicParticipant participant : right.getParticipants()) {
             rxn.addProduct(participant);

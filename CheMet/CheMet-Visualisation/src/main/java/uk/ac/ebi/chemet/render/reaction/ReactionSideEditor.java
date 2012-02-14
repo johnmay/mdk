@@ -20,12 +20,20 @@
  */
 package uk.ac.ebi.chemet.render.reaction;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Window;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 
 
@@ -42,6 +50,16 @@ import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 public class ReactionSideEditor extends ExpandingComponentList<ParticipantEditor> {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionSideEditor.class);
+
+    private static ImageIcon PLUS = new ImageIcon(new BufferedImage(15, 128, BufferedImage.TYPE_3BYTE_BGR));
+
+
+    {
+        PLUS.getImage().getGraphics().setColor(Color.WHITE);
+        PLUS.getImage().getGraphics().fillRect(0, 0, 15, 128);
+        ReactionRenderer.drawPlus((Graphics2D) PLUS.getImage().getGraphics(),
+                                  new Rectangle2D.Double(0, 0, 15, 128));
+    }
 
 
     public ReactionSideEditor(Window window) {
@@ -61,12 +79,19 @@ public class ReactionSideEditor extends ExpandingComponentList<ParticipantEditor
         for (int i = 0; i < participants.size(); i++) {
             super.getComponent(i).setParticipant(participants.get(i));
         }
-        
+
         // ensure there's always a chance to add a new participant
         if (super.getSize() == 0) {
             append();
         }
-        
+
+    }
+
+
+    @Override
+    public JComponent newSpacer() {
+        JLabel label = LabelFactory.newLabel(PLUS);
+        return label;
     }
 
 
