@@ -56,7 +56,7 @@ public class InChIConnectivity {
     }
     
     private static final Pattern hydrogenInInChIFirstLayer = Pattern.compile("H\\d*");;
-    private static final Pattern CHxOnlyPattern = Pattern.compile("/[A-Z][a-z]{0,1}H\\d*/h");
+    private static final Pattern CHxOnlyPattern = Pattern.compile("/([A-Z][a-z]{0,1}){0,1}H\\d*/h");
     /**
      * Takes a first layer (mol formula) and connectivity and
      * replaced the H<number> for %, so that mysql will use it 
@@ -67,7 +67,7 @@ public class InChIConnectivity {
      * @return converted inchi.
      */
     public static String getRidOfHydrogenInMolFormulaOfInChIFirstLayer(String inchiFirstLayer) {
-        // We need to avoid the case of InChI=1S/C%/h1H4/ or 1S/F%/h1H/ or 1S/Cl%/h1H/
+        // We need to avoid the case of InChI=1S/C%/h1H4/ or 1S/F%/h1H/ or 1S/Cl%/h1H/ or 1S/%/h1H/
         Matcher CHxOnlyMatcher = CHxOnlyPattern.matcher(inchiFirstLayer);
         if(CHxOnlyMatcher.find())
             return inchiFirstLayer;
