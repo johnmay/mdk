@@ -98,7 +98,8 @@ public class AnnotationFactory {
                                                    new Source(),
                                                    new ExactMass(),
                                                    new SMILES(),
-                                                   new InChI())) {
+                                                   new InChI(),
+                                                   new Charge())) {
 
             instances.put(annotation.getIndex(), annotation);
 
