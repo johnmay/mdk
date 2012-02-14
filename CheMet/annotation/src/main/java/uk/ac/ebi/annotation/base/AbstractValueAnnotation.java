@@ -26,16 +26,15 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AbstractAnnotation;
 
 
-/**
- *
- * DoubleAnnotation 2012.01.12
- *
+/** 
+ * AbstractValueAnnotation 2012.01.12 <br/>
+ * Provides an abstract layer for other common (e.g. primitive) annotation types
+ * to build upon.
+ * 
  * @version $Rev$ : Last Changed $Date$
- * @author johnmay
- * @author $Author$ (this version)
- *
- * Provides an abstract layer for
- *
+ * @author  johnmay
+ * @author  $Author$ (this version)
+ * @param   T the type of value to store
  */
 public abstract class AbstractValueAnnotation<T>
         extends AbstractAnnotation {
@@ -44,31 +43,42 @@ public abstract class AbstractValueAnnotation<T>
 
     private T value;
 
-
+    /**
+     * Default constructor does not initialise
+     * the stored value
+     */
     public AbstractValueAnnotation() {
     }
 
-
+    /**
+     * Constructor provides a value to store
+     */
     public AbstractValueAnnotation(T value) {
         this.value = value;
     }
 
-
+    /**
+     * Mutator for the underlying value
+     * @param value new state
+     */
     public void setValue(T value) {
         this.value = value;
     }
 
-
+    /**
+     * Accessor for the underlying stored value
+     */
     public T getValue() {
         return value;
     }
 
-
+    /**
+     * @inheritDoc
+     */
     @Override
     public String toString() {
-        return value == null ? "Null" : value.toString();
+        return value == null ? "N/A" : value.toString();
     }
-
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
