@@ -20,13 +20,18 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
+import com.jgoodies.forms.factories.Borders;
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.table.TableCellRenderer;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.chemet.render.list.renderers.TableCellRenderingPool;
 
 
@@ -38,29 +43,26 @@ import uk.ac.ebi.chemet.render.list.renderers.TableCellRenderingPool;
  * @author  $Author$ (this version)
  */
 public class ActionButtonCellRenderer
-        extends TableCellRenderingPool<JButton, Action> {
+        extends JButton
+        implements TableCellRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(ActionButtonCellRenderer.class);
 
     private boolean visible = true;
 
-    private int alignment = SwingConstants.CENTER;
 
-
-    public ActionButtonCellRenderer(boolean allowBackgroundChange, int alignment) {
-        super(allowBackgroundChange);
-        this.alignment = alignment;
+    public ActionButtonCellRenderer(int alignment) {
+        setUI(new BasicButtonUI());
+        setFont(ThemeManager.getInstance().getTheme().getBodyFont());
+        setHorizontalAlignment(alignment);
+        setBorder(Borders.EMPTY_BORDER);
+        setBackground(null);
     }
 
 
     @Override
-    public JButton create() {
-        return ButtonFactory.newCleanButton(null, alignment);
-    }
-
-
     public void setVisible(boolean visible) {
-        this.visible = visible;
+        super.setVisible(visible);
     }
 
 
@@ -72,26 +74,13 @@ public class ActionButtonCellRenderer
                                                    int row,
                                                    int column) {
 
-        if (visible && value != null) {
-            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-                                                                      column);
-
-            return component;
+        if (isVisible() && value != null) {
+            setAction((Action) value);
+            setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+            setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
+            return this;
         }
         return null;
 
-    }
-
-
-    @Override
-    public boolean setup(JButton component,
-                         Action object) {
-        component.setAction(object);
-        return true;
-    }
-
-
-    @Override
-    public void expire(JButton component) {
     }
 }

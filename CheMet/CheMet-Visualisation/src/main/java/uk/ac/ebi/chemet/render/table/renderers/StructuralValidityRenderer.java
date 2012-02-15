@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ import uk.ac.ebi.core.tools.StructuralValidity;
  *
  */
 public class StructuralValidityRenderer
-        extends AnnotationDescriptionRenderer {
+        extends DefaultRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(StructuralValidityRenderer.class);
 
@@ -64,6 +65,8 @@ public class StructuralValidityRenderer
 
         this.setIcon(iconMap.get(validity.getCategory()));
         this.setToolTipText(validity.getMessage());
+        this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
+        this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
 
         return this;
 

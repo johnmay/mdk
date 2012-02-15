@@ -68,9 +68,9 @@ public class AnnotationCellRenderer
                       : value.toString();
 
 
-        setText(html ? TextUtility.html(text) : text);
-        setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-        setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
+        this.setText(html ? TextUtility.html(text) : text);
+        this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
+        this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
 
         return this;
     }

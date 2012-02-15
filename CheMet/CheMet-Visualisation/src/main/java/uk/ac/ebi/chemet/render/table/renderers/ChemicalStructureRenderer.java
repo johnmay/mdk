@@ -66,8 +66,8 @@ public class ChemicalStructureRenderer
         Collection<AtomContainerAnnotation> collection = value instanceof Collection ? (Collection) value : Arrays.asList(
                 value);
 
-        if (table.getColumnModel().getColumn(column).getPreferredWidth() != table.getRowHeight(row)) {
-            table.setRowHeight(row, table.getColumnModel().getColumn(column).getPreferredWidth());
+        if (table.getColumnModel().getColumn(column).getWidth() != table.getRowHeight(row)) {
+            table.setRowHeight(row, table.getColumnModel().getColumn(column).getWidth());
         }
 
         if (collection.iterator().hasNext()) {
@@ -75,10 +75,10 @@ public class ChemicalStructureRenderer
                 AtomContainerAnnotation structure = collection.iterator().next();
                 this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
                 this.setIcon(new ImageIcon(
-                        renderer.getImage(structure.getMolecule(),
+                        renderer.getImage(structure.getStructure(),
                                           new Rectangle(0, 0,
-                                                        table.getRowHeight(row),
-                                                        table.getRowHeight(row)),
+                                                        table.getRowHeight(row) - 10,
+                                                        table.getRowHeight(row) - 10 ),
                                           getBackground())));
             } catch (CDKException ex) {
                 System.err.println("Unable to render molecule: " + ex.getMessage());

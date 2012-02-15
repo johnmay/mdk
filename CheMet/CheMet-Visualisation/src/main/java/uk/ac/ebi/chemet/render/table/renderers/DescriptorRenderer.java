@@ -20,12 +20,16 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
-import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.caf.component.theme.Theme;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.interfaces.Descriptor;
+
 
 /**
  *          AnnotationDescriptionRenderer - 2011.12.13 <br>
@@ -34,14 +38,13 @@ import uk.ac.ebi.interfaces.Descriptor;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AnnotationDescriptionRenderer
+public class DescriptorRenderer
         extends DefaultRenderer {
 
-    private static final Logger LOGGER = Logger.getLogger(AnnotationDescriptionRenderer.class);
-
-    public AnnotationDescriptionRenderer() {
+    public DescriptorRenderer() {
         setHorizontalAlignment(SwingConstants.RIGHT);
     }
+
 
     @Override
     public Component getTableCellRendererComponent(JTable table,
@@ -52,10 +55,11 @@ public class AnnotationDescriptionRenderer
                                                    int column) {
         Descriptor descriptor = (Descriptor) value;
 
+
         setText(descriptor.getShortDescription());
         setToolTipText(descriptor.getLongDescription());
         setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-        setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
+        setForeground(isSelected ? table.getSelectionForeground() : ColorUtility.shade(table.getForeground(), 0.4f));
 
         return this;
 
