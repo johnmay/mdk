@@ -37,7 +37,6 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 @Context
 @Descriptor(brief = "Parameter",
             description = "A parameter for a task (not necessarily external)")
-
 public class Parameter extends AbstractAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(Parameter.class);

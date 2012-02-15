@@ -41,6 +41,7 @@ public class DoubleAnnotationEditor
 
     private JTextField field = FieldFactory.newField(4);
 
+
     public DoubleAnnotationEditor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         add(field);

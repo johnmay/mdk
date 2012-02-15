@@ -191,6 +191,7 @@ public class AnnotationFactory {
             return contextMap.get(entityClass);
         }
 
+        Set<Class> visited = new HashSet<Class>();
         List<Annotation> annotations = new ArrayList<Annotation>();
 
         for (Annotation annotation : instances.values()) {
@@ -199,11 +200,13 @@ public class AnnotationFactory {
             if (context == null) {
                 LOGGER.warn("No @Context for " + annotation.getClass().getSimpleName());
                 continue;
-            }            
+            }
 
             for (Class c : context.value()) {
-                if (entityClass.isAssignableFrom(c) || c.isAssignableFrom(entityClass)) {
+                if (!visited.contains(annotation.getClass())
+                    && (entityClass.isAssignableFrom(c) || c.isAssignableFrom(entityClass))) {
                     annotations.add(annotation);
+                    visited.add(annotation.getClass());
                 }
             }
         }

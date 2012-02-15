@@ -2,6 +2,7 @@ package uk.ac.ebi.chemet.editor.annotation;
 
 import com.jgoodies.forms.factories.Borders;
 import javax.swing.JComponent;
+import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.interfaces.Annotation;
 
 
@@ -21,6 +22,18 @@ public abstract class AbstractAnnotationEditor<A extends Annotation>
 
     private A annotation;
 
+    private Class<A> c;
+
+    
+    /**
+     * Method must be called on instantiation if you
+     * want you're editor to create new annotations
+     * @param c 
+     */
+    public final void setClass(Class<A> c) {
+        this.c = c;
+    }
+
 
     public AbstractAnnotationEditor() {
         setBorder(Borders.DLU4_BORDER);
@@ -39,7 +52,7 @@ public abstract class AbstractAnnotationEditor<A extends Annotation>
      * @inheritDoc
      */
     public A getAnnotation() {
-        return annotation;
+        return annotation == null ? (A) AnnotationFactory.getInstance().ofClass(c) : annotation;
     }
 
 

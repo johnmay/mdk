@@ -76,7 +76,7 @@ public class AnnotationChoiceEditor extends JComponent {
                 }
 
                 AbstractAnnotationEditor editor = EDITOR_FACTORY.newEditor((Class<Annotation>) type.getSelectedItem().getClass());
-
+                editor.setClass(type.getSelectedItem().getClass());
                 add(editor, 1);
                 window.pack();
 
@@ -97,5 +97,13 @@ public class AnnotationChoiceEditor extends JComponent {
             model.addElement(annotation);
         }
         type.addItemListener(listener);
+    }
+
+
+    public AnnotationEditor getEditor() {
+        if (getComponentCount() > 1) {
+            return (AnnotationEditor) getComponent(1);
+        }
+        return null;
     }
 }

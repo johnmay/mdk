@@ -82,7 +82,7 @@ public class CrossReference<E extends Identifier>
 
     @Override
     public String toString() {
-        return identifier.toString();
+        return identifier != null ? identifier.toString() : "null";
     }
 
 

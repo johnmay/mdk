@@ -37,8 +37,8 @@ import uk.ac.ebi.interfaces.annotation.Descriptor;
  * @author  $Author$ (this version)
  */
 @Context
-@Descriptor(brief = "Author Annotation",
-            description = "Short description that has been added by an author")
+@Descriptor(brief = "Comment",
+            description = "Short comment that has been added by an author")
 public class AuthorAnnotation
         extends AbstractAnnotation
         implements StringAnnotation {
@@ -118,7 +118,7 @@ public class AuthorAnnotation
      */
     @Override
     public String toString() {
-        return annotation;
+        return "@" + author + " " + annotation;
     }
 
 
@@ -143,7 +143,7 @@ public class AuthorAnnotation
      */
     @Override
     public String getShortDescription() {
-        return "@" + author;
+        return description.shortDescription;
     }
 
 

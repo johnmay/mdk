@@ -84,11 +84,7 @@
             <artifactId>forms</artifactId>
             <version>1.2.1</version>
         </dependency>
-        <dependency>
-            <groupId>com.explodingpixels</groupId>
-            <artifactId>MacWidgets</artifactId>
-            <version>0.10-SNAPSHOT</version>
-        </dependency>
+     
         
         <!-- Core Application Framework -->
         <dependency>
@@ -101,6 +97,10 @@
             <artifactId>caf-component</artifactId>
             <version>${caf.version}</version>
         </dependency>
-        
+        <dependency>
+            <groupId>com.explodingpixels</groupId>
+            <artifactId>macwidgets</artifactId>
+            <version>0.9.6-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
