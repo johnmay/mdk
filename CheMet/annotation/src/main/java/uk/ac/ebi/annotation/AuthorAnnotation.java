@@ -23,6 +23,8 @@ import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.StringAnnotation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
 
@@ -35,10 +37,11 @@ import uk.ac.ebi.interfaces.annotation.Descriptor;
  * @author  $Author$ (this version)
  */
 @Context
-@Descriptor(brief       = "Author Annotation",
+@Descriptor(brief = "Author Annotation",
             description = "Short description that has been added by an author")
 public class AuthorAnnotation
-        extends AbstractAnnotation {
+        extends AbstractAnnotation
+        implements StringAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(AuthorAnnotation.class);
 
@@ -103,6 +106,11 @@ public class AuthorAnnotation
     }
 
 
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+
     /**
      *
      * Returns the author annotation in the form: <pre> @author ...annotation..</pre>
@@ -163,5 +171,20 @@ public class AuthorAnnotation
     @Override
     public AuthorAnnotation newInstance() {
         return new AuthorAnnotation();
+    }
+
+
+    public String getValue() {
+        return annotation;
+    }
+
+
+    public void setValue(String value) {
+        this.annotation = value;
+    }
+
+
+    public Annotation getInstance(String value) {
+        return new AuthorAnnotation(value);
     }
 }
