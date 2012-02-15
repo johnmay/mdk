@@ -26,19 +26,22 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.*;
 import java.security.InvalidParameterException;
-import java.util.logging.Level;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import net.sf.jniinchi.INCHI_RET;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.ChemFile;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
+import org.openscience.cdk.interfaces.IChemFile;
 import org.openscience.cdk.interfaces.IMolecule;
+import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
+import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
@@ -79,7 +82,7 @@ public class AssignStructure
 
         component = PanelFactory.createDialogPanel("p, p:grow, min", "p, 4dlu, p");
 
-        format = new JComboBox(new String[]{"InChI", "Mol (v2000)", "Mol (v3000)", "SMILES"});
+        format = new JComboBox(new String[]{"InChI", "Mol (v2000)", "CML", "Mol (v3000)", "SMILES"});
         browse = ButtonFactory.newButton("Browse", new AbstractAction() {
 
             public void actionPerformed(ActionEvent e) {
@@ -119,6 +122,8 @@ public class AssignStructure
                     format.setSelectedItem("InChI");
                 } else if (text.contains("v2000")) {
                     format.setSelectedItem("Mol (v2000)");
+                } else if (text.contains("cml")) {
+                    format.setSelectedItem("CML");
                 } else if (text.contains("v3000")) {
                     format.setSelectedItem("Mol (v3000)");
                 } else {
@@ -181,7 +186,18 @@ public class AssignStructure
             // todo
         } else if (formatName.equals("Mol (v3000)")) {
             transferMDLV3000();
+        } else if (formatName.equals("CML")) {
+            transferCML();
         }
+    }
+
+
+    public void transferCML() throws CDKException, UnsupportedEncodingException, IOException {
+        String cmltext = area.getText();
+        CMLReader cmlreader = new CMLReader(new ByteArrayInputStream(cmltext.getBytes("UTF-8")));
+        IChemFile chemfile = cmlreader.read(DefaultChemObjectBuilder.getInstance().newInstance(ChemFile.class));
+        cmlreader.close();
+        metabolite.addAnnotation(new AtomContainerAnnotation(ChemFileManipulator.getAllAtomContainers(chemfile).get(0)));
     }
 
 
