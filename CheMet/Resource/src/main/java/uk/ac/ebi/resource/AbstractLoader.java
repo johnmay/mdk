@@ -28,7 +28,6 @@ import uk.ac.ebi.interfaces.DescriptionLoader;
 import uk.ac.ebi.core.Description;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
 
-
 /**
  *          AbstractLoader – 2011.09.15 <br>
  *          Class description
@@ -41,13 +40,9 @@ public abstract class AbstractLoader
         implements DescriptionLoader {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractLoader.class);
-
     public static final String SHORT_DESCRIPTION = ".ShortDescription";
-
     public static final String LONG_DESCRIPTION = ".LongDescription";
-
     public static final String INDEX = ".Index";
-
 
     public AbstractLoader(InputStream stream) {
         try {
@@ -57,19 +52,17 @@ public abstract class AbstractLoader
         }
     }
 
-
     public String getShortDescription(Class c) {
-        
+
         Descriptor descriptor = (Descriptor) c.getAnnotation(Descriptor.class);
 
         if (descriptor != null) {
             return descriptor.brief();
         }
-        
-        return getProperty(c.getSimpleName() + SHORT_DESCRIPTION);
-        
-    }
 
+        return getProperty(c.getSimpleName() + SHORT_DESCRIPTION);
+
+    }
 
     public String getLongDescription(Class c) {
 
@@ -82,16 +75,14 @@ public abstract class AbstractLoader
         return getProperty(c.getSimpleName() + LONG_DESCRIPTION);
     }
 
-
     /**
      * Return the index of a given class
      * @param c
      * @return
      */
     public Byte getIndex(Class c) {
-        return Byte.parseByte(getProperty(c.getSimpleName() + INDEX));
+            return Byte.parseByte(getProperty(c.getSimpleName() + INDEX));
     }
-
 
     /**
      * Returns a bundled description object with the short description, long description and index
@@ -103,7 +94,7 @@ public abstract class AbstractLoader
      */
     public Description getMetaInfo(Class c) {
         return new Description(getShortDescription(c),
-                               getLongDescription(c),
-                               getIndex(c));
+                getLongDescription(c),
+                getIndex(c));
     }
 }

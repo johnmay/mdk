@@ -21,6 +21,8 @@
 package uk.ac.ebi.resource.classification;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.MIRIAMIdentifier;
 
