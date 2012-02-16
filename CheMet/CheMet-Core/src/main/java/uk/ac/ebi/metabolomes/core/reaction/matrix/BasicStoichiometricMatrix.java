@@ -16,11 +16,10 @@
  */
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
-import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
-import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.interfaces.reaction.Participant;
 
 
@@ -91,10 +90,23 @@ public class BasicStoichiometricMatrix
     }
 
 
-    public int addReaction(AbstractReaction<? extends Participant<String, Double>> reaction) {
+    public int addReaction(Reaction<? extends Participant<String, Double>> reaction) {
 
-        String[] metabolites = ((List<String>) reaction.getAllReactionMolecules()).toArray(new String[0]);
-        Double[] coefficients = ((List<Double>) reaction.getAllReactionCoefficients()).toArray(new Double[0]);
+        List<String> ms = new ArrayList<String>();
+        List<Double> cs = new ArrayList<Double>();
+
+        for (Participant<String, Double> p : reaction.getReactants()) {
+            ms.add(p.getMolecule());
+            cs.add(p.getCoefficient());
+        }
+        for (Participant<String, Double> p : reaction.getProducts()) {
+            ms.add(p.getMolecule());
+            cs.add(p.getCoefficient());
+        }
+
+        Double[] coefficients = cs.toArray(new Double[0]);
+        String[] metabolites = ms.toArray(new String[0]);
+
 
         for (int i = 0; i < reaction.getReactantCount(); i++) {
             coefficients[i] = -coefficients[i];
