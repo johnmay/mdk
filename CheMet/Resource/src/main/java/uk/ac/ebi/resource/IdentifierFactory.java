@@ -101,7 +101,11 @@ public class IdentifierFactory {
             new PubChemCompoundIdentifier(),
             new PubChemSubstanceIdentifier(),
             new ChemIDplusIdentifier(),
-            new InChI()));
+            new InChI(),
+            new ExperimentalFactorOntologyIdentifier(),
+            new CellTypeOntologyIdentifier(),
+            new FoundationalModelOfAnatomyOntologyIdentifier(),
+            new BRENDATissueOntologyIdentifier()));
 
     private Map<String, Identifier> synonyms = new HashMap();
 
