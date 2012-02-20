@@ -25,9 +25,11 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
+import java.awt.Color;
 import net.sf.furbelow.SpinningDial;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -46,6 +48,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import uk.ac.ebi.io.remote.RemoteResourceManager;
 
+
 /**
  *          ResourcePanel - 2011.10.27 <br>
  *          Class description
@@ -56,14 +59,21 @@ import uk.ac.ebi.io.remote.RemoteResourceManager;
 public class ResourcePanel extends JPanel {
 
     private static final Logger LOGGER = Logger.getLogger(ResourcePanel.class);
+
     private RemoteResourceManager manager = RemoteResourceManager.getInstance();
+
     private CellConstraints cc = new CellConstraints();
-    private FormLayout layout = new FormLayout("p, 4dlu, p, 4dlu, p, 4dlu, p, 4dlu, p");
+
+    private FormLayout layout = new FormLayout("min, 4dlu, min, 4dlu, p, 4dlu, p, 4dlu, min");
+
     private Map<RemoteResource, JLabel> labelMap = new HashMap();
+
+    private static final DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy HH:mm");
+
 
     public ResourcePanel() {
 
-        DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy hh:mm");
+        setBackground(Color.WHITE);
         setBorder(Borders.createEmptyBorder("6dlu, 6dlu, 6dlu, 6dlu"));
         setLayout(layout);
         for (RemoteResource resource : manager.getResources()) {
@@ -73,7 +83,7 @@ public class ResourcePanel extends JPanel {
             JLabel date = new JLabel();
             JTextField local = new JTextField(20);
             JTextField remote = new JTextField(20);
-            JButton update = new JButton(new UpdateResource(resource));
+            JButton update = new JButton(new UpdateResource(resource, date));
 
             local.setEditable(false);
             remote.setEditable(false);
@@ -100,15 +110,22 @@ public class ResourcePanel extends JPanel {
         }
     }
 
+
     private class UpdateResource extends AbstractAction {
 
         private RemoteResource resource;
+
         private AbstractAction button;
 
-        public UpdateResource(RemoteResource resource) {
+        private JLabel date;
+
+
+        public UpdateResource(RemoteResource resource, JLabel date) {
             super("Update");
             this.resource = resource;
+            this.date = date;
         }
+
 
         public void actionPerformed(ActionEvent e) {
             this.button = this;
@@ -120,12 +137,13 @@ public class ResourcePanel extends JPanel {
 
                     @Override
                     protected Object doInBackground() throws Exception {
-                        resource.getLocal().delete();
+                        deleteDir(resource.getLocal());
                         resource.update();
                         SwingUtilities.invokeLater(new Runnable() {
 
                             public void run() {
                                 button.setEnabled(true);
+                                date.setText(resource.getLastUpdated().getTime() == 0l ? "Not loaded" : dateFormat.format(resource.getLastUpdated()));
                                 labelMap.get(resource).setIcon(null);
                             }
                         });
@@ -138,6 +156,23 @@ public class ResourcePanel extends JPanel {
             }
         }
     }
+
+
+    public static boolean deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        // The directory is now empty so delete it
+        return dir.delete();
+    }
+
 
     public static void main(String[] args) {
 
