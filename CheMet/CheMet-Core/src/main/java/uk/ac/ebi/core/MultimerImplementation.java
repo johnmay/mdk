@@ -44,7 +44,7 @@ import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MultimerImplementation extends AbstractAnnotatedEntity implements Multimer {
+public class MultimerImplementation extends AbstractGeneProduct implements Multimer {
 
     private static final Logger LOGGER = Logger.getLogger(MultimerImplementation.class);
 
@@ -66,7 +66,7 @@ public class MultimerImplementation extends AbstractAnnotatedEntity implements M
      * Creates a multimeric gene product from existing products. Note the copies
      * are shallow thus changing the names of the product within the multimer
      * will change the names of the products and vise-versa.
-     * @param product
+     * @param subunits
      */
     public MultimerImplementation(GeneProduct... subunits) {
 
