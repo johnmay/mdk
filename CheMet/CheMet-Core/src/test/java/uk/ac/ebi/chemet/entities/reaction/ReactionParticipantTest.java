@@ -33,28 +33,4 @@ public class ReactionParticipantTest {
     public static void tearDownClass() throws Exception {
     }
 
-    @Test
-    public void testSomeMethod() {
-        try {
-            ParticipantImplementation rp = new ParticipantImplementation<String , Integer , String>();
-            rp.setMolecule( "A Molecule" );
-            rp.setCompartment( "[a]" );
-            File tmpFile = File.createTempFile( "ReactionParticipant" , ".javaobject" );
-            System.out.println( "Testing Object writing: " + tmpFile );
-            ObjectOutputStream oos = new ObjectOutputStream( new FileOutputStream( tmpFile ) );
-            oos.writeObject( rp );
-            oos.close();
-
-            ObjectInputStream ois = new ObjectInputStream( new FileInputStream( tmpFile ) );
-            ParticipantImplementation rp2 = ( ParticipantImplementation ) ois.readObject();
-            ois.close();
-
-            System.out.println( rp2 );
-
-        } catch ( ClassNotFoundException ex ) {
-            ex.printStackTrace();
-        } catch ( IOException ex ) {
-            ex.printStackTrace();
-        }
-    }
 }
