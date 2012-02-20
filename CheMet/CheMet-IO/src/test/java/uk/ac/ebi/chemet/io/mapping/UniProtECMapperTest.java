@@ -48,14 +48,14 @@ public class UniProtECMapperTest extends TestCase {
 
         List<ECNumber> ecs_parsed = new ArrayList( mapper.parseValue( ecs ) );
         assertEquals( 2 , ecs_parsed.size() );
-        assertEquals( new ECNumber( "1.1.1.1" ) , ecs_parsed.get( 0 ) );
-        assertEquals( new ECNumber( "1.1.1.86" ) , ecs_parsed.get( 1 ) );
+        assertTrue(ecs_parsed.contains(new ECNumber("1.1.1.1")));
+        assertTrue( ecs_parsed.contains(new ECNumber( "1.1.1.86" )) );
 
         String ecs_withSpace = "1.1.3.1; 5.2.-.-";
-        ecs_parsed = new ArrayList( mapper.parseValue( ecs_withSpace ) );
-        assertEquals( 2 , ecs_parsed.size() );
-        assertEquals( new ECNumber( "1.1.3.1" ) , ecs_parsed.get( 0 ) );
-        assertEquals( new ECNumber( "5.2.-.-" ) , ecs_parsed.get( 1 ) );
+        ecs_parsed = new ArrayList( mapper.parseValue( ecs_withSpace ));
+        assertEquals(2, ecs_parsed.size());
+        assertTrue(ecs_parsed.contains(new ECNumber("1.1.3.1")));
+        assertTrue( ecs_parsed.contains(new ECNumber( "5.2.-.-" )) );
 
     }
 

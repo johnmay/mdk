@@ -24,6 +24,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.IdentifierFactory;
@@ -56,11 +57,11 @@ public class UniProtECMapper
 
     @Override
     public UniProtIdentifier parseKey( String keyString ) {
-        AbstractIdentifier id = IdentifierFactory.getIdentifiers( keyString ).get( 0 );
-        if ( id instanceof UniProtIdentifier ) {
-            return ( UniProtIdentifier ) id;
+        IdentifierSet identifiers = IdentifierFactory.getInstance().resolveSequenceHeader(keyString);
+        if(!identifiers.getIdentifiers().isEmpty()){
+            return (UniProtIdentifier) identifiers.getIdentifiers().iterator().next();
         }
-        return new SwissProtIdentifier( keyString );
+        return new SwissProtIdentifier( keyString );  // FIX ME: Convert SwissProt/TrEMBL to a unifier UniProt Id
     }
 
     @Override
