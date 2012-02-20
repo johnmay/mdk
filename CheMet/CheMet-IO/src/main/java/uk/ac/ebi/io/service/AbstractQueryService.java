@@ -43,20 +43,35 @@ import uk.ac.ebi.interfaces.services.LuceneService;
 public class AbstractQueryService {
 
     private Document[] documents;
+    private Directory directory;
+    private Analyzer analyzer;
     private IndexReader reader;
-    private LuceneService service;
     private int max = Preferences.userNodeForPackage(AbstractQueryService.class).getInt("default.max.results", 100);
 
+    public AbstractQueryService(){
+
+    }
+
     public AbstractQueryService(LuceneService service) {
-        this.service = service;
+        analyzer  = service.getAnalzyer();
         try {
-            reader = IndexReader.open(service.getDirectory(), true);
-            documents = new Document[reader.numDocs()];
-        } catch (CorruptIndexException ex) {
-            Logger.getLogger(AbstractQueryService.class.getName()).log(Level.SEVERE, null, ex);
+            setDirectory(service.getDirectory());
         } catch (IOException ex) {
             Logger.getLogger(AbstractQueryService.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void setDirectory(Directory directory) throws IOException {
+        if(reader != null){
+            reader.close();
+        }
+        this.directory = directory;
+        reader = IndexReader.open(directory, true);
+        documents = new Document[reader.numDocs()];
+    }
+
+    public void setAnalyzer(Analyzer analyzer){
+        this.analyzer = analyzer;
     }
 
     public void setMaxResults(int max) {
@@ -102,11 +117,11 @@ public class AbstractQueryService {
     }
 
     public Directory getDirectory() {
-        return service.getDirectory();
+        return directory;
     }
 
     public Analyzer getAnalyzer() {
-        return service.getAnalzyer();
+        return analyzer;
     }
     Pattern escape = Pattern.compile("[\\\\+\\-\\!\\(\\)\\:\\^\\]\\[\\{\\}\\~\\*\\?]");
 
