@@ -79,10 +79,10 @@ public class TrEMBLIdentifier
     @Override
     public LinkedList<String> resolve(LinkedList<String> tokens) {
         setAccession(tokens.get(1));
-        String name = tokens.get(2); // store?
+        String name = tokens.size() > 2 ? tokens.get(2) : ""; // store?
         tokens.removeFirst();
         tokens.removeFirst();
-        tokens.removeFirst();
+        if(tokens.size() > 2) tokens.removeFirst();
 
         return tokens;
 
