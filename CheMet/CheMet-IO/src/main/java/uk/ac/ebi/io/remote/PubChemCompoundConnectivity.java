@@ -129,7 +129,7 @@ public class PubChemCompoundConnectivity extends AbstrastRemoteResource implemen
         String defaultFile = System.getProperty("user.home")
                 + File.separator + "databases"
                 + File.separator + "indexes"
-                + File.separator + "uniprot-crossref";
+                + File.separator + "pubchem-connectivity";
         Preferences prefs = Preferences.userNodeForPackage(PubChemCompoundConnectivity.class);
         return new File(prefs.get("pubchemCompound.connectivity.path", defaultFile));
     }
