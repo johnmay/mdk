@@ -1,4 +1,4 @@
-package uk.ac.ebi.io.service.location;
+package uk.ac.ebi.io.service.loader.location;
 
 import org.junit.Assert;
 import org.junit.Test;
