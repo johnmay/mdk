@@ -1,7 +1,6 @@
 package uk.ac.ebi.io.service.loader.structure;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
@@ -10,12 +9,9 @@ import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import uk.ac.ebi.io.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.AbstractResourceLoader;
-import uk.ac.ebi.io.service.location.ResourceLocation;
-import uk.ac.ebi.io.service.location.ResourceLocationKey;
-import uk.ac.ebi.io.service.lucene.structure.StructureIndexWriter;
-import uk.ac.ebi.io.service.manager.DefaultIndexManager;
-import uk.ac.ebi.io.service.manager.DefaultLuceneIndexLocation;
-import uk.ac.ebi.io.service.manager.LuceneIndexLocation;
+import uk.ac.ebi.io.service.loader.location.ResourceLocation;
+import uk.ac.ebi.io.service.loader.location.ResourceLocationKey;
+import uk.ac.ebi.io.service.index.structure.HMDBStructureIndex;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,16 +33,16 @@ public class HMDBStructureLoader
 
     private Pattern HMDB_ID = Pattern.compile("(HMDB\\d+)");
 
-    @ResourceLocationKey
+    @ResourceLocationKey(name = "HMDB SDF File",
+                         desc = "An SDF file containing the HMDB Id in the title of each Mol entry")
     public static final String HMDB_SDF_KEY = "hmdb.sdf";
 
-    public HMDBStructureLoader() {
-        try {
-            addLocation(HMDB_SDF_KEY,
-                        "http://www.hmdb.ca/public/downloads/current/mcard_sdf_all.txt.gz");
-        } catch (IOException exception) {
-            LOGGER.error("Unable to add default location for HMDB SDF");
-        }
+    public HMDBStructureLoader() throws IOException {
+        super(new HMDBStructureIndex());
+
+        // default location
+        addLocation(HMDB_SDF_KEY,
+                    "http://www.hmdb.ca/public/downloads/current/mcard_sdf_all.txt.gz");
     }
 
     @Override
@@ -60,10 +56,7 @@ public class HMDBStructureLoader
         MDLV2000Writer mdlv2000Writer = new MDLV2000Writer();
 
         clean();
-        LuceneIndexLocation indexLocation = new DefaultLuceneIndexLocation(getResourceRootChild("hmdb/structure"),
-                                                                           new KeywordAnalyzer());
-        DefaultIndexManager.getInstance().put("hmdb.structure", indexLocation);
-        StructureIndexWriter writer = StructureIndexWriter.create(indexLocation);
+        StructureIndexWriter writer = StructureIndexWriter.create(getIndex());
 
         while (reader.hasNext()) {
 
@@ -75,7 +68,6 @@ public class HMDBStructureLoader
                 Matcher matcher = HMDB_ID.matcher(title.toString());
                 if (matcher.find()) {
                     String hmdb_id = matcher.group(1);
-                    System.out.println(hmdb_id);
                     StringWriter sw = new StringWriter();
                     try {
                         mdlv2000Writer.setWriter(sw);
@@ -95,17 +87,8 @@ public class HMDBStructureLoader
 
     }
 
-    public static void main(String[] args) throws IOException, MissingLocationException {
-        HMDBStructureLoader chebisdf = new HMDBStructureLoader();
-        System.out.println(chebisdf.isAvailable());
-        chebisdf.load();
-    }
-
     @Override
     public void clean() {
-        LuceneIndexLocation index = DefaultIndexManager.getInstance().get("structure.structure");
-        if (index != null) {
-            delete(index.getLocation());
-        }
+        delete(getIndex().getLocation());
     }
 }

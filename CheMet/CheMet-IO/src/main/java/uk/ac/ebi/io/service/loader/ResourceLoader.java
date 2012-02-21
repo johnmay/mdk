@@ -1,11 +1,13 @@
 package uk.ac.ebi.io.service.loader;
 
 import uk.ac.ebi.io.service.exception.MissingLocationException;
-import uk.ac.ebi.io.service.location.ResourceLocation;
+import uk.ac.ebi.io.service.loader.location.ResourceLocation;
+import uk.ac.ebi.io.service.loader.location.ResourceLocationKey;
+import uk.ac.ebi.io.service.index.LuceneIndex;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 
 /**
  * ${Name}.java - 20.02.2012 <br/>
@@ -42,9 +44,25 @@ public interface ResourceLoader {
     public boolean isAvailable();
 
     /**
-     * Access a list of the required keys for this loader
+     * Access a list of the required keys for this loader including
+     * their short description
      * @return
      */
-    public List<String> getRequiredKeys();
+    public Map<String,ResourceLocationKey> getRequiredKeys();
+
+
+    /**
+     * Access the lucene index for this loader
+     * @return
+     */
+    public LuceneIndex getIndex();
+
+    /**
+     * Access the stored location for the specified key
+     * @param key
+     * @return
+     * @throws MissingLocationException
+     */
+    public ResourceLocation getLocation(String key) throws MissingLocationException;
 
 }

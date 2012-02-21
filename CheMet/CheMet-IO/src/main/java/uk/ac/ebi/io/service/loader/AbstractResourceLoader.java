@@ -4,9 +4,10 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.io.service.exception.MissingLocationException;
-import uk.ac.ebi.io.service.location.LocationFactory;
-import uk.ac.ebi.io.service.location.ResourceLocation;
-import uk.ac.ebi.io.service.location.ResourceLocationKey;
+import uk.ac.ebi.io.service.loader.location.LocationFactory;
+import uk.ac.ebi.io.service.loader.location.ResourceLocation;
+import uk.ac.ebi.io.service.loader.location.ResourceLocationKey;
+import uk.ac.ebi.io.service.index.LuceneIndex;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.*;
 
 /**
  * ${Name}.java - 20.02.2012 <br/>
+ * <p/>
  * Abstract loaded defines the handling of the resource locations and availability methods
  *
  * @author johnmay
@@ -24,12 +26,34 @@ import java.util.*;
 public abstract class AbstractResourceLoader implements ResourceLoader {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractResourceLoader.class);
-    
+
     private LocationFactory factory = LocationFactory.getInstance();
 
     private Map<String, ResourceLocation> locationMap = new HashMap<String, ResourceLocation>(6);
-    
-    private List<String> requiredKeys;
+
+    private Map<String, ResourceLocationKey> requiredKeys;
+
+    private LuceneIndex index;
+
+    public AbstractResourceLoader(LuceneIndex index) {
+        this.index = index;
+        
+        for(String key : getRequiredKeys().keySet()){
+            if(!locationMap.containsKey(key)){
+                // force loading of user defined keys
+                try{
+                    addLocation(LocationFactory.getInstance().newDefaultLocation(key, ""));
+                } catch (IOException ex){
+                    // ignore
+                }
+            }
+        }
+        
+    }
+
+    public LuceneIndex getIndex() {
+        return index;
+    }
 
     /**
      * Access a location for the specified key
@@ -77,8 +101,8 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
     }
 
     /**
-     * Access the location of the named resource under the RESOURCE_ROOT preferences. i.e. if you provide "/structure/sdf"
-     * and the resource root is /resources/chemet the file will be /resources/chemet/structure/sdf
+     * Access the location of the named resource under the RESOURCE_ROOT preferences. i.e. if you provide
+     * "/structure/sdf" and the resource root is /resources/chemet the file will be /resources/chemet/structure/sdf
      *
      * @param name
      * @return
@@ -110,14 +134,15 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
     }
 
     /**
-     * Determines whether the resource is available for update. If a required key is missing
-     * or the location is not available this method will return false
+     * Determines whether the resource is available for update. If a required key is missing or the location is not
+     * available this method will return false
+     *
      * @return
      */
     public boolean isAvailable() {
-        for (String key : getRequiredKeys()) {
-            if(!locationMap.containsKey(key)
-                    || !locationMap.get(key).isAvailable()){
+        for (String key : getRequiredKeys().keySet()) {
+            if (!locationMap.containsKey(key)
+                    || !locationMap.get(key).isAvailable()) {
                 return false;
             }
         }
@@ -125,22 +150,24 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
     }
 
     /**
-     * Access a list of required keys for this loader. The keys are accessed via the
-     * {@see ResourceLocationKey} language annotation.
+     * Access a list of required keys for this loader. The keys are accessed via the {@see ResourceLocationKey} language
+     * annotation.
+     *
      * @return list of required keys
      */
-    public List<String> getRequiredKeys() {
+    public Map<String,ResourceLocationKey> getRequiredKeys() {
 
-        if(requiredKeys != null){
+        if (requiredKeys != null) {
             return requiredKeys;
         }
 
-        requiredKeys = new ArrayList<String>();
+        requiredKeys = new HashMap<String,ResourceLocationKey>();
 
         for (Field field : getClass().getDeclaredFields()) {
-            if (field.getAnnotation(ResourceLocationKey.class) != null) {
+            ResourceLocationKey annotation = field.getAnnotation(ResourceLocationKey.class);
+            if (annotation != null) {
                 try {
-                    requiredKeys.add((String) field.get(new String()));
+                    requiredKeys.put((String) field.get(new String()), annotation);
                 } catch (IllegalAccessException exception) {
                     LOGGER.error("Could not access filed " + field.getName() + " in " + getClass() + " please ensure it is public");
                 }
