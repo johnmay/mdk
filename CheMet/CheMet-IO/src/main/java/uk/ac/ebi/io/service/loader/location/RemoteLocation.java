@@ -6,7 +6,9 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * RemoteLocation.java - 20.02.12 <br/> Remote location defines a remote resource location, i.e. on an FTP server or
+ * RemoteLocation.java - 20.02.12 <br/>
+ * <p/>
+ * Remote location defines a remote resource location, i.e. on an FTP server or
  * HTML page
  *
  * @author johnmay
@@ -14,31 +16,23 @@ import java.net.URLConnection;
  * @version $Rev$
  */
 public class RemoteLocation
-        implements ResourceLocation {
+        implements ResourceFileLocation {
 
     private URL location;
-    private String key;
 
     private URLConnection connection;
     private InputStream stream;
 
-    RemoteLocation(String key, URL location) {
-        this.key = key;
+    public RemoteLocation(URL location) {
         this.location = location;
     }
 
-    public String getKey() {
-        return this.key;
-    }
-    
     public URL getLocation() {
         return location;
     }
 
     /**
-     * Determine whether the
-     *
-     * @return
+     * @inheritDoc
      */
     public boolean isAvailable() {
 
@@ -56,8 +50,7 @@ public class RemoteLocation
     /**
      * Open a stream to the remote resource. This first opens the URLConnection and then the stream
      *
-     * @return the opened stream
-     * @throws IOException
+     * @inheritDoc
      */
     public InputStream open() throws IOException {
         if (stream == null) {
@@ -70,7 +63,7 @@ public class RemoteLocation
     /**
      * Close the open stream to the remote resource
      *
-     * @throws IOException
+     * @inheritDoc
      */
     public void close() throws IOException {
         if (stream != null) {
@@ -79,8 +72,11 @@ public class RemoteLocation
             connection = null;
         }
     }
-    
-    public String toString(){
+
+    /**
+     * @inheritDoc
+     */
+    public String toString() {
         return location.toString();
     }
 

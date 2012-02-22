@@ -86,21 +86,21 @@ public class LocationFactory {
         if (protocolMatcher.find()) {
             String protocol = protocolMatcher.group(1);
             if (protocol.equals("http")) {
-                return gzip ? new GZIPRemoteLocation(key, new URL(location)): new RemoteLocation(key, new URL(location));
+                return gzip ? new GZIPRemoteLocation(new URL(location)): new RemoteLocation(new URL(location));
             } else if (protocol.equals("ftp")) {
-                return gzip ? new GZIPRemoteLocation(key, new URL(location)): new RemoteLocation(key, new URL(location));
+                return gzip ? new GZIPRemoteLocation(new URL(location)): new RemoteLocation(new URL(location));
             } else if (protocol.equals("https")) {
-                return gzip ? new GZIPRemoteLocation(key, new URL(location)): new RemoteLocation(key, new URL(location));
+                return gzip ? new GZIPRemoteLocation(new URL(location)): new RemoteLocation(new URL(location));
             }
         }
 
         File file = new File(location);
         if(file.exists() && file.isDirectory()){
-            return new SystemDirectoryLocation(key, file);
+            return new SystemDirectoryLocation(file);
         }
         
         // default to system location
-        return gzip ? new GZIPSystemLocation(key, file) : new SystemLocation(key, file);
+        return gzip ? new GZIPSystemLocation(file) : new SystemLocation(file);
 
     }
 

@@ -16,29 +16,23 @@ import java.io.InputStream;
  * @version $Rev$
  */
 public class SystemLocation
-        implements ResourceLocation {
+        implements ResourceFileLocation {
 
-    private String key;
     private File location;
 
     private InputStream stream;
 
-    public SystemLocation(String key, File location) {
-        this.key = key;
+    public SystemLocation(File location) {
         this.location = location;
     }
 
-    /**
-     * Access the key for this location
-     *
-     * @return
-     */
-    public String getKey() {
-        return this.key;
+    public SystemLocation(String location) {
+        this(new File(location));
     }
 
     /**
      * Get the location of the resource
+     *
      * @return the file location
      */
     public File getLocation() {
@@ -58,8 +52,7 @@ public class SystemLocation
      * Open the file stream, if the stream has not been opened. If the stream is not null then the current stream is
      * returned
      *
-     * @return Opened stream
-     * @throws IOException if there was a problem opening the stream
+     * @inheritDoc
      */
     public InputStream open() throws IOException {
         if (stream == null) {
@@ -71,7 +64,7 @@ public class SystemLocation
     /**
      * Close the file stream if it has been opened
      *
-     * @throws IOException problem closing stream
+     * @inheritDoc
      */
     public void close() throws IOException {
         if (stream != null) {
@@ -79,6 +72,9 @@ public class SystemLocation
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public String toString() {
         return location.toString();
     }

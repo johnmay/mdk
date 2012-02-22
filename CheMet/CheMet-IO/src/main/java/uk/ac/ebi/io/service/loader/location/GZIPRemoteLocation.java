@@ -8,8 +8,9 @@ import java.util.zip.GZIPInputStream;
 
 /**
  * GZIPRemoteLocation.java - 20.02.12 <br/>
- * GZIPRemoteLocation defines a remote resource location of a compressed stream, i.e. on an FTP server or
- * HTML page
+ *
+ * GZIPRemoteLocation defines a remote resource location of a compressed
+ * stream, i.e. on an FTP server or HTML page
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -21,15 +22,25 @@ public class GZIPRemoteLocation
     private URLConnection connection;
     private InputStream stream;
 
-    public GZIPRemoteLocation(String key, URL location) {
-        super(key, location);
+    public GZIPRemoteLocation(URL location) {
+        super(location);
+    }
+
+    /**
+     * Convenience constructor will create a GZIPRemoteLoaction
+     * for a provided URL string.
+     *
+     * @param location
+     * @throws IOException
+     */
+    public GZIPRemoteLocation(String location) throws IOException {
+        super(new URL(location));
     }
 
     /**
      * Open a gzip stream to the remote resource. This first opens the URLConnection and then the stream
      *
-     * @return the opened stream
-     * @throws java.io.IOException
+     * @inheritDoc
      */
     public InputStream open() throws IOException {
         if (stream == null) {
@@ -42,7 +53,7 @@ public class GZIPRemoteLocation
     /**
      * Close the open stream to the remote resource
      *
-     * @throws java.io.IOException
+     * @inheritDoc
      */
     public void close() throws IOException {
         if (stream != null) {
@@ -53,9 +64,7 @@ public class GZIPRemoteLocation
     }
 
     /**
-     * Determine whether the
-     *
-     * @return
+     * @inheritDoc
      */
     public boolean isAvailable() {
 

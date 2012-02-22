@@ -1,9 +1,8 @@
 package uk.ac.ebi.io.service.loader.location;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 /**
@@ -16,37 +15,39 @@ import java.nio.charset.Charset;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class SystemDirectoryLocation extends SystemLocation {
+public class SystemDirectoryLocation
+        implements ResourceDirectoryLocation {
 
-    private InputStream stream;
+    private File directory;
 
-    public SystemDirectoryLocation(String key, File directory) {
-        super(key, directory);
+    public SystemDirectoryLocation(File directory) {
+        this.directory = directory;
     }
 
-
+    /**
+     * Indicates whether the directory exists and whether it is in-fact a directory
+     * @inheritDoc
+     */
     @Override
-    public InputStream open() throws IOException {
-        if (stream == null) {
-            String[] children = getLocation().list();
-            String separator = System.getProperty("line.separator");
-            StringBuilder stringBuilder = new StringBuilder(children.length * (getLocation().getAbsolutePath().length() + 20));
-            for (String child : children) {
-                stringBuilder.append(getLocation().getAbsolutePath())
-                        .append(File.separator)
-                        .append(child)
-                        .append(separator);
-            }
-            stream = new ByteArrayInputStream(stringBuilder.toString().getBytes(Charset.forName("UTF-8")));
-        }
-        return stream;
+    public boolean isAvailable() {
+        return directory.exists() && directory.isDirectory();
     }
 
+    /**
+     * Simple call to the {@see File#listFiles()} method
+     *
+     * @inheritDoc
+     */
     @Override
-    public void close() throws IOException {
-        if (stream != null) {
-            stream.close();
-        }
+    public File[] list() {
+        return directory.listFiles();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public String toString(){
+        return directory.toString();
     }
 
 }

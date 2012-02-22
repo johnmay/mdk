@@ -7,7 +7,8 @@ import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 
 /**
- * GZIPRemoteLocation.java - 20.02.12 <br/>
+ * GZIPRemoteLocation.java - 20.02.12<br/>
+ * <p/>
  * GZIPRemoteLocation defines a remote resource location of a compressed stream, i.e. on an FTP server or
  * HTML page
  *
@@ -16,23 +17,26 @@ import java.util.zip.GZIPInputStream;
  * @version $Rev$
  */
 public class GZIPSystemLocation
-       extends SystemLocation {
+        extends SystemLocation {
 
     private InputStream stream;
 
-    public GZIPSystemLocation(String key, File location) {
-        super(key, location);
+    public GZIPSystemLocation(File location) {
+        super(location);
+    }
+
+    public GZIPSystemLocation(String location) {
+        super(new File(location));
     }
 
     /**
      * Open a gzip stream to the remote resource. This first opens the URLConnection and then the stream
      *
-     * @return the opened stream
-     * @throws java.io.IOException
+     * @inheritDoc
      */
     public InputStream open() throws IOException {
         if (stream == null) {
-            stream     = new GZIPInputStream(new FileInputStream(getLocation()));
+            stream = new GZIPInputStream(new FileInputStream(getLocation()));
         }
         return stream;
     }
@@ -40,7 +44,7 @@ public class GZIPSystemLocation
     /**
      * Close the open stream to the remote resource
      *
-     * @throws java.io.IOException
+     * @inheritDoc
      */
     public void close() throws IOException {
         if (stream != null) {
