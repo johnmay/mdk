@@ -31,7 +31,9 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated simplifed API with uk.ac.ebi.io.service.* interfaces
  */
+@Deprecated
 public interface NameQueryService<I extends Identifier> extends QueryService<I> {
    
     public Collection<I> fuzzySearchForName(String name);

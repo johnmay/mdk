@@ -28,7 +28,9 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated old QueryService is now replaced with identically name interface in uk.ac.ebi.io.service.*
  */
+@Deprecated
 public interface QueryService<I extends Identifier> {
 
     public I getIdentifier();

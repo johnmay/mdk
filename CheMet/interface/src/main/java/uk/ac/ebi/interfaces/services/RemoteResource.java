@@ -31,7 +31,9 @@ import java.util.Date;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated interfaces was not flexible enough, please use uk.ac.ebi.io.service.ResourceLoader (currently in IO)
  */
+@Deprecated
 public interface RemoteResource {
 
     /**
