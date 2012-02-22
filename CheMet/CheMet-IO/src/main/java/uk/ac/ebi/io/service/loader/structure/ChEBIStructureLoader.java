@@ -1,20 +1,20 @@
 package uk.ac.ebi.io.service.loader.structure;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import uk.ac.ebi.io.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.AbstractResourceLoader;
-import uk.ac.ebi.io.service.loader.location.ResourceLocationKey;
-import uk.ac.ebi.io.service.loader.location.ResourceLocation;
+import uk.ac.ebi.io.service.loader.LocationDescription;
+import uk.ac.ebi.io.service.loader.location.GZIPRemoteLocation;
+import uk.ac.ebi.io.service.loader.location.RemoteLocation;
+import uk.ac.ebi.io.service.loader.location.ResourceFileLocation;
 import uk.ac.ebi.io.service.index.structure.ChEBIStructureIndex;
 
 import java.io.*;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -32,14 +32,6 @@ public class ChEBIStructureLoader
     private static final Logger LOGGER = Logger.getLogger(ChEBIStructureLoader.class);
 
     /**
-     * Key for the ChEBI SDF file
-     */
-    @ResourceLocationKey(name = "ChEBI SDF File",
-                         desc = "An SDF file containing the ChEBI ID as a property named <ChEBI ID>")
-    public static final String CHEBI_SDF_KEY = "chebi.sdf";
-
-
-    /**
      * Default constructor uses the {@see ChEBIStructureIndex} for Analyzer/Directory and File location.
      * This loader sets the default location to the EBI FTP site.
      *
@@ -49,10 +41,10 @@ public class ChEBIStructureLoader
 
         super(new ChEBIStructureIndex());
 
-        // default location
-        addLocation(CHEBI_SDF_KEY,
-                    "ftp://ftp.ebi.ac.uk/pub/databases/chebi/SDF/ChEBI_complete.sdf.gz");
-
+        addResource(new LocationDescription("ChEBI SDF",
+                                            "An SDF file containing the ChEBI ID as a property named <ChEBI ID>",
+                                            ResourceFileLocation.class,
+                                            new GZIPRemoteLocation(new URL("ftp://ftp.ebi.ac.uk/pub/databases/chebi/SDF/ChEBI_complete.sdf.gz"))));
 
     }
 
@@ -63,7 +55,7 @@ public class ChEBIStructureLoader
     public void load() throws MissingLocationException, IOException {
 
         // get the SDF location
-        ResourceLocation location = getLocation(CHEBI_SDF_KEY);
+        ResourceFileLocation location = getLocation("ChEBI SDF");
 
         // open the location and pass to an iterating reader, we also create a MDLV2000Writer that
         // we will reuse

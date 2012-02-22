@@ -9,13 +9,15 @@ import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import uk.ac.ebi.io.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.AbstractResourceLoader;
-import uk.ac.ebi.io.service.loader.location.ResourceLocation;
-import uk.ac.ebi.io.service.loader.location.ResourceLocationKey;
+import uk.ac.ebi.io.service.loader.LocationDescription;
+import uk.ac.ebi.io.service.loader.location.GZIPRemoteLocation;
+import uk.ac.ebi.io.service.loader.location.ResourceFileLocation;
 import uk.ac.ebi.io.service.index.structure.HMDBStructureIndex;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,22 +35,20 @@ public class HMDBStructureLoader
 
     private Pattern HMDB_ID = Pattern.compile("(HMDB\\d+)");
 
-    @ResourceLocationKey(name = "HMDB SDF File",
-                         desc = "An SDF file containing the HMDB Id in the title of each Mol entry")
-    public static final String HMDB_SDF_KEY = "hmdb.sdf";
-
     public HMDBStructureLoader() throws IOException {
         super(new HMDBStructureIndex());
 
         // default location
-        addLocation(HMDB_SDF_KEY,
-                    "http://www.hmdb.ca/public/downloads/current/mcard_sdf_all.txt.gz");
+        addResource(new LocationDescription("HMDB SDF",
+                                            "An SDF file containing the HMDB Id in the title of each Mol entry",
+                                            ResourceFileLocation.class,
+                                            new GZIPRemoteLocation(new URL("http://www.hmdb.ca/public/downloads/current/mcard_sdf_all.txt.gz"))));
     }
 
     @Override
     public void load() throws MissingLocationException, IOException {
 
-        ResourceLocation location = getLocation(HMDB_SDF_KEY);
+        ResourceFileLocation location = getLocation("HMDB SDF");
 
         InputStream stream = location.open();
         IteratingMDLReader reader = new IteratingMDLReader(stream, DefaultChemObjectBuilder.getInstance());

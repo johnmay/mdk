@@ -4,15 +4,18 @@ import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
+import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.io.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.AbstractResourceLoader;
-import uk.ac.ebi.io.service.loader.location.ResourceLocationKey;
+import uk.ac.ebi.io.service.loader.LocationDescription;
+import uk.ac.ebi.io.service.loader.location.GZIPRemoteLocation;
+import uk.ac.ebi.io.service.loader.location.ResourceDirectoryLocation;
+import uk.ac.ebi.io.service.loader.location.ResourceFileLocation;
 import uk.ac.ebi.io.service.loader.location.SystemDirectoryLocation;
 import uk.ac.ebi.io.service.index.structure.KEGGCompoundStructureIndex;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.prefs.Preferences;
+import java.net.URL;
 
 /**
  * ${Name}.java - 20.02.2012 <br/>
@@ -26,30 +29,26 @@ import java.util.prefs.Preferences;
  */
 public class KEGGCompoundStructureLoader extends AbstractResourceLoader {
 
-    @ResourceLocationKey(name="Mol Direcotry",
-                         desc="A directory containing only '.mol' files named with KEGG Compound Id")
-    public static final String KEGG_MOL_DIRECTORY = "kegg.mol.dir";
 
     public KEGGCompoundStructureLoader() throws IOException {
         super(new KEGGCompoundStructureIndex());
+
+        addResource(new LocationDescription("Mol Directory",
+                                            " directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/ligand/mol/C00009.mol)",
+                                            ResourceDirectoryLocation.class));
+
     }
 
     @Override
     public void load() throws MissingLocationException, IOException {
 
-        SystemDirectoryLocation location = (SystemDirectoryLocation) getLocation(KEGG_MOL_DIRECTORY);
+       ResourceDirectoryLocation location = getLocation("Mol Directory");
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(location.open()));
-        clean();
-        StructureIndexWriter indexwriter = StructureIndexWriter.create(getIndex());
+       StructureIndexWriter writer =  StructureIndexWriter.create(getIndex());
+        
+       for(File file : location.list()){
 
-        byte[] b = new byte[0];
-        String line = null;
-        while ((line = in.readLine()) != null) {
-
-            File molfile = new File(line);
-
-            MDLV2000Reader mdlReader = new MDLV2000Reader(new FileInputStream(molfile));
+            MDLV2000Reader mdlReader = new MDLV2000Reader(new FileInputStream(file));
             try{
                 IAtomContainer molecule = new AtomContainer(mdlReader.read(new Molecule()));
 
@@ -57,7 +56,7 @@ public class KEGGCompoundStructureLoader extends AbstractResourceLoader {
                 ObjectOutputStream out = new ObjectOutputStream(byteStream);
                 out.writeObject(molecule);
 
-                indexwriter.add(molfile.getName().substring(0, 6),
+                writer.add(file.getName().substring(0, 6),
                                 byteStream.toByteArray());
 
 
@@ -68,8 +67,7 @@ public class KEGGCompoundStructureLoader extends AbstractResourceLoader {
 
         }
 
-        indexwriter.close();
-        location.close();
+        writer.close();
 
     }
 

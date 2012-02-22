@@ -2,7 +2,6 @@ package uk.ac.ebi.io.service.loader;
 
 import uk.ac.ebi.io.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.location.ResourceLocation;
-import uk.ac.ebi.io.service.loader.location.ResourceLocationKey;
 import uk.ac.ebi.io.service.index.LuceneIndex;
 
 import java.io.IOException;
@@ -21,10 +20,10 @@ import java.util.Map;
 public interface ResourceLoader {
 
     /**
-     * Sets resource input locations for this loader
-     * @param locations
+     * add resource input locations for this loader
+     * @param location
      */
-    public void setLocations(Collection<ResourceLocation> locations);
+    public void addLocation(String key, ResourceLocation location);
     
     /**
      * Load the resource
@@ -48,7 +47,7 @@ public interface ResourceLoader {
      * their short description
      * @return
      */
-    public Map<String,ResourceLocationKey> getRequiredKeys();
+    public Map<String,LocationDescription> getRequiredResources();
 
 
     /**
@@ -63,6 +62,6 @@ public interface ResourceLoader {
      * @return
      * @throws MissingLocationException
      */
-    public ResourceLocation getLocation(String key) throws MissingLocationException;
+    public <T extends ResourceLocation> T getLocation(String key) throws MissingLocationException;
 
 }
