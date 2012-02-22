@@ -13,6 +13,6 @@ import uk.ac.ebi.io.service.index.KeywordNIOIndex;
  */
 public class ChEBIStructureIndex extends KeywordNIOIndex {
     public ChEBIStructureIndex() {
-        super("ChEBI Structure", "structure/chebi");
+        super("ChEBI Chemical Structures", "structure/chebi");
     }
 }

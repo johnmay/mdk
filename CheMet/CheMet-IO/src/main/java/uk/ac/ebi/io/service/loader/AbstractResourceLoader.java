@@ -9,7 +9,7 @@ import uk.ac.ebi.io.service.loader.location.ResourceLocation;
 import uk.ac.ebi.io.service.index.LuceneIndex;
 
 import java.io.File;
-import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.*;
 
 /**
@@ -31,18 +31,72 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
 
     private Map<String, LocationDescription> requiredResources = new HashMap<String, LocationDescription>();
 
-    private LuceneIndex index;
+    private Map<String, LuceneIndex> indexMap = new HashMap<String, LuceneIndex>();
 
     public AbstractResourceLoader(LuceneIndex index) {
-        this.index = index;
+        indexMap.put(index.getName(), index);
+    }
+
+    public AbstractResourceLoader() {
+
+    }
+
+    public void addIndex(String key, LuceneIndex index) {
+        indexMap.put(key, index);
     }
 
     public LuceneIndex getIndex() {
-        return index;
+        if (indexMap.size() > 1) {
+            throw new InvalidParameterException("Resource loader has more then one index!");
+        }
+        return indexMap.values().iterator().next();
+    }
+
+    @Override
+    public Collection<LuceneIndex> getIndexes() {
+        return indexMap.values();
+    }
+
+    @Override
+    public LuceneIndex getIndex(String key) {
+        return indexMap.get(key);
     }
 
     public void addLocation(String key, ResourceLocation location) {
         locationMap.put(key, location);
+    }
+
+    public <T extends ResourceLocation> void addReqiredResource(String name,
+                                                                String description,
+                                                                Class<T> c,
+                                                                T defaultLocation) {
+        addRequiredResource(new LocationDescription(name,
+                                                    description,
+                                                    c,
+                                                    defaultLocation));
+    }
+
+    public <T extends ResourceLocation> void addResource(String name,
+                                                         String description,
+                                                         Class<T> c) {
+        addRequiredResource(new LocationDescription(name,
+                                                    description,
+                                                    c
+        ));
+    }
+
+    /**
+     * Access the name of the first index, note that multiple indexes
+     * are not stored in order so this method should be over-ridden
+     * if you intend to load multiple indexes.
+     *
+     * @return
+     */
+    public String getName() {
+        if (indexMap.size() > 1) {
+            return indexMap.values().iterator().next().getName();
+        }
+        return "Unnamed loader";
     }
 
     /**
@@ -70,7 +124,7 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
      *
      * @param resource
      */
-    public void addResource(LocationDescription resource) {
+    public void addRequiredResource(LocationDescription resource) {
 
         requiredResources.put(resource.getKey(), resource);
 
@@ -93,33 +147,12 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
         FilePreference filePreference = CorePreferences.getInstance().getPreference("RESOURCE_ROOT");
         return new File(filePreference.get(), name);
     }
-    
-    
-    public Map<String,LocationDescription> getRequiredResources(){
+
+
+    public Map<String, LocationDescription> getRequiredResources() {
         return requiredResources;
     }
 
-    /**
-     * Deletes a directory and all it's children
-     *
-     * @param dir
-     *
-     * @return
-     */
-    public static boolean delete(File dir) {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = delete(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-
-        // The directory is now empty so delete it
-        return dir.delete();
-    }
 
     /**
      * Determines whether the resource is available for update. If a required key is missing or the location is not
@@ -138,4 +171,52 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
     }
 
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void backup() {
+
+        for (LuceneIndex index : getIndexes()) {
+            if (index.isAvailable()) {
+                index.backup();
+            }
+        }
+
+    }
+
+
+    @Override
+    public void revert() {
+        for (LuceneIndex index : getIndexes()) {
+            if (index.canRevert()) {
+                index.revert();
+            }
+        }
+    }
+
+    @Override
+    public void clean() {
+        for (LuceneIndex index : getIndexes()) {
+            index.clean();
+        }
+    }
+
+    @Override
+    public boolean canBackup() {
+        boolean backup = false;
+        for (LuceneIndex index : getIndexes()) {
+            backup = index.isAvailable() || backup;
+        }
+        return backup;
+    }
+
+    @Override
+    public boolean canRevert() {
+        boolean revert = false;
+        for (LuceneIndex index : getIndexes()) {
+            revert = index.canRevert() || revert;
+        }
+        return revert;
+    }
 }

@@ -39,10 +39,10 @@ public class HMDBStructureLoader
         super(new HMDBStructureIndex());
 
         // default location
-        addResource(new LocationDescription("HMDB SDF",
-                                            "An SDF file containing the HMDB Id in the title of each Mol entry",
-                                            ResourceFileLocation.class,
-                                            new GZIPRemoteLocation(new URL("http://www.hmdb.ca/public/downloads/current/mcard_sdf_all.txt.gz"))));
+        addRequiredResource(new LocationDescription("HMDB SDF",
+                                                    "An SDF file containing the HMDB Id in the title of each Mol entry",
+                                                    ResourceFileLocation.class,
+                                                    new GZIPRemoteLocation(new URL("http://www.hmdb.ca/public/downloads/current/mcard_sdf_all.txt.gz"))));
     }
 
     @Override
@@ -55,7 +55,7 @@ public class HMDBStructureLoader
 
         MDLV2000Writer mdlv2000Writer = new MDLV2000Writer();
 
-        clean();
+        backup();
         StructureIndexWriter writer = StructureIndexWriter.create(getIndex());
 
         while (reader.hasNext()) {
@@ -87,8 +87,4 @@ public class HMDBStructureLoader
 
     }
 
-    @Override
-    public void clean() {
-        delete(getIndex().getLocation());
-    }
 }

@@ -51,4 +51,34 @@ public interface LuceneIndex {
      */
     public boolean isAvailable();
 
+    /**
+     * Access the backup location for this index
+     * @return backup file
+     */
+    public File getBackup();
+    
+    /**
+     * Indicate whether is possible to
+     * revert the index to a previous
+     * state
+     */
+    public boolean canRevert();
+
+    /**
+     * Creates a backup of this index
+     * @return
+     */
+    public boolean backup();
+
+    /**
+     * Revert the index to a previous state
+     * @return
+     */
+    public boolean revert();
+
+    /**
+     * Remove all traces of this index
+     */
+    public void clean();
+
 }

@@ -4,18 +4,13 @@ import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
-import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.io.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.AbstractResourceLoader;
 import uk.ac.ebi.io.service.loader.LocationDescription;
-import uk.ac.ebi.io.service.loader.location.GZIPRemoteLocation;
 import uk.ac.ebi.io.service.loader.location.ResourceDirectoryLocation;
-import uk.ac.ebi.io.service.loader.location.ResourceFileLocation;
-import uk.ac.ebi.io.service.loader.location.SystemDirectoryLocation;
 import uk.ac.ebi.io.service.index.structure.KEGGCompoundStructureIndex;
 
 import java.io.*;
-import java.net.URL;
 
 /**
  * ${Name}.java - 20.02.2012 <br/>
@@ -33,14 +28,17 @@ public class KEGGCompoundStructureLoader extends AbstractResourceLoader {
     public KEGGCompoundStructureLoader() throws IOException {
         super(new KEGGCompoundStructureIndex());
 
-        addResource(new LocationDescription("Mol Directory",
-                                            " directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/ligand/mol/C00009.mol)",
-                                            ResourceDirectoryLocation.class));
+        addRequiredResource(new LocationDescription("Mol Directory",
+                                                    " directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/ligand/mol/C00009.mol)",
+                                                    ResourceDirectoryLocation.class));
 
     }
 
     @Override
     public void load() throws MissingLocationException, IOException {
+
+
+       backup();
 
        ResourceDirectoryLocation location = getLocation("Mol Directory");
 
@@ -71,9 +69,6 @@ public class KEGGCompoundStructureLoader extends AbstractResourceLoader {
 
     }
 
-    @Override
-    public void clean() {
-        delete(getIndex().getLocation());
-    }
+
 
 }

@@ -7,14 +7,11 @@ import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import uk.ac.ebi.io.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.AbstractResourceLoader;
-import uk.ac.ebi.io.service.loader.LocationDescription;
 import uk.ac.ebi.io.service.loader.location.GZIPRemoteLocation;
-import uk.ac.ebi.io.service.loader.location.RemoteLocation;
 import uk.ac.ebi.io.service.loader.location.ResourceFileLocation;
 import uk.ac.ebi.io.service.index.structure.ChEBIStructureIndex;
 
 import java.io.*;
-import java.net.URL;
 import java.util.Map;
 
 /**
@@ -41,10 +38,11 @@ public class ChEBIStructureLoader
 
         super(new ChEBIStructureIndex());
 
-        addResource(new LocationDescription("ChEBI SDF",
-                                            "An SDF file containing the ChEBI ID as a property named <ChEBI ID>",
-                                            ResourceFileLocation.class,
-                                            new GZIPRemoteLocation(new URL("ftp://ftp.ebi.ac.uk/pub/databases/chebi/SDF/ChEBI_complete.sdf.gz"))));
+        // tell the loader what we need
+        addReqiredResource("ChEBI SDF",
+                           "An SDF file containing the ChEBI ID as a property named <ChEBI ID>",
+                           ResourceFileLocation.class,
+                           new GZIPRemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/SDF/ChEBI_complete.sdf.gz"));
 
     }
 
@@ -62,8 +60,8 @@ public class ChEBIStructureLoader
         IteratingMDLReader sdfReader = new IteratingMDLReader(location.open(), DefaultChemObjectBuilder.getInstance());
         MDLV2000Writer mdlWriter = new MDLV2000Writer();
 
-        // remove previous index and create an usable StructureIndexWriter
-        clean();
+        // make sure we do a backup
+        backup();
         StructureIndexWriter writer = StructureIndexWriter.create(getIndex());
 
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
@@ -98,13 +96,7 @@ public class ChEBIStructureLoader
 
     }
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void clean() {
-        delete(getIndex().getLocation());
-    }
+
 
     public static void main(String[] args) throws IOException, MissingLocationException {
         new ChEBIStructureLoader().load();
