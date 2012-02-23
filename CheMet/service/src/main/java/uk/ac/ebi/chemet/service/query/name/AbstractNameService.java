@@ -1,6 +1,6 @@
-package uk.ac.ebi.chemet.service.index.query.name;
+package uk.ac.ebi.chemet.service.query.name;
 
-import uk.ac.ebi.chemet.service.index.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.service.index.LuceneIndex;
 

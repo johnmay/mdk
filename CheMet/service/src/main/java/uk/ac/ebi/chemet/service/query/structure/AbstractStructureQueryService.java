@@ -1,4 +1,4 @@
-package uk.ac.ebi.chemet.service.index.query.structure;
+package uk.ac.ebi.chemet.service.query.structure;
 
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
@@ -7,15 +7,13 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
-import uk.ac.ebi.chemet.service.index.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.StructureQueryService;
 import uk.ac.ebi.service.index.LuceneIndex;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * ${Name}.java - 20.02.2012 <br/> Description...
