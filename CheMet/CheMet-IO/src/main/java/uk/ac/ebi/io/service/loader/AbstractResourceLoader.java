@@ -56,7 +56,7 @@ public abstract class AbstractResourceLoader
         requiredResources.put(resource.getKey(), resource);
 
         // if the resource has a default location, add it to the location map
-        if (resource.hasDefaultLocation()) {
+        if (resource.hasDefault()) {
             locationMap.put(resource.getKey(), resource.getDefault());
         }
 

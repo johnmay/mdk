@@ -8,6 +8,7 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.io.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.ResourceLoader;
+import uk.ac.ebi.io.service.loader.SingleIndexResourceLoader;
 import uk.ac.ebi.io.service.loader.structure.ChEBIStructureLoader;
 import uk.ac.ebi.io.service.loader.structure.HMDBStructureLoader;
 import uk.ac.ebi.io.service.loader.structure.KEGGCompoundStructureLoader;
@@ -32,43 +33,43 @@ public class LoaderRow extends JComponent {
     private JLabel name;
     private JButton update;
 
-    public LoaderRow(final ResourceLoader resourceLoader) {
+    public LoaderRow(final SingleIndexResourceLoader loader) {
 
         final Window window = SwingUtilities.getWindowAncestor(this);
 
         delete = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/trash_12x12.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                resourceLoader.clean();
-                delete.setEnabled(resourceLoader.canBackup() || resourceLoader.canRevert());
-                revert.setEnabled(resourceLoader.canRevert());
+                loader.clean();
+                delete.setEnabled(loader.canBackup() || loader.canRevert());
+                revert.setEnabled(loader.canRevert());
             }
         });
         delete.setToolTipText("Delete the current index and it's backup");
         revert = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/revert_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                resourceLoader.revert();
-                delete.setEnabled(resourceLoader.canBackup() || resourceLoader.canRevert());
-                revert.setEnabled(resourceLoader.canRevert());
+                loader.revert();
+                delete.setEnabled(loader.canBackup() || loader.canRevert());
+                revert.setEnabled(loader.canRevert());
             }
         });
         revert.setToolTipText("Revert to the previous version of the index");
         configure = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/cog_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                ResourceLoaderConfig dialog = new ResourceLoaderConfig(window, resourceLoader);
+                ResourceLoaderConfig dialog = new ResourceLoaderConfig(window, loader);
                 dialog.setAnchor(configure);
                 dialog.setVisible(true);
                 dialog.configure();
-                update.setEnabled(resourceLoader.isAvailable());
-                delete.setEnabled(resourceLoader.canBackup() || resourceLoader.canRevert());
-                revert.setEnabled(resourceLoader.canRevert());
+                update.setEnabled(loader.canUpdate());
+                delete.setEnabled(loader.canBackup() || loader.canRevert());
+                revert.setEnabled(loader.canRevert());
             }
         });
         configure.setToolTipText("Configure loader");
 
-        name = LabelFactory.newLabel(resourceLoader.getIndex().getName());
+        name = LabelFactory.newLabel(loader.getIndex().getName());
 
         update = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/update_16x16.png"), new AbstractAction() {
             @Override
@@ -85,7 +86,7 @@ public class LoaderRow extends JComponent {
                     @Override
                     protected Object doInBackground() throws Exception {
                         try {
-                            resourceLoader.load();
+                            loader.update();
                         } catch (MissingLocationException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         } catch (IOException e) {
@@ -96,10 +97,10 @@ public class LoaderRow extends JComponent {
 
                     @Override
                     protected void done() {
-                        delete.setEnabled(resourceLoader.canBackup() || resourceLoader.canRevert());
-                        revert.setEnabled(resourceLoader.canRevert());
+                        delete.setEnabled(loader.canBackup() || loader.canRevert());
+                        revert.setEnabled(loader.canRevert());
                         configure.setEnabled(true);
-                        update.setEnabled(resourceLoader.isAvailable());
+                        update.setEnabled(loader.canUpdate());
                         name.setIcon(null);
                     }
                 };
@@ -110,9 +111,9 @@ public class LoaderRow extends JComponent {
         update.setToolTipText("Update the index");
 
 
-        update.setEnabled(resourceLoader.isAvailable());
-        delete.setEnabled(resourceLoader.canBackup() || resourceLoader.canRevert());
-        revert.setEnabled(resourceLoader.canRevert());
+        update.setEnabled(loader.canUpdate());
+        delete.setEnabled(loader.canBackup() || loader.canRevert());
+        revert.setEnabled(loader.canRevert());
 
         setLayout(new FormLayout("4dlu, min, 4dlu, min, 4dlu, min, 4dlu, p, 4dlu, min, 4dlu", "p")
 

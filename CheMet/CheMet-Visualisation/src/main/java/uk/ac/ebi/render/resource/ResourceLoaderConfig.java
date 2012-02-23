@@ -5,8 +5,9 @@ import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.io.service.exception.MissingLocationException;
-import uk.ac.ebi.io.service.loader.LocationDescription;
+import uk.ac.ebi.io.service.loader.location.DefaultLocationDescription;
 import uk.ac.ebi.io.service.loader.ResourceLoader;
+import uk.ac.ebi.io.service.loader.location.LocationDescription;
 import uk.ac.ebi.io.service.loader.location.ResourceLocation;
 import uk.ac.ebi.io.service.loader.location.LocationFactory;
 

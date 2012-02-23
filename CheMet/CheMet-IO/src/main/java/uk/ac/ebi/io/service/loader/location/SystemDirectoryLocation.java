@@ -1,9 +1,6 @@
 package uk.ac.ebi.io.service.loader.location;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.Charset;
 
 /**
  * SystemDirectoryLocation.java - 20.02.2012 <br/>
