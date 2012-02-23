@@ -1,5 +1,7 @@
 package uk.ac.ebi.io.service.index;
 
+import uk.ac.ebi.service.index.LuceneIndex;
+
 import java.io.File;
 
 /**

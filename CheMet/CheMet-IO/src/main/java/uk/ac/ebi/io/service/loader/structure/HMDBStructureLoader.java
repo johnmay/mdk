@@ -5,13 +5,13 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
-import uk.ac.ebi.io.service.query.IUPACNameService;
-import uk.ac.ebi.io.service.query.PreferredNameService;
-import uk.ac.ebi.io.service.exception.MissingLocationException;
+import uk.ac.ebi.service.exception.MissingLocationException;
+import uk.ac.ebi.service.query.IUPACNameService;
+import uk.ac.ebi.service.query.PreferredNameService;
 import uk.ac.ebi.io.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.io.service.loader.location.DefaultLocationDescription;
 import uk.ac.ebi.io.service.loader.location.GZIPRemoteLocation;
-import uk.ac.ebi.io.service.loader.location.ResourceFileLocation;
+import uk.ac.ebi.service.location.ResourceFileLocation;
 import uk.ac.ebi.io.service.index.structure.HMDBStructureIndex;
 import uk.ac.ebi.io.service.loader.writer.DefaultStructureIndexWriter;
 

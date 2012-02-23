@@ -6,11 +6,11 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.io.service.query.IUPACNameService;
-import uk.ac.ebi.io.service.query.PreferredNameService;
-import uk.ac.ebi.io.service.query.QueryService;
-import uk.ac.ebi.io.service.index.LuceneIndex;
-import uk.ac.ebi.io.service.query.SynonymService;
+import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.service.query.IUPACNameService;
+import uk.ac.ebi.service.query.QueryService;
+import uk.ac.ebi.service.query.PreferredNameService;
+import uk.ac.ebi.service.query.SynonymService;
 
 import java.io.IOException;
 import java.util.ArrayList;

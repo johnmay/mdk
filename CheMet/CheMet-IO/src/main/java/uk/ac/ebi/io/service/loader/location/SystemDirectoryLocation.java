@@ -1,5 +1,7 @@
 package uk.ac.ebi.io.service.loader.location;
 
+import uk.ac.ebi.service.location.ResourceDirectoryLocation;
+
 import java.io.*;
 
 /**

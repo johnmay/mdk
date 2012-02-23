@@ -3,10 +3,10 @@ package uk.ac.ebi.io.service.loader.structure;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
-import uk.ac.ebi.io.service.exception.MissingLocationException;
+import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.io.service.loader.location.DefaultLocationDescription;
-import uk.ac.ebi.io.service.loader.location.ResourceDirectoryLocation;
+import uk.ac.ebi.service.location.ResourceDirectoryLocation;
 import uk.ac.ebi.io.service.index.structure.KEGGCompoundStructureIndex;
 import uk.ac.ebi.io.service.loader.writer.DefaultStructureIndexWriter;
 

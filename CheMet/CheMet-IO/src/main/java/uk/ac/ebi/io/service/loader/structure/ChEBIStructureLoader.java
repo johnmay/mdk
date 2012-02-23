@@ -4,10 +4,10 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
-import uk.ac.ebi.io.service.exception.MissingLocationException;
+import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.io.service.loader.location.GZIPRemoteLocation;
-import uk.ac.ebi.io.service.loader.location.ResourceFileLocation;
+import uk.ac.ebi.service.location.ResourceFileLocation;
 import uk.ac.ebi.io.service.index.structure.ChEBIStructureIndex;
 import uk.ac.ebi.io.service.loader.writer.DefaultStructureIndexWriter;
 

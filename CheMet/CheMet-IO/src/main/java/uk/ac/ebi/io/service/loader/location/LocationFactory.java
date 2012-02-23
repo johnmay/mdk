@@ -1,5 +1,7 @@
 package uk.ac.ebi.io.service.loader.location;
 
+import uk.ac.ebi.service.location.ResourceLocation;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

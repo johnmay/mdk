@@ -6,8 +6,8 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.util.Version;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.io.service.query.QueryService;
-import uk.ac.ebi.io.service.index.LuceneIndex;
+import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.service.query.QueryService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

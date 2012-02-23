@@ -1,8 +1,9 @@
 package uk.ac.ebi.io.service.loader;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.io.service.index.LuceneIndex;
+import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.io.service.loader.location.LocationFactory;
+import uk.ac.ebi.service.MultiIndexResourceLoader;
 
 import java.util.*;
 

@@ -1,10 +1,11 @@
 package uk.ac.ebi.io.service.loader;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.io.service.exception.MissingLocationException;
+import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.io.service.loader.location.DefaultLocationDescription;
-import uk.ac.ebi.io.service.loader.location.LocationDescription;
-import uk.ac.ebi.io.service.loader.location.ResourceLocation;
+import uk.ac.ebi.service.location.LocationDescription;
+import uk.ac.ebi.service.location.ResourceLocation;
+import uk.ac.ebi.service.ResourceLoader;
 
 import java.util.HashMap;
 import java.util.Map;

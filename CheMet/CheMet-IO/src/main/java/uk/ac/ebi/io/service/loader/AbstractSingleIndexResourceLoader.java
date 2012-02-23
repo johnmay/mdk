@@ -1,18 +1,9 @@
 package uk.ac.ebi.io.service.loader;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.utility.preference.type.FilePreference;
-import uk.ac.ebi.core.CorePreferences;
-import uk.ac.ebi.io.service.exception.MissingLocationException;
-import uk.ac.ebi.io.service.index.LuceneIndex;
+import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.io.service.loader.location.DefaultLocationDescription;
-import uk.ac.ebi.io.service.loader.location.LocationDescription;
-import uk.ac.ebi.io.service.loader.location.LocationFactory;
-import uk.ac.ebi.io.service.loader.location.ResourceLocation;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import uk.ac.ebi.service.SingleIndexResourceLoader;
 
 /**
  * ${Name}.java - 20.02.2012 <br/>
