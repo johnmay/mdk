@@ -59,7 +59,7 @@ public class Taxonomy extends AbstractIdentifier {
         this.kingdom = kingdom;
         this.officialName = officialName;
         this.commonName = commonName;
-        setAccession(code);
+        setAccession(Integer.toString(taxon));
     }
 
 
@@ -107,6 +107,11 @@ public class Taxonomy extends AbstractIdentifier {
         return taxon;
     }
 
+    @Override
+    public void setAccession(String accession) {
+        setTaxon(Integer.parseInt(accession));
+        super.setAccession(accession);
+    }
 
     public void setTaxon(int taxon) {
         this.taxon = taxon;
