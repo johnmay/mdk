@@ -15,6 +15,12 @@ package uk.ac.ebi.service.location;
 public interface LocationDescription {
 
     /**
+     * Access a key for this location description
+     * @return
+     */
+    public String getKey();
+    
+    /**
      * Short name of the required location (e.g. ChEBI SDF File)
      *
      * @return the name

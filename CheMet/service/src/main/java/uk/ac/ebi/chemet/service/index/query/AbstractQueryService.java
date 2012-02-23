@@ -1,32 +1,6 @@
-/**
- * AbstractQueryService.java
- *
- * 2011.10.26
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
- */
-package uk.ac.ebi.io.service;
+package uk.ac.ebi.chemet.service.index.query;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.prefs.Preferences;
-import java.util.regex.Pattern;
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
@@ -38,12 +12,21 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.service.query.NameService;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.logging.Level;
+import java.util.prefs.Preferences;
+import java.util.regex.Pattern;
+
 /**
- *          AbstractQueryService - 2011.10.26 <br>
- *          Class description
- * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * AbstractQueryService - 23.02.2012 <br/>
+ * <p/>
+ * Class descriptions.
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
+ * @version $Rev$
  */
 public class AbstractQueryService {
 
@@ -63,7 +46,7 @@ public class AbstractQueryService {
         try {
             setDirectory(service.getDirectory());
         } catch (IOException ex) {
-            Logger.getLogger(AbstractQueryService.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AbstractQueryService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

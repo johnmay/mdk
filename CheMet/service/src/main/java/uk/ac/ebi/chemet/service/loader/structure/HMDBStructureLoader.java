@@ -1,15 +1,17 @@
 package uk.ac.ebi.chemet.service.loader.structure;
 
+import org.apache.log4j.Logger;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import uk.ac.ebi.chemet.service.index.structure.HMDBStructureIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
+import uk.ac.ebi.chemet.service.loader.location.DefaultLocationDescription;
 import uk.ac.ebi.chemet.service.loader.location.GZIPRemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter;
-import uk.ac.ebi.io.service.loader.location.DefaultLocationDescription;
 import uk.ac.ebi.service.exception.MissingLocationException;
+import uk.ac.ebi.service.location.ResourceFileLocation;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -40,13 +42,13 @@ public class HMDBStructureLoader
     public HMDBStructureLoader() throws IOException {
         super(new HMDBStructureIndex());
 
-        addRequiredResource(new DefaultLocationDescription("HMDB SDF",
-                                                           "An SDF file containing the HMDB Id in the title of each Mol entry",
-                                                           ResourceFileLocation.class,
-                                                           new GZIPRemoteLocation("http://www.hmdb.ca/public/downloads/current/mcard_sdf_all.txt.gz")));
+        addRequiredResource("HMDB SDF",
+                            "An SDF file containing the HMDB Id in the title of each Mol entry",
+                            ResourceFileLocation.class,
+                            new GZIPRemoteLocation("http://www.hmdb.ca/public/downloads/current/mcard_sdf_all.txt.gz"));
     }
 
-    
+
     /**
      * @inheritDoc
      */

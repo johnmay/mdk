@@ -5,7 +5,7 @@ import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
-import uk.ac.ebi.core.CorePreferences;
+import uk.ac.ebi.chemet.service.ServicePreferences;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public abstract class KeywordNIOIndex extends AbstractLuceneIndex {
     private Analyzer analyzer;
     private Directory directory;
 
-    private static final FilePreference RESOURCE_ROOT = CorePreferences.getInstance().getPreference("RESOURCE_ROOT");
+    private static final FilePreference SERVICE_ROOT = ServicePreferences.getInstance().getPreference("SERVICE_ROOT");
 
     /**
      * Creates an index description for the path relative to the RESOURCE_ROOT property
@@ -36,7 +36,7 @@ public abstract class KeywordNIOIndex extends AbstractLuceneIndex {
      * @param path
      */
     public KeywordNIOIndex(String name, String path) {
-        this(name, new File(RESOURCE_ROOT.get(), path));
+        this(name, new File(SERVICE_ROOT.get(), path));
     }
 
     /**

@@ -3,14 +3,15 @@ package uk.ac.ebi.chemet.service.loader.structure;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
+import uk.ac.ebi.chemet.service.index.structure.KEGGCompoundStructureIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter;
 import uk.ac.ebi.service.exception.MissingLocationException;
-import uk.ac.ebi.io.service.loader.location.DefaultLocationDescription;
 import uk.ac.ebi.service.location.ResourceDirectoryLocation;
-import uk.ac.ebi.io.service.index.structure.KEGGCompoundStructureIndex;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 /**
  * KEGGCompoundStructureLoader - 20.02.2012 <br/>
@@ -33,9 +34,9 @@ public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoad
     public KEGGCompoundStructureLoader() {
         super(new KEGGCompoundStructureIndex());
 
-        addRequiredResource(new DefaultLocationDescription("KEGG Mol files",
-                                                           "a directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/ligand/mol/C00009.mol)",
-                                                           ResourceDirectoryLocation.class));
+        addRequiredResource("KEGG Mol files",
+                            "a directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/ligand/mol/C00009.mol)",
+                            ResourceDirectoryLocation.class);
 
     }
 

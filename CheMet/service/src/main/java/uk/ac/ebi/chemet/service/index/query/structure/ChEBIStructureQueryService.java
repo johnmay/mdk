@@ -1,6 +1,6 @@
 package uk.ac.ebi.chemet.service.index.query.structure;
 
-import uk.ac.ebi.io.service.index.structure.ChEBIStructureIndex;
+import uk.ac.ebi.chemet.service.index.structure.ChEBIStructureIndex;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 import java.io.IOException;

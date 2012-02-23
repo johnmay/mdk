@@ -7,9 +7,9 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
+import uk.ac.ebi.chemet.service.index.query.AbstractQueryService;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.StructureQueryService;
-import uk.ac.ebi.io.service.AbstractQueryService;
 import uk.ac.ebi.service.index.LuceneIndex;
 
 import java.io.IOException;
@@ -30,14 +30,9 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
 
     private IndexSearcher searcher;
 
-    private LuceneIndex index;
-    
     private Term IDENTIFIER = new Term("Identifier");
 
     public AbstractStructureQueryService(LuceneIndex index) throws IOException {
-
-
-        this.index = index;
 
         if(index.isAvailable()){
             setDirectory(index.getDirectory());
@@ -49,10 +44,6 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
         throw new UnsupportedOperationException("Fix my terms!");
 
 
-    }
-
-    public LuceneIndex getIndex(){
-        return index;
     }
 
     @Override
@@ -67,7 +58,7 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
 
             MDLV2000Reader reader = new MDLV2000Reader(new StringReader(str));
             IMolecule molecule = new Molecule();
-            return (IAtomContainer) reader.read(molecule);
+            return reader.read(molecule);
 
         } catch (CDKException ex) {
             // throw our own exception?
@@ -89,7 +80,6 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
             if (hits.length > 1) {
                 // LOGGER.info("more then one hit found for an id! this shouldn't happen");
             }
-            Collection<String> names = new HashSet<String>(hits.length);
             for (ScoreDoc scoreDoc : hits) {
                 return new String(getBinaryValue(scoreDoc, "Molecule"));
             }

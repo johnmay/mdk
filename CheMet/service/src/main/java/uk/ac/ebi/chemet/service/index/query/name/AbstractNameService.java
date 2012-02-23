@@ -1,7 +1,7 @@
 package uk.ac.ebi.chemet.service.index.query.name;
 
+import uk.ac.ebi.chemet.service.index.query.AbstractQueryService;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.io.service.AbstractQueryService;
 import uk.ac.ebi.service.index.LuceneIndex;
 
 import java.io.IOException;

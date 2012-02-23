@@ -1,7 +1,7 @@
 package uk.ac.ebi.chemet.service.index.query.structure;
 
+import uk.ac.ebi.chemet.service.index.structure.KEGGCompoundStructureIndex;
 import uk.ac.ebi.interfaces.services.StructureQueryService;
-import uk.ac.ebi.io.service.index.structure.KEGGCompoundStructureIndex;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 import java.io.IOException;

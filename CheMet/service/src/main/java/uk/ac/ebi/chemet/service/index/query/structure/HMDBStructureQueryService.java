@@ -1,6 +1,6 @@
 package uk.ac.ebi.chemet.service.index.query.structure;
 
-import uk.ac.ebi.io.service.index.structure.HMDBStructureIndex;
+import uk.ac.ebi.chemet.service.index.structure.HMDBStructureIndex;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 
 import java.io.IOException;

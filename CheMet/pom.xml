@@ -15,7 +15,7 @@
         <module>annotation</module>
         <module>interface</module>
         <module>observation</module>
-        <module>interface</module>
+        <module>service</module>
     </modules>
     
     <properties>
