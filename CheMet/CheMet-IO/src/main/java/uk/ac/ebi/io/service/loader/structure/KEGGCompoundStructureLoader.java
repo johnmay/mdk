@@ -1,19 +1,19 @@
 package uk.ac.ebi.io.service.loader.structure;
 
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.io.service.exception.MissingLocationException;
-import uk.ac.ebi.io.service.loader.AbstractResourceLoader;
-import uk.ac.ebi.io.service.loader.LocationDescription;
+import uk.ac.ebi.io.service.loader.AbstractSingleIndexResourceLoader;
+import uk.ac.ebi.io.service.loader.location.DefaultLocationDescription;
 import uk.ac.ebi.io.service.loader.location.ResourceDirectoryLocation;
 import uk.ac.ebi.io.service.index.structure.KEGGCompoundStructureIndex;
+import uk.ac.ebi.io.service.loader.writer.DefaultStructureIndexWriter;
 
 import java.io.*;
 
 /**
- * ${Name}.java - 20.02.2012 <br/>
+ * KEGGCompoundStructureLoader - 20.02.2012 <br/>
  * <p/>
  * Load the KEGG mol directory into a lucene index.
  * The KEGG Compound identifier is provided by the name of the file
@@ -22,43 +22,43 @@ import java.io.*;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class KEGGCompoundStructureLoader extends AbstractResourceLoader {
+public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoader {
 
-
-    public KEGGCompoundStructureLoader() throws IOException {
+    /**
+     * Creates the loader with the {@see KEGGCompoundStructureIndex} and no default location.
+     * The KEGG mol directory used to be available on the FTP site before a subscription
+     * was required but now the it is only available to subscribers. Therefore the resource
+     * can be loaded from a local file only
+     */
+    public KEGGCompoundStructureLoader() {
         super(new KEGGCompoundStructureIndex());
 
-        addRequiredResource(new LocationDescription("Mol Directory",
-                                                    " directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/ligand/mol/C00009.mol)",
-                                                    ResourceDirectoryLocation.class));
+        addRequiredResource(new DefaultLocationDescription("KEGG Mol files",
+                                                           "a directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/ligand/mol/C00009.mol)",
+                                                           ResourceDirectoryLocation.class));
 
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
-    public void load() throws MissingLocationException, IOException {
+    public void update() throws MissingLocationException, IOException {
 
+        // get the directory of files
+        ResourceDirectoryLocation location = getLocation("KEGG Mol files");
+        DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
+        MDLV2000Reader mdlReader = new MDLV2000Reader();
 
-       backup();
+        for (File file : location.list()) {
 
-       ResourceDirectoryLocation location = getLocation("Mol Directory");
-
-       StructureIndexWriter writer =  StructureIndexWriter.create(getIndex());
-        
-       for(File file : location.list()){
-
-            MDLV2000Reader mdlReader = new MDLV2000Reader(new FileInputStream(file));
-            try{
-                IAtomContainer molecule = new AtomContainer(mdlReader.read(new Molecule()));
-
-                ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-                ObjectOutputStream out = new ObjectOutputStream(byteStream);
-                out.writeObject(molecule);
-
-                writer.add(file.getName().substring(0, 6),
-                                byteStream.toByteArray());
-
-
-            } catch (Exception ex){
+            try {
+                mdlReader.setReader(new FileInputStream(file));
+                IAtomContainer molecule = mdlReader.read(new Molecule());
+                writer.add(file.getName().substring(0, 6), molecule);
+                mdlReader.close();
+            } catch (Exception ex) {
+                // TODO: log error
                 ex.printStackTrace();
             }
 
@@ -68,7 +68,6 @@ public class KEGGCompoundStructureLoader extends AbstractResourceLoader {
         writer.close();
 
     }
-
 
 
 }
