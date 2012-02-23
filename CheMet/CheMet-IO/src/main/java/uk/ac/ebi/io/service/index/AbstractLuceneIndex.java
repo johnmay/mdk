@@ -6,6 +6,7 @@ import java.io.File;
  * AbstractLuceneIndex.java - 21.02.2012 <br/> Description...
  *
  * Provides name storage and isAvailable/lastModified implementations
+ * as well as backup and revert operations
  *
  * @author johnmay
  * @author $Author$ (this version)
