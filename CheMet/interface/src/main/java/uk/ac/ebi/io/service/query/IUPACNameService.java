@@ -1,4 +1,4 @@
-package uk.ac.ebi.io.service;
+package uk.ac.ebi.io.service.query;
 
 import org.apache.lucene.index.Term;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -38,13 +38,13 @@ public interface IUPACNameService<I extends Identifier>
 
     /**
      * Search for identifiers matching the specified IUPAC name. The search can
-     * be direct or fuzzy. A fuzzy search will take considerably longer but
+     * be direct or fuzzy. A approximate search will take considerably longer but
      * with the complexity of the IUPAC nomenclature it may be required.
      *
      * @param name iupac name to search for
-     * @param fuzzy whether the search is fuzzy or not
+     * @param approximate whether the search is approximate or not
      * @return collection of identifiers that match the search criteria
      */
-    public Collection<I> searchIUPACName(String name, boolean fuzzy);
+    public Collection<I> searchIUPACName(String name, boolean approximate);
     
 }

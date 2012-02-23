@@ -1,4 +1,4 @@
-package uk.ac.ebi.io.service;
+package uk.ac.ebi.io.service.query;
 
 import org.apache.lucene.index.Term;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -36,7 +36,7 @@ public interface QueryService<I extends Identifier> {
     public void setMaxResults(int maxResults);
 
     /**
-     * Set the default minimum similarity for fuzzy searches.
+     * Set the default minimum similarity for approximate searches.
      * @param similarity new minimum similarity
      */
     public void setMinSimilarity(float similarity);

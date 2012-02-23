@@ -1,4 +1,4 @@
-package uk.ac.ebi.io.service;
+package uk.ac.ebi.io.service.query;
 
 import org.apache.lucene.index.Term;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -32,10 +32,10 @@ public interface NameService<I extends Identifier>
      * IUPAC name and a synonyms all three should be search with this method
      *
      * @param name name to search for
-     * @param fuzzy perform a fuzzy search
+     * @param approximate perform a approximate search
      * @return collection of service specific identifiers matching the provided name
      */
-    public Collection<I> searchName(String name, boolean fuzzy);
+    public Collection<I> searchName(String name, boolean approximate);
 
     /**
      * Access all names for a given identifier. As with {@see searchName}, if the

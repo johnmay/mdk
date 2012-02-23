@@ -1,4 +1,4 @@
-package uk.ac.ebi.io.service;
+package uk.ac.ebi.io.service.query;
 
 import org.apache.lucene.index.Term;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -19,7 +19,7 @@ public interface SynonymService<I extends Identifier>
     
     public static Term SYNONYM = new Term("Synonym");
 
-    public Collection<I> searchSynonyms(String name, boolean fuzzy);
+    public Collection<I> searchSynonyms(String name, boolean approximate);
 
     public Collection<String> getSynonyms(I identifier);
 

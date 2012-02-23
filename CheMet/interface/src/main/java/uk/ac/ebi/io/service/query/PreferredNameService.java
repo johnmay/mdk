@@ -1,4 +1,4 @@
-package uk.ac.ebi.io.service;
+package uk.ac.ebi.io.service.query;
 
 import org.apache.lucene.index.Term;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -28,15 +28,15 @@ public interface PreferredNameService<I extends Identifier>
 
     /**
      * Search the index for identifiers whose name matches the name provided. Whether
-     * the search should be fuzzy or not can specified by the 'fuzzy' attribute. A fuzzy
-     * search will take considerably longer then a non-fuzzy search.
+     * the search should be approximate or not can specified by the 'approximate' attribute. A approximate
+     * search will take considerably longer then a non-approximate search.
      *
      * @param name  the name to find matching identifiers for
-     * @param fuzzy whether to perform a fuzzy search
+     * @param approximate whether to perform a approximate search
      *
      * @return collection of identifiers whose preferred name matches the provided query
      */
-    public Collection<I> searchPreferredName(String name, boolean fuzzy);
+    public Collection<I> searchPreferredName(String name, boolean approximate);
 
     /**
      * Provides the preferred name for the given identifier. If no preferred name
