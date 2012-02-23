@@ -3,7 +3,9 @@ package uk.ac.ebi.io.service.index.name;
 import uk.ac.ebi.io.service.index.KeywordNIOIndex;
 
 /**
- * ${Name}.java - 21.02.2012 <br/> Description...
+ * HMDBNameIndex - 21.02.2012 <br/> Description...
+ *
+ * Index is used in HMDLMetabocardsLoader and HMDBNameService
  *
  * @author johnmay
  * @author $Author$ (this version)
