@@ -3,7 +3,7 @@ package uk.ac.ebi.io.service.index.structure;
 import uk.ac.ebi.io.service.index.KeywordNIOIndex;
 
 /**
- * ChEBIStructureIndex.java - 21.02.2012 <br/>
+ * ChEBIStructureIndex - 21.02.2012 <br/>
  * <p/>
  * Describes the {@see LuceneIndex} used in {@see ChEBIStructureQueryService} and {@see ChEBIStructureLoader}.
  *
