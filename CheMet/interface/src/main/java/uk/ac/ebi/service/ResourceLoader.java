@@ -65,6 +65,20 @@ public interface ResourceLoader {
     public void update() throws MissingLocationException, IOException;
 
     /**
+     * Cancel the update process. This method should inform the update
+     * process to terminate the update as soon as possible. The process
+     * should NOT automatically invoke {@see backup()}, this should be
+     * handled by an update manager.
+     */
+    public void cancel();
+
+    /**
+     * Reset the cancelled state of the loader. This should be called
+     * by an update manager before invoking the update() method.
+     */
+    public void uncancel();
+
+    /**
      * Create a backup of this loaders output, this method should be called
      * before any calls to {@see update()} to ensure that {@see revert()}
      * can be called should a problem occur. The call to this method before
