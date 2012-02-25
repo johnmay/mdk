@@ -32,11 +32,7 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
 
     public AbstractStructureQueryService(LuceneIndex index) throws IOException {
 
-        if(index.isAvailable()){
-            setDirectory(index.getDirectory());
-            setAnalyzer(index.getAnalyzer());
-        }
-
+        super(index);
         searcher = new IndexSearcher(index.getDirectory());
 
         throw new UnsupportedOperationException("Fix my terms!");
