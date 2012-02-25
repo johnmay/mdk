@@ -24,6 +24,7 @@ public abstract class AbstractResourceLoader
 
     private static final Logger LOGGER = Logger.getLogger(AbstractResourceLoader.class);
     private Map<String, ResourceLocation> locationMap = new HashMap<String, ResourceLocation>(6);
+    private boolean cancelled = false;
 
     private Map<String, LocationDescription> requiredResources = new HashMap<String, LocationDescription>();
 
@@ -94,6 +95,7 @@ public abstract class AbstractResourceLoader
     @Override
     public boolean canUpdate() {
         for (String key : getRequiredResources().keySet()) {
+            System.out.println("checking... " + key);
             if (!locationMap.containsKey(key)
                     || !locationMap.get(key).isAvailable()) {
                 return false;
@@ -110,4 +112,29 @@ public abstract class AbstractResourceLoader
     public Map<String, LocationDescription> getRequiredResources() {
         return requiredResources;
     }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public synchronized void cancel() {
+        cancelled = true;
+    }
+
+    /**
+     * Determine whether the update has been cancelled
+     * @return
+     */
+    public synchronized boolean isCancelled(){
+        return cancelled;
+    }
+
+    /**
+     * Reset the cancelled state (should be called before update)
+     */
+    @Override
+    public void uncancel(){
+        cancelled = false;
+    }
+
 }
