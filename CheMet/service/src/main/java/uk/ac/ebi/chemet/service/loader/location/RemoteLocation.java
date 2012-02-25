@@ -4,6 +4,7 @@ import uk.ac.ebi.service.location.ResourceFileLocation;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -29,6 +30,10 @@ public class RemoteLocation
         this.location = location;
     }
 
+    public RemoteLocation(String location) throws MalformedURLException {
+        this.location = new URL(location);
+    }
+
     public URL getLocation() {
         return location;
     }
@@ -39,10 +44,8 @@ public class RemoteLocation
     public boolean isAvailable() {
 
         try {
-            open();
-            boolean available = connection.getContentLength() > 0;
-            close();
-            return available;
+            connection = location.openConnection();
+            return connection.getContentLength() > 0;
         } catch (IOException ex) {
             return false;
         }
@@ -56,7 +59,7 @@ public class RemoteLocation
      */
     public InputStream open() throws IOException {
         if (stream == null) {
-            connection = location.openConnection();
+            connection = connection == null ? location.openConnection() : connection;
             stream = connection.getInputStream();
         }
         return stream;
