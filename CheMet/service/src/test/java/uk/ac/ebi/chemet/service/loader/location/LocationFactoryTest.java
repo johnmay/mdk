@@ -5,40 +5,41 @@ import org.junit.Assert;
 import uk.ac.ebi.service.location.ResourceLocation;
 
 /**
- * ${Name}.java - 20.02.2012 <br/> Description...
+ * LocationFactoryTest - 20.02.2012 <br/>
+ *
+ * Unit tests for {@see LocationFactory}
  *
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$
  */
 public class LocationFactoryTest {
+
+    private static LocationFactory factory = LocationFactory.getInstance();
+
     @Test
     public void testGetInstance() throws Exception {
         Assert.assertNotNull(LocationFactory.getInstance());
     }
 
     @Test
-    public void testCreate() throws Exception {
-
-        LocationFactory factory = LocationFactory.getInstance();
+    public void testRemoteLocation() throws Exception {
 
         ResourceLocation chebiNames = factory.newDefaultLocation("chebi.names",
                                                                  "ftp://ftp.ebi.ac.uk/" +
                                                                          "pub/databases/structure/Flat_file_tab_delimited/names.tsv");
-
         Assert.assertTrue(chebiNames instanceof RemoteLocation);
 
         ResourceLocation google = factory.newDefaultLocation("google",
                                                              "http://www.google.co.uk");
-
         Assert.assertTrue(google instanceof RemoteLocation);
 
+    }
 
+    @Test
+    public void testSystemLocation() throws Exception {
         ResourceLocation home = factory.newDefaultLocation("user.home",
                                                            System.getProperty("user.home"));
-
         Assert.assertTrue(home instanceof SystemLocation);
-
-
     }
 }
