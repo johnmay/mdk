@@ -59,6 +59,8 @@ public class ChEBIStructureLoader
 
         while (sdfReader.hasNext()) {
 
+            if(isCancelled()) break;
+
             IMolecule molecule = (IMolecule) sdfReader.next();
             Map properties = molecule.getProperties();
 

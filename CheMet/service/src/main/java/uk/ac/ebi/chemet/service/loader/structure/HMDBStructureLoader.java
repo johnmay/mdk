@@ -63,6 +63,8 @@ public class HMDBStructureLoader
 
         while (sdf.hasNext()) {
 
+            if(isCancelled()) break;
+
             IMolecule molecule = (IMolecule) sdf.next();
             Object title = molecule.getProperty(CDKConstants.TITLE);
 
