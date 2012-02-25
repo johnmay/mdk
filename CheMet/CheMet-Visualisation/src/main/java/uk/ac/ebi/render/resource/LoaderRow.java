@@ -3,15 +3,12 @@ package uk.ac.ebi.render.resource;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import net.sf.furbelow.SpinningDial;
+import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.io.service.exception.MissingLocationException;
-import uk.ac.ebi.io.service.loader.ResourceLoader;
-import uk.ac.ebi.io.service.loader.SingleIndexResourceLoader;
-import uk.ac.ebi.io.service.loader.structure.ChEBIStructureLoader;
-import uk.ac.ebi.io.service.loader.structure.HMDBStructureLoader;
-import uk.ac.ebi.io.service.loader.structure.KEGGCompoundStructureLoader;
+import uk.ac.ebi.service.SingleIndexResourceLoader;
+import uk.ac.ebi.service.exception.MissingLocationException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,10 +29,13 @@ public class LoaderRow extends JComponent {
     private JButton configure;
     private JLabel name;
     private JButton update;
+    private JButton cancel;
 
-    public LoaderRow(final SingleIndexResourceLoader loader) {
+    private static final Logger LOGGER = Logger.getLogger(LoaderRow.class);
 
-        final Window window = SwingUtilities.getWindowAncestor(this);
+    public LoaderRow(final SingleIndexResourceLoader loader, final Window window) {
+
+        System.out.println("Creating loader for UI " + loader.getName());
 
         delete = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/trash_12x12.png"), new AbstractAction() {
             @Override
@@ -45,6 +45,7 @@ public class LoaderRow extends JComponent {
                 revert.setEnabled(loader.canRevert());
             }
         });
+        System.out.println("Delete... done");
         delete.setToolTipText("Delete the current index and it's backup");
         revert = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/revert_16x16.png"), new AbstractAction() {
             @Override
@@ -54,6 +55,7 @@ public class LoaderRow extends JComponent {
                 revert.setEnabled(loader.canRevert());
             }
         });
+        System.out.println("Revert... done");
         revert.setToolTipText("Revert to the previous version of the index");
         configure = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/cog_16x16.png"), new AbstractAction() {
             @Override
@@ -68,12 +70,14 @@ public class LoaderRow extends JComponent {
             }
         });
         configure.setToolTipText("Configure loader");
-
+        System.out.println("Configure... done");
         name = LabelFactory.newLabel(loader.getIndex().getName());
 
         update = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/update_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
+                System.out.println("Invoked update()");
 
                 name.setIcon(new SpinningDial(16, 16));
                 update.setEnabled(false);
@@ -81,43 +85,65 @@ public class LoaderRow extends JComponent {
                 configure.setEnabled(false);
                 revert.setEnabled(false);
 
-                SwingWorker worker = new SwingWorker() {
+                // ensure the loader isn't cancelled and update
+                loader.backup();
+                loader.uncancel();
 
+                new SwingWorker() {
                     @Override
                     protected Object doInBackground() throws Exception {
                         try {
+                            System.out.println("update()");
                             loader.update();
+                            System.out.println("done");
                         } catch (MissingLocationException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         } catch (IOException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         }
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                delete.setEnabled(loader.canBackup() || loader.canRevert());
+                                revert.setEnabled(loader.canRevert());
+                                configure.setEnabled(true);
+                                update.setEnabled(loader.canUpdate());
+                                name.setIcon(null);
+                            }
+                        });
                         return null;
-                    };
-
-                    @Override
-                    protected void done() {
-                        delete.setEnabled(loader.canBackup() || loader.canRevert());
-                        revert.setEnabled(loader.canRevert());
-                        configure.setEnabled(true);
-                        update.setEnabled(loader.canUpdate());
-                        name.setIcon(null);
                     }
-                };
 
-                worker.execute();
+                }.execute();
+
             }
-        });
+        }
+
+        );
+
+        cancel = ButtonFactory.newCleanButton(new AbstractAction("Cancel") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("cancel()");
+                loader.cancel();
+                System.out.println("done()");
+                loader.revert();
+            }
+        }
+
+        );
+        System.out.println("Update... done");
         update.setToolTipText("Update the index");
 
-
+        System.out.println("Setting state");
         update.setEnabled(loader.canUpdate());
         delete.setEnabled(loader.canBackup() || loader.canRevert());
         revert.setEnabled(loader.canRevert());
 
-        setLayout(new FormLayout("4dlu, min, 4dlu, min, 4dlu, min, 4dlu, p, 4dlu, min, 4dlu", "p")
+        setLayout(new FormLayout("4dlu, min, 4dlu, min, 4dlu, min, 4dlu, min, 4dlu, min, 4dlu, p:grow, 4dlu", "p")
 
         );
+
+        System.out.println("Laying out loader components");
         CellConstraints cc = new CellConstraints();
 
         add(delete, cc.xy(2, 1)
@@ -136,7 +162,11 @@ public class LoaderRow extends JComponent {
 
         );
 
-        add(name, cc.xy(10, 1)
+        add(cancel, cc.xy(10, 1)
+
+        );
+
+        add(name, cc.xy(12, 1)
 
         );
     }
@@ -149,11 +179,11 @@ public class LoaderRow extends JComponent {
         frame.setContentPane(box);
         box.add(Box.createRigidArea(new Dimension(5, 5)));
         box.add(Box.createGlue());
-        box.add(new LoaderRow(new ChEBIStructureLoader()));
-        box.add(Box.createGlue());
-        box.add(new LoaderRow(new KEGGCompoundStructureLoader()));
-        box.add(Box.createGlue());
-        box.add(new LoaderRow(new HMDBStructureLoader()));
+        //        box.add(new LoaderRow(new ChEBIStructureLoader()));
+        //        box.add(Box.createGlue());
+        //        box.add(new LoaderRow(new KEGGCompoundStructureLoader()));
+        //        box.add(Box.createGlue());
+        //        box.add(new LoaderRow(new HMDBStructureLoader()));
         box.add(Box.createGlue());
         box.add(Box.createRigidArea(new Dimension(5, 5)));
         frame.setVisible(true);

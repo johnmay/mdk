@@ -4,15 +4,13 @@ import uk.ac.ebi.caf.component.CalloutDialog;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.io.service.exception.MissingLocationException;
-import uk.ac.ebi.io.service.loader.location.DefaultLocationDescription;
-import uk.ac.ebi.io.service.loader.ResourceLoader;
-import uk.ac.ebi.io.service.loader.location.LocationDescription;
-import uk.ac.ebi.io.service.loader.location.ResourceLocation;
-import uk.ac.ebi.io.service.loader.location.LocationFactory;
+import uk.ac.ebi.service.ResourceLoader;
+import uk.ac.ebi.service.exception.MissingLocationException;
+import uk.ac.ebi.service.location.LocationDescription;
+import uk.ac.ebi.service.location.ResourceLocation;
 
 import javax.swing.*;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,22 +90,22 @@ public class ResourceLoaderConfig extends CalloutDialog {
             String value = e.getValue().getText().trim();
             
             if(!value.isEmpty()){
-                try {
-                    
-                    try{
-                        ResourceLocation location = loader.getLocation(value);
-                        if(location.toString().equals(value)){
-                            continue;
-                        }
-                    } catch (MissingLocationException ex){
-                        
-                    }
-                    
-                    loader.addLocation(key, LocationFactory.getInstance().newLocation(key, value));
-
-                }catch(IOException ex){
-                    
-                }
+//                try {
+//
+//                    try{
+//                        ResourceLocation location = loader.getLocation(value);
+//                        if(location.toString().equals(value)){
+//                            continue;
+//                        }
+//                    } catch (MissingLocationException ex){
+//
+//                    }
+//
+//                   // loader.addLocation(key, LocationFactory.getInstance().newLocation(key, value));
+//
+//                }catch(IOException ex){
+//
+//                }
             }
             
         }
