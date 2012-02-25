@@ -142,7 +142,7 @@ public class AbstractQueryService {
 
             for (ScoreDoc document : hits) {
                 T id = (T) identifier.newInstance();
-                id.setAccession(getValue(document, NameService.IDENTIFIER_TERM.field()));
+                id.setAccession(getValue(document, NameService.IDENTIFIER.field()));
                 identifiers.add(id);
             }
         } catch (IOException ex) {
