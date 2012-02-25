@@ -5,7 +5,6 @@ import uk.ac.ebi.caf.utility.preference.AbstractPreferenceLoader;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.prefs.AbstractPreferences;
 
 /**
  * ServicePreferences - 23.02.2012 <br/>
