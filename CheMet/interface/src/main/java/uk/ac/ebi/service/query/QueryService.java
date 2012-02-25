@@ -20,7 +20,7 @@ public interface QueryService<I extends Identifier> {
      * Identifier term should be used to create and search any identifier
      * field in an index. This ensures naming consistency
      */
-    public static final Term IDENTIFIER_TERM = new Term("Identifier");
+    public static final Term IDENTIFIER = new Term("Identifier");
 
     /**
      * Provides an instance of a identifier usable by the service.
