@@ -1,20 +1,19 @@
 package uk.ac.ebi.chemet.service.query;
 
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.services.LuceneService;
-import uk.ac.ebi.service.query.NameService;
+import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.service.query.QueryService;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Level;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 
@@ -27,28 +26,35 @@ import java.util.regex.Pattern;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class AbstractQueryService {
+public abstract class AbstractQueryService<I extends Identifier>
+        implements QueryService<I> {
+
+    private static final Logger LOGGER = Logger.getLogger(AbstractQueryService.class);
 
     private Document[] documents;
     private Directory directory;
     private Analyzer analyzer;
     private IndexReader reader;
+    private IndexSearcher searcher;
+
     private int max = Preferences.userNodeForPackage(AbstractQueryService.class).getInt("default.max.results", 100);
     private float minSimilarity = 0.5f; // for fuzzy queries
 
-    public AbstractQueryService(){
 
-    }
-
-    public AbstractQueryService(LuceneService service) {
-        analyzer  = service.getAnalzyer();
+    public AbstractQueryService(LuceneIndex index) {
         try {
-            setDirectory(service.getDirectory());
+            analyzer = index.getAnalyzer();
+            setDirectory(index.getDirectory());
+            searcher = new IndexSearcher(getDirectory(), true);
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(AbstractQueryService.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error("Could not create query service");
         }
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
     public void setMinSimilarity(float minSimilarity) {
         this.minSimilarity = minSimilarity;
     }
@@ -58,7 +64,7 @@ public class AbstractQueryService {
     }
 
     public void setDirectory(Directory directory) throws IOException {
-        if(reader != null){
+        if (reader != null) {
             reader.close();
         }
         this.directory = directory;
@@ -66,9 +72,11 @@ public class AbstractQueryService {
         documents = new Document[reader.numDocs()];
     }
 
-    public void setAnalyzer(Analyzer analyzer){
+    public void setAnalyzer(Analyzer analyzer) {
         this.analyzer = analyzer;
     }
+
+    @Override
 
     public void setMaxResults(int max) {
         this.max = max;
@@ -78,7 +86,7 @@ public class AbstractQueryService {
         return max;
     }
 
-    public byte[] getBinaryValue(ScoreDoc document, String field) throws CorruptIndexException, IOException {
+    public byte[] getBinaryValue(ScoreDoc document, String field) throws IOException {
         int index = document.doc;
 
         if (documents[index] == null) {
@@ -88,7 +96,7 @@ public class AbstractQueryService {
         return documents[index].getBinaryValue(field);
     }
 
-    public String getValue(ScoreDoc document, String field) throws CorruptIndexException, IOException {
+    public String getValue(ScoreDoc document, String field) throws IOException {
 
         int index = document.doc;
 
@@ -100,7 +108,7 @@ public class AbstractQueryService {
 
     }
 
-    public String[] getValues(ScoreDoc document, String field) throws CorruptIndexException, IOException {
+    public String[] getValues(ScoreDoc document, String field) throws IOException {
 
         int index = document.doc;
 
@@ -112,9 +120,9 @@ public class AbstractQueryService {
 
     }
 
-    public <T extends Identifier> Collection<T> getIdentifiers(IndexSearcher searcher, Query query, T identifier){
+    public Collection<I> getIdentifiers(Query query) {
 
-        Collection<T> identifiers = new ArrayList<T>();
+        Collection<I> identifiers = new ArrayList<I>();
 
         TopScoreDocCollector collector = TopScoreDocCollector.create(getMaxResults(), true);
         try {
@@ -123,8 +131,8 @@ public class AbstractQueryService {
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
             for (ScoreDoc document : hits) {
-                T id = (T) identifier.newInstance();
-                id.setAccession(getValue(document, NameService.IDENTIFIER_TERM.field()));
+                I id = getIdentifier();
+                id.setAccession(getValue(document, IDENTIFIER.field()));
                 identifiers.add(id);
             }
         } catch (IOException ex) {
@@ -136,14 +144,27 @@ public class AbstractQueryService {
 
     /**
      * Create a new query
-     * @param name
+     *
+     * @param text
      * @param term
      * @param fuzzy
+     *
      * @return
      */
-    public Query create(String name, Term term, boolean fuzzy){
-        Term searchTerm = term.createTerm(name);
+    public Query create(String text, Term term, boolean fuzzy) {
+        Term searchTerm = term.createTerm(text);
         return fuzzy ? new FuzzyQuery(searchTerm, getMinSimilarity()) : new TermQuery(searchTerm);
+    }
+
+    public Query create(String text, Term term) {
+        return create(text, term, false);
+    }
+
+    public String getFirstValue(Identifier identifier, Term term){
+        return getFirstValue(create(identifier.getAccession(), IDENTIFIER), term.field());
+    }
+    public String getFirstValue(Query query, Term term){
+        return getFirstValue(query, term.field());
     }
 
     /**
@@ -152,10 +173,10 @@ public class AbstractQueryService {
      *
      * @param query
      * @param field
-     * @return
      *
+     * @return
      */
-    public String getFirstValue(IndexSearcher searcher, Query query, String field) {
+    public String getFirstValue(Query query, String field) {
 
         TopScoreDocCollector collector = TopScoreDocCollector.create(5, true);
         try {
@@ -172,11 +193,40 @@ public class AbstractQueryService {
                 return getValue(document, field);
             }
         } catch (IOException ex) {
-
+            LOGGER.error("IO Exception occurred on service: " + ex.getMessage());
         }
 
         return "";
 
+    }
+
+    public Collection<String> getValues(Query query, Term term){
+        return getValues(query, term.field());
+    }
+
+    public Collection<String> getValues(Query query, String field){
+
+        Collection<String> values = new ArrayList<String>();
+
+        TopScoreDocCollector collector = TopScoreDocCollector.create(getMaxResults(), true);
+        try {
+
+            searcher.search(query, collector);
+            ScoreDoc[] hits = collector.topDocs().scoreDocs;
+
+            if (hits.length > 1) {
+                System.err.println("expected only one result");
+            }
+
+
+            for (ScoreDoc document : hits) {
+                values.add(getValue(document, field));
+            }
+        } catch (IOException ex) {
+            LOGGER.error("IO Exception occurred on service: " + ex.getMessage());
+        }
+
+        return values;
     }
 
     public Directory getDirectory() {
@@ -186,6 +236,7 @@ public class AbstractQueryService {
     public Analyzer getAnalyzer() {
         return analyzer;
     }
+
     Pattern escape = Pattern.compile("[\\\\+\\-\\!\\(\\)\\:\\^\\]\\[\\{\\}\\~\\*\\?]");
 
     public String escape(String query) {
