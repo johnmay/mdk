@@ -52,7 +52,7 @@ public class DefaultStructureIndexWriter {
                     byte[] molecule) throws IOException {
 
         Document document = new Document();
-        document.add(new Field(QueryService.IDENTIFIER_TERM.field(),
+        document.add(new Field(QueryService.IDENTIFIER.field(),
                                identifier
                 , Field.Store.NO, Field.Index.ANALYZED));
         document.add(new Field("Molecule", molecule));
