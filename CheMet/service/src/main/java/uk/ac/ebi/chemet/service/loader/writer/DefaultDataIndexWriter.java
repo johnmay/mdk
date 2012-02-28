@@ -58,7 +58,10 @@ public class DefaultDataIndexWriter {
         Document doc = new Document();
 
         doc.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.ANALYZED));
-        doc.add(new Field(MolecularFormulaService.MOLECULAR_FORMULA.field(), formula.trim(), Field.Store.YES, Field.Index.ANALYZED));
+
+        if(formula != null) {
+            doc.add(new Field(MolecularFormulaService.MOLECULAR_FORMULA.field(), formula.trim(), Field.Store.YES, Field.Index.ANALYZED));
+        }
 
         // molecular charge
         Double chargeValue = getChargeValue(charge);
