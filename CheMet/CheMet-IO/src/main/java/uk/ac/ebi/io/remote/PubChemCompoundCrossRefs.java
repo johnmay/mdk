@@ -139,7 +139,7 @@ public class PubChemCompoundCrossRefs extends AbstrastRemoteResource implements 
 
 
                 //--  InputStream in = pcwsc.downloadFile((String[]) (subsToDownload.toArray(new String[subsToDownload.size()])), FormatType.eFormat_SDF, PCIDType.eID_SID);
-                LOGGER.info("Retrieved SDF files for " + subsToDownload.size() + " different substances...");
+                LOGGER.info("Retrieved getting external identifiers for " + subsToDownload.size() + " different substances...");
                 Multimap<String, CrossReference> subs2CrossRefs = euwsc.getExternalIdentifiersForPubChemSubstances(subsToDownload);
                 //--  SDF2MolFiles sdfmf = new SDF2MolFiles(in, null, null, "> <PUBCHEM_SUBSTANCE_ID>");
                 //-- PubChemSubstanceSDFFieldExtractor sDFFieldExtractor = new PubChemSubstanceSDFFieldExtractor();
