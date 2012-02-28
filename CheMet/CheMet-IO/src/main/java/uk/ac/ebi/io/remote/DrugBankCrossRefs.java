@@ -112,4 +112,8 @@ public class DrugBankCrossRefs extends AbstrastRemoteResource implements RemoteR
     public String getDescription() {
         return "DrugBank Cross-references";
     }
+    
+    public static void main(String[] args) throws IOException {
+        new DrugBankCrossRefs().update();
+    }
 }

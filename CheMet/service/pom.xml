@@ -38,6 +38,11 @@
             <artifactId>cdk-io</artifactId>
             <version>${cdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-formula</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
     </dependencies>
 
 
