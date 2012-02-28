@@ -2,11 +2,16 @@ package uk.ac.ebi.render.resource;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.sun.awt.AWTUtilities;
 import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.chemet.service.loader.structure.ChEBIStructureLoader;
+import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
+import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
+import uk.ac.ebi.render.resource.location.FileLocationEditor;
 import uk.ac.ebi.service.SingleIndexResourceLoader;
 import uk.ac.ebi.service.exception.MissingLocationException;
 
@@ -14,6 +19,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  * ${Name}.java - 21.02.2012 <br/> Description...
@@ -30,12 +36,17 @@ public class LoaderRow extends JComponent {
     private JLabel name;
     private JButton update;
     private JButton cancel;
+    private SingleIndexResourceLoader loader;
+    private SwingWorker worker;
 
     private static final Logger LOGGER = Logger.getLogger(LoaderRow.class);
 
     public LoaderRow(final SingleIndexResourceLoader loader, final Window window) {
 
+        this.loader = loader;
+
         System.out.println("Creating loader for UI " + loader.getName());
+        setOpaque(false);
 
         delete = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/trash_12x12.png"), new AbstractAction() {
             @Override
@@ -89,7 +100,7 @@ public class LoaderRow extends JComponent {
                 loader.backup();
                 loader.uncancel();
 
-                new SwingWorker() {
+                worker = new SwingWorker() {
                     @Override
                     protected Object doInBackground() throws Exception {
                         try {
@@ -101,20 +112,13 @@ public class LoaderRow extends JComponent {
                         } catch (IOException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         }
-                        SwingUtilities.invokeLater(new Runnable() {
-                            public void run() {
-                                delete.setEnabled(loader.canBackup() || loader.canRevert());
-                                revert.setEnabled(loader.canRevert());
-                                configure.setEnabled(true);
-                                update.setEnabled(loader.canUpdate());
-                                name.setIcon(null);
-                            }
-                        });
+                        updateButtons();
                         return null;
                     }
 
-                }.execute();
+                };
 
+                worker.execute();
             }
         }
 
@@ -123,10 +127,18 @@ public class LoaderRow extends JComponent {
         cancel = ButtonFactory.newCleanButton(new AbstractAction("Cancel") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("cancel()");
                 loader.cancel();
-                System.out.println("done()");
+
+                // wait for worker to finish then revert
+                try {
+                    worker.get();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (ExecutionException e1) {
+                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
                 loader.revert();
+                updateButtons();
             }
         }
 
@@ -171,6 +183,19 @@ public class LoaderRow extends JComponent {
         );
     }
 
+    public void updateButtons(){
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                delete.setEnabled(loader.canBackup() || loader.canRevert());
+                revert.setEnabled(loader.canRevert());
+                configure.setEnabled(true);
+                update.setEnabled(loader.canUpdate());
+                name.setIcon(null);
+            }
+        });
+    }
+
+
     public static void main(String[] args) throws IOException {
 
         JFrame frame = new JFrame("Resource Loading");
@@ -179,14 +204,17 @@ public class LoaderRow extends JComponent {
         frame.setContentPane(box);
         box.add(Box.createRigidArea(new Dimension(5, 5)));
         box.add(Box.createGlue());
-        //        box.add(new LoaderRow(new ChEBIStructureLoader()));
-        //        box.add(Box.createGlue());
-        //        box.add(new LoaderRow(new KEGGCompoundStructureLoader()));
-        //        box.add(Box.createGlue());
-        //        box.add(new LoaderRow(new HMDBStructureLoader()));
+        box.add(new LoaderRow(new ChEBIStructureLoader(), frame));
+        box.add(Box.createGlue());
+        box.add(new LoaderRow(new KEGGCompoundStructureLoader(), frame));
+        box.add(Box.createGlue());
+        box.add(new LoaderRow(new HMDBStructureLoader(), frame));
         box.add(Box.createGlue());
         box.add(Box.createRigidArea(new Dimension(5, 5)));
+
+        box.add(new FileLocationEditor());
         frame.setVisible(true);
+        frame.pack();
 
     }
 

@@ -4,9 +4,15 @@ import uk.ac.ebi.caf.component.CalloutDialog;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.chemet.service.loader.location.LocationFactory;
+import uk.ac.ebi.render.resource.location.DirectoryLocationEditor;
+import uk.ac.ebi.render.resource.location.FileLocationEditor;
+import uk.ac.ebi.render.resource.location.LocationEditor;
 import uk.ac.ebi.service.ResourceLoader;
 import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.location.LocationDescription;
+import uk.ac.ebi.service.location.ResourceDirectoryLocation;
+import uk.ac.ebi.service.location.ResourceFileLocation;
 import uk.ac.ebi.service.location.ResourceLocation;
 
 import javax.swing.*;
@@ -28,92 +34,74 @@ import java.util.Map;
 public class ResourceLoaderConfig extends CalloutDialog {
 
     private ResourceLoader loader;
-    private Map<String,JTextField> fieldMap;
+    private Map<String, LocationEditor> fieldMap;
 
-    public ResourceLoaderConfig(final Window window, ResourceLoader loader){
-        
+    public ResourceLoaderConfig(final Window window, ResourceLoader loader) {
+
         super(window);
         this.loader = loader;
-        
+
         JComponent panel = getMainPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        fieldMap = new HashMap<String, LocationEditor>();
 
-        fieldMap = new HashMap<String,JTextField>();
 
-        
-        for(Map.Entry<String,LocationDescription> e : loader.getRequiredResources().entrySet() ) {
-            
-            final JTextField field = FieldFactory.newField(20);
-            fieldMap.put(e.getKey(), field);
-            
+        for (Map.Entry<String, LocationDescription> e : loader.getRequiredResources().entrySet()) {
+
+
             Box box = Box.createHorizontalBox();
+            //            try{
+            //                field.setText(loader.getLocation(e.getKey()).toString());
+            //            }catch (MissingLocationException ex){
+            //                // do nothing
+            //            }
 
-            try{
-                field.setText(loader.getLocation(e.getKey()).toString());
-            }catch (MissingLocationException ex){
-                // do nothing
-            }
-            
             box.add(LabelFactory.newFormLabel(e.getValue().getName(), e.getValue().getDescription()));
             box.add(Box.createHorizontalStrut(10));
-            box.add(field);
-            box.add(Box.createHorizontalStrut(10));
-            box.add(ButtonFactory.newButton(new AbstractAction("Browse") {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    JFileChooser chooser = new JFileChooser();
-                    chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-                    int option = chooser.showOpenDialog(window);
-                    if(option == JFileChooser.APPROVE_OPTION){
-                        field.setText(chooser.getSelectedFile().getAbsolutePath());
-                    }
-                }
-            }));
-            
+
+            Class c = e.getValue().getType();
+            if (c.equals(ResourceFileLocation.class)) {
+                FileLocationEditor editor = new FileLocationEditor();
+                fieldMap.put(e.getKey(), editor);
+                box.add(editor);
+                editor.setup(e.getValue());
+            } else if (c.equals(ResourceDirectoryLocation.class)) {
+                DirectoryLocationEditor editor = new DirectoryLocationEditor();
+                fieldMap.put(e.getKey(), editor);
+                box.add(editor);
+                editor.setup(e.getValue());
+            }
+
+
             panel.add(box);
         }
 
         pack();
-        
-        
-        
+
+
     }
-    
-    
-    public void configure(){
-        
+
+
+    public void configure() {
+
         List<ResourceLocation> locationList = new ArrayList<ResourceLocation>();
-        
-        for(Map.Entry<String,JTextField> e : fieldMap.entrySet()){
-            
-            String key   = e.getKey();
-            String value = e.getValue().getText().trim();
-            
-            if(!value.isEmpty()){
-//                try {
-//
-//                    try{
-//                        ResourceLocation location = loader.getLocation(value);
-//                        if(location.toString().equals(value)){
-//                            continue;
-//                        }
-//                    } catch (MissingLocationException ex){
-//
-//                    }
-//
-//                   // loader.addLocation(key, LocationFactory.getInstance().newLocation(key, value));
-//
-//                }catch(IOException ex){
-//
-//                }
+
+        for (Map.Entry<String, LocationEditor> e : fieldMap.entrySet()) {
+
+            String key = e.getKey();
+
+            try {
+                // replace with individual UI components for selecting
+                loader.addLocation(key, e.getValue().getResourceLocation());
+            } catch (IOException ex) {
+
             }
-            
+
+
         }
 
 
     }
-    
-       
-    
-    
+
+
 }
