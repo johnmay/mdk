@@ -33,8 +33,14 @@ public class DefaultStructureIndexWriter {
                                                        index.getAnalyzer()));
     }
 
-    public void add(String identifier,
-                    IAtomContainer molecule) throws IOException {
+    /**
+     * Write a CDK molecule and it's identifier to the index
+     * @param identifier
+     * @param molecule
+     * @throws IOException
+     */
+    public void write(String identifier,
+                      IAtomContainer molecule) throws IOException {
 
         // Serialize to a byte array
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -43,12 +49,12 @@ public class DefaultStructureIndexWriter {
         out.close();
 
         // Get the bytes of the serialized object
-        add(identifier, bos.toByteArray());
+        write(identifier, bos.toByteArray());
 
 
     }
 
-    public void add(String identifier,
+    private void write(String identifier,
                     byte[] molecule) throws IOException {
 
         Document document = new Document();

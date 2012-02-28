@@ -7,7 +7,6 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import uk.ac.ebi.chemet.service.index.structure.HMDBStructureIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
-import uk.ac.ebi.chemet.service.loader.location.DefaultLocationDescription;
 import uk.ac.ebi.chemet.service.loader.location.GZIPRemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter;
 import uk.ac.ebi.service.exception.MissingLocationException;
@@ -74,7 +73,7 @@ public class HMDBStructureLoader
 
                     // write to the index
                     String identifier = matcher.group(1);
-                    writer.add(identifier, molecule);
+                    writer.write(identifier, molecule);
                 }
             }
 

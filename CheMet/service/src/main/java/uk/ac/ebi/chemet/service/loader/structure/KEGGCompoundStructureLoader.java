@@ -58,7 +58,7 @@ public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoad
             try {
                 mdlReader.setReader(new FileInputStream(file));
                 IAtomContainer molecule = mdlReader.read(new Molecule());
-                writer.add(file.getName().substring(0, 6), molecule);
+                writer.write(file.getName().substring(0, 6), molecule);
                 mdlReader.close();
             } catch (Exception ex) {
                 // TODO: log error

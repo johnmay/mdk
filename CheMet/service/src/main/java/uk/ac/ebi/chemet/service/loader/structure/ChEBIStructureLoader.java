@@ -67,7 +67,7 @@ public class ChEBIStructureLoader
             // if we have a ChEBI identifier, write to the index
             if (properties.containsKey("ChEBI ID")) {
                 String identifier = properties.get("ChEBI ID").toString();
-                writer.add(identifier, molecule);
+                writer.write(identifier, molecule);
             }
 
         }
