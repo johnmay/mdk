@@ -46,7 +46,9 @@ import org.apache.lucene.document.Fieldable;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated use AbstractSingleIndexLoader or AbstractMultiIndexLoader in the service module.
  */
+@Deprecated
 public abstract class AbstrastRemoteResource implements RemoteResource {
 
     private static final Logger LOGGER = Logger.getLogger(AbstrastRemoteResource.class);

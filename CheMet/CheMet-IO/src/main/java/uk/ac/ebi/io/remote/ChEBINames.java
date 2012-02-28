@@ -49,7 +49,9 @@ import uk.ac.ebi.interfaces.services.LuceneService;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated replaced by ChEBINameLoader in the service package
  */
+@Deprecated
 public class ChEBINames
         extends AbstrastRemoteResource
         implements LuceneService, RemoteResource {

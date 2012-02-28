@@ -46,7 +46,9 @@ import org.apache.lucene.util.Version;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated  use ChEBIDataLoader in the chemet-service module
  */
+@Deprecated
 public class ChEBIChemicalData
         extends AbstrastRemoteResource
         implements LuceneService, RemoteResource {

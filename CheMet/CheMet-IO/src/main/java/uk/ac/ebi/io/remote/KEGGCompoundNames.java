@@ -48,7 +48,9 @@ import uk.ac.ebi.interfaces.services.LuceneService;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated replaced by KEGGCompoundNameLoader
  */
+@Deprecated
 public class KEGGCompoundNames
         extends AbstrastRemoteResource
         implements LuceneService, RemoteResource {
