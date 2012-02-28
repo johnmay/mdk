@@ -59,7 +59,7 @@ public class DefaultDataIndexWriter {
 
         doc.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.ANALYZED));
 
-        if(formula != null) {
+        if(formula != null && !formula.isEmpty()) {
             doc.add(new Field(MolecularFormulaService.MOLECULAR_FORMULA.field(), formula.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
 
