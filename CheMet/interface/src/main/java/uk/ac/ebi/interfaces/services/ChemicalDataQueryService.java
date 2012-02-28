@@ -31,6 +31,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Deprecated
 public interface ChemicalDataQueryService<I extends Identifier> extends QueryService<I> {
 
     public Collection<IMolecularFormula> getFormulas(I identifier);

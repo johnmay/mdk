@@ -30,6 +30,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Deprecated
 public interface MolQueryService<I extends Identifier> extends QueryService<I> {
    
     public String getMol(I identifier);
