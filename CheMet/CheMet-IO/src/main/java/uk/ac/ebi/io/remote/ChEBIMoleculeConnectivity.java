@@ -72,6 +72,7 @@ public class ChEBIMoleculeConnectivity
         reader.close();
 
         MoleculeCollectionConnectivity collectionConnectivity = new MoleculeCollectionConnectivity(COLLECTION, connectivities.iterator());
+        collectionConnectivity.deleteCollection();
         collectionConnectivity.update();
     }
 

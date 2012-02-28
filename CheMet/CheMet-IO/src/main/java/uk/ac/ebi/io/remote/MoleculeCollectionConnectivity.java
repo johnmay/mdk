@@ -33,12 +33,14 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
-import uk.ac.ebi.resource.organism.Taxonomy;
 
 /**
  *          Writes a Lucene index for a set molecules for which a unique connectivity string has been previously 
@@ -113,6 +115,16 @@ public class MoleculeCollectionConnectivity extends AbstrastRemoteResource imple
     
     public void setMolIterator(Iterator<MoleculeConnectivity> molIterator) {
         this.molIterator = molIterator;
+    }
+    
+    public void deleteCollection() throws IOException {
+        Query queryCollection = new TermQuery(new Term(MoleculeCollectionConnectivityLuceneFields.CollectionName.toString(), this.collectionName));
+        
+        Directory index = getDirectory();
+        IndexWriter writer = new IndexWriter(index, new IndexWriterConfig(Version.LUCENE_34, getAnalzyer()));
+        writer.deleteDocuments(queryCollection);
+        writer.close();
+        index.close();
     }
 
     public void update() throws IOException {
