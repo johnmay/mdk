@@ -6,6 +6,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.chemet.service.index.data.HMDBDataIndex;
+import uk.ac.ebi.chemet.service.index.data.KEGGCompoundDataIndex;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultDataIndexWriter;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
@@ -34,7 +35,7 @@ public class KEGGCompoundDataService
     private static final IChemObjectBuilder BUILDER = DefaultChemObjectBuilder.getInstance();
 
     public KEGGCompoundDataService() {
-        super(new HMDBDataIndex());
+        super(new KEGGCompoundDataIndex());
     }
 
     /**
@@ -80,9 +81,8 @@ public class KEGGCompoundDataService
      * @inheritDoc
      */
     @Override
-    public HMDBIdentifier getIdentifier() {
-        return new HMDBIdentifier();
+    public KEGGCompoundIdentifier getIdentifier() {
+        return new KEGGCompoundIdentifier();
     }
-
 
 }
