@@ -1,5 +1,6 @@
 package uk.ac.ebi.service.query.data;
 
+import org.apache.lucene.index.Term;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.service.query.QueryService;
 
@@ -18,6 +19,8 @@ import uk.ac.ebi.service.query.QueryService;
  */
 public interface MolecularChargeService<I extends Identifier>
         extends QueryService<I> {
+
+    public static final Term MOLECULAR_CHARGE = new Term("MolecularCharge");
 
     /**
      * Look-up the charge value for a given identifier. If no charge

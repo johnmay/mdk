@@ -1,5 +1,6 @@
 package uk.ac.ebi.service.query.data;
 
+import org.apache.lucene.index.Term;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.service.query.QueryService;
@@ -22,6 +23,8 @@ import java.util.Collection;
 public interface MolecularFormulaService<I extends Identifier>
         extends QueryService<I> {
 
+    public static final Term MOLECULAR_FORMULA = new Term("MolecularFormula");
+    
     /**
      * Search for a identifiers in the data-set which match the provided
      * molecular formula. The approximate flag determines whether the
