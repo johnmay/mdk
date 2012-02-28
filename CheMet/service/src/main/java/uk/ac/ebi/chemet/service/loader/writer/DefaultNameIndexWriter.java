@@ -14,7 +14,9 @@ import uk.ac.ebi.service.query.SynonymService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * DefaultNameIndexWriter - 22.02.2012 <br/>
@@ -57,25 +59,39 @@ public class DefaultNameIndexWriter {
      * @param synonyms
      * @throws IOException
      */
-    public void write(String identifier, String preferred, String iupac, List<String> synonyms) throws IOException {
+    public void write(String identifier, String preferred, String iupac, Collection<String> synonyms) throws IOException {
 
         Document document = new Document();
 
         document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
-        if (!iupac.isEmpty()) {
+        if (iupac != null && !iupac.isEmpty()) {
             document.add(new Field(IUPACNameService.IUPAC.field(), iupac.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
-        if (!preferred.isEmpty()) {
+        if (preferred != null && !preferred.isEmpty()) {
             document.add(new Field(PreferredNameService.PREFERRED_NAME.field(), preferred.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
-        if (synonyms.size() > 0) {
+        if (synonyms != null && synonyms.size() > 0) {
             for (String synonym : synonyms) {
+
+                // skip those which are already in the index
+                if(matches(synonym, iupac) || matches(synonym, preferred))
+                    continue;
+
                 document.add(new Field(SynonymService.SYNONYM.field(), synonym.trim(), Field.Store.YES, Field.Index.ANALYZED));
+
             }
         }
 
         writer.addDocument(document);
     }
+    
+    public boolean matches(String name1, String name2){
+        if(name1 == null || name2 == null) {
+            return false;
+        }
+        return name1.toLowerCase(Locale.ENGLISH).equals(name2.toLowerCase(Locale.ENGLISH));
+    }
+
 
     public void close() throws IOException {
         writer.close();
