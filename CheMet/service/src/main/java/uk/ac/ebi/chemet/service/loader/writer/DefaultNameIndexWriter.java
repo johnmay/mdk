@@ -61,16 +61,16 @@ public class DefaultNameIndexWriter {
 
         Document document = new Document();
 
-        document.add(new Field(QueryService.IDENTIFIER.field(), identifier, Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+        document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
         if (!iupac.isEmpty()) {
-            document.add(new Field(IUPACNameService.IUPAC.field(), iupac, Field.Store.YES, Field.Index.ANALYZED));
+            document.add(new Field(IUPACNameService.IUPAC.field(), iupac.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
         if (!preferred.isEmpty()) {
-            document.add(new Field(PreferredNameService.PREFERRED_NAME.field(), preferred, Field.Store.YES, Field.Index.ANALYZED));
+            document.add(new Field(PreferredNameService.PREFERRED_NAME.field(), preferred.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
         if (synonyms.size() > 0) {
             for (String synonym : synonyms) {
-                document.add(new Field(SynonymService.SYNONYM.field(), synonym, Field.Store.YES, Field.Index.ANALYZED));
+                document.add(new Field(SynonymService.SYNONYM.field(), synonym.trim(), Field.Store.YES, Field.Index.ANALYZED));
             }
         }
 
