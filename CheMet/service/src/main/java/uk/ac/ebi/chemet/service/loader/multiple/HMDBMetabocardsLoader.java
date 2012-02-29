@@ -43,7 +43,7 @@ public class HMDBMetabocardsLoader extends AbstractMultiIndexResourceLoader {
 
         addIndex("hmdb.names", new HMDBNameIndex());
         addIndex("hmdb.chemdata", new HMDBDataIndex()); // charge, formula, etc.
-        addIndex("hmdb.inchi", null); // not yet supported
+    //    addIndex("hmdb.inchi", null); // not yet supported
 
         addRequiredResource("Metabocards",
                             "HMDB Metabocards file",
