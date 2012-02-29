@@ -8,10 +8,16 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.chemet.service.loader.data.ChEBIDataLoader;
+import uk.ac.ebi.chemet.service.loader.multiple.HMDBMetabocardsLoader;
+import uk.ac.ebi.chemet.service.loader.multiple.KEGGCompoundLoader;
+import uk.ac.ebi.chemet.service.loader.name.ChEBINameLoader;
+import uk.ac.ebi.chemet.service.loader.single.TaxonomyLoader;
 import uk.ac.ebi.chemet.service.loader.structure.ChEBIStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
 import uk.ac.ebi.render.resource.location.FileLocationEditor;
+import uk.ac.ebi.service.ResourceLoader;
 import uk.ac.ebi.service.SingleIndexResourceLoader;
 import uk.ac.ebi.service.exception.MissingLocationException;
 
@@ -36,12 +42,12 @@ public class LoaderRow extends JComponent {
     private JLabel name;
     private JButton update;
     private JButton cancel;
-    private SingleIndexResourceLoader loader;
+    private ResourceLoader loader;
     private SwingWorker worker;
 
     private static final Logger LOGGER = Logger.getLogger(LoaderRow.class);
 
-    public LoaderRow(final SingleIndexResourceLoader loader, final Window window) {
+    public LoaderRow(final ResourceLoader loader, final Window window) {
 
         this.loader = loader;
 
@@ -82,7 +88,7 @@ public class LoaderRow extends JComponent {
         });
         configure.setToolTipText("Configure loader");
         System.out.println("Configure... done");
-        name = LabelFactory.newLabel(loader.getIndex().getName());
+        name = LabelFactory.newLabel(loader.getName());
 
         update = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/update_16x16.png"), new AbstractAction() {
             @Override
@@ -209,6 +215,16 @@ public class LoaderRow extends JComponent {
         box.add(new LoaderRow(new KEGGCompoundStructureLoader(), frame));
         box.add(Box.createGlue());
         box.add(new LoaderRow(new HMDBStructureLoader(), frame));
+        box.add(Box.createGlue());
+        box.add(new LoaderRow(new HMDBMetabocardsLoader(), frame));
+        box.add(Box.createGlue());
+        box.add(new LoaderRow(new KEGGCompoundLoader(), frame));
+        box.add(Box.createGlue());
+        box.add(new LoaderRow(new ChEBINameLoader(), frame));
+        box.add(Box.createGlue());
+        box.add(new LoaderRow(new ChEBIDataLoader(), frame));
+        box.add(Box.createGlue());
+        box.add(new LoaderRow(new TaxonomyLoader(), frame));
         box.add(Box.createGlue());
         box.add(Box.createRigidArea(new Dimension(5, 5)));
 
