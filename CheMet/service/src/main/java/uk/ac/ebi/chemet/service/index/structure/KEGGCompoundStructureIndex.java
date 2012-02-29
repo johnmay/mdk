@@ -14,6 +14,6 @@ import uk.ac.ebi.chemet.service.index.KeywordNIOIndex;
  */
 public class KEGGCompoundStructureIndex extends KeywordNIOIndex {
     public KEGGCompoundStructureIndex() {
-        super("KEGG Compound Chemical Structures", "structure/kegg");
+        super("KEGG Compound (Structures)", "structure/kegg");
     }
 }

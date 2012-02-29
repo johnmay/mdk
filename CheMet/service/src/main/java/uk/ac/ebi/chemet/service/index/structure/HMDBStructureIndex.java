@@ -13,6 +13,6 @@ import uk.ac.ebi.chemet.service.index.KeywordNIOIndex;
  */
 public class HMDBStructureIndex extends KeywordNIOIndex {
     public HMDBStructureIndex() {
-        super("HMDB Chemical Structures", "structure/hmdb");
+        super("HMDB (Structures)", "structure/hmdb");
     }
 }
