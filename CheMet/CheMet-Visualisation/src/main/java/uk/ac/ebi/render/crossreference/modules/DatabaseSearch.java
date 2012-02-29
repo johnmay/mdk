@@ -46,6 +46,7 @@ import uk.ac.ebi.chemet.render.components.MetaboliteMatchIndication;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
+import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.io.service.ChEBIChemicalDataService;
 import uk.ac.ebi.io.service.ChEBINameService;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateFactory;
@@ -221,20 +222,22 @@ public class DatabaseSearch
         System.out.println(name);
 
 
-        CandidateFactory<ChEBIIdentifier> factory = new CandidateFactory(ChEBINameService.getInstance(),
-                                                                         new ChemicalFingerprintEncoder());
+//        CandidateFactory<ChEBIIdentifier> factory = new CandidateFactory(LuceneService,
+//                                                                         new ChemicalFingerprintEncoder());
 
-        Multimap<Integer, SynonymCandidateEntry> map = fuzzy.isSelected()
-                                                       ? factory.getFuzzySynonymCandidates(name) : factory.getSynonymCandidates(name);
+//        Multimap<Integer, SynonymCandidateEntry> map = fuzzy.isSelected()
+//                                                       ? factory.getFuzzySynonymCandidates(name) : factory.getSynonymCandidates(name);
+//
+//
+//        List<Metabolite> metabolites = factory.getMetaboliteList(factory.getSortedList(map),
+//                                                                 new ChEBIIdentifier(),
+//                                                                 ChEBIChemicalDataService.getInstance(),
+//                                                                 "ChEBI",
+//                                                                 DefaultEntityFactory.getInstance());
 
+        throw new UnsupportedOperationException("Fix Me");
 
-        List<Metabolite> metabolites = factory.getMetaboliteList(factory.getSortedList(map),
-                                                                 new ChEBIIdentifier(),
-                                                                 ChEBIChemicalDataService.getInstance(),
-                                                                 "ChEBI",
-                                                                 DefaultEntityFactory.getInstance());
-
-        getCandidateTable().getModel().set(metabolites);
+        //getCandidateTable().getModel().set(metabolites);
 
 
     }
