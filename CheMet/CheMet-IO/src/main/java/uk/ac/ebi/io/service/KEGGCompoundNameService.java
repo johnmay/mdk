@@ -68,12 +68,38 @@ public class KEGGCompoundNameService
         return KEGGCompoundNameServiceHolder.INSTANCE;
     }
 
+    /**
+     * The KEGG index doesn't make a distinction regarding a preferred name, so we just return the first name.
+     * 
+     * @param identifier
+     * @return 
+     */
     public String getPreferredName(KEGGCompoundIdentifier identifier) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            Query q = NumericRangeQuery.newIntRange("id", identifier.getValue(), identifier.getValue(), true, true);
+
+
+            TopScoreDocCollector collector = TopScoreDocCollector.create(1, true);
+            searcher.search(q, collector);
+            ScoreDoc[] hits = collector.topDocs().scoreDocs;
+            if (hits.length > 1) {
+                LOGGER.info("more then one hit found for an id! this shouldn't happen");
+            }
+            String name = null;
+            for (ScoreDoc scoreDoc : hits) {
+                String[] names = getValues(scoreDoc, "name");
+                if(names.length>0)
+                    return names[0];
+            }
+            return name;
+        } catch (IOException ex) {
+            LOGGER.info(ex.getMessage());
+        }
+        return null;
     }
 
     public Collection<String> getSynonyms(KEGGCompoundIdentifier identifier) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new ArrayList<String>();
     }
 
     /**
