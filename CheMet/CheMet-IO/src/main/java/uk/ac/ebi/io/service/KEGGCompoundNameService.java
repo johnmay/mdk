@@ -44,7 +44,9 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated use chemet-service
  */
+@Deprecated
 public class KEGGCompoundNameService
         extends KEGGCompoundQueryService
         implements NameQueryService<KEGGCompoundIdentifier> {

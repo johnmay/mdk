@@ -47,7 +47,9 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated use the one in chemet-service
  */
+@Deprecated
 public class ChEBICrossReferenceService
         extends ChEBIQueryService
         implements CrossReferenceQueryService<ChEBIIdentifier>  {

@@ -71,7 +71,9 @@ import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated use ChEBICrossReferenceLoader in chemet-service. Note: the ChEBICrossReferenceLoader loader is still lacking PubChem referecnes
  */
+@Deprecated
 public class ChEBICrossRefs
         extends AbstrastRemoteResource
         implements LuceneService, RemoteResource {

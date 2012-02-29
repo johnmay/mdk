@@ -44,7 +44,9 @@ import uk.ac.ebi.service.query.name.NameService;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated use the one in chemet-service
  */
+@Deprecated
 public class AbstractQueryService {
 
     private Document[] documents;
