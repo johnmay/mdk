@@ -41,4 +41,13 @@ public interface QueryService<I extends Identifier> {
      */
     public void setMinSimilarity(float similarity);
 
+    /**
+     * Determine whether the service is available for use. In the case
+     * of a database/webservice connection this method should return false
+     * if a connection could not be made. In the case of a lucene index
+     * service the index is checked whether it is available
+     * @return whether the service is available
+     */
+    public boolean isAvailable();
+
 }

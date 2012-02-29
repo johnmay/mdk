@@ -37,11 +37,15 @@ public abstract class AbstractQueryService<I extends Identifier>
     private IndexReader reader;
     private IndexSearcher searcher;
 
+    private LuceneIndex index;
+
     private int max = Preferences.userNodeForPackage(AbstractQueryService.class).getInt("default.max.results", 100);
     private float minSimilarity = 0.5f; // for fuzzy queries
 
 
     public AbstractQueryService(LuceneIndex index) {
+        this.index = index;
+
         try {
             analyzer = index.getAnalyzer();
             setDirectory(index.getDirectory());
@@ -88,6 +92,15 @@ public abstract class AbstractQueryService<I extends Identifier>
 
     public int getMaxResults() {
         return max;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean isAvailable() {
+        return index != null && index.isAvailable();
     }
 
     public byte[] getBinaryValue(ScoreDoc document, String field) throws IOException {
