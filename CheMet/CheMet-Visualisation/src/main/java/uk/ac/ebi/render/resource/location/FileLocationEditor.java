@@ -4,8 +4,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
-import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
-import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
+
 import uk.ac.ebi.service.location.LocationDescription;
 import uk.ac.ebi.service.location.LocationFactory;
 import uk.ac.ebi.service.location.ResourceLocation;
@@ -77,16 +76,17 @@ public class FileLocationEditor
     @Override
     public void setup(LocationDescription description) {
         
-        ResourceLocation location = description.getDefault();
-        if(location instanceof RemoteLocation){
-            remote.setup(description);
-            selector.setSelectedItem("Remote");
-            show("Remote");
-        }
-        else if(location instanceof SystemLocation){
-            local.setup(description);
-            selector.setSelectedItem("Local");
-            show("Local");
-        }
+//        ResourceLocation location = description.getDefault();
+//        if(location instanceof RemoteLocation){
+//            remote.setup(description);
+//            selector.setSelectedItem("Remote");
+//            show("Remote");
+//        }
+//        else if(location instanceof SystemLocation){
+//            local.setup(description);
+//            selector.setSelectedItem("Local");
+//            show("Local");
+//        }
+
     }
 }

@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
-import uk.ac.ebi.chemet.service.loader.location.*;
 import uk.ac.ebi.service.location.LocationDescription;
 import uk.ac.ebi.service.location.LocationFactory;
 import uk.ac.ebi.service.location.ResourceLocation;

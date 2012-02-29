@@ -2,23 +2,12 @@ package uk.ac.ebi.render.resource;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.sun.awt.AWTUtilities;
 import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.chemet.service.loader.data.ChEBIDataLoader;
-import uk.ac.ebi.chemet.service.loader.multiple.HMDBMetabocardsLoader;
-import uk.ac.ebi.chemet.service.loader.multiple.KEGGCompoundLoader;
-import uk.ac.ebi.chemet.service.loader.name.ChEBINameLoader;
-import uk.ac.ebi.chemet.service.loader.single.TaxonomyLoader;
-import uk.ac.ebi.chemet.service.loader.structure.ChEBIStructureLoader;
-import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
-import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
-import uk.ac.ebi.render.resource.location.FileLocationEditor;
 import uk.ac.ebi.service.ResourceLoader;
-import uk.ac.ebi.service.SingleIndexResourceLoader;
 import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.location.LocationFactory;
 
