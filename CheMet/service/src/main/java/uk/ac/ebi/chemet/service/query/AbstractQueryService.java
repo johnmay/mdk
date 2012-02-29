@@ -96,6 +96,36 @@ public abstract class AbstractQueryService<I extends Identifier>
         return documents[index].getBinaryValue(field);
     }
 
+    public byte[] getFirstBinaryValue(Identifier identifier, Term field){
+        return getFirstBinaryValue(identifier.getAccession(), field.field());
+    }
+
+    public byte[] getFirstBinaryValue(String identifier, String field){
+        return getFirstBinaryValue(create(identifier, IDENTIFIER), field);
+    }
+
+    public byte[] getFirstBinaryValue(Query query, String field){
+        TopScoreDocCollector collector = TopScoreDocCollector.create(5, true);
+        try {
+
+            searcher.search(query, collector);
+            ScoreDoc[] hits = collector.topDocs().scoreDocs;
+
+            if (hits.length > 1) {
+                System.err.println("expected only one result");
+            }
+
+
+            for (ScoreDoc document : hits) {
+                return getBinaryValue(document, field);
+            }
+        } catch (IOException ex) {
+            LOGGER.error("IO Exception occurred on service: " + ex.getMessage());
+        }
+
+        return new byte[0];
+    }
+
     public String getValue(ScoreDoc document, String field) throws IOException {
 
         int index = document.doc;
