@@ -65,8 +65,9 @@ public class DefaultDataIndexWriter {
 
         // molecular charge
         Double chargeValue = getChargeValue(charge);
-        if (chargeValue != Double.NaN)
+        if (!chargeValue.equals(Double.NaN)) {
             doc.add(newChargeField(chargeValue));
+        }
 
         writer.addDocument(doc);
     }
@@ -85,7 +86,7 @@ public class DefaultDataIndexWriter {
 
         Double value = Double.NaN;
 
-        if (charge.isEmpty())
+        if (charge == null || charge.isEmpty())
             return value;
 
         try {

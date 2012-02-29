@@ -8,6 +8,7 @@ import org.apache.lucene.util.Version;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.service.query.QueryService;
+import uk.ac.ebi.service.query.StructureService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class DefaultStructureIndexWriter {
         document.add(new Field(QueryService.IDENTIFIER.field(),
                                identifier
                 , Field.Store.NO, Field.Index.ANALYZED));
-        document.add(new Field("Molecule", molecule));
+        document.add(new Field(StructureService.ATOM_CONTAINER.field(), molecule));
         writer.addDocument(document);
 
     }
