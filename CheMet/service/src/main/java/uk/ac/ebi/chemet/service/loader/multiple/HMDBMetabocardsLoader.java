@@ -58,7 +58,7 @@ public class HMDBMetabocardsLoader extends AbstractMultiIndexResourceLoader {
     @Override
     public void update() throws MissingLocationException, IOException {
 
-        ZIPSystemLocation location = getLocation("Metabocards");
+        ResourceFileLocation location = getLocation("Metabocards");
         BufferedReader scanner = new BufferedReader(new InputStreamReader(location.open()));
 
         // open the index writers
