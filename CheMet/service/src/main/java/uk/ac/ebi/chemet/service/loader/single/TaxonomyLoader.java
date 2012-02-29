@@ -59,8 +59,6 @@ public class TaxonomyLoader
             String entry = scanner.nextLine();
             Matcher matcher = ENTRY.matcher(entry);
 
-            System.out.println(isCancelled());
-
             if(isCancelled()) break;
 
             if (matcher.matches()) {
