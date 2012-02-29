@@ -1,6 +1,8 @@
 package uk.ac.ebi.chemet.service.loader;
 
 import au.com.bytecode.opencsv.CSVReader;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.service.exception.MissingLocationException;
@@ -9,17 +11,14 @@ import uk.ac.ebi.service.location.ResourceFileLocation;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * AbstractChEBILoader - 28.02.2012 <br/>
  * <p/>
- * Provides methods for resolving ChEBI secondary identifiers to their primary equivalent
+ * Provides methods for resolving ChEBI secondary parentMap to their primary equivalent
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -29,7 +28,8 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
 
     private static final Logger LOGGER = Logger.getLogger(AbstractChEBILoader.class);
 
-    private Map<String, String> identifiers = new HashMap<String, String>();
+    private Map<String, String> parentMap = new HashMap<String, String>();
+    private Multimap<String, String> childMap = HashMultimap.create();
 
     /**
      * @inheritDoc
@@ -45,7 +45,7 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
     }
 
     /**
-     * Creates a map from the ChEBI Compounds resources of secondary to primary identifiers.
+     * Creates a map from the ChEBI Compounds resources of secondary to primary parentMap.
      *
      * @throws IOException problem reading file
      * @throws MissingLocationException if ChEBI Compounds resource location is missing
@@ -73,12 +73,16 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
             Matcher parentMatcher = ACCESSION_PATTERN.matcher(parent);
 
             if (accessionMatcher.find()) {
-                if (parentMatcher.find()) {
-                    identifiers.put(accessionMatcher.group(1), "CHEBI:" + parentMatcher.group(1));
-                    identifiers.put("CHEBI:" + accessionMatcher.group(1), "CHEBI:" + parentMatcher.group(1));
-                } else {
-                    identifiers.put(accessionMatcher.group(1), "CHEBI:" + accessionMatcher.group(1));
-                }
+                
+                String childAcc  = accessionMatcher.group(1);
+                String parentAcc = parentMatcher.find() ? parentMatcher.group(1) : childAcc;
+
+                childMap.put(parentAcc, "CHEBI:" + childAcc);
+                childMap.put("CHEBI:" + parentAcc, "CHEBI:" + childAcc);
+
+                parentMap.put(childAcc, "CHEBI:" + parentAcc);
+                parentMap.put("CHEBI:" + childAcc, "CHEBI:" + parentAcc);
+
             }
 
         }
@@ -102,15 +106,32 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
      */
     public String getPrimaryIdentifier(String accession) throws IOException, MissingLocationException {
 
-        if (identifiers.isEmpty())
+        if (parentMap.isEmpty())
             createIdentifierMap();
 
-        if (identifiers.containsKey(accession)) {
-            return identifiers.get(accession);
+        if (parentMap.containsKey(accession)) {
+            return parentMap.get(accession);
         }
 
         return accession;
 
+    }
+    
+    public Collection<String> getAllChEBIIdentifiers(String accession) throws IOException, MissingLocationException {
+        String primary = getPrimaryIdentifier(accession);
+        if(childMap.get(primary).size() == 0){
+            System.out.println(primary);
+        }
+        return childMap.get(primary);
+    }
+    
+    
+    public Map<String,Integer> getHeaderMap(String[] row){
+        Map<String,Integer> map = new HashMap<String,Integer>();
+        for(int i = 0; i < row.length ; i++){
+            map.put(row[i], i);
+        }
+        return map;
     }
 
 }
