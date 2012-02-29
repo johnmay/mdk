@@ -12,7 +12,7 @@ import uk.ac.ebi.chemet.service.index.KeywordNIOIndex;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class ChEBINameIndex extends KeywordNIOIndex {
+public class ChEBINameIndex extends DefaultNameIndex {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBINameIndex.class);
 

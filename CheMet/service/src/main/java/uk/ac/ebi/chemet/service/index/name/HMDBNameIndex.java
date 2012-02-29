@@ -11,7 +11,7 @@ import uk.ac.ebi.chemet.service.index.KeywordNIOIndex;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class HMDBNameIndex extends KeywordNIOIndex {
+public class HMDBNameIndex extends DefaultNameIndex {
     public HMDBNameIndex(){
         super("HMDB Names", "name/hmdb");
     }

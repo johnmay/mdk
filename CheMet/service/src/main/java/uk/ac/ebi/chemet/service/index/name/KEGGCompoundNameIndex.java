@@ -11,7 +11,7 @@ import uk.ac.ebi.chemet.service.index.KeywordNIOIndex;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class KEGGCompoundNameIndex extends KeywordNIOIndex {
+public class KEGGCompoundNameIndex extends DefaultNameIndex {
     public KEGGCompoundNameIndex(){
         super("KEGG Compound Names", "name/kegg-compound");
     }
