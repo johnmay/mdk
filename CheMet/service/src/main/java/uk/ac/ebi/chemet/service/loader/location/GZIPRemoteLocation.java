@@ -19,7 +19,6 @@ import java.util.zip.GZIPInputStream;
 public class GZIPRemoteLocation
         extends RemoteLocation {
 
-    private URLConnection connection;
     private InputStream stream;
 
     public GZIPRemoteLocation(URL location) {
