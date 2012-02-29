@@ -1,7 +1,8 @@
-package uk.ac.ebi.service.query;
+package uk.ac.ebi.service.query.name;
 
 import org.apache.lucene.index.Term;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.service.query.QueryService;
 
 import java.util.Collection;
 

@@ -36,7 +36,7 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
-import uk.ac.ebi.service.query.NameService;
+import uk.ac.ebi.service.query.name.NameService;
 
 /**
  *          AbstractQueryService - 2011.10.26 <br>

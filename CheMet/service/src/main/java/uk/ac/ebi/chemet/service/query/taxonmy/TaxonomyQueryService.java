@@ -1,19 +1,14 @@
 package uk.ac.ebi.chemet.service.query.taxonmy;
 
-import jena.query;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.WildcardQuery;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.chemet.service.index.other.TaxonomyIndex;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.service.query.NameService;
+import uk.ac.ebi.service.query.name.NameService;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -3,10 +3,10 @@ package uk.ac.ebi.chemet.service.query.name;
 import uk.ac.ebi.chemet.service.index.name.ChEBINameIndex;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.service.query.IUPACNameService;
-import uk.ac.ebi.service.query.NameService;
-import uk.ac.ebi.service.query.PreferredNameService;
-import uk.ac.ebi.service.query.SynonymService;
+import uk.ac.ebi.service.query.name.IUPACNameService;
+import uk.ac.ebi.service.query.name.NameService;
+import uk.ac.ebi.service.query.name.PreferredNameService;
+import uk.ac.ebi.service.query.name.SynonymService;
 
 import java.util.Collection;
 import java.util.HashSet;
