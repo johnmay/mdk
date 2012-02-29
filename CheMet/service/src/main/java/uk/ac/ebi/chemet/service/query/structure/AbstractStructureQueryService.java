@@ -2,6 +2,7 @@ package uk.ac.ebi.chemet.service.query.structure;
 
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -11,9 +12,9 @@ import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.StructureQueryService;
 import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.service.query.StructureService;
 
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 
 /**
  * ${Name}.java - 20.02.2012 <br/> Description...
@@ -23,67 +24,34 @@ import java.io.StringReader;
  * @version $Rev$
  */
 public abstract class AbstractStructureQueryService<I extends Identifier>
-    extends AbstractQueryService
-        implements StructureQueryService<I> {
+        extends AbstractQueryService<I>
+        implements StructureService<I> {
 
     private IndexSearcher searcher;
 
     private Term IDENTIFIER = new Term("Identifier");
 
-    public AbstractStructureQueryService(LuceneIndex index) throws IOException {
+    public AbstractStructureQueryService(LuceneIndex index) {
 
         super(index);
-        searcher = new IndexSearcher(index.getDirectory());
-
-        throw new UnsupportedOperationException("Fix my terms!");
-
 
     }
 
     @Override
     public IAtomContainer getStructure(I identifier) {
 
-        try {
-            String str = getMol(identifier);
+        byte[] bytes = getFirstBinaryValue(identifier, ATOM_CONTAINER);
 
-            if (str.isEmpty()) {
-                return null;
-            }
-
-            MDLV2000Reader reader = new MDLV2000Reader(new StringReader(str));
-            IMolecule molecule = new Molecule();
-            return reader.read(molecule);
-
-        } catch (CDKException ex) {
-            // throw our own exception?
-            return null;
-        }
-    }
-
-    @Override
-    public String getMol(I identifier) {
-        return getMol(identifier.getAccession());
-    }
-
-    private String getMol(String identifier) {
-        try {
-            Query q = new TermQuery(IDENTIFIER.createTerm(identifier));
-            TopScoreDocCollector collector = TopScoreDocCollector.create(5, true);
-            searcher.search(q, collector);
-            ScoreDoc[] hits = collector.topDocs().scoreDocs;
-            if (hits.length > 1) {
-                // LOGGER.info("more then one hit found for an id! this shouldn't happen");
-            }
-            for (ScoreDoc scoreDoc : hits) {
-                return new String(getBinaryValue(scoreDoc, "Molecule"));
-            }
-
-        } catch (Exception ex) {
+        try{
+            ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            return (IAtomContainer) in.readObject();
+        } catch (Exception ex){
             ex.printStackTrace();
-            throw new RuntimeException();
         }
+        
+        return null;
 
-        return "";
     }
+
 
 }

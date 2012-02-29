@@ -12,10 +12,10 @@ import java.io.IOException;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class HMDBStructureQueryService
+public class HMDBStructureService
             extends AbstractStructureQueryService<HMDBIdentifier> {
 
-    public HMDBStructureQueryService() throws IOException {
+    public HMDBStructureService()  {
         super(new HMDBStructureIndex());
     }
 

@@ -6,16 +6,16 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import java.io.IOException;
 
 /**
- * ChEBIStructureQueryService.java - 21.02.2012 <br/> Description...
+ * ChEBIStructureService.java - 21.02.2012 <br/> Description...
  *
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class ChEBIStructureQueryService
+public class ChEBIStructureService
             extends AbstractStructureQueryService<ChEBIIdentifier> {
 
-    public ChEBIStructureQueryService() throws IOException {
+    public ChEBIStructureService() {
         super(new ChEBIStructureIndex());
     }
 
