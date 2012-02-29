@@ -45,8 +45,7 @@ public class GZIPRemoteLocation
      */
     public InputStream open() throws IOException {
         if (stream == null) {
-            connection = connection == null ? getLocation().openConnection() : connection;
-            stream = new GZIPInputStream(connection.getInputStream());
+            stream = new GZIPInputStream(super.open());
         }
         return stream;
     }
@@ -58,23 +57,10 @@ public class GZIPRemoteLocation
      */
     public void close() throws IOException {
         if (stream != null) {
+            super.close(); // close the connection also
             stream.close();
             stream = null;
-            connection = null;
         }
     }
-
-    /**
-     * @inheritDoc
-     */
-    public boolean isAvailable() {
-        try {
-            connection = getLocation().openConnection();
-            return connection.getContentLength() > 0;
-        } catch (IOException ex) {
-            return false;
-        }
-    }
-
 
 }

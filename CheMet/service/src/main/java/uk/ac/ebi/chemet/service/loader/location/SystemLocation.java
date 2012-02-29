@@ -71,6 +71,7 @@ public class SystemLocation
     public void close() throws IOException {
         if (stream != null) {
             this.stream.close();
+            this.stream = null; // ensure re-open is a success
         }
     }
 

@@ -23,7 +23,6 @@ import java.util.zip.ZipInputStream;
 public class ZIPRemoteLocation
         extends RemoteLocation {
 
-    private URLConnection connection;
     private ZipInputStream stream;
 
     public ZIPRemoteLocation(URL location) {
@@ -33,6 +32,7 @@ public class ZIPRemoteLocation
     public ZIPRemoteLocation(String location) throws IOException {
         super(new URL(location));
     }
+
 
     /**
      * Open a Zip stream to the remote resource. This first opens the URLConnection
@@ -48,8 +48,7 @@ public class ZIPRemoteLocation
     @Override
     public InputStream open() throws IOException {
         if (stream == null) {
-            connection = getLocation().openConnection();
-            stream = new ZipInputStream(connection.getInputStream());
+            stream = new ZipInputStream(super.open());
             stream.getNextEntry();
         }
         return stream;
@@ -62,27 +61,10 @@ public class ZIPRemoteLocation
     @Override
     public void close() throws IOException {
         if (stream != null) {
+            super.close(); // close the connection also
             stream.close();
             stream = null;
-            connection = null;
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public boolean isAvailable() {
-
-        try {
-            open();
-            boolean available = connection.getContentLength() > 0;
-            close();
-            return available;
-        } catch (IOException ex) {
-            return false;
-        }
-
     }
 
 

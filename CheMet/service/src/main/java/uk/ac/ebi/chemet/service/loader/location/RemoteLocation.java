@@ -38,18 +38,21 @@ public class RemoteLocation
         return location;
     }
 
+    public URLConnection getConnection() throws IOException {
+        if(connection == null)
+            connection = getLocation().openConnection();
+        return connection;
+    }
+
     /**
      * @inheritDoc
      */
     public boolean isAvailable() {
-
         try {
-            connection = location.openConnection();
-            return connection.getContentLength() > 0;
+            return getConnection().getContentLength() > 0;
         } catch (IOException ex) {
             return false;
         }
-
     }
 
     /**
@@ -59,7 +62,7 @@ public class RemoteLocation
      */
     public InputStream open() throws IOException {
         if (stream == null) {
-            connection = connection == null ? location.openConnection() : connection;
+            connection = getConnection();
             stream = connection.getInputStream();
         }
         return stream;

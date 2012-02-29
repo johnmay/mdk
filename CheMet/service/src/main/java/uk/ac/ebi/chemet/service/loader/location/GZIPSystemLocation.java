@@ -36,7 +36,7 @@ public class GZIPSystemLocation
      */
     public InputStream open() throws IOException {
         if (stream == null) {
-            stream = new GZIPInputStream(new FileInputStream(getLocation()));
+            stream = new GZIPInputStream(super.open());
         }
         return stream;
     }
@@ -48,6 +48,7 @@ public class GZIPSystemLocation
      */
     public void close() throws IOException {
         if (stream != null) {
+            super.close(); // ensure superclass clean-up
             stream.close();
             stream = null;
         }

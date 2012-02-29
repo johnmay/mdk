@@ -34,7 +34,7 @@ public class ZIPSystemLocation
     }
 
     /**
-     * Open a Zip stream to the remote resource. This first opens the URLConnection
+     * Open a Zip stream to the local resource. This first opens the URLConnection
      * and then the stream.
      * Note: this method will call {@see stream#getNextEntry()} once when the stream
      * is opened and thus only allow you to read the first entry via the returned
@@ -47,7 +47,7 @@ public class ZIPSystemLocation
     @Override
     public InputStream open() throws IOException {
         if (stream == null) {
-            stream = new ZipInputStream(new FileInputStream(getLocation()));
+            stream = new ZipInputStream(super.open());
             stream.getNextEntry();
         }
         return stream;
@@ -62,6 +62,7 @@ public class ZIPSystemLocation
     public void close() throws IOException {
         if (stream != null) {
             stream.close();
+            super.close(); // ensure superclass clean-up
             stream = null;
         }
     }
