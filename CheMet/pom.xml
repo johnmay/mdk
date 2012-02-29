@@ -17,6 +17,7 @@
         <module>observation</module>
         <module>service</module>
         <module>chemet-apps</module>
+        <module>chemet-tools</module>
     </modules>
     
     <properties>
