@@ -3,10 +3,7 @@ package uk.ac.ebi.chemet.service.query.name;
 import uk.ac.ebi.chemet.service.index.name.ChEBINameIndex;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.service.query.name.IUPACNameService;
-import uk.ac.ebi.service.query.name.NameService;
-import uk.ac.ebi.service.query.name.PreferredNameService;
-import uk.ac.ebi.service.query.name.SynonymService;
+import uk.ac.ebi.service.query.name.*;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -25,7 +22,9 @@ public class ChEBINameService
         implements IUPACNameService<ChEBIIdentifier>,
                    PreferredNameService<ChEBIIdentifier>,
                    SynonymService<ChEBIIdentifier>,
-                   NameService<ChEBIIdentifier>{
+                   BrandNameService<ChEBIIdentifier>,
+                   InternationalNonproprietaryNameService<ChEBIIdentifier>,
+                   NameService<ChEBIIdentifier> {
 
     public ChEBINameService() {
         super(new ChEBINameIndex());
@@ -39,8 +38,11 @@ public class ChEBINameService
         // use set as to avoid duplicates
         Collection<ChEBIIdentifier> identifiers = new HashSet<ChEBIIdentifier>();
 
+        // efficiency could be improved with multifield search
         identifiers.addAll(searchIUPACName(name, approximate));
         identifiers.addAll(searchPreferredName(name, approximate));
+        identifiers.addAll(searchBrandName(name, approximate));
+        identifiers.addAll(searchINN(name, approximate));
         identifiers.addAll(searchSynonyms(name, approximate));
 
         return identifiers;
@@ -57,6 +59,8 @@ public class ChEBINameService
 
         names.add(getIUPACName(identifier));
         names.add(getPreferredName(identifier));
+        names.add(getBrandName(identifier));
+        names.add(getINN(identifier));
         names.addAll(getSynonyms(identifier));
 
         return names;
@@ -109,6 +113,38 @@ public class ChEBINameService
     @Override
     public Collection<String> getSynonyms(ChEBIIdentifier identifier) {
         return getValues(create(identifier.getAccession(), IDENTIFIER), PREFERRED_NAME);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getBrandName(ChEBIIdentifier identifier) {
+        return getFirstValue(identifier, BRAND_NAME);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Collection<ChEBIIdentifier> searchBrandName(String name, boolean approximate) {
+        return getIdentifiers(create(name, BRAND_NAME, approximate));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String getINN(ChEBIIdentifier identifier) {
+        return getFirstValue(identifier, INN);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Collection<ChEBIIdentifier> searchINN(String name, boolean approximate) {
+        return getIdentifiers(create(name, INN, approximate));
     }
 
     /**

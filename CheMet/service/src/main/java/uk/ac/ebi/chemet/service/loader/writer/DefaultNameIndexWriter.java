@@ -7,10 +7,8 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.query.name.IUPACNameService;
+import uk.ac.ebi.service.query.name.*;
 import uk.ac.ebi.service.query.QueryService;
-import uk.ac.ebi.service.query.name.PreferredNameService;
-import uk.ac.ebi.service.query.name.SynonymService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,6 +76,38 @@ public class DefaultNameIndexWriter {
                     continue;
 
                 document.add(new Field(SynonymService.SYNONYM.field(), synonym.trim(), Field.Store.YES, Field.Index.ANALYZED));
+
+            }
+        }
+
+        writer.addDocument(document);
+    }
+
+    public void write(String identifier, String preferred, String iupac, String brand, String inn, Collection<String> synonyms) throws IOException {
+
+        Document document = new Document();
+
+        document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+        if (iupac != null && !iupac.isEmpty()) {
+            document.add(new Field(IUPACNameService.IUPAC.field(), iupac.trim(), Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
+        }
+        if (preferred != null && !preferred.isEmpty()) {
+            document.add(new Field(PreferredNameService.PREFERRED_NAME.field(), preferred.trim(), Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
+        }
+        if (brand != null && !brand.isEmpty()) {
+            document.add(new Field(BrandNameService.BRAND_NAME.field(), brand.trim(), Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
+        }
+        if (inn != null && !inn.isEmpty()) {
+            document.add(new Field(InternationalNonproprietaryNameService.INN.field(), inn.trim(), Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
+        }
+        if (synonyms != null && synonyms.size() > 0) {
+            for (String synonym : synonyms) {
+
+                // skip those which are already in the index
+                if(matches(synonym, iupac) || matches(synonym, preferred))
+                    continue;
+
+                document.add(new Field(SynonymService.SYNONYM.field(), synonym.trim(), Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
 
             }
         }

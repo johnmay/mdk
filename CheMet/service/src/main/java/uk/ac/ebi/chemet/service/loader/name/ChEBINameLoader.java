@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
  * ChEBINameLoader - 28.02.2012 <br/>
  * <p/>
  * Load ChEBI Names into a searchable lucene index. Some generalisations are made to
- * reduce the complexity of the provided data. The loader treats systematic names, brand
- * names and INN (International Nonproprietary Names) as synonyms. When an entry has
+ * reduce the complexity of the provided data. The loader treats systematic names as synonyms.
+ * When an entry has
  * multiple IUPAC names the first one is index and any others are added as synonyms.
  * <p/>
  * The preferred name for each entry is fetched from ChEBI Compounds resource first, if
@@ -75,10 +75,12 @@ public class ChEBINameLoader extends AbstractChEBILoader {
         int max = Math.max(nameIndex, Math.max(typeIndex, accessionIndex));
 
         // what we treat as synonyms
-        Set<String> synonymType = new HashSet<String>(Arrays.asList("SYSTEMATIC NAME", "SYNONYM", "BRAND NAME", "INN"));
+        Set<String> synonymType = new HashSet<String>(Arrays.asList("SYSTEMATIC NAME", "SYNONYM"));
 
         Multimap<String, String> synonyms = HashMultimap.create();
         Multimap<String, String> iupac = HashMultimap.create();
+        Multimap<String, String> inn = HashMultimap.create();
+        Multimap<String, String> brand = HashMultimap.create();
 
         String[] row = null;
         while ((row = csv.readNext()) != null ) {
@@ -127,6 +129,24 @@ public class ChEBINameLoader extends AbstractChEBILoader {
 
             }
 
+            if (type.equals("BRAND NAME")) {
+                if (!brand.containsKey(accession)) {
+                    brand.put(accession, name);
+                } else {
+                    if (!brand.get(accession).equals(name))
+                        synonyms.put(accession, name);
+                }
+            }
+
+            if (type.equals("INN")) {
+                if (!inn.containsKey(accession)) {
+                    inn.put(accession, name);
+                } else {
+                    if (!inn.get(accession).equals(name))
+                        synonyms.put(accession, name);
+                }
+            }
+
         }
 
         // if not cancelled write the index
@@ -137,6 +157,8 @@ public class ChEBINameLoader extends AbstractChEBILoader {
             accessions.addAll(synonyms.keySet());
             accessions.addAll(iupac.keySet());
             accessions.addAll(preferredNameMap.keySet());
+            accessions.addAll(brand.keySet());
+            accessions.addAll(inn.keySet());
 
             DefaultNameIndexWriter writer = new DefaultNameIndexWriter(getIndex());
 
@@ -144,9 +166,11 @@ public class ChEBINameLoader extends AbstractChEBILoader {
             for (String accession : accessions) {
 
                 String preferredName = preferredNameMap.containsKey(accession) ? preferredNameMap.get(accession) : "";
-                String iupacName = iupac.containsKey(accession) ? iupac.get(accession).iterator().next() : "";
+                String iupacName     = iupac.containsKey(accession) ? iupac.get(accession).iterator().next() : "";
+                String brandName     = brand.containsKey(accession) ? brand.get(accession).iterator().next() : "";
+                String innName       = inn.containsKey(accession) ? inn.get(accession).iterator().next() : "";
 
-                writer.write(accession, preferredName, iupacName, synonyms.get(accession));
+                writer.write(accession, preferredName, iupacName, brandName, innName, synonyms.get(accession));
 
             }
 
