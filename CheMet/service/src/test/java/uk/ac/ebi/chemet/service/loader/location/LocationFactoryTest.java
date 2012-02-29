@@ -7,7 +7,7 @@ import uk.ac.ebi.service.location.ResourceLocation;
 /**
  * LocationFactoryTest - 20.02.2012 <br/>
  *
- * Unit tests for {@see LocationFactory}
+ * Unit tests for {@see DefaultLocationFactory}
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -15,11 +15,11 @@ import uk.ac.ebi.service.location.ResourceLocation;
  */
 public class LocationFactoryTest {
 
-    private static LocationFactory factory = LocationFactory.getInstance();
+    private static DefaultLocationFactory factory = DefaultLocationFactory.getInstance();
 
     @Test
     public void testGetInstance() throws Exception {
-        Assert.assertNotNull(LocationFactory.getInstance());
+        Assert.assertNotNull(DefaultLocationFactory.getInstance());
     }
 
     @Test

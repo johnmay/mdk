@@ -1,15 +1,11 @@
 package uk.ac.ebi.render.resource;
 
 import uk.ac.ebi.caf.component.CalloutDialog;
-import uk.ac.ebi.caf.component.factory.ButtonFactory;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.chemet.service.loader.location.LocationFactory;
 import uk.ac.ebi.render.resource.location.DirectoryLocationEditor;
 import uk.ac.ebi.render.resource.location.FileLocationEditor;
 import uk.ac.ebi.render.resource.location.LocationEditor;
 import uk.ac.ebi.service.ResourceLoader;
-import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.location.LocationDescription;
 import uk.ac.ebi.service.location.ResourceDirectoryLocation;
 import uk.ac.ebi.service.location.ResourceFileLocation;
@@ -17,7 +13,6 @@ import uk.ac.ebi.service.location.ResourceLocation;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
