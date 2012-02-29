@@ -5,7 +5,7 @@ import uk.ac.ebi.chemet.service.index.KeywordNIOIndex;
 /**
  * KEGGCompoundStructureIndex - 21.02.2012 <br/> Description...
  * <p/>
- * Describes the {@see LuceneIndex} used in {@see KEGGCompoundStructureQueryService}
+ * Describes the {@see LuceneIndex} used in {@see KEGGCompoundStructureService}
  * and {@see KEGGCompoundStructureLoader}.
  *
  * @author johnmay

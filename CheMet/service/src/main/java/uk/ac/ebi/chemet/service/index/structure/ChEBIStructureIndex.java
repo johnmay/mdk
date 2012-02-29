@@ -5,7 +5,7 @@ import uk.ac.ebi.chemet.service.index.KeywordNIOIndex;
 /**
  * ChEBIStructureIndex - 21.02.2012 <br/>
  * <p/>
- * Describes the {@see LuceneIndex} used in {@see ChEBIStructureQueryService} and {@see ChEBIStructureLoader}.
+ * Describes the {@see LuceneIndex} used in {@see ChEBIStructureService} and {@see ChEBIStructureLoader}.
  *
  * @author johnmay
  * @author $Author$ (this version)
