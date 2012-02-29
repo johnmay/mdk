@@ -5,8 +5,11 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.util.Version;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.service.query.QueryService;
@@ -14,6 +17,8 @@ import uk.ac.ebi.service.query.QueryService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.prefs.Preferences;
 import java.util.regex.Pattern;
 
@@ -39,6 +44,8 @@ public abstract class AbstractQueryService<I extends Identifier>
 
     private LuceneIndex index;
 
+    private Map<String, QueryParser> parserMap = new HashMap<String, QueryParser>();
+
     private int max = Preferences.userNodeForPackage(AbstractQueryService.class).getInt("default.max.results", 100);
     private float minSimilarity = 0.5f; // for fuzzy queries
 
@@ -51,11 +58,11 @@ public abstract class AbstractQueryService<I extends Identifier>
             setDirectory(index.getDirectory());
             searcher = new IndexSearcher(getDirectory(), true);
         } catch (IOException ex) {
-            LOGGER.error("Could not create query service");
+            LOGGER.error("Could not create query service", ex);
         }
     }
 
-    public IndexSearcher getSearcher(){
+    public IndexSearcher getSearcher() {
         return searcher;
     }
 
@@ -113,15 +120,15 @@ public abstract class AbstractQueryService<I extends Identifier>
         return documents[index].getBinaryValue(field);
     }
 
-    public byte[] getFirstBinaryValue(Identifier identifier, Term field){
+    public byte[] getFirstBinaryValue(Identifier identifier, Term field) {
         return getFirstBinaryValue(identifier.getAccession(), field.field());
     }
 
-    public byte[] getFirstBinaryValue(String identifier, String field){
+    public byte[] getFirstBinaryValue(String identifier, String field) {
         return getFirstBinaryValue(create(identifier, IDENTIFIER), field);
     }
 
-    public byte[] getFirstBinaryValue(Query query, String field){
+    public byte[] getFirstBinaryValue(Query query, String field) {
         TopScoreDocCollector collector = TopScoreDocCollector.create(5, true);
         try {
 
@@ -199,18 +206,53 @@ public abstract class AbstractQueryService<I extends Identifier>
      * @return
      */
     public Query create(String text, Term term, boolean fuzzy) {
+
+        // slight speed boost when searching for identifier look-up
+        if(term == IDENTIFIER ){
+            return new TermQuery(IDENTIFIER.createTerm(text));
+        }
+
+        QueryParser parser = getParser(term);
+
+        // bit messy but the parse tries first with text, if that fails
+        // it escapes the text.
+        try{
+            return parser.parse(text + ( fuzzy ? "~" + getMinSimilarity() : ""));
+        } catch (ParseException e1){
+            try{
+                return parser.parse(QueryParser.escape(text) + ( fuzzy ? "~" + getMinSimilarity() : ""));
+            } catch (ParseException e2){
+                LOGGER.warn("Could not parse query");
+            }
+        }
+
+        // only tried if the parsing fails
         Term searchTerm = term.createTerm(text);
         return fuzzy ? new FuzzyQuery(searchTerm, getMinSimilarity()) : new TermQuery(searchTerm);
+
+    }
+
+    public QueryParser getParser(Term term){
+        return getParser(term.field());
+    }
+    
+    public QueryParser getParser(String field) {
+        if (!parserMap.containsKey(field)) {
+            parserMap.put(field,
+                          new QueryParser(Version.LUCENE_34, field, getAnalyzer()));
+        }
+        return parserMap.get(field);
     }
 
     public Query create(String text, Term term) {
         return create(text, term, false);
     }
 
-    public String getFirstValue(Identifier identifier, Term term){
+    public String getFirstValue(Identifier identifier, Term term) {
         return getFirstValue(create(identifier.getAccession(), IDENTIFIER), term.field());
     }
-    public String getFirstValue(Query query, Term term){
+
+    public String getFirstValue(Query query, Term term) {
         return getFirstValue(query, term.field());
     }
 
@@ -232,13 +274,16 @@ public abstract class AbstractQueryService<I extends Identifier>
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
             if (hits.length > 1) {
-                System.err.println("expected only one result");
+                System.err.println("Expected only one result");
             }
-
 
             for (ScoreDoc document : hits) {
-                return getValue(document, field);
+                String value = getValue(document, field);
+                if(value != null){
+                    return value;
+                }
             }
+            
         } catch (IOException ex) {
             LOGGER.error("IO Exception occurred on service: " + ex.getMessage());
         }
@@ -247,11 +292,11 @@ public abstract class AbstractQueryService<I extends Identifier>
 
     }
 
-    public Collection<String> getValues(Query query, Term term){
+    public Collection<String> getValues(Query query, Term term) {
         return getValues(query, term.field());
     }
 
-    public Collection<String> getValues(Query query, String field){
+    public Collection<String> getValues(Query query, String field) {
 
         Collection<String> values = new ArrayList<String>();
 
