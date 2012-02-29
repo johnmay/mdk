@@ -44,7 +44,9 @@ import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated use new service in chemet-servicer: ChEBINameService
  */
+@Deprecated
 public class ChEBINameService
         extends ChEBIQueryService
         implements ChemicalNameQueryService<ChEBIIdentifier> {
