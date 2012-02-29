@@ -56,6 +56,9 @@ public class KEGGCompoundNameService
         names.add(getPreferredName(identifier));
         names.addAll(getSynonyms(identifier));
 
+        names.remove(""); // remove empty results
+
+
         return names;
 
     }

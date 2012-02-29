@@ -39,11 +39,11 @@ public class ChEBINameService
         Collection<ChEBIIdentifier> identifiers = new HashSet<ChEBIIdentifier>();
 
         // efficiency could be improved with multifield search
-        identifiers.addAll(searchIUPACName(name, approximate));
         identifiers.addAll(searchPreferredName(name, approximate));
+        identifiers.addAll(searchSynonyms(name, approximate));
+        identifiers.addAll(searchIUPACName(name, approximate));
         identifiers.addAll(searchBrandName(name, approximate));
         identifiers.addAll(searchINN(name, approximate));
-        identifiers.addAll(searchSynonyms(name, approximate));
 
         return identifiers;
 
@@ -62,6 +62,8 @@ public class ChEBINameService
         names.add(getBrandName(identifier));
         names.add(getINN(identifier));
         names.addAll(getSynonyms(identifier));
+
+        names.remove(""); // remove empty results
 
         return names;
 
@@ -153,5 +155,16 @@ public class ChEBINameService
     @Override
     public ChEBIIdentifier getIdentifier() {
         return new ChEBIIdentifier();
+    }
+
+    public static void main(String[] args) {
+        ChEBINameService service = new ChEBINameService();
+        long start = System.currentTimeMillis();
+        service.setMinSimilarity(0.9f);
+        for(ChEBIIdentifier id : service.searchName("ATP", true)){
+            System.out.println(service.getNames(id));
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("time: " + (end - start));
     }
 }
