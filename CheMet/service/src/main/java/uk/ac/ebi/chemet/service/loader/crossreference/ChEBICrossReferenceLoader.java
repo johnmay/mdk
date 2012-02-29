@@ -1,6 +1,8 @@
 package uk.ac.ebi.chemet.service.loader.crossreference;
 
 import au.com.bytecode.opencsv.CSVReader;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.service.index.crossreference.ChEBICrossReferenceIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractChEBILoader;
@@ -8,18 +10,26 @@ import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultCrossReferenceIndexWriter;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.service.SingleIndexResourceLoader;
 import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.location.ResourceFileLocation;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.security.InvalidParameterException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
  * ChEBICrossReferenceLoader - 29.02.2012 <br/>
  * <p/>
- * Class descriptions.
+ * Loader will create a lucene index with cross-references for the ChEBI
+ * database. The current implementation only write the the cross-references
+ * for ChEBI primary identifiers.
+ *
+ * Note: PubChem Compound Id's provide a problem as require extensive resolution, the
+ *       PubChem SID/CID's are not included in this index as it would require parsing of
+ *       a very large file.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -31,60 +41,65 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
 
     public ChEBICrossReferenceLoader() throws IOException {
         super(new ChEBICrossReferenceIndex());
-        
+
         addRequiredResource("ChEBI Database Accession",
-                            "...",
+                            "Tab Separated Value (TSV) flat-file containing COMPOUND_ID, TYPE and DATABASE_ACCESSION columns",
                             ResourceFileLocation.class,
                             new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession.tsv"));
 
-// ekk this file is huge for just getting the pubchem identifiers?
-//        addRequiredResource("ChEBI References",
-//                            "...",
-//                            ResourceFileLocation.class,
-//                            new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession.tsv"));
+        // ekk! this file is huge for just getting the pubchem identifiers?
+        //        addRequiredResource("ChEBI References",
+        //                            "...",
+        //                            ResourceFileLocation.class,
+        //                            new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession.tsv"));
 
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public void update() throws MissingLocationException, IOException {
 
+        // open the database accession file
         ResourceFileLocation location = getLocation("ChEBI Database Accession");
-
         CSVReader tsv = new CSVReader(new InputStreamReader(location.open()), '\t', '\0');
 
-        DefaultCrossReferenceIndexWriter writer = new DefaultCrossReferenceIndexWriter(getIndex());
+
+        // store references in a map first to avoid duplications
+        Multimap<String, Identifier> crossreferences = HashMultimap.create();
 
         String[] row = tsv.readNext();
-        Map<String,Integer> map = getHeaderMap(row);
-        while((row = tsv.readNext()) != null){
+        Map<String, Integer> map = getHeaderMap(row);
+        while ((row = tsv.readNext()) != null) {
 
-            if(isCancelled()) break;
+            if (isCancelled()) break;
 
-            String identifier  = row[map.get("COMPOUND_ID")];
-            String type        = row[map.get("TYPE")];
-            String accession   = row[map.get("ACCESSION_NUMBER")];
+            String identifier = row[map.get("COMPOUND_ID")];
+            String type = row[map.get("TYPE")];
+            String accession = row[map.get("ACCESSION_NUMBER")];
 
-
-            try{
+            // create an instance of the identifier and add it to the map
+            try {
                 Identifier id = IdentifierFactory.getInstance().ofSynonym(type);
-                // could write cross-references for all identifiers but this
-                // doubles the index size a
-                String chebiid = getPrimaryIdentifier(identifier);
-                writer.write(chebiid, id.getIndex().toString(), accession);
-            }catch (Exception e){
-                LOGGER.warn("No db to synonym");
+                id.setAccession(accession);
+                crossreferences.put(getPrimaryIdentifier(identifier), id);
+            } catch (Exception e) {
+                LOGGER.warn(e.getMessage());
             }
+        }
 
-
+        // put references from the map into the index
+        DefaultCrossReferenceIndexWriter writer = new DefaultCrossReferenceIndexWriter(getIndex());
+        for (String accession : crossreferences.keySet()) {
+            for (Identifier crossreference : crossreferences.get(accession)) {
+                writer.write(accession, crossreference.getIndex(), crossreference.getAccession());
+            }
 
         }
 
         writer.close();
         location.close();
 
-    }
-
-    public static void main(String[] args) throws Exception {
-        new ChEBICrossReferenceLoader().update();
     }
 }

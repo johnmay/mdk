@@ -41,12 +41,12 @@ public class DefaultCrossReferenceIndexWriter {
                                       new IndexWriterConfig(Version.LUCENE_34, index.getAnalyzer()));
     }
     
-    public void write(String identifier, String databaseName, String databaseAccession) throws IOException {
+    public void write(String identifier, Byte databaseName, String databaseAccession) throws IOException {
 
         Document document = new Document();
 
         document.add(new Field(QueryService.IDENTIFIER.field(), identifier, Field.Store.YES, Field.Index.ANALYZED));
-        document.add(new Field(CrossReferenceService.DATABASE_IDENTIFIER_INDEX.field(), databaseName, Field.Store.YES, Field.Index.ANALYZED));
+        document.add(new Field(CrossReferenceService.DATABASE_IDENTIFIER_INDEX.field(), databaseName.toString(), Field.Store.YES, Field.Index.ANALYZED));
         document.add(new Field(CrossReferenceService.DATABASE_ACCESSION.field(), databaseAccession, Field.Store.YES, Field.Index.ANALYZED));
 
         writer.addDocument(document);

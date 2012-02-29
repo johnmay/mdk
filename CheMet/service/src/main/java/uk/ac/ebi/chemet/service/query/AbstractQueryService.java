@@ -51,6 +51,10 @@ public abstract class AbstractQueryService<I extends Identifier>
         }
     }
 
+    public IndexSearcher getSearcher(){
+        return searcher;
+    }
+
     /**
      * @inheritDoc
      */
