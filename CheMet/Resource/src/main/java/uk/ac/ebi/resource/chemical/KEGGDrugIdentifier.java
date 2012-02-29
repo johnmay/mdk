@@ -22,6 +22,7 @@ package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierDescription;
 import uk.ac.ebi.resource.MIRIAMIdentifier;
@@ -37,7 +38,7 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  *
  */
 @MIRIAMIdentifier(mir = 25)
-public class KEGGDrugIdentifier extends ChemicalIdentifier {
+public class KEGGDrugIdentifier extends ChemicalIdentifier implements KEGGIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGDrugIdentifier.class);
 

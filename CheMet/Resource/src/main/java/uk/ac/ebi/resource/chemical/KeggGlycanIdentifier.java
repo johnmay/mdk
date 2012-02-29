@@ -21,25 +21,22 @@
 package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierDescription;
 import uk.ac.ebi.resource.MIRIAMIdentifier;
 
 
 /**
- *
- * @name    KEGGCompoundIdentifier – 2011.08.16
- *          An identifier for KEGG Compound
- *
+ * @author pmoreno
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- *
- * @author  pmoreno
- * @author  $Author$ (this version)
- *
+ * @name KEGGCompoundIdentifier – 2011.08.16
+ * An identifier for KEGG Compound
  */
 @MIRIAMIdentifier(mir = 26)
 public class KeggGlycanIdentifier
-        extends ChemicalIdentifier {
+        extends ChemicalIdentifier implements KEGGIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(KeggGlycanIdentifier.class);
 
