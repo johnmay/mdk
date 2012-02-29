@@ -5,6 +5,7 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import uk.ac.ebi.chemet.service.index.structure.ChEBIStructureIndex;
+import uk.ac.ebi.chemet.service.loader.AbstractChEBILoader;
 import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.location.GZIPRemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter;
@@ -24,7 +25,7 @@ import java.util.Map;
  * @version $Rev$
  */
 public class ChEBIStructureLoader
-        extends AbstractSingleIndexResourceLoader {
+        extends AbstractChEBILoader {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIStructureLoader.class);
 
@@ -66,8 +67,9 @@ public class ChEBIStructureLoader
 
             // if we have a ChEBI identifier, write to the index
             if (properties.containsKey("ChEBI ID")) {
+                // re-map to primary id using super class method
                 String identifier = properties.get("ChEBI ID").toString();
-                writer.write(identifier, molecule);
+                writer.write(getPrimaryIdentifier(identifier), molecule);
             }
 
         }
