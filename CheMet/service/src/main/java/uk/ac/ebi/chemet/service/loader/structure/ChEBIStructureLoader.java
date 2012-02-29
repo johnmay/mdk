@@ -76,6 +76,7 @@ public class ChEBIStructureLoader
 
         // close the sdf reader and the index writer
         sdfReader.close();
+        location.close();
         writer.close();
 
     }
