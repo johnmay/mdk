@@ -42,6 +42,7 @@ import uk.ac.ebi.interfaces.services.NameQueryService;
 import uk.ac.ebi.reconciliation.StringEncoder;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.service.query.name.NameService;
 
 
 /**
@@ -55,12 +56,12 @@ public class CandidateFactory<I extends Identifier> {
 
     private static final Logger LOGGER = Logger.getLogger(CandidateFactory.class);
 
-    private final NameQueryService<I> service;
+    private final NameService<I> service;
 
     private StringEncoder encoder;
 
 
-    public CandidateFactory(NameQueryService<I> service, StringEncoder encoder) {
+    public CandidateFactory(NameService<I> service, StringEncoder encoder) {
         this.service = service;
         this.encoder = encoder;
     }
@@ -72,7 +73,6 @@ public class CandidateFactory<I extends Identifier> {
      * distance
      *
      * @param name
-     * @param encoder A StringEncoder such as ChemicalFingerprint
      * @return
      * 
      */
@@ -80,8 +80,7 @@ public class CandidateFactory<I extends Identifier> {
 
         Multimap<Integer, SynonymCandidateEntry> map = HashMultimap.create();
 
-        // todo add general search
-        for (I id : service.searchForName(name)) {
+        for (I id : service.searchName(name, false)) {
 
             Collection<String> names = service.getNames(id);
 
@@ -155,7 +154,7 @@ public class CandidateFactory<I extends Identifier> {
         Multimap<Integer, SynonymCandidateEntry> map = HashMultimap.create();
 
         // todo add general search
-        for (I id : service.fuzzySearchForName(name)) {
+        for (I id : service.searchName(name, true)) {
 
             Collection<String> names = service.getNames(id);
 
