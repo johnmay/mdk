@@ -53,6 +53,9 @@ public class FileLocationEditor
             }
         });
         this.add(card, cc.xy(2,1));
+
+        selector.setSelectedItem("Local");
+        show("Local");
     }
 
     @Override
