@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * HMDBNameQueryService - 23.02.2012 <br/>
+ * HMDBNameService - 23.02.2012 <br/>
  * <p/>
  * Class descriptions.
  *
@@ -22,14 +22,14 @@ import java.util.HashSet;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class HMDBNameQueryService
+public class HMDBNameService
         extends AbstractQueryService<HMDBIdentifier>
         implements IUPACNameService<HMDBIdentifier>,
                    PreferredNameService<HMDBIdentifier>,
                    SynonymService<HMDBIdentifier>,
                    NameService<HMDBIdentifier>{
 
-    public HMDBNameQueryService() {
+    public HMDBNameService() {
         super(new HMDBNameIndex());
     }
 
