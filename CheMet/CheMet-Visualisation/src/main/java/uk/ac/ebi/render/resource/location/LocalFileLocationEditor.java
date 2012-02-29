@@ -6,6 +6,7 @@ import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.chemet.service.loader.location.*;
 import uk.ac.ebi.service.location.LocationDescription;
+import uk.ac.ebi.service.location.LocationFactory;
 import uk.ac.ebi.service.location.ResourceLocation;
 
 import javax.swing.*;
@@ -36,8 +37,12 @@ public class LocalFileLocationEditor
     private JCheckBox zipped = CheckBoxFactory.newCheckBox("ZIP");
     private JCheckBox gzipped = CheckBoxFactory.newCheckBox("GZIP");
 
+    private LocationFactory factory;
 
-    public LocalFileLocationEditor() {
+    public LocalFileLocationEditor(LocationFactory factory) {
+
+        this.factory = factory;
+
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 
         final JComponent component = this;
@@ -62,17 +67,17 @@ public class LocalFileLocationEditor
         field.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                suggestCompression();
+                getCompression();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                suggestCompression();
+                getCompression();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                suggestCompression();
+                getCompression();
             }
         });
 
@@ -104,15 +109,18 @@ public class LocalFileLocationEditor
         }
     }
 
-    public void suggestCompression() {
+    public LocationFactory.Compression getCompression() {
         String text = field.getText().trim();
         if (text.endsWith(".zip")) {
             zipped.setSelected(true);
+            return LocationFactory.Compression.ZIP_ARCHIVE;
         } else if (text.endsWith(".gz")) {
             gzipped.setSelected(true);
+            return LocationFactory.Compression.GZIP_ARCHIVE;
         } else {
             zipped.setSelected(false);
             gzipped.setSelected(false);
+            return LocationFactory.Compression.NONE;
         }
     }
 
@@ -122,11 +130,11 @@ public class LocalFileLocationEditor
         String text = field.getText().trim();
 
         if (zipped.isSelected()) {
-            return new ZIPSystemLocation(text);
+            return factory.newFileLocation(text, LocationFactory.Compression.ZIP_ARCHIVE, LocationFactory.Location.LOCAL_FS);
         }
         if (gzipped.isSelected()) {
-            return new GZIPSystemLocation(text);
+            return factory.newFileLocation(text, LocationFactory.Compression.GZIP_ARCHIVE, LocationFactory.Location.LOCAL_FS);
         }
-        return new SystemLocation(text);
+        return factory.newFileLocation(text, LocationFactory.Compression.NONE, LocationFactory.Location.LOCAL_FS);
     }
 }

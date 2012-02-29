@@ -7,6 +7,7 @@ import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
 import uk.ac.ebi.service.location.LocationDescription;
+import uk.ac.ebi.service.location.LocationFactory;
 import uk.ac.ebi.service.location.ResourceLocation;
 
 import javax.swing.*;
@@ -32,11 +33,15 @@ public class FileLocationEditor
 
     private JComboBox selector = ComboBoxFactory.newComboBox("Remote", "Local");
 
-    private LocalFileLocationEditor local = new LocalFileLocationEditor();
-    private RemoteFileLocationEditor remote = new RemoteFileLocationEditor();
+    private LocalFileLocationEditor local;
+    private RemoteFileLocationEditor remote;
     private JComponent card;
 
-    public FileLocationEditor() {
+    public FileLocationEditor(LocationFactory factory) {
+
+        local = new LocalFileLocationEditor(factory);
+        remote = new RemoteFileLocationEditor(factory);
+
         setLayout(new FormLayout("p, p", "p"));
         CellConstraints cc = new CellConstraints();
         add(selector, cc.xy(1,1));

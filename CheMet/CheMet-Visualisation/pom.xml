@@ -44,12 +44,6 @@
             <artifactId>CheMet-Core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>chemet-service</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
 
         <!-- Chemistry Development Kit -->
         <dependency>

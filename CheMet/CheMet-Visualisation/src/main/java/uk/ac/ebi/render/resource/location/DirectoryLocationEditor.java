@@ -5,6 +5,7 @@ import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.chemet.service.loader.location.SystemDirectoryLocation;
 import uk.ac.ebi.service.location.LocationDescription;
+import uk.ac.ebi.service.location.LocationFactory;
 import uk.ac.ebi.service.location.ResourceLocation;
 
 import javax.swing.*;
@@ -39,17 +40,20 @@ public class DirectoryLocationEditor extends JComponent implements LocationEdito
             }
         }
     });
+
+    private LocationFactory factory;
     
-    public DirectoryLocationEditor(){
+    public DirectoryLocationEditor(LocationFactory factory){
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         add(field);
         add(browse);
         component = this;
+        this.factory = factory;
     }
     
     @Override
     public ResourceLocation getResourceLocation() throws IOException {
-        return new SystemDirectoryLocation(new File(field.getText().trim()));
+        return factory.newDirectoryLocation(field.getText(), LocationFactory.Compression.NONE, LocationFactory.Location.LOCAL_FS);
     }
 
     @Override

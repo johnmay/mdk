@@ -7,6 +7,7 @@ import uk.ac.ebi.chemet.service.loader.location.GZIPRemoteLocation;
 import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.chemet.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.service.location.LocationDescription;
+import uk.ac.ebi.service.location.LocationFactory;
 import uk.ac.ebi.service.location.ResourceLocation;
 
 import javax.swing.*;
@@ -35,8 +36,12 @@ public class RemoteFileLocationEditor
     private JCheckBox zipped = CheckBoxFactory.newCheckBox("ZIP");
     private JCheckBox gzipped = CheckBoxFactory.newCheckBox("GZIP");
 
+    private LocationFactory factory;
 
-    public RemoteFileLocationEditor() {
+    public RemoteFileLocationEditor(LocationFactory factory) {
+
+        this.factory = factory;
+
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         add(field);
         add(zipped);
@@ -106,11 +111,14 @@ public class RemoteFileLocationEditor
         String text = field.getText().trim();
 
         if (zipped.isSelected()) {
-            return new ZIPRemoteLocation(text);
+            return factory.newFileLocation(text, LocationFactory.Compression.ZIP_ARCHIVE, LocationFactory.Location.FTP);
         }
+
         if (gzipped.isSelected()) {
-            return new GZIPRemoteLocation(text);
+            return factory.newFileLocation(text, LocationFactory.Compression.GZIP_ARCHIVE, LocationFactory.Location.FTP);
         }
-        return new RemoteLocation(text);
+
+        return factory.newFileLocation(text, LocationFactory.Compression.NONE, LocationFactory.Location.FTP);
+
     }
 }

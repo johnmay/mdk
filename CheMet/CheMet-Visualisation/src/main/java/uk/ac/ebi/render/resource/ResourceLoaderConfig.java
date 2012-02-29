@@ -6,10 +6,7 @@ import uk.ac.ebi.render.resource.location.DirectoryLocationEditor;
 import uk.ac.ebi.render.resource.location.FileLocationEditor;
 import uk.ac.ebi.render.resource.location.LocationEditor;
 import uk.ac.ebi.service.ResourceLoader;
-import uk.ac.ebi.service.location.LocationDescription;
-import uk.ac.ebi.service.location.ResourceDirectoryLocation;
-import uk.ac.ebi.service.location.ResourceFileLocation;
-import uk.ac.ebi.service.location.ResourceLocation;
+import uk.ac.ebi.service.location.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,9 +26,12 @@ import java.util.Map;
 public class ResourceLoaderConfig extends CalloutDialog {
 
     private ResourceLoader loader;
+    private LocationFactory factory;
     private Map<String, LocationEditor> fieldMap;
 
-    public ResourceLoaderConfig(final Window window, ResourceLoader loader) {
+    public ResourceLoaderConfig(final Window window,
+                                ResourceLoader loader,
+                                LocationFactory factory ) {
 
         super(window);
         this.loader = loader;
@@ -56,12 +56,12 @@ public class ResourceLoaderConfig extends CalloutDialog {
 
             Class c = e.getValue().getType();
             if (c.equals(ResourceFileLocation.class)) {
-                FileLocationEditor editor = new FileLocationEditor();
+                FileLocationEditor editor = new FileLocationEditor(factory);
                 fieldMap.put(e.getKey(), editor);
                 box.add(editor);
                 editor.setup(e.getValue());
             } else if (c.equals(ResourceDirectoryLocation.class)) {
-                DirectoryLocationEditor editor = new DirectoryLocationEditor();
+                DirectoryLocationEditor editor = new DirectoryLocationEditor(factory);
                 fieldMap.put(e.getKey(), editor);
                 box.add(editor);
                 editor.setup(e.getValue());

@@ -20,6 +20,7 @@ import uk.ac.ebi.render.resource.location.FileLocationEditor;
 import uk.ac.ebi.service.ResourceLoader;
 import uk.ac.ebi.service.SingleIndexResourceLoader;
 import uk.ac.ebi.service.exception.MissingLocationException;
+import uk.ac.ebi.service.location.LocationFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,7 +48,7 @@ public class LoaderRow extends JComponent {
 
     private static final Logger LOGGER = Logger.getLogger(LoaderRow.class);
 
-    public LoaderRow(final ResourceLoader loader, final Window window) {
+    public LoaderRow(final ResourceLoader loader, final Window window, final LocationFactory factory) {
 
         this.loader = loader;
 
@@ -77,7 +78,7 @@ public class LoaderRow extends JComponent {
         configure = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/cog_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                ResourceLoaderConfig dialog = new ResourceLoaderConfig(window, loader);
+                ResourceLoaderConfig dialog = new ResourceLoaderConfig(window, loader, factory);
                 dialog.setAnchor(configure);
                 dialog.setVisible(true);
                 dialog.configure();
@@ -193,35 +194,35 @@ public class LoaderRow extends JComponent {
     }
 
 
-    public static void main(String[] args) throws IOException {
-
-        JFrame frame = new JFrame("Resource Loading");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Box box = Box.createVerticalBox();
-        frame.setContentPane(box);
-        box.add(Box.createRigidArea(new Dimension(5, 5)));
-        box.add(Box.createGlue());
-        box.add(new LoaderRow(new ChEBIStructureLoader(), frame));
-        box.add(Box.createGlue());
-        box.add(new LoaderRow(new KEGGCompoundStructureLoader(), frame));
-        box.add(Box.createGlue());
-        box.add(new LoaderRow(new HMDBStructureLoader(), frame));
-        box.add(Box.createGlue());
-        box.add(new LoaderRow(new HMDBMetabocardsLoader(), frame));
-        box.add(Box.createGlue());
-        box.add(new LoaderRow(new KEGGCompoundLoader(), frame));
-        box.add(Box.createGlue());
-        box.add(new LoaderRow(new ChEBINameLoader(), frame));
-        box.add(Box.createGlue());
-        box.add(new LoaderRow(new ChEBIDataLoader(), frame));
-        box.add(Box.createGlue());
-        box.add(new LoaderRow(new TaxonomyLoader(), frame));
-        box.add(Box.createGlue());
-        box.add(Box.createRigidArea(new Dimension(5, 5)));
-
-        frame.setVisible(true);
-        frame.pack();
-
-    }
+//    public static void main(String[] args) throws IOException {
+//
+//        JFrame frame = new JFrame("Resource Loading");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        Box box = Box.createVerticalBox();
+//        frame.setContentPane(box);
+//        box.add(Box.createRigidArea(new Dimension(5, 5)));
+//        box.add(Box.createGlue());
+//        box.add(new LoaderRow(new ChEBIStructureLoader(), frame, ));
+//        box.add(Box.createGlue());
+//        box.add(new LoaderRow(new KEGGCompoundStructureLoader(), frame));
+//        box.add(Box.createGlue());
+//        box.add(new LoaderRow(new HMDBStructureLoader(), frame));
+//        box.add(Box.createGlue());
+//        box.add(new LoaderRow(new HMDBMetabocardsLoader(), frame));
+//        box.add(Box.createGlue());
+//        box.add(new LoaderRow(new KEGGCompoundLoader(), frame));
+//        box.add(Box.createGlue());
+//        box.add(new LoaderRow(new ChEBINameLoader(), frame));
+//        box.add(Box.createGlue());
+//        box.add(new LoaderRow(new ChEBIDataLoader(), frame));
+//        box.add(Box.createGlue());
+//        box.add(new LoaderRow(new TaxonomyLoader(), frame));
+//        box.add(Box.createGlue());
+//        box.add(Box.createRigidArea(new Dimension(5, 5)));
+//
+//        frame.setVisible(true);
+//        frame.pack();
+//
+//    }
 
 }
