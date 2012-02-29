@@ -7,7 +7,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 /**
  * StructureService - 28.02.2012 <br/>
  * <p/>
- * Class descriptions.
+ * Provides a CDK atom container for a given identifier
  *
  * @author johnmay
  * @author $Author$ (this version)
