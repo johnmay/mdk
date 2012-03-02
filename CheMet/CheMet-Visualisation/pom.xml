@@ -12,8 +12,8 @@
     <version>1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Render</name>
-    <url>http://maven.apache.org</url>
+    <name>chemet-visualisation</name>
+    <url>http://www.ebi.ac.uk/steinbeck</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,6 +34,17 @@
         </dependency>
 
         <!-- Internal Dependencies -->
+        <!-- NOTE: CheMet-Core and WebServices and IO need to be removed in future -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CheMet-Core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>CheMet-WebServices</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>CheMet-IO</artifactId>
@@ -41,7 +52,17 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>CheMet-Core</artifactId>
+            <artifactId>chemet-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>chemet-annotation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>chemet-resource</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -100,6 +121,14 @@
             <groupId>com.explodingpixels</groupId>
             <artifactId>macwidgets</artifactId>
             <version>0.9.6-SNAPSHOT</version>
+        </dependency>
+
+
+        <!-- other -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
         </dependency>
     </dependencies>
 </project>
