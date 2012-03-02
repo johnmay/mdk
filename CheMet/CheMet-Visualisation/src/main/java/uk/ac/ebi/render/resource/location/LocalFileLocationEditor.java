@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.service.location.LocationDescription;
 import uk.ac.ebi.service.location.LocationFactory;
 import uk.ac.ebi.service.location.ResourceLocation;
@@ -46,7 +47,7 @@ public class LocalFileLocationEditor
 
         final JComponent component = this;
 
-        browse = ButtonFactory.newButton(new AbstractAction("Browse") {
+        browse = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/browse_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
