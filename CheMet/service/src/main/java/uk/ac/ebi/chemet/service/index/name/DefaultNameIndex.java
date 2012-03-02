@@ -1,15 +1,18 @@
 package uk.ac.ebi.chemet.service.index.name;
 
+import com.hp.hpl.jena.graph.query.NamedGraphMap;
 import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
+import org.apache.lucene.analysis.*;
+import org.apache.lucene.analysis.ngram.NGramTokenizer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.chemet.service.ServicePreferences;
+import uk.ac.ebi.chemet.service.analyzer.ChemicalNameAnalyzer;
 import uk.ac.ebi.chemet.service.analyzer.LowerCaseKeywordAnalyzer;
+import uk.ac.ebi.chemet.service.analyzer.LowerCaseNGramAnalzyer;
 import uk.ac.ebi.chemet.service.index.AbstractLuceneIndex;
 import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.service.query.QueryService;
@@ -49,15 +52,14 @@ public class DefaultNameIndex extends AbstractLuceneIndex {
         super(name);
         this.file = new File(SERVICE_ROOT.get(), path);
 
-        analyzer = new PerFieldAnalyzerWrapper(new StandardAnalyzer(Version.LUCENE_34));
+        analyzer = new PerFieldAnalyzerWrapper(new ChemicalNameAnalyzer());
 
-        analyzer.addAnalyzer(QueryService.IDENTIFIER.field(),             new LowerCaseKeywordAnalyzer());
+        analyzer.addAnalyzer(QueryService.IDENTIFIER.field(),             new KeywordAnalyzer());
 //      // don't think we need these if they are the same as the default
 //        analyzer.addAnalyzer(PreferredNameService.PREFERRED_NAME.field(), new StandardAnalyzer(Version.LUCENE_34));
 //        analyzer.addAnalyzer(IUPACNameService.IUPAC.field(),              new StandardAnalyzer(Version.LUCENE_34));
 //        analyzer.addAnalyzer(SynonymService.SYNONYM.field(),              new StandardAnalyzer(Version.LUCENE_34));
 //        analyzer.addAnalyzer(NameService.NAME.field(),                    new StandardAnalyzer(Version.LUCENE_34));
-
 
     }
     
