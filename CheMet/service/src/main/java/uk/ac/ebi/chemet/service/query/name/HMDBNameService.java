@@ -110,7 +110,7 @@ public class HMDBNameService
      */
     @Override
     public Collection<String> getSynonyms(HMDBIdentifier identifier) {
-        return getValues(create(identifier.getAccession(), IDENTIFIER), PREFERRED_NAME);
+        return getValues(create(identifier.getAccession(), IDENTIFIER), SYNONYM);
     }
 
     /**
