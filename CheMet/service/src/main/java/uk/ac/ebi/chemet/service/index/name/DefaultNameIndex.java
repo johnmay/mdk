@@ -12,7 +12,7 @@ import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.chemet.service.ServicePreferences;
 import uk.ac.ebi.chemet.service.analyzer.ChemicalNameAnalyzer;
 import uk.ac.ebi.chemet.service.analyzer.LowerCaseKeywordAnalyzer;
-import uk.ac.ebi.chemet.service.analyzer.LowerCaseNGramAnalzyer;
+//import uk.ac.ebi.chemet.service.analyzer.LowerCaseNGramAnalzyer;
 import uk.ac.ebi.chemet.service.index.AbstractLuceneIndex;
 import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.service.query.QueryService;
