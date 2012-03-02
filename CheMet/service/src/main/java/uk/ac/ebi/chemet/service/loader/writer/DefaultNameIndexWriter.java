@@ -61,7 +61,7 @@ public class DefaultNameIndexWriter {
 
         Document document = new Document();
 
-        document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+        document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
         if (iupac != null && !iupac.isEmpty()) {
             document.add(new Field(IUPACNameService.IUPAC.field(), iupac.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
@@ -87,18 +87,18 @@ public class DefaultNameIndexWriter {
 
         Document document = new Document();
 
-        document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+        document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
         if (iupac != null && !iupac.isEmpty()) {
-            document.add(new Field(IUPACNameService.IUPAC.field(), iupac.trim(), Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
+            document.add(new Field(IUPACNameService.IUPAC.field(), iupac.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
         if (preferred != null && !preferred.isEmpty()) {
-            document.add(new Field(PreferredNameService.PREFERRED_NAME.field(), preferred.trim(), Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
+            document.add(new Field(PreferredNameService.PREFERRED_NAME.field(), preferred.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
         if (brand != null && !brand.isEmpty()) {
-            document.add(new Field(BrandNameService.BRAND_NAME.field(), brand.trim(), Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
+            document.add(new Field(BrandNameService.BRAND_NAME.field(), brand.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
         if (inn != null && !inn.isEmpty()) {
-            document.add(new Field(InternationalNonproprietaryNameService.INN.field(), inn.trim(), Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
+            document.add(new Field(InternationalNonproprietaryNameService.INN.field(), inn.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
         if (synonyms != null && synonyms.size() > 0) {
             for (String synonym : synonyms) {
@@ -107,7 +107,7 @@ public class DefaultNameIndexWriter {
                 if(matches(synonym, iupac) || matches(synonym, preferred))
                     continue;
 
-                document.add(new Field(SynonymService.SYNONYM.field(), synonym.trim(), Field.Store.YES, Field.Index.ANALYZED_NO_NORMS));
+                document.add(new Field(SynonymService.SYNONYM.field(), synonym.trim(), Field.Store.YES, Field.Index.ANALYZED));
 
             }
         }
