@@ -92,7 +92,7 @@ public class KEGGCompoundNameService
      */
     @Override
     public Collection<String> getSynonyms(KEGGCompoundIdentifier identifier) {
-        return getValues(create(identifier.getAccession(), IDENTIFIER), PREFERRED_NAME);
+        return getValues(create(identifier.getAccession(), IDENTIFIER), SYNONYM);
     }
 
     /**
