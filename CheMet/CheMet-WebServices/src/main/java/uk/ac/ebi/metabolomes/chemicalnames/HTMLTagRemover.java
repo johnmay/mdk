@@ -41,13 +41,14 @@ public class HTMLTagRemover {
     //private static final Pattern definedHtmlTags = Pattern.compile("</{0,1}(i|sub|sup)>");
     //private static final Pattern greekLetters = Pattern.compile("&(alpha|beta|gamma|epsilon);");
     private static final List<Pattern> htmlPatternsWithReplacement = Arrays.asList(
-            Pattern.compile("&(alpha);"),
-            Pattern.compile("&(beta);"),
-            Pattern.compile("&(gamma);"),
-            Pattern.compile("&(epsilon);")
+            Pattern.compile("&(alpha);",Pattern.CASE_INSENSITIVE),
+            Pattern.compile("&(delta);",Pattern.CASE_INSENSITIVE),
+            Pattern.compile("&(beta);",Pattern.CASE_INSENSITIVE),
+            Pattern.compile("&(gamma);",Pattern.CASE_INSENSITIVE),
+            Pattern.compile("&(epsilon);",Pattern.CASE_INSENSITIVE)
             );
     private static final List<Pattern> htmlPatternsNoReplace = Arrays.asList(
-            Pattern.compile("</{0,1}(i|sub|sup)>")
+            Pattern.compile("</{0,1}(i|sub|sup)>",Pattern.CASE_INSENSITIVE)
             );
     
     
