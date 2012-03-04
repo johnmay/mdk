@@ -156,6 +156,15 @@ public class IterativeUniProtAnnotationLoader {
                         if (idFound != null && toReturn != null) {
                             toReturn.addExtIdentifier(idFound);
                         }
+                    } else if (name.equals("organism")) {
+                        Taxonomy tax = parseOrganism(xmlr);
+                        if (tax != null && toReturn != null) {
+                            toReturn.addExtIdentifier(tax);
+                        }
+                    } else if (name.equals("organismHost")) {
+                        // we don't do anything with the host currently, we just handle it to avoid confusing it with
+                        // the main organism.
+                        parseOrganismHost(xmlr);
                     }
                     break;
                 case END_ELEMENT:
@@ -189,8 +198,9 @@ public class IterativeUniProtAnnotationLoader {
                 }
             }
         }
-        if(ident!=null && accession!=null)
+        if (ident != null && accession != null) {
             ident.setAccession(accession);
+        }
 
         return ident;
     }
@@ -198,9 +208,43 @@ public class IterativeUniProtAnnotationLoader {
     public void close() {
         try {
             xmlr.closeCompletely();
-        } catch(XMLStreamException e) {
+        } catch (XMLStreamException e) {
             LOGGER.error("Could not close xmlr completely", e);
         }
+    }
+
+    private Taxonomy parseOrganism(XMLStreamReader2 xmlr) throws XMLStreamException {
+        String closingName = "organism";
+        return getTaxonomyIdentifierForSectionClosingWith(xmlr, closingName);
+    }
+    
+    private Taxonomy parseOrganismHost(XMLStreamReader2 xmlr) throws XMLStreamException {
+        String closingName = "organismHost";
+        return getTaxonomyIdentifierForSectionClosingWith(xmlr, closingName);
+    }
+
+    private Taxonomy getTaxonomyIdentifierForSectionClosingWith(XMLStreamReader2 xmlr, String closingName) throws XMLStreamException {
+        Taxonomy taxToReturn = new Taxonomy();
+        while (xmlr.hasNext()) {
+            int event = xmlr.next();
+            switch (event) {
+                case START_ELEMENT:
+                    String name = xmlr.getName().getLocalPart();
+                    if (name.equals("dbReference")) {
+                        Identifier idFound = getIdentifier(xmlr);
+                        if (idFound != null && idFound instanceof Taxonomy) {
+                            taxToReturn = (Taxonomy) idFound;
+                        }
+                    }
+                    break;
+                case END_ELEMENT:
+                    if (xmlr.getName().getLocalPart().equals(closingName)) {
+                        return taxToReturn;
+                    }
+                    break;
+            }
+        }
+        return taxToReturn;
     }
 
     public class UniProtEntry {
@@ -230,7 +274,7 @@ public class IterativeUniProtAnnotationLoader {
         public List<Identifier> getIdentifiers() {
             return extIdentifiers;
         }
-        
+
         public UniProtIdentifier getUniProtIdentifier() {
             return this.identifier;
         }
