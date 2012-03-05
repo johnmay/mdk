@@ -18,6 +18,7 @@
         <module>lucene-service</module>
         <module>chemet-apps</module>
         <module>chemet-tools</module>
+        <module>derby-service</module>
     </modules>
     
     <properties>
