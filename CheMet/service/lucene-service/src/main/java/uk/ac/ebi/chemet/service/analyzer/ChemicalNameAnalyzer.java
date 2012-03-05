@@ -6,6 +6,7 @@ import org.apache.lucene.analysis.miscellaneous.PatternAnalyzer;
 import org.apache.lucene.analysis.ngram.NGramTokenFilter;
 import org.apache.lucene.util.Version;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -33,6 +34,11 @@ public final class ChemicalNameAnalyzer extends Analyzer {
     @Override
     public TokenStream tokenStream(String fieldName, Reader reader) {
         return analyzer.tokenStream(fieldName, reader);
+    }
+
+    @Override
+    public TokenStream reusableTokenStream(String fieldName, Reader reader) throws IOException {
+        return analyzer.reusableTokenStream(fieldName, reader);
     }
 
     public static Pattern compilePattern() {
