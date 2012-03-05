@@ -12,8 +12,8 @@ import java.util.zip.GZIPInputStream;
  * stream, i.e. on an FTP server or HTML page
  *
  * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$
+ * @author $Author: johnmay $ (this version)
+ * @version $Rev: 1719 $
  */
 public class GZIPRemoteLocation
         extends RemoteLocation {

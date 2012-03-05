@@ -12,8 +12,8 @@ import java.util.zip.GZIPInputStream;
  * HTML page
  *
  * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$
+ * @author $Author: johnmay $ (this version)
+ * @version $Rev: 1719 $
  */
 public class GZIPSystemLocation
         extends SystemLocation {

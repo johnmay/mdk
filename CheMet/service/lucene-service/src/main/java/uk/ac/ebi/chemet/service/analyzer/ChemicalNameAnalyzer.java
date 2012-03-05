@@ -1,14 +1,11 @@
 package uk.ac.ebi.chemet.service.analyzer;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.miscellaneous.PatternAnalyzer;
-import org.apache.lucene.analysis.ngram.NGramTokenFilter;
 import org.apache.lucene.util.Version;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 /**

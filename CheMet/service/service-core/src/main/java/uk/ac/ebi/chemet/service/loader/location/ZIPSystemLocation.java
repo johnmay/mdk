@@ -16,8 +16,8 @@ import java.util.zip.ZipInputStream;
  * cast the {@see InputStream} for {@see open()} to a {@see ZipInputStream}.
  *
  * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$
+ * @author $Author: johnmay $ (this version)
+ * @version $Rev: 1719 $
  */
 public class ZIPSystemLocation
         extends SystemLocation {

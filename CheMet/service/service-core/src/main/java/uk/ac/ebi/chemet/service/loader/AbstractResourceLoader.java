@@ -16,8 +16,8 @@ import java.util.Map;
  * Class descriptions.
  *
  * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$
+ * @author $Author: johnmay $ (this version)
+ * @version $Rev: 1719 $
  */
 public abstract class AbstractResourceLoader
         implements ResourceLoader {

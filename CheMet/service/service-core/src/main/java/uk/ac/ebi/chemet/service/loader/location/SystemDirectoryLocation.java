@@ -11,8 +11,8 @@ import java.io.*;
  * provide the full path's to the file's separated by line separator.
  *
  * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$
+ * @author $Author: johnmay $ (this version)
+ * @version $Rev: 1719 $
  */
 public class SystemDirectoryLocation
         implements ResourceDirectoryLocation {

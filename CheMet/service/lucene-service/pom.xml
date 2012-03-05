@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-interface</artifactId>
+            <artifactId>chemet-service-core</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
