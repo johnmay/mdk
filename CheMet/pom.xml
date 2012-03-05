@@ -15,7 +15,7 @@
         <module>annotation</module>
         <module>interface</module>
         <module>observation</module>
-        <module>service</module>
+        <module>lucene-service</module>
         <module>chemet-apps</module>
         <module>chemet-tools</module>
     </modules>

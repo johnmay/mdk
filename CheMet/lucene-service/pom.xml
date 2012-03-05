@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>chemet-service</artifactId>
+    <artifactId>chemet-lucene-service</artifactId>
     <version>1.2-SNAPSHOT</version>
     <groupId>uk.ac.ebi.chemet</groupId>
 
