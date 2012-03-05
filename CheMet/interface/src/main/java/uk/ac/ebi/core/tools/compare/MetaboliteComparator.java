@@ -18,5 +18,5 @@ public interface MetaboliteComparator {
      * @param  subject the subject metabolite
      * @return         whether the metabolite names are equal
      */
-    public boolean areEqual(Metabolite query, Metabolite subject);
+    public boolean equal(Metabolite query, Metabolite subject);
 }
