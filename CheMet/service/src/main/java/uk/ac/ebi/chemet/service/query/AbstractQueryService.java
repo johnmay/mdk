@@ -396,8 +396,6 @@ public abstract class AbstractQueryService<I extends Identifier>
 
                 Term termToken = term.createTerm(termAttribute.toString());
 
-                System.out.println(termToken);
-
                 Query subQuery = approximate
                         ? new FuzzyQuery(termToken, getMinSimilarity())
                         : new TermQuery(termToken);
@@ -696,7 +694,7 @@ public abstract class AbstractQueryService<I extends Identifier>
         for (String value : values(query, IDENTIFIER)) {
             I identifier = (I) base.newInstance();
             identifier.setAccession(value);
-            identifiers.add(base);
+            identifiers.add(identifier);
         }
 
         return identifiers;

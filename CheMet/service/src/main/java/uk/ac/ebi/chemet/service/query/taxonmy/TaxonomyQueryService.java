@@ -93,9 +93,8 @@ public class TaxonomyQueryService
 
         long start = System.currentTimeMillis();
         service.setMaxResults(5);
-        for (int i = 0; i < 10000; i++) {
-            service.searchName("Lactobacillus Plantarum", true);
-        }
+            service.searchCode("lacpl", false);
+
         long end = System.currentTimeMillis();
         System.out.println("Time: " + (end - start) + "ms");
     }
