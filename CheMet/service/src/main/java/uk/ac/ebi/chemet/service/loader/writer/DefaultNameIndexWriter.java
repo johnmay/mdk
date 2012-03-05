@@ -61,7 +61,7 @@ public class DefaultNameIndexWriter {
 
         Document document = new Document();
 
-        document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+        document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.ANALYZED));
         if (iupac != null && !iupac.isEmpty()) {
             document.add(new Field(IUPACNameService.IUPAC.field(), iupac.trim(), Field.Store.YES, Field.Index.ANALYZED));
         }
