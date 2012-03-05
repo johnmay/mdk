@@ -63,7 +63,7 @@ public class MetaboliteInChIComparatorTest {
                                    + "h2-4,6-7,10,16-17H,1H2,(H,21,22)(H,23,24)(H2,11,12,13)(H2,18,19,20)/"
                                    + "p-3/t4-,6-,7-,10-/m1/s1"));
 
-        Assert.assertFalse(comparator.areEqual(m1, m2));
+        Assert.assertFalse(comparator.equal(m1, m2));
 
         // InChI for ATP(3-) 
         m1.addAnnotation(new InChI("InChI=1S/"
@@ -72,7 +72,7 @@ public class MetaboliteInChIComparatorTest {
                                    + "h2-4,6-7,10,16-17H,1H2,(H,21,22)(H,23,24)(H2,11,12,13)(H2,18,19,20)/"
                                    + "p-3/t4-,6-,7-,10-/m1/s1"));
 
-        Assert.assertTrue(comparator.areEqual(m1, m2));
+        Assert.assertTrue(comparator.equal(m1, m2));
 
     }
 
@@ -96,7 +96,7 @@ public class MetaboliteInChIComparatorTest {
                                    + "h2-4,6-7,10,16-17H,1H2,(H,21,22)(H,23,24)(H2,11,12,13)(H2,18,19,20)/"
                                    + "p-3/t4-,6-,7-,10-/m1/s1"));
 
-        Assert.assertTrue(comparatorLessSpecific.areEqual(m1, m2));
+        Assert.assertTrue(comparatorLessSpecific.equal(m1, m2));
 
     }
 }

@@ -60,12 +60,12 @@ public class MetaboliteHashCodeComparatorTest {
         // InChI for ATP(3-) 
         m2.addAnnotation(new AtomContainerAnnotation(TestMoleculeFactory.atp_minus_3()));
 
-        Assert.assertFalse(comparatorWithCharge.areEqual(m1, m2));
+        Assert.assertFalse(comparatorWithCharge.equal(m1, m2));
 
         // InChI for ATP(3-) 
         m1.addAnnotation(new AtomContainerAnnotation(TestMoleculeFactory.atp_minus_3()));
 
-        Assert.assertTrue(comparatorWithCharge.areEqual(m1, m2));
+        Assert.assertTrue(comparatorWithCharge.equal(m1, m2));
 
     }
 
@@ -81,7 +81,7 @@ public class MetaboliteHashCodeComparatorTest {
         // InChI for ATP(3-)
         m2.addAnnotation(new AtomContainerAnnotation(TestMoleculeFactory.atp_minus_3()));
 
-        Assert.assertTrue(comparator.areEqual(m1, m2));
+        Assert.assertTrue(comparator.equal(m1, m2));
 
     }
 }

@@ -45,7 +45,7 @@ public class MetaboliteHashCodeComparator
      * are considered equal
      * @inheritDoc
      */
-    public boolean areEqual(Metabolite query, Metabolite subject) {
+    public boolean equal(Metabolite query, Metabolite subject) {
 
         Set<Integer> queryHashes = new HashSet<Integer>();
         Set<Integer> subjectHashes = new HashSet<Integer>();

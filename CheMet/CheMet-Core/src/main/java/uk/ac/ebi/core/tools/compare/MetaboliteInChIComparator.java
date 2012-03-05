@@ -50,7 +50,7 @@ public class MetaboliteInChIComparator
      * InChIs are equal they metabolites are considered equal
      * @inheritDoc
      */
-    public boolean areEqual(Metabolite query, Metabolite subject) {
+    public boolean equal(Metabolite query, Metabolite subject) {
 
         Set<String> queryInChIs = new HashSet<String>();
         Set<String> subjectInChIs = new HashSet<String>();

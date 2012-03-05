@@ -48,11 +48,11 @@ public class MetaboliteNameComparatorTest {
         m1.setName("ATP");
         m2.setName("Adenosine TP");
 
-        Assert.assertFalse(comparator.areEqual(m1, m2));
+        Assert.assertFalse(comparator.equal(m1, m2));
 
         m2.setName("atp");
 
-        Assert.assertTrue(comparator.areEqual(m1, m2));
+        Assert.assertTrue(comparator.equal(m1, m2));
 
     }
 
@@ -63,11 +63,11 @@ public class MetaboliteNameComparatorTest {
         m1.setName("ATP");
         m2.setName("Adenosine TP");
 
-        Assert.assertFalse(comparator.areEqual(m1, m2));
+        Assert.assertFalse(comparator.equal(m1, m2));
 
         m2.addAnnotation(new Synonym("atp"));
 
-        Assert.assertTrue(comparator.areEqual(m1, m2));
+        Assert.assertTrue(comparator.equal(m1, m2));
 
     }
 }

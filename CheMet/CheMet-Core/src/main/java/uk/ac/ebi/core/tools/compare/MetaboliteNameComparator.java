@@ -28,7 +28,7 @@ public class MetaboliteNameComparator
      * any name/synonym matches then the metabolites are considered equal
      * @inheritDoc
      */
-    public boolean areEqual(Metabolite query, Metabolite subject) {
+    public boolean equal(Metabolite query, Metabolite subject) {
 
         Set<String> queryNames = new HashSet<String>();
         Set<String> subjectNames = new HashSet<String>();
