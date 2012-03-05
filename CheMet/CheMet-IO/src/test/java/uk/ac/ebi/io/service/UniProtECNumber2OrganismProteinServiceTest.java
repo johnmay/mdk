@@ -63,7 +63,7 @@ public class UniProtECNumber2OrganismProteinServiceTest {
         System.out.println("getECNumbers");
         UniProtIdentifier identifier = new TrEMBLIdentifier("Q5SB14");
         UniProtECNumber2OrganismProteinService instance = UniProtECNumber2OrganismProteinService.getInstance();
-        Collection<Identifier> result = instance.getECNumbers(identifier);
+        Collection<ECNumber> result = instance.getECNumbers(identifier);
         assertNotNull(result);
         assertTrue(result.size()>0);
         for (Identifier ident : result) {

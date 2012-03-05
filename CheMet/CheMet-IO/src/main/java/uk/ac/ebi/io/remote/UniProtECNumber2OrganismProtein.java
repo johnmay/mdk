@@ -116,6 +116,7 @@ public class UniProtECNumber2OrganismProtein extends AbstrastRemoteResource impl
         init();
     }
 
+    @Override
     public void update() throws IOException {
         List<Document> docs;
         // write the index

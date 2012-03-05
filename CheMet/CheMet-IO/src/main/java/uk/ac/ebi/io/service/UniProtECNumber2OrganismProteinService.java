@@ -69,7 +69,7 @@ public class UniProtECNumber2OrganismProteinService
         return UniProtECNumber2OrganismProtServiceHolder.INSTANCE;
     }
 
-    public Collection<Identifier> getECNumbers(UniProtIdentifier identifier) {
+    public Collection<ECNumber> getECNumbers(UniProtIdentifier identifier) {
         Query queryUniprotID = new TermQuery(new Term(UniProtECNumber2OrgProtLuceneFields.UniprotAcc.toString(), identifier.getAccession()));
         return search(queryUniprotID);
     }
@@ -113,8 +113,8 @@ public class UniProtECNumber2OrganismProteinService
         return ids;
     }
     
-    private Collection<Identifier> search(Query query) {
-        Collection<Identifier> ids = new HashSet<Identifier>();
+    private Collection<ECNumber> search(Query query) {
+        Collection<ECNumber> ids = new HashSet<ECNumber>();
 
         try {
             TopScoreDocCollector collector = TopScoreDocCollector.create(getMaxResults(), true);
