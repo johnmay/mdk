@@ -10,6 +10,7 @@ import uk.ac.ebi.chemet.service.ServicePreferences;
 import uk.ac.ebi.chemet.service.analyzer.ChemicalNameAnalyzer;
 import uk.ac.ebi.chemet.service.analyzer.LowerCaseKeywordAnalyzer;
 import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.service.query.QueryService;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ import java.io.IOException;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class DefaultNameIndex extends BasicServiceLocation implements LuceneService {
+public class DefaultNameIndex extends BasicServiceLocation implements LuceneIndex {
 
     private static final Logger LOGGER = Logger.getLogger(DefaultNameIndex.class);
 
@@ -48,7 +49,7 @@ public class DefaultNameIndex extends BasicServiceLocation implements LuceneServ
 
 
     @Override
-    public PerFieldAnalyzerWrapper getAnalzyer(){
+    public PerFieldAnalyzerWrapper getAnalyzer(){
         return analyzer;
     }
 
