@@ -40,7 +40,7 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
     @Override
     public IAtomContainer getStructure(I identifier) {
 
-        byte[] bytes = getFirstBinaryValue(identifier, ATOM_CONTAINER);
+        byte[] bytes = firstBinaryValue(construct(identifier.getAccession(), IDENTIFIER), ATOM_CONTAINER);
 
         try{
             ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(bytes));

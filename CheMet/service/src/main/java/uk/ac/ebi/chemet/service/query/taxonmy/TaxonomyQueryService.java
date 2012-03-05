@@ -31,8 +31,6 @@ public class TaxonomyQueryService
     public static final Term KINGDOM = new Term("Kingdom");
     public static final Term CODE = new Term("Code");
 
-    QueryParser parser = new QueryParser(Version.LUCENE_34, NAME.field(), getAnalyzer());
-
     public TaxonomyQueryService() {
         super(new TaxonomyIndex());
     }
@@ -48,7 +46,7 @@ public class TaxonomyQueryService
 //        Query query = approximate ? new WildcardQuery(NAME.createTerm(name + "*"))
 //                : new TermQuery(NAME.createTerm(name));
         try{
-            return setup(getIdentifiers(parser.parse(name + "*")));
+            return setup(getIdentifiers(getParser(NAME).parse(name + "*")));
         }catch (Exception ex){
             ex.printStackTrace();
         }
@@ -66,24 +64,24 @@ public class TaxonomyQueryService
 
     @Override
     public Collection<String> getNames(Taxonomy identifier) {
-        return getValues(create(identifier.getAccession(), IDENTIFIER), NAME);
+        return values(construct(identifier.getAccession(), IDENTIFIER), NAME);
     }
 
     public String getKingdom(Taxonomy identifier) {
-        return getFirstValue(identifier, KINGDOM);
+        return firstValue(identifier, KINGDOM);
     }
 
     public String getCode(Taxonomy identifier) {
-        return getFirstValue(identifier, CODE);
+        return firstValue(identifier, CODE);
     }
 
     public Collection<Taxonomy> searchTaxonomyIdentifier(String identifier, boolean approximate) {
-        Collection<Taxonomy> identifiers = getIdentifiers(create(identifier, IDENTIFIER, approximate));
+        Collection<Taxonomy> identifiers = getIdentifiers(construct(identifier, IDENTIFIER, approximate));
         return setup(identifiers);
     }
 
     public Collection<Taxonomy> searchCode(String code, boolean approximate) {
-        Collection<Taxonomy> identifiers = getIdentifiers(create(code, CODE, approximate));
+        Collection<Taxonomy> identifiers = getIdentifiers(construct(code, CODE, approximate));
         return setup(identifiers);
     }
 

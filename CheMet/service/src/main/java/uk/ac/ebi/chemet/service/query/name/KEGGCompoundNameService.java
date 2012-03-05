@@ -68,7 +68,7 @@ public class KEGGCompoundNameService
      */
     @Override
     public Collection<KEGGCompoundIdentifier> searchPreferredName(String name, boolean approximate) {
-        return getIdentifiers(create(name, PREFERRED_NAME, approximate));
+        return getIdentifiers(construct(name, PREFERRED_NAME, approximate));
     }
 
     /**
@@ -76,7 +76,7 @@ public class KEGGCompoundNameService
      */
     @Override
     public String getPreferredName(KEGGCompoundIdentifier identifier) {
-        return getFirstValue(identifier, PREFERRED_NAME);
+        return firstValue(identifier, PREFERRED_NAME);
     }
 
     /**
@@ -84,7 +84,7 @@ public class KEGGCompoundNameService
      */
     @Override
     public Collection<KEGGCompoundIdentifier> searchSynonyms(String name, boolean approximate) {
-        return getIdentifiers(create(name, SYNONYM, approximate));
+        return getIdentifiers(construct(name, SYNONYM, approximate));
     }
 
     /**
@@ -92,7 +92,7 @@ public class KEGGCompoundNameService
      */
     @Override
     public Collection<String> getSynonyms(KEGGCompoundIdentifier identifier) {
-        return getValues(create(identifier.getAccession(), IDENTIFIER), SYNONYM);
+        return firstValues(identifier, SYNONYM);
     }
 
     /**

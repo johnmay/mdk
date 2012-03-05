@@ -55,7 +55,7 @@ public class KEGGCompoundDataService
      */
     @Override
     public String getMolecularFormula(KEGGCompoundIdentifier identifier) {
-        return getFirstValue(identifier, MOLECULAR_FORMULA);
+        return firstValue(identifier, MOLECULAR_FORMULA);
     }
 
     /**
@@ -74,7 +74,7 @@ public class KEGGCompoundDataService
         if (approximate) {
             LOGGER.error("Approximate search is not yet implemented");
         }
-        return getIdentifiers(create(formula, MOLECULAR_FORMULA));
+        return getIdentifiers(construct(formula, MOLECULAR_FORMULA));
     }
 
     /**

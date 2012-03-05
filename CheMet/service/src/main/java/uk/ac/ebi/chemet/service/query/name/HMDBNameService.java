@@ -70,7 +70,7 @@ public class HMDBNameService
      */
     @Override
     public String getIUPACName(HMDBIdentifier identifier) {
-        return getFirstValue(identifier, IUPAC);
+        return firstValue(identifier, IUPAC);
     }
 
     /**
@@ -78,7 +78,7 @@ public class HMDBNameService
      */
     @Override
     public Collection<HMDBIdentifier> searchIUPACName(String name, boolean approximate) {
-        return getIdentifiers(create(name, IUPAC, approximate));
+        return getIdentifiers(construct(name, IUPAC, approximate));
     }
 
     /**
@@ -86,7 +86,7 @@ public class HMDBNameService
      */
     @Override
     public Collection<HMDBIdentifier> searchPreferredName(String name, boolean approximate) {
-        return getIdentifiers(create(name, PREFERRED_NAME, approximate));
+        return getIdentifiers(construct(name, PREFERRED_NAME, approximate));
     }
 
     /**
@@ -94,7 +94,7 @@ public class HMDBNameService
      */
     @Override
     public String getPreferredName(HMDBIdentifier identifier) {
-        return getFirstValue(identifier, PREFERRED_NAME);
+        return firstValue(identifier, PREFERRED_NAME);
     }
 
     /**
@@ -102,7 +102,7 @@ public class HMDBNameService
      */
     @Override
     public Collection<HMDBIdentifier> searchSynonyms(String name, boolean approximate) {
-        return getIdentifiers(create(name, SYNONYM, approximate));
+        return getIdentifiers(construct(name, SYNONYM, approximate));
     }
 
     /**
@@ -110,7 +110,7 @@ public class HMDBNameService
      */
     @Override
     public Collection<String> getSynonyms(HMDBIdentifier identifier) {
-        return getValues(create(identifier.getAccession(), IDENTIFIER), SYNONYM);
+        return firstValues(identifier, SYNONYM);
     }
 
     /**

@@ -1,10 +1,19 @@
 package uk.ac.ebi.chemet.service.query.name;
 
+import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.QueryParser;
 import uk.ac.ebi.chemet.service.index.name.ChEBINameIndex;
+import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
+import uk.ac.ebi.chemet.service.loader.location.ZIPSystemLocation;
+import uk.ac.ebi.chemet.service.loader.name.ChEBINameLoader;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.service.ResourceLoader;
 import uk.ac.ebi.service.query.name.*;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -74,7 +83,7 @@ public class ChEBINameService
      */
     @Override
     public String getIUPACName(ChEBIIdentifier identifier) {
-        return getFirstValue(identifier, IUPAC);
+        return firstValue(identifier, IUPAC);
     }
 
     /**
@@ -82,7 +91,7 @@ public class ChEBINameService
      */
     @Override
     public Collection<ChEBIIdentifier> searchIUPACName(String name, boolean approximate) {
-        return getIdentifiers(create(name, IUPAC, approximate));
+        return getIdentifiers(construct(name, IUPAC, approximate));
     }
 
     /**
@@ -90,7 +99,11 @@ public class ChEBINameService
      */
     @Override
     public Collection<ChEBIIdentifier> searchPreferredName(String name, boolean approximate) {
-        return getIdentifiers(create(name, PREFERRED_NAME, approximate));
+        return getIdentifiers(construct(name, PREFERRED_NAME, approximate));
+    }
+
+    public Collection<ChEBIIdentifier> searchPreferredName_split(String name, boolean approximate) {
+        return getIdentifiers(construct(name, PREFERRED_NAME, approximate));
     }
 
     /**
@@ -98,7 +111,7 @@ public class ChEBINameService
      */
     @Override
     public String getPreferredName(ChEBIIdentifier identifier) {
-        return getFirstValue(identifier, PREFERRED_NAME);
+        return firstValue(identifier, PREFERRED_NAME);
     }
 
     /**
@@ -106,7 +119,7 @@ public class ChEBINameService
      */
     @Override
     public Collection<ChEBIIdentifier> searchSynonyms(String name, boolean approximate) {
-        return getIdentifiers(create(name, SYNONYM, approximate));
+        return getIdentifiers(construct(name, SYNONYM, approximate));
     }
 
     /**
@@ -114,7 +127,7 @@ public class ChEBINameService
      */
     @Override
     public Collection<String> getSynonyms(ChEBIIdentifier identifier) {
-        return getValues(create(identifier.getAccession(), IDENTIFIER), PREFERRED_NAME);
+        return firstValues(identifier, SYNONYM);
     }
 
     /**
@@ -122,7 +135,7 @@ public class ChEBINameService
      */
     @Override
     public String getBrandName(ChEBIIdentifier identifier) {
-        return getFirstValue(identifier, BRAND_NAME);
+        return firstValue(identifier, BRAND_NAME);
     }
 
     /**
@@ -130,7 +143,7 @@ public class ChEBINameService
      */
     @Override
     public Collection<ChEBIIdentifier> searchBrandName(String name, boolean approximate) {
-        return getIdentifiers(create(name, BRAND_NAME, approximate));
+        return getIdentifiers(construct(name, BRAND_NAME, approximate));
     }
 
     /**
@@ -138,7 +151,7 @@ public class ChEBINameService
      */
     @Override
     public String getINN(ChEBIIdentifier identifier) {
-        return getFirstValue(identifier, INN);
+        return firstValue(identifier, INN);
     }
 
     /**
@@ -146,7 +159,7 @@ public class ChEBINameService
      */
     @Override
     public Collection<ChEBIIdentifier> searchINN(String name, boolean approximate) {
-        return getIdentifiers(create(name, INN, approximate));
+        return getIdentifiers(construct(name, INN, approximate));
     }
 
     /**
@@ -158,13 +171,78 @@ public class ChEBINameService
     }
 
     public static void main(String[] args) {
-        ChEBINameService service = new ChEBINameService();
-        long start = System.currentTimeMillis();
-        service.setMinSimilarity(0.9f);
-        for(ChEBIIdentifier id : service.searchName("ATP", true)){
-            System.out.println(service.getNames(id));
+
+        try {
+
+            ResourceLoader loader = new ChEBINameLoader();
+            loader.addLocation("ChEBI Compounds", new ZIPSystemLocation("/databases/chebi/flatfiles/compounds.zip"));
+            loader.addLocation("ChEBI Names", new SystemLocation("/databases/chebi/flatfiles/names.tsv"));
+          //  loader.backup(); loader.update();
+        } catch (Exception ex) {
+
         }
-        long end = System.currentTimeMillis();
-        System.out.println("time: " + (end - start));
+
+        ChEBINameService service = new ChEBINameService();
+
+
+        System.out.println(service.values(service.construct("chebi:15390", IDENTIFIER, false), SYNONYM));
+
+
+        //        Collection<String> names = new HashSet<String>();
+        //        for (int i = 0; i < 8000; i++) {
+        //            ChEBIIdentifier id = new ChEBIIdentifier(i);
+        //            String preferredName = service.getPreferredName(id);
+        //            if (!preferredName.isEmpty()) {
+        //                names.add(preferredName);
+        //            }
+        //        }
+        //
+        //        for (String name : names) {
+        //            service.searchPreferredName_split(name, false);
+        //            service.searchPreferredName(name, false);
+        //        }
+        //
+        //
+        //        {
+        //            System.out.print("getIdentifiers_split(\"...\", false) : ");
+        //            long start = System.currentTimeMillis();
+        //            ChEBINameService newService = new ChEBINameService();
+        //            for (String name : names) {
+        //                newService.searchPreferredName_split(name, false);
+        //            }
+        //            long end = System.currentTimeMillis();
+        //            System.out.println(end - start);
+        //        }
+        //
+        //        {
+        //            ChEBINameService newService = new ChEBINameService();
+        //            System.out.print("getIdentifiers(\"...\", false) : ");
+        //            long start = System.currentTimeMillis();
+        //            for (String name : names) {
+        //                newService.searchPreferredName(name, false);
+        //            }
+        //            long end = System.currentTimeMillis();
+        //            System.out.println(end - start);
+        //        }
+
+
+        //        for (String name : Arrays.asList("(R)-Acetoin", "Coenzyme A")) {
+        //            Collection<ChEBIIdentifier> results = service.searchPreferredName(name, false);
+        //            System.out.println(name + ":");
+        //            for (ChEBIIdentifier id : results) {
+        //                System.out.println(id + "\t" + service.getPreferredName(id));
+        //            }
+        //        }
+
+
+        //          Collection<ChEBIIdentifier> results = service.searchName("Coenzyme A", true);
+        //        Collection<ChEBIIdentifier> results = service.searchName("D-glucose 6-phosphate", true);
+        //        Collection<ChEBIIdentifier> results = service.searchName("phenyl lactate", true);
+        //        System.out.println(results.size() + " results");
+        //        for(ChEBIIdentifier id : results){
+        //            System.out.println(id + "\t" + service.getNames(id));
+        //        }
+        //        long end = System.currentTimeMillis();
+        //        System.out.println("time: " + (end - start));
     }
 }

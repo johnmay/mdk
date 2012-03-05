@@ -53,7 +53,7 @@ public class HMDBDataService
      */
     @Override
     public String getMolecularFormula(HMDBIdentifier identifier) {
-        return getFirstValue(identifier, MOLECULAR_FORMULA);
+        return firstValue(identifier, MOLECULAR_FORMULA);
     }
 
     /**
@@ -72,7 +72,7 @@ public class HMDBDataService
         if(approximate){
             LOGGER.error("Approximate search is not yet implemented");
         }
-        return getIdentifiers(create(formula, MOLECULAR_FORMULA));
+        return getIdentifiers(construct(formula, MOLECULAR_FORMULA));
     }
 
     /**
@@ -80,7 +80,7 @@ public class HMDBDataService
      */
     @Override
     public Double getCharge(HMDBIdentifier identifier) {
-        String value = getFirstValue(identifier, MOLECULAR_CHARGE);
+        String value = firstValue(identifier, MOLECULAR_CHARGE);
         // reuse method for the write that will get a Double.NAN on fail
         return DefaultDataIndexWriter.getChargeValue(value);
     }

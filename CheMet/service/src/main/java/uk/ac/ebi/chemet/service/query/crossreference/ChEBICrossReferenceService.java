@@ -41,7 +41,7 @@ public class ChEBICrossReferenceService
     @Override
     public Collection<? extends Identifier> getCrossReferences(ChEBIIdentifier identifier) {
 
-        Query query = create(identifier.getAccession(), IDENTIFIER);
+        Query query = construct(identifier.getAccession(), IDENTIFIER);
 
         Collection<Identifier> crossreferences = new ArrayList<Identifier>();
 
@@ -52,8 +52,8 @@ public class ChEBICrossReferenceService
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
             for (ScoreDoc document : hits) {
-                byte index = Byte.parseByte(getValue(document, DATABASE_IDENTIFIER_INDEX.field()));
-                String accession = getValue(document, DATABASE_ACCESSION.field());
+                byte index = Byte.parseByte(value(document, DATABASE_IDENTIFIER_INDEX.field()));
+                String accession = value(document, DATABASE_ACCESSION.field());
 
                 Identifier crossreference = IdentifierFactory.getInstance().ofIndex(index);
                 crossreference.setAccession(accession);
@@ -95,7 +95,7 @@ public class ChEBICrossReferenceService
     @Override
     public Collection<ChEBIIdentifier> searchCrossReferences(Identifier crossreference) {
 
-        return getIdentifiers(create(crossreference.getAccession(), DATABASE_ACCESSION));
+        return getIdentifiers(construct(crossreference.getAccession(), DATABASE_ACCESSION));
         
     }
 
