@@ -3,14 +3,18 @@ package uk.ac.ebi.render.resource.location;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 
+import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.service.location.LocationDescription;
 import uk.ac.ebi.service.location.LocationFactory;
 import uk.ac.ebi.service.location.ResourceLocation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
@@ -25,68 +29,68 @@ import java.io.IOException;
  * @version $Rev$
  */
 public class FileLocationEditor
-            extends JPanel
-            implements LocationEditor{
+        extends JPanel
+        implements LocationEditor {
 
     private static final Logger LOGGER = Logger.getLogger(FileLocationEditor.class);
 
-    private JComboBox selector = ComboBoxFactory.newComboBox("Remote", "Local");
+    private JTextField field = FieldFactory.newField(15);
+    private JButton browse;
+    private LocationFactory factory;
 
-    private LocalFileLocationEditor local;
-    private RemoteFileLocationEditor remote;
-    private JComponent card;
+    private static final JFileChooser chooser = new JFileChooser();
 
     public FileLocationEditor(LocationFactory factory) {
 
-        local = new LocalFileLocationEditor(factory);
-        remote = new RemoteFileLocationEditor(factory);
+        setLayout(new FormLayout("p, min", "p"));
 
-        setLayout(new FormLayout("p, p", "p"));
-        CellConstraints cc = new CellConstraints();
-        add(selector, cc.xy(1,1));
+        setOpaque(false);
 
-        card = new JPanel(new CardLayout());
-        card.add(local, "Local");
-        card.add(remote, "Remote");
-        card.setBackground(Color.WHITE);
-        selector.addItemListener(new ItemListener() {
+        this.factory = factory;
+        final JComponent component = this;
+
+        browse = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/browse_16x16.png"), new AbstractAction() {
             @Override
-            public void itemStateChanged(ItemEvent e) {
-                String selection = (String) selector.getSelectedItem();
-                show(selection);
+            public void actionPerformed(ActionEvent e) {
+                int choice = chooser.showOpenDialog(component);
+                if(choice == JFileChooser.APPROVE_OPTION){
+                    field.setText(chooser.getSelectedFile().getAbsolutePath());
+                }
             }
         });
-        this.add(card, cc.xy(2,1));
+        browse.setToolTipText("Browse for a selected file");
 
-        selector.setSelectedItem("Local");
-        show("Local");
+        CellConstraints cc = new CellConstraints();
+        add(field, cc.xy(1, 1));
+        add(browse, cc.xy(2, 1));
     }
 
     @Override
     public ResourceLocation getResourceLocation() throws IOException {
-        String selection = (String) selector.getSelectedItem();
-        return selection.equals("Remote") ? remote.getResourceLocation() : local.getResourceLocation();
+        String text = field.getText();
+
+        LocationFactory.Location location = LocationFactory.Location.LOCAL_FS;
+        if (text.startsWith("http")) {
+            location = LocationFactory.Location.HTTP;
+        } else if (text.startsWith("ftp")) {
+            location = LocationFactory.Location.FTP;
+        }
+
+        LocationFactory.Compression compression = LocationFactory.Compression.NONE;
+        if (text.endsWith("gz")) {
+            compression = LocationFactory.Compression.GZIP_ARCHIVE;
+        } else if (text.endsWith("zip")) {
+            compression = LocationFactory.Compression.ZIP_ARCHIVE;
+        }
+
+        return factory.newFileLocation(text, compression, location);
+
     }
 
-    private void show(String name){
-        CardLayout layout = (CardLayout) card.getLayout();
-        layout.show(card, name);
-    }
-    
+
     @Override
     public void setup(LocationDescription description) {
-        
-//        ResourceLocation location = description.getDefault();
-//        if(location instanceof RemoteLocation){
-//            remote.setup(description);
-//            selector.setSelectedItem("Remote");
-//            show("Remote");
-//        }
-//        else if(location instanceof SystemLocation){
-//            local.setup(description);
-//            selector.setSelectedItem("Local");
-//            show("Local");
-//        }
-
+        field.setText(description.hasDefault() ? description.getDefault().toString() : "");
     }
+
 }

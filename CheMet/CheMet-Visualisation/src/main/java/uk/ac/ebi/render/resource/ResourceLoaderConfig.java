@@ -1,5 +1,6 @@
 package uk.ac.ebi.render.resource;
 
+import com.jgoodies.forms.layout.*;
 import uk.ac.ebi.caf.component.CalloutDialog;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.render.resource.location.DirectoryLocationEditor;
@@ -31,44 +32,39 @@ public class ResourceLoaderConfig extends CalloutDialog {
 
     public ResourceLoaderConfig(final Window window,
                                 ResourceLoader loader,
-                                LocationFactory factory ) {
+                                LocationFactory factory) {
 
         super(window);
         this.loader = loader;
 
         JComponent panel = getMainPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        FormLayout layout = new FormLayout("right:min, p");
+        CellConstraints cc = new CellConstraints();
+        panel.setLayout(layout);
         fieldMap = new HashMap<String, LocationEditor>();
 
 
         for (Map.Entry<String, LocationDescription> e : loader.getRequiredResources().entrySet()) {
 
 
-            Box box = Box.createHorizontalBox();
-            //            try{
-            //                field.setText(loader.getLocation(e.getKey()).toString());
-            //            }catch (MissingLocationException ex){
-            //                // do nothing
-            //            }
+            layout.appendRow(new RowSpec(Sizes.PREFERRED));
+            panel.add(LabelFactory.newFormLabel(e.getValue().getName(), e.getValue().getDescription()), cc.xy(1, layout.getRowCount()));
 
-            box.add(LabelFactory.newFormLabel(e.getValue().getName(), e.getValue().getDescription()));
-            box.add(Box.createHorizontalStrut(10));
+            LocationEditor editor = null;
 
             Class c = e.getValue().getType();
             if (c.equals(ResourceFileLocation.class)) {
-                FileLocationEditor editor = new FileLocationEditor(factory);
+                editor = new FileLocationEditor(factory);
                 fieldMap.put(e.getKey(), editor);
-                box.add(editor);
                 editor.setup(e.getValue());
             } else if (c.equals(ResourceDirectoryLocation.class)) {
-                DirectoryLocationEditor editor = new DirectoryLocationEditor(factory);
+                editor = new DirectoryLocationEditor(factory);
                 fieldMap.put(e.getKey(), editor);
-                box.add(editor);
                 editor.setup(e.getValue());
             }
 
+            panel.add((JComponent) editor, cc.xy(1, layout.getRowCount()));
 
-            panel.add(box);
         }
 
         pack();

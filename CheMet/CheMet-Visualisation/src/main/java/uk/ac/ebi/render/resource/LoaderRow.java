@@ -1,8 +1,12 @@
 package uk.ac.ebi.render.resource;
 
+import com.jgoodies.animation.*;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.layout.Sizes;
+import net.sf.furbelow.AbstractAnimatedIcon;
 import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
@@ -79,6 +83,10 @@ public class LoaderRow extends JComponent {
         });
         System.out.println("Revert... done");
         revert.setToolTipText("Revert to the previous version of the index");
+
+        final Animation expand = new Expand(configuration, 500);
+        final Animation collapse = new Collapse(configuration, 500);
+
         configure = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/cog_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -88,10 +96,10 @@ public class LoaderRow extends JComponent {
 
                 if (configuration.isVisible()) {
                     configuration.configure();
-                    hideConfiguration();
+                    new Animator(collapse, 32).start();
                     updateButtons();
                 } else {
-                    showConfiguration();
+                    new Animator(expand, 32).start();
                 }
 
             }
@@ -232,7 +240,7 @@ public class LoaderRow extends JComponent {
     }
 
 
-    class LoaderConfiguration extends Box {
+    class LoaderConfiguration extends JPanel {
 
         private Map<String, LocationEditor> editors = new HashMap<String, LocationEditor>();
         private ResourceLoader loader;
@@ -240,37 +248,37 @@ public class LoaderRow extends JComponent {
 
         public LoaderConfiguration(ResourceLoader loader, LocationFactory factory) {
 
-            super(BoxLayout.PAGE_AXIS);
-
             setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
 
             this.loader = loader;
             this.factory = factory;
 
+            FormLayout layout = new FormLayout("right:min, p");
+            CellConstraints cc = new CellConstraints();
+            setLayout(layout);
+            editors = new HashMap<String, LocationEditor>();
+
+
             for (Map.Entry<String, LocationDescription> e : loader.getRequiredResources().entrySet()) {
 
-                String key = e.getKey();
-                LocationDescription description = e.getValue();
 
-                Box box = Box.createHorizontalBox();
+                layout.appendRow(new RowSpec(Sizes.PREFERRED));
+                add(LabelFactory.newFormLabel(e.getValue().getName(), e.getValue().getDescription()), cc.xy(1, layout.getRowCount()));
 
-                box.add(LabelFactory.newFormLabel(e.getValue().getName(), e.getValue().getDescription()));
-                box.add(Box.createHorizontalStrut(10));
+                LocationEditor editor = null;
 
                 Class c = e.getValue().getType();
                 if (c.equals(ResourceFileLocation.class)) {
-                    FileLocationEditor editor = new FileLocationEditor(factory);
+                    editor = new FileLocationEditor(factory);
                     editors.put(e.getKey(), editor);
-                    box.add(editor);
                     editor.setup(e.getValue());
                 } else if (c.equals(ResourceDirectoryLocation.class)) {
-                    DirectoryLocationEditor editor = new DirectoryLocationEditor(factory);
+                    editor = new DirectoryLocationEditor(factory);
                     editors.put(e.getKey(), editor);
-                    box.add(editor);
                     editor.setup(e.getValue());
                 }
 
-                add(box);
+                add((JComponent) editor, cc.xy(2, layout.getRowCount()));
 
             }
 
@@ -365,6 +373,91 @@ public class LoaderRow extends JComponent {
             }
         });
         timer.start();
+    }
+
+    class Expand extends ResizePanel implements AnimationListener {
+
+        private JPanel panel;
+
+        protected Expand(JPanel panel, long duration) {
+            super(panel, new Dimension(panel.getPreferredSize().height, 0), panel.getPreferredSize(), duration);
+            this.panel = panel;
+            addAnimationListener(this);
+        }
+
+        @Override
+        public void animationStarted(AnimationEvent animationEvent) {
+            panel.setPreferredSize(new Dimension(panel.getPreferredSize().height, 0));
+            panel.setVisible(true);
+        }
+
+        @Override
+        public void animationStopped(AnimationEvent animationEvent) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+    }
+
+    class Collapse extends ResizePanel implements AnimationListener {
+        private JPanel panel;
+
+        protected Collapse(JPanel panel, long duration) {
+            super(panel, panel.getPreferredSize(), new Dimension(panel.getPreferredSize().height, 0), duration);
+            this.panel = panel;
+            addAnimationListener(this);
+        }
+
+        @Override
+        public void animationStarted(AnimationEvent animationEvent) {
+        }
+
+        @Override
+        public void animationStopped(AnimationEvent animationEvent) {
+            panel.setVisible(false);
+        }
+    }
+
+    class ResizePanel extends AbstractAnimation {
+
+        private final JPanel panel;
+        private final Dimension endSize;
+        private final Dimension startSize;
+        private int xdiff;
+        private int ydiff;
+
+        protected ResizePanel(JPanel panel,
+                              Dimension startSize,
+                              Dimension endSize,
+                              long duration) {
+            super(duration);
+            this.panel = panel;
+            this.startSize = startSize;
+            this.endSize = endSize;
+
+            xdiff = endSize.width - startSize.width;
+            ydiff = endSize.height - startSize.height;
+
+        }
+
+        @Override
+        protected void applyEffect(long l) {
+
+            if (l == 0) return; // ignore resting state
+
+            double position = (double) l / duration();
+            double proportion = (Math.cos(position * Math.PI + Math.PI) + 1) / 2;
+
+            int width  = startSize.width + (int) ((xdiff) * proportion);
+            int height = startSize.height + (int) ((ydiff) * proportion);
+            Dimension newSize = new Dimension(width,
+                                              height);
+
+            System.out.println(newSize);
+
+            panel.setPreferredSize(newSize);
+            revalidate();
+
+        }
     }
 
 
