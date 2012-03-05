@@ -23,6 +23,8 @@ package uk.ac.ebi.interfaces.services;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.store.Directory;
 
+import java.io.IOException;
+
 /**
  *          LuceneProvider - 2011.10.26 <br>
  *          Interface describe a service that provides a lucene Directory and
@@ -35,5 +37,5 @@ public interface LuceneService {
 
     public Analyzer getAnalzyer();
 
-    public Directory getDirectory();
+    public Directory getDirectory() throws IOException;
 }

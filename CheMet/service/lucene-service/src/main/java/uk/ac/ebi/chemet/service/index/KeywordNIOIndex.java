@@ -5,7 +5,9 @@ import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
+import uk.ac.ebi.chemet.service.BasicServiceLocation;
 import uk.ac.ebi.chemet.service.ServicePreferences;
+import uk.ac.ebi.service.index.LuceneIndex;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +23,8 @@ import java.io.IOException;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public abstract class KeywordNIOIndex extends AbstractLuceneIndex {
+public abstract class KeywordNIOIndex extends BasicServiceLocation implements LuceneIndex {
 
-    private File location;
     private Analyzer analyzer;
     private Directory directory;
 
@@ -45,14 +46,9 @@ public abstract class KeywordNIOIndex extends AbstractLuceneIndex {
      * @param file
      */
     public KeywordNIOIndex(String name, File file) {
-        super(name);
-        this.location = file;
+        super(name, file);
     }
 
-    @Override
-    public File getLocation() {
-        return location;
-    }
 
     @Override
     public Analyzer getAnalyzer() {
