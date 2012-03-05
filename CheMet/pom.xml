@@ -15,10 +15,9 @@
         <module>annotation</module>
         <module>interface</module>
         <module>observation</module>
-        <module>lucene-service</module>
         <module>chemet-apps</module>
         <module>chemet-tools</module>
-        <module>derby-service</module>
+        <module>service</module>
     </modules>
     
     <properties>
