@@ -10,7 +10,7 @@
     <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>CheMet-WebServices</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <name>Service</name>
+    <name>CheMet-WebService</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
