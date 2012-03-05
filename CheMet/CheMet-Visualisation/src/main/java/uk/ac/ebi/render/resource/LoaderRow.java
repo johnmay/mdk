@@ -309,85 +309,19 @@ public class LoaderRow extends JComponent {
     }
 
 
-    boolean animating = false;
-
-    public void showConfiguration() {
-
-        if (animating) return;
-
-        configuration.setVisible(true);
-        final Dimension target = configuration.getPreferredSize();
-
-        configuration.setPreferredSize(new Dimension(target.width, 0));
-
-        animating = true;
-
-        Timer timer = new Timer(5, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                Dimension current = configuration.getPreferredSize();
-
-                if (current.height < target.height) {
-                    configuration.setPreferredSize(new Dimension(current.width, current.height + 1));
-                    revalidate();
-                } else {
-                    ((Timer) e.getSource()).stop();
-                    configuration.setPreferredSize(target);
-                    animating = false;
-                }
-
-            }
-        });
-        timer.start();
-    }
-
-    public void hideConfiguration() {
-
-        if (animating) return;
-
-        final Dimension original = configuration.getPreferredSize();
-        final Dimension target = new Dimension(original.width, 0);
-
-        animating = true;
-
-        Timer timer = new Timer(5, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                Dimension current = configuration.getPreferredSize();
-
-
-                if (current.height > target.height) {
-                    configuration.setPreferredSize(new Dimension(current.width, current.height - 1));
-                    revalidate();
-                } else {
-
-                    ((Timer) e.getSource()).stop();
-                    configuration.setVisible(false);
-                    configuration.setPreferredSize(original); // reset
-                    animating = false;
-                    revalidate();
-                }
-
-            }
-        });
-        timer.start();
-    }
-
     class Expand extends ResizePanel implements AnimationListener {
 
         private JPanel panel;
 
         protected Expand(JPanel panel, long duration) {
-            super(panel, new Dimension(panel.getPreferredSize().height, 0), panel.getPreferredSize(), duration);
+            super(panel, new Dimension(panel.getPreferredSize().width, 0), panel.getPreferredSize(), duration);
             this.panel = panel;
             addAnimationListener(this);
         }
 
         @Override
         public void animationStarted(AnimationEvent animationEvent) {
-            panel.setPreferredSize(new Dimension(panel.getPreferredSize().height, 0));
+            panel.setPreferredSize(new Dimension(panel.getPreferredSize().width, 0));
             panel.setVisible(true);
         }
 
@@ -402,7 +336,7 @@ public class LoaderRow extends JComponent {
         private JPanel panel;
 
         protected Collapse(JPanel panel, long duration) {
-            super(panel, panel.getPreferredSize(), new Dimension(panel.getPreferredSize().height, 0), duration);
+            super(panel, panel.getPreferredSize(), new Dimension(panel.getPreferredSize().width, 0), duration);
             this.panel = panel;
             addAnimationListener(this);
         }
@@ -451,8 +385,6 @@ public class LoaderRow extends JComponent {
             int height = startSize.height + (int) ((ydiff) * proportion);
             Dimension newSize = new Dimension(width,
                                               height);
-
-            System.out.println(newSize);
 
             panel.setPreferredSize(newSize);
             revalidate();
