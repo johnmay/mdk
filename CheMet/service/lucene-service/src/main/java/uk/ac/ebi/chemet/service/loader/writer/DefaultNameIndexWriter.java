@@ -25,17 +25,10 @@ import java.util.Locale;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class DefaultNameIndexWriter {
-
-    private static final Logger LOGGER = Logger.getLogger(DefaultNameIndexWriter.class);
-
-    private LuceneIndex index;
-    private IndexWriter writer;
+public class DefaultNameIndexWriter extends AbstractIndexWriter {
 
     public DefaultNameIndexWriter(LuceneIndex index) throws IOException {
-        this.index = index;
-        this.writer = new IndexWriter(index.getDirectory(),
-                                      new IndexWriterConfig(Version.LUCENE_34, index.getAnalyzer()));
+        super(index);
     }
 
     public void write(String identifier, List<String> names) throws IOException {
@@ -61,12 +54,12 @@ public class DefaultNameIndexWriter {
 
         Document document = new Document();
 
-        document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.ANALYZED));
+        document.add(create(QueryService.IDENTIFIER, identifier.trim()));
         if (iupac != null && !iupac.isEmpty()) {
-            document.add(new Field(IUPACNameService.IUPAC.field(), iupac.trim(), Field.Store.YES, Field.Index.ANALYZED));
+            document.add(create(IUPACNameService.IUPAC, iupac.trim()));
         }
         if (preferred != null && !preferred.isEmpty()) {
-            document.add(new Field(PreferredNameService.PREFERRED_NAME.field(), preferred.trim(), Field.Store.YES, Field.Index.ANALYZED));
+            document.add(create(PreferredNameService.PREFERRED_NAME, preferred.trim()));
         }
         if (synonyms != null && synonyms.size() > 0) {
             for (String synonym : synonyms) {
@@ -75,30 +68,30 @@ public class DefaultNameIndexWriter {
                 if(matches(synonym, iupac) || matches(synonym, preferred))
                     continue;
 
-                document.add(new Field(SynonymService.SYNONYM.field(), synonym.trim(), Field.Store.YES, Field.Index.ANALYZED));
+                document.add(create(SynonymService.SYNONYM, synonym.trim()));
 
             }
         }
 
-        writer.addDocument(document);
+        add(document);
     }
 
     public void write(String identifier, String preferred, String iupac, String brand, String inn, Collection<String> synonyms) throws IOException {
 
         Document document = new Document();
 
-        document.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.ANALYZED));
+        document.add(create(QueryService.IDENTIFIER, identifier.trim()));
         if (iupac != null && !iupac.isEmpty()) {
-            document.add(new Field(IUPACNameService.IUPAC.field(), iupac.trim(), Field.Store.YES, Field.Index.ANALYZED));
+            document.add(create(IUPACNameService.IUPAC, iupac.trim()));
         }
         if (preferred != null && !preferred.isEmpty()) {
-            document.add(new Field(PreferredNameService.PREFERRED_NAME.field(), preferred.trim(), Field.Store.YES, Field.Index.ANALYZED));
+            document.add(create(PreferredNameService.PREFERRED_NAME, preferred.trim()));
         }
         if (brand != null && !brand.isEmpty()) {
-            document.add(new Field(BrandNameService.BRAND_NAME.field(), brand.trim(), Field.Store.YES, Field.Index.ANALYZED));
+            document.add(create(BrandNameService.BRAND_NAME, brand.trim()));
         }
         if (inn != null && !inn.isEmpty()) {
-            document.add(new Field(InternationalNonproprietaryNameService.INN.field(), inn.trim(), Field.Store.YES, Field.Index.ANALYZED));
+            document.add(create(InternationalNonproprietaryNameService.INN, inn.trim()));
         }
         if (synonyms != null && synonyms.size() > 0) {
             for (String synonym : synonyms) {
@@ -107,12 +100,12 @@ public class DefaultNameIndexWriter {
                 if(matches(synonym, iupac) || matches(synonym, preferred))
                     continue;
 
-                document.add(new Field(SynonymService.SYNONYM.field(), synonym.trim(), Field.Store.YES, Field.Index.ANALYZED));
+                document.add(create(SynonymService.SYNONYM, synonym.trim()));
 
             }
         }
 
-        writer.addDocument(document);
+        add(document);
     }
     
     public boolean matches(String name1, String name2){
@@ -120,11 +113,6 @@ public class DefaultNameIndexWriter {
             return false;
         }
         return name1.toLowerCase(Locale.ENGLISH).equals(name2.toLowerCase(Locale.ENGLISH));
-    }
-
-
-    public void close() throws IOException {
-        writer.close();
     }
 
 }

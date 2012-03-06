@@ -24,12 +24,7 @@ import java.io.IOException;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class DefaultDataIndexWriter {
-
-    private static final Logger LOGGER = Logger.getLogger(DefaultDataIndexWriter.class);
-
-    private LuceneIndex index;
-    private IndexWriter writer;
+public class DefaultDataIndexWriter extends AbstractIndexWriter{
 
     /**
      * Create the index writer for the specified index
@@ -39,9 +34,7 @@ public class DefaultDataIndexWriter {
      * @throws IOException
      */
     public DefaultDataIndexWriter(LuceneIndex index) throws IOException {
-        this.index = index;
-        this.writer = new IndexWriter(index.getDirectory(),
-                                      new IndexWriterConfig(Version.LUCENE_34, index.getAnalyzer()));
+       super(index);
     }
 
     /**
@@ -57,10 +50,10 @@ public class DefaultDataIndexWriter {
     public void write(String identifier, String charge, String formula) throws IOException {
         Document doc = new Document();
 
-        doc.add(new Field(QueryService.IDENTIFIER.field(), identifier.trim(), Field.Store.YES, Field.Index.ANALYZED));
+        doc.add(create(QueryService.IDENTIFIER, identifier.trim()));
 
         if(formula != null && !formula.isEmpty()) {
-            doc.add(new Field(MolecularFormulaService.MOLECULAR_FORMULA.field(), formula.trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.add(create(MolecularFormulaService.MOLECULAR_FORMULA, formula.trim()));
         }
 
         // molecular charge
@@ -69,14 +62,10 @@ public class DefaultDataIndexWriter {
             doc.add(newChargeField(chargeValue));
         }
 
-        writer.addDocument(doc);
+        add(doc);
     }
 
-    public DefaultDataIndexWriter() {
-        super();    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
-    /**
+     /**
      * Parse the charge value for the given string, if there is no charge
      * pressent this will return Double.NAN
      * @param charge
@@ -108,10 +97,6 @@ public class DefaultDataIndexWriter {
         NumericField charge = new NumericField(MolecularChargeService.MOLECULAR_CHARGE.field(), Field.Store.YES, false);
         charge.setDoubleValue(value);
         return charge;
-    }
-
-    public void close() throws IOException {
-        writer.close();
     }
 
 

@@ -6,6 +6,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.util.Version;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.service.query.CrossReferenceService;
 import uk.ac.ebi.service.query.QueryService;
@@ -21,40 +22,28 @@ import java.io.IOException;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class DefaultCrossReferenceIndexWriter {
+public class DefaultCrossReferenceIndexWriter extends AbstractIndexWriter {
 
-    private static final Logger LOGGER = Logger.getLogger(DefaultCrossReferenceIndexWriter.class);
 
-    private LuceneIndex index;
-    private IndexWriter writer;
-
-    /**
-     * Create the index writer for the specified index
-     *
-     * @param index
-     *
-     * @throws java.io.IOException
-     */
     public DefaultCrossReferenceIndexWriter(LuceneIndex index) throws IOException {
-        this.index = index;
-        this.writer = new IndexWriter(index.getDirectory(),
-                                      new IndexWriterConfig(Version.LUCENE_34, index.getAnalyzer()));
+        super(index);
+    }
+    
+    public void write(String identifier, Identifier xref) throws IOException{
+        write(identifier, xref.getIndex(), xref.getAccession());
     }
     
     public void write(String identifier, Byte databaseName, String databaseAccession) throws IOException {
 
         Document document = new Document();
 
-        document.add(new Field(QueryService.IDENTIFIER.field(), identifier, Field.Store.YES, Field.Index.ANALYZED));
-        document.add(new Field(CrossReferenceService.DATABASE_IDENTIFIER_INDEX.field(), databaseName.toString(), Field.Store.YES, Field.Index.ANALYZED));
-        document.add(new Field(CrossReferenceService.DATABASE_ACCESSION.field(), databaseAccession, Field.Store.YES, Field.Index.ANALYZED));
+        document.add(create(QueryService.IDENTIFIER, identifier));
+        document.add(create(CrossReferenceService.DATABASE_IDENTIFIER_INDEX, databaseName.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+        document.add(create(CrossReferenceService.DATABASE_ACCESSION, databaseAccession));
 
-        writer.addDocument(document);
+        add(document);
 
     }
-    
-    public void close() throws IOException {
-        writer.close();
-    }
+
     
 }
