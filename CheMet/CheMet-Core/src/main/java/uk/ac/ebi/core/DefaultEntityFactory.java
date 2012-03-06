@@ -24,10 +24,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.entities.reaction.participant.BasicParticipant;
+import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.interfaces.reaction.Participant;
 
 
 /**
@@ -60,7 +64,10 @@ public class DefaultEntityFactory
                                            new GeneImplementation(),
                                            new ChromosomeImplementation(),
                                            new GenomeImplementation(),
-                                           new MultimerImplementation())) {
+                                           new MultimerImplementation(),
+                                           new IdentifierReactionImplementation(),
+                                           new BasicParticipant(),
+                                           new ParticipantImplementation())) {
 
             entites.put(getEntityClass(entity.getClass()), entity);
 
