@@ -31,23 +31,23 @@ import uk.ac.ebi.interfaces.Observation;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface ObservationBasedAnnotation {
+public interface ObservationBasedAnnotation<O extends Observation> {
 
     /**
      * Access a collection of observations supporting this annotation
      * @return
      */
-    public Collection<Observation> getObservations();
+    public Collection<O> getObservations();
 
     /**
      * An a single observation that supports the annotation (previous
      * observations are not removed)
      */
-    public boolean addObservation(Observation observation);
+    public boolean addObservation(O observation);
 
     /**
      * An numerous observation that support the annotation (previous
      * observations are not removed)
      */
-    public boolean addObservations(Collection<Observation> observations);
+    public boolean addObservations(Collection<O> observations);
 }

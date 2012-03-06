@@ -45,11 +45,11 @@ import uk.ac.ebi.resource.IdentifierFactory;
  * @author  $Author$ (this version)
  */
 @Context
-@Descriptor(brief = "Crossreference",
+@Descriptor(brief       = "Crossreference",
             description = "A crossreference to an alternative identifier")
-public class CrossReference<E extends Identifier>
+public class CrossReference<E extends Identifier, O extends Observation>
         extends AbstractAnnotation
-        implements ObservationBasedAnnotation {
+        implements ObservationBasedAnnotation<O> {
 
     private static final Logger LOGGER = Logger.getLogger(CrossReference.class);
 
@@ -58,7 +58,7 @@ public class CrossReference<E extends Identifier>
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
             CrossReference.class);
 
-    private List<Observation> observations = new ArrayList();
+    private List<O> observations = new ArrayList<O>();
 
 
     public CrossReference() {
@@ -115,7 +115,7 @@ public class CrossReference<E extends Identifier>
     /**
      * @inheritDoc
      */
-    public Collection<Observation> getObservations() {
+    public Collection<O> getObservations() {
         return Collections.unmodifiableList(observations);
     }
 
@@ -123,7 +123,7 @@ public class CrossReference<E extends Identifier>
     /**
      * @inheritDoc
      */
-    public boolean addObservation(Observation observation) {
+    public boolean addObservation(O observation) {
         return observations.add(observation);
     }
 
@@ -131,7 +131,7 @@ public class CrossReference<E extends Identifier>
     /**
      * @inheritDoc
      */
-    public boolean addObservations(Collection<Observation> observations) {
+    public boolean addObservations(Collection<O> observations) {
         return this.observations.addAll(observations);
     }
 
@@ -173,7 +173,7 @@ public class CrossReference<E extends Identifier>
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CrossReference<E> other = (CrossReference<E>) obj;
+        final CrossReference<E,O> other = (CrossReference<E,O>) obj;
         if (this.identifier != other.identifier && (this.identifier == null || !this.identifier.equals(other.identifier))) {
             return false;
         }

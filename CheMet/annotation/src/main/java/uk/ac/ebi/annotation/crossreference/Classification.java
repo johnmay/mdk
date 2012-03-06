@@ -20,6 +20,7 @@ package uk.ac.ebi.annotation.crossreference;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
+import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -36,8 +37,8 @@ import uk.ac.ebi.resource.classification.ClassificationIdentifier;
 @Context
 @Descriptor(brief = "Classification",
             description = "A crossreference that specifically links to a classiciation identifier")
-public class Classification<E extends Identifier>
-        extends CrossReference<E> {
+public class Classification<E extends Identifier, O extends Observation>
+        extends CrossReference<E, O> {
 
     private static final Logger LOGGER = Logger.getLogger(Classification.class);
 
