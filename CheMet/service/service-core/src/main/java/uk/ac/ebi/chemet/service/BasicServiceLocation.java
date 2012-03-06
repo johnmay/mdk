@@ -41,26 +41,41 @@ public abstract class BasicServiceLocation
         this.backup = backup;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public File getLocation() {
         return path;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long lastModified() {
         return getLocation().lastModified();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isAvailable() {
         return getLocation().exists();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public File getBackup() {
         if (backup == null) {
@@ -69,11 +84,17 @@ public abstract class BasicServiceLocation
         return backup;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean canRevert() {
         return getBackup().exists();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean backup() {
         File backup = getBackup();
@@ -83,6 +104,9 @@ public abstract class BasicServiceLocation
         return getLocation().renameTo(backup);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean revert() {
         File backup = getBackup();
@@ -92,12 +116,20 @@ public abstract class BasicServiceLocation
         return backup.renameTo(getLocation());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clean() {
         delete(getLocation());
         delete(getBackup());
     }
 
+    /**
+     * Deletes the file and all it's children
+     * @param dir file to delete
+     * @return whether the file was deleted
+     */
     private static boolean delete(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
