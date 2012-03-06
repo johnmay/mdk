@@ -12,6 +12,8 @@
     <artifactId>chemet-lucene-service</artifactId>
     <version>1.2-SNAPSHOT</version>
     <groupId>uk.ac.ebi.chemet</groupId>
+    <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/service/lucene-service</url>
+
 
     <dependencies>
 

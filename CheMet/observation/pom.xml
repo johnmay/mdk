@@ -13,7 +13,8 @@
     <artifactId>chemet-observation</artifactId>
     <version>1.2-SNAPSHOT</version>
     <name>Observation</name>
-    <url>http://maven.apache.org</url>
+    <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/observation</url>
+
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

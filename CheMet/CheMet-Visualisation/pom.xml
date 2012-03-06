@@ -13,8 +13,7 @@
     <packaging>jar</packaging>
 
     <name>chemet-visualisation</name>
-    <url>http://www.ebi.ac.uk/steinbeck</url>
-
+    <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/visualisation</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cdk.render.version>1.4.5</cdk.render.version>

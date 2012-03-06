@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>CheMet</artifactId>
@@ -19,14 +20,16 @@
         <module>chemet-tools</module>
         <module>service</module>
     </modules>
-    
+
+    <url>http://www.ebi.ac.uk/steinbeck</url>
+
     <properties>
         <cdk.version>1.3.8-SNAPSHOT</cdk.version>
         <caf.version>0.8.5-SNAPSHOT</caf.version>
     </properties>
-    
+
     <repositories>
-        
+
         <repository>
             <id>maven-repo</id>
             <url>http://repo1.maven.org/maven2</url>
@@ -34,7 +37,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>jni-inchi</id>
             <name>JNI-InChI Maven Repository</name>
@@ -60,7 +63,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>maven-restlet</id>
             <name>Public online Restlet repository</name>
@@ -76,10 +79,11 @@
             <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>interval:10080</updatePolicy> <!-- weekly -->
+                <updatePolicy>interval:10080</updatePolicy>
+                <!-- weekly -->
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>ops4j</id>
             <!-- <url>http://maven.glassfish.org/content/repositories/ops4j/</url> -->
@@ -88,7 +92,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>biobabel-repo</id>
             <url>${biobabel.maven.repo.url}</url>
@@ -96,7 +100,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>dev.java.net.2</id>
             <name>java.net repository for Maven2</name>
@@ -106,7 +110,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>ambit-plovdiv</id>
             <name>ambit-plovdiv</name>
@@ -115,7 +119,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>biojava-maven-repo</id>
             <name>BioJava repository</name>
@@ -124,7 +128,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>paxtools</id>
             <name>BioPAX maven 2 repository</name>
@@ -136,7 +140,7 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        
+
         <repository>
             <id>paxtools-snapshots</id>
             <name>BioPAX maven 2 snapshots repository</name>
@@ -146,29 +150,29 @@
             </releases>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>interval:10080</updatePolicy> <!-- weekly -->
+                <updatePolicy>interval:10080</updatePolicy>
+                <!-- weekly -->
             </snapshots>
         </repository>
-        
-       <!-- <repository>
-            <id>ch-cam</id>
-            <name>ch-cam</name>
-            <url>http://maven.ch.cam.ac.uk/m2repo</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>interval:10080</updatePolicy>
-            </snapshots>
-        </repository> -->
+
+        <!-- <repository>
+           <id>ch-cam</id>
+           <name>ch-cam</name>
+           <url>http://maven.ch.cam.ac.uk/m2repo</url>
+           <snapshots>
+               <enabled>true</enabled>
+               <updatePolicy>interval:10080</updatePolicy>
+           </snapshots>
+       </repository> -->
         <!--<repository>
             <id>rothamsted-bbsrc</id>
             <name>rothamsted-bbsrc</name>
             <url>http://ondex.rothamsted.bbsrc.ac.uk/nexus/content/repositories/public/</url>
         </repository>-->
-        
-        
-        
+
+
     </repositories>
-    
+
     <pluginRepositories>
         <pluginRepository>
             <id>mc-release</id>
@@ -182,7 +186,7 @@
             </releases>
         </pluginRepository>
     </pluginRepositories>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -206,5 +210,20 @@
             </plugins>
         </pluginManagement>
     </build>
+
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <aggregate>true</aggregate>
+
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 
 </project>

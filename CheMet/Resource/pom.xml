@@ -11,7 +11,7 @@
     <artifactId>chemet-resource</artifactId>
     <version>1.2-SNAPSHOT</version>
     <name>Resource</name>
-    <url>http://maven.apache.org</url>
+    <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/resource</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
