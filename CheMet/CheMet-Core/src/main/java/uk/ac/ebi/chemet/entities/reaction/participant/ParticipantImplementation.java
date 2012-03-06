@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.core.AbstractReconstructionEntity;
+import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.interfaces.reaction.Participant;
 
@@ -39,14 +42,10 @@ import uk.ac.ebi.interfaces.reaction.Participant;
  * @param <S>
  * @param <C>
  */
-public class ParticipantImplementation<M, S extends Number, C>
+public class ParticipantImplementation<M, S extends Number, C> extends BasicParticipant<M, S>
         implements CompartmentalisedParticipant<M, S, C> {
 
     private static final Logger LOGGER = Logger.getLogger(ParticipantImplementation.class);
-
-    protected M molecule;
-
-    protected S coefficient;
 
     protected C compartment;
 
@@ -67,21 +66,9 @@ public class ParticipantImplementation<M, S extends Number, C>
 
 
     public ParticipantImplementation(M molecule, S coefficient, C compartment) {
-        this.molecule = molecule;
-        this.coefficient = coefficient;
+        super(molecule, coefficient);
         this.compartment = compartment;
     }
-
-
-    public S getCoefficient() {
-        return coefficient;
-    }
-
-
-    public void setCoefficient(S coefficient) {
-        this.coefficient = coefficient;
-    }
-
 
     public C getCompartment() {
         return compartment;
@@ -91,17 +78,6 @@ public class ParticipantImplementation<M, S extends Number, C>
     public void setCompartment(C compartment) {
         this.compartment = compartment;
     }
-
-
-    public M getMolecule() {
-        return molecule;
-    }
-
-
-    public void setMolecule(M molecule) {
-        this.molecule = molecule;
-    }
-
 
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(this.molecule);
@@ -153,7 +129,6 @@ public class ParticipantImplementation<M, S extends Number, C>
      * molecules {@code hashCode()} method. This method is intended to be overridden by sub
      * classes that use an 'M' object that do not override the default {@code hashCode}
      * (e.g. CDK AtomContainer).
-     * @param  molecule The molecule to calculate the hashCode for
      * @return hash code for the provided molecule
      */
     public int hashCode() {
@@ -210,5 +185,10 @@ public class ParticipantImplementation<M, S extends Number, C>
         }
 
         return 0;
+    }
+
+    @Override
+    public CompartmentalisedParticipant newInstance() {
+        return new ParticipantImplementation();
     }
 }

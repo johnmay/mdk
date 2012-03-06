@@ -5,6 +5,8 @@
 package uk.ac.ebi.interfaces.reaction;
 
 
+import uk.ac.ebi.interfaces.entities.Entity;
+
 /**
  *
  *          Participant 2012.02.07
@@ -15,7 +17,7 @@ package uk.ac.ebi.interfaces.reaction;
  *          Interface describes a reaction participant
  *
  */
-public interface Participant<M, S extends Number> extends Comparable<Participant<M, S>> {
+public interface Participant<M, S extends Number> extends Entity, Comparable<Participant<M, S>> {
 
     /**
      * 
