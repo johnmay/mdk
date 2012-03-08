@@ -35,9 +35,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
 import org.openscience.cdk.tools.AtomTypeTools;
-import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import uk.ac.ebi.metabolomes.identifier.InChI;
-import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
 
 /**
  * @name    CDKMoleculeBuilder
