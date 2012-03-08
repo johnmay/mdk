@@ -48,9 +48,8 @@ public class TaggedOutputStream extends DataOutputStream {
      * @param c the class to write to the stream
      *
      * @throws IOException            low-level io error
-     * @throws ClassNotFoundException low-level io error
      */
-    public void write(Class c) throws IOException, ClassNotFoundException {
+    public void write(Class c) throws IOException {
 
         if (tagMap.containsKey(c)) {
             writeShort(tagMap.get(c));
@@ -67,9 +66,8 @@ public class TaggedOutputStream extends DataOutputStream {
      * @param c the class to write to the stream
      *
      * @throws IOException            low-level io error
-     * @throws ClassNotFoundException low-level io error
      */
-    private void writeNew(Class c) throws IOException, ClassNotFoundException {
+    private void writeNew(Class c) throws IOException {
 
         TICKER.increment();
 
