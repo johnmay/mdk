@@ -54,7 +54,6 @@ public class AtomContainerAnnotation
     private static final Logger LOGGER = Logger.getLogger(AtomContainerAnnotation.class);
 
     private IAtomContainer molecule;
-    // todo:
 
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
             AtomContainerAnnotation.class);
