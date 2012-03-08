@@ -21,7 +21,10 @@
 package uk.ac.ebi.resource.rna;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.ResourcePreferences;
 
 /**
  *          BasicGeneIdentifier - 2011.10.17 <br>
@@ -48,7 +51,10 @@ public class BasicRNAIdentifier extends RNAIdentifier {
      * jvm instance
      */
     public static Identifier nextIdentifier() {
-        return new BasicRNAIdentifier(String.format("rna_%05d", ++ticker));
+        StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_RNA_ID_FORMAT");
+        IncrementalPreference ticker = ResourcePreferences.getInstance().getPreference("BASIC_RNA_ID_TICK");
+
+        return new BasicRNAIdentifier(String.format(format.get(), ticker.get()));
     }
 
     public Identifier newInstance() {

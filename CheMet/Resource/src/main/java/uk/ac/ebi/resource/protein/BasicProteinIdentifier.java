@@ -53,7 +53,7 @@ public class BasicProteinIdentifier
 
 
     public static Identifier nextIdentifier() {
-        StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_GENE_ID_FORMAT");
+        StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_PROT_ID_FORMAT");
         IncrementalPreference ticker = ResourcePreferences.getInstance().getPreference("BASIC_GENE_ID_TICK");
 
         return new BasicProteinIdentifier(String.format(format.get(), ticker.get()));
