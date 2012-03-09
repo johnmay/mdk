@@ -11,6 +11,8 @@
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/service/service-core</url>
 
     <artifactId>chemet-service-core</artifactId>
+    <groupId>uk.ac.ebi.chemet</groupId>
+    <version>1.2-SNAPSHOT</version>
 
 
     <dependencies>
