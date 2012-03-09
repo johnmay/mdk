@@ -23,21 +23,26 @@ package uk.ac.ebi.observation.sequence;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+
+import com.google.common.base.Objects;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
- *          LocalAlignment – 2011.09.12 <br>
- *          A basic annotation of a local alignment
+ * LocalAlignment – 2011.09.12 <br>
+ * A basic annotation of a local alignment
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class LocalAlignment
-        extends Alignment {
+        extends Alignment
+        implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(LocalAlignment.class);
     // mandatory fields
@@ -115,7 +120,7 @@ public class LocalAlignment
 
     public void setPositive(int positive) {
         this.positive = positive;
-    }    
+    }
 
     public String getQuery() {
         return query;
@@ -191,9 +196,10 @@ public class LocalAlignment
 
     /**
      * Returns true if query, subject and alignment sequence are not null
-     * @return 
+     *
+     * @return
      */
-    public boolean hasSequences(){
+    public boolean hasSequences() {
         return querySequence != null && alignmentSequence != null && subjectSequence != null;
     }
 
@@ -204,61 +210,37 @@ public class LocalAlignment
     }
 
     @Override
-    public void readExternal(ObjectInput in, List<AnnotatedEntity> sources) throws IOException, ClassNotFoundException {
-
-        super.readExternal(in, sources);
-        query = in.readUTF();
-        subject = in.readUTF();
-
-        positive = in.readInt();
-        identity = in.readInt();
-        length = in.readInt();
-
-        queryStart = in.readInt();
-        queryEnd = in.readInt();
-        subjectStart = in.readInt();
-        subjectEnd = in.readInt();
-
-        expected = in.readDouble();
-        bitScore = in.readDouble();
-
-        // read sequences if available
-        boolean hasSequence = in.readBoolean();
-        if (hasSequence) {
-            querySequence = in.readUTF();
-            subjectSequence = in.readUTF();
-            alignmentSequence = in.readUTF();
-        }
-
+    public int hashCode() {
+        return Objects.hashCode(query, subject,
+                                positive, identity, length,
+                                queryStart, queryEnd,
+                                subjectStart, subjectEnd,
+                                expected, bitScore,
+                                querySequence, subjectSequence, alignmentSequence);
     }
 
     @Override
-    public void writeExternal(ObjectOutput out, List<AnnotatedEntity> sources) throws IOException {
+    public boolean equals(Object obj) {
 
-        super.writeExternal(out, sources);
-        out.writeUTF(query);
-        out.writeUTF(subject);
-
-        out.writeInt(positive);
-        out.writeInt(identity);
-        out.writeInt(length);
-
-        out.writeInt(queryStart);
-        out.writeInt(queryEnd);
-        out.writeInt(subjectStart);
-        out.writeInt(subjectEnd);
-
-        out.writeDouble(expected);
-        out.writeDouble(bitScore);
-
-        if (querySequence != null) {
-            out.writeBoolean(true);
-            out.writeUTF(querySequence);
-            out.writeUTF(subjectSequence);
-            out.writeUTF(alignmentSequence);
-        } else {
-            out.writeBoolean(false);
+        if (obj instanceof LocalAlignment) {
+            LocalAlignment o = (LocalAlignment) obj;
+            return Objects.equal(this.query, o.query)
+                    && Objects.equal(this.subject, o.subject)
+                    && Objects.equal(this.positive, o.positive)
+                    && Objects.equal(this.identity, o.identity)
+                    && Objects.equal(this.length, o.length)
+                    && Objects.equal(this.queryStart, o.queryStart)
+                    && Objects.equal(this.queryEnd, o.queryEnd)
+                    && Objects.equal(this.subjectStart, o.subjectStart)
+                    && Objects.equal(this.subjectEnd, o.subjectEnd)
+                    && Objects.equal(this.expected, o.expected)
+                    && Objects.equal(this.bitScore, o.bitScore)
+                    && Objects.equal(this.querySequence, o.querySequence)
+                    && Objects.equal(this.subjectSequence, o.subjectSequence)
+                    && Objects.equal(this.alignmentSequence, o.alignmentSequence);
         }
+
+        return false;
 
     }
 
