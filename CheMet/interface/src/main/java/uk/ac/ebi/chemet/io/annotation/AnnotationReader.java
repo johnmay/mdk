@@ -2,6 +2,8 @@ package uk.ac.ebi.chemet.io.annotation;
 
 import uk.ac.ebi.interfaces.Annotation;
 
+import java.io.IOException;
+
 /**
  * AnnotationWriter - 08.03.2012 <br/>
  * <p/>
@@ -11,8 +13,8 @@ import uk.ac.ebi.interfaces.Annotation;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public interface AnnotationReader {
+public interface AnnotationReader<A extends Annotation> {
 
-    public Annotation readAnnotation();
+    public A readAnnotation() throws IOException;
     
 }

@@ -2,7 +2,7 @@ package uk.ac.ebi.chemet.io.annotation;
 
 import uk.ac.ebi.interfaces.Annotation;
 
-import java.io.InputStream;
+import java.io.IOException;
 
 /**
  * AnnotationWriter - 08.03.2012 <br/>
@@ -13,8 +13,8 @@ import java.io.InputStream;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public interface AnnotationWriter {
+public interface AnnotationWriter<A extends Annotation> {
 
-    public void write(Annotation annotation);
+    public void write(A annotation) throws IOException;
     
 }
