@@ -1,7 +1,8 @@
 package uk.ac.ebi.chemet.io.observation;
 
-import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Observation;
+
+import java.io.IOException;
 
 /**
  * ObservationReader - 08.03.2012 <br/>
@@ -12,8 +13,8 @@ import uk.ac.ebi.interfaces.Observation;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public interface ObservationWriter {
+public interface ObservationWriter<O extends Observation> {
 
-    public void write(Observation observation);
+    public void write(O observation) throws IOException;
 
 }
