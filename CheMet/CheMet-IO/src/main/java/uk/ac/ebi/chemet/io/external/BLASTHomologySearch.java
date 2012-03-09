@@ -29,11 +29,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.TaskOptions;
-import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.blast.BlastReader;
-import uk.ac.ebi.observation.parameters.TaskOption;
 
 
 /**
