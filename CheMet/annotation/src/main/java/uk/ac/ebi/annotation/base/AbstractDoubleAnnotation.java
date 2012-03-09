@@ -18,7 +18,7 @@
 package uk.ac.ebi.annotation.base;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AbstractAnnotation;
+import uk.ac.ebi.interfaces.annotation.DoubleAnnotation;
 
 
 /**
@@ -33,7 +33,8 @@ import uk.ac.ebi.annotation.AbstractAnnotation;
  *
  */
 public abstract class AbstractDoubleAnnotation
-        extends AbstractValueAnnotation<Double> {
+        extends AbstractValueAnnotation<Double>
+            implements DoubleAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractDoubleAnnotation.class);
 
