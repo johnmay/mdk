@@ -58,7 +58,8 @@ public class AnnotationFactory {
     // reflective map
     private static Constructor[] constructors = new Constructor[Byte.MAX_VALUE];
 
-    private static Map<Byte, Annotation> instances = new HashMap<Byte, Annotation>();
+    private static Map<Byte, Annotation> instances_old = new HashMap<Byte, Annotation>();
+    private static Map<Class, Annotation> instances = new HashMap<Class, Annotation>();
 
     private ListMultimap<Class, Annotation> contextMap = ArrayListMultimap.create();
 
@@ -101,7 +102,8 @@ public class AnnotationFactory {
                                                    new InChI(),
                                                    new Charge())) {
 
-            instances.put(annotation.getIndex(), annotation);
+            instances_old.put(annotation.getIndex(), annotation);
+            instances.put(annotation.getClass(), annotation);
 
         }
 
@@ -114,44 +116,12 @@ public class AnnotationFactory {
 
     }
 
-
-    /**
-     *
-     * Same is {
-     *
-     * @see ofIndex(Byte)} but uses reflection to instantiate
-     *
-     * @param index
-     *
-     * @return
-     *
-     * @deprecated
-     *
-     */
-    @Deprecated
-    public Annotation ofIndexReflection(int index) {
-
-
-        try {
-            return (Annotation) constructors[index].newInstance();
-
-//                throw new InvalidParameterException("Class of index " + index +
-//                                                    " has not been implemented in factory");
-//            }
-
-        } catch (Exception ex) {
-            throw new InvalidParameterException("Unable to construct: " + ex.getMessage());
-        }
-
-    }
-
-
     /**
      * 
      * Access a list of annotations that are specific to the
      * provided entity class. Note: the annotations contained
      * with in the list should only be used to construct
-     * new entities and not to store information. The instances
+     * new entities and not to store information. The instances_old
      * instead of the classes are returned to avoid extra object
      * creation.
      * 
@@ -173,7 +143,7 @@ public class AnnotationFactory {
      * Access a list of annotations that are specific to the
      * provided entity class. Note: the annotations contained
      * with in the list should only be used to construct
-     * new entities and not to store information. The instances
+     * new entities and not to store information. The instances_old
      * instead of the classes are returned to avoid extra object
      * creation.
      * 
@@ -194,7 +164,7 @@ public class AnnotationFactory {
         Set<Class> visited = new HashSet<Class>();
         List<Annotation> annotations = new ArrayList<Annotation>();
 
-        for (Annotation annotation : instances.values()) {
+        for (Annotation annotation : instances_old.values()) {
             Context context = annotation.getClass().getAnnotation(Context.class);
 
             if (context == null) {
@@ -226,12 +196,20 @@ public class AnnotationFactory {
      * 1800 % slower (note this is still only about 1/3 second for 100 000
      * objects).
      *
-     * @param type
+     * @param c
      *
      * @return
      */
-    public Annotation ofClass(Class type) {
-        return ofIndex(AnnotationLoader.getInstance().getIndex(type));
+    public <A extends Annotation> A ofClass(Class<? extends A> c) {
+
+        Annotation annotation = instances.get(c);
+
+        if (annotation != null) {
+            return (A) annotation.newInstance();
+        }
+
+        throw new InvalidParameterException("Unable to get instance of annotation class: "
+                                                    + c);
     }
 
 
@@ -250,12 +228,12 @@ public class AnnotationFactory {
      * @return
      *
      */
-    public Annotation ofIndex(byte index) {
+    public <A extends Annotation> A ofIndex(byte index) {
 
-        Annotation annotation = instances.get(index);
+        Annotation annotation = instances_old.get(index);
 
         if (annotation != null) {
-            return annotation.newInstance();
+            return (A) annotation.newInstance();
         }
 
         throw new InvalidParameterException("Unable to get instance of annotation with index: "
@@ -329,57 +307,4 @@ public class AnnotationFactory {
         return ann;
     }
 
-
-    public static void main(String[] args) {
-
-        AnnotationFactory.getInstance();
-
-        long reflectionAvg = 0;
-        long instanceAvg = 0;
-        long cascadeAvg = 0;
-
-        for (Annotation ann : instances.values()) {
-
-            if (ann != null) {
-
-                long cStart = System.currentTimeMillis();
-                for (int i = 0; i < 1000000; i++) {
-                    //    Annotation annotation = AnnotationFactory.getInstance().ofIndexCascade(ann.getIndex());
-                }
-                long cEnd = System.currentTimeMillis();
-                System.out.println("time using cascade: " + (cEnd - cStart) + " (ms)");
-                cascadeAvg += (cEnd - cStart);
-                cascadeAvg /= 2;
-
-
-                long rStart = System.currentTimeMillis();
-                for (int i = 0; i < 1000000; i++) {
-                    Annotation annotation = AnnotationFactory.getInstance().ofIndexReflection(ann.getIndex());
-                }
-                long rEnd = System.currentTimeMillis();
-                System.out.println("time using reflections: " + (rEnd - rStart) + " (ms)");
-
-                reflectionAvg += (rEnd - rStart);
-                reflectionAvg /= 2;
-
-
-                long iStart = System.currentTimeMillis();
-                for (int i = 0; i < 1000000; i++) {
-                    Annotation annotation = AnnotationFactory.getInstance().ofIndex(ann.getIndex());
-                }
-                long iEnd = System.currentTimeMillis();
-                System.out.println("time using instances: " + (iEnd - iStart) + " (ms)");
-
-                instanceAvg += (iEnd - iStart);
-                instanceAvg /= 2;
-
-            }
-
-        }
-
-        System.out.println("    cascade mean: " + cascadeAvg + " (ms)");
-        System.out.println("reflections mean: " + reflectionAvg + " (ms)");
-        System.out.println("  instances mean: " + instanceAvg + " (ms)");
-
-    }
 }

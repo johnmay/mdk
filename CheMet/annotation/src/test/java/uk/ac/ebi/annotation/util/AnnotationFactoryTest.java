@@ -23,17 +23,22 @@ package uk.ac.ebi.annotation.util;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.ac.ebi.annotation.crossreference.Citation;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+
 import static org.junit.Assert.*;
+
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.annotation.crossreference.*;
 import uk.ac.ebi.annotation.model.FluxLowerBound;
 import uk.ac.ebi.annotation.model.FluxUpperBound;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
@@ -44,7 +49,6 @@ import uk.ac.ebi.resource.classification.TransportClassificationNumber;
 
 
 /**
- *
  * @author johnmay
  */
 public class AnnotationFactoryTest {
@@ -80,8 +84,13 @@ public class AnnotationFactoryTest {
 
     @Test
     public void testOfClass() {
-        assertEquals(Citation.class, AnnotationFactory.getInstance().ofClass(Citation.class).getClass());
-        assertEquals(CrossReference.class, AnnotationFactory.getInstance().ofClass(CrossReference.class).getClass());
+
+        AnnotationFactory factory = AnnotationFactory.getInstance();
+        for (Annotation annotation : factory.ofContext(AnnotatedEntity.class)) {
+            Class c = annotation.getClass();
+            Assert.assertEquals(c, factory.ofClass(c).getClass());
+        }
+
     }
 
 
