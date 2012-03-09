@@ -33,6 +33,7 @@ import java.io.ObjectOutput;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Deprecated
 public class TaskOption implements Externalizable {
 
     private String description;

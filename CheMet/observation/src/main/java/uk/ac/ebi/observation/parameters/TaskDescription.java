@@ -39,6 +39,8 @@ import uk.ac.ebi.resource.IdentifierFactory;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+
+@Deprecated
 public class TaskDescription implements TaskOptions {
 
     private String name;
