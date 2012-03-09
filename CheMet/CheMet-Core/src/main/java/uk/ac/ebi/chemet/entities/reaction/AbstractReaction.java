@@ -372,7 +372,7 @@ public class AbstractReaction<P extends Participant>
     }
 
 
-    public AbstractReaction newInstance() {
+    public Reaction newInstance() {
         return new AbstractReaction();
     }
 

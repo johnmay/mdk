@@ -79,13 +79,14 @@ public class ParticipantImplementation<M, S extends Number, C> extends BasicPart
         this.compartment = compartment;
     }
 
+    @Deprecated
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeObject(this.molecule);
         out.writeObject(this.coefficient);
         out.writeObject(this.compartment);
     }
 
-
+    @Deprecated
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         this.molecule = (M) in.readObject();
         this.coefficient = (S) in.readObject();

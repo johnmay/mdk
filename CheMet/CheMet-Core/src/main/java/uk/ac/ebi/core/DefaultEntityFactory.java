@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.chemet.entities.reaction.participant.BasicParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -67,7 +68,8 @@ public class DefaultEntityFactory
                                            new MultimerImplementation(),
                                            new IdentifierReactionImplementation(),
                                            new BasicParticipant(),
-                                           new ParticipantImplementation())) {
+                                           new ParticipantImplementation(),
+                                           new AbstractReaction())) {
 
             entites.put(getEntityClass(entity.getClass()), entity);
 
@@ -76,7 +78,7 @@ public class DefaultEntityFactory
     }
 
 
-    public static DefaultEntityFactory getInstance() {
+    public static EntityFactory getInstance() {
         return DefaultEntityFactoryHolder.INSTANCE;
     }
 
