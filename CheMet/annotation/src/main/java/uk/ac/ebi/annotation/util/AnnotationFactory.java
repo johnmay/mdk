@@ -36,6 +36,7 @@ import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
@@ -228,6 +229,7 @@ public class AnnotationFactory {
      * @return
      *
      */
+    @SuppressWarnings("unchecked")
     public <A extends Annotation> A ofIndex(byte index) {
 
         Annotation annotation = instances_old.get(index);
@@ -254,9 +256,9 @@ public class AnnotationFactory {
      * @return 
      * 
      */
-    public CrossReference getCrossReference(Identifier identifier) {
+    public <I extends Identifier> CrossReference<I, Observation> getCrossReference(I identifier) {
 
-        CrossReference xref = getCrossReference(identifier.getClass());
+        CrossReference<I, Observation> xref = ( CrossReference<I, Observation>) getCrossReference(identifier.getClass());
 
         xref.setIdentifier(identifier);
 
@@ -265,8 +267,8 @@ public class AnnotationFactory {
 
     }
 
-
-    public CrossReference getCrossReference(Class<? extends Identifier> c) {
+    @SuppressWarnings("unchecked")
+    public <I extends Identifier> CrossReference<I, Observation> getCrossReference(Class<I> c) {
 
 
         if (xrefMap.containsKey(c)) {
