@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
+import uk.ac.ebi.chemet.mol.comparison.AtomCountComparator;
 
 /**
  * @name    ConnectiveComponents
