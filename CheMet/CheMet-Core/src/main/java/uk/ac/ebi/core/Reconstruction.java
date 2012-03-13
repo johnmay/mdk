@@ -4,7 +4,9 @@ package uk.ac.ebi.core;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 import java.io.*;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,6 +14,7 @@ import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
 import uk.ac.ebi.core.metabolite.Metabolome;
+import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
@@ -19,22 +22,19 @@ import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.Genome;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.EntityCollection;
-import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 
 /**
  * Reconstruction.java
  * Object to represent a complete reconstruction with genes, reactions and metabolites
+ *
  * @author johnmay
  * @date Apr 13, 2011
  */
 public class Reconstruction
         extends AbstractAnnotatedEntity
-        implements Externalizable {
+        implements Externalizable, IReconstruction {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
             Reconstruction.class);
@@ -71,7 +71,8 @@ public class Reconstruction
 
     /**
      * Constructor mainly used for creating a new Reconstruction
-     * @param id The identifier of the project
+     *
+     * @param id  The identifier of the project
      * @param org The organism identifier
      */
     public Reconstruction(ReconstructionIdentifier id,
@@ -96,11 +97,10 @@ public class Reconstruction
     }
 
 
-
     /*
-     * Default constructor
-     */
-    private Reconstruction() {
+    * Default constructor
+    */
+    public Reconstruction() {
         metabolites = new Metabolome();
         reactions = new ReactionList();
         genome = new GenomeImplementation();
@@ -116,7 +116,8 @@ public class Reconstruction
 
     /**
      * Access the taxonmy of this reconstruction
-     * @return 
+     *
+     * @return
      */
     public Taxonomy getTaxonomy() {
         return taxonomy;
@@ -137,28 +138,28 @@ public class Reconstruction
 
 
     /**
-     * 
      * Access the genome of the reconstruction. The genome
      * provides methods for adding chromosomes and genes.
-     * 
+     *
      * @return The genome associated with the reconstruction
-     * 
      */
     public Genome getGenome() {
         return genome;
     }
 
 
+    public void setGenome(Genome genome) {
+        this.genome = genome;
+    }
+
     /**
-     * 
-     * Access a collection of all the genes in the 
-     * reconstruction. Adding genes to this collection 
-     * will not add them to the reconstruction. See 
+     * Access a collection of all the genes in the
+     * reconstruction. Adding genes to this collection
+     * will not add them to the reconstruction. See
      * {@see Chromosome} and {@se Genome} for how
      * to add genes.
-     * 
+     *
      * @return All genes currently in the reconstruction
-     * 
      */
     public Collection<Gene> getGenes() {
         return genome.getGenes();
@@ -166,42 +167,48 @@ public class Reconstruction
 
 
     /**
-     * 
      * Access to the gene products associated with the
      * reconstruction as {@see ProductCollection}. The
      * gene product collection contains a mix of Protein,
      * Ribosomal RNA and Transfer RNA products
-     * 
+     *
      * @return
-     * 
      */
     public ProductCollection getProducts() {
         return products;
     }
 
+    /**
+     * Add a product to the reconstruction
+     * @param product
+     */
+    public void addProduct(GeneProduct product) {
+        products.add(product);
+    }
+
 
     /**
-     * 
      * Access to the reactions associated with the
      * reconstruction as {@see ReactionList}. The
      * reaction order is maintained in List to ease
      * read/write operations
-     * 
+     *
      * @return
-     * 
      */
     public ReactionList getReactions() {
         return reactions;
     }
 
+    public ReactionList getReactome() {
+        return reactions;
+    }
+
 
     /**
-     * 
      * Access the collection of metabolites for this
      * reconstruction
-     * 
-     * @return 
-     * 
+     *
+     * @return
      */
     public Metabolome getMetabolome() {
         return metabolites;
@@ -209,13 +216,11 @@ public class Reconstruction
 
 
     /**
-     * 
-     * Add a new metabolic reaction to the 
+     * Add a new metabolic reaction to the
      * reconstruction. Note this method does not
      * check for duplications.
-     * 
+     *
      * @param reaction a new reaction
-     * 
      */
     public void addReaction(MetabolicReaction reaction) {
         reactions.add(reaction);
@@ -235,12 +240,10 @@ public class Reconstruction
 
 
     /**
-     * 
      * Add a new metabolite to the reconstruction.
      * Note this method does not check for duplicates
-     * 
+     *
      * @param metabolite a new metabolite
-     * 
      */
     public void addMetabolite(uk.ac.ebi.interfaces.entities.Metabolite metabolite) {
         metabolites.add(metabolite);
@@ -248,10 +251,8 @@ public class Reconstruction
 
 
     /**
-     * 
      * Add a new subset to the reconstruction. The subset should
      * define entities already in the reconstruction.
-     * 
      */
     public boolean addSubset(EntityCollection subset) {
         return subsets.add(subset);
@@ -264,11 +265,9 @@ public class Reconstruction
 
 
     /**
-     * 
      * Removes a subset from the reconstruction. The subset should
      * define entities already in the reconstruction. Note removing
      * the subset will not remove the entities
-     * 
      */
     public boolean removeSubset(EntityCollection subset) {
         return subsets.remove(subset);
@@ -293,8 +292,9 @@ public class Reconstruction
     }
 
 
-
-    /** Holding methods (likely to change) **/
+    /**
+     * Holding methods (likely to change) *
+     */
     public void setMatix(StoichiometricMatrix<CompartmentalisedMetabolite, ?> matrix) {
         this.matrix = matrix;
     }
@@ -307,9 +307,6 @@ public class Reconstruction
 
     public boolean hasMatrix() {
         return matrix != null;
-
-
-
 
 
     }
@@ -329,127 +326,135 @@ public class Reconstruction
     }
 
 
+
     /**
      * Loads a reconstruction from a given container
      */
-//    public static Reconstruction load(File container) throws IOException, ClassNotFoundException {
-//
-//        File file = new File(container, "recon.extern.gzip");
-//        ObjectInput in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file),
-//                                                                   1024 * 8)); // 8 mb
-//        Reconstruction reconstruction = new Reconstruction();
-//        reconstruction.readExternal(in);
-//
-//        return reconstruction;
-//
-//    }
-//    /**
-//     * Saves the project and it's data
-//     * @return if the project was saved
-//     */
-//    public boolean save() throws IOException {
-//        if (container != null) {
-//
-//            ObjectOutput out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(
-//                    new File(container, "recon.extern.gzip"))));
-//            this.writeExternal(out);
-//            out.close();
-//            return true;
-//
-//        }
-//        return false;
-//    }
-//
-//
-//    public void saveAsProject(File projectRoot) throws IOException {
-//
-//        if (!projectRoot.getPath().endsWith("mnb")) {
-//            projectRoot = new File(projectRoot.getPath() + ".mnb");
-//        }
-//
-//        // create folder
-//        if (!projectRoot.exists()) {
-//            logger.info("Saving project as " + projectRoot);
-//            setContainer(projectRoot);
-//            container.mkdir();
-//            getDataDirectory().mkdir();
-//            save();
-//            //  setTmpDir();
-//        } else if (projectRoot.equals(container)) {
-//            save();
-//        } else {
-//            JOptionPane.showMessageDialog(null,
-//                                          "Cannot overwrite a different project");
-//        }
-//    }
+    //    public static Reconstruction load(File container) throws IOException, ClassNotFoundException {
+    //
+    //        File file = new File(container, "recon.extern.gzip");
+    //        ObjectInput in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file),
+    //                                                                   1024 * 8)); // 8 mb
+    //        Reconstruction reconstruction = new Reconstruction();
+    //        reconstruction.readExternal(in);
+    //
+    //        return reconstruction;
+    //
+    //    }
+    //    /**
+    //     * Saves the project and it's data
+    //     * @return if the project was saved
+    //     */
+    //    public boolean save() throws IOException {
+    //        if (container != null) {
+    //
+    //            ObjectOutput out = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(
+    //                    new File(container, "recon.extern.gzip"))));
+    //            this.writeExternal(out);
+    //            out.close();
+    //            return true;
+    //
+    //        }
+    //        return false;
+    //    }
+    //
+    //
+    //    public void saveAsProject(File projectRoot) throws IOException {
+    //
+    //        if (!projectRoot.getPath().endsWith("mnb")) {
+    //            projectRoot = new File(projectRoot.getPath() + ".mnb");
+    //        }
+    //
+    //        // create folder
+    //        if (!projectRoot.exists()) {
+    //            logger.info("Saving project as " + projectRoot);
+    //            setContainer(projectRoot);
+    //            container.mkdir();
+    //            getDataDirectory().mkdir();
+    //            save();
+    //            //  setTmpDir();
+    //        } else if (projectRoot.equals(container)) {
+    //            save();
+    //        } else {
+    //            JOptionPane.showMessageDialog(null,
+    //                                          "Cannot overwrite a different project");
+    //        }
+    //    }
     public void writeExternal(ObjectOutput out) throws IOException {
-//        super.writeExternal(out);
-//
-//        out.writeUTF(container.getAbsolutePath());
-//
-//        taxonomy.writeExternal(out);
-//
-//
-//        // genome
-//        genome.write(out);
-//
-//        // products
-//        products.writeExternal(out, genome);
-//
-//        // metabolites
-//        out.writeInt(metabolites.size());
-//        for (Metabolite metabolite : metabolites) {
-//            metabolite.writeExternal(out);
-//        }
-//
-//        // reactions
-//        out.writeInt(reactions.size());
-//        for (MetabolicReaction reaction : reactions) {
-//            reaction.writeExternal(out, metabolites, products);
-//            // already writen so don't need to write
-//        }
+        //        super.writeExternal(out);
+        //
+        //        out.writeUTF(container.getAbsolutePath());
+        //
+        //        taxonomy.writeExternal(out);
+        //
+        //
+        //        // genome
+        //        genome.write(out);
+        //
+        //        // products
+        //        products.writeExternal(out, genome);
+        //
+        //        // metabolites
+        //        out.writeInt(metabolites.size());
+        //        for (Metabolite metabolite : metabolites) {
+        //            metabolite.writeExternal(out);
+        //        }
+        //
+        //        // reactions
+        //        out.writeInt(reactions.size());
+        //        for (MetabolicReaction reaction : reactions) {
+        //            reaction.writeExternal(out, metabolites, products);
+        //            // already writen so don't need to write
+        //        }
     }
 
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-//        super.readExternal(in);
-//
-//        container = new File(in.readUTF());
-//
-//        // ids
-//        taxonomy = new Taxonomy();
-//        taxonomy.readExternal(in);
-//
-//        // genome
-//        genome.read(in);
-//
-//        // products
-//        products = new ProductCollection();
-//        products.readExternal(in, genome);
-//
-//
-//
-//        // metabolites
-//        metabolites = new MetaboliteCollection();
-//        int nMets = in.readInt();
-//        for (int i = 0; i < nMets; i++) {
-//            Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
-//            m.readExternal(in);
-//            metabolites.add(m);
-//        }
-//
-//        // reactions
-//        reactions = new ReactionList();
-//
-//        long start = System.currentTimeMillis();
-//        int nRxns = in.readInt();
-//        for (int i = 0; i < nRxns; i++) {
-//            MetabolicReaction r = new MetabolicReaction();
-//            r.readExternal(in, metabolites, products);
-//            reactions.add(r);
-//        }
-//        long end = System.currentTimeMillis();
-//        logger.info("Loaded reaction into collection " + (end - start) + " ms");
+        //        super.readExternal(in);
+        //
+        //        container = new File(in.readUTF());
+        //
+        //        // ids
+        //        taxonomy = new Taxonomy();
+        //        taxonomy.readExternal(in);
+        //
+        //        // genome
+        //        genome.read(in);
+        //
+        //        // products
+        //        products = new ProductCollection();
+        //        products.readExternal(in, genome);
+        //
+        //
+        //
+        //        // metabolites
+        //        metabolites = new MetaboliteCollection();
+        //        int nMets = in.readInt();
+        //        for (int i = 0; i < nMets; i++) {
+        //            Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
+        //            m.readExternal(in);
+        //            metabolites.add(m);
+        //        }
+        //
+        //        // reactions
+        //        reactions = new ReactionList();
+        //
+        //        long start = System.currentTimeMillis();
+        //        int nRxns = in.readInt();
+        //        for (int i = 0; i < nRxns; i++) {
+        //            MetabolicReaction r = new MetabolicReaction();
+        //            r.readExternal(in, metabolites, products);
+        //            reactions.add(r);
+        //        }
+        //        long end = System.currentTimeMillis();
+        //        logger.info("Loaded reaction into collection " + (end - start) + " ms");
+    }
+
+    @Override
+    public void setTaxonomy(Identifier taxonomy) {
+        if (taxonomy instanceof Taxonomy)
+            setTaxonomy((Taxonomy) taxonomy);
+        throw new InvalidParameterException("Not taxonomic identifier!");
     }
 
 

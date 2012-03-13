@@ -43,6 +43,11 @@ public class DefaultEntityFactoryTest {
         Metabolite metabolite = factory.newInstance(Metabolite.class);
         Assert.assertEquals(uk.ac.ebi.core.MetaboliteImplementation.class, metabolite.getClass());
 
+        Entity p = factory.newInstance(MetabolicParticipant.class);
+        Assert.assertEquals(MetabolicParticipant.class, p.getClass());
+
+        // remember to check the newInstance method of the entity if something is not working!
+
     }
 
 

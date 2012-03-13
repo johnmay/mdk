@@ -41,5 +41,5 @@ public interface MetabolicReaction extends Reaction<MetabolicParticipant> {
     public void addModifier(GeneProduct product);
 
 
-    public Collection<? extends AnnotatedEntity> getModifiers();
+    public Collection<GeneProduct> getModifiers();
 }

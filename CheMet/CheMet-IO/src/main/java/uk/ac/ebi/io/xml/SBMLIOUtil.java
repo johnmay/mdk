@@ -164,7 +164,7 @@ public class SBMLIOUtil {
 
 
     public SpeciesReference getSpeciesReference(Model model,
-                                                CompartmentalisedParticipant<Metabolite, Double, Compartment> participant) {
+                                                CompartmentalisedParticipant<Metabolite, Double, Enum<? extends Compartment>> participant) {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
@@ -193,7 +193,7 @@ public class SBMLIOUtil {
      * @return
      */
     public SpeciesReference addSpecies(Model model,
-                                       CompartmentalisedParticipant<Metabolite, Double, Compartment> participant) {
+                                       CompartmentalisedParticipant<Metabolite, Double, Enum<? extends Compartment>> participant) {
 
         Species species = new Species(level, version);
 
@@ -209,7 +209,7 @@ public class SBMLIOUtil {
             accession = accession.trim();
             accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
             accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
-            species.setId(accession + "_" + participant.getCompartment().getAbbreviation());
+            species.setId(accession + "_" + ((Compartment)participant.getCompartment()).getAbbreviation());
         }
 
         species.setName(m.getName());
@@ -233,19 +233,22 @@ public class SBMLIOUtil {
     }
 
 
-    public org.sbml.jsbml.Compartment getCompartment(Model model, CompartmentalisedParticipant<?, ?, Compartment> participant) {
+    public org.sbml.jsbml.Compartment getCompartment(Model model, CompartmentalisedParticipant<?, ?, Enum<? extends Compartment>> participant) {
 
         if (compartmentMap.containsKey(participant.getCompartment())) {
             return compartmentMap.get(participant.getCompartment());
         }
 
         org.sbml.jsbml.Compartment sbmlCompartment = new org.sbml.jsbml.Compartment(level, version);
-        sbmlCompartment.setId(participant.getCompartment().getAbbreviation());
-        sbmlCompartment.setName(participant.getCompartment().getDescription());
+
+        Compartment compartment = (Compartment) participant.getCompartment();
+
+        sbmlCompartment.setId(compartment.getAbbreviation());
+        sbmlCompartment.setName(compartment.getDescription());
 
         model.addCompartment(sbmlCompartment);
 
-        compartmentMap.put(participant.getCompartment(), sbmlCompartment);
+        compartmentMap.put(compartment, sbmlCompartment);
 
         return sbmlCompartment;
 

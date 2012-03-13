@@ -43,7 +43,9 @@ import org.biojava3.core.sequence.RNASequence;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @Deprecated now in chemet-core-io...
  */
+@Deprecated
 public class SequenceSerializer {
 
     private static final Logger LOGGER = Logger.getLogger(SequenceSerializer.class);

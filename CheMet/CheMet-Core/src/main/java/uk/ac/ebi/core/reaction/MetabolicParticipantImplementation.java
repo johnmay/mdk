@@ -43,7 +43,7 @@ import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
  * @author  $Author$ (this version)
  */
 public class MetabolicParticipantImplementation
-        extends ParticipantImplementation<Metabolite, Double, Compartment>
+        extends ParticipantImplementation<Metabolite, Double, Enum<? extends Compartment>>
         implements MetabolicParticipant {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicParticipantImplementation.class);
@@ -53,12 +53,12 @@ public class MetabolicParticipantImplementation
     }
 
 
-    public MetabolicParticipantImplementation(Metabolite molecule, Compartment compartment) {
+    public MetabolicParticipantImplementation(Metabolite molecule, Enum<? extends Compartment> compartment) {
         super(molecule, 1d, compartment);
     }
 
 
-    public MetabolicParticipantImplementation(Metabolite molecule, Double coefficient, Compartment compartment) {
+    public MetabolicParticipantImplementation(Metabolite molecule, Double coefficient, Enum<? extends Compartment> compartment) {
         super(molecule, coefficient, compartment);
     }
 
@@ -70,5 +70,10 @@ public class MetabolicParticipantImplementation
 
     public MetabolicParticipantImplementation(Metabolite molecule) {
         super(molecule, 1d, Organelle.CYTOPLASM);
+    }
+
+    @Override
+    public MetabolicParticipant newInstance() {
+        return new MetabolicParticipantImplementation();
     }
 }

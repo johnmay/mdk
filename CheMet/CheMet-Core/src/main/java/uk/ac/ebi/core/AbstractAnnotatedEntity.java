@@ -19,6 +19,7 @@ package uk.ac.ebi.core;
 import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -26,6 +27,7 @@ import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainerSet;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
@@ -44,6 +46,7 @@ import uk.ac.ebi.observation.ObservationCollection;
 /**
  * AnnotatedEntity.java – MetabolicDevelopmentKit – Jun 23, 2011
  * AnnotatedEntity contains collections of annotations and observations on objects
+ *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
 public abstract class AbstractAnnotatedEntity
@@ -53,11 +56,11 @@ public abstract class AbstractAnnotatedEntity
 
     private transient static final Logger logger = Logger.getLogger(AbstractAnnotatedEntity.class);
 
-    private ListMultimap<Byte, Annotation> annotations = ArrayListMultimap.create();
+    private ListMultimap<Class, Annotation> annotations = ArrayListMultimap.create();
 
     private ObservationCollection observations = new ObservationCollection();
 
-    private Rating rating = StarRating.ONE_STAR;
+    private Enum<? extends Rating> rating = StarRating.ONE_STAR;
 
 
     public AbstractAnnotatedEntity() {
@@ -81,12 +84,11 @@ public abstract class AbstractAnnotatedEntity
 
 
     /**
-     *
      * Add an annotation to the reconstruction object
      *
      * @param annotation The new annotation
-     *
      */
+    @Override
     public void addAnnotation(Annotation annotation) {
 
         // delegate to annotation manager
@@ -94,58 +96,58 @@ public abstract class AbstractAnnotatedEntity
             annotations.removeAll(annotation.getIndex());
         }
 
-        annotations.put(annotation.getIndex(), annotation);
+        annotations.put(annotation.getClass(), annotation);
 
     }
 
 
     /**
-     *
      * Accessor to all the annotations currently stored
      *
      * @return A collection of all annotations held within the object
-     *
      */
+    @Override
     public Collection<Annotation> getAnnotations() {
         return annotations.values();
     }
 
 
+    @Override
     public boolean hasAnnotation(Class<? extends Annotation> c) {
-        return annotations.containsKey(AnnotationLoader.getInstance().getIndex(c));
+        return annotations.containsKey(c);
     }
 
 
+    @Override
     public boolean hasAnnotation(Annotation annotation) {
         return annotations.containsKey(annotation.getIndex());
     }
 
-
-    public ListMultimap<Byte, Annotation> getAnnotationMap() {
-        return annotations;
+    @Override
+    public Collection<Class> getAnnotationClasses() {
+        return annotations.keys();
     }
 
-
     /**
-     *
      * Accessor to all annotations of a given type
      *
-     * @param type
-     * @return
+     * @param c
      *
+     * @return
      */
-    public <T> Collection<T> getAnnotations(final Class<T> type) {
-        return (Collection<T>) annotations.get(AnnotationLoader.getInstance().getIndex(type));
+    @Override
+    public <T> Collection<T> getAnnotations(final Class<T> c) {
+        return (Collection<T>) annotations.get(c);
     }
 
 
     /**
-     *
      * Accessor to all annotations extending a given type. For example if you provide a CrossReference
      * class all Classification annotations will also be returned this is because Classification is
      * a sub-class of CrossReference
      *
-     * @param type
+     * @param base
+     *
      * @return
      */
     public <T extends Annotation> Set<T> getAnnotationsExtending(final T base) {
@@ -160,12 +162,11 @@ public abstract class AbstractAnnotatedEntity
 
 
     /**
-     *
      * {@see getAnnotationsExtending(Annotation)}
      *
      * @param c
-     * @return
      *
+     * @return
      */
     public <T extends Annotation> Set<T> getAnnotationsExtending(final Class<T> c) {
         Set<T> annotationSubset = new HashSet<T>();
@@ -180,16 +181,27 @@ public abstract class AbstractAnnotatedEntity
 
     /**
      * Remove an annotation from the entity
+     *
      * @param annotation
+     *
      * @return
      */
     public boolean removeAnnotation(final Annotation annotation) {
-        return annotations.get(annotation.getIndex()).remove(annotation);
+        return annotations.get(annotation.getClass()).remove(annotation);
     }
 
+    public Collection<Class<? extends Observation>> getObservationClasses() {
+        return observations.getClasses();
+    }
+    
+    public Collection<Observation> getObservations(Class<? extends Observation> c){
+        return observations.get(c);
+    }
+    
 
     /**
      * Accessor to the stored observations
+     *
      * @return unmodifiable ObservationCollection
      */
     public ObservationCollection getObservationCollection() {
@@ -204,7 +216,9 @@ public abstract class AbstractAnnotatedEntity
 
     /**
      * Adds an observation to the descriptor
+     *
      * @param observation The new observation to add
+     *
      * @return whether the underlying collection was modified
      */
     public boolean addObservation(Observation observation) {
@@ -215,7 +229,9 @@ public abstract class AbstractAnnotatedEntity
 
     /**
      * Removes an observation to the descriptor
+     *
      * @param observation The observation to remove
+     *
      * @return whether the underlying collection was modified
      */
     public boolean removeObservation(Observation observation) {
@@ -225,78 +241,34 @@ public abstract class AbstractAnnotatedEntity
 
 
     /**
-     *
      * Adds an identifier to the cross-reference collection
-     *
      */
     @Deprecated
     public boolean addCrossReference(Identifier id) {
         CrossReference xref = new CrossReference(id);
-        return annotations.put(xref.getIndex(), xref);
+        return annotations.put(xref.getClass(), xref);
     }
 
 
-    public Rating getRating() {
+    public Enum<? extends Rating> getRating() {
         return rating;
     }
 
 
-    public void setRating(Rating rating) {
+    public void setRating(Enum<? extends Rating> rating) {
         this.rating = rating;
     }
 
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
-        super.readExternal(in);
-
-        rating = (Rating) in.readObject();
-
-        observations = new ObservationCollection();
-        observations.readExternal(in, this);
-
-        int totalAnnotations = in.readInt();
-
-        AnnotationFactory annotationFactory = AnnotationFactory.getInstance();
-
-        while (totalAnnotations > annotations.values().size()) {
-            int n = in.readInt();
-            Byte index = in.readByte();
-            for (int j = 0; j < n; j++) {
-                annotations.put(index, annotationFactory.readExternal(index, in));
-            }
-        }
-
+        // old
     }
 
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
-
-        super.writeExternal(out);
-
-        out.writeObject(rating);
-
-        observations.writeExternal(out);
-
-        // total number of annotations
-        out.writeInt(annotations.values().size());
-
-        // write by index
-        for (Byte index : annotations.keySet()) {
-            out.writeInt(annotations.get(index).size());
-            out.writeByte(index);
-            try {
-                for (Annotation annotation : annotations.get(index)) {
-                    annotation.writeExternal(out);
-                }
-            } catch (IOException ex) {
-                // XXX
-                throw new IOException(
-                        "Could not save, annotation on entity " + this + " : " + ex.getMessage() + " caused an error");
-            }
-        }
+        // old
     }
 
 
@@ -321,15 +293,15 @@ public abstract class AbstractAnnotatedEntity
             return false;
         }
 
-//        final AnnotatedEntity other = (AnnotatedEntity) obj;
-//        if( this.annotations != other.annotations &&
-//            (this.annotations == null || !this.annotations.equals(other.annotations)) ) {
-//            return false;
-//        }
-//        if( this.observations != other.observations &&
-//            (this.observations == null || !this.observations.equals(other.observations)) ) {
-//            return false;
-//        }
+        //        final AnnotatedEntity other = (AnnotatedEntity) obj;
+        //        if( this.annotations != other.annotations &&
+        //            (this.annotations == null || !this.annotations.equals(other.annotations)) ) {
+        //            return false;
+        //        }
+        //        if( this.observations != other.observations &&
+        //            (this.observations == null || !this.observations.equals(other.observations)) ) {
+        //            return false;
+        //        }
         return true;
     }
 }

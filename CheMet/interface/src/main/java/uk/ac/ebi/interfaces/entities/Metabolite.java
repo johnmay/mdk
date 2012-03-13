@@ -28,11 +28,10 @@ public interface Metabolite extends AnnotatedEntity {
     public boolean isGeneric();
 
 
-    public void setType(MetaboliteClass valueOf);
+    public void setType(Enum<? extends MetaboliteClass> type);
 
 
-    public MetaboliteClass getType();
-
+    public Enum<? extends MetaboliteClass> getType();
 
     /**
      * Method replaces hasStructureAssociated to be more direct

@@ -61,9 +61,6 @@ public interface AnnotatedEntity extends Entity {
     public Collection<Annotation> getAnnotations();
 
 
-    public ListMultimap<Byte, Annotation> getAnnotationMap();
-
-
     /**
      * Determine whether the entity has the specific annotation
      * @param annotation
@@ -83,6 +80,15 @@ public interface AnnotatedEntity extends Entity {
 
     /**
      *
+     * Accessor to all the annotations currently stored
+     *
+     * @return A collection of all annotations held within the object
+     *
+     */
+    public Collection<Class> getAnnotationClasses();
+
+    /**
+     *
      * Accessor to all annotations of a given type
      *
      * @param type
@@ -98,7 +104,7 @@ public interface AnnotatedEntity extends Entity {
      * class all Classification annotations will also be returned this is because Classification is
      * a sub-class of CrossReference
      *
-     * @param type
+     * @param base
      * @return
      */
     public <T extends Annotation> Set<T> getAnnotationsExtending(final T base);
@@ -108,7 +114,7 @@ public interface AnnotatedEntity extends Entity {
      *
      * {@see getAnnotationsExtending(Annotation)}
      *
-     * @param type
+     * @param c
      * @return
      *
      */
@@ -146,16 +152,20 @@ public interface AnnotatedEntity extends Entity {
     public boolean removeObservation(Observation observation);
 
 
+    public Collection<Class<? extends Observation>> getObservationClasses();
+
+    public Collection<Observation> getObservations(Class<? extends Observation> c);
+
     /**
      * Access the rating for this entity
      */
-    public Rating getRating();
+    public Enum<? extends Rating> getRating();
 
 
     /**
      * Set the rating for this entity
      */
-    public void setRating(Rating rating);
+    public void setRating(Enum<? extends Rating> rating);
 
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException;

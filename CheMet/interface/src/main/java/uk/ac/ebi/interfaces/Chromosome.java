@@ -25,22 +25,27 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.List;
+
+import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.interfaces.entities.Entity;
 
 
 /**
- *          Chromosome – 2011.09.12 <br>
- *          Interface description of a chromosome
+ * Chromosome – 2011.09.12 <br>
+ * Interface description of a chromosome
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public interface Chromosome extends Entity {
 
     /**
      * A gene to the chromosome. This will set the circular reference for the gene
      * back to this chromosome as well as the sequence (based on start/end)
+     *
      * @param gene
+     *
      * @return whether the gene was added (false if the gene is already present)
      */
     public boolean add(Gene gene);
@@ -48,7 +53,9 @@ public interface Chromosome extends Entity {
 
     /**
      * Iteratively add genes to the chromosome
+     *
      * @param genes
+     *
      * @return whether the gene was added (false if the gene is already present)
      */
     public boolean addAll(Collection<? extends Gene> genes);
@@ -60,14 +67,15 @@ public interface Chromosome extends Entity {
     /**
      * Removes all genes and their references back to this chromosome. Note
      * the sequence of the gene is also unset
+     *
      * @param genes
+     *
      * @return
      */
     public boolean removeAll(Collection<? extends Gene> genes);
 
 
     /**
-     *
      * Returns all the genes on this chromosome
      *
      * @return
@@ -76,11 +84,13 @@ public interface Chromosome extends Entity {
 
 
     /**
-     *
      * Access the number of the chromosome
-     *
      */
     public int getChromosomeNumber();
+
+    public void setSequence(ChromosomeSequence sequence);
+
+    public ChromosomeSequence getSequence();
 
 
     public void readExternal(ObjectInput out) throws ClassNotFoundException, IOException;

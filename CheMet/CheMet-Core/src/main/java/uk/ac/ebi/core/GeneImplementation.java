@@ -46,7 +46,7 @@ public class GeneImplementation extends AbstractAnnotatedEntity implements Gene 
 
     private int end;
 
-    private Strand strand;
+    private Strand strand = Strand.UNDEFINED;
 
     private Sequence sequence;
 

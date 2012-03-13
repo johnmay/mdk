@@ -12,6 +12,7 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.InChI;
+import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
@@ -56,11 +57,13 @@ public class MetaboliteImplementationTest {
 
         Assert.assertFalse(m.hasStructure());
 
-        m.addAnnotation(new AtomContainerAnnotation());
+        Annotation annotation = new AtomContainerAnnotation();
+
+        m.addAnnotation(annotation);
 
         Assert.assertTrue(m.hasStructure());
 
-        m.getAnnotationMap().clear();
+        m.removeAnnotation(annotation);
 
         Assert.assertFalse(m.hasStructure());
 

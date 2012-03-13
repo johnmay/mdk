@@ -120,11 +120,11 @@ public class ReactionRenderer {
      */
     public ImageIcon renderUniporterReaction(AbstractReaction<MetabolicParticipantImplementation> rxn) {
 
-        BiMap<CompartmentalisedParticipant<Metabolite, ?, Compartment>, CompartmentalisedParticipant<Metabolite, ?, Compartment>> mapping = TransportReactionUtil.getMappings(
+        BiMap<CompartmentalisedParticipant<Metabolite, ?, Enum<? extends Compartment>>, CompartmentalisedParticipant<Metabolite, ?, Enum<? extends Compartment>>> mapping = TransportReactionUtil.getMappings(
                 rxn);
 
-        CompartmentalisedParticipant<Metabolite, ?, Compartment> left = mapping.keySet().iterator().next();
-        CompartmentalisedParticipant<Metabolite, ?, Compartment> right = mapping.get(left);
+        CompartmentalisedParticipant<Metabolite, ?, Enum<? extends Compartment>> left = mapping.keySet().iterator().next();
+        CompartmentalisedParticipant<Metabolite, ?, Enum<? extends Compartment>> right = mapping.get(left);
 
         int n = mapping.size();
 
@@ -141,7 +141,7 @@ public class ReactionRenderer {
 
         drawCompartmentSeperator(g2, new Rectangle(128, 0, 128, 128));
 
-        drawArrow(g2, new Rectangle(128, 0, 128, 128), rxn.getDirection(), 1.25f);
+        drawArrow(g2, new Rectangle(128, 0, 128, 128), (Direction)rxn.getDirection(), 1.25f);
 
         drawMolecule(g2, new Rectangle(256, 0, 128, 128),
                      (MetabolicParticipantImplementation) right);
@@ -228,7 +228,7 @@ public class ReactionRenderer {
 
         bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
                                         0, 128, 128);
-        drawArrow(g2, bounds, rxn.getDirection());
+        drawArrow(g2, bounds, (Direction)rxn.getDirection());
         List<MetabolicParticipant> products = rxn.getProducts();
         for (int i = 0; i < products.size(); i++) {
             bounds = new Rectangle2D.Double(bounds.getX() + bounds.getWidth(),
@@ -256,7 +256,7 @@ public class ReactionRenderer {
                              MetabolicParticipantImplementation p) {
 
         Metabolite metabolite = p.getMolecule();
-        String compartment = "[" + p.getCompartment().getAbbreviation() + "]";
+        String compartment = "[" + ((Compartment)p.getCompartment()).getAbbreviation() + "]";
         g2.setColor(Color.LIGHT_GRAY);
         g2.setFont(ViewUtilities.DEFAULT_MONO_SPACE_FONT.deriveFont(11.0f));
         int compartmentWidth = g2.getFontMetrics().stringWidth(compartment);

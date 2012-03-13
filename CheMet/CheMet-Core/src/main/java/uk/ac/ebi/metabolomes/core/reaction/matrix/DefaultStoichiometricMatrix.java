@@ -10,6 +10,7 @@ import uk.ac.ebi.core.CompartmentalisedMetabolite;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.interfaces.reaction.Participant;
 
 
@@ -63,7 +64,7 @@ public class DefaultStoichiometricMatrix
         return addReaction(reaction.getAbbreviation(),
                            getMetabolites(reaction),
                            getStoichiometries(reaction),
-                           reaction.getDirection().isReversible());
+                           ((Direction) reaction.getDirection()).isReversible());
     }
 
 

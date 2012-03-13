@@ -35,6 +35,7 @@ import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
 
 /**
  *          GenomeImplementation - 2011.10.18 <br>

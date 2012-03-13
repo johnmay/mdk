@@ -36,5 +36,5 @@ import uk.ac.ebi.interfaces.reaction.Participant;
  *          Class description
  *
  */
-public interface MetabolicParticipant extends CompartmentalisedParticipant<Metabolite, Double, Compartment> {
+public interface MetabolicParticipant extends CompartmentalisedParticipant<Metabolite, Double, Enum<? extends Compartment>> {
 }

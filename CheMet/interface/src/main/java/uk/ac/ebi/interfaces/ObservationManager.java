@@ -65,5 +65,5 @@ public interface ObservationManager {
      * @return all current observation classes
      * 
      */
-    public Set<Class<? extends Observation>> getClasses();
+    public Collection<Class<? extends Observation>> getClasses();
 }

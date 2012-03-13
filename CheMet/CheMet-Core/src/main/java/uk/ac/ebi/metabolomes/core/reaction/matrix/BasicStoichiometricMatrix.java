@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import uk.ac.ebi.interfaces.entities.Reaction;
+import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.interfaces.reaction.Participant;
 
 
@@ -117,7 +118,7 @@ public class BasicStoichiometricMatrix
         return addReaction(reaction.getName(),
                            metabolites,
                            coefficients,
-                           reaction.getDirection().isReversible());
+                           ((Direction) reaction.getDirection()).isReversible());
     }
 
 

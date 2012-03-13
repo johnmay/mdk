@@ -4,17 +4,17 @@
  * 2011.10.17
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,8 +27,10 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
+import org.biojava3.core.sequence.DNASequence;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.Entity;
@@ -36,18 +38,19 @@ import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 
 
 /**
- *          ChromosomeImplementation - 2011.10.17 <br>
- *          A class description of a chromosome. This effectively wraps
- *          BioJava3 ChromosomeSequence object to act as a buffer with our CheMet objects
+ * ChromosomeImplementation - 2011.10.17 <br>
+ * A class description of a chromosome. This effectively wraps
+ * BioJava3 ChromosomeSequence object to act as a buffer with our CheMet objects
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class ChromosomeImplementation extends AbstractAnnotatedEntity implements Chromosome, Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(ChromosomeImplementation.class);
 
-    private ChromosomeSequence sequence;
+    private ChromosomeSequence sequence = new ChromosomeSequence("");
 
     private List<Gene> genes = new ArrayList();
 
@@ -72,6 +75,8 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
      */
     public boolean add(Gene gene) {
         gene.setChromosome(this);
+        int length = sequence.getLength();
+        if(gene.getEnd() < length)
         gene.setSequence(sequence.getSubSequence(gene.getStart(), gene.getEnd()));
         return genes.add(gene);
     }
@@ -126,6 +131,14 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
         return changed;
     }
 
+    public void setSequence(ChromosomeSequence sequence) {
+        this.sequence = sequence;
+    }
+
+    @Override
+    public ChromosomeSequence getSequence() {
+        return sequence;
+    }
 
     /**
      * @inheritDoc

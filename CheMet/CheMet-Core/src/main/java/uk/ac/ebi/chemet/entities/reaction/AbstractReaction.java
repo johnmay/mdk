@@ -21,7 +21,9 @@
 package uk.ac.ebi.chemet.entities.reaction;
 
 import com.google.common.base.Joiner;
+
 import java.util.*;
+
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
@@ -36,35 +38,35 @@ import uk.ac.ebi.interfaces.reaction.*;
 
 /**
  * AbstractReaction –  2011.08.08 <br>
+ * <p/>
+ * A base reaction class that allows the specification of different
+ * types of participant. Two important participant types are
+ * {@see Participant} and {@see CompartmentalisedParticipant}. Due
+ * to the verboseness of the later when provided with the three
+ * parameter types like {@see MetabolicParticipant} are usable. <br><br>
+ * <p/>
+ * {@code Reaction<Participant<String,Integer>> rxn = new AbstractReaction<Participant<String,Integer>>(); } <br><br>
+ * {@code rxn.addReactant(new ParticipantImplementation<String, Integer>("NAD+", 1));                        } <br>
+ * {@code rxn.addReactant(new ParticipantImplementation<String, Integer>("primary-alcohol", 1));             } <br><br>
+ * {@code rxn.addProduct(new ParticipantImplementation<String, Integer>("NADH", 1));                         } <br>
+ * {@code rxn.addProduct(new ParticipantImplementation<String, Integer>("H+", 1));                           } <br>
+ * {@code rxn.addProduct(new ParticipantImplementation<String, Integer>("aldehyde", 1));                     } <br>
+ * <p/>
+ * <br>
+ * <p/>
+ * If you intend to use this library's {@see Metabolite} and
+ * {@see Compartment} implementations please use the concrete
+ * class {@see MetabolicReaction}.
+ * <p/>
+ * <pre>
  *
- *          A base reaction class that allows the specification of different
- *          types of participant. Two important participant types are
- *          {@see Participant} and {@see CompartmentalisedParticipant}. Due
- *          to the verboseness of the later when provided with the three 
- *          parameter types like {@see MetabolicParticipant} are usable. <br><br>
- *          
- *          {@code Reaction<Participant<String,Integer>> rxn = new AbstractReaction<Participant<String,Integer>>(); } <br><br>
- *          {@code rxn.addReactant(new ParticipantImplementation<String,Integer>("NAD+",1));                        } <br>
- *          {@code rxn.addReactant(new ParticipantImplementation<String,Integer>("primary-alcohol",1));             } <br><br>
- *          {@code rxn.addProduct(new ParticipantImplementation<String,Integer>("NADH",1));                         } <br>
- *          {@code rxn.addProduct(new ParticipantImplementation<String,Integer>("H+",1));                           } <br>
- *          {@code rxn.addProduct(new ParticipantImplementation<String,Integer>("aldehyde",1));                     } <br>
- *  
- *          <br>
- * 
- *          If you intend to use this library's {@see Metabolite} and
- *          {@see Compartment} implementations please use the concrete
- *          class {@see MetabolicReaction}.
- * 
- *          <pre>
- * 
- *          </pre> 
- *                   
+ *          </pre>
  *
+ * @param <P> Reaction participant type
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- * @param   <P> Reaction participant type
  */
 public class AbstractReaction<P extends Participant>
         extends AbstractAnnotatedEntity
@@ -81,7 +83,7 @@ public class AbstractReaction<P extends Participant>
     private List<P> products;
     // whether the reaction is reversible
 
-    private Direction direction = DirectionImplementation.BIDIRECTIONAL;
+    private Enum<? extends Direction> direction = DirectionImplementation.BIDIRECTIONAL;
 
     private AbstractParticipantFilter filter = new AcceptAllFilter(); // accepts all
 
@@ -91,7 +93,6 @@ public class AbstractReaction<P extends Participant>
      * class of molecule used in the generic reaction. Ideally this should be a singleton class.
      *
      * @param moleculeComparator
-     *
      */
     public AbstractReaction() {
         reactants = new LinkedList<P>();
@@ -110,6 +111,7 @@ public class AbstractReaction<P extends Participant>
      * Constructor to build a reaction and use the provided filter to trim down included molecules.
      * Note – the reaction doesn't need a new instance of the filter every-time and it is better to
      * provide all required reactions with the same filter
+     *
      * @param filter The filter to use
      */
     public AbstractReaction(AbstractParticipantFilter filter) {
@@ -119,14 +121,13 @@ public class AbstractReaction<P extends Participant>
 
 
     /**
-     *
      * Sets the reversibility of the reaction. By default the reaction reversibility is unknown.
      * The reversibility is not tested in the {@see equals(M} method as this method treats reactions
-     * with same products (coefficients and compartments), different sides as being the same.
-     * @param reversibility The reaction reversibility
+     *with same products (coefficients and compartments), different sides as being the same.
      *
+     * @param reversibility The reaction reversibility
      */
-    public void setDirection(Direction direction) {
+    public void setDirection(Enum<? extends Direction> direction) {
         this.direction = direction;
     }
 
@@ -135,30 +136,29 @@ public class AbstractReaction<P extends Participant>
      * Get the direction of the reaction
      *
      * @return Reaction reversibility enumeration
-     *
      */
-    public Direction getDirection() {
+    public Enum<? extends Direction> getDirection() {
         return direction;
     }
 
 
-//    /**
-//     * Accessor for all the reactant compartments of the reaction
-//     * @return Fixed size array of reactant compartments
-//     */
-//    public List<C> getReactantCompartments() {
-//        List<C> compartments = new ArrayList();
-//        for (CompartmentalisedParticipant<M, S, C> p : getReactantParticipants()) {
-//            compartments.add(p.getCompartment());
-//        }
-//        return compartments;
-//    }
-//
-//
-//    /**
-//     * Accessor for all the reactant coefficients of the reaction
-//     * @return Fixed size array of reactant coefficients
-//     */
+    //    /**
+    //     * Accessor for all the reactant compartments of the reaction
+    //     * @return Fixed size array of reactant compartments
+    //     */
+    //    public List<C> getReactantCompartments() {
+    //        List<C> compartments = new ArrayList();
+    //        for (CompartmentalisedParticipant<M, S, C> p : getReactantParticipants()) {
+    //            compartments.add(p.getCompartment());
+    //        }
+    //        return compartments;
+    //    }
+    //
+    //
+    //    /**
+    //     * Accessor for all the reactant coefficients of the reaction
+    //     * @return Fixed size array of reactant coefficients
+    //     */
     public List getReactantStoichiometries() {
         List coefficients = new ArrayList();
         for (P p : getReactantParticipants()) {
@@ -166,12 +166,13 @@ public class AbstractReaction<P extends Participant>
         }
         return coefficients;
     }
-//
-//
+    //
+    //
 
 
     /**
      * Accessor for all the reactants of the reaction
+     *
      * @return Fixed size array of reactants of class 'M'
      */
     public List getReactantMolecules() {
@@ -195,33 +196,34 @@ public class AbstractReaction<P extends Participant>
 
     /**
      * Add a reactant (left side) to the reaction
+     *
      * @param product The reactant to add
      */
     public boolean addReactant(P participant) {
-//        if (filter.reject(participant)) {
-//            return;
-//        }
+        //        if (filter.reject(participant)) {
+        //            return;
+        //        }
         return this.reactants.add(participant);
     }
 
 
-//    /**
-//     * Accessor for all the product compartments of the reaction
-//     * @return Fixed size array of compartments
-//     */
-//    public List<C> getProductCompartments() {
-//        List<C> compartments = new ArrayList();
-//        for (CompartmentalisedParticipant<M, S, C> p : getProductParticipants()) {
-//            compartments.add(p.getCompartment());
-//        }
-//        return compartments;
-//    }
-//
-//
-//    /**
-//     * Accessor for all the product coefficients of the reaction
-//     * @return Fixed size array of coefficients
-//     */
+    //    /**
+    //     * Accessor for all the product compartments of the reaction
+    //     * @return Fixed size array of compartments
+    //     */
+    //    public List<C> getProductCompartments() {
+    //        List<C> compartments = new ArrayList();
+    //        for (CompartmentalisedParticipant<M, S, C> p : getProductParticipants()) {
+    //            compartments.add(p.getCompartment());
+    //        }
+    //        return compartments;
+    //    }
+    //
+    //
+    //    /**
+    //     * Accessor for all the product coefficients of the reaction
+    //     * @return Fixed size array of coefficients
+    //     */
     public List getProductStoichiometries() {
         List coefficients = new ArrayList();
         for (P p : getProductParticipants()) {
@@ -230,10 +232,11 @@ public class AbstractReaction<P extends Participant>
         return coefficients;
     }
 
-//
+    //
 
     /**
      * Accessor for all the products of the reaction
+     *
      * @return Fixed size array of products of class 'M'
      */
     public List getProductMolecules() {
@@ -265,18 +268,20 @@ public class AbstractReaction<P extends Participant>
 
     /**
      * Add a product (right side) to the reaction
+     *
      * @param product The product to add
      */
     public boolean addProduct(P participant) {
-//        if (filter.reject(participant)) {
-//            return;
-//        }
+        //        if (filter.reject(participant)) {
+        //            return;
+        //        }
         return this.products.add(participant);
     }
 
 
     /**
      * Accessor to all the reaction molecules
+     *
      * @return shallow copy combined list of all products (ordered reactant, product)
      */
     public List getAllReactionMolecules() {
@@ -288,6 +293,7 @@ public class AbstractReaction<P extends Participant>
 
     /**
      * Accessor to all the reaction participants
+     *
      * @return shallow copy combined list of all products (ordered reactant, product)
      */
     public List<P> getAllReactionParticipants() {
@@ -299,6 +305,7 @@ public class AbstractReaction<P extends Participant>
 
     /**
      * Accessor to all the reaction compartments
+     *
      * @return shallow copy combined list of all coefficients (ordered reactant, product)
      */
     public List getAllReactionCoefficients() {
@@ -307,19 +314,20 @@ public class AbstractReaction<P extends Participant>
         return allMolecules;
     }
 
-//
-//    /**
-//     * Accessor to all the reaction compartments
-//     * @return shallow copy combined list of all compartments (ordered reactant, product)
-//     */
-//    public List<C> getAllReactionCompartments() {
-//        List<C> allMolecules = new ArrayList<C>(getReactantCompartments());
-//        allMolecules.addAll(getProductCompartments());
-//        return allMolecules;
-//    }
+    //
+    //    /**
+    //     * Accessor to all the reaction compartments
+    //     * @return shallow copy combined list of all compartments (ordered reactant, product)
+    //     */
+    //    public List<C> getAllReactionCompartments() {
+    //        List<C> allMolecules = new ArrayList<C>(getReactantCompartments());
+    //        allMolecules.addAll(getProductCompartments());
+    //        return allMolecules;
+    //    }
 
     /**
      * Accessor for the number of reactants
+     *
      * @return
      */
     public int getReactantCount() {
@@ -329,6 +337,7 @@ public class AbstractReaction<P extends Participant>
 
     /**
      * Accessor for the number of products
+     *
      * @return
      */
     public int getProductCount() {
@@ -343,6 +352,7 @@ public class AbstractReaction<P extends Participant>
 
     /**
      * Accessor to query whether the reaction is generic
+     *
      * @return t/f
      */
     public Boolean isGeneric() {
@@ -353,6 +363,7 @@ public class AbstractReaction<P extends Participant>
     /**
      * Indicate that this reaction contains GenericMolecules. This influences the
      * {@see equals(Object obj)} method into taking longer
+     *
      * @param generic
      */
     public void setGeneric(Boolean generic) {
@@ -385,6 +396,7 @@ public class AbstractReaction<P extends Participant>
      * this.cachedHash which is 'nullified' if the state of the object changes.
      * Warning: This hash code will not persist between different virtual machines if enumerations are used. However
      * as the hash code is meant to be calculated when needed this should not be a problem
+     *
      * @return hash code the reaction, note – there is no guarantee of unique hash code and the equals method should
      *         be called if the the matching hashCodes are found
      */
@@ -426,19 +438,19 @@ public class AbstractReaction<P extends Participant>
             }
         }
 
-//        List reac = new ArrayList(this.reactants);
-//        List prod = new ArrayList(this.products);
-//
-//        Collections.sort(reac);
-//        Collections.sort(prod);
-//
-//        Integer[] hashes = new Integer[]{reac.hashCode(),
-//                                         prod.hashCode()};
-//
-//        Arrays.sort(hashes);
-//
-//        hash = 59 * hash + hashes[0];
-//        hash = 59 * hash + hashes[1];
+        //        List reac = new ArrayList(this.reactants);
+        //        List prod = new ArrayList(this.products);
+        //
+        //        Collections.sort(reac);
+        //        Collections.sort(prod);
+        //
+        //        Integer[] hashes = new Integer[]{reac.hashCode(),
+        //                                         prod.hashCode()};
+        //
+        //        Arrays.sort(hashes);
+        //
+        //        hash = 59 * hash + hashes[0];
+        //        hash = 59 * hash + hashes[1];
 
         return hash;
 
@@ -448,13 +460,17 @@ public class AbstractReaction<P extends Participant>
     /**
      * Check equality of reactions based on state. Reactions are considered equals if their reactants and products
      * (coefficients and compartments) are equals regardless of the side they reside on. For example A + B <-> C + D is
-     * considered equals to C + D <-> A + B. The participant stoichiometric coefficients and compartments are also checked.
-     *
-     * To accomplish this the reactionParticipants and copied, sorted and then a hash for each side (four total) is made.
-     * Duplicate hashes are then removed via the {@See Set} interface and the query (this) and the other (obj) sides are
+     * considered equals to C + D <-> A + B. The participant stoichiometric coefficients and compartments are also
+     * checked.
+     * <p/>
+     * To accomplish this the reactionParticipants and copied, sorted and then a hash for each side (four total) is
+     * made.
+     * Duplicate hashes are then removed via the {@See Set} interface and the query (this) and the other (obj) sides
+     * are
      * tested for coefficient, compartment and finally molecule similarity
      *
      * @param obj The other object to test equality with
+     *
      * @return Whether the objects are considered equals
      */
     @Override
@@ -496,11 +512,11 @@ public class AbstractReaction<P extends Participant>
                 if (hashes.size() == 1) {
                     if (queryReactants.equals(otherReactants) && queryReactants.equals(
                             otherReactants)
-                        && queryProducts.equals(otherProducts)) {
+                            && queryProducts.equals(otherProducts)) {
                         return true;
                     }
                     throw new UnsupportedOperationException("Reaction.equals(): Unresolvable reaction comparision [1]\n\t"
-                                                            + this + "\n\t" + other);
+                                                                    + this + "\n\t" + other);
                 }
                 return false;
             }
@@ -534,8 +550,10 @@ public class AbstractReaction<P extends Participant>
 
     /**
      * A simple hack that checks will be improved in future. Checks whether the unsorted lists are equal
+     *
      * @param query
      * @param other
+     *
      * @return
      */
     private boolean genericEquals(List<P> query, List<P> other) {
@@ -570,7 +588,6 @@ public class AbstractReaction<P extends Participant>
 
 
     /**
-     *
      * Displays the objects stored in the reaction in string form prefixed with the stoichiometric
      * coefficients and post fixed with compartments if either exists. The reaction reversibility is determined
      * by the enumeration value {@see Reversibility} enumeration. Example representation:

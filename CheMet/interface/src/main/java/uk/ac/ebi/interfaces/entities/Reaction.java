@@ -66,10 +66,10 @@ public interface Reaction<P extends Participant>
     public int getParticipantCount();
 
 
-    public Direction getDirection();
+    public Enum<? extends Direction> getDirection();
 
 
-    public void setDirection(Direction direction);
+    public void setDirection(Enum<? extends Direction> direction);
 
 
     public void transpose();

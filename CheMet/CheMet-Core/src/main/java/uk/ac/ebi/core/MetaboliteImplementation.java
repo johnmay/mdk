@@ -50,7 +50,7 @@ public class MetaboliteImplementation
 
     private boolean generic = false;
 
-    private MetaboliteClass type = MetaboliteClassImplementation.UNKNOWN;
+    private Enum<? extends MetaboliteClass> type = MetaboliteClassImplementation.UNKNOWN;
 
     public static final String BASE_TYPE = "Metabolite";
 
@@ -160,12 +160,12 @@ public class MetaboliteImplementation
     }
 
 
-    public MetaboliteClass getType() {
+    public Enum<? extends MetaboliteClass> getType() {
         return type;
     }
 
 
-    public void setType(MetaboliteClass type) {
+    public void setType(Enum<? extends MetaboliteClass> type) {
         this.type = type;
     }
 

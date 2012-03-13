@@ -6,22 +6,24 @@ package uk.ac.ebi.chemet.render.reaction;
  * 2012.02.13
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import javax.swing.*;
+
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.templates.MoleculeFactory;
@@ -54,14 +57,13 @@ import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 
 /**
+ * ParticipantEditor 2012.02.13
  *
- *          ParticipantEditor 2012.02.13
+ * @author johnmay
+ * @author $Author$ (this version)
+ *         <p/>
+ *         Class defines an editor for reaction participants
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Class defines an editor for reaction participants
- *
  */
 public class ParticipantEditor extends JPanel {
 
@@ -118,7 +120,7 @@ public class ParticipantEditor extends JPanel {
         this.participant = participant;
 
         metabolite.setText(participant.getMolecule().getName());
-        compartment.setSelectedItem(participant.getCompartment().getDescription());
+        compartment.setSelectedItem(((Compartment) participant.getCompartment()).getDescription());
         stoichiometry.setText(participant.getCoefficient().toString());
 
 
@@ -138,10 +140,8 @@ public class ParticipantEditor extends JPanel {
 
 
     /**
-     * 
      * Access the participant with the new edited values.
      * If the name is empty (i.e. no molecule) null is returned
-     * 
      */
     public MetabolicParticipant getParticipant() {
 
@@ -183,7 +183,7 @@ public class ParticipantEditor extends JPanel {
 
         participant.setCoefficient(coef);
 
-        participant.setCompartment((Compartment) compartment.getSelectedItem());
+        participant.setCompartment((Enum<? extends Compartment>) compartment.getSelectedItem());
 
 
         return participant;
