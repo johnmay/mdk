@@ -52,8 +52,8 @@ public class ObservationCollection
     }
 
 
-    public Set<Class<? extends Observation>> getClasses() {
-        return typeMap.keySet();
+    public Collection<Class<? extends Observation>> getClasses() {
+        return typeMap.keys();
     }
 
 
