@@ -20,15 +20,16 @@
  */
 package uk.ac.ebi.core;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.Strand;
 import org.biojava3.core.sequence.template.Sequence;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
 
 /**
@@ -129,6 +130,32 @@ public class GeneImplementation extends AbstractAnnotatedEntity implements Gene 
         return new GeneImplementation();
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        GeneImplementation that = (GeneImplementation) o;
+
+        if (end      != that.end)    return false;
+        if (start    != that.start)  return false;
+        if (sequence != null ? !sequence.getSequenceAsString().equals(that.sequence != null ? that.sequence.getSequenceAsString() : "" ) : that.sequence != null) return false;
+        if (strand   != that.strand) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + start;
+        result = 31 * result + end;
+        result = 31 * result + (strand != null ? strand.hashCode() : 0);
+        result = 31 * result + (sequence != null ? sequence.getSequenceAsString().hashCode() : 0);
+        return result;
+    }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {

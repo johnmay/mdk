@@ -20,22 +20,18 @@
  */
 package uk.ac.ebi.core;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
+
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.security.InvalidParameterException;
+import java.util.*;
 
 /**
  *          GenomeImplementation - 2011.10.18 <br>
@@ -154,6 +150,22 @@ public class GenomeImplementation implements Genome {
         return new int[]{-1, -1};
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GenomeImplementation that = (GenomeImplementation) o;
+
+        if (chromosomes != null ? !chromosomes.equals(that.chromosomes) : that.chromosomes != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return chromosomes != null ? chromosomes.hashCode() : 0;
+    }
 
     public String getName() {
         throw new UnsupportedOperationException("Not supported yet.");

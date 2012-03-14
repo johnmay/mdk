@@ -20,6 +20,12 @@
  */
 package uk.ac.ebi.core;
 
+import org.apache.log4j.Logger;
+import org.biojava3.core.sequence.ChromosomeSequence;
+import uk.ac.ebi.interfaces.Chromosome;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
+
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -27,14 +33,6 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.biojava3.core.sequence.ChromosomeSequence;
-import org.biojava3.core.sequence.DNASequence;
-import uk.ac.ebi.interfaces.Chromosome;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.Entity;
-import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 
 
 /**
@@ -138,6 +136,28 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
     @Override
     public ChromosomeSequence getSequence() {
         return sequence;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ChromosomeImplementation that = (ChromosomeImplementation) o;
+
+        if (genes != null    ? !genes.equals(that.genes) : that.genes != null) return false;
+        if (sequence != null ? !sequence.equals(that.sequence) : that.sequence != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (sequence != null ? sequence.hashCode() : 0);
+        result = 31 * result + (genes    != null ? genes.hashCode() : 0);
+        return result;
     }
 
     /**
