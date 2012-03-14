@@ -19,6 +19,13 @@ package uk.ac.ebi.core;
 import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import org.apache.log4j.Logger;
+import org.openscience.cdk.AtomContainerSet;
+import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.interfaces.*;
+import uk.ac.ebi.interfaces.annotation.Unique;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.observation.ObservationCollection;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -27,20 +34,6 @@ import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.apache.log4j.Logger;
-import org.openscience.cdk.AtomContainerSet;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.util.AnnotationFactory;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.Rating;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.ObservationManager;
-import uk.ac.ebi.interfaces.annotation.Unique;
-import uk.ac.ebi.observation.ObservationCollection;
 
 
 /**
@@ -125,7 +118,7 @@ public abstract class AbstractAnnotatedEntity
 
     @Override
     public Collection<Class> getAnnotationClasses() {
-        return annotations.keys();
+        return annotations.keySet();
     }
 
     /**
