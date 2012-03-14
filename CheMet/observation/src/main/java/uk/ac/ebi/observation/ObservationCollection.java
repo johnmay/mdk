@@ -18,17 +18,17 @@ package uk.ac.ebi.observation;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.interfaces.ObservationManager;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.ObservationManager;
 
 
 /**
@@ -53,7 +53,7 @@ public class ObservationCollection
 
 
     public Collection<Class<? extends Observation>> getClasses() {
-        return typeMap.keys();
+        return typeMap.keySet();
     }
 
 
