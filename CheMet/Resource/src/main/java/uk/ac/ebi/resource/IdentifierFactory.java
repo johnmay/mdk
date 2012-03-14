@@ -174,14 +174,21 @@ public class IdentifierFactory {
             }
         }
 
-        // TODO Build proteinIdentifiers list from supported identifiers list
-        for (SequenceIdentifier id : proteinIdentifiers) {
-            for(String code : id.getHeaderCodes()){
-                if(proteinIdMap.containsKey(code)) {
-                    System.err.println("Clashing header codes");
+        for (Identifier id : supportedIdentifiers) {
+
+            if(id instanceof SequenceIdentifier){
+
+                SequenceIdentifier seqid = (SequenceIdentifier) id;
+                
+                for(String code : seqid.getHeaderCodes()){
+                    if(proteinIdMap.containsKey(code)) {
+                        System.err.println("Clashing header codes");
+                    }
+                    proteinIdMap.put(code, seqid);
                 }
-                proteinIdMap.put(code, id);
+
             }
+
 
         }
 
@@ -232,7 +239,7 @@ public class IdentifierFactory {
             } else if(proteinIdMap.containsKey(code)){
                 resolved.add(proteinIdMap.get(code).ofHeader(token));
             }
-            
+
         }
 
         return resolved;
@@ -401,7 +408,7 @@ public class IdentifierFactory {
         Identifier id = ofSynonym(synonym);
         id.setAccession(accession);
         return id;
-        
+
     }
 
     public boolean hasSynonym(String synonym){
