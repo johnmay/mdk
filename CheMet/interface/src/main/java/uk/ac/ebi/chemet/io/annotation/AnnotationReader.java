@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * AnnotationWriter - 08.03.2012 <br/>
  * <p/>
- * Describes a class tha can read annotations
+ * Describes a class that can read annotations
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -15,6 +15,6 @@ import java.io.IOException;
  */
 public interface AnnotationReader<A extends Annotation> {
 
-    public A readAnnotation() throws IOException;
+    public A readAnnotation() throws IOException, ClassNotFoundException;
     
 }
