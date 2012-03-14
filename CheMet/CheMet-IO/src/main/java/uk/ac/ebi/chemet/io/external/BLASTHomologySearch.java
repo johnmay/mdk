@@ -20,17 +20,21 @@
  */
 package uk.ac.ebi.chemet.io.external;
 
+import com.sun.tools.javac.resources.version;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.task.FileParameter;
+import uk.ac.ebi.annotation.task.Parameter;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.core.CorePreferences;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.io.blast.BlastReader;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Map;
 import java.util.prefs.Preferences;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.task.FileParameter;
-import uk.ac.ebi.annotation.task.Parameter;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.io.blast.BlastReader;
 
 
 /**
@@ -130,8 +134,9 @@ public class BLASTHomologySearch extends RunnableTask {
                 throw new InvalidParameterException("Output or format missing");
             }
 
-            String version = Preferences.userNodeForPackage(HomologySearchFactory.class).get("blastp.version", "");
-
+            CorePreferences pref = CorePreferences.getInstance();
+            String version = ((StringPreference)pref.getPreference("BLASTP_VERSION")).get();
+            
             // load results into object
             new BlastReader().load(map, output, format, version, this);
             setCompletedStatus();

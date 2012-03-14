@@ -20,26 +20,24 @@
  */
 package uk.ac.ebi.chemet.io.external;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.io.FastaWriterHelper;
 import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
+import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.chemet.exceptions.MissingPreferencesException;
+import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.core.HomologyDatabaseManager;
 import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.resource.TaskIdentifier;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.InvalidParameterException;
+import java.util.*;
 
 /**
  * @name    HomologySearchFactory - 2011.10.10 <br>
@@ -107,7 +105,8 @@ public class HomologySearchFactory {
                                   int results,
                                   int format) throws IOException, Exception {
 
-        String blastp = Preferences.userNodeForPackage(this.getClass()).get("blastp.path", null);
+        FilePreference blastpath = CorePreferences.getInstance().getPreference("BLASTP_PATH");
+        String blastp = blastpath.get().getAbsolutePath();
 
         if (blastp == null) {
             throw new MissingPreferencesException("No path found for blastp, please configure the user preference");
