@@ -16,18 +16,9 @@
  */
 package uk.ac.ebi.resource;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.security.InvalidParameterException;
-import java.util.*;
-import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
@@ -37,11 +28,22 @@ import uk.ac.ebi.resource.classification.*;
 import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
 import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.resource.protein.*;
+import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
+import uk.ac.ebi.resource.protein.SwissProtIdentifier;
+import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 import uk.ac.ebi.resource.rna.BasicRNAIdentifier;
 import uk.ac.ebi.resource.structure.HSSPIdentifier;
 import uk.ac.ebi.resource.structure.PDBIdentifier;
+
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.security.InvalidParameterException;
+import java.util.*;
+import java.util.regex.Pattern;
 
 
 /**
@@ -138,6 +140,7 @@ public class IdentifierFactory {
 
     /**
      * Access a list of all available identifiers
+     *
      * @return Unmodifiable List of identifier
      */
     public List<Identifier> getSupportedIdentifiers() {
@@ -173,7 +176,13 @@ public class IdentifierFactory {
 
         // TODO Build proteinIdentifiers list from supported identifiers list
         for (SequenceIdentifier id : proteinIdentifiers) {
-            proteinIdMap.put(id.getHeaderCode(), id);
+            for(String code : id.getHeaderCodes()){
+                if(proteinIdMap.containsKey(code)) {
+                    System.err.println("Clashing header codes");
+                }
+                proteinIdMap.put(code, id);
+            }
+
         }
 
 
@@ -204,21 +213,29 @@ public class IdentifierFactory {
      */
     public IdentifierSet resolveSequenceHeader(String header) {
 
-        IdentifierSet idSet = new IdentifierSet();
-        LinkedList<String> tokens = new LinkedList(Arrays.asList(header.split("\\|")));
+        IdentifierSet    resolved = new IdentifierSet();
+        Iterator<String> token    = Arrays.asList(header.split("\\|")).iterator();
 
-        while (tokens.size() > 0) {
-            String key = tokens.get(0);
-            if (proteinIdMap.containsKey(key)) {
-                ProteinIdentifier id = (ProteinIdentifier) proteinIdMap.get(key).newInstance();
-                tokens = id.resolve(tokens);
-                idSet.add(id);
-            } else {
-                tokens.removeFirst();
+        while (token.hasNext()) {
+
+            String code = token.next();
+
+            if(code.equals("gnl")){
+
+                String db        = token.hasNext() ? token.next() : "";
+                String accession = token.hasNext() ? token.next() : "";
+
+                if(hasSynonym(db)){
+                    resolved.add(ofSynonym(db, accession));
+                }
+
+            } else if(proteinIdMap.containsKey(code)){
+                resolved.add(proteinIdMap.get(code).ofHeader(token));
             }
+            
         }
 
-        return idSet;
+        return resolved;
 
     }
 
@@ -226,8 +243,10 @@ public class IdentifierFactory {
     /**
      * Builds an identifier given the accession
      * Uses the identifier parse method to validate ids (slower)
+     *
      * @param resource
      * @param accession
+     *
      * @deprecated do not use
      */
     @Deprecated
@@ -282,9 +301,12 @@ public class IdentifierFactory {
      * Builds a list of identifiers from a string that may
      * or maynot contain multiple identifiers
      * atm: handle gi|39327|sp|398339 etc..
-     * @Deprecated Use resolveSequenceHeader
+     *
      * @param idsString
+     *
      * @return
+     *
+     * @Deprecated Use resolveSequenceHeader
      */
     @Deprecated
     public static List<AbstractIdentifier> getIdentifiers(String idsString) {
@@ -330,11 +352,10 @@ public class IdentifierFactory {
 
 
     /**
-     *
      * Returns and identifier
      *
-     * @param <T>
      * @param type
+     *
      * @return
      */
     public Identifier ofClass(Class type) {
@@ -345,7 +366,9 @@ public class IdentifierFactory {
     /**
      * Main factory method. this returns a new identifier of the given index. The indicies are specified in the
      * IdentifierDescription.propertiers file (see. src/main/resources)
+     *
      * @param index
+     *
      * @return
      */
     public Identifier ofIndex(Byte index) {
@@ -357,7 +380,9 @@ public class IdentifierFactory {
      * Create an identifier of the given synonym. for example "EC" for ECNumber.
      * The synonyms are loaded from the MIRIAM registry with custom synonyms
      * specified in the IdentifierDescription properites resource file.
+     *
      * @param synonym
+     *
      * @return
      */
     public Identifier ofSynonym(String synonym) {
@@ -371,11 +396,28 @@ public class IdentifierFactory {
         throw new InvalidParameterException("No matching identifier synonym found for: " + synonym);
     }
 
+    public Identifier ofSynonym(String synonym, String accession) {
+
+        Identifier id = ofSynonym(synonym);
+        id.setAccession(accession);
+        return id;
+        
+    }
+
+    public boolean hasSynonym(String synonym){
+
+        String key = synonym.toLowerCase(Locale.ENGLISH);
+
+        if (synonyms.containsKey(key)) {
+            return true;
+        }
+
+        return false;
+
+    }
 
     /**
-     *
      * Utility method for reading an identifier to an ObjectOutput
-     *
      */
     public Identifier read(ObjectInput in) throws IOException, ClassNotFoundException {
         Identifier identifier = ofIndex(in.readByte());
@@ -385,9 +427,7 @@ public class IdentifierFactory {
 
 
     /**
-     *
      * Utility method for writing an identifier to an ObjectOutput
-     *
      */
     public void write(ObjectOutput out, Identifier identifier) throws IOException {
         out.writeByte(identifier.getIndex());

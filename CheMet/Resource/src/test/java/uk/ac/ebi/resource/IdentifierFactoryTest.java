@@ -4,19 +4,9 @@
  */
 package uk.ac.ebi.resource;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import org.junit.Test;
 import uk.ac.ebi.core.IdentifierSet;
-import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
@@ -24,16 +14,15 @@ import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 
+import java.io.*;
+
 
 /**
- *
  * @author johnmay
  */
-public class IdentifierFactoryTest extends TestCase {
+public class IdentifierFactoryTest {
 
-    public IdentifierFactoryTest(String testName) {
-        super(testName);
-    }
+
 
 
     @Test
@@ -53,7 +42,7 @@ public class IdentifierFactoryTest extends TestCase {
                               time);
 
             // fail test on slow creation
-            assertTrue(time < 500);
+            Assert.assertTrue(time < 500);
 
         }
     }
@@ -62,9 +51,9 @@ public class IdentifierFactoryTest extends TestCase {
     @Test
     public void testSynonymLoading() {
         IdentifierFactory factory = IdentifierFactory.getInstance();
-        assertEquals(ECNumber.class, factory.ofSynonym("EC").getClass());
-        assertEquals(SwissProtIdentifier.class, factory.ofSynonym("Sprot").getClass());
-        assertEquals(HMDBIdentifier.class, factory.ofSynonym("HMDB").getClass());
+        Assert.assertEquals(ECNumber.class, factory.ofSynonym("EC").getClass());
+        Assert.assertEquals(SwissProtIdentifier.class, factory.ofSynonym("Sprot").getClass());
+        Assert.assertEquals(HMDBIdentifier.class, factory.ofSynonym("HMDB").getClass());
     }
 
 
@@ -86,7 +75,7 @@ public class IdentifierFactoryTest extends TestCase {
                               time);
 
             // fail test on slow creation
-            assertTrue(time < 500);
+            Assert.assertTrue(time < 500);
 
         }
     }
@@ -94,6 +83,7 @@ public class IdentifierFactoryTest extends TestCase {
 
     @Test
     public void testMapping() {
+
         IdentifierFactory factory = IdentifierFactory.getInstance();
         System.out.printf("%35s %-35s\n", "Class Name", "Mapped Description");
 
@@ -111,31 +101,32 @@ public class IdentifierFactoryTest extends TestCase {
         }
     }
 
-
     @Test
-    public void sequenceHeaderResolution() {
+    public void sequenceHeaderResolution() throws Exception {
+
         System.out.println("testSequenceHeaderResolution");
 
         // basic features
-        String sequenceHeader = "sp|Q197F8|002R_IIV3|sp|Q6GZX1|004R_FRG3G|gnl|ec|1.1.1.1";
+        String sequenceHeader = "sp|Q197F8|002R_IIV3|sp|Q6GZX1|004R_FRG3G|gnl|ec|1.1.1.1|lcl|chemet-id";
         IdentifierSet ids = IdentifierFactory.getInstance().resolveSequenceHeader(sequenceHeader);
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q197F8")));
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q6GZX1")));
-        Assert.assertTrue(ids.contains(new BasicProteinIdentifier("1.1.1.1")));
+        Assert.assertTrue(ids.contains(new ECNumber("1.1.1.1")));
+        Assert.assertTrue(ids.contains(new BasicProteinIdentifier("chemet-id")));
 
     }
 
 
     @Test
-    public void sequenceHeaderUnsupportedIdentifier() {
-        System.out.println("testSequenceHeaderResolution");
+    public void sequenceHeaderUnsupportedIdentifier() throws Exception {
 
         // basic features
         String sequenceHeader = "gi|2010202|sp|Q197F8|002R_IIV3|sp|Q6GZX1|004R_FRG3G|gnl|ec|1.1.1.1";
         IdentifierSet ids = IdentifierFactory.getInstance().resolveSequenceHeader(sequenceHeader);
+
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q197F8")));
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q6GZX1")));
-        Assert.assertTrue(ids.contains(new BasicProteinIdentifier("1.1.1.1")));
+        Assert.assertTrue(ids.contains(new ECNumber("1.1.1.1")));
 
     }
 
@@ -161,52 +152,4 @@ public class IdentifierFactoryTest extends TestCase {
     }
 
 
-    @Test
-    public void testGetInstance() {
-    }
-
-
-    @Test
-    public void testResolveSequenceHeader() {
-    }
-
-
-    @Test
-    public void testGetIdentifier() {
-    }
-
-
-    @Test
-    public void testGetUncheckedIdentifier() {
-    }
-
-
-    @Test
-    public void testGetIdentifiers() {
-    }
-
-
-    @Test
-    public void testGetResouce() {
-    }
-
-
-    @Test
-    public void testOfClass() {
-    }
-
-
-    @Test
-    public void testOfIndex() {
-    }
-
-
-    @Test
-    public void testRead() throws Exception {
-    }
-
-
-    @Test
-    public void testWrite() throws Exception {
-    }
 }

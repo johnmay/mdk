@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.core;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import java.io.*;
 import java.util.*;
@@ -38,7 +39,7 @@ public class IdentifierSet
         implements Externalizable {
 
     private static final Logger LOGGER = Logger.getLogger(IdentifierSet.class);
-    private HashMultimap<Byte, Identifier> identifiers = HashMultimap.create();
+    private HashMultimap<Class, Identifier> identifiers = HashMultimap.create();
 
     /**
      * Adds an identifier to the set
@@ -46,7 +47,7 @@ public class IdentifierSet
      * @return
      */
     public boolean add(Identifier identifier) {
-        return identifiers.put(identifier.getIndex(), identifier);
+        return identifiers.put(identifier.getClass(), identifier);
     }
 
     /**
@@ -57,7 +58,7 @@ public class IdentifierSet
      * @return
      */
     public boolean remove(Identifier identifier) {
-        return identifiers.remove(identifier.getIndex(), identifier);
+        return identifiers.remove(identifier.getClass(), identifier);
     }
 
     /**
@@ -79,9 +80,9 @@ public class IdentifierSet
      * @return
      *
      */
-    public <T> Collection<T> getIdentifiers(final Class<T> type) {
+    public <T> Collection<T> getIdentifiers(final Class<T> c) {
 
-        return (Collection<T>) identifiers.get(IdentifierLoader.getInstance().getIndex(type));
+        return (Collection<T>) identifiers.get(c);
     }
 
     /**
@@ -124,21 +125,7 @@ public class IdentifierSet
      */
     public void writeExternal(ObjectOutput out) throws IOException {
 
-        Set<Byte> keys = identifiers.keySet();
-        out.writeInt(keys.size());
-
-        for (Byte index : keys) {
-
-            Set<Identifier> values = identifiers.get(index);
-
-            out.writeByte(index);
-            out.writeInt(values.size());
-
-            for (Identifier id : values) {
-                id.writeExternal(out);
-            }
-
-        }
+        throw new UnsupportedOperationException("deprecated");
 
     }
 
@@ -147,21 +134,13 @@ public class IdentifierSet
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
-        IdentifierFactory factory = IdentifierFactory.getInstance();
+        throw new UnsupportedOperationException("deprecated");
 
-        Integer nClasses = in.readInt();
+    }
 
-        for (int i = 0; i < nClasses; i++) {
-            Identifier idTemplate = factory.ofIndex(in.readByte());
-            Integer nOfClass = in.readInt();
 
-            for (int j = 0; j < nOfClass; j++) {
-                Identifier newIdentifier = idTemplate.newInstance();
-                newIdentifier.readExternal(in);
-                identifiers.put(newIdentifier.getIndex(), newIdentifier);
-            }
-
-        }
-
+    @Override
+    public String toString() {
+        return Joiner.on(", ").join(identifiers.values());
     }
 }

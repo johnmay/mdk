@@ -4,14 +4,9 @@
  */
 package uk.ac.ebi.resource.protein;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 
 /**
  *
@@ -34,17 +29,5 @@ public class BasicProteinIdentifierTest {
     public void testNewInstance() {
     }
 
-    @Test
-    public void testResolve() {
-        ProteinIdentifier id = new BasicProteinIdentifier();
-        Assert.assertEquals(new ArrayList(), id.resolve(new LinkedList(Arrays.asList("gnl", "db", "1234"))));
-        Assert.assertEquals("1234", id.getAccession());
-    }
 
-    @Test
-    public void testResolve2() {
-        ProteinIdentifier id = new BasicProteinIdentifier();
-        Assert.assertEquals(Arrays.asList("sp", "Q32", "DNAA"), id.resolve(new LinkedList(Arrays.asList("gnl", "db", "1234", "sp", "Q32", "DNAA"))));
-        Assert.assertEquals("1234", id.getAccession());
-    }
 }

@@ -20,19 +20,23 @@
  */
 package uk.ac.ebi.resource.protein;
 
-import java.util.LinkedList;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.IdentifierDescription;
 import uk.ac.ebi.resource.MIRIAMIdentifier;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+
 /**
- *          SwissProtIdentifier – 2011.09.14 <br>
- *          Class description
+ * SwissProtIdentifier – 2011.09.14 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
-@MIRIAMIdentifier(mir=5)
+@MIRIAMIdentifier(mir = 5)
 public class SwissProtIdentifier
         extends UniProtIdentifier {
 
@@ -69,21 +73,20 @@ public class SwissProtIdentifier
     }
 
     @Override
-    public LinkedList<String> resolve(LinkedList<String> tokens) {
-        setAccession(tokens.get(1));
-        String name = tokens.size() > 2 ? tokens.get(2) : ""; // store?
-        tokens.removeFirst();
-        tokens.removeFirst();
-        if(tokens.size() > 2) tokens.removeFirst();
+    public SwissProtIdentifier ofHeader(Iterator<String> token) {
 
-        return tokens;
+        String accession = token.hasNext() ? token.next() : "";
+        String name      = token.hasNext() ? token.next() : "";
+
+        return new SwissProtIdentifier(accession);
+
     }
 
     /**
      * @inheritDoc
      */
     @Override
-    public String getHeaderCode() {
-        return "sp";
+    public Collection<String> getHeaderCodes() {
+        return Arrays.asList("sp");
     }
 }

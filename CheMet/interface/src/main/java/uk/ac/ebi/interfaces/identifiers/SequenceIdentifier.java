@@ -20,7 +20,8 @@
  */
 package uk.ac.ebi.interfaces.identifiers;
 
-import java.util.LinkedList;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * @name    SequenceIdentifier - 2011.10.13 <br>
@@ -33,12 +34,10 @@ import java.util.LinkedList;
 public interface SequenceIdentifier extends Identifier {
 
     /**
-     * Resolve the list of tokens in to a sequence identifier
-     */
-    public LinkedList<String> resolve(LinkedList<String> tokens);
-
-    /**
      * Returns the header code for the sequence e.g. sp of swissprot, tr for trembl
      */
-    public abstract String getHeaderCode();
+    public Collection<String> getHeaderCodes();
+
+    public SequenceIdentifier ofHeader(Iterator<String> token);
+
 }

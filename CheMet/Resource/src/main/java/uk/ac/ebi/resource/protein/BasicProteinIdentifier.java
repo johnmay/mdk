@@ -20,14 +20,17 @@
  */
 package uk.ac.ebi.resource.protein;
 
-import java.util.LinkedList;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.MetaboliteIdentifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
-import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
-import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.resource.ResourcePreferences;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 
 
 /**
@@ -70,19 +73,13 @@ public class BasicProteinIdentifier
 
 
     @Override
-    public LinkedList<String> resolve(LinkedList<String> tokens) {
-        String database = tokens.get(1); // store?
-        setAccession(tokens.get(2));
-        tokens.removeFirst();
-        tokens.removeFirst();
-        tokens.removeFirst();
-        return tokens;
-
+    public BasicProteinIdentifier ofHeader(Iterator<String> token) {
+        return new BasicProteinIdentifier(token.next());  //To change body of implemented methods use File | Settings | File Templates.
     }
 
 
     @Override
-    public String getHeaderCode() {
-        return "gnl";
+    public Collection<String> getHeaderCodes() {
+        return Arrays.asList("lcl");
     }
 }
