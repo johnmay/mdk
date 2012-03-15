@@ -44,7 +44,7 @@ public class ChEBINameLoader extends AbstractChEBILoader {
 
         // we use the ZIP location so it's slightly smaller to download
         // note: ChEBI Compounds as already required by the super class, but as they have the same
-        //       name the resource is collpased down to a single entry
+        //       name the resource is collapsed down to a single entry
         addRequiredResource("ChEBI Compounds",
                             "...",
                             ResourceFileLocation.class,
@@ -69,18 +69,18 @@ public class ChEBINameLoader extends AbstractChEBILoader {
         CSVReader csv = new CSVReader(new InputStreamReader(location.open()), '\t', '\0');
 
         List<String> header = Arrays.asList(csv.readNext());
-        int nameIndex = header.indexOf("NAME");
-        int typeIndex = header.indexOf("TYPE");
-        int accessionIndex = header.indexOf("COMPOUND_ID");
-        int max = Math.max(nameIndex, Math.max(typeIndex, accessionIndex));
+        int nameIndex       = header.indexOf("NAME");
+        int typeIndex       = header.indexOf("TYPE");
+        int accessionIndex  = header.indexOf("COMPOUND_ID");
+        int langIndex       = header.indexOf("LANGUAGE");
 
         // what we treat as synonyms
         Set<String> synonymType = new HashSet<String>(Arrays.asList("SYSTEMATIC NAME", "SYNONYM"));
 
         Multimap<String, String> synonyms = HashMultimap.create();
-        Multimap<String, String> iupac = HashMultimap.create();
-        Multimap<String, String> inn = HashMultimap.create();
-        Multimap<String, String> brand = HashMultimap.create();
+        Multimap<String, String> iupac    = HashMultimap.create();
+        Multimap<String, String> inn      = HashMultimap.create();
+        Multimap<String, String> brand    = HashMultimap.create();
 
         String[] row = null;
         while ((row = csv.readNext()) != null ) {
@@ -91,6 +91,12 @@ public class ChEBINameLoader extends AbstractChEBILoader {
             String accession = getPrimaryIdentifier(row[accessionIndex]);
             String name = row[nameIndex];
             String type = row[typeIndex];
+            String lang = row[langIndex];
+
+            // only keep latin and english compound names
+            if(!lang.equals("en") && !lang.equals("la")) {
+                continue;
+            }
 
             /* SYNONYM
              * Type matches anything we are considering a synonym
