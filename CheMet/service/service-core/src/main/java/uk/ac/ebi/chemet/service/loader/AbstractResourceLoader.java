@@ -95,7 +95,6 @@ public abstract class AbstractResourceLoader
     @Override
     public boolean canUpdate() {
         for (String key : getRequiredResources().keySet()) {
-            System.out.println("checking... " + key);
             if (!locationMap.containsKey(key)
                     || !locationMap.get(key).isAvailable()) {
                 return false;

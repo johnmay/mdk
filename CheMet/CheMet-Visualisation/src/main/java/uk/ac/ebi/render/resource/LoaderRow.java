@@ -1,12 +1,10 @@
 package uk.ac.ebi.render.resource;
 
 import com.jgoodies.animation.*;
-import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
-import net.sf.furbelow.AbstractAnimatedIcon;
 import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
@@ -20,14 +18,12 @@ import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.location.*;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -56,7 +52,6 @@ public class LoaderRow extends JComponent {
 
         this.loader = loader;
 
-        System.out.println("Creating loader for UI " + loader.getName());
         setOpaque(false);
 
         configuration = new LoaderConfiguration(loader, factory);
@@ -71,7 +66,6 @@ public class LoaderRow extends JComponent {
                 revert.setEnabled(loader.canRevert());
             }
         });
-        System.out.println("Delete... done");
         delete.setToolTipText("Delete the current index and it's backup");
         revert = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/revert_16x16.png"), new AbstractAction() {
             @Override
@@ -81,7 +75,6 @@ public class LoaderRow extends JComponent {
                 revert.setEnabled(loader.canRevert());
             }
         });
-        System.out.println("Revert... done");
         revert.setToolTipText("Revert to the previous version of the index");
 
         final Animation expand = new Expand(configuration, 500);
@@ -105,14 +98,11 @@ public class LoaderRow extends JComponent {
             }
         });
         configure.setToolTipText("Configure loader");
-        System.out.println("Configure... done");
         name = LabelFactory.newLabel(loader.getName());
 
         update = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/update_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                System.out.println("Invoked update()");
 
                 name.setIcon(new SpinningDial(16, 16));
                 update.setEnabled(false);
@@ -130,9 +120,7 @@ public class LoaderRow extends JComponent {
                     @Override
                     protected Object doInBackground() throws Exception {
                         try {
-                            System.out.println("update()");
                             loader.update();
-                            System.out.println("done");
                             cancel.setEnabled(false);
                             cancel.setVisible(false);
                         } catch (MissingLocationException e) {
@@ -173,10 +161,8 @@ public class LoaderRow extends JComponent {
         }
 
         );
-        System.out.println("Update... done");
         update.setToolTipText("Update the index");
 
-        System.out.println("Setting state");
         update.setEnabled(false);
         new MyUpdateChecker().execute();
         delete.setEnabled(loader.canBackup() || loader.canRevert());
@@ -185,7 +171,6 @@ public class LoaderRow extends JComponent {
         cancel.setVisible(false);
 
 
-        System.out.println("Laying out loader components");
         CellConstraints cc = new CellConstraints();
 
         Box controls = Box.createHorizontalBox();
