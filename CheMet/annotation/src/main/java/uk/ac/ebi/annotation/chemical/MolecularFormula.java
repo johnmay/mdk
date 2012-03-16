@@ -120,6 +120,9 @@ public class MolecularFormula
         IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
         super.setValue(formula);
         this.formula = MolecularFormulaManipulator.getMolecularFormula(formula, builder);
+        if (this.formula != null) {
+            this.html = MolecularFormulaManipulator.getHTML(this.formula);
+        }
     }
 
 
