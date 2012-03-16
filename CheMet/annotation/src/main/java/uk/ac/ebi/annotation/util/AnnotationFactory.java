@@ -24,6 +24,9 @@ import java.io.ObjectInput;
 import java.lang.reflect.Constructor;
 import java.security.InvalidParameterException;
 import java.util.*;
+
+import uk.ac.ebi.annotation.reaction.GibbsEnergy;
+import uk.ac.ebi.annotation.reaction.GibbsEnergyError;
 import uk.ac.ebi.interfaces.Annotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.*;
@@ -101,7 +104,9 @@ public class AnnotationFactory {
                                                    new ExactMass(),
                                                    new SMILES(),
                                                    new InChI(),
-                                                   new Charge())) {
+                                                   new Charge(),
+                                                   new GibbsEnergy(),
+                                                   new GibbsEnergyError())) {
 
             instances_old.put(annotation.getIndex(), annotation);
             instances.put(annotation.getClass(), annotation);
