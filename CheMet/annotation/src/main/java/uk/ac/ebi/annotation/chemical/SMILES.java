@@ -18,7 +18,12 @@
 package uk.ac.ebi.annotation.chemical;
 
 import org.apache.log4j.Logger;
+import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.smiles.SmilesGenerator;
+import org.openscience.cdk.smiles.SmilesParser;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
 import uk.ac.ebi.core.Description;
@@ -47,8 +52,13 @@ public class SMILES
 
     private static final Logger LOGGER = Logger.getLogger(SMILES.class);
 
+    private static final SmilesParser    SMILES_PARSER   = new SmilesParser(DefaultChemObjectBuilder.getInstance());
+    private static final SmilesGenerator SMILES_GENERATOR = new SmilesGenerator();
+
     private static Description description = AnnotationLoader.getInstance().getMetaInfo(
             SMILES.class);
+    
+    private IAtomContainer atomContainer;
 
 
     public SMILES() {
@@ -56,7 +66,11 @@ public class SMILES
 
 
     public SMILES(String smiles) {
-        super.setValue(smiles);
+        setValue(smiles);
+    }
+
+    public SMILES(IAtomContainer structure) {
+        setStructure(structure);
     }
 
 
@@ -67,6 +81,12 @@ public class SMILES
 
     public Annotation getInstance(String value) {
         return new SMILES(value);
+    }
+    
+    @Override
+    public void setValue(String SMILES){
+        super.setValue(SMILES);
+        parseSMILES();
     }
 
 
@@ -83,11 +103,22 @@ public class SMILES
 
 
     public IAtomContainer getStructure() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return atomContainer == null ? parseSMILES() : atomContainer;
+    }
+    
+    private IAtomContainer parseSMILES(){
+        try{
+            atomContainer = new AtomContainer(SMILES_PARSER.parseSmiles(getValue()));
+        } catch (CDKException ex){
+            LOGGER.error("Could not parse SMILES ", ex);
+            atomContainer = new AtomContainer();
+        }
+
+        return atomContainer;
     }
 
-
     public void setStructure(IAtomContainer structure) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.atomContainer = structure;
+        setValue(SMILES_GENERATOR.createSMILES(structure));
     }
 }
