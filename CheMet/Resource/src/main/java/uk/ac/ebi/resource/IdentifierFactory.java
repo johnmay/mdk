@@ -107,7 +107,8 @@ public class IdentifierFactory {
             new ExperimentalFactorOntologyIdentifier(),
             new CellTypeOntologyIdentifier(),
             new FoundationalModelOfAnatomyOntologyIdentifier(),
-            new BRENDATissueOntologyIdentifier()));
+            new BRENDATissueOntologyIdentifier(),
+            new TransportClassificationNumber()));
 
     private Map<String, Identifier> synonyms = new HashMap();
 
