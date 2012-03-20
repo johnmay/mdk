@@ -531,7 +531,7 @@ public class AbstractReaction<P extends Participant>
             }
 
         } else {
-            System.out.println("Using generic comparisson");
+            LOGGER.info("Using generic comparisson");
             // XXX May be a quicker way but for not this works
             if (genericEquals(queryReactants, otherReactants) && genericEquals(queryProducts,
                                                                                otherProducts)) {
