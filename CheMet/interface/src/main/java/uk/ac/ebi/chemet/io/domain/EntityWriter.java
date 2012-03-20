@@ -1,7 +1,6 @@
-package uk.ac.ebi.chemet.io.entity;
+package uk.ac.ebi.chemet.io.domain;
 
 import uk.ac.ebi.interfaces.entities.Entity;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 import java.io.IOException;
 
