@@ -17,7 +17,7 @@ import uk.ac.ebi.interfaces.entities.MetabolicReaction;
  */
 @Context(MetabolicReaction.class)
 @Descriptor(brief       = "Gibbs energy (ΔG)",
-            description = "...")
+            description = "Thermodynamic potential of the reaction")
 public class GibbsEnergy
         extends AbstractDoubleAnnotation {
 

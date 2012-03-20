@@ -62,7 +62,6 @@ public class AnnotationFactory {
     // reflective map
     private static Constructor[] constructors = new Constructor[Byte.MAX_VALUE];
 
-    private static Map<Byte, Annotation> instances_old = new HashMap<Byte, Annotation>();
     private static Map<Class, Annotation> instances = new HashMap<Class, Annotation>();
 
     private ListMultimap<Class, Annotation> contextMap = ArrayListMultimap.create();
@@ -108,7 +107,6 @@ public class AnnotationFactory {
                                                    new GibbsEnergy(),
                                                    new GibbsEnergyError())) {
 
-            instances_old.put(annotation.getIndex(), annotation);
             instances.put(annotation.getClass(), annotation);
 
         }
@@ -170,7 +168,7 @@ public class AnnotationFactory {
         Set<Class> visited = new HashSet<Class>();
         List<Annotation> annotations = new ArrayList<Annotation>();
 
-        for (Annotation annotation : instances_old.values()) {
+        for (Annotation annotation : instances.values()) {
             Context context = annotation.getClass().getAnnotation(Context.class);
 
             if (context == null) {
@@ -233,18 +231,12 @@ public class AnnotationFactory {
      *
      * @return
      *
+     * @deprecated use AnnotationFactory.ofClass(Class)
      */
     @SuppressWarnings("unchecked")
+    @Deprecated
     public <A extends Annotation> A ofIndex(byte index) {
-
-        Annotation annotation = instances_old.get(index);
-
-        if (annotation != null) {
-            return (A) annotation.newInstance();
-        }
-
-        throw new InvalidParameterException("Unable to get instance of annotation with index: "
-                                            + index);
+        throw new UnsupportedOperationException("Deprecated method, use AnnotationFactory.ofClass(Class)");
     }
 
 
@@ -306,12 +298,5 @@ public class AnnotationFactory {
         return xrefs.isEmpty() ? new CrossReference() : xrefs.iterator().next();
     }
 
-
-    public Annotation readExternal(Byte index, ObjectInput in) throws IOException,
-                                                                      ClassNotFoundException {
-        Annotation ann = ofIndex(index);
-        ann.readExternal(in);
-        return ann;
-    }
 
 }
