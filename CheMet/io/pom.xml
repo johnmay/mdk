@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>CheMet</artifactId>
+        <groupId>uk.ac.ebi.chemet</groupId>
+        <version>1.2-SNAPSHOT</version>
+    </parent>
+    <packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+
+        <!-- data (binary) io modules -->
+        <module>data-io-utilities</module>
+        <module>domain-data-io</module>
+        <module>annotation-data-io</module>
+        <module>observation-data-io</module>
+
+        <!-- xml io modules (if needed) -->
+
+    </modules>
+
+    <artifactId>chemet-io-modules</artifactId>
+    <version>1.2-SNAPSHOT</version>
+    <groupId>uk.ac.ebi.chemet</groupId>
+
+
+</project>
