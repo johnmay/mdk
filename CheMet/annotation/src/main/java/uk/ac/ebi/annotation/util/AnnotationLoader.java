@@ -60,8 +60,7 @@ public class AnnotationLoader
         try {
             return super.getIndex(clazz);
         } catch (Exception e) {
-            System.out.println(clazz);
-            list(System.out);
+            LOGGER.warn("No index found for " + clazz);
             return 0;
         }
     }
