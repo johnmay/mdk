@@ -8,17 +8,21 @@
     <packaging>pom</packaging>
     <name>CheMet</name>
     <modules>
+        <module>interface</module>
+        <module>observation</module>
         <module>annotation</module>
         <module>apps</module>
+        <module>service</module>
+        <module>tools</module>
+        <module>io</module>
+
+        <!-- old structure modules (to be converted) -->
         <module>CheMet-Core</module>
         <module>CheMet-IO</module>
         <module>CheMet-Visualisation</module>
         <module>CheMet-WebServices</module>
-        <module>interface</module>
-        <module>observation</module>
         <module>Resource</module>
-        <module>service</module>
-        <module>tools</module>
+
     </modules>
 
     <url>http://www.ebi.ac.uk/steinbeck</url>
