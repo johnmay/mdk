@@ -68,13 +68,28 @@ public class IdentifierEditor extends JComponent {
 
     private Identifier identifier;
 
+    public IdentifierEditor(){
+        this(new ArrayList<Class<? extends Identifier>>());
+    }
 
-    public IdentifierEditor() {
+    public IdentifierEditor(Collection<Class<? extends  Identifier>> identifiers) {
 
         setLayout(new FormLayout("pref, 4dlu, pref", "p"));
 
-        for (Identifier facotryIdentifier : ID_FACTORY.getSupportedIdentifiers()) {
-            idMap.put(facotryIdentifier.getShortDescription(), facotryIdentifier.getIndex());
+        for (Identifier factoryID : ID_FACTORY.getSupportedIdentifiers()) {
+
+            if(identifiers.isEmpty()){
+                idMap.put(factoryID.getShortDescription(), factoryID.getIndex());
+            }
+
+            ACCEPT:
+            for(Class<? extends Identifier> accepted : identifiers){
+                if(accepted.isInstance(factoryID)){
+                    idMap.put(factoryID.getShortDescription(), factoryID.getIndex());
+                    break ACCEPT;
+                }
+            }
+
         }
         
         idNames = new ArrayList<String>(idMap.keySet());;

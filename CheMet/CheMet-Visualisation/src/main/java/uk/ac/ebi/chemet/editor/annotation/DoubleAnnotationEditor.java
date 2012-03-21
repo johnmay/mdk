@@ -37,33 +37,24 @@ import uk.ac.ebi.caf.component.factory.FieldFactory;
  *
  */
 public class DoubleAnnotationEditor
-        extends AbstractAnnotationEditor<AbstractDoubleAnnotation> {
-
-    private JTextField field = FieldFactory.newField(4);
-
+        extends BasicFieldEditor<AbstractDoubleAnnotation> {
 
     public DoubleAnnotationEditor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        add(field);
     }
 
-
-    public JTextField getField() {
-        return field;
-    }
 
 
     @Override
     public void setAnnotation(AbstractDoubleAnnotation annotation) {
         super.setAnnotation(annotation);
-        field.setText(annotation.getValue().toString());
+        getField().setText(annotation.getValue().toString());
     }
 
 
     @Override
     public AbstractDoubleAnnotation getAnnotation() {
         AbstractDoubleAnnotation a = super.getAnnotation();
-        a.setValue(Double.parseDouble(field.getText()));
+        a.setValue(Double.parseDouble(getField().getText()));
         return a;
     }
 

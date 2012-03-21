@@ -40,33 +40,23 @@ import uk.ac.ebi.interfaces.StringAnnotation;
  *
  */
 public class StringAnnotationEditor
-        extends AbstractAnnotationEditor<StringAnnotation> {
-
-    private JTextField field = FieldFactory.newField(20);
+        extends BasicFieldEditor<StringAnnotation> {
 
 
     public StringAnnotationEditor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        add(field);
     }
-
-
-    public JTextField getField() {
-        return field;
-    }
-
 
     @Override
     public void setAnnotation(StringAnnotation annotation) {
         super.setAnnotation(annotation);
-        field.setText(annotation.getValue());
+        getField().setText(annotation.getValue());
     }
 
 
     @Override
     public StringAnnotation getAnnotation() {
         StringAnnotation a = super.getAnnotation();
-        a.setValue(field.getText());
+        a.setValue(getField().getText());
         return a;
     }
 

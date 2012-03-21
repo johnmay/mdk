@@ -20,16 +20,21 @@
  */
 package uk.ac.ebi.chemet.editor.annotation;
 
-import java.security.InvalidParameterException;
-import java.util.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AuthorAnnotation;
-import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.annotation.crossreference.*;
 import uk.ac.ebi.chemet.annotation.Flag;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.StringAnnotation;
 import uk.ac.ebi.interfaces.annotation.BooleanAnnotation;
+import uk.ac.ebi.interfaces.annotation.DoubleAnnotation;
+import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.resource.classification.ClassificationIdentifier;
+import uk.ac.ebi.resource.classification.ECNumber;
+
+import java.security.InvalidParameterException;
+import java.util.*;
 
 
 /**
@@ -63,12 +68,16 @@ public class AnnotationEditorFactory {
 
 
     private AnnotationEditorFactory() {
-        editors.put(StringAnnotation.class, new StringAnnotationEditor());
-        editors.put(CrossReference.class, new CrossReferenceEditor());
-        editors.put(AuthorAnnotation.class, new AuthorAnnotationEditor());
-        editors.put(AbstractDoubleAnnotation.class, new DoubleAnnotationEditor());
-        editors.put(BooleanAnnotation.class, new BooleanAnnotationEditor());
-        editors.put(Flag.class, new FlagEditor());
+        editors.put(StringAnnotation.class,    new StringAnnotationEditor());
+        editors.put(CrossReference.class,      new CrossReferenceEditor());
+        editors.put(ChEBICrossReference.class, new CrossReferenceEditor(ChEBIIdentifier.class));
+        editors.put(KEGGCrossReference.class,  new CrossReferenceEditor(KEGGCompoundIdentifier.class));
+        editors.put(Classification.class,      new CrossReferenceEditor(ClassificationIdentifier.class));
+        editors.put(EnzymeClassification.class,new CrossReferenceEditor(ECNumber.class));
+        editors.put(AuthorAnnotation.class,    new AuthorAnnotationEditor());
+        editors.put(DoubleAnnotation.class,    new DoubleAnnotationEditor());
+        editors.put(BooleanAnnotation.class,   new BooleanAnnotationEditor());
+        editors.put(Flag.class,                new FlagEditor());
     }
 
 
@@ -126,5 +135,9 @@ public class AnnotationEditorFactory {
 
         return null;
 
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getInstance().getExplicitEditor(ChEBICrossReference.class));
     }
 }

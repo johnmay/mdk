@@ -76,7 +76,7 @@ public class AnnotationChoiceEditor extends JComponent {
                 }
 
                 AbstractAnnotationEditor editor = EDITOR_FACTORY.newEditor((Class<Annotation>) type.getSelectedItem().getClass());
-                editor.setClass(type.getSelectedItem().getClass());
+                editor.setAnnotationClass(type.getSelectedItem().getClass());
                 add(editor, 1);
                 window.pack();
 

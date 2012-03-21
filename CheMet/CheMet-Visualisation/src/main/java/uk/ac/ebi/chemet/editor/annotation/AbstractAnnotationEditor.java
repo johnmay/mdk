@@ -30,8 +30,12 @@ public abstract class AbstractAnnotationEditor<A extends Annotation>
      * want you're editor to create new annotations
      * @param c 
      */
-    public final void setClass(Class<A> c) {
+    public final void setAnnotationClass(Class<A> c) {
         this.c = c;
+    }
+    
+    public final Class<A> getAnnotationClass(){
+        return this.c;
     }
 
 

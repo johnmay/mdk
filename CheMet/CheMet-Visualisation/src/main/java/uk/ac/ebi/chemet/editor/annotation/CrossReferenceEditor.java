@@ -21,39 +21,49 @@
 package uk.ac.ebi.chemet.editor.annotation;
 
 import javax.swing.BoxLayout;
-import org.apache.log4j.Logger;
+
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.render.components.IdentifierEditor;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 
 /**
  *
  *          CrossReferenceEditor 2012.02.15
- * @version $Rev$ : Last Changed $Date$
+ * @version $Rev: 1472 $ : Last Changed $Date: 2012-02-15 12:21:00 +0000 (Wed, 15 Feb 2012) $
  * @author  johnmay
- * @author  $Author$ (this version)
+ * @author  $Author: johnmay $ (this version)
  *
  *          Class description
  *
  */
-public class CrossReferenceEditor
-        extends AbstractAnnotationEditor<CrossReference> {
+public class CrossReferenceEditor<X extends CrossReference>
+        extends AbstractAnnotationEditor<X> {
 
-    private static final Logger LOGGER = Logger.getLogger(CrossReferenceEditor.class);
-
-    private IdentifierEditor identifierEditor = new IdentifierEditor();
-
+    private IdentifierEditor identifierEditor;
+    private Collection<Class<? extends Identifier>> accept = new HashSet<Class<? extends Identifier>>();
 
     public CrossReferenceEditor() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        identifierEditor = new IdentifierEditor();
+        add(identifierEditor);
+    }
+
+    public CrossReferenceEditor(Class<? extends Identifier> ... identifiers) {
+        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        accept.addAll(Arrays.asList(identifiers));
+        identifierEditor = new IdentifierEditor(accept);
         add(identifierEditor);
     }
 
 
     @Override
-    public CrossReference getAnnotation() {
-        CrossReference xref = super.getAnnotation();
+    public X getAnnotation() {
+        X xref = super.getAnnotation();
         if (identifierEditor.isFilled()) {
             xref.setIdentifier(identifierEditor.getIdentifier());
         }
@@ -62,7 +72,7 @@ public class CrossReferenceEditor
 
 
     @Override
-    public void setAnnotation(CrossReference annotation) {
+    public void setAnnotation(X annotation) {
         super.setAnnotation(annotation);
         if (annotation.getIdentifier() != null) {
             identifierEditor.setIdentifier(annotation.getIdentifier());
@@ -72,6 +82,6 @@ public class CrossReferenceEditor
 
     @Override
     public CrossReferenceEditor newInstance() {
-        return new CrossReferenceEditor();
+        return new CrossReferenceEditor(accept.toArray(new Class[0]));
     }
 }
