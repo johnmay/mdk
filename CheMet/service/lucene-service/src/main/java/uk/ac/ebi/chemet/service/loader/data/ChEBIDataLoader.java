@@ -77,7 +77,9 @@ public class ChEBIDataLoader extends AbstractChEBILoader {
 
         for(String accession : values.keySet()){
             Collection<DataValue> data = values.get(accession);
-            writer.write(accession, getCharge(data), getFormula(accession, data));
+            if(isActive(accession)){
+                writer.write(accession, getCharge(data), getFormula(accession, data));
+            }
         }
 
         writer.close();

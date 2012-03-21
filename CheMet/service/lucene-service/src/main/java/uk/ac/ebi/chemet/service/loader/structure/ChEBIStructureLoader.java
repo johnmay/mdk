@@ -68,7 +68,9 @@ public class ChEBIStructureLoader
             if (properties.containsKey("ChEBI ID")) {
                 // re-map to primary id using super class method
                 String identifier = properties.get("ChEBI ID").toString();
-                writer.write(getPrimaryIdentifier(identifier), molecule);
+                if(isActive(identifier)){
+                    writer.write(getPrimaryIdentifier(identifier), molecule);
+                }
             }
 
         }

@@ -80,7 +80,9 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
             try {
                 Identifier id = IdentifierFactory.getInstance().ofSynonym(type);
                 id.setAccession(accession);
-                crossreferences.put(getPrimaryIdentifier(identifier), id);
+                if(isActive(identifier)){
+                    crossreferences.put(getPrimaryIdentifier(identifier), id);
+                }
             } catch (Exception e) {
                 LOGGER.warn(e.getMessage());
             }

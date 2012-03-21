@@ -3,6 +3,7 @@ package uk.ac.ebi.chemet.service.loader.name;
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.service.index.name.ChEBINameIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractChEBILoader;
@@ -171,12 +172,16 @@ public class ChEBINameLoader extends AbstractChEBILoader {
             // for each accession write the name's to the index
             for (String accession : accessions) {
 
+                if(isActive(accession)) {
+
                 String preferredName = preferredNameMap.containsKey(accession) ? preferredNameMap.get(accession) : "";
                 String iupacName     = iupac.containsKey(accession) ? iupac.get(accession).iterator().next() : "";
                 String brandName     = brand.containsKey(accession) ? brand.get(accession).iterator().next() : "";
                 String innName       = inn.containsKey(accession) ? inn.get(accession).iterator().next() : "";
 
                 writer.write(accession, preferredName, iupacName, brandName, innName, synonyms.get(accession));
+
+                }
 
             }
 
@@ -201,14 +206,14 @@ public class ChEBINameLoader extends AbstractChEBILoader {
         Map<String, String> preferredNames = new HashMap<String, String>();
 
         // need to build the map first as it uses the same resource
-        createIdentifierMap();
+        createMap();
 
         ResourceFileLocation location = getLocation("ChEBI Compounds");
         CSVReader csv = new CSVReader(new InputStreamReader(location.open()), '\t');
 
         List<String> header = Arrays.asList(csv.readNext());
-        int nameIndex = header.indexOf("NAME");
-        int accessionIndex = header.indexOf("CHEBI_ACCESSION");
+        int nameIndex       = header.indexOf("NAME");
+        int accessionIndex  = header.indexOf("CHEBI_ACCESSION");
 
         Pattern NULL_PATTERN = Pattern.compile("null");
 
