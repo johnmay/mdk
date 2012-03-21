@@ -19,26 +19,21 @@ package uk.ac.ebi.annotation.util;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.lang.reflect.Constructor;
-import java.security.InvalidParameterException;
-import java.util.*;
-
-import uk.ac.ebi.annotation.reaction.GibbsEnergy;
-import uk.ac.ebi.annotation.reaction.GibbsEnergyError;
-import uk.ac.ebi.interfaces.Annotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.*;
-import uk.ac.ebi.annotation.crossreference.*;
 import uk.ac.ebi.annotation.chemical.*;
-import uk.ac.ebi.annotation.crossreference.Citation;
-import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.annotation.model.*;
+import uk.ac.ebi.annotation.crossreference.*;
+import uk.ac.ebi.annotation.model.FluxLowerBound;
+import uk.ac.ebi.annotation.model.FluxUpperBound;
+import uk.ac.ebi.annotation.model.Lumped;
+import uk.ac.ebi.annotation.reaction.GibbsEnergy;
+import uk.ac.ebi.annotation.reaction.GibbsEnergyError;
 import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
+import uk.ac.ebi.chemet.annotation.Flag;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -47,13 +42,17 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ClassificationIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 
+import java.lang.reflect.Constructor;
+import java.security.InvalidParameterException;
+import java.util.*;
+
 
 /**
  * AnnotationFactory – 2011.09.12 <br> Class description
  *
- * @version $Rev$ : Last Changed $Date$
  * @author johnmay
  * @author $Author$ (this version)
+ * @version $Rev$ : Last Changed $Date$
  */
 public class AnnotationFactory {
 
@@ -67,6 +66,9 @@ public class AnnotationFactory {
     private ListMultimap<Class, Annotation> contextMap = ArrayListMultimap.create();
 
     private Map<Class, CrossReference> xrefMap = new HashMap<Class, CrossReference>();
+
+    // hold flag annotations
+    private Collection<Flag> flags = new ArrayList<Flag>();
 
 
     public static AnnotationFactory getInstance() {
@@ -105,7 +107,9 @@ public class AnnotationFactory {
                                                    new InChI(),
                                                    new Charge(),
                                                    new GibbsEnergy(),
-                                                   new GibbsEnergyError())) {
+                                                   new GibbsEnergyError(),
+                                                   Lumped.getInstance(),
+                                                   ACPAssociated.getInstance())) {
 
             instances.put(annotation.getClass(), annotation);
 
@@ -117,25 +121,29 @@ public class AnnotationFactory {
         xrefMap.put(KEGGCompoundIdentifier.class, new KEGGCrossReference());
         xrefMap.put(Identifier.class, new CrossReference());
 
+        // add the flags
+        for (Annotation annotation : instances.values()) {
+            if (annotation instanceof Flag) {
+                flags.add((Flag) annotation);
+            }
+        }
+
 
     }
 
     /**
-     * 
      * Access a list of annotations that are specific to the
      * provided entity class. Note: the annotations contained
      * with in the list should only be used to construct
      * new entities and not to store information. The instances_old
      * instead of the classes are returned to avoid extra object
      * creation.
-     * 
-     * @param  entity instance of the entity you which to get context
-     *                annotations for
-     * 
+     *
+     * @param entity instance of the entity you which to get context
+     *               annotations for
+     *
      * @return List of annotations that can be added to that class which
      *         are intended for new instantiation only
-     *         
-     * 
      */
     public List<Annotation> ofContext(AnnotatedEntity entity) {
         return ofContext(entity.getClass());
@@ -143,21 +151,18 @@ public class AnnotationFactory {
 
 
     /**
-     * 
      * Access a list of annotations that are specific to the
      * provided entity class. Note: the annotations contained
      * with in the list should only be used to construct
      * new entities and not to store information. The instances_old
      * instead of the classes are returned to avoid extra object
      * creation.
-     * 
-     * @param  entityClass class of the entity you which to get context
-     *                     annotations for
-     * 
+     *
+     * @param entityClass class of the entity you which to get context
+     *                    annotations for
+     *
      * @return List of annotations that can be added to that class which
      *         are intended for new instantiation only
-     *         
-     * 
      */
     public List<Annotation> ofContext(Class<? extends AnnotatedEntity> entityClass) {
 
@@ -178,7 +183,7 @@ public class AnnotationFactory {
 
             for (Class c : context.value()) {
                 if (!visited.contains(annotation.getClass())
-                    && (entityClass.isAssignableFrom(c) || c.isAssignableFrom(entityClass))) {
+                        && (entityClass.isAssignableFrom(c) || c.isAssignableFrom(entityClass))) {
                     annotations.add(annotation);
                     visited.add(annotation.getClass());
                 }
@@ -193,7 +198,6 @@ public class AnnotationFactory {
 
 
     /**
-     *
      * Construct an empty annotation of the given class type. Note there is an
      * overhead off using this method over {@ofIndex(Byte)} as the Byte index is
      * first looked up in the AnnotationLoader. The average speed reduction is
@@ -218,19 +222,17 @@ public class AnnotationFactory {
 
 
     /**
-     *
      * Construct an empty annotation given it's index. It the index returns a
      * null pointer then an InvalidParameterException is thrown informing of the
      * problematic index. The index is given in the
      * uk.ac.ebi.annotation/AnnotationDescription.properties file which in turn
      * is loaded by {
      *
-     * @see AnnotationLoader}.
-     *
      * @param index
      *
      * @return
      *
+     * @see AnnotationLoader}.
      * @deprecated use AnnotationFactory.ofClass(Class)
      */
     @SuppressWarnings("unchecked")
@@ -239,23 +241,43 @@ public class AnnotationFactory {
         throw new UnsupportedOperationException("Deprecated method, use AnnotationFactory.ofClass(Class)");
     }
 
+    /**
+     * Access a set of annotation flags that could match this entity. This provides suggestion
+     * of matching flag's for this entity using the {@see AbstractFlag.matches(AnnotatedEntity)}
+     *
+     * @param entity the entity to collect matching flags for
+     *
+     * @return annotations which could be added to the entity (may need user prompt)
+     *
+     * @see Flag#matches(uk.ac.ebi.interfaces.AnnotatedEntity)
+     */
+    public Set<Flag> getMatchingFlags(AnnotatedEntity entity) {
+
+        Set<Flag> matching = new HashSet<Flag>();
+
+        for (Flag flag : flags) {
+            if (flag.matches(entity)) {
+                matching.add(flag); // don't need a new instance as there is not data stored
+            }
+        }
+
+        return matching;
+    }
 
     /**
-     * 
      * Builds a cross-reference from the identifier. The cross-reference is
-     * designated either a {@see ChEBICrossReference}, 
+     * designated either a {@see ChEBICrossReference},
      * {@see KEGGCompoundIdentifier}, {@see EnzymeClassification} or
      * {@see Classification}. If no appropiate cross-reference is
      * available then the default {@see CrossReference} class is return
-     * 
-     * 
+     *
      * @param identifier
-     * @return 
-     * 
+     *
+     * @return
      */
     public <I extends Identifier> CrossReference<I, Observation> getCrossReference(I identifier) {
 
-        CrossReference<I, Observation> xref = ( CrossReference<I, Observation>) getCrossReference(identifier.getClass());
+        CrossReference<I, Observation> xref = (CrossReference<I, Observation>) getCrossReference(identifier.getClass());
 
         xref.setIdentifier(identifier);
 

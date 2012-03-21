@@ -18,6 +18,7 @@
 package uk.ac.ebi.annotation.base;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.annotation.BooleanAnnotation;
 
 
 /**
@@ -29,7 +30,8 @@ import org.apache.log4j.Logger;
  * @author  $Author$ (this version)
  */
 public abstract class AbstractBooleanAnnotation
-        extends AbstractValueAnnotation<Boolean> {
+        extends AbstractValueAnnotation<Boolean>
+        implements BooleanAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractBooleanAnnotation.class);
 
