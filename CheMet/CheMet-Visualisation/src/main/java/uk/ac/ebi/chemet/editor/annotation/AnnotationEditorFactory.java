@@ -26,8 +26,10 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AuthorAnnotation;
 import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.chemet.annotation.Flag;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.StringAnnotation;
+import uk.ac.ebi.interfaces.annotation.BooleanAnnotation;
 
 
 /**
@@ -65,6 +67,8 @@ public class AnnotationEditorFactory {
         editors.put(CrossReference.class, new CrossReferenceEditor());
         editors.put(AuthorAnnotation.class, new AuthorAnnotationEditor());
         editors.put(AbstractDoubleAnnotation.class, new DoubleAnnotationEditor());
+        editors.put(BooleanAnnotation.class, new BooleanAnnotationEditor());
+        editors.put(Flag.class, new FlagEditor());
     }
 
 
