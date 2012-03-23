@@ -19,11 +19,14 @@
 
 package uk.ac.ebi.chemet.editor.annotation;
 
+import com.jgoodies.forms.factories.Borders;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.interfaces.Annotation;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * @author johnmay
@@ -31,16 +34,20 @@ import javax.swing.*;
  * @version $Rev$
  */
 public abstract class BasicFieldEditor<A extends Annotation>
-        extends AbstractAnnotationEditor<A>{
+        extends AbstractAnnotationEditor<A> {
 
     private JTextField field = FieldFactory.newField(20);
-    
+
     public BasicFieldEditor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        add(field);
+        field.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, ThemeManager.getInstance().getTheme().getForeground()));
     }
 
     public JTextField getField() {
+        return field;
+    }
+
+    @Override
+    public JComponent getComponent() {
         return field;
     }
 }

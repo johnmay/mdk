@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.chemet.editor.annotation;
 
-import javax.swing.BoxLayout;
+import javax.swing.*;
 
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.render.components.IdentifierEditor;
@@ -48,22 +48,18 @@ public class CrossReferenceEditor<X extends CrossReference>
     private Collection<Class<? extends Identifier>> accept = new HashSet<Class<? extends Identifier>>();
 
     public CrossReferenceEditor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         identifierEditor = new IdentifierEditor();
-        add(identifierEditor);
     }
 
     public CrossReferenceEditor(Class<? extends Identifier> ... identifiers) {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         accept.addAll(Arrays.asList(identifiers));
         identifierEditor = new IdentifierEditor(accept);
-        add(identifierEditor);
     }
 
 
     @Override
-    public X getAnnotation() {
-        X xref = super.getAnnotation();
+    public X newAnnotation() {
+        X xref = super.newAnnotation();
         if (identifierEditor.isFilled()) {
             xref.setIdentifier(identifierEditor.getIdentifier());
         }
@@ -79,6 +75,10 @@ public class CrossReferenceEditor<X extends CrossReference>
         }
     }
 
+    @Override
+    public JComponent getComponent() {
+        return identifierEditor;
+    }
 
     @Override
     public CrossReferenceEditor newInstance() {

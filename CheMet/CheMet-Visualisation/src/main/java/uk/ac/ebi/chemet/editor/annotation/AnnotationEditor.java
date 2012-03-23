@@ -2,6 +2,7 @@ package uk.ac.ebi.chemet.editor.annotation;
 
 import uk.ac.ebi.interfaces.Annotation;
 
+import javax.swing.*;
 
 
 /**
@@ -19,7 +20,7 @@ public interface AnnotationEditor<A extends Annotation> {
     /**
      * Set the annotation for this editor. This method
      * will setup the GUI editor to display information
-     * of the annotation that can be edited
+     * of from an existing annotation that can be edited
      * 
      * @param annotation the annotation to set
      * 
@@ -29,11 +30,13 @@ public interface AnnotationEditor<A extends Annotation> {
 
     /**
      * Access the annotation with appropriate values 
-     * of the annotation set
+     * of the annotation set. Note invoking this method
+     * provides a new instance of the annotation and not
+     * and edited version of that passed in {@see setAnnotation}
      * 
      * @return configured annotation
      */
-    public A getAnnotation();
+    public A newAnnotation();
 
 
     /**
@@ -44,4 +47,14 @@ public interface AnnotationEditor<A extends Annotation> {
      * @return new instance of the this editor
      */
     public AnnotationEditor newInstance();
+
+
+    /**
+     * Access the JComponent for this editor. This will be displayed in the
+     * JTable.
+     * @return
+     */
+    public JComponent getComponent();
+
+    
 }

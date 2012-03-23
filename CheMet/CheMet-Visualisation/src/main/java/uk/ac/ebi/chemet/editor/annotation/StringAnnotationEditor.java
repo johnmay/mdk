@@ -20,12 +20,6 @@
  */
 package uk.ac.ebi.chemet.editor.annotation;
 
-import java.lang.annotation.Annotation;
-import javax.swing.BoxLayout;
-import javax.swing.JComponent;
-import javax.swing.JTextField;
-import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.interfaces.StringAnnotation;
 
 
@@ -54,8 +48,8 @@ public class StringAnnotationEditor
 
 
     @Override
-    public StringAnnotation getAnnotation() {
-        StringAnnotation a = super.getAnnotation();
+    public StringAnnotation newAnnotation() {
+        StringAnnotation a = super.newAnnotation();
         a.setValue(getField().getText());
         return a;
     }

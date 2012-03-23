@@ -40,8 +40,6 @@
 package uk.ac.ebi.chemet.editor.annotation;
 
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
-import uk.ac.ebi.interfaces.StringAnnotation;
 import uk.ac.ebi.interfaces.annotation.BooleanAnnotation;
 
 import javax.swing.*;
@@ -62,10 +60,7 @@ public class BooleanAnnotationEditor
 
     private JCheckBox is = CheckBoxFactory.newCheckBox("Yes?");
 
-
     public BooleanAnnotationEditor() {
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        add(is);
     }
 
     @Override
@@ -76,12 +71,16 @@ public class BooleanAnnotationEditor
 
 
     @Override
-    public BooleanAnnotation getAnnotation() {
-        BooleanAnnotation a = super.getAnnotation();
+    public BooleanAnnotation newAnnotation() {
+        BooleanAnnotation a = super.newAnnotation();
         a.setValue(is.isSelected());
         return a;
     }
 
+    @Override
+    public JComponent getComponent() {
+        return is;
+    }
 
     @Override
     public AbstractAnnotationEditor newInstance() {

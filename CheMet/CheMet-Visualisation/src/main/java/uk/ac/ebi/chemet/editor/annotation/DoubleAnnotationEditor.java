@@ -20,10 +20,7 @@
  */
 package uk.ac.ebi.chemet.editor.annotation;
 
-import javax.swing.BoxLayout;
-import javax.swing.JTextField;
 import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
 
 
 /**
@@ -42,8 +39,6 @@ public class DoubleAnnotationEditor
     public DoubleAnnotationEditor() {
     }
 
-
-
     @Override
     public void setAnnotation(AbstractDoubleAnnotation annotation) {
         super.setAnnotation(annotation);
@@ -52,8 +47,8 @@ public class DoubleAnnotationEditor
 
 
     @Override
-    public AbstractDoubleAnnotation getAnnotation() {
-        AbstractDoubleAnnotation a = super.getAnnotation();
+    public AbstractDoubleAnnotation newAnnotation() {
+        AbstractDoubleAnnotation a = super.newAnnotation();
         a.setValue(Double.parseDouble(getField().getText()));
         return a;
     }

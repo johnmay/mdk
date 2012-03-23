@@ -20,7 +20,9 @@
  */
 package uk.ac.ebi.chemet.editor.annotation;
 
-import javax.swing.JTextField;
+import javax.swing.*;
+
+import com.jgoodies.forms.factories.Borders;
 import uk.ac.ebi.annotation.AuthorAnnotation;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.interfaces.StringAnnotation;
@@ -40,11 +42,19 @@ public class AuthorAnnotationEditor
         extends StringAnnotationEditor {
 
     private JTextField author = FieldFactory.newField(System.getProperty("user.name"));
+    private JTextField value  = FieldFactory.newField(20);
+    
+    private Box box = Box.createHorizontalBox();
 
 
     public AuthorAnnotationEditor() {
+
         // field is added in super constructor
-        add(author, 0);
+        box.add(author);
+        box.add(value);
+
+        box.setBorder(Borders.EMPTY_BORDER);
+
     }
 
 
@@ -66,12 +76,16 @@ public class AuthorAnnotationEditor
 
 
     @Override
-    public AuthorAnnotation getAnnotation() {
-        AuthorAnnotation a = (AuthorAnnotation) super.getAnnotation();
+    public AuthorAnnotation newAnnotation() {
+        AuthorAnnotation a = (AuthorAnnotation) super.newAnnotation();
         a.setAuthor(author.getText());
         return a;
     }
 
+    @Override
+    public JComponent getComponent() {
+        return box;
+    }
 
     @Override
     public AbstractAnnotationEditor newInstance() {

@@ -4,25 +4,29 @@
  * 2012.02.14
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.chemet.editor.annotation;
 
+import com.jgoodies.animation.AbstractAnimation;
+import com.jgoodies.animation.Animation;
+import com.jgoodies.animation.Animator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AuthorAnnotation;
 import uk.ac.ebi.annotation.crossreference.*;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.annotation.Flag;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.StringAnnotation;
@@ -33,19 +37,27 @@ import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.resource.classification.ClassificationIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 
+import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.EventListenerList;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.security.InvalidParameterException;
 import java.util.*;
+import java.util.List;
 
 
 /**
+ * AnnotationEditorFactory 2012.02.14
  *
- *          AnnotationEditorFactory 2012.02.14
+ * @author johnmay
+ * @author $Author$ (this version)
+ *         <p/>
+ *         Class description
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Class description
- *
  */
 public class AnnotationEditorFactory {
 
@@ -60,7 +72,6 @@ public class AnnotationEditorFactory {
         return AnnotationEditorFactoryHolder.INSTANCE;
     }
 
-
     private static class AnnotationEditorFactoryHolder {
 
         private static final AnnotationEditorFactory INSTANCE = new AnnotationEditorFactory();
@@ -68,18 +79,17 @@ public class AnnotationEditorFactory {
 
 
     private AnnotationEditorFactory() {
-        editors.put(StringAnnotation.class,    new StringAnnotationEditor());
-        editors.put(CrossReference.class,      new CrossReferenceEditor());
+        editors.put(StringAnnotation.class, new StringAnnotationEditor());
+        editors.put(CrossReference.class, new CrossReferenceEditor());
         editors.put(ChEBICrossReference.class, new CrossReferenceEditor(ChEBIIdentifier.class));
-        editors.put(KEGGCrossReference.class,  new CrossReferenceEditor(KEGGCompoundIdentifier.class));
-        editors.put(Classification.class,      new CrossReferenceEditor(ClassificationIdentifier.class));
-        editors.put(EnzymeClassification.class,new CrossReferenceEditor(ECNumber.class));
-        editors.put(AuthorAnnotation.class,    new AuthorAnnotationEditor());
-        editors.put(DoubleAnnotation.class,    new DoubleAnnotationEditor());
-        editors.put(BooleanAnnotation.class,   new BooleanAnnotationEditor());
-        editors.put(Flag.class,                new FlagEditor());
+        editors.put(KEGGCrossReference.class, new CrossReferenceEditor(KEGGCompoundIdentifier.class));
+        editors.put(Classification.class, new CrossReferenceEditor(ClassificationIdentifier.class));
+        editors.put(EnzymeClassification.class, new CrossReferenceEditor(ECNumber.class));
+        editors.put(AuthorAnnotation.class, new AuthorAnnotationEditor());
+        editors.put(DoubleAnnotation.class, new DoubleAnnotationEditor());
+        editors.put(BooleanAnnotation.class, new BooleanAnnotationEditor());
+        editors.put(Flag.class, new FlagEditor());
     }
-
 
     public AbstractAnnotationEditor newEditor(Class<? extends Annotation> c) {
 
@@ -133,11 +143,88 @@ public class AnnotationEditorFactory {
 
         }
 
-        return null;
+        return new NonEditableAnnotationEditor();
 
     }
 
-    public static void main(String[] args) {
-        System.out.println(getInstance().getExplicitEditor(ChEBICrossReference.class));
+    public TableCellEditor getTableCellEditor() {
+        if (tableeditor == null)
+            tableeditor = new AnnotationTableCellEditor();
+        return tableeditor;
     }
+
+    private AnnotationTableCellEditor tableeditor;
+
+    private class AnnotationTableCellEditor extends AbstractCellEditor implements TableCellEditor {
+
+        private AbstractAnnotationEditor editor = new NonEditableAnnotationEditor();
+
+        public AnnotationTableCellEditor() {
+        }
+
+        public JComponent getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+
+            if (value instanceof Annotation) {
+
+                Annotation annotation = (Annotation) value;
+                editor = getExplicitEditor(annotation.getClass());
+                editor.setAnnotationClass(annotation.getClass());
+                editor.setAnnotation(annotation);
+
+                return editor.getComponent();
+            }
+
+            return new JLabel("-");
+
+
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return editor != null ? editor.newAnnotation() : null;
+        }
+
+        @Override
+        public boolean isCellEditable(EventObject anEvent) {
+            if (anEvent instanceof MouseEvent) {
+                return ((MouseEvent) anEvent).getClickCount() >= 2;
+            }
+            return false;
+        }
+
+    }
+    
+
+
+    private class NonEditableAnnotationEditor extends AbstractAnnotationEditor<Annotation> {
+
+
+        private Annotation annotation;
+
+        public NonEditableAnnotationEditor() {
+        }
+
+        @Override
+        public JComponent getComponent() {
+            return LabelFactory.newFormLabel("N/A");
+        }
+
+        @Override
+        public void setAnnotation(Annotation annotation) {
+            this.annotation = annotation;
+        }
+
+        // return an unedited annotation of that whichw as set
+        @Override
+        public Annotation newAnnotation() {
+            return this.annotation;
+        }
+
+        @Override
+        public AbstractAnnotationEditor newInstance() {
+            return new NonEditableAnnotationEditor();
+        }
+
+    }
+
 }
