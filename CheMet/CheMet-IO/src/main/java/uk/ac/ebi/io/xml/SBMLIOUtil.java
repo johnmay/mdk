@@ -117,7 +117,7 @@ public class SBMLIOUtil {
             sbmlRxn.setId(accession);
         }
 
-        Enum<? extends Direction> direction = rxn.getDirection();
+        Direction direction = rxn.getDirection();
 
         if (direction instanceof DirectionImplementation) {
 

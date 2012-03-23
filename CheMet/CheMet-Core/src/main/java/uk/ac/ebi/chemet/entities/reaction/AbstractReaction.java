@@ -83,7 +83,7 @@ public class AbstractReaction<P extends Participant>
     private List<P> products;
     // whether the reaction is reversible
 
-    private Enum<? extends Direction> direction = DirectionImplementation.BIDIRECTIONAL;
+    private Direction direction = DirectionImplementation.BIDIRECTIONAL;
 
     private AbstractParticipantFilter filter = new AcceptAllFilter(); // accepts all
 
@@ -127,7 +127,7 @@ public class AbstractReaction<P extends Participant>
      *
      * @param reversibility The reaction reversibility
      */
-    public void setDirection(Enum<? extends Direction> direction) {
+    public void setDirection(Direction direction) {
         this.direction = direction;
     }
 
@@ -137,7 +137,7 @@ public class AbstractReaction<P extends Participant>
      *
      * @return Reaction reversibility enumeration
      */
-    public Enum<? extends Direction> getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 
