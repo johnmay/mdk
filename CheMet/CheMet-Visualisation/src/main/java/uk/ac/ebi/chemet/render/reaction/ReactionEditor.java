@@ -97,7 +97,7 @@ public class ReactionEditor {
             rxn.addReactant(participant);
         }
 
-        rxn.setDirection((Enum<? extends Direction>) direction.getSelectedItem());
+        rxn.setDirection((Direction)direction.getSelectedItem());
 
         for (MetabolicParticipant participant : right.getParticipants()) {
             rxn.addProduct(participant);
