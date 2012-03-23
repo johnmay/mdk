@@ -25,6 +25,12 @@
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
             <version>${cdk.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>junit</artifactId>
+                    <groupId>junit</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
@@ -79,6 +85,10 @@
                 <exclusion>
                     <groupId>wsdl4j</groupId>
                     <artifactId>wsdl4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-discovery</artifactId>
+                    <groupId>commons-discovery</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
