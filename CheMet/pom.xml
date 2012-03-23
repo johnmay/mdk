@@ -211,6 +211,11 @@
                     <artifactId>maven-license-plugin</artifactId>
                     <version>1.9.0</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jaxws-maven-plugin</artifactId>
+                    <version>1.10</version>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
