@@ -40,6 +40,7 @@ import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.interfaces.reaction.Direction;
 
 
 /**
@@ -114,9 +115,11 @@ public class SBMLIOUtil {
             sbmlRxn.setId(accession);
         }
 
-        sbmlRxn.setReversible(rxn.getDirection() == DirectionImplementation.BIDIRECTIONAL ? true : false);
+        DirectionImplementation direction = ((DirectionImplementation) rxn.getDirection());
 
-        if (rxn.getDirection() == DirectionImplementation.BACKWARD) {
+        sbmlRxn.setReversible(direction.isReversible());
+
+        if (direction == DirectionImplementation.BACKWARD) {
             rxn.transpose();
             rxn.setDirection(DirectionImplementation.FORWARD);
         }

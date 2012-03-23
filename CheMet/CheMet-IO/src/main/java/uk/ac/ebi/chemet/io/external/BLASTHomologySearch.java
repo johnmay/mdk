@@ -20,7 +20,6 @@
  */
 package uk.ac.ebi.chemet.io.external;
 
-import com.sun.tools.javac.resources.version;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
@@ -34,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.Map;
-import java.util.prefs.Preferences;
 
 
 /**
