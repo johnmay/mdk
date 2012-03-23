@@ -4,17 +4,17 @@
  * 2011.09.27
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,6 +22,7 @@ package uk.ac.ebi.io.xml;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.Model;
@@ -44,11 +45,12 @@ import uk.ac.ebi.interfaces.reaction.Direction;
 
 
 /**
- *          SBMLIOUtil – 2011.09.27 <br>
- *          Class description
+ * SBMLIOUtil – 2011.09.27 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class SBMLIOUtil {
 
@@ -115,13 +117,19 @@ public class SBMLIOUtil {
             sbmlRxn.setId(accession);
         }
 
-        DirectionImplementation direction = ((DirectionImplementation) rxn.getDirection());
+        Enum<? extends Direction> direction = rxn.getDirection();
 
-        sbmlRxn.setReversible(direction.isReversible());
+        if (direction instanceof DirectionImplementation) {
 
-        if (direction == DirectionImplementation.BACKWARD) {
-            rxn.transpose();
-            rxn.setDirection(DirectionImplementation.FORWARD);
+            DirectionImplementation directionImplementation = (DirectionImplementation) direction;
+
+            sbmlRxn.setReversible(directionImplementation.isReversible());
+
+            if (directionImplementation == DirectionImplementation.BACKWARD) {
+                rxn.transpose();
+                rxn.setDirection(DirectionImplementation.FORWARD);
+            }
+
         }
 
         for (MetabolicParticipant p : rxn.getReactants()) {
@@ -138,26 +146,26 @@ public class SBMLIOUtil {
             sbmlRxn.addCVTerm(term);
         }
 
-//        sbmlRxn.setNotes("<cml xmlns=\"http://www.xml-cml.org/schema\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:conventions=\"http://www.xml-cml.org/convention/\" convention=\"conventions:molecular\"><dc:title>test file for http://www.xml-cml.org/conventions/molecular convention</dc:title><dc:description>should not fail because atoms in formula/atomArray do not need ids</dc:description><dc:date>2009-04-05</dc:date><molecule id=\"m1\"><formula><atomArray><atom elementType=\"H\" isotopeNumber=\"2\" /></atomArray></formula></molecule></cml>");
-//        XMLNode annotation = new XMLNode(new XMLTriple("title",
-//                                                       "http://purl.org/dc/elements/1.1/",
-//                                                       "dc"));
-//        annotation.addAttr("xmlns:dc", "http://purl.org/dc/elements/1.1/");
-//        annotation.addChild(new XMLNode("John Doe"));
-//        XMLNode notes = new XMLNode("notes");
-//        notes.addChild(annotation);
-//        sbmlRxn.setNotes(notes);
+        //        sbmlRxn.setNotes("<cml xmlns=\"http://www.xml-cml.org/schema\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:conventions=\"http://www.xml-cml.org/convention/\" convention=\"conventions:molecular\"><dc:title>test file for http://www.xml-cml.org/conventions/molecular convention</dc:title><dc:description>should not fail because atoms in formula/atomArray do not need ids</dc:description><dc:date>2009-04-05</dc:date><molecule id=\"m1\"><formula><atomArray><atom elementType=\"H\" isotopeNumber=\"2\" /></atomArray></formula></molecule></cml>");
+        //        XMLNode annotation = new XMLNode(new XMLTriple("title",
+        //                                                       "http://purl.org/dc/elements/1.1/",
+        //                                                       "dc"));
+        //        annotation.addAttr("xmlns:dc", "http://purl.org/dc/elements/1.1/");
+        //        annotation.addChild(new XMLNode("John Doe"));
+        //        XMLNode notes = new XMLNode("notes");
+        //        notes.addChild(annotation);
+        //        sbmlRxn.setNotes(notes);
 
-//        try {
-//
-//            DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-//            DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-//            Document doc = docBuilder.newDocument();
-//            XMLAnnotationWriter writer = new XMLAnnotationWriter(doc);
-//            sbmlRxn.setNotes(writer.getSBMLNotes(rxn));
-//        } catch (Exception ex) {
-//            LOGGER.error(ex);
-//        }
+        //        try {
+        //
+        //            DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
+        //            DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
+        //            Document doc = docBuilder.newDocument();
+        //            XMLAnnotationWriter writer = new XMLAnnotationWriter(doc);
+        //            sbmlRxn.setNotes(writer.getSBMLNotes(rxn));
+        //        } catch (Exception ex) {
+        //            LOGGER.error(ex);
+        //        }
 
         model.addReaction(sbmlRxn);
 
@@ -191,8 +199,10 @@ public class SBMLIOUtil {
 
     /**
      * Creates a new species in the given model adding
+     *
      * @param model
      * @param participant
+     *
      * @return
      */
     public SpeciesReference addSpecies(Model model,
@@ -212,7 +222,7 @@ public class SBMLIOUtil {
             accession = accession.trim();
             accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
             accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
-            species.setId(accession + "_" + ((Compartment)participant.getCompartment()).getAbbreviation());
+            species.setId(accession + "_" + ((Compartment) participant.getCompartment()).getAbbreviation());
         }
 
         species.setName(m.getName());
