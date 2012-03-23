@@ -1,17 +1,13 @@
 package uk.ac.ebi.chemet.io.annotation.base;
 
 
-import com.sun.tools.javac.util.Version;
-import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.chemet.io.annotation.AnnotationReader;
-import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.StringAnnotation;
 
 import java.io.DataInput;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * StringAnnotationReader - 09.03.2012 <br/>

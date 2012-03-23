@@ -1,13 +1,9 @@
 package uk.ac.ebi.chemet.io.annotation.base;
 
 
-import com.sun.tools.javac.util.Version;
-import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
-import uk.ac.ebi.annotation.base.AbstractIntegerAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.chemet.io.annotation.AnnotationReader;
-import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.IntegerAnnotation;
 
 import java.io.DataInput;
