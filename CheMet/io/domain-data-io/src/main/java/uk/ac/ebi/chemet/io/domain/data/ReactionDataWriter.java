@@ -58,7 +58,7 @@ public class ReactionDataWriter
             entityOut.writeData(p.getMolecule());
         }
 
-        enumWriter.writeEnum(rxn.getDirection());
+        enumWriter.writeEnum( (Enum) rxn.getDirection());
 
         // write modifiers
         Collection<GeneProduct> modifiers = rxn.getModifiers();

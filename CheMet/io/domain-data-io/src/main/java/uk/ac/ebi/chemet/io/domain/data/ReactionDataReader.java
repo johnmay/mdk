@@ -6,6 +6,7 @@ import uk.ac.ebi.chemet.io.core.EnumReader;
 import uk.ac.ebi.chemet.io.domain.EntityInput;
 import uk.ac.ebi.chemet.io.domain.EntityReader;
 import uk.ac.ebi.interfaces.entities.*;
+import uk.ac.ebi.interfaces.reaction.Direction;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class ReactionDataReader
             rxn.addProduct(p);
         }
 
-        rxn.setDirection(enumReader.readEnum());
+        rxn.setDirection((Direction)enumReader.readEnum());
 
         // read modifiers
         int nModifiers = in.readByte();
