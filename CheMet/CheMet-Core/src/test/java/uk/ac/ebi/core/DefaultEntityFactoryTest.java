@@ -8,6 +8,7 @@ import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.BeforeClass;
+import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.*;
 
@@ -44,7 +45,7 @@ public class DefaultEntityFactoryTest {
         Assert.assertEquals(uk.ac.ebi.core.MetaboliteImplementation.class, metabolite.getClass());
 
         Entity p = factory.newInstance(MetabolicParticipant.class);
-        Assert.assertEquals(MetabolicParticipant.class, p.getClass());
+        Assert.assertEquals(MetabolicParticipantImplementation.class, p.getClass());
 
         // remember to check the newInstance method of the entity if something is not working!
 
