@@ -83,7 +83,7 @@ public class AbstractReaction<P extends Participant>
     private List<P> products;
     // whether the reaction is reversible
 
-    private Direction direction = DirectionImplementation.BIDIRECTIONAL;
+    private Direction direction = Direction.BIDIRECTIONAL;
 
     private AbstractParticipantFilter filter = new AcceptAllFilter(); // accepts all
 

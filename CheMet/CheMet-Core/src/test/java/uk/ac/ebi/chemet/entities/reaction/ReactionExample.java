@@ -25,6 +25,7 @@ import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.InChIParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
+import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 import static uk.ac.ebi.chemet.TestMoleculeFactory.*;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
@@ -56,7 +57,7 @@ public class ReactionExample {
             r.addProduct(new ParticipantImplementation<String, Integer, String>("C", 1));
             r.addProduct(new ParticipantImplementation<String, Integer, String>("D", 1));
             // set the reversibilty of the reaction (not used in comparisson)
-            r.setDirection(DirectionImplementation.BIDIRECTIONAL);
+            r.setDirection(Direction.BIDIRECTIONAL);
             System.out.println(r);
         }
 

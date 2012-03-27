@@ -32,7 +32,9 @@ import uk.ac.ebi.metabolomes.resource.BlastProgram;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated use xml-parsers module
  */
+@Deprecated
 public class ParserFactory {
 
     private static final Logger LOGGER = Logger.getLogger(ParserFactory.class);

@@ -1,48 +1,81 @@
-/**
- * ReactionType.java
- *
- * 2012.02.07
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
- */
 package uk.ac.ebi.interfaces.reaction;
 
-import org.apache.log4j.Logger;
-
-
 /**
+ * Enumeration defines the direction reactions can proceeds.
  *
- *          ReactionType 2012.02.07
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Class description
- *
  */
-public interface Direction {
+public enum Direction {
 
-    public String getAscii();
+    /**
+     * Defines the reaction direction as 'forward' or
+     * 'left to right'.
+     */
+    FORWARD("\u2192", "-->", Boolean.FALSE),
+
+    /**
+     * Defines the reaction direction as 'backward' or
+     * 'right to left'.
+     */
+    BACKWARD("\u2190", "<--", Boolean.FALSE),
 
 
-    public String getSymbol();
+    /**
+     * Defines the reaction as bi-directional/reversible
+     */
+    BIDIRECTIONAL("\u21CC", "<==>", Boolean.TRUE),
 
 
-    public boolean isReversible();
+    /**
+     * Defines unknown direction
+     */
+    UNKNOWN("\u21af", "<?>", Boolean.TRUE);
 
+    private String  utf8;
+    private String  ascii;
+    private Boolean reversible;
 
-    public byte getIndex();
+    private Direction(String  utf8,
+                      String  ascii,
+                      Boolean reversible) {
+        this.utf8       = utf8;
+        this.ascii      = ascii;
+        this.reversible = reversible;
+    }
+
+    /**
+     * Access the ascii value for the direction arrow
+     * @return ascii arrow representation
+     */
+    public String getAscii() {
+        return ascii;
+    }
+
+    /**
+     * Access the uff8 arrow for the direction, useful
+     * when displaying on uis.
+     * @return utf8 arrow the given direction
+     */
+    public String getSymbol() {
+        return this.utf8;
+    }
+
+    /**
+     * Access the reversibility of this direction
+     * @return whether this direction is irreversible
+     */
+    public Boolean isReversible() {
+        return reversible;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String toString() {
+        return getSymbol();
+    }
+
 }

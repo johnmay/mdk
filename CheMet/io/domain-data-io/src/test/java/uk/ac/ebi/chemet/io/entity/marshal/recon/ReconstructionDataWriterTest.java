@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import org.junit.Test;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
 import uk.ac.ebi.chemet.io.domain.*;
@@ -19,6 +18,7 @@ import uk.ac.ebi.core.reaction.compartment.Organelle;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.*;
+import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
 import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
@@ -134,7 +134,7 @@ public class ReconstructionDataWriterTest {
         reconstruction.addProduct(rna2);
 
         r1.addModifier(p1);
-        r2.setDirection(DirectionImplementation.BACKWARD);
+        r2.setDirection(Direction.BACKWARD);
 
         Chromosome chromosome = factory.ofClass(Chromosome.class, new ChromosomeIdentifier(1), "Chromosome 1", "ch1");
 

@@ -31,7 +31,6 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
@@ -119,15 +118,15 @@ public class SBMLIOUtil {
 
         Direction direction = rxn.getDirection();
 
-        if (direction instanceof DirectionImplementation) {
+        if (direction instanceof Direction) {
 
-            DirectionImplementation directionImplementation = (DirectionImplementation) direction;
+            Direction directionImplementation = (Direction) direction;
 
             sbmlRxn.setReversible(directionImplementation.isReversible());
 
-            if (directionImplementation == DirectionImplementation.BACKWARD) {
+            if (directionImplementation == Direction.BACKWARD) {
                 rxn.transpose();
-                rxn.setDirection(DirectionImplementation.FORWARD);
+                rxn.setDirection(Direction.FORWARD);
             }
 
         }

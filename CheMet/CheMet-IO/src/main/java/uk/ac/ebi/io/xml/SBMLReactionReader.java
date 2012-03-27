@@ -46,6 +46,7 @@ import uk.ac.ebi.chemet.exceptions.AbsentAnnotationException;
 import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
+import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.resource.MIRIAMLoader;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.CompartmentImplementation;
@@ -211,7 +212,7 @@ public class SBMLReactionReader {
         }
 
         // set the reversibility
-        reaction.setDirection(sbmlReaction.isReversible() ? DirectionImplementation.BIDIRECTIONAL : DirectionImplementation.FORWARD);
+        reaction.setDirection(sbmlReaction.isReversible() ? Direction.BIDIRECTIONAL : Direction.FORWARD);
 
         return reaction;
 
@@ -320,7 +321,7 @@ public class SBMLReactionReader {
         }
 
         // set the reversibility
-        reaction.setDirection(sbmlReaction.isReversible() ? DirectionImplementation.BIDIRECTIONAL : DirectionImplementation.FORWARD);
+        reaction.setDirection(sbmlReaction.isReversible() ? Direction.BIDIRECTIONAL : Direction.FORWARD);
 
         // TODO(johnmay): Add Enzyme annotations and modifiers
 
