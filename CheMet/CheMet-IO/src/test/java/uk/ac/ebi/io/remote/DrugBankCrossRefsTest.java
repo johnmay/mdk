@@ -42,9 +42,10 @@ public class DrugBankCrossRefsTest {
      */
     @Test
     public void testUpdate() throws Exception {
-        System.out.println("update");
-        DrugBankCrossRefs instance = new DrugBankCrossRefs();
-        instance.update();
+// XXX: Not unit test
+//        System.out.println("update");
+//        DrugBankCrossRefs instance = new DrugBankCrossRefs();
+//        instance.update();
     }
 
     /**

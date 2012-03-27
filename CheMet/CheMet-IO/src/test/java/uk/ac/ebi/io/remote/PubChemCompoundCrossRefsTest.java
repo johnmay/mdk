@@ -45,35 +45,36 @@ public class PubChemCompoundCrossRefsTest {
      */
     @Test
     public void testUpdate() throws Exception {
-        System.out.println("update");
-        List<String> pubchemCompoundIds = new ArrayList<String>();
-        /*pubchemCompoundIds.add("44264212");
-        pubchemCompoundIds.add("44134622");
-        pubchemCompoundIds.add("24201024");
-        pubchemCompoundIds.add("16218850");
-        pubchemCompoundIds.add("16133838");
-        pubchemCompoundIds.add("16133648");
-        pubchemCompoundIds.add("16132374");
-        pubchemCompoundIds.add("16132321");
-        pubchemCompoundIds.add("16132312");
-        pubchemCompoundIds.add("16132280");
-        pubchemCompoundIds.add("16131310");
-        pubchemCompoundIds.add("16129677");
-        pubchemCompoundIds.add("16129627");
-        pubchemCompoundIds.add("16051918");*/
-        pubchemCompoundIds.add("311");
-        //pubchemCompoundIds.add("6"); // Einecs, ZINC, EPA Pesticide, HSDB
-        //pubchemCompoundIds.add("11840966"); // DrugBank, ChEMBL, ChEBI.
-        //pubchemCompoundIds.add("2725"); // Kegg drug example, Kegg glycans apparently don't have compounds assigned.
-        
-        
-        List<PubChemCompoundIdentifier> pchemIdentifiers = new ArrayList<PubChemCompoundIdentifier>(pubchemCompoundIds.size()); 
-        for (String compIDs : pubchemCompoundIds) {
-            pchemIdentifiers.add(new PubChemCompoundIdentifier(compIDs));
-        }
-        
-        PubChemCompoundCrossRefs instance = new PubChemCompoundCrossRefs(pchemIdentifiers);
-        instance.update();
+        // XXX: Not unit test
+//        System.out.println("update");
+//        List<String> pubchemCompoundIds = new ArrayList<String>();
+//        /*pubchemCompoundIds.add("44264212");
+//        pubchemCompoundIds.add("44134622");
+//        pubchemCompoundIds.add("24201024");
+//        pubchemCompoundIds.add("16218850");
+//        pubchemCompoundIds.add("16133838");
+//        pubchemCompoundIds.add("16133648");
+//        pubchemCompoundIds.add("16132374");
+//        pubchemCompoundIds.add("16132321");
+//        pubchemCompoundIds.add("16132312");
+//        pubchemCompoundIds.add("16132280");
+//        pubchemCompoundIds.add("16131310");
+//        pubchemCompoundIds.add("16129677");
+//        pubchemCompoundIds.add("16129627");
+//        pubchemCompoundIds.add("16051918");*/
+//        pubchemCompoundIds.add("311");
+//        //pubchemCompoundIds.add("6"); // Einecs, ZINC, EPA Pesticide, HSDB
+//        //pubchemCompoundIds.add("11840966"); // DrugBank, ChEMBL, ChEBI.
+//        //pubchemCompoundIds.add("2725"); // Kegg drug example, Kegg glycans apparently don't have compounds assigned.
+//
+//
+//        List<PubChemCompoundIdentifier> pchemIdentifiers = new ArrayList<PubChemCompoundIdentifier>(pubchemCompoundIds.size());
+//        for (String compIDs : pubchemCompoundIds) {
+//            pchemIdentifiers.add(new PubChemCompoundIdentifier(compIDs));
+//        }
+//
+//        PubChemCompoundCrossRefs instance = new PubChemCompoundCrossRefs(pchemIdentifiers);
+//        instance.update();
     }
 
     /**

@@ -42,9 +42,10 @@ public class KEGGCompoundBriteTest {
      */
     @Test
     public void testUpdate() throws Exception {
-        System.out.println("update");
-        KEGGCompoundBrite instance = new KEGGCompoundBrite();
-        instance.update();
+// XXX: Not unit test
+//        System.out.println("update");
+//        KEGGCompoundBrite instance = new KEGGCompoundBrite();
+//        instance.update();
     }
 
     /**

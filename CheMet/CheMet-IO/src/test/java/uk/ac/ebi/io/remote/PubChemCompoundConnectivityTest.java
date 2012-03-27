@@ -68,9 +68,10 @@ public class PubChemCompoundConnectivityTest {
      */
     @Test
     public void testUpdate() throws Exception {
-        System.out.println("update");
-        PubChemCompoundConnectivity instance = new PubChemCompoundConnectivity(1, 500000);
-        instance.update();
+        // XXX: Not unit test
+//        System.out.println("update");
+//        PubChemCompoundConnectivity instance = new PubChemCompoundConnectivity(1, 500000);
+//        instance.update();
     }
 
     /**
