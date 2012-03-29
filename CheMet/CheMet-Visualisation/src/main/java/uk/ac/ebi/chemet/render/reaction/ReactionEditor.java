@@ -27,7 +27,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
-import uk.ac.ebi.chemet.entities.reaction.DirectionImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
@@ -52,7 +51,7 @@ public class ReactionEditor {
 
     private ReactionSideEditor right;
 
-    private JComboBox direction = ComboBoxFactory.newComboBox(DirectionImplementation.values());
+    private JComboBox direction = ComboBoxFactory.newComboBox(Direction.values());
 
     private JComponent component;
 
