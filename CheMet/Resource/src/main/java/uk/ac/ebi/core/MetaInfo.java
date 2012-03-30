@@ -1,7 +1,8 @@
+
 /**
- * IdentifierDescription.java
+ * MetaInfo.java
  *
- * 2011.09.15
+ * 2011.09.14
  *
  * This file is part of the CheMet library
  *
@@ -18,32 +19,29 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource;
+package uk.ac.ebi.core;
 
-import java.util.Collection;
-import uk.ac.ebi.core.Description;
-import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 
 /**
- *          IdentifierDescription – 2011.09.15 <br>
- *          Class description
+ *          MetaInfo – 2011.09.14 <br>
+ *          Holds the description of an object. Mainly used for the user interface
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class IdentifierDescription
-        extends Description {
+public class MetaInfo {
 
-    public final MIRIAMEntry resource;
-    private final Collection<String> synonyms;
+    public final String brief;
+    public final String description;
+    public final Byte index;
 
-    public IdentifierDescription(MIRIAMEntry miriam,
-                                 String shortDescription,
-                                 String longDescription,
-                                 Byte index,
-                                 Collection<String> synonyms) {
-        super(shortDescription, longDescription, index);
-        this.resource = miriam;
-        this.synonyms = synonyms;
+
+    public MetaInfo(String shortDescription, String description, Byte index) {
+        this.brief = shortDescription;
+        this.description = description;
+        this.index = index;
     }
+
+
 }
+

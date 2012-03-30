@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
- * ${Name}.java - 21.02.2012 <br/> Description...
+ * ${Name}.java - 21.02.2012 <br/> MetaInfo...
  *
  * @author johnmay
  * @author $Author$ (this version)

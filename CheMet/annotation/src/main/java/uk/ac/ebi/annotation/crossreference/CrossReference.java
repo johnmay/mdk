@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.Description;
+import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
@@ -55,7 +55,7 @@ public class CrossReference<E extends Identifier, O extends Observation>
 
     private E identifier;
 
-    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             CrossReference.class);
 
     private List<O> observations = new ArrayList<O>();
@@ -91,7 +91,7 @@ public class CrossReference<E extends Identifier, O extends Observation>
      */
     @Override
     public String getShortDescription() {
-        return identifier != null ? identifier.getShortDescription() : description.shortDescription;
+        return identifier != null ? identifier.getShortDescription() : metaInfo.brief;
     }
 
 
@@ -100,7 +100,7 @@ public class CrossReference<E extends Identifier, O extends Observation>
      */
     @Override
     public String getLongDescription() {
-        return identifier != null ? identifier.getLongDescription() : description.longDescription;
+        return identifier != null ? identifier.getLongDescription() : metaInfo.description;
     }
 
 

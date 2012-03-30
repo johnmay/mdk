@@ -16,7 +16,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
 /**
- * ${Name}.java - 20.02.2012 <br/> Description...
+ * ${Name}.java - 20.02.2012 <br/> MetaInfo...
  *
  * @author johnmay
  * @author $Author$ (this version)

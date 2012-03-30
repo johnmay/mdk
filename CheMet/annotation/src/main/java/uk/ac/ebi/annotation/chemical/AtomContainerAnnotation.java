@@ -30,7 +30,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.Description;
+import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
@@ -39,7 +39,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 
 /**
  *          ChemicalStructure – 2011.09.08 <br>
- *          Class description
+ *          Class metaInfo
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -55,7 +55,7 @@ public class AtomContainerAnnotation
 
     private IAtomContainer molecule;
 
-    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             AtomContainerAnnotation.class);
 
 
@@ -139,7 +139,7 @@ public class AtomContainerAnnotation
      */
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return metaInfo.brief;
     }
 
 
@@ -148,7 +148,7 @@ public class AtomContainerAnnotation
      */
     @Override
     public String getLongDescription() {
-        return description.longDescription;
+        return metaInfo.description;
     }
 
 
@@ -157,7 +157,7 @@ public class AtomContainerAnnotation
      */
     @Override
     public Byte getIndex() {
-        return description.index;
+        return metaInfo.index;
     }
 
 

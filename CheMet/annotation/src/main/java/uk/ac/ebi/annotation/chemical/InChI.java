@@ -17,7 +17,6 @@
  */
 package uk.ac.ebi.annotation.chemical;
 
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
@@ -27,7 +26,7 @@ import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.Description;
+import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.annotation.Context;
@@ -41,7 +40,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @version $Rev$ : Last Changed $Date$
  * @author  pmoreno
  * @author  $Author$ (this version)
- * @brief   ...class description...
+ * @brief   ...class metaInfo...
  *
  */
 @Context(Metabolite.class)
@@ -53,7 +52,7 @@ public class InChI
 
     private static final Logger LOGGER = Logger.getLogger(InChI.class);
 
-    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             InChI.class);
 
     private IAtomContainer structure;
@@ -87,19 +86,19 @@ public class InChI
 
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return metaInfo.brief;
     }
 
 
     @Override
     public String getLongDescription() {
-        return description.longDescription;
+        return metaInfo.description;
     }
 
 
     @Override
     public Byte getIndex() {
-        return description.index;
+        return metaInfo.index;
     }
 
 

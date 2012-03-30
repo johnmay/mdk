@@ -26,7 +26,7 @@ import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.Description;
+import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.annotation.Context;
@@ -40,7 +40,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @version $Rev$ : Last Changed $Date$
  * @author  pmoreno
  * @author  $Author$ (this version)
- * @brief   ...class description...
+ * @brief   ...class metaInfo...
  *
  */
 @Context(Metabolite.class)
@@ -55,7 +55,7 @@ public class SMILES
     private static final SmilesParser    SMILES_PARSER   = new SmilesParser(DefaultChemObjectBuilder.getInstance());
     private static final SmilesGenerator SMILES_GENERATOR = new SmilesGenerator();
 
-    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             SMILES.class);
     
     private IAtomContainer atomContainer;
@@ -92,13 +92,13 @@ public class SMILES
 
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return metaInfo.brief;
     }
 
 
     @Override
     public String getLongDescription() {
-        return description.longDescription;
+        return metaInfo.description;
     }
 
 

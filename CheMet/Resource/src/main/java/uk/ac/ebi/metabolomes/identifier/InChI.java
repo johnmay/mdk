@@ -23,8 +23,8 @@ package uk.ac.ebi.metabolomes.identifier;
 
 import java.io.Serializable;
 import java.util.regex.Pattern;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierDescription;
+
+import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
 
 
@@ -57,7 +57,7 @@ public class InChI
     transient private String charges;
     // matchers
     transient private Pattern standardInChIMatcher = Pattern.compile("InChI=1S");
-    private static final IdentifierDescription DESCRIPTION =
+    private static final IdentifierMetaInfo DESCRIPTION =
                                                IDENTIFIER_LOADER.getMetaInfo(InChI.class);
 
 
@@ -293,7 +293,7 @@ public class InChI
      */
     @Override
     public String getShortDescription() {
-        return DESCRIPTION.shortDescription;
+        return DESCRIPTION.brief;
     }
 
 
@@ -302,7 +302,7 @@ public class InChI
      */
     @Override
     public String getLongDescription() {
-        return DESCRIPTION.longDescription;
+        return DESCRIPTION.description;
     }
 
 

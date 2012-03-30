@@ -22,7 +22,7 @@ package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Resource;
-import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.MIRIAMIdentifier;
 
 
@@ -42,7 +42,7 @@ public class ChEBIIdentifier
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIIdentifier.class);
 
-    private static final IdentifierDescription META_DATA = IDENTIFIER_LOADER.getMetaInfo(
+    private static final IdentifierMetaInfo META_DATA = IDENTIFIER_LOADER.getMetaInfo(
             ChEBIIdentifier.class);
 
 
@@ -107,7 +107,7 @@ public class ChEBIIdentifier
      */
     @Override
     public String getShortDescription() {
-        return META_DATA.shortDescription;
+        return META_DATA.brief;
     }
 
 
@@ -116,7 +116,7 @@ public class ChEBIIdentifier
      */
     @Override
     public String getLongDescription() {
-        return META_DATA.longDescription;
+        return META_DATA.description;
     }
 
 

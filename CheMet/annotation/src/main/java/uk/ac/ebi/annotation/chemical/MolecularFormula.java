@@ -26,7 +26,7 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.Description;
+import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -51,7 +51,7 @@ public class MolecularFormula
 
     private String html; // speeds up rendering
 
-    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             MolecularFormula.class);
 
 
@@ -146,7 +146,7 @@ public class MolecularFormula
      */
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return metaInfo.brief;
     }
 
 
@@ -155,7 +155,7 @@ public class MolecularFormula
      */
     @Override
     public String getLongDescription() {
-        return description.longDescription;
+        return metaInfo.description;
     }
 
 
@@ -164,7 +164,7 @@ public class MolecularFormula
      */
     @Override
     public Byte getIndex() {
-        return description.index;
+        return metaInfo.index;
     }
 
 

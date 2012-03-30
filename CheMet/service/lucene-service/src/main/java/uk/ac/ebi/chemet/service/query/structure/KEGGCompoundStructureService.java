@@ -4,7 +4,7 @@ import uk.ac.ebi.chemet.service.index.structure.KEGGCompoundStructureIndex;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 /**
- * ${Name}.java - 21.02.2012 <br/> Description...
+ * ${Name}.java - 21.02.2012 <br/> MetaInfo...
  *
  * @author johnmay
  * @author $Author$ (this version)

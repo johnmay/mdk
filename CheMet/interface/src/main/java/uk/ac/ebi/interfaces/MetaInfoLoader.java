@@ -1,6 +1,6 @@
 
 /**
- * DescriptionLoader.java
+ * MetaInfoLoader.java
  *
  * 2011.09.14
  *
@@ -23,13 +23,13 @@ package uk.ac.ebi.interfaces;
 
 
 /**
- *          DescriptionLoader – 2011.09.14 <br>
+ *          MetaInfoLoader – 2011.09.14 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface DescriptionLoader {
+public interface MetaInfoLoader {
 
     public String getShortDescription(Class clazz);
 

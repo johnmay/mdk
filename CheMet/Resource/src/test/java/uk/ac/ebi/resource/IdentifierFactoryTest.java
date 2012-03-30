@@ -85,7 +85,7 @@ public class IdentifierFactoryTest {
     public void testMapping() {
 
         IdentifierFactory factory = IdentifierFactory.getInstance();
-        System.out.printf("%35s %-35s\n", "Class Name", "Mapped Description");
+        System.out.printf("%35s %-35s\n", "Class Name", "Mapped MetaInfo");
 
         for (Identifier id : factory.getSupportedIdentifiers()) {
             long start = System.currentTimeMillis();

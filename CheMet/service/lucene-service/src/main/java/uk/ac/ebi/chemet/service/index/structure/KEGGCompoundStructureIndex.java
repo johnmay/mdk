@@ -3,7 +3,7 @@ package uk.ac.ebi.chemet.service.index.structure;
 import uk.ac.ebi.chemet.service.index.KeywordNIOIndex;
 
 /**
- * KEGGCompoundStructureIndex - 21.02.2012 <br/> Description...
+ * KEGGCompoundStructureIndex - 21.02.2012 <br/> MetaInfo...
  * <p/>
  * Describes the {@see LuceneIndex} used in {@see KEGGCompoundStructureService}
  * and {@see KEGGCompoundStructureLoader}.

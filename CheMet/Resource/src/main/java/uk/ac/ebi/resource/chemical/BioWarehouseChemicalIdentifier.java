@@ -24,7 +24,7 @@ package uk.ac.ebi.resource.chemical;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.BioWarehouseIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
-import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.IdentifierMetaInfo;
 
 
 /**
@@ -42,7 +42,7 @@ public class BioWarehouseChemicalIdentifier
   extends ChemicalIdentifier implements BioWarehouseIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BioWarehouseChemicalIdentifier.class);
-    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
+    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
       BioWarehouseChemicalIdentifier.class);
     private Long wid;
     private Long dataSetWid;
@@ -85,7 +85,7 @@ public class BioWarehouseChemicalIdentifier
      */
     @Override
     public String getShortDescription() {
-        return DESCRIPTION.shortDescription;
+        return DESCRIPTION.brief;
     }
 
 
@@ -94,7 +94,7 @@ public class BioWarehouseChemicalIdentifier
      */
     @Override
     public String getLongDescription() {
-        return DESCRIPTION.longDescription;
+        return DESCRIPTION.description;
     }
 
 

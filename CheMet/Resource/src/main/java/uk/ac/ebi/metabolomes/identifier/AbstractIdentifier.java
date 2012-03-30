@@ -105,7 +105,7 @@ public abstract class AbstractIdentifier
     @Override
     public int hashCode() {
         int hash = 257;
-        hash = 37 * hash + getClass().hashCode()
+        hash = 37 * hash + getClass().hashCode();
         hash = 37 * hash + (this.accession != null ? this.accession.hashCode() : 0);
         return hash;
     }

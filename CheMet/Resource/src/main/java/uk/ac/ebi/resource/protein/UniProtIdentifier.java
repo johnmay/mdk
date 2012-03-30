@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
-import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.MIRIAMIdentifier;
 
 
@@ -39,7 +39,7 @@ public abstract class UniProtIdentifier
                                                  org.apache.log4j.Logger.getLogger(
             UniProtIdentifier.class);
 
-    private static final IdentifierDescription META_INFO = IDENTIFIER_LOADER.getMetaInfo(
+    private static final IdentifierMetaInfo META_INFO = IDENTIFIER_LOADER.getMetaInfo(
             UniProtIdentifier.class);
 
     private static final String UNIPROT_ACCESSION_SCHEMA = "[A-Z][A-Z0-9]{5}";
@@ -124,7 +124,7 @@ public abstract class UniProtIdentifier
      */
     @Override
     public String getShortDescription() {
-        return META_INFO.shortDescription;
+        return META_INFO.brief;
     }
 
 
@@ -133,7 +133,7 @@ public abstract class UniProtIdentifier
      */
     @Override
     public String getLongDescription() {
-        return META_INFO.longDescription;
+        return META_INFO.description;
     }
 
 

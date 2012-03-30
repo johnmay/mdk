@@ -28,7 +28,7 @@ import uk.ac.ebi.interfaces.Resource;
  *
  * A Miaram Registry entry (http://www.ebi.ac.uk/miriam/main/) that stores various data about
  * base urn/definition/name etc. The main use is in generating URN annotation for identifiers
- * which is of particular use in SBML Resource Description
+ * which is of particular use in SBML Resource MetaInfo
  * <pre>
  * <code> MIRIAMEntry chebiRDF = MIRIAMResource.CHEBI.getEntry(); // CheMet-IO (atm) </code>
  * <code> chebiRDF.getBaseURN()                                   // urn:miriam:obo.chebi </code>

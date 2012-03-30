@@ -22,7 +22,7 @@
 package uk.ac.ebi.observation;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.DescriptionLoader;
+import uk.ac.ebi.interfaces.MetaInfoLoader;
 import uk.ac.ebi.resource.AbstractLoader;
 
 
@@ -35,7 +35,7 @@ import uk.ac.ebi.resource.AbstractLoader;
  */
 public class ObservationLoader
   extends AbstractLoader
-  implements DescriptionLoader {
+  implements MetaInfoLoader {
 
     private static final Logger LOGGER = Logger.getLogger(ObservationLoader.class);
     private static final String RESOURCE_NAME = "ObservationDescription.properties";

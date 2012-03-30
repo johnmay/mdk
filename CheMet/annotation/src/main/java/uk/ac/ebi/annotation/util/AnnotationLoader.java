@@ -18,7 +18,7 @@
 package uk.ac.ebi.annotation.util;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.DescriptionLoader;
+import uk.ac.ebi.interfaces.MetaInfoLoader;
 import uk.ac.ebi.resource.AbstractLoader;
 
 
@@ -32,7 +32,7 @@ import uk.ac.ebi.resource.AbstractLoader;
  */
 public class AnnotationLoader
         extends AbstractLoader
-        implements DescriptionLoader {
+        implements MetaInfoLoader {
 
     private static final Logger LOGGER = Logger.getLogger(AnnotationLoader.class);
 

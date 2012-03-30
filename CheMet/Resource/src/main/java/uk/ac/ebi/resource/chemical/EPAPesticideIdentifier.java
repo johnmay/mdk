@@ -23,7 +23,7 @@ package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
-import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.IdentifierMetaInfo;
 
 
 /**
@@ -41,7 +41,7 @@ public class EPAPesticideIdentifier
   extends ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(EPAPesticideIdentifier.class);
-    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
+    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
       EPAPesticideIdentifier.class);
 
 
@@ -77,7 +77,7 @@ public class EPAPesticideIdentifier
      */
     @Override
     public String getShortDescription() {
-        return DESCRIPTION.shortDescription;
+        return DESCRIPTION.brief;
     }
 
 
@@ -86,7 +86,7 @@ public class EPAPesticideIdentifier
      */
     @Override
     public String getLongDescription() {
-        return DESCRIPTION.longDescription;
+        return DESCRIPTION.description;
     }
 
 

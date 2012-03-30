@@ -22,7 +22,7 @@ package uk.ac.ebi.core;
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.DescriptionLoader;
+import uk.ac.ebi.interfaces.MetaInfoLoader;
 import uk.ac.ebi.interfaces.Descriptor;
 
 
@@ -38,10 +38,10 @@ public abstract class AbstractDescriptor
 
     private static final Logger LOGGER = Logger.getLogger(AbstractDescriptor.class);
     // short/long description and index are loaded from a properties file
-    private DescriptionLoader loader;
+    private MetaInfoLoader loader;
 
 
-    public AbstractDescriptor(DescriptionLoader loader) {
+    public AbstractDescriptor(MetaInfoLoader loader) {
         this.loader = loader;
     }
 

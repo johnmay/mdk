@@ -22,7 +22,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.Description;
+import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.StringAnnotation;
 import uk.ac.ebi.interfaces.annotation.Context;
@@ -31,7 +31,7 @@ import uk.ac.ebi.interfaces.annotation.Descriptor;
 
 /**
  *          AuthorAnnotation – 2011.09.14 <br>
- *          Class description
+ *          Class metaInfo
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -49,7 +49,7 @@ public class AuthorAnnotation
 
     private String annotation;
 
-    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             AuthorAnnotation.class);
 
 
@@ -143,7 +143,7 @@ public class AuthorAnnotation
      */
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return metaInfo.brief;
     }
 
 
@@ -152,7 +152,7 @@ public class AuthorAnnotation
      */
     @Override
     public String getLongDescription() {
-        return description.longDescription;
+        return metaInfo.description;
     }
 
 
@@ -161,7 +161,7 @@ public class AuthorAnnotation
      */
     @Override
     public Byte getIndex() {
-        return description.index;
+        return metaInfo.index;
     }
 
 

@@ -21,7 +21,7 @@
 package uk.ac.ebi.resource.protein;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.MIRIAMIdentifier;
 
 import java.util.Arrays;
@@ -41,7 +41,7 @@ public class SwissProtIdentifier
         extends UniProtIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(SwissProtIdentifier.class);
-    private static final IdentifierDescription DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
+    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
             SwissProtIdentifier.class);
 
     public SwissProtIdentifier() {

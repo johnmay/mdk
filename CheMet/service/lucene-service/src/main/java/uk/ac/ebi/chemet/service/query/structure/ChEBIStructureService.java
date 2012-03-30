@@ -4,7 +4,7 @@ import uk.ac.ebi.chemet.service.index.structure.ChEBIStructureIndex;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 /**
- * ChEBIStructureService.java - 21.02.2012 <br/> Description...
+ * ChEBIStructureService.java - 21.02.2012 <br/> MetaInfo...
  *
  * @author johnmay
  * @author $Author$ (this version)

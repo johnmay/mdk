@@ -19,7 +19,7 @@ package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.Description;
+import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
@@ -41,7 +41,7 @@ public class Citation extends CrossReference<Identifier, Observation> {
 
     private static final Logger LOGGER = Logger.getLogger(Citation.class);
 
-    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             Citation.class);
 
 
@@ -56,13 +56,13 @@ public class Citation extends CrossReference<Identifier, Observation> {
 
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return metaInfo.brief;
     }
 
 
     @Override
     public String getLongDescription() {
-        return description.longDescription;
+        return metaInfo.description;
     }
 
 
@@ -71,7 +71,7 @@ public class Citation extends CrossReference<Identifier, Observation> {
      */
     @Override
     public Byte getIndex() {
-        return description.index;
+        return metaInfo.index;
     }
 
 

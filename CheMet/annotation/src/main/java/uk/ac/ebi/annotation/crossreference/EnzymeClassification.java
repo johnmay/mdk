@@ -19,7 +19,7 @@ package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.Description;
+import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
@@ -43,7 +43,7 @@ public class EnzymeClassification<O extends Observation>
 
     private static final Logger LOGGER = Logger.getLogger(EnzymeClassification.class);
 
-    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             EnzymeClassification.class);
 
 
@@ -61,7 +61,7 @@ public class EnzymeClassification<O extends Observation>
      */
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return metaInfo.brief;
     }
 
 
@@ -70,7 +70,7 @@ public class EnzymeClassification<O extends Observation>
      */
     @Override
     public String getLongDescription() {
-        return description.longDescription;
+        return metaInfo.description;
     }
 
 
@@ -79,7 +79,7 @@ public class EnzymeClassification<O extends Observation>
      */
     @Override
     public Byte getIndex() {
-        return description.index;
+        return metaInfo.index;
     }
 
 

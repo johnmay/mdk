@@ -22,7 +22,7 @@ package uk.ac.ebi.resource.chemical;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
-import uk.ac.ebi.resource.IdentifierDescription;
+import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.IdentifierLoader;
 import uk.ac.ebi.resource.MIRIAMIdentifier;
 
@@ -40,7 +40,7 @@ public class PubChemSubstanceIdentifier
 
     private static final Logger LOGGER = Logger.getLogger(PubChemSubstanceIdentifier.class);
 
-    private static final IdentifierDescription DESCRIPTION = IdentifierLoader.getInstance().getMetaInfo(
+    private static final IdentifierMetaInfo DESCRIPTION = IdentifierLoader.getInstance().getMetaInfo(
             PubChemSubstanceIdentifier.class);
 
 
@@ -75,7 +75,7 @@ public class PubChemSubstanceIdentifier
      */
     @Override
     public String getShortDescription() {
-        return DESCRIPTION.shortDescription;
+        return DESCRIPTION.brief;
     }
 
 
@@ -84,7 +84,7 @@ public class PubChemSubstanceIdentifier
      */
     @Override
     public String getLongDescription() {
-        return DESCRIPTION.longDescription;
+        return DESCRIPTION.description;
     }
 
 

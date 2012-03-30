@@ -1,7 +1,7 @@
 package uk.ac.ebi.chemet.service.index.name;
 
 /**
- * HMDBNameIndex - 21.02.2012 <br/> Description...
+ * HMDBNameIndex - 21.02.2012 <br/> MetaInfo...
  *
  * Index is used in HMDLMetabocardsLoader and HMDBNameService
  *

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ${Name}.java - 21.02.2012 <br/> Description...
+ * ${Name}.java - 21.02.2012 <br/> MetaInfo...
  *
  * @author johnmay
  * @author $Author$ (this version)

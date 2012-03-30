@@ -51,7 +51,7 @@ public class CandidateEntry
      * Construct a candidate entry given all possible attributes
      * 
      * @param id        Candidate Identifier
-     * @param desc      Description of the candidate (e.g. compound name)
+     * @param desc      MetaInfo of the candidate (e.g. compound name)
      * @param distance  The distance between the candidate and the query (not-stored in class)
      * @param comment   Additional comments on the candidate
      * 

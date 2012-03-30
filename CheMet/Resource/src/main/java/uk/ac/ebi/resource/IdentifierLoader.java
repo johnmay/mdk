@@ -22,7 +22,7 @@ package uk.ac.ebi.resource;
 
 import java.util.*;
 
-import uk.ac.ebi.interfaces.DescriptionLoader;
+import uk.ac.ebi.interfaces.MetaInfoLoader;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 
@@ -37,7 +37,7 @@ import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
  */
 public class IdentifierLoader
         extends AbstractLoader
-        implements DescriptionLoader {
+        implements MetaInfoLoader {
 
     private static final String RESOURCE_NAME = "IdentifierDescription.properties";
 
@@ -47,7 +47,7 @@ public class IdentifierLoader
 
     private static final MIRIAMLoader MIRIAM_LOADER = MIRIAMLoader.getInstance();
 
-    private Map<Class, IdentifierDescription> loaded = new HashMap<Class, IdentifierDescription>(32);
+    private Map<Class, IdentifierMetaInfo> loaded = new HashMap<Class, IdentifierMetaInfo>(32);
 
     private IdentifierLoader() {
         super(IdentifierLoader.class.getResourceAsStream(RESOURCE_NAME));
@@ -173,14 +173,14 @@ public class IdentifierLoader
     }
 
 
-    public IdentifierDescription load(Class c) {
-        IdentifierDescription metaInfo = getMetaInfo(c);
+    public IdentifierMetaInfo load(Class c) {
+        IdentifierMetaInfo metaInfo = getMetaInfo(c);
         loaded.put(c, metaInfo);
         return metaInfo;
     }
 
-    private IdentifierDescription loadMetaInfo(Class c) {
-        IdentifierDescription metaInfo = new IdentifierDescription(getEntry(c),
+    private IdentifierMetaInfo loadMetaInfo(Class c) {
+        IdentifierMetaInfo metaInfo = new IdentifierMetaInfo(getEntry(c),
                                                                    getShortDescription(c),
                                                                    getLongDescription(c),
                                                                    getIndex(c),
@@ -190,7 +190,7 @@ public class IdentifierLoader
     }
 
     @Override
-    public IdentifierDescription getMetaInfo(Class c) {
+    public IdentifierMetaInfo getMetaInfo(Class c) {
         return loaded.containsKey(c) ? loaded.get(c) : loadMetaInfo(c);
     }
 

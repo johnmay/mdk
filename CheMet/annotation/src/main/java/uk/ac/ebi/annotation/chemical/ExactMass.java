@@ -20,7 +20,7 @@ package uk.ac.ebi.annotation.chemical;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.base.AbstractFloatAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.Description;
+import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
@@ -33,7 +33,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @version $Rev$ : Last Changed $Date$
  * @author  pmoreno
  * @author  $Author$ (this version)
- * @brief   ...class description...
+ * @brief   ...class metaInfo...
  *
  */
 @Context(Metabolite.class)
@@ -43,7 +43,7 @@ public class ExactMass extends AbstractFloatAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(ExactMass.class);
 
-    private static Description description = AnnotationLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             ExactMass.class);
 
 
@@ -68,12 +68,12 @@ public class ExactMass extends AbstractFloatAnnotation {
 
     @Override
     public String getShortDescription() {
-        return description.shortDescription;
+        return metaInfo.brief;
     }
 
 
     @Override
     public String getLongDescription() {
-        return description.longDescription;
+        return metaInfo.description;
     }
 }

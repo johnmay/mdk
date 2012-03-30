@@ -373,7 +373,7 @@ public class IdentifierFactory {
 
     /**
      * Main factory method. this returns a new identifier of the given index. The indicies are specified in the
-     * IdentifierDescription.propertiers file (see. src/main/resources)
+     * IdentifierMetaInfo.propertiers file (see. src/main/resources)
      *
      * @param index
      *
@@ -387,7 +387,7 @@ public class IdentifierFactory {
     /**
      * Create an identifier of the given synonym. for example "EC" for ECNumber.
      * The synonyms are loaded from the MIRIAM registry with custom synonyms
-     * specified in the IdentifierDescription properites resource file.
+     * specified in the IdentifierMetaInfo properites resource file.
      *
      * @param synonym
      *

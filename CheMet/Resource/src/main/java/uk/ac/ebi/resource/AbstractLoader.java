@@ -22,11 +22,10 @@ package uk.ac.ebi.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.Properties;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.DescriptionLoader;
-import uk.ac.ebi.core.Description;
+import uk.ac.ebi.core.MetaInfo;
+import uk.ac.ebi.interfaces.MetaInfoLoader;
 import uk.ac.ebi.interfaces.annotation.Descriptor;
 
 /**
@@ -38,7 +37,7 @@ import uk.ac.ebi.interfaces.annotation.Descriptor;
  */
 public abstract class AbstractLoader
         extends Properties
-        implements DescriptionLoader {
+        implements MetaInfoLoader {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractLoader.class);
     public static final String SHORT_DESCRIPTION = ".ShortDescription";
@@ -94,8 +93,8 @@ public abstract class AbstractLoader
      * @return
      *
      */
-    public Description getMetaInfo(Class c) {
-        return new Description(getShortDescription(c),
+    public MetaInfo getMetaInfo(Class c) {
+        return new MetaInfo(getShortDescription(c),
                 getLongDescription(c),
                 getIndex(c));
     }
