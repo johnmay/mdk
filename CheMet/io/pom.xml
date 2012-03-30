@@ -17,9 +17,11 @@
         <module>domain-data-io</module>
         <module>annotation-data-io</module>
         <module>observation-data-io</module>
-        <module>xml-parsers</module>
 
         <!-- xml io modules (if needed) -->
+        
+        <!-- other io modules -->
+        <!--<module>xml-parsers</module>-->
 
     </modules>
 
