@@ -11,6 +11,8 @@ import uk.ac.ebi.chemet.io.domain.EntityInput;
 import uk.ac.ebi.chemet.io.domain.EntityOutput;
 import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
 import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
+import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
@@ -19,8 +21,6 @@ import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.interfaces.reaction.Participant;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
-import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -11,6 +11,7 @@ import uk.ac.ebi.chemet.io.domain.EntityInput;
 import uk.ac.ebi.chemet.io.domain.EntityOutput;
 import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
 import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
+import uk.ac.ebi.chemet.resource.basic.*;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
@@ -20,14 +21,10 @@ import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
-import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
+import uk.ac.ebi.chemet.resource.basic.BasicGeneIdentifier;
 import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
-import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
-import uk.ac.ebi.resource.rna.BasicRNAIdentifier;
 
 import java.io.*;
 
@@ -123,10 +120,10 @@ public class ReconstructionDataWriterTest {
         reconstruction.addReaction(r1);
         reconstruction.addReaction(r2);
 
-        GeneProduct p1 = factory.ofClass(ProteinProduct.class, BasicProteinIdentifier.nextIdentifier(), "prot1", "p1");
-        GeneProduct p2 = factory.ofClass(ProteinProduct.class, BasicProteinIdentifier.nextIdentifier(), "prot2", "p2");
-        GeneProduct rna1 = factory.ofClass(RibosomalRNA.class, BasicRNAIdentifier.nextIdentifier(), "rna1", "rna1");
-        GeneProduct rna2 = factory.ofClass(TransferRNA.class, BasicRNAIdentifier.nextIdentifier(), "rna2", "rna2");
+        GeneProduct p1 = factory.ofClass(ProteinProduct.class, new BasicProteinIdentifier(), "prot1", "p1");
+        GeneProduct p2 = factory.ofClass(ProteinProduct.class, new BasicProteinIdentifier(), "prot2", "p2");
+        GeneProduct rna1 = factory.ofClass(RibosomalRNA.class, new BasicRNAIdentifier(), "rna1", "rna1");
+        GeneProduct rna2 = factory.ofClass(TransferRNA.class, new BasicRNAIdentifier(), "rna2", "rna2");
 
         reconstruction.addProduct(p1);
         reconstruction.addProduct(p2);
@@ -141,16 +138,16 @@ public class ReconstructionDataWriterTest {
         reconstruction.getGenome().add(chromosome);
         chromosome.setSequence(new ChromosomeSequence("AACGTGCTGATCGTACGTAGCTAGCTAGCATGCATGCATGCATGACTGCATAC".toLowerCase()));
 
-        Gene g1 = factory.ofClass(Gene.class, BasicGeneIdentifier.nextIdentifier(), "Gene 1", "g1");
+        Gene g1 = factory.ofClass(Gene.class, new BasicGeneIdentifier(), "Gene 1", "g1");
         g1.setStart(1);
         g1.setEnd(5);
-        Gene g2 = factory.ofClass(Gene.class, BasicGeneIdentifier.nextIdentifier(), "Gene 2", "g2");
+        Gene g2 = factory.ofClass(Gene.class, new BasicGeneIdentifier(), "Gene 2", "g2");
         g2.setStart(1);
         g2.setEnd(6);
-        Gene g3 = factory.ofClass(Gene.class, BasicGeneIdentifier.nextIdentifier(), "Gene 3", "g3");
+        Gene g3 = factory.ofClass(Gene.class, new BasicGeneIdentifier(), "Gene 3", "g3");
         g3.setStart(1);
         g3.setEnd(7);
-        Gene g4 = factory.ofClass(Gene.class, BasicGeneIdentifier.nextIdentifier(), "Gene 4", "g4");
+        Gene g4 = factory.ofClass(Gene.class, new BasicGeneIdentifier(), "Gene 4", "g4");
         g4.setStart(1);
         g4.setEnd(8);
 

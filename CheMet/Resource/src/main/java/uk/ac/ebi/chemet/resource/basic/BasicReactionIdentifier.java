@@ -18,13 +18,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.reaction;
+package uk.ac.ebi.chemet.resource.basic;
 
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.chemet.resource.Brief;
+import uk.ac.ebi.chemet.resource.Description;
 import uk.ac.ebi.resource.ResourcePreferences;
+import uk.ac.ebi.resource.reaction.ReactionIdentifier;
 
 /**
  *          BasicReactionIdentifier – 2011.09.26 <br>
@@ -33,10 +36,11 @@ import uk.ac.ebi.resource.ResourcePreferences;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Brief("Reaction")
+@Description("A basic auto-incrementing identifier for reactions")
 public class BasicReactionIdentifier extends ReactionIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicReactionIdentifier.class);
-    private static long ticker = Preferences.userNodeForPackage(BasicReactionIdentifier.class).getLong("ticker", 0);
 
     public BasicReactionIdentifier() {
     }
@@ -54,12 +58,14 @@ public class BasicReactionIdentifier extends ReactionIdentifier {
         return new BasicReactionIdentifier();
     }
 
-    public static BasicReactionIdentifier nextIdentifier() {
-        
+    private static String nextAccession(){
         StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_RXN_ID_FORMAT");
         IncrementalPreference ticker = ResourcePreferences.getInstance().getPreference("BASIC_RXN_ID_TICK");
-        
-        return new BasicReactionIdentifier(String.format(format.get(), ticker.get()));
-        
+        return String.format(format.get(), ticker.get());
     }
+    
+    public static BasicReactionIdentifier nextIdentifier() {
+        return new BasicReactionIdentifier(nextAccession());
+    }
+
 }

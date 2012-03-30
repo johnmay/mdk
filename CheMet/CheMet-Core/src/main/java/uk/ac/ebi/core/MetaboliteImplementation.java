@@ -26,13 +26,13 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.InChI;
+import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.metabolite.MetaboliteClassImplementation;
 import uk.ac.ebi.interfaces.MetaboliteClass;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 
 /**
@@ -68,13 +68,13 @@ public class MetaboliteImplementation
      *
      * Convenience constructor wraps accession in a BasicChemicalIdentifier
      *
-     * @param accession
      * @param abbreviation
      * @param name
      * 
      */
-    public MetaboliteImplementation(String accession, String abbreviation, String name) {
-        super(new BasicChemicalIdentifier(accession), abbreviation, name);
+    public MetaboliteImplementation(String abbreviation, String name) {
+        // accession is ignored here
+        super(new BasicChemicalIdentifier(), abbreviation, name);
     }
 
 

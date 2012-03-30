@@ -33,6 +33,10 @@ import org.biojava3.core.sequence.template.AbstractSequence;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.annotation.Locus;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;
+import uk.ac.ebi.chemet.resource.basic.BasicGeneIdentifier;
+import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
+import uk.ac.ebi.chemet.resource.basic.BasicRNAIdentifier;
 import uk.ac.ebi.core.GeneImplementation;
 import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.core.ProteinProductImplementation;
@@ -43,9 +47,6 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
-import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
-import uk.ac.ebi.resource.rna.BasicRNAIdentifier;
 
 /**
  *          ENAFeatureParser - 2011.10.17 <br>
@@ -215,16 +216,16 @@ public class ENAFeatureParser {
 
     private AbstractRNAProduct getRNA() {
         if (isRNA()) {
-            return new RibosomalRNAImplementation(BasicRNAIdentifier.nextIdentifier(), getLocusTag(), getProduct());
+            return new RibosomalRNAImplementation(new BasicRNAIdentifier(), getLocusTag(), getProduct());
         } else if (isTRNA()) {
-            return new TransferRNAImplementation(BasicRNAIdentifier.nextIdentifier(), getLocusTag(), getProduct());
+            return new TransferRNAImplementation(new BasicRNAIdentifier(), getLocusTag(), getProduct());
         }
         return null;
     }
 
     private Gene getGene() {
 
-        Gene gene = new GeneImplementation(BasicGeneIdentifier.nextIdentifier(),
+        Gene gene = new GeneImplementation(new BasicGeneIdentifier(),
                                            "",
                                            getLocusTag(),
                                            start,
@@ -245,7 +246,7 @@ public class ENAFeatureParser {
      * CDS only
      */
     public Identifier getProteinIdentifier() {
-        return qualifiers.containsKey("protein_id") ? new BasicProteinIdentifier(qualifiers.get("protein_id")) : BasicProteinIdentifier.nextIdentifier();
+        return qualifiers.containsKey("protein_id") ? new DynamicIdentifier("ENA Protein ID", qualifiers.get("protein_id")) : new BasicProteinIdentifier();
     }
 
     public String getProduct() {

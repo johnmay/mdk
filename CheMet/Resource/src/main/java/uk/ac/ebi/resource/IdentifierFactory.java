@@ -23,16 +23,13 @@ import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.metabolomes.resource.Resource;
+import uk.ac.ebi.chemet.resource.basic.*;
 import uk.ac.ebi.resource.chemical.*;
 import uk.ac.ebi.resource.classification.*;
-import uk.ac.ebi.resource.gene.BasicGeneIdentifier;
 import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
-import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
-import uk.ac.ebi.resource.rna.BasicRNAIdentifier;
 import uk.ac.ebi.resource.structure.HSSPIdentifier;
 import uk.ac.ebi.resource.structure.PDBIdentifier;
 

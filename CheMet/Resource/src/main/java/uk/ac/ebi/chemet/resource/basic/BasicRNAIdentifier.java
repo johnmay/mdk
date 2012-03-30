@@ -18,13 +18,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.rna;
+package uk.ac.ebi.chemet.resource.basic;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.chemet.resource.Brief;
+import uk.ac.ebi.chemet.resource.Description;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.ResourcePreferences;
+import uk.ac.ebi.resource.rna.RNAIdentifier;
 
 /**
  *          BasicGeneIdentifier - 2011.10.17 <br>
@@ -33,31 +36,29 @@ import uk.ac.ebi.resource.ResourcePreferences;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Brief("RNA")
+@Description("A basic auto-incrementing identifier for RNA products")
 public class BasicRNAIdentifier extends RNAIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicRNAIdentifier.class);
     private static int ticker = 0;
 
     public BasicRNAIdentifier() {
+        super(nextAccession());
     }
 
     public BasicRNAIdentifier(String accession) {
         super(accession);
     }
 
-    /**
-     * Convenience method for creating basic identifiers. It will return the
-     * next incremented identifier to where it's ticker is at (resets) every
-     * jvm instance
-     */
-    public static Identifier nextIdentifier() {
+    private static String nextAccession(){
         StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_RNA_ID_FORMAT");
         IncrementalPreference ticker = ResourcePreferences.getInstance().getPreference("BASIC_RNA_ID_TICK");
-
-        return new BasicRNAIdentifier(String.format(format.get(), ticker.get()));
+        return String.format(format.get(), ticker.get());
     }
 
     public Identifier newInstance() {
         return new BasicRNAIdentifier();
     }
+
 }

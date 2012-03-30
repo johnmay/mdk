@@ -20,7 +20,6 @@
  */
 package uk.ac.ebi.io.xml;
 
-import com.sun.org.apache.regexp.internal.recompile;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,7 +27,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.geom.Line2D;
 import java.awt.geom.RoundRectangle2D;
@@ -45,20 +43,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import uk.ac.ebi.chemet.resource.XMLHelper;
+import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
+import uk.ac.ebi.chemet.resource.reaction.KEGGReactionIdentifier;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.resource.reaction.BasicReactionIdentifier;
 
 
 /**
@@ -148,11 +142,11 @@ public class KGMLReader {
             KGMLEntry rxnEntry = entries.get(reaction.id);
 
             String[] names = rxnEntry.name.split(" ");
-            MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(new BasicReactionIdentifier(Integer.toString(rxnEntry.id)),
+            MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(new KEGGReactionIdentifier(Integer.toString(rxnEntry.id)),
                                                                                       names[0].substring(3),
                                                                                       names[0].substring(3));
             for (String name : names) {
-                rxn.addCrossReference(new BasicReactionIdentifier(name.substring(3)));
+                rxn.addCrossReference(new KEGGReactionIdentifier(name.substring(3)));
             }
             for (int id : reaction.getSubstrateIds()) {
                 rxn.addReactant(new MetabolicParticipantImplementation(metabolites.get(id)));

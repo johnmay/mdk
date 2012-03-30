@@ -18,15 +18,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.protein;
+package uk.ac.ebi.chemet.resource.basic;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.chemet.resource.Brief;
+import uk.ac.ebi.chemet.resource.Description;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.MetaboliteIdentifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.resource.ResourcePreferences;
+import uk.ac.ebi.resource.protein.AbstractProteinIdentifier;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,6 +43,8 @@ import java.util.Iterator;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Brief("Protein")
+@Description("A basic auto-incrementing identifier for proteins")
 public class BasicProteinIdentifier
         extends AbstractProteinIdentifier implements ProteinIdentifier, MetaboliteIdentifier {
 
@@ -47,21 +52,19 @@ public class BasicProteinIdentifier
 
 
     public BasicProteinIdentifier() {
+        super(nextAccession());
     }
 
 
     public BasicProteinIdentifier(String accession) {
         super(accession);
     }
-
-
-    public static Identifier nextIdentifier() {
+    
+    private static String nextAccession(){
         StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_PROT_ID_FORMAT");
         IncrementalPreference ticker = ResourcePreferences.getInstance().getPreference("BASIC_GENE_ID_TICK");
-
-        return new BasicProteinIdentifier(String.format(format.get(), ticker.get()));
+        return String.format(format.get(), ticker.get());
     }
-
 
     /**
      * @inheritDoc

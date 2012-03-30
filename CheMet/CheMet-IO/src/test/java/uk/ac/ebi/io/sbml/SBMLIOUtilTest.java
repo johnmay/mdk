@@ -4,10 +4,6 @@
  */
 package uk.ac.ebi.io.sbml;
 
-import uk.ac.ebi.io.xml.SBMLIOUtil;
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-import javax.xml.stream.XMLStreamException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -15,14 +11,22 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
-import uk.ac.ebi.core.*;
+import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.core.CompartmentImplementation;
+import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.io.xml.SBMLIOUtil;
 import uk.ac.ebi.resource.ReconstructionIdentifier;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
+
+import javax.xml.stream.XMLStreamException;
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 
 
 /**

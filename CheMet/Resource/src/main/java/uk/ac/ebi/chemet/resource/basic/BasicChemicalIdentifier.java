@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.chemical;
+package uk.ac.ebi.chemet.resource.basic;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -26,8 +26,11 @@ import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.chemet.resource.Brief;
+import uk.ac.ebi.chemet.resource.Description;
 import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.resource.ResourcePreferences;
+import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
 
 
 /**
@@ -37,8 +40,8 @@ import uk.ac.ebi.resource.ResourcePreferences;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@MetaInfo(brief       = "Basic Chemical Identifier",
-            description = "Provides a basic auto-incrementing identifier for chemical compounds")
+@Brief("Chemical")
+@Description("A basic auto-incrementing identifier for chemical compounds")
 public class BasicChemicalIdentifier
         extends ChemicalIdentifier {
 
@@ -48,7 +51,7 @@ public class BasicChemicalIdentifier
 
 
     public BasicChemicalIdentifier() {
-        super();
+        super(nextAccession());
     }
 
 
@@ -56,21 +59,21 @@ public class BasicChemicalIdentifier
         super(accession);
     }
 
-
+    // TODO: Remove short description and make a 'DynamicIdentifier'
     public BasicChemicalIdentifier(String accession, String shortDescription) {
         super(accession);
         this.shortDesc = shortDescription;
     }
 
-
-    public static BasicChemicalIdentifier nextIdentifier() {
-
-
+    private static String nextAccession(){
         StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_CHEM_ID_FORMAT");
         IncrementalPreference ticker = ResourcePreferences.getInstance().getPreference("BASIC_CHEM_ID_TICK");
+        return String.format(format.get(), ticker.get());
+    }
+    
 
-        return new BasicChemicalIdentifier(String.format(format.get(), ticker.get()));
-
+    public static BasicChemicalIdentifier nextIdentifier() {
+        return new BasicChemicalIdentifier(nextAccession());
     }
 
 

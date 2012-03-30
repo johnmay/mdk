@@ -11,7 +11,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
+import uk.ac.ebi.chemet.resource.basic.*;
 import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 
 import java.io.*;

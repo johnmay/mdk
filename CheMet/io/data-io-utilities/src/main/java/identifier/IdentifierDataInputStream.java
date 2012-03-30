@@ -1,12 +1,14 @@
 package identifier;
 
 import identifier.basic.BasicIdentifierReader;
+import identifier.other.DynamicIdentifierReader;
 import identifier.other.TaxonomyReader;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.core.AbstractDataInput;
 import uk.ac.ebi.chemet.io.identifier.IdentifierInput;
 import uk.ac.ebi.chemet.io.identifier.IdentifierReader;
+import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
@@ -39,7 +41,8 @@ public class IdentifierDataInputStream
         this.v  = v;
         
         add(Taxonomy.class, new TaxonomyReader(this.in));
-        
+        add(DynamicIdentifier.class, new DynamicIdentifierReader(this.in));
+
     }
 
     @Override

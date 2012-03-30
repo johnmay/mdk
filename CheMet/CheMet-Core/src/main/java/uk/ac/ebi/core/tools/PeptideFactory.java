@@ -37,10 +37,10 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.normalize.SMSDNormalizer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
-import uk.ac.ebi.resource.chemical.BasicChemicalIdentifier;
 
 
 /**

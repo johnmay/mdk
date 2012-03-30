@@ -29,12 +29,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
+import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.entities.Multimer;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.protein.BasicProteinIdentifier;
 
 
 /**
@@ -70,7 +70,7 @@ public class MultimerImplementation extends AbstractGeneProduct implements Multi
      */
     public MultimerImplementation(GeneProduct... subunits) {
 
-        super(BasicProteinIdentifier.nextIdentifier(), null, null);
+        super(new BasicProteinIdentifier(), null, null);
 
 
         // make an aggregated name

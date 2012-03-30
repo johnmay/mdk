@@ -27,9 +27,9 @@ import java.lang.annotation.Target;
 
 
 /**
- * Annotation type defines the MIRIAM MIR Identifying
+ * Annotation type defines the MIRIAM MIR which identifies
  * a particular resource. ChEBI for example is MIR:00000002
- * and so a ChEBI identifier is annotated {@code @MIR(id=2)}
+ * and so a ChEBI identifier is annotated {@code @MIR(2)}
  * 
  * @author johnmay
  */
