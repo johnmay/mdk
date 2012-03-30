@@ -22,6 +22,7 @@ package uk.ac.ebi.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.DescriptionLoader;
@@ -43,6 +44,7 @@ public abstract class AbstractLoader
     public static final String SHORT_DESCRIPTION = ".ShortDescription";
     public static final String LONG_DESCRIPTION = ".LongDescription";
     public static final String INDEX = ".Index";
+
 
     public AbstractLoader(InputStream stream) {
         try {

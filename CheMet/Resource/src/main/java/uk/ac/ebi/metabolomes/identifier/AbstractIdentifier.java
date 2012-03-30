@@ -20,25 +20,24 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.net.URL;
 import java.util.Collection;
+
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.core.AbstractDescriptor;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.resource.IdentifierLoader;
 
 /**
- *
  * Abstract class for that all identifiers should extend.
  * If the sub-class has more then one component (e.g. InChI)
  * the developer should decide which is or what should the
  * 'main' identifier be.
- *
+ * <p/>
  * In some case you may want a concatenated identifier where
  * the multiple sub-class variables are concatenated together
  * to form a string which identifies that object
  *
  * @author johnmay
- * @date   6 Apr 2011
- *
+ * @date 6 Apr 2011
  */
 public abstract class AbstractIdentifier
         extends AbstractDescriptor
@@ -49,7 +48,7 @@ public abstract class AbstractIdentifier
     private String accession;
 
     public AbstractIdentifier() {
-        super(IdentifierLoader.getInstance());
+        super(IDENTIFIER_LOADER);
     }
 
     public AbstractIdentifier(String accession) {
@@ -60,22 +59,23 @@ public abstract class AbstractIdentifier
     /**
      * @inheritDoc
      */
+    @Override
     public String getAccession() {
         return accession;
     }
 
     /**
-     * @param accession
      * @inheritDoc
      */
+    @Override
     public void setAccession(String accession) {
         this.accession = accession;
     }
 
     /**
-     *
-     * @return
+     * @inheritDoc
      */
+    @Override
     public Resource getResource() {
         return IDENTIFIER_LOADER.getEntry(getClass());
     }
@@ -87,15 +87,27 @@ public abstract class AbstractIdentifier
     public String toString() {
         return accession;
     }
-    
+
     /**
-     * Returns a string summary of the Identifier, consisting of the short description of the database and the accession.
+     * Returns a string summary of the Identifier, consisting of the short description of the database and the
+     * accession.
      * Added to avoid changing the behaviour of toString().
-     * 
-     * @return dbName + accession. 
+     *
+     * @return dbName + accession.
      */
     public String toStringSummary() {
-        return getShortDescription()+" "+getAccession();
+        return getShortDescription() + " " + getAccession();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public int hashCode() {
+        int hash = 257;
+        hash = 37 * hash + getClass().hashCode()
+        hash = 37 * hash + (this.accession != null ? this.accession.hashCode() : 0);
+        return hash;
     }
 
     /**
@@ -120,18 +132,8 @@ public abstract class AbstractIdentifier
     /**
      * @inheritDoc
      */
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 37 * hash + (this.accession != null ? this.accession.hashCode() : 0);
-        return hash;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public String getURN() {
-        return getResource().getURN(accession);
+        return getResource().getURN(getAccession());
     }
 
     /**

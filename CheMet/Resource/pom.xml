@@ -10,11 +10,27 @@
     <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>chemet-resource</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <name>Resource</name>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/resource</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <developers>
+        <developer>
+            <name>John May</name>
+            <organization>EMBL-EBI</organization>
+            <organizationUrl>http://www.ebi.ac.uk</organizationUrl>
+            <email>johnmay@ebi.ac.uk</email>
+        </developer>
+        <developer>
+            <name>Pablo Moreno</name>
+            <organization>EMBL-EBI</organization>
+            <organizationUrl>http://www.ebi.ac.uk</organizationUrl>
+            <email>pmoreno@ebi.ac.uk</email>
+        </developer>
+    </developers>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -25,17 +41,14 @@
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-interface</artifactId>
-            <version>${project.version}</version>
+            <version>1.2-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.16</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>11.0.1</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.caf</groupId>
@@ -48,6 +61,7 @@
             <version>2.6</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>

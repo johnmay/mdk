@@ -20,20 +20,20 @@
  */
 package uk.ac.ebi.resource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
+
 import uk.ac.ebi.interfaces.DescriptionLoader;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 
 
 /**
- *          IdentifierLoader – 2011.09.15 <br>
- *          Class description
+ * IdentifierLoader – 2011.09.15 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class IdentifierLoader
         extends AbstractLoader
@@ -47,6 +47,7 @@ public class IdentifierLoader
 
     private static final MIRIAMLoader MIRIAM_LOADER = MIRIAMLoader.getInstance();
 
+    private Map<Class, IdentifierDescription> loaded = new HashMap<Class, IdentifierDescription>(32);
 
     private IdentifierLoader() {
         super(IdentifierLoader.class.getResourceAsStream(RESOURCE_NAME));
@@ -54,7 +55,6 @@ public class IdentifierLoader
 
 
     private static class IdentifierLoaderHolder {
-
         private static IdentifierLoader INSTANCE = new IdentifierLoader();
     }
 
@@ -65,10 +65,10 @@ public class IdentifierLoader
 
 
     /**
-     *
-     * Returns the MIR Identifier
+     * Returns the MIRIAM MIR Identifier
      *
      * @param type
+     *
      * @return
      */
     public int getMIR(Class<? extends AbstractIdentifier> type) {
@@ -86,10 +86,10 @@ public class IdentifierLoader
 
 
     /**
-     *
      * Returns the miriam entry for this identifier class
      *
      * @param type
+     *
      * @return
      */
     public MIRIAMEntry getEntry(Class type) {
@@ -149,7 +149,9 @@ public class IdentifierLoader
 
     /**
      * Access the synonyms for this identifier
+     *
      * @param type
+     *
      * @return
      */
     public Collection<String> getDatabaseSynonyms(Class type) {
@@ -171,11 +173,26 @@ public class IdentifierLoader
     }
 
 
-    public IdentifierDescription getMetaInfo(Class type) {
-        return new IdentifierDescription(getEntry(type),
-                                         getShortDescription(type),
-                                         getLongDescription(type),
-                                         getIndex(type),
-                                         getDatabaseSynonyms(type));
+    public IdentifierDescription load(Class c) {
+        IdentifierDescription metaInfo = getMetaInfo(c);
+        loaded.put(c, metaInfo);
+        return metaInfo;
     }
+
+    private IdentifierDescription loadMetaInfo(Class c) {
+        IdentifierDescription metaInfo = new IdentifierDescription(getEntry(c),
+                                                                   getShortDescription(c),
+                                                                   getLongDescription(c),
+                                                                   getIndex(c),
+                                                                   getDatabaseSynonyms(c));
+        loaded.put(c, metaInfo);
+        return metaInfo;
+    }
+
+    @Override
+    public IdentifierDescription getMetaInfo(Class c) {
+        return loaded.containsKey(c) ? loaded.get(c) : loadMetaInfo(c);
+    }
+
+
 }
