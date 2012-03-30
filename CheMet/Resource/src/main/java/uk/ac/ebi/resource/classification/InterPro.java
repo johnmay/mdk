@@ -21,7 +21,7 @@
 package uk.ac.ebi.resource.classification;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 
 /**
@@ -31,7 +31,7 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@MIRIAMIdentifier(mir = 11)
+@MIR(value = 11)
 public class InterPro
         extends ClassificationIdentifier {
 

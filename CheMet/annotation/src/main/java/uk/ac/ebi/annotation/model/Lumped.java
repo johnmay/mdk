@@ -26,7 +26,7 @@ import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.chemet.annotation.Flag;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.annotation.Unique;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
@@ -42,7 +42,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  */
 @Unique
 @Context(value = { Metabolite.class, MetabolicReaction.class})
-@Descriptor(brief       = "Lumped",
+@MetaInfo(brief       = "Lumped",
             description = "Indicate that a metabolite or reactions is not a discrete entity and rather it is " +
                           "an average of many entities. It is common practise to include such metabolites" +
                           "as DNA/RNA/Fatty Acid Composition in biomass reactions")

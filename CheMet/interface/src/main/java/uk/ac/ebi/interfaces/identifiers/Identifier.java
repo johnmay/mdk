@@ -22,69 +22,77 @@ package uk.ac.ebi.interfaces.identifiers;
 
 import java.net.URL;
 import java.util.Collection;
+
 import uk.ac.ebi.interfaces.Descriptor;
 import uk.ac.ebi.interfaces.Resource;
 
 /**
- *          Identifier – 2011.09.15 <br>
- *          Interface for an identifier object
+ * Identifier – 2011.09.15 <br>
+ * Interface for an identifier object
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public interface Identifier extends Descriptor {
 
     /**
-     *
-     * Access the stored accession
+     * Mutator for the identifier accession.
      *
      * @param accession
-     *
      */
     public void setAccession(String accession);
 
     /**
-     *
-     * Returns the accession of the identifier
+     * Access the accession value (as a string) for this identifier type
      *
      * @return The string accession
-     *
      */
     public String getAccession();
 
     /**
-     *
-     * Returns a new empty instance of the identifier object. Primarily used in factory methods
+     * Returns a new empty instance of the identifier object. This is primarily used
+     * in factories for object creation without reflection.
      *
      * @return new instance of the identifier
-     *
      */
     public Identifier newInstance();
 
     /**
+     * Access a URL for the identifier item.
      *
-     * Return the URL of the database item
-     *
+     * @return URL for the identifier
      */
     public URL getURL();
 
     /**
+     * Access the URN for use in RDF annotations, in particular the
+     * Systems Biology Markup Language (SBML).
      *
-     * Return the URN for use in Systems Biology Markup Language
-     *
+     * @return String urn for the identifier (note some accessions
+     *         may have special characters substituted)
      */
     public String getURN();
 
     /**
-     * Results a list of synonyms commonly used to describe the database of this
+     * Provides a list of synonyms commonly used to describe the database of this
      * identifier. For example Enzyme Nomenclature is more frequently referred to
      * as EC. The synonyms are specified in the IdentifierDescription.properites
      * file. If no synonyms are present an empty collection is returned
+     *
      * @return
      */
-    public Collection<String> getDatabaseSynonyms();
+    public Collection<String> getSynonyms();
 
     public Resource getResource();
-    
-    public String toStringSummary();
+
+    /**
+     * Access a summary of the identifier. The summary provides the
+     * name of the identifier concatenated to the accession.
+     *
+     * @return summary
+     */
+    public String getSummary();
+
+
 }

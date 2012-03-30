@@ -21,7 +21,7 @@ import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 
 /**
@@ -35,7 +35,7 @@ import uk.ac.ebi.interfaces.annotation.Descriptor;
  *
  */
 @Context
-@Descriptor(brief = "Soruce",
+@MetaInfo(brief = "Soruce",
             description = "Non-semantic description of where the entity has come from")
 public class Source extends AbstractStringAnnotation {
 

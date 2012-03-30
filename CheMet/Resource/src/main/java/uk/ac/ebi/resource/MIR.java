@@ -20,21 +20,21 @@
  */
 package uk.ac.ebi.resource;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 
 /**
- * 
  * Annotation type defines the MIRIAM MIR Identifying
  * a particular resource. ChEBI for example is MIR:00000002
  * and so a ChEBI identifier is annotated {@code @MIR(id=2)}
  * 
  * @author johnmay
- * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MIRIAMIdentifier {
-
-    int mir() default 0;
+@Target(ElementType.TYPE)
+public @interface MIR {
+    int value() default 0;
 }

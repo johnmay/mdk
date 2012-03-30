@@ -41,14 +41,14 @@ import uk.ac.ebi.resource.IdentifierLoader;
  */
 public abstract class AbstractIdentifier
         extends AbstractDescriptor
-        implements Identifier,
-                   Externalizable {
+        implements Identifier {
 
     public static final IdentifierLoader IDENTIFIER_LOADER = IdentifierLoader.getInstance();
     private String accession;
 
     public AbstractIdentifier() {
         super(IDENTIFIER_LOADER);
+        this.accession = ""; // avoid NullPointerExceptions
     }
 
     public AbstractIdentifier(String accession) {
@@ -69,6 +69,8 @@ public abstract class AbstractIdentifier
      */
     @Override
     public void setAccession(String accession) {
+        if(accession == null)
+            throw new NullPointerException("Provided accession was null");
         this.accession = accession;
     }
 
@@ -95,7 +97,8 @@ public abstract class AbstractIdentifier
      *
      * @return dbName + accession.
      */
-    public String toStringSummary() {
+    @Override
+    public String getSummary() {
         return getShortDescription() + " " + getAccession();
     }
 
@@ -132,6 +135,7 @@ public abstract class AbstractIdentifier
     /**
      * @inheritDoc
      */
+    @Override
     public String getURN() {
         return getResource().getURN(getAccession());
     }
@@ -139,6 +143,7 @@ public abstract class AbstractIdentifier
     /**
      * @inheritDoc
      */
+    @Override
     public URL getURL() {
         return getResource().getURL(getAccession());
     }
@@ -146,7 +151,8 @@ public abstract class AbstractIdentifier
     /**
      * @inheritDoc
      */
-    public Collection<String> getDatabaseSynonyms() {
+    @Override
+    public Collection<String> getSynonyms() {
         return IDENTIFIER_LOADER.getDatabaseSynonyms(getClass());
     }
 

@@ -21,7 +21,7 @@ package uk.ac.ebi.annotation.task;
 import java.io.File;
 import java.security.InvalidParameterException;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 
 /**
@@ -32,7 +32,7 @@ import uk.ac.ebi.interfaces.annotation.Descriptor;
  * @author  $Author$ (this version)
  */
 @Context
-@Descriptor(brief = "Excutable",
+@MetaInfo(brief = "Excutable",
             description = "A parameter for an external task that describes the executable")
 public class ExecutableParameter
         extends FileParameter {

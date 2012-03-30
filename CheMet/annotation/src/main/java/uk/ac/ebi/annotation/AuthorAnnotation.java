@@ -22,11 +22,10 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.StringAnnotation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 
 /**
@@ -37,7 +36,7 @@ import uk.ac.ebi.interfaces.annotation.Descriptor;
  * @author  $Author$ (this version)
  */
 @Context
-@Descriptor(brief = "Comment",
+@MetaInfo(brief = "Comment",
             description = "Short comment that has been added by an author")
 public class AuthorAnnotation
         extends AbstractAnnotation
@@ -49,7 +48,7 @@ public class AuthorAnnotation
 
     private String annotation;
 
-    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             AuthorAnnotation.class);
 
 

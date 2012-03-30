@@ -21,7 +21,7 @@ package uk.ac.ebi.annotation.task;
 import java.io.File;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 /**
  * @name    FileParameter - 2011.10.13 <br>
@@ -31,7 +31,7 @@ import uk.ac.ebi.interfaces.annotation.Descriptor;
  * @author  $Author$ (this version)
  */
 @Context
-@Descriptor(brief = "File",
+@MetaInfo(brief = "File",
             description = "A parameter for a task (not necessarily external) that uses a local file")
 
 public class FileParameter extends Parameter {

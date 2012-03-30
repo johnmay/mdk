@@ -26,6 +26,7 @@ import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.resource.ResourcePreferences;
 
 
@@ -36,6 +37,8 @@ import uk.ac.ebi.resource.ResourcePreferences;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@MetaInfo(brief       = "Basic Chemical Identifier",
+            description = "Provides a basic auto-incrementing identifier for chemical compounds")
 public class BasicChemicalIdentifier
         extends ChemicalIdentifier {
 

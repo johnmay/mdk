@@ -23,8 +23,7 @@ package uk.ac.ebi.resource.chemical;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
-
+import uk.ac.ebi.resource.MIR;
 
 /**
  *
@@ -34,10 +33,9 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
- *
  */
-@MIRIAMIdentifier(mir = 2)
-public class ChEBIIdentifier
+@MIR(2)
+public final class ChEBIIdentifier
         extends ChemicalIdentifier implements Cloneable {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIIdentifier.class);
@@ -45,10 +43,8 @@ public class ChEBIIdentifier
     private static final IdentifierMetaInfo META_DATA = IDENTIFIER_LOADER.getMetaInfo(
             ChEBIIdentifier.class);
 
-
     public ChEBIIdentifier() {
     }
-
 
     /**
      *
@@ -59,25 +55,35 @@ public class ChEBIIdentifier
      */
     public ChEBIIdentifier(String accession) {
         super(accession);
-        super.setAccession(super.getAccession().replaceFirst("ChEBI", "CHEBI"));
+
+        // normalise
+        if(getAccession().contains("ChEBI")){
+            super.setAccession(super.getAccession().replaceFirst("ChEBI", "CHEBI"));
+        }
+
     }
 
 
     @Override
     public void setAccession(String accession) {
+
+        if(accession == null) {
+            throw new NullPointerException("Provided ChEBI identifier was null");
+        }
+
         if (accession.matches("^\\d+")) {
             accession = "CHEBI:" + accession;
         }
+        accession = accession.replaceAll("ChEBI", "CHEBI");
         super.setAccession(accession);
     }
 
 
     /**
-     *
-     * Convenience constructor using only the integer accession of a ChEBI accession
+     * Convenience constructor allows instantiation with only the
+     * integer accession of a ChEBI accession
      *
      * @param accession Integer part of a ChEBI accession
-     *
      */
     public ChEBIIdentifier(Integer accession) {
         super("CHEBI:" + accession);

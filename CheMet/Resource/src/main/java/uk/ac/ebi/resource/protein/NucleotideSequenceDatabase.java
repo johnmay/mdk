@@ -2,7 +2,7 @@ package uk.ac.ebi.resource.protein;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-@MIRIAMIdentifier(mir=29)
+@MIR(value =29)
 public class NucleotideSequenceDatabase
         extends AbstractProteinIdentifier {
 

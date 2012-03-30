@@ -26,9 +26,8 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -40,7 +39,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @author  $Author$ (this version)
  */
 @Context(Metabolite.class)
-@Descriptor(brief = "Molecular Formula",
+@MetaInfo(brief = "Molecular Formula",
             description = "The chemical formula of a metabolite")
 public class MolecularFormula
         extends AbstractStringAnnotation {
@@ -51,7 +50,7 @@ public class MolecularFormula
 
     private String html; // speeds up rendering
 
-    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             MolecularFormula.class);
 
 

@@ -20,7 +20,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 
 /**
@@ -30,7 +30,7 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  * @author johnmay
  * @date Mar 21, 2011
  */
-@MIRIAMIdentifier(mir = 5)
+@MIR(value = 5)
 public abstract class UniProtIdentifier
         extends AbstractProteinIdentifier
         implements Externalizable {

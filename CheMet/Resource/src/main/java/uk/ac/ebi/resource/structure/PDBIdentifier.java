@@ -23,7 +23,7 @@ package uk.ac.ebi.resource.structure;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,7 +38,7 @@ import java.util.Iterator;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-@MIRIAMIdentifier(mir = 20)
+@MIR(value = 20)
 public class PDBIdentifier
         extends StructuralIdentifier
         implements SequenceIdentifier {

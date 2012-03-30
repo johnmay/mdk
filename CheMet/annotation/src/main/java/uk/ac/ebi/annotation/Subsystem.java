@@ -20,7 +20,7 @@ package uk.ac.ebi.annotation;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.Reaction;
 
 
@@ -32,7 +32,7 @@ import uk.ac.ebi.interfaces.entities.Reaction;
  * @author  $Author$ (this version)
  */
 @Context(Reaction.class)
-@Descriptor(brief = "Subsystem",
+@MetaInfo(brief = "Subsystem",
             description = "Abstract functional role of this reaction")
 public class Subsystem
         extends AbstractStringAnnotation {

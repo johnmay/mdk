@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.IdentifierLoader;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 
 /**
@@ -34,7 +34,7 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@MIRIAMIdentifier(mir = 34)
+@MIR(value = 34)
 public class PubChemCompoundIdentifier
         extends ChemicalIdentifier {
 

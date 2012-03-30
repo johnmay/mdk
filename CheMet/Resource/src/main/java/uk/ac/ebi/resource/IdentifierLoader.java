@@ -73,10 +73,10 @@ public class IdentifierLoader
      */
     public int getMIR(Class<? extends AbstractIdentifier> type) {
 
-        MIRIAMIdentifier miriam = type.getAnnotation(MIRIAMIdentifier.class);
+        MIR miriam = type.getAnnotation(MIR.class);
 
         if (miriam != null) {
-            return miriam.mir();
+            return miriam.value();
         }
 
         return Short.parseShort(super.getProperty(type.getSimpleName() + MIR_EXTENSION));

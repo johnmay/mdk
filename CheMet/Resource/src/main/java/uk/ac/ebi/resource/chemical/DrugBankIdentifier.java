@@ -23,7 +23,7 @@ package uk.ac.ebi.resource.chemical;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 
 /**
@@ -33,7 +33,7 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@MIRIAMIdentifier(mir = 102)
+@MIR(value = 102)
 public class DrugBankIdentifier extends AbstractIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(DrugBankIdentifier.class);

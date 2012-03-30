@@ -20,7 +20,7 @@ package uk.ac.ebi.annotation;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 
 /**
@@ -31,7 +31,7 @@ import uk.ac.ebi.interfaces.annotation.Descriptor;
  * @author  $Author$ (this version)
  */
 @Context
-@Descriptor(brief = "Synonym",
+@MetaInfo(brief = "Synonym",
             description = "An alternative name for this entity")
 public class Synonym extends AbstractStringAnnotation {
 

@@ -23,7 +23,7 @@ import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.chemet.annotation.Flag;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.annotation.Unique;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
  */
 @Unique
 @Context(Metabolite.class)
-@Descriptor(brief       = "ACP Associated",
+@MetaInfo(brief       = "ACP Associated",
             description = "Marks a metabolite as being attached to an Acyl Carrier Protein")
 public class ACPAssociated extends AbstractAnnotation implements Flag {
 

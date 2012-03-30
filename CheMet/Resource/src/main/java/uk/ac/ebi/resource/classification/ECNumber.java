@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.PrintStream;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 
 /**
@@ -29,7 +29,7 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  * @author johnmay
  * @date Mar 11, 2011
  */
-@MIRIAMIdentifier(mir = 4)
+@MIR(value = 4)
 public class ECNumber
         extends ClassificationIdentifier implements Comparable<ECNumber> {
 

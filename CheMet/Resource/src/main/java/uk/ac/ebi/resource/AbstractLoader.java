@@ -24,9 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.MetaInfoLoader;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 /**
  *          AbstractLoader – 2011.09.15 <br>
@@ -55,10 +54,10 @@ public abstract class AbstractLoader
 
     public String getShortDescription(Class c) {
 
-        Descriptor descriptor = (Descriptor) c.getAnnotation(Descriptor.class);
+        MetaInfo metaInfo = (MetaInfo) c.getAnnotation(MetaInfo.class);
 
-        if (descriptor != null) {
-            return descriptor.brief();
+        if (metaInfo != null) {
+            return metaInfo.brief();
         }
 
         return getProperty(c.getSimpleName() + SHORT_DESCRIPTION);
@@ -67,10 +66,10 @@ public abstract class AbstractLoader
 
     public String getLongDescription(Class c) {
 
-        Descriptor descriptor = (Descriptor) c.getAnnotation(Descriptor.class);
+        MetaInfo metaInfo = (MetaInfo) c.getAnnotation(MetaInfo.class);
 
-        if (descriptor != null) {
-            return descriptor.description();
+        if (metaInfo != null) {
+            return metaInfo.description();
         }
 
         return getProperty(c.getSimpleName() + LONG_DESCRIPTION);
@@ -93,8 +92,8 @@ public abstract class AbstractLoader
      * @return
      *
      */
-    public MetaInfo getMetaInfo(Class c) {
-        return new MetaInfo(getShortDescription(c),
+    public uk.ac.ebi.core.MetaInfo getMetaInfo(Class c) {
+        return new uk.ac.ebi.core.MetaInfo(getShortDescription(c),
                 getLongDescription(c),
                 getIndex(c));
     }

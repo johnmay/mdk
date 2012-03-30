@@ -11,17 +11,14 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 
 /**
  * 
- * Descriptor provides a brief and long description of an annotation, 
+ * MetaInfo provides a brief and long description of an annotation,
  * observation or identifier
  * 
  * @author johnmay
  * 
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Descriptor {
-
+public @interface MetaInfo {
     String brief();
     String description();
-    
-    
 }

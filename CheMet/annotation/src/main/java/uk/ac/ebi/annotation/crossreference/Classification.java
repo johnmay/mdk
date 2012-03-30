@@ -19,10 +19,9 @@ package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 
@@ -34,14 +33,14 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  $Author$ (this version)
  */
 @Context
-@Descriptor(brief = "Classification",
+@MetaInfo(brief = "Classification",
             description = "A crossreference that specifically links to a classiciation identifier")
 public class Classification<E extends Identifier, O extends Observation>
         extends CrossReference<E, O> {
 
     private static final Logger LOGGER = Logger.getLogger(Classification.class);
 
-    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             Classification.class);
 
 

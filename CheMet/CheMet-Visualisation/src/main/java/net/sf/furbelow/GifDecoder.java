@@ -683,7 +683,7 @@ public class GifDecoder {
     }
 
     /**
-     * Reads Logical Screen Descriptor
+     * Reads Logical Screen MetaInfo
      */
     protected void readLSD() {
         // logical screen size

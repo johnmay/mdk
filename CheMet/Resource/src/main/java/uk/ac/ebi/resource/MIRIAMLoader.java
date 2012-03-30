@@ -18,6 +18,7 @@ package uk.ac.ebi.resource;
 
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import java.io.InputStream;
+import java.io.Reader;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,11 @@ import org.w3c.dom.NodeList;
 import uk.ac.ebi.chemet.resource.XMLHelper;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import static javax.xml.stream.events.XMLEvent.*;
 
 
 /**
@@ -69,6 +75,39 @@ public class MIRIAMLoader {
         load();
     }
 
+
+    private void fastload() throws XMLStreamException {
+        XMLInputFactory factory = XMLInputFactory.newInstance();
+        XMLStreamReader xmlr  = factory.createXMLStreamReader((Reader)null);
+        while(xmlr.hasNext()){
+            int event = xmlr.next();
+            switch (event) {
+                case START_ELEMENT:
+                    if(xmlr.getLocalName().equals("datatype")){
+
+                    }
+                    break;
+            }
+
+        }
+    }
+
+    private MIRIAMEntry getEntry(XMLStreamReader xmlr) throws XMLStreamException {
+        while(xmlr.hasNext()){
+            int event = xmlr.next();
+            switch (event) {
+                case START_ELEMENT:
+                    String name = xmlr.getLocalName();
+                    if(name.equals("name")){
+                        // parse name
+                    } else if(name.equals("definition")){
+                        //
+                    }
+                    break;
+            }
+
+        }
+    }
 
     private void load() {
 

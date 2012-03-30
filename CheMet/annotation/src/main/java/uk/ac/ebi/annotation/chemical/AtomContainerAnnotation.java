@@ -30,10 +30,9 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -45,7 +44,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @author  $Author$ (this version)
  */
 @Context(Metabolite.class)
-@Descriptor(brief       = "Chemical Structure",
+@MetaInfo(brief       = "Chemical Structure",
             description = "The chemical structure of the metabolite")
 public class AtomContainerAnnotation
         extends AbstractAnnotation
@@ -55,7 +54,7 @@ public class AtomContainerAnnotation
 
     private IAtomContainer molecule;
 
-    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             AtomContainerAnnotation.class);
 
 

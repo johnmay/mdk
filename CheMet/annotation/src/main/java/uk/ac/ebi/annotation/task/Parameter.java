@@ -23,8 +23,7 @@ import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 
 /**
@@ -35,7 +34,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @author  $Author$ (this version)
  */
 @Context
-@Descriptor(brief = "Parameter",
+@MetaInfo(brief = "Parameter",
             description = "A parameter for a task (not necessarily external)")
 public class Parameter extends AbstractAnnotation {
 

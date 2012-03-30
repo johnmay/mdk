@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.annotation.Unique;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
@@ -36,7 +36,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  */
 @Unique
 @Context(Metabolite.class)
-@Descriptor(brief       = "Charge",
+@MetaInfo(brief       = "Charge",
             description = "The chare of this chemical")
 public class Charge
         extends AbstractDoubleAnnotation {

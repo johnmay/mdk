@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 
 /**
@@ -34,7 +34,7 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  * @name KEGGCompoundIdentifier – 2011.08.16
  * An identifier for KEGG Compound
  */
-@MIRIAMIdentifier(mir = 26)
+@MIR(value = 26)
 public class KeggGlycanIdentifier
         extends ChemicalIdentifier implements KEGGIdentifier {
 

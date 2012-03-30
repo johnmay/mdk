@@ -26,11 +26,10 @@ import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -44,7 +43,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  *
  */
 @Context(Metabolite.class)
-@Descriptor(brief = "InChI",
+@MetaInfo(brief = "InChI",
             description = "The IUPAC International Chemical Identifier string representation of chemical structure")
 public class InChI
         extends AbstractStringAnnotation
@@ -52,7 +51,7 @@ public class InChI
 
     private static final Logger LOGGER = Logger.getLogger(InChI.class);
 
-    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             InChI.class);
 
     private IAtomContainer structure;

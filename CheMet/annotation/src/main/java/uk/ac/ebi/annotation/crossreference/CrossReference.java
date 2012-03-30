@@ -27,10 +27,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AbstractAnnotation;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
@@ -45,7 +44,7 @@ import uk.ac.ebi.resource.IdentifierFactory;
  * @author  $Author$ (this version)
  */
 @Context
-@Descriptor(brief       = "Crossreference",
+@MetaInfo(brief       = "Crossreference",
             description = "A crossreference to an alternative identifier")
 public class CrossReference<E extends Identifier, O extends Observation>
         extends AbstractAnnotation
@@ -55,7 +54,7 @@ public class CrossReference<E extends Identifier, O extends Observation>
 
     private E identifier;
 
-    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             CrossReference.class);
 
     private List<O> observations = new ArrayList<O>();

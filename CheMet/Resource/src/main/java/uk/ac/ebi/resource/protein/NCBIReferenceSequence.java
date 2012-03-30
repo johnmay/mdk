@@ -2,7 +2,7 @@ package uk.ac.ebi.resource.protein;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,7 +17,7 @@ import java.util.Iterator;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-@MIRIAMIdentifier(mir=39)
+@MIR(39)
 public class NCBIReferenceSequence
         extends AbstractProteinIdentifier {
 

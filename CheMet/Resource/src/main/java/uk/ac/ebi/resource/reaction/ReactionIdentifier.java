@@ -32,6 +32,7 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Deprecated
 public abstract class ReactionIdentifier extends AbstractIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionIdentifier.class);

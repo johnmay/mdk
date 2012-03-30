@@ -22,7 +22,7 @@ package uk.ac.ebi.resource.classification;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 /**
  * @name    ExperimentalFactorOntologyIdentifier
@@ -33,7 +33,7 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  * @brief   ...class description...
  *
  */
-@MIRIAMIdentifier(mir = 110)
+@MIR(value = 110)
 public class CellTypeOntologyIdentifier extends ClassificationIdentifier {
     
     private static final Logger LOGGER = Logger.getLogger(CellTypeOntologyIdentifier.class);

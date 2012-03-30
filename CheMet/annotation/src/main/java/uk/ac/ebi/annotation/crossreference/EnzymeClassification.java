@@ -19,10 +19,9 @@ package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.core.MetaInfo;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.resource.classification.ECNumber;
@@ -36,14 +35,14 @@ import uk.ac.ebi.resource.classification.ECNumber;
  * @author  $Author$ (this version)
  */
 @Context(value = {GeneProduct.class, Reaction.class})
-@Descriptor(brief = "Enzyme Classification",
+@MetaInfo(brief = "Enzyme Classification",
             description = "A crossreference to the Enzyme Classification (E.C.) number")
 public class EnzymeClassification<O extends Observation>
         extends Classification<ECNumber, O> {
 
     private static final Logger LOGGER = Logger.getLogger(EnzymeClassification.class);
 
-    private static MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
             EnzymeClassification.class);
 
 

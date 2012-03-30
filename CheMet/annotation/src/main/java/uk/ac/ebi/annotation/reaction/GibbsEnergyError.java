@@ -3,7 +3,7 @@ package uk.ac.ebi.annotation.reaction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.Descriptor;
+import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 
 /**
@@ -16,7 +16,7 @@ import uk.ac.ebi.interfaces.entities.MetabolicReaction;
  * @version $Rev$
  */
 @Context(MetabolicReaction.class)
-@Descriptor(brief       = "Gibbs energy (ΔG) error",
+@MetaInfo(brief       = "Gibbs energy (ΔG) error",
             description = "Thermodynamic potential of the reaction (usually when predicted)")
 public class GibbsEnergyError
         extends AbstractDoubleAnnotation {

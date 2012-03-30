@@ -23,7 +23,7 @@ package uk.ac.ebi.resource.chemical;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 
 /**
@@ -37,7 +37,7 @@ import uk.ac.ebi.resource.MIRIAMIdentifier;
  * @author  $Author$ (this version)
  *
  */
-@MIRIAMIdentifier(mir = 96)
+@MIR(value = 96)
 public class ChemIDplusIdentifier
         extends ChemicalIdentifier {
 

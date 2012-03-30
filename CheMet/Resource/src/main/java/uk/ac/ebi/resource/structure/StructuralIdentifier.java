@@ -30,6 +30,7 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Deprecated
 public abstract class StructuralIdentifier extends AbstractIdentifier {
 
     public StructuralIdentifier() {

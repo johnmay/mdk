@@ -22,7 +22,7 @@ package uk.ac.ebi.resource.protein;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
-import uk.ac.ebi.resource.MIRIAMIdentifier;
+import uk.ac.ebi.resource.MIR;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +36,7 @@ import java.util.Iterator;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-@MIRIAMIdentifier(mir = 5)
+@MIR(value = 5)
 public class SwissProtIdentifier
         extends UniProtIdentifier {
 
