@@ -107,6 +107,7 @@ public class MIRIAMLoader {
             }
 
         }
+        return null;
     }
 
     private void load() {
