@@ -16,22 +16,17 @@
  */
 package uk.ac.ebi.io.xml;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.resource.IdentifierFactory;
+
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
-import uk.ac.ebi.metabolomes.resource.Resource;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * IntEnzEnzymeEntry.java
@@ -49,7 +44,7 @@ public class IntEnzEnzymeEntry {
     private String acceptedName;
     // store links as general database links
     // e.g. identifier and which db they are from
-    private List<AbstractIdentifier> links;
+    private List<Identifier> links;
     // ELEMENT NAMES
     private static final String ENZYME_ELEMENT = "enzyme";
     private static final String EC_ELEMENT = "ec";
@@ -75,7 +70,7 @@ public class IntEnzEnzymeEntry {
      */
     public IntEnzEnzymeEntry( XMLStreamReader xmlr ) throws XMLStreamException {
 
-        links = new ArrayList<AbstractIdentifier>();
+        links = new ArrayList<Identifier>();
 
         // check this is a valid start point
         if ( isEnzymeStartElement( xmlr ) ) {
@@ -100,7 +95,7 @@ public class IntEnzEnzymeEntry {
      * Get all links that where parsed irespective of their type
      * @return
      */
-    public List<AbstractIdentifier> getAllLinks() {
+    public List<Identifier> getAllLinks() {
         return Collections.unmodifiableList( links );
     }
 
@@ -111,8 +106,8 @@ public class IntEnzEnzymeEntry {
      * @return
      */
     public <T> List<T> getLinks( Class<T> idClassType ) {
-        List<AbstractIdentifier> sublist = new ArrayList<AbstractIdentifier>();
-        for ( AbstractIdentifier link : links ) {
+        List<Identifier> sublist = new ArrayList<Identifier>();
+        for ( Identifier link : links ) {
             if ( link.getClass() == idClassType ) {
                 sublist.add( link );
             }
@@ -193,14 +188,8 @@ public class IntEnzEnzymeEntry {
                     accession = xmlr.getAttributeValue( i );
                 }
                 if ( db_name != null && accession != null ) {
-                    // get the resource form the name e.g. UniProt, PROSITE etc.
-                    // tood use the miriam synonyms to allow searching of the dbs
-                    Resource resource = Resource.getResource( db_name );
-                    // if there's an unrecognised resource log an error
-                    if ( resource == Resource.UNKNOWN ) {
-                        logger.error( "IntEnz link to " + db_name + " not parsed" );
-                    } else {
-                        links.add( IdentifierFactory.getUncheckedIdentifier( resource , accession ) );
+                    if(IdentifierFactory.getInstance().hasSynonym(db_name)) {
+                        links.add( IdentifierFactory.getInstance().ofSynonym( db_name , accession ) );
                     }
                     return;
                 }

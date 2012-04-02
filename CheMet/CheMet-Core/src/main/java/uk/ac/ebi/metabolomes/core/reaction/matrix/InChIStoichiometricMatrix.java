@@ -7,7 +7,8 @@ package uk.ac.ebi.metabolomes.core.reaction.matrix;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
-import uk.ac.ebi.resource.classification.ECNumber;
+
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 
 

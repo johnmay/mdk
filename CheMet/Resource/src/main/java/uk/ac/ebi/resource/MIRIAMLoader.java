@@ -131,7 +131,7 @@ public class MIRIAMLoader {
                                       "None MIRIAM Entry",
                                       "",
                                       "http://www.google.com/search?q=$id",
-                                      new ArrayList()));
+                                      new ArrayList(), false));
 
         Node datatypeNode = xmlDocument.getLastChild().getFirstChild();
 
@@ -170,7 +170,7 @@ public class MIRIAMLoader {
                 }
 
                 // add to the map
-                MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn, url, synonyms);
+                MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn, url, synonyms, true);
                 mirMap.put(mir, entry);
                 nameEntryMap.put(name.toLowerCase(),
                                  entry);

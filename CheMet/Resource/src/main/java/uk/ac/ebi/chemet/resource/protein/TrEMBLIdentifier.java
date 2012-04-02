@@ -1,5 +1,5 @@
 /**
- * SwissProtIdentifier.java
+ * TrEMBLIdentifier.java
  *
  * 2011.09.14
  *
@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.protein;
+package uk.ac.ebi.chemet.resource.protein;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
@@ -28,36 +28,41 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
+
 /**
- * SwissProtIdentifier – 2011.09.14 <br>
- * Class description
- *
- * @author johnmay
- * @author $Author$ (this version)
+ *          TrEMBLIdentifier – 2011.09.14 <br>
+ *          Class description
  * @version $Rev$ : Last Changed $Date$
+ * @author  johnmay
+ * @author  $Author$ (this version)
  */
 @MIR(value = 5)
-public class SwissProtIdentifier
+public class TrEMBLIdentifier
         extends UniProtIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(SwissProtIdentifier.class);
-    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
-            SwissProtIdentifier.class);
+    private static final Logger LOGGER = Logger.getLogger(TrEMBLIdentifier.class);
 
-    public SwissProtIdentifier() {
+    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
+            TrEMBLIdentifier.class);
+
+
+    public TrEMBLIdentifier() {
     }
 
-    public SwissProtIdentifier(String identifier) {
+
+    public TrEMBLIdentifier(String identifier) {
         super(identifier);
     }
+
 
     /**
      * @inheritDoc
      */
     @Override
-    public SwissProtIdentifier newInstance() {
-        return new SwissProtIdentifier();
+    public TrEMBLIdentifier newInstance() {
+        return new TrEMBLIdentifier();
     }
+
 
     /**
      * @inheritDoc
@@ -67,26 +72,29 @@ public class SwissProtIdentifier
         return DESCRIPTION.index;
     }
 
-    @Override
-    public UniProtIdentifier.Status getStatus() {
-        return UniProtIdentifier.Status.REVIEWED;
-    }
 
     @Override
-    public SwissProtIdentifier ofHeader(Iterator<String> token) {
+    public UniProtIdentifier.Status getStatus() {
+        return UniProtIdentifier.Status.UNREVIEWED;
+    }
+
+
+    @Override
+    public TrEMBLIdentifier ofHeader(Iterator<String> token) {
 
         String accession = token.hasNext() ? token.next() : "";
         String name      = token.hasNext() ? token.next() : "";
 
-        return new SwissProtIdentifier(accession);
+        return new TrEMBLIdentifier(accession);
 
     }
+
 
     /**
      * @inheritDoc
      */
     @Override
     public Collection<String> getHeaderCodes() {
-        return Arrays.asList("sp");
+        return Arrays.asList("tr");
     }
 }

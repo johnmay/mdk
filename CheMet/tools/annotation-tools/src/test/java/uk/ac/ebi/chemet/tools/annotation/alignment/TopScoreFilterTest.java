@@ -4,10 +4,10 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.tools.annotation.AnnotationFilter;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
-import uk.ac.ebi.resource.classification.ECNumber;
 
 import java.util.Arrays;
 import java.util.Collection;

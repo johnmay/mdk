@@ -31,7 +31,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import uk.ac.ebi.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
 import uk.ac.ebi.chemet.resource.XMLHelper;
 

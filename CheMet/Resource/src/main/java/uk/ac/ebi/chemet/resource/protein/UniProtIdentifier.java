@@ -12,12 +12,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package uk.ac.ebi.resource.protein;
+package uk.ac.ebi.chemet.resource.protein;
 
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+
+import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.MIR;
@@ -32,8 +35,8 @@ import uk.ac.ebi.resource.MIR;
  */
 @MIR(value = 5)
 public abstract class UniProtIdentifier
-        extends AbstractProteinIdentifier
-        implements Externalizable {
+        extends AbstractIdentifier
+        implements ProteinIdentifier, Externalizable {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(

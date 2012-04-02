@@ -26,8 +26,8 @@ import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.chemet.resource.Brief;
 import uk.ac.ebi.chemet.resource.Description;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.ResourcePreferences;
-import uk.ac.ebi.resource.rna.RNAIdentifier;
 
 /**
  *          BasicGeneIdentifier - 2011.10.17 <br>
@@ -38,7 +38,7 @@ import uk.ac.ebi.resource.rna.RNAIdentifier;
  */
 @Brief("RNA")
 @Description("A basic auto-incrementing identifier for RNA products")
-public class BasicRNAIdentifier extends RNAIdentifier {
+public class BasicRNAIdentifier extends AbstractIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicRNAIdentifier.class);
     private static int ticker = 0;

@@ -16,6 +16,7 @@
  */
 package uk.ac.ebi.metabolomes.execs;
 
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.metabolomes.http.uniprot.UniProtSearchQuery;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -30,7 +31,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import uk.ac.ebi.metabolomes.http.uniprot.UniProtSearch;
-import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.io.xml.IntEnzXML;
 
 /**

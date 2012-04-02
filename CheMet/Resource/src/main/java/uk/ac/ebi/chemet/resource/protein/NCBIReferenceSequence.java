@@ -1,7 +1,9 @@
-package uk.ac.ebi.resource.protein;
+package uk.ac.ebi.chemet.resource.protein;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.MIR;
 
 import java.util.Arrays;
@@ -19,7 +21,8 @@ import java.util.Iterator;
  */
 @MIR(39)
 public class NCBIReferenceSequence
-        extends AbstractProteinIdentifier {
+        extends AbstractIdentifier
+        implements ProteinIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(NCBIReferenceSequence.class);
 

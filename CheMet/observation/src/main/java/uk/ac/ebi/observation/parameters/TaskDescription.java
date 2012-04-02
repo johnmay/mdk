@@ -96,7 +96,7 @@ public class TaskDescription implements TaskOptions {
         program = new File(in.readUTF());
         date = new Date();
         date.setTime(in.readLong());
-        identifier = IdentifierFactory.getInstance().read(in);
+       // identifier = IdentifierFactory.getInstance().read(in);
 
         int nOptions = in.readInt();
         while (nOptions > options.size()) {

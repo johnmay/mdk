@@ -92,7 +92,7 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
         DefaultCrossReferenceIndexWriter writer = new DefaultCrossReferenceIndexWriter(getIndex());
         for (String accession : crossreferences.keySet()) {
             for (Identifier crossreference : crossreferences.get(accession)) {
-                writer.write(accession, crossreference.getIndex(), crossreference.getAccession());
+                writer.write(accession, crossreference);
             }
 
         }

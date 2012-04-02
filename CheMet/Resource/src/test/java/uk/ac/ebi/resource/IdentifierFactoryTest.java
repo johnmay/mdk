@@ -6,13 +6,13 @@ package uk.ac.ebi.resource;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
-import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.basic.*;
-import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 
 import java.io.*;
 
@@ -25,27 +25,7 @@ public class IdentifierFactoryTest {
 
 
 
-    @Test
-    public void testIndexLoading() {
-        IdentifierFactory factory = IdentifierFactory.getInstance();
 
-        System.out.println("Testing factory load times using index (10,000 objects);");
-        for (Identifier id : factory.getSupportedIdentifiers()) {
-            long start = System.currentTimeMillis();
-            Byte index = id.getIndex();
-            for (int j = 0; j < 10000; j++) {
-                factory.ofIndex(index);
-            }
-            long end = System.currentTimeMillis();
-            long time = end - start;
-            System.out.printf("%3s %-25s: %d (ms)\n", id.getIndex(), id.getClass().getSimpleName(),
-                              time);
-
-            // fail test on slow creation
-            Assert.assertTrue(time < 500);
-
-        }
-    }
 
 
     @Test
@@ -131,25 +111,7 @@ public class IdentifierFactoryTest {
     }
 
 
-    @Test
-    public void testIO() throws IOException, ClassNotFoundException {
-        ProteinIdentifier id = new BasicProteinIdentifier("Basic Protein");
-        IdentifierFactory factory = IdentifierFactory.getInstance();
 
-        File f = File.createTempFile("tmp", ".binary");
-
-        ObjectOutput out = new ObjectOutputStream(new FileOutputStream(f));
-        factory.write(out, id);
-        out.close();
-
-        ObjectInput in = new ObjectInputStream(new FileInputStream(f));
-        Identifier readId = factory.read(in);
-        in.close();
-
-
-        System.out.println(readId);
-
-    }
 
 
 }

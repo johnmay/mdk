@@ -83,4 +83,7 @@ public interface Resource {
      * @return Collection of synonyms
      */
     public Collection<String> getSynonyms();
+
+    public Boolean isMapped();
+
 }

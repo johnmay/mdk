@@ -20,14 +20,13 @@
  */
 package uk.ac.ebi.chemet.resource.basic;
 
-import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.chemet.resource.Brief;
 import uk.ac.ebi.chemet.resource.Description;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.ResourcePreferences;
-import uk.ac.ebi.resource.reaction.ReactionIdentifier;
 
 /**
  *          BasicReactionIdentifier – 2011.09.26 <br>
@@ -38,7 +37,7 @@ import uk.ac.ebi.resource.reaction.ReactionIdentifier;
  */
 @Brief("Reaction")
 @Description("A basic auto-incrementing identifier for reactions")
-public class BasicReactionIdentifier extends ReactionIdentifier {
+public class BasicReactionIdentifier extends AbstractIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicReactionIdentifier.class);
 

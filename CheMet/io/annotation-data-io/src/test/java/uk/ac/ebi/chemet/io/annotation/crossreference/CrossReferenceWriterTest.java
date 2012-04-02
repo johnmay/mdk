@@ -8,13 +8,13 @@ import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
 import uk.ac.ebi.chemet.io.annotation.AnnotationOutput;
 import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
 import uk.ac.ebi.chemet.io.observation.ObservationOutput;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.classification.GeneOntologyTerm;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.resource.classification.GeneOntologyTerm;
 
 import java.io.*;
 

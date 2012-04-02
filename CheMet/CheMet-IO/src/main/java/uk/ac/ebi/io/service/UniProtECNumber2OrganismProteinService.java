@@ -32,14 +32,13 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
+import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.io.remote.UniProtECNumber2OrganismProtein;
 import uk.ac.ebi.io.remote.UniProtECNumber2OrganismProtein.UniProtECNumber2OrgProtLuceneFields;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.classification.ECNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
-import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
 
 /**
  *          UniProtCrossReferenceService - 2011.10.26 <br>

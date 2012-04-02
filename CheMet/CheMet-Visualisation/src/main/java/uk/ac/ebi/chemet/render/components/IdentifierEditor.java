@@ -4,17 +4,17 @@
  * 2012.02.03
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,31 +22,34 @@ package uk.ac.ebi.chemet.render.components;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+
+import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.util.*;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.chemet.render.table.renderers.DefaultRenderer;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.IdentifierFactory;
 
 
 /**
+ * CrossreferenceEditor 2012.02.03
  *
- *          CrossreferenceEditor 2012.02.03
+ * @author johnmay
+ * @author $Author$ (this version)
+ *         <p/>
+ *         Class description
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Class description
- *
  */
 public class IdentifierEditor extends JComponent {
 
@@ -60,48 +63,57 @@ public class IdentifierEditor extends JComponent {
 
     private static final IdentifierFactory ID_FACTORY = IdentifierFactory.getInstance();
 
-    private Map<String, Byte> idMap = new HashMap<String, Byte>();
-
-    private List<String> idNames;
+    private List<Class> classes;
 
     private SuggestType suggestion = new SuggestType();
 
     private Identifier identifier;
 
-    public IdentifierEditor(){
+    public IdentifierEditor() {
         this(new ArrayList<Class<? extends Identifier>>());
     }
 
-    public IdentifierEditor(Collection<Class<? extends  Identifier>> identifiers) {
+    public IdentifierEditor(Collection<Class<? extends Identifier>> identifiers) {
 
         setLayout(new FormLayout("pref, 4dlu, pref", "p"));
 
+        classes = new ArrayList<Class>();
+
+
         for (Identifier factoryID : ID_FACTORY.getSupportedIdentifiers()) {
 
-            if(identifiers.isEmpty()){
-                idMap.put(factoryID.getShortDescription(), factoryID.getIndex());
-            }
-
-            ACCEPT:
-            for(Class<? extends Identifier> accepted : identifiers){
-                if(accepted.isInstance(factoryID)){
-                    idMap.put(factoryID.getShortDescription(), factoryID.getIndex());
-                    break ACCEPT;
+            if (identifiers.isEmpty()) {
+                classes.add(factoryID.getClass());
+            } else {
+                ACCEPT:
+                for (Class<? extends Identifier> accepted : identifiers) {
+                    if (accepted.isInstance(factoryID)) {
+                        classes.add(factoryID.getClass());
+                        break ACCEPT;
+                    }
                 }
             }
 
         }
-        
-        idNames = new ArrayList<String>(idMap.keySet());;
 
-        Collections.sort(idNames);
 
-        field = FieldFactory.newField(14);
-        type = ComboBoxFactory.newComboBox(idNames);
 
+        field = FieldFactory.newField(8);
+        type  = ComboBoxFactory.newComboBox(classes);
         type.setPreferredSize(new Dimension(150, 27));
-
         type.setBackground(ThemeManager.getInstance().getTheme().getDialogBackground());
+        type.setRenderer(new ListCellRenderer() {
+
+            private JLabel label = LabelFactory.newLabel("N/A", LabelFactory.Size.SMALL);
+
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                label.setText(ID_FACTORY.ofClass((Class<Identifier>)value).getShortDescription());
+                label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+                label.setBackground(isSelected ? list.getSelectionForeground() : list.getForeground());
+                return label;
+            }
+        });
 
         CellConstraints cc = new CellConstraints();
 
@@ -147,31 +159,33 @@ public class IdentifierEditor extends JComponent {
 
     /**
      * Whether the text field has been filled in
-     * @return 
+     *
+     * @return
      */
     public final boolean isFilled() {
         return !field.getText().isEmpty()
-               && !field.getText().trim().equals(DEFAULT_TEXT);
+                && !field.getText().trim().equals(DEFAULT_TEXT);
     }
 
 
     /**
      * Access an instance of the edited identifier
-     * @return 
+     *
+     * @return
      */
     public Identifier getIdentifier() {
 
-        String accession = field.getText().trim();
-        Byte index = idMap.get((String) type.getSelectedItem());
+        String accession    = field.getText().trim();
+        Class<Identifier> c = (Class<Identifier>) type.getSelectedItem();
 
         // if the idenfier is the same just return the current instance
         if (identifier != null
-            && identifier.getAccession().equals(accession)
-            && index == identifier.getIndex()) {
+                && identifier.getAccession().equals(accession)
+                && c == identifier.getClass()) {
             return identifier;
         }
 
-        identifier = ID_FACTORY.ofIndex(index);
+        identifier = ID_FACTORY.ofClass(c);
 
         identifier.setAccession(accession);
 
@@ -182,7 +196,8 @@ public class IdentifierEditor extends JComponent {
 
     /**
      * Set the identifier to display as editable
-     * @param identifier 
+     *
+     * @param identifier
      */
     public void setIdentifier(Identifier identifier) {
 
@@ -218,12 +233,12 @@ public class IdentifierEditor extends JComponent {
             String accession = field.getText().trim();
             DefaultComboBoxModel model = (DefaultComboBoxModel) type.getModel();
             model.removeAllElements();
-            for (Identifier id : ID_FACTORY.getMatchingIdentifiers(accession)) {
-                model.addElement(id.getShortDescription());
+            for (Class<? extends Identifier> c : ID_FACTORY.ofPattern(accession)) {
+                model.addElement(c);
             }
             if (model.getSize() == 0) {
-                for (String id : idNames) {
-                    model.addElement(id);
+                for (Class c : classes) {
+                    model.addElement(c);
                 }
             }
             type.repaint();

@@ -44,14 +44,12 @@ import static javax.xml.stream.events.XMLEvent.*;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
+import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.resource.classification.KEGGOrthology;
-import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.resource.protein.SwissProtIdentifier;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 /**
  * @name    UniprotAnnotations - 2011.10.13 <br>
@@ -101,7 +99,8 @@ public class UniProtAnnoationLoader implements Externalizable {
         System.out.println(references.size());
         out.writeInt(references.size());
         for (Identifier reference : references) {
-            IdentifierFactory.getInstance().write(out, reference);
+            throw new UnsupportedOperationException("Refractor to use IdentifierOutputStream");
+            //IdentifierFactory.getInstance().write(out, reference);
         }
 
         out.writeInt(map.keySet().size());
@@ -124,7 +123,8 @@ public class UniProtAnnoationLoader implements Externalizable {
         int size = in.readInt();
         Identifier[] references = new Identifier[size];
         for (int i = 0; i < size; i++) {
-            references[i] = factory.read(in);
+            // references[i] = factory.read(in);
+            // throw new UnsupportedOperationException("Refractor to use IdentifierOutputStream");
         }
 
         int keySize = in.readInt();

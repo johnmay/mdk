@@ -11,10 +11,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import uk.ac.ebi.resource.classification.ECNumber;
+
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
+import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**

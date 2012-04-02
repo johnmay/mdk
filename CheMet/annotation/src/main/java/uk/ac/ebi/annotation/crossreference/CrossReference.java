@@ -141,7 +141,7 @@ public class CrossReference<E extends Identifier, O extends Observation>
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
-        identifier = (E) IdentifierFactory.getInstance().read(in);
+        throw new UnsupportedOperationException();
     }
 
 
@@ -151,10 +151,7 @@ public class CrossReference<E extends Identifier, O extends Observation>
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
         super.writeExternal(out);
-        IdentifierFactory.getInstance().write(out, identifier);
-        if (!observations.isEmpty()) {
-            LOGGER.error("Attached observations are not saved");
-        }
+        throw new UnsupportedOperationException();
     }
 
 

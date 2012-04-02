@@ -19,12 +19,12 @@ package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.Reaction;
-import uk.ac.ebi.resource.classification.ECNumber;
 
 
 /**

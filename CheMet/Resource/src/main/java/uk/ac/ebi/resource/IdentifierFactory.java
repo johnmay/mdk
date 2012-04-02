@@ -17,27 +17,23 @@
 package uk.ac.ebi.resource;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.resource.classification.*;
+import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
+import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
-import uk.ac.ebi.metabolomes.resource.Resource;
 import uk.ac.ebi.chemet.resource.basic.*;
 import uk.ac.ebi.resource.chemical.*;
-import uk.ac.ebi.resource.classification.*;
 import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.resource.protein.SwissProtIdentifier;
-import uk.ac.ebi.resource.protein.TrEMBLIdentifier;
-import uk.ac.ebi.resource.structure.HSSPIdentifier;
-import uk.ac.ebi.resource.structure.PDBIdentifier;
+import uk.ac.ebi.chemet.resource.structure.HSSPIdentifier;
+import uk.ac.ebi.chemet.resource.structure.PDBIdentifier;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -56,7 +52,7 @@ public class IdentifierFactory {
 
     private static final String IDENTIFIER_MAPPING_FILE = "IdentifierResourceMapping.properties";
 
-    private static final Identifier[] identifiers = new Identifier[Byte.MAX_VALUE];
+    private static final Map<Class,Identifier> identifiers = new HashMap<Class,Identifier>(60);
 
     private List<Identifier> supportedIdentifiers = new ArrayList<Identifier>(Arrays.asList(
             new ChEBIIdentifier(),
@@ -113,28 +109,12 @@ public class IdentifierFactory {
                                                                                       new TrEMBLIdentifier(),
                                                                                       new SwissProtIdentifier()));
 
+    private Set<Identifier> unmapped = new HashSet<Identifier>();
+    private Set<Identifier> mapped   = new HashSet<Identifier>();
+
     private Map<String, SequenceIdentifier> proteinIdMap = new HashMap();
 
     private List<String> synonymExclusions = Arrays.asList("uniprotkb");
-
-
-    /**
-     * Access a subset of all available identifiers that the accession matches
-     * the pattern provided by {@see uk.ac.ebi.interfaces.Resource#getCompiledPattern()}
-     *
-     * @return Unmodifiable List of identifier
-     */
-    public List<Identifier> getMatchingIdentifiers(String accession) {
-        List<Identifier> subset = new ArrayList<Identifier>();
-        for (Identifier identifier : supportedIdentifiers) {
-            Pattern pattern = identifier.getResource().getCompiledPattern();
-            if (pattern.matcher(accession).matches()) {
-                subset.add(identifier);
-            }
-        }
-        return subset;
-    }
-
 
     /**
      * Access a list of all available identifiers
@@ -149,10 +129,12 @@ public class IdentifierFactory {
     private IdentifierFactory() {
 
         for (Identifier identifier : supportedIdentifiers) {
-            identifiers[identifier.getIndex()] = identifier;
-        }
+            
+            identifiers.put(identifier.getClass(), identifier);
 
-        for (Identifier identifier : supportedIdentifiers) {
+            // add to the mapped/unmapped set
+            Set set = identifier.getResource().isMapped() ? mapped : unmapped;
+            set.add(identifier);
 
             synonyms.put(identifier.getShortDescription().toLowerCase(Locale.ENGLISH), identifier);
             for (String synonym : identifier.getSynonyms()) {
@@ -170,19 +152,16 @@ public class IdentifierFactory {
                 }
 
             }
-        }
 
-        for (Identifier id : supportedIdentifiers) {
+            if(identifier instanceof SequenceIdentifier){
 
-            if(id instanceof SequenceIdentifier){
+                SequenceIdentifier sequenceIdentifier = (SequenceIdentifier) identifier;
 
-                SequenceIdentifier seqid = (SequenceIdentifier) id;
-                
-                for(String code : seqid.getHeaderCodes()){
+                for(String code : sequenceIdentifier.getHeaderCodes()){
                     if(proteinIdMap.containsKey(code)) {
                         System.err.println("Clashing header codes");
                     }
-                    proteinIdMap.put(code, seqid);
+                    proteinIdMap.put(code, sequenceIdentifier);
                 }
 
             }
@@ -190,10 +169,8 @@ public class IdentifierFactory {
 
         }
 
-
         // sort by resource name
         Collections.sort(supportedIdentifiers, new Comparator<Identifier>() {
-
             public int compare(Identifier o1, Identifier o2) {
                 return o1.getResource().getName().compareTo(o2.getResource().getName());
             }
@@ -244,118 +221,6 @@ public class IdentifierFactory {
 
     }
 
-
-    /**
-     * Builds an identifier given the accession
-     * Uses the identifier parse method to validate ids (slower)
-     *
-     * @param resource
-     * @param accession
-     *
-     * @deprecated do not use
-     */
-    @Deprecated
-    public static AbstractIdentifier getIdentifier(Resource resource, String accession) {
-
-        Constructor constructor = resource.getIdentifierConstructor();
-        if (constructor != null) {
-            try {
-                return (AbstractIdentifier) constructor.newInstance(accession, true);
-            } catch (InstantiationException ex) {
-                ex.printStackTrace();
-            } catch (IllegalAccessException ex) {
-                ex.printStackTrace();
-            } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
-            } catch (InvocationTargetException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return new BasicProteinIdentifier(accession);
-    }
-
-    /*     
-     * @param resource
-     * @param accession
-     * @return
-     * @deprecated do not use
-     */
-
-    @Deprecated
-    public static AbstractIdentifier getUncheckedIdentifier(Resource resource, String accession) {
-
-        Constructor constructor = resource.getIdentifierConstructor();
-        if (constructor != null) {
-            try {
-                return (AbstractIdentifier) constructor.newInstance(accession, false);
-            } catch (InstantiationException ex) {
-                ex.printStackTrace();
-            } catch (IllegalAccessException ex) {
-                ex.printStackTrace();
-            } catch (IllegalArgumentException ex) {
-                ex.printStackTrace();
-            } catch (InvocationTargetException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return new BasicProteinIdentifier(accession);
-    }
-
-
-    /**
-     * Builds a list of identifiers from a string that may
-     * or maynot contain multiple identifiers
-     * atm: handle gi|39327|sp|398339 etc..
-     *
-     * @param idsString
-     *
-     * @return
-     *
-     * @Deprecated Use resolveSequenceHeader
-     */
-    @Deprecated
-    public static List<AbstractIdentifier> getIdentifiers(String idsString) {
-
-        List<AbstractIdentifier> hitIdentifiers = new ArrayList<AbstractIdentifier>();
-
-        if (idsString.contains(ID_SEPERATOR)) {
-
-            ListIterator<String> it = Arrays.asList(idsString.split(ID_ESCAPED_SEPERATOR)).
-                    listIterator();
-
-            // db identifiers , gi,sp,tr etc..
-            while (it.hasNext()) {
-
-                String dbid = it.next();
-
-                if (dbid.length() <= DBID_MAX_LENGTH) {
-                    Resource r = Resource.getResource(dbid);
-
-                    if (r != Resource.UNKNOWN) {
-                        hitIdentifiers.add(IdentifierFactory.getIdentifier(r, it.next()));
-                    } else if (it.hasNext()) {
-                        dbid = it.next();
-                        r = Resource.getResource(dbid);
-                        if (r != Resource.UNIPROT) {
-                            hitIdentifiers.add(IdentifierFactory.getIdentifier(r, it.next()));
-                        } else {
-                            it.previous();
-                        }
-                    }
-
-                } else {
-
-                    hitIdentifiers.add(new BasicProteinIdentifier(dbid));
-                }
-            }
-        } else {
-            hitIdentifiers.add(new BasicProteinIdentifier(idsString));
-        }
-
-        return hitIdentifiers;
-    }
-
-
     /**
      * Returns and identifier
      *
@@ -363,23 +228,40 @@ public class IdentifierFactory {
      *
      * @return
      */
-    public Identifier ofClass(Class type) {
-        return ofIndex(IdentifierLoader.getInstance().getIndex(type));
+    public <I extends Identifier> I ofClass(Class<I> type) {
+        return (I) identifiers.get(type).newInstance();
+    }
+
+    public <I extends Identifier> I ofClass(Class<I> type, String accession) {
+        I identifier = ofClass(type);
+        identifier.setAccession(accession);
+        return identifier;
     }
 
 
-    /**
-     * Main factory method. this returns a new identifier of the given index. The indicies are specified in the
-     * IdentifierMetaInfo.propertiers file (see. src/main/resources)
-     *
-     * @param index
-     *
-     * @return
-     */
-    public Identifier ofIndex(Byte index) {
-        return identifiers[index].newInstance();
+    public Collection<Class<? extends Identifier>> ofPattern(String accession){
+        Collection<Class<? extends Identifier>> matched = new ArrayList<Class<? extends Identifier>>();
+        for(Identifier identifier : mapped){
+            Pattern pattern = identifier.getResource().getCompiledPattern();
+            if(pattern.matcher(accession).matches()){
+                matched.add(identifier.getClass());
+            }
+        }
+        return matched;
     }
 
+
+    public boolean hasSynonym(String synonym){
+
+        String key = synonym.toLowerCase(Locale.ENGLISH);
+
+        if (synonyms.containsKey(key)) {
+            return true;
+        }
+
+        return false;
+
+    }
 
     /**
      * Create an identifier of the given synonym. for example "EC" for ECNumber.
@@ -409,39 +291,4 @@ public class IdentifierFactory {
 
     }
 
-    public boolean hasSynonym(String synonym){
-
-        String key = synonym.toLowerCase(Locale.ENGLISH);
-
-        if (synonyms.containsKey(key)) {
-            return true;
-        }
-
-        return false;
-
-    }
-
-    /**
-     * Utility method for reading an identifier to an ObjectOutput
-     */
-    public Identifier read(ObjectInput in) throws IOException, ClassNotFoundException {
-        Identifier identifier = ofIndex(in.readByte());
-        identifier.readExternal(in);
-        return identifier;
-    }
-
-
-    /**
-     * Utility method for writing an identifier to an ObjectOutput
-     */
-    public void write(ObjectOutput out, Identifier identifier) throws IOException {
-        out.writeByte(identifier.getIndex());
-        identifier.writeExternal(out);
-    }
-
-    private static final String ID_SEPERATOR = "|";
-
-    private static final String ID_ESCAPED_SEPERATOR = "\\|";
-
-    private static final int DBID_MAX_LENGTH = 3;
 }

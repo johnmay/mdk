@@ -117,16 +117,12 @@ public abstract class AbstractReconstructionEntity implements Entity, Cloneable,
 //        return super.clone();
 //    }
     public void writeExternal(ObjectOutput out) throws IOException {
-        IdentifierFactory.getInstance().write(out, identifier);
-        out.writeUTF(abbreviation);
-        out.writeUTF(name);
+        throw new UnsupportedOperationException("No longer supported, use entity-io module");
     }
 
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-        identifier = IdentifierFactory.getInstance().read(in);
-        abbreviation = in.readUTF();
-        name = in.readUTF();
+        throw new UnsupportedOperationException("No longer supported, use entity-io module");
     }
 
 

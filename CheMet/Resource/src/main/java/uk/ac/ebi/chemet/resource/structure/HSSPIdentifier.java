@@ -1,5 +1,5 @@
 /**
- * GeneIdentifier.java
+ * PDBIdentifier.java
  *
  * 2011.10.17
  *
@@ -18,30 +18,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.rna;
+package uk.ac.ebi.chemet.resource.structure;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 
 /**
- *          GeneIdentifier - 2011.10.17 <br>
- *          A base class description for rna identifiers
+ *          PDBIdentifier - 2011.10.17 <br>
+ *          A class description of a HSSP (http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+LibInfo+-lib+HSSP) identifier
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@Deprecated
-public abstract class RNAIdentifier extends AbstractIdentifier {
+public class HSSPIdentifier extends AbstractIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(RNAIdentifier.class);
+    private static final Logger LOGGER = Logger.getLogger(HSSPIdentifier.class);
 
-    public RNAIdentifier() {
+    public HSSPIdentifier() {
     }
 
-    public RNAIdentifier(String accession) {
+    public HSSPIdentifier(String accession) {
         super(accession);
     }
 
-    
-
+    public Identifier newInstance() {
+        return new HSSPIdentifier();
+    }
 }

@@ -12,11 +12,11 @@ import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
 import uk.ac.ebi.chemet.io.annotation.AnnotationInput;
 import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
 import uk.ac.ebi.chemet.io.observation.ObservationInput;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.classification.GeneOntologyTerm;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.resource.classification.GeneOntologyTerm;
 
 import java.io.DataInputStream;
 import java.io.IOException;

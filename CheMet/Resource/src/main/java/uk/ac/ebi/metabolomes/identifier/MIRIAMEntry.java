@@ -20,7 +20,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.regex.Pattern;
-import org.apache.log4j.Logger;
+
 import uk.ac.ebi.interfaces.Resource;
 
 /**
@@ -47,26 +47,28 @@ public class MIRIAMEntry
                                                  org.apache.log4j.Logger.getLogger(MIRIAMEntry.class);
     private String id;
     private Pattern pattern;
-    private String resouceName;
+    private String name;
     private String definition;
     private String urn;
     private String url;
+    private Boolean mapped;
     private Collection<String> synonyms;
 
     public MIRIAMEntry(String id, String regex, String resouceName, String definition, String urn,
-                       String url, Collection<String> synonyms) {
-        this(id, Pattern.compile(regex), resouceName, definition, urn, url, synonyms);
+                       String url, Collection<String> synonyms, Boolean mapped) {
+        this(id, Pattern.compile(regex), resouceName, definition, urn, url, synonyms, mapped);
     }
 
     public MIRIAMEntry(String id, Pattern pattern, String resouceName, String definition, String urn,
-                       String url, Collection<String> synonyms) {
+                       String url, Collection<String> synonyms,  Boolean mapped) {
         this.id = id;
         this.pattern = pattern;
-        this.resouceName = resouceName;
+        this.name = resouceName;
         this.definition = definition;
         this.urn = urn;
         this.url = url;
         this.synonyms = synonyms;
+        this.mapped = mapped;
     }
 
     /**
@@ -103,7 +105,7 @@ public class MIRIAMEntry
      * @inheritDoc
      */
     public String getName() {
-        return resouceName;
+        return name;
     }
 
     /**
@@ -111,7 +113,7 @@ public class MIRIAMEntry
      */
     @Deprecated
     public String getResourceName() {
-        return resouceName;
+        return name;
     }
 
     public String getBaseURN() {
@@ -130,6 +132,11 @@ public class MIRIAMEntry
 
     public String getBaseURL() {
         return this.url;
+    }
+
+    @Override
+    public Boolean isMapped() {
+        return mapped;
     }
 
     /**

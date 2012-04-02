@@ -25,9 +25,8 @@ import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;
-import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.classification.ECNumber;
 
 /**
  * @name    IdentiferECMapper

@@ -36,12 +36,12 @@ import static javax.xml.stream.events.XMLEvent.*;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.classification.KEGGOrthology;
+import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
+import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.resource.classification.KEGGOrthology;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.resource.protein.SwissProtIdentifier;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
 
 /**
  * @name    IterativeUniprotAnnotationLoader - 2011.10.13 <br>

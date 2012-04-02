@@ -1,7 +1,7 @@
 /**
- * AbstractProteinIdentifier.java
+ * ExperimentalFactorOntologyIdentifier.java
  *
- * 2011.10.13
+ * 2012.02.15
  *
  * This file is part of the CheMet library
  * 
@@ -18,27 +18,27 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.protein;
+package uk.ac.ebi.chemet.resource.classification;
 
-import uk.ac.ebi.interfaces.identifiers.MetaboliteIdentifier;
-import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.MIR;
 
 /**
- * @name    AbstractProteinIdentifier - 2011.10.13 <br>
- *          Class description
+ * @name    ExperimentalFactorOntologyIdentifier
+ * @date    2012.02.15
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
+ * @author  pmoreno
  * @author  $Author$ (this version)
+ * @brief   ...class description...
+ *
  */
-public abstract class AbstractProteinIdentifier
-        extends AbstractIdentifier
-        implements ProteinIdentifier, MetaboliteIdentifier {
-
-    public AbstractProteinIdentifier() {
-    }
-
-    public AbstractProteinIdentifier(String accession) {
-        super(accession);
+@MIR(value = 67)
+public class FoundationalModelOfAnatomyOntologyIdentifier extends ClassificationIdentifier {
+    
+    private static final Logger LOGGER = Logger.getLogger(FoundationalModelOfAnatomyOntologyIdentifier.class);
+    
+    public Identifier newInstance() {
+        return new FoundationalModelOfAnatomyOntologyIdentifier();
     }
 }

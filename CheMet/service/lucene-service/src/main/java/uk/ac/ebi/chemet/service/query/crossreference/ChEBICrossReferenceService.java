@@ -1,8 +1,10 @@
 package uk.ac.ebi.chemet.service.query.crossreference;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.chemet.service.index.crossreference.ChEBICrossReferenceIndex;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
@@ -14,6 +16,8 @@ import uk.ac.ebi.service.query.CrossReferenceService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * ChEBICrossReferenceService - 29.02.2012 <br/>
@@ -31,10 +35,34 @@ public class ChEBICrossReferenceService
 
     private static final Logger LOGGER = Logger.getLogger(ChEBICrossReferenceService.class);
 
+    private Map<String,Class> indexMap = new HashMap<String,Class>();
+    
     public ChEBICrossReferenceService() {
         super(new ChEBICrossReferenceIndex());
     }
 
+    private Class getIdentifierClass(String index){
+
+        // to save space we store the class name's in the index with a 'class-index' link
+
+        if(indexMap.containsKey(index)){
+            return indexMap.get(index);
+        }
+
+        Query  q    = new TermQuery(new Term("class-index", index));
+        String name = firstValue(q, "class");
+        try {
+            Class c =  Class.forName(name);
+            indexMap.put(index, c);
+            return c;
+        } catch (ClassNotFoundException ex){
+            LOGGER.error("Could not find class for name " + name);
+        }
+
+        return null;
+
+    }
+    
     /**
      * @inheritDoc
      */
@@ -52,14 +80,9 @@ public class ChEBICrossReferenceService
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
             for (ScoreDoc document : hits) {
-                byte index = Byte.parseByte(value(document, DATABASE_IDENTIFIER_INDEX.field()));
-                String accession = value(document, DATABASE_ACCESSION.field());
-
-                Identifier crossreference = IdentifierFactory.getInstance().ofIndex(index);
-                crossreference.setAccession(accession);
-
-                crossreferences.add(crossreference);
-
+                Class  c         = getIdentifierClass(value(document, DATABASE_IDENTIFIER_INDEX.field()));
+                String accession = value(document,          DATABASE_ACCESSION.field());
+                crossreferences.add(IdentifierFactory.getInstance().ofClass(c, accession));
             }
         } catch (IOException ex) {
             LOGGER.error("IO Exception occurred on service: " + ex.getMessage());

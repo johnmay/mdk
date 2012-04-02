@@ -20,31 +20,23 @@
  */
 package uk.ac.ebi.chemet.editor.annotation;
 
-import com.jgoodies.animation.AbstractAnimation;
-import com.jgoodies.animation.Animation;
-import com.jgoodies.animation.Animator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AuthorAnnotation;
 import uk.ac.ebi.annotation.crossreference.*;
 import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.annotation.Flag;
+import uk.ac.ebi.chemet.resource.classification.ClassificationIdentifier;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.StringAnnotation;
 import uk.ac.ebi.interfaces.annotation.BooleanAnnotation;
 import uk.ac.ebi.interfaces.annotation.DoubleAnnotation;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.resource.classification.ClassificationIdentifier;
-import uk.ac.ebi.resource.classification.ECNumber;
 
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.EventListenerList;
 import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableColumn;
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.security.InvalidParameterException;
 import java.util.*;

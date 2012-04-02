@@ -7,16 +7,19 @@ package uk.ac.ebi.io.xml;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javax.xml.stream.XMLStreamException;
-import uk.ac.ebi.resource.classification.ECNumber;
+
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
+import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
+
 import uk.ac.ebi.metabolomes.resource.IntEnzDatabaseProperties;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
-import uk.ac.ebi.resource.protein.SwissProtIdentifier;
 
 /**
  * IntEnzXML.java

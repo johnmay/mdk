@@ -18,11 +18,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.structure;
+package uk.ac.ebi.chemet.resource.structure;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.MIR;
 
 import java.util.Arrays;
@@ -40,7 +41,7 @@ import java.util.Iterator;
  */
 @MIR(value = 20)
 public class PDBIdentifier
-        extends StructuralIdentifier
+        extends AbstractIdentifier
         implements SequenceIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(PDBIdentifier.class);

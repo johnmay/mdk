@@ -25,11 +25,9 @@ import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.chemet.resource.Brief;
 import uk.ac.ebi.chemet.resource.Description;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.identifiers.MetaboliteIdentifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
+import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.ResourcePreferences;
-import uk.ac.ebi.resource.protein.AbstractProteinIdentifier;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -46,7 +44,7 @@ import java.util.Iterator;
 @Brief("Protein")
 @Description("A basic auto-incrementing identifier for proteins")
 public class BasicProteinIdentifier
-        extends AbstractProteinIdentifier implements ProteinIdentifier, MetaboliteIdentifier {
+        extends AbstractIdentifier implements ProteinIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicProteinIdentifier.class);
 

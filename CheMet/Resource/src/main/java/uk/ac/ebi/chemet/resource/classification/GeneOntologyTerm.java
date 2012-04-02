@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.classification;
+package uk.ac.ebi.chemet.resource.classification;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.MIR;
@@ -28,21 +28,21 @@ import uk.ac.ebi.resource.MIR;
  *          GeneOntologyTerm – 2011.09.14 <br>
  *          Class description
  * @version $Rev$ : Last Changed $Date$
- * @author  pmoreno
+ * @author  johnmay
  * @author  $Author$ (this version)
  */
-@MIR(value = 116)
-public class KEGGOrthology
+@MIR(value = 22)
+public class GeneOntologyTerm
         extends ClassificationIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(KEGGOrthology.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneOntologyTerm.class);
 
 
-    public KEGGOrthology() {
+    public GeneOntologyTerm() {
     }
 
 
-    public KEGGOrthology(String accession) {
+    public GeneOntologyTerm(String accession) {
         super(accession);
     }
 
@@ -51,7 +51,7 @@ public class KEGGOrthology
      * @inheritDoc
      */
     @Override
-    public KEGGOrthology newInstance() {
-        return new KEGGOrthology();
+    public GeneOntologyTerm newInstance() {
+        return new GeneOntologyTerm();
     }
 }

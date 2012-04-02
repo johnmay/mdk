@@ -28,7 +28,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.annotation.crossreference.Citation;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 
 import static org.junit.Assert.*;
@@ -38,14 +37,14 @@ import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.annotation.crossreference.*;
 import uk.ac.ebi.annotation.model.FluxLowerBound;
 import uk.ac.ebi.annotation.model.FluxUpperBound;
+import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.chemet.resource.classification.TransportClassificationNumber;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.resource.classification.ECNumber;
-import uk.ac.ebi.resource.classification.TransportClassificationNumber;
 
 
 /**

@@ -22,6 +22,7 @@ package uk.ac.ebi.io.remote;
 
 import com.google.common.collect.Multimap;
 import org.apache.lucene.analysis.Analyzer;
+import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +41,6 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.xml.UniProtAnnoationLoader;
-import uk.ac.ebi.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.resource.organism.Taxonomy;
 

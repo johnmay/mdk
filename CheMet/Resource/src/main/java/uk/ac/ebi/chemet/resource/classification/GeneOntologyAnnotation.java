@@ -1,47 +1,58 @@
+
 /**
- * PDBIdentifier.java
+ * GeneOntologyTerm.java
  *
- * 2011.10.17
+ * 2011.09.14
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.structure;
+package uk.ac.ebi.chemet.resource.classification;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+
 
 /**
- *          PDBIdentifier - 2011.10.17 <br>
- *          A class description of a HSSP (http://srs.ebi.ac.uk/srsbin/cgi-bin/wgetz?-page+LibInfo+-lib+HSSP) identifier
+ *          GeneOntologyTerm – 2011.09.14 <br>
+ *          Identifier for http://www.ebi.ac.uk/GOA/
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class HSSPIdentifier extends StructuralIdentifier {
+public class GeneOntologyAnnotation
+  extends ClassificationIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(HSSPIdentifier.class);
+    private static final Logger LOGGER = Logger.getLogger(GeneOntologyAnnotation.class);
 
-    public HSSPIdentifier() {
+
+    public GeneOntologyAnnotation() {
     }
 
-    public HSSPIdentifier(String accession) {
+
+    public GeneOntologyAnnotation(String accession) {
         super(accession);
     }
 
-    public Identifier newInstance() {
-        return new HSSPIdentifier();
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public GeneOntologyAnnotation newInstance() {
+        return new GeneOntologyAnnotation();
     }
+
+
 }
+
