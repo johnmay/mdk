@@ -33,7 +33,7 @@ import uk.ac.ebi.interfaces.entities.Reaction;
  * @author  $Author$ (this version)
  */
 @Context(Reaction.class)
-@Brief("Subsytem")
+@Brief("Subsystem")
 @Description("Abstract functional role of this reaction")
 public class Subsystem
         extends AbstractStringAnnotation {
