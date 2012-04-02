@@ -20,10 +20,11 @@
 package uk.ac.ebi.annotation.chemical;
 
 import uk.ac.ebi.annotation.AbstractAnnotation;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.chemet.annotation.Flag;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.annotation.Unique;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
@@ -39,27 +40,27 @@ import java.util.regex.Pattern;
  */
 @Unique
 @Context(Metabolite.class)
-@MetaInfo(brief       = "ACP Associated",
-            description = "Marks a metabolite as being attached to an Acyl Carrier Protein")
+@Brief("ACP Associated")
+@Description("Marks a metabolite as being attached to an Acyl Carrier Protein")
 public class ACPAssociated extends AbstractAnnotation implements Flag {
 
     private static final Pattern ACP_NAME = Pattern.compile("ACP");
 
-    private ACPAssociated(){
+    private ACPAssociated() {
     }
 
     private static class ACPAssociatedHolder {
         private static ACPAssociated INSTANCE = new ACPAssociated();
     }
 
-    public static ACPAssociated getInstance(){
+    public static ACPAssociated getInstance() {
         return ACPAssociatedHolder.INSTANCE;
     }
 
     @Override
     public boolean matches(AnnotatedEntity entity) {
-        if(entity instanceof Metabolite){
-            if(ACP_NAME.matcher(entity.getName()).find()){
+        if (entity instanceof Metabolite) {
+            if (ACP_NAME.matcher(entity.getName()).find()) {
                 return true;
             }
         }

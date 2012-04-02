@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 
 /**
  * @name    KEGGBriteEntry

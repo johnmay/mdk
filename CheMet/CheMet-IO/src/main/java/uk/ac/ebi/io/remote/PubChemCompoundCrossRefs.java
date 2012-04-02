@@ -23,6 +23,8 @@ package uk.ac.ebi.io.remote;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.lucene.analysis.Analyzer;
+import uk.ac.ebi.chemet.resource.chemical.ChemSpiderIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
@@ -54,8 +56,6 @@ import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.metabolomes.webservices.EUtilsWebServiceConnection;
-import uk.ac.ebi.resource.chemical.ChemSpiderIdentifier;
-import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
  *          PubChemCompoundCrossRefs - 2011.10.25 <br>

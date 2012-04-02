@@ -86,7 +86,7 @@ public abstract class AbstractAnnotatedEntity
 
         // delegate to annotation manager
         if (annotation.getClass().getAnnotation(Unique.class) != null) {
-            annotations.removeAll(annotation.getIndex());
+            annotations.removeAll(annotation.getClass());
         }
 
         annotations.put(annotation.getClass(), annotation);
@@ -113,7 +113,7 @@ public abstract class AbstractAnnotatedEntity
 
     @Override
     public boolean hasAnnotation(Annotation annotation) {
-        return annotations.containsKey(annotation.getIndex());
+        return annotations.containsKey(annotation.getClass());
     }
 
     @Override

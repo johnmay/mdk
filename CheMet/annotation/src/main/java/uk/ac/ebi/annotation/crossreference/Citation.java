@@ -18,11 +18,11 @@
 package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.chemet.Brief;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.DefaultLoader;
 
 
 /**
@@ -34,13 +34,12 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  $Author$ (this version)
  */
 @Context
-@MetaInfo(brief = "Citation",
-            description = "A citation refering to an non-descript resource")
+@Brief("Citation")
 public class Citation extends CrossReference<Identifier, Observation> {
 
     private static final Logger LOGGER = Logger.getLogger(Citation.class);
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             Citation.class);
 
 
@@ -65,13 +64,6 @@ public class Citation extends CrossReference<Identifier, Observation> {
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return metaInfo.index;
-    }
 
 
     @Override

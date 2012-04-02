@@ -41,14 +41,14 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.webservices.ICrossReferenceProvider;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.chemical.BRNIdentifier;
-import uk.ac.ebi.resource.chemical.CASIdentifier;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.resource.chemical.EINECSIdentifier;
-import uk.ac.ebi.resource.chemical.EPAPesticideIdentifier;
-import uk.ac.ebi.resource.chemical.HSDBIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.resource.chemical.ZINCIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.BRNIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.CASIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.EINECSIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.EPAPesticideIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.HSDBIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.ZINCIdentifier;
 
 /**
  * @name    CactusChemical

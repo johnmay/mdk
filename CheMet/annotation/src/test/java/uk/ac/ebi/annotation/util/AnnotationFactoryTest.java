@@ -42,9 +42,9 @@ import uk.ac.ebi.chemet.resource.classification.TransportClassificationNumber;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.resource.chemical.HMDBIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 
 
 /**

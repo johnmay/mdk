@@ -21,8 +21,11 @@
 package uk.ac.ebi.chemet.resource.structure;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.Synonyms;
 
 /**
  *          PDBIdentifier - 2011.10.17 <br>
@@ -31,6 +34,9 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Brief("HSSP")
+@Description("HSSP (homology-derived structures of proteins) is a derived database merging structural (2-D and 3-D) and sequence information (1-D)")
+@Synonyms("Homology-derived Structures of Proteins")
 public class HSSPIdentifier extends AbstractIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(HSSPIdentifier.class);

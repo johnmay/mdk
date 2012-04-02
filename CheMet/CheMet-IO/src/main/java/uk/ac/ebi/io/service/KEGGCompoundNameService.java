@@ -34,9 +34,9 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.interfaces.services.NameQueryService;
 import uk.ac.ebi.io.remote.KEGGCompoundNames;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 /**
  *          KEGGCompoundNameService - 2011.10.27 <br>

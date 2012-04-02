@@ -81,7 +81,7 @@ public class TaskDescription implements TaskOptions {
         out.writeUTF(program.getAbsolutePath());
         out.writeLong(date.getTime());
 
-        out.writeByte(identifier.getIndex());
+      //  out.writeByte(identifier.getIndex());
         identifier.writeExternal(out);
 
         out.writeInt(options.size());

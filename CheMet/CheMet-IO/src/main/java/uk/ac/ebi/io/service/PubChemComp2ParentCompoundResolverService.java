@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.io.service;
 
+import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
 import uk.ac.ebi.interfaces.services.SecondaryToPrimaryIDResolverService;
 import java.io.IOException;
 import java.util.Collection;
@@ -34,7 +35,6 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.io.remote.PubChemComp2ParentCompound;
 import uk.ac.ebi.io.remote.PubChemComp2ParentCompound.PubChemComp2ParentComp;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
  *          PubChemComp2ParentCompoundResolverService - 2011.10.26 <br>

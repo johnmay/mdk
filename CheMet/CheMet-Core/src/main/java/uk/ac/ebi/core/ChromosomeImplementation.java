@@ -22,9 +22,9 @@ package uk.ac.ebi.core;
 
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
+import uk.ac.ebi.chemet.resource.basic.ChromosomeNumber;
 import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
 
 
     public ChromosomeImplementation(int number, ChromosomeSequence sequence) {
-        super(new ChromosomeIdentifier(number), "CH:" + number, "Choromsome " + number);
+        super(new ChromosomeNumber(number), "CH:" + number, "Choromsome " + number);
         this.sequence = sequence;
     }
 
@@ -104,7 +104,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
      * @inheritDoc
      */
     public int getChromosomeNumber() {
-        return ((ChromosomeIdentifier) getIdentifier()).getNumber();
+        return ((ChromosomeNumber) getIdentifier()).getNumber();
     }
 
 

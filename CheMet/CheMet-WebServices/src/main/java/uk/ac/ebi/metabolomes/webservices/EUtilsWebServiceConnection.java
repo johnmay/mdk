@@ -44,6 +44,8 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.PubChemSubstanceIdentifier;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.metabolomes.webservices.eutils.ELinkXMLResponseParser;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemCompoundESummaryResult;
@@ -51,8 +53,6 @@ import uk.ac.ebi.metabolomes.webservices.eutils.PubChemCompoundXMLResponseParser
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemNamesResult;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemSubstanceESummaryResult;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemSubstanceXMLResponseParser;
-import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
-import uk.ac.ebi.resource.chemical.PubChemSubstanceIdentifier;
 
 /**
  * @name    EUtilsWebServiceConnection

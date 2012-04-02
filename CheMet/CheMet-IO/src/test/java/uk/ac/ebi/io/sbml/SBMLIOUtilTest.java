@@ -13,6 +13,7 @@ import org.sbml.jsbml.SBMLWriter;
 import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
@@ -21,7 +22,6 @@ import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.io.xml.SBMLIOUtil;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 import javax.xml.stream.XMLStreamException;

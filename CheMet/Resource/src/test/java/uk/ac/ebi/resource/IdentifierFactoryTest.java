@@ -7,10 +7,10 @@ package uk.ac.ebi.resource;
 import junit.framework.Assert;
 import org.junit.Test;
 import uk.ac.ebi.chemet.resource.IdentifierSet;
+import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.chemet.resource.basic.*;
 
 
@@ -33,29 +33,6 @@ public class IdentifierFactoryTest {
         Assert.assertEquals(HMDBIdentifier.class, factory.ofSynonym("HMDB").getClass());
     }
 
-
-    @Test
-    public void testClassLoading() {
-        IdentifierFactory factory = IdentifierFactory.getInstance();
-
-        System.out.println("Testing factory load times using Class (10,000 objects);");
-        for (Identifier id : factory.getSupportedIdentifiers()) {
-            long start = System.currentTimeMillis();
-            Class clazz = id.getClass();
-            for (int j = 0; j < 10000; j++) {
-                factory.ofClass(clazz);
-            }
-            long end = System.currentTimeMillis();
-            long time = end - start;
-
-            System.out.printf("%3s %-25s: %d (ms)\n", id.getIndex(), id.getClass().getSimpleName(),
-                              time);
-
-            // fail test on slow creation
-            Assert.assertTrue(time < 500);
-
-        }
-    }
 
 
     @Test

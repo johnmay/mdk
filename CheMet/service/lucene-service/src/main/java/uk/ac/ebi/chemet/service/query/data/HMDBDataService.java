@@ -5,10 +5,10 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.chemet.service.index.data.HMDBDataIndex;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultDataIndexWriter;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
-import uk.ac.ebi.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.service.query.data.MolecularChargeService;
 import uk.ac.ebi.service.query.data.MolecularFormulaService;
 

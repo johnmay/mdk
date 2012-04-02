@@ -140,13 +140,7 @@ public abstract class UniProtIdentifier
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return META_INFO.index;
-    }
+
 
 
     /**

@@ -18,29 +18,31 @@
 package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.DefaultLoader;
 
 
 /**
- *          Classification – 2011.09.14 <br>
- *          Base class for classification cross references such as EC, TCDB codes and GO Terms
+ * Classification – 2011.09.14 <br>
+ * Base class for classification cross references such as EC, TCDB codes and GO Terms
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 @Context
-@MetaInfo(brief = "Classification",
-            description = "A crossreference that specifically links to a classiciation identifier")
+@Brief("Classification")
+@Description("A cross-reference that specifically links to a classifcation identifier")
 public class Classification<E extends Identifier, O extends Observation>
         extends CrossReference<E, O> {
 
     private static final Logger LOGGER = Logger.getLogger(Classification.class);
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             Classification.class);
 
 
@@ -68,15 +70,6 @@ public class Classification<E extends Identifier, O extends Observation>
     @Override
     public String getLongDescription() {
         return metaInfo.description;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return metaInfo.index;
     }
 
 

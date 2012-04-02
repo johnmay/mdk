@@ -21,6 +21,7 @@
 package uk.ac.ebi.io.remote;
 
 import org.apache.lucene.analysis.Analyzer;
+import uk.ac.ebi.chemet.resource.chemical.ChemicalIdentifier;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +41,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.interfaces.services.LuceneService;
-import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
 
 /**
  *          Writes a Lucene index for a set molecules for which a unique connectivity string has been previously 

@@ -32,11 +32,11 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
+import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
 import uk.ac.ebi.interfaces.services.ChemicalConnectivityQueryService;
 import uk.ac.ebi.io.remote.PubChemCompoundConnectivity;
 import uk.ac.ebi.io.remote.PubChemCompoundConnectivity.PChemCompConnectivityLuceneFields;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
  *          ChEBIMoleculeConnectivityService - 2011.10.26 <br>

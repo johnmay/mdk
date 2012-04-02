@@ -75,7 +75,7 @@ public class ObservationCollection
 
     public boolean remove(Observation observation) {
         sourceMap.remove(observation.getSource(), observation);
-        return typeMap.remove(observation.getIndex(), observation);
+        return typeMap.remove(observation.getClass(), observation);
     }
 
 
@@ -92,56 +92,6 @@ public class ObservationCollection
     public Collection<Observation> getAll() {
         return sourceMap.values();
     }
-
-
-    public void writeExternal(ObjectOutput out) throws IOException {
-
-        List<AnnotatedEntity> sources = new ArrayList(sourceMap.keySet());
-
-        out.writeInt(sourceMap.keySet().size());
-
-        for (AnnotatedEntity opt : sources) {
-            out.writeObject(opt);
-        }
-
-        out.writeInt(typeMap.values().size());
-        for (Class c : typeMap.keySet()) {
-            Collection<Observation> obs = typeMap.get(c);
-            out.writeInt(obs.size());
-            out.writeByte(ObservationLoader.getInstance().getIndex(c));
-            for (Observation o : obs) {
-                o.writeExternal(out, sources);
-            }
-        }
-    }
-
-
-    public void readExternal(ObjectInput in, AnnotatedEntity entity) throws IOException, ClassNotFoundException {
-
-
-        int nTaskOptions = in.readInt();
-        List<AnnotatedEntity> sources = new ArrayList();
-        while (nTaskOptions > sources.size()) {
-            sources.add((AnnotatedEntity) in.readObject());
-        }
-
-        int nObservations = in.readInt();
-
-        ObservationFactory factory = ObservationFactory.getInstance();
-
-        while (nObservations > typeMap.values().size()) {
-            int n = in.readInt();
-            Byte index = in.readByte();
-            for (int j = 0; j < n; j++) {
-                Observation observation = factory.readExternal(index, in, sources);
-                observation.setEntity(entity);
-                typeMap.put(observation.getClass(), observation);
-                sourceMap.put(observation.getSource(), observation);
-            }
-        }
-
-    }
-
 
     @Override
     public int hashCode() {

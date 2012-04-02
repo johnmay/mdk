@@ -59,19 +59,5 @@ public interface Descriptor extends Externalizable {
      */
     public String getLongDescription();
 
-
-    /**
-     *
-     * Accessor to the annotation index
-     *
-     * @return Index value specified on object construction via a properties file
-     *
-     */
-    public Byte getIndex();
-
-
-
-
-
 }
 

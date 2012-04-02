@@ -37,21 +37,15 @@ import uk.ac.ebi.interfaces.MetaInfoLoader;
  * @version $Rev$ : Last Changed $Date$
  */
 public class IdentifierLoader
-        extends AbstractLoader
+        extends DefaultLoader
         implements MetaInfoLoader {
-
-    private static final String RESOURCE_NAME = "IdentifierDescription.properties";
-
-    private static final String MIR_EXTENSION = ".MIR";
-
-    private static final String SYNONYMS = ".Synonyms";
 
     private static final MIRIAMLoader MIRIAM_LOADER = MIRIAMLoader.getInstance();
 
     private Map<Class, IdentifierMetaInfo> loaded = new HashMap<Class, IdentifierMetaInfo>(32);
 
     private IdentifierLoader() {
-        super(IdentifierLoader.class.getResourceAsStream(RESOURCE_NAME));
+        super();
     }
 
 
@@ -80,8 +74,7 @@ public class IdentifierLoader
             return miriam.value();
         }
 
-        return Short.parseShort(super.getProperty(type.getSimpleName() + MIR_EXTENSION));
-
+        return 0; // default entry
 
     }
 
@@ -103,23 +96,16 @@ public class IdentifierLoader
      * @inheritDoc
      */
     @Override
-    public String getShortDescription(Class type) {
+    public String getShortDescription(Class c) {
 
-        String key = type.getSimpleName() + SHORT_DESCRIPTION;
-
-
-        if (super.containsKey(key)) {
-            return super.getShortDescription(type);
-        }
-
-        int mir = getMIR(type);
+        int mir = getMIR(c);
 
         if (mir != 0) {
             MIRIAMEntry entry = MIRIAM_LOADER.getEntry(mir);
             return entry.getName();
         }
 
-        return "";
+        return super.getLongDescription(c);
 
     }
 
@@ -128,22 +114,16 @@ public class IdentifierLoader
      * @inheritDoc
      */
     @Override
-    public String getLongDescription(Class type) {
+    public String getLongDescription(Class c) {
 
-        String key = type.getSimpleName() + LONG_DESCRIPTION;
-
-        if (super.containsKey(key)) {
-            return super.getLongDescription(type);
-        }
-
-        int mir = getMIR(type);
+        int mir = getMIR(c);
 
         if (mir != 0) {
             MIRIAMEntry entry = MIRIAM_LOADER.getEntry(mir);
             return entry.getDescription();
         }
 
-        return "";
+        return super.getLongDescription(c);
 
     }
 
@@ -157,17 +137,16 @@ public class IdentifierLoader
      */
     public Collection<String> getDatabaseSynonyms(Class type) {
 
-        String key = type.getSimpleName() + SYNONYMS;
-
         int mir = getMIR(type);
 
-        Collection<String> synonyms = new ArrayList();
+        Set<String> synonyms = new HashSet();
         if (mir != 0) {
             synonyms.addAll(MIRIAM_LOADER.getEntry(mir).getSynonyms());
         }
 
-        if (super.containsKey(key)) {
-            synonyms.addAll(Arrays.asList(super.getProperty(key).split(",")));
+        Synonyms annotation = (Synonyms) type.getAnnotation(Synonyms.class);
+        if (annotation != null) {
+            synonyms.addAll(Arrays.asList(annotation.value()));
         }
 
         return synonyms;
@@ -181,11 +160,9 @@ public class IdentifierLoader
     }
 
     private IdentifierMetaInfo loadMetaInfo(Class c) {
-        IdentifierMetaInfo metaInfo = new IdentifierMetaInfo(getEntry(c),
-                                                                   getShortDescription(c),
-                                                                   getLongDescription(c),
-                                                                   getIndex(c),
-                                                                   getDatabaseSynonyms(c));
+        IdentifierMetaInfo metaInfo = new IdentifierMetaInfo(super.getMetaInfo(c),
+                                                             getEntry(c),
+                                                             getDatabaseSynonyms(c));
         loaded.put(c, metaInfo);
         return metaInfo;
     }

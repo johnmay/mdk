@@ -22,7 +22,7 @@ import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicGeneIdentifier;
-import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
+import uk.ac.ebi.chemet.resource.basic.ChromosomeNumber;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
@@ -133,7 +133,7 @@ public class ReconstructionDataWriterTest {
         r1.addModifier(p1);
         r2.setDirection(Direction.BACKWARD);
 
-        Chromosome chromosome = factory.ofClass(Chromosome.class, new ChromosomeIdentifier(1), "Chromosome 1", "ch1");
+        Chromosome chromosome = factory.ofClass(Chromosome.class, new ChromosomeNumber(1), "Chromosome 1", "ch1");
 
         reconstruction.getGenome().add(chromosome);
         chromosome.setSequence(new ChromosomeSequence("AACGTGCTGATCGTACGTAGCTAGCTAGCATGCATGCATGCATGACTGCATAC".toLowerCase()));

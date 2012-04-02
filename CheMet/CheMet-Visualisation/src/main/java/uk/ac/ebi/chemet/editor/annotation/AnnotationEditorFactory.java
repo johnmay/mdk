@@ -26,14 +26,14 @@ import uk.ac.ebi.annotation.crossreference.*;
 import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.annotation.Flag;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ClassificationIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.StringAnnotation;
 import uk.ac.ebi.interfaces.annotation.BooleanAnnotation;
 import uk.ac.ebi.interfaces.annotation.DoubleAnnotation;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;

@@ -12,7 +12,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 
 /**
  *

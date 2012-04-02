@@ -27,14 +27,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
-import uk.ac.ebi.annotation.Synonym;
-import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
-import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
+
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
-import uk.ac.ebi.metabolomes.webservices.util.SynonymCandidateEntry;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 
 

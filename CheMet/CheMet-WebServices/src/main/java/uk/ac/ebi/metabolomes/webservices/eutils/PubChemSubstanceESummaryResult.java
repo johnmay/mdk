@@ -32,9 +32,9 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGDrugIdentifier;
-import uk.ac.ebi.resource.chemical.KeggGlycanIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGDrugIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KeggGlycanIdentifier;
 
 /**
  * @name    PubChemSubstanceESummaryResult

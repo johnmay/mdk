@@ -21,12 +21,12 @@
 package uk.ac.ebi.io.remote;
 
 import org.apache.lucene.analysis.Analyzer;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.prefs.Preferences;
 import org.apache.log4j.Logger;
@@ -41,7 +41,6 @@ import org.apache.lucene.util.Version;
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.io.plain.KEGGBriteEntry;
 import uk.ac.ebi.io.plain.KEGGBriteReader;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 /**
  *          KEGGCompound - 2011.11.19 <br>

@@ -62,13 +62,5 @@ public abstract class AbstractDescriptor
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    public Byte getIndex() {
-        return loader.getIndex(getClass());
-    }
-
-
 }
 

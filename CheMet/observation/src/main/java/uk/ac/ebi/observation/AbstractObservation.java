@@ -30,6 +30,7 @@ import uk.ac.ebi.core.AbstractDescriptor;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.vistors.ObservationVisitor;
+import uk.ac.ebi.resource.DefaultLoader;
 
 /**
  *          AbstractObservation – 2011.09.14 <br>
@@ -48,7 +49,7 @@ public abstract class AbstractObservation
     private AnnotatedEntity entity;
 
     public AbstractObservation() {
-        super(ObservationLoader.getInstance());
+        super(DefaultLoader.getInstance());
     }
 
     public void accept(ObservationVisitor visitor) {

@@ -26,9 +26,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.resource.chemical.KeggGlycanIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGDrugIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KeggGlycanIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGDrugIdentifier;
 
 /**
  * @name    PubChemSubstanceSDFRecord

@@ -18,29 +18,30 @@
 package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.resource.DefaultLoader;
 
 
 /**
- * @name    KEGGCrossReference - 2011.10.03 <br>
- *          Class metaInfo
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name KEGGCrossReference - 2011.10.03 <br>
+ * Class metaInfo
  */
 @Context(Metabolite.class)
-@MetaInfo(brief = "KEGG Compound Crossreference",
-            description = "A crossreference that specifically links to the KEGG Compound database")
+@Brief("KEGG Compound Cross-reference")
+@Description("A cross-reference that specifically links to the KEGG Compound database")
 public class KEGGCrossReference<O extends Observation> extends CrossReference<KEGGCompoundIdentifier, O> {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCrossReference.class);
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             KEGGCrossReference.class);
 
 
@@ -68,15 +69,6 @@ public class KEGGCrossReference<O extends Observation> extends CrossReference<KE
     @Override
     public String getLongDescription() {
         return metaInfo.description;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return metaInfo.index;
     }
 
 

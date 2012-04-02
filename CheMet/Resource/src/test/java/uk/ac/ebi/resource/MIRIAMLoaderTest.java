@@ -7,8 +7,9 @@ package uk.ac.ebi.resource;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.util.MIRIAMLoader;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
+
 import static org.junit.Assert.*;
 
 /**

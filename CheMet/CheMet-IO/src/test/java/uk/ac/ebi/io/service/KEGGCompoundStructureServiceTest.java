@@ -7,9 +7,8 @@ package uk.ac.ebi.io.service;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.core.tools.CDKSerializer;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
-import static org.junit.Assert.*;
 
 /**
  *

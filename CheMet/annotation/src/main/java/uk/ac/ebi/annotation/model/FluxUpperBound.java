@@ -19,25 +19,24 @@
 package uk.ac.ebi.annotation.model;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.Reaction;
 
 
 /**
- *
  * FluxUpperBound 2012.01.12
  *
- * @version $Rev$ : Last Changed $Date$
  * @author johnmay
  * @author $Author$ (this version)
- *
- * Class description
- *
+ *         <p/>
+ *         Class description
+ * @version $Rev$ : Last Changed $Date$
  */
 @Context(Reaction.class)
-@MetaInfo(brief = "Flux Upper Bound",
-            description = "An upper bound for reaction flux")
+@Brief("Flux Upper Bound")
+@Description("A upper bound for reaction flux")
 public class FluxUpperBound extends FluxBound {
 
     private static final Logger LOGGER = Logger.getLogger(FluxUpperBound.class);

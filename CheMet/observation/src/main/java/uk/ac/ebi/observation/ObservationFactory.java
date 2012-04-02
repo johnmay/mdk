@@ -24,7 +24,10 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.security.InvalidParameterException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.interfaces.AnnotatedEntity;
@@ -42,7 +45,7 @@ public class ObservationFactory {
 
     private static final Logger LOGGER = Logger.getLogger(ObservationFactory.class);
     // reflective map
-    private static Observation[] instances = new Observation[Byte.MAX_VALUE];
+    private static Map<Class,Observation> instances = new HashMap<Class,Observation>();
 
     public static ObservationFactory getInstance() {
         return observationFactoryHolder.INSTANCE;
@@ -56,7 +59,7 @@ public class ObservationFactory {
     private ObservationFactory() {
         try {
             for (Observation observation : Arrays.asList(new LocalAlignment())) {
-                instances[observation.getIndex()] = observation;
+                instances.put(observation.getClass(), observation);
             }
         } catch (Exception e) {
             LOGGER.error("Could not store annotation constructor in map");
@@ -70,46 +73,12 @@ public class ObservationFactory {
      * AnnotationLoader. The average speed reduction is 1800 % slower (note this is still only about
      * 1/3 second for 100 000 objects).
      *
-     * @param type
+     * @param c
      * @return
      */
-    public Observation ofClass(Class type) {
-        return ofIndex(ObservationLoader.getInstance().getIndex(type));
+    public Observation ofClass(Class<? extends Observation> c) {
+        return instances.get(c);
     }
 
-    /**
-     *
-     * Construct an empty observation given it's index. It the index returns a null pointer then an
-     * InvalidParameterException is thrown informing of the problematic index. The index is given
-     * in the uk.ac.ebi.observation/ObservationDescription.properties file which in turn is loaded by
-     * {@see ObservationLoader}.
-     *
-     * @param index
-     * @return
-     *
-     */
-    public Observation ofIndex(int index) {
 
-        Observation observation = instances[index];
-
-        if (observation != null) {
-            return observation.getInstance();
-        }
-
-        throw new InvalidParameterException("Unable to get instance of annotation with index: "
-                + index);
-    }
-
-    public Observation readExternal(Byte index, ObjectInput in) throws IOException,
-            ClassNotFoundException {
-        Observation obs = ofIndex(index);
-        obs.readExternal(in);
-        return obs;
-    }
-
-    public Observation readExternal(Byte index, ObjectInput in, List<AnnotatedEntity> options) throws IOException, ClassNotFoundException {
-        Observation obs = ofIndex(index);
-        obs.readExternal(in, options);
-        return obs;
-    }
 }

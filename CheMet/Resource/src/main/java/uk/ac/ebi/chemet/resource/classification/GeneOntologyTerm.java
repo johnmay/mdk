@@ -22,6 +22,7 @@ package uk.ac.ebi.chemet.resource.classification;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.MIR;
+import uk.ac.ebi.resource.Synonyms;
 
 
 /**
@@ -31,7 +32,8 @@ import uk.ac.ebi.resource.MIR;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@MIR(value = 22)
+@MIR(22)
+@Synonyms("GO")
 public class GeneOntologyTerm
         extends ClassificationIdentifier {
 

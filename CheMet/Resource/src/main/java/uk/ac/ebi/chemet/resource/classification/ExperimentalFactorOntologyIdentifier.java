@@ -21,7 +21,9 @@
 package uk.ac.ebi.chemet.resource.classification;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.Brief;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.Synonyms;
 
 /**
  * @name    ExperimentalFactorOntologyIdentifier
@@ -32,6 +34,8 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @brief   ...class description...
  *
  */
+@Brief("Experimental Factor Ontology")
+@Synonyms("EFO")
 public class ExperimentalFactorOntologyIdentifier extends ClassificationIdentifier {
     
     private static final Logger LOGGER = Logger.getLogger(ExperimentalFactorOntologyIdentifier.class);

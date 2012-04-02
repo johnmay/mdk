@@ -1,4 +1,3 @@
-
 /**
  * WriteReactionsMain.java
  *
@@ -21,28 +20,31 @@
  */
 package uk.ac.ebi.metabolomes.identifier;
 
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.chemet.resource.chemical.ChemicalIdentifier;
+import uk.ac.ebi.chemet.resource.util.MIRIAMEntry;
+import uk.ac.ebi.resource.IdentifierMetaInfo;
+
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
-import uk.ac.ebi.chemet.resource.util.MIRIAMEntry;
-import uk.ac.ebi.resource.IdentifierMetaInfo;
-import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
-
 
 /**
- * @brief   Wrapper object for an InChI storing the InChI, InChIKey and AuxInfo
- *          strings. Allows storage and comparison.
- *          TODO: Name is for convenience only might be better to move this somewhere else
- *
- * @author  Pablo Moreno
- * @author  John May
- * @author  $Author$ (this version)
+ * @author Pablo Moreno
+ * @author John May
+ * @author $Author$ (this version)
  * @version $Rev$ Last Changed $Date$
- * @date    2011.05.06
+ * @brief Wrapper object for an InChI storing the InChI, InChIKey and AuxInfo
+ * strings. Allows storage and comparison.
+ * TODO: Name is for convenience only might be better to move this somewhere else
+ * @date 2011.05.06
  */
+@Brief("InChI")
+@Description("The IUPAC International Chemical Identifier ")
 public class InChI
-  extends ChemicalIdentifier
-  implements Serializable {
+        extends ChemicalIdentifier
+        implements Serializable {
 
     private static final long serialVersionUID = 8312829501093553787L;
     private String name = "";
@@ -51,7 +53,7 @@ public class InChI
     private String auxInfo = "";
     transient private boolean standard = false;
     // main layer
-//    transient private MolecularFormula formula;
+    //    transient private MolecularFormula formula;
     transient private String connectivity;
     transient private String hydrogens;
     // charge layer
@@ -59,7 +61,7 @@ public class InChI
     // matchers
     transient private Pattern standardInChIMatcher = Pattern.compile("InChI=1S");
     private static final IdentifierMetaInfo DESCRIPTION =
-                                               IDENTIFIER_LOADER.getMetaInfo(InChI.class);
+            IDENTIFIER_LOADER.getMetaInfo(InChI.class);
 
 
     public InChI() {
@@ -67,8 +69,9 @@ public class InChI
 
 
     /**
-     * @brief   Construtor for instantiating with just the InChI string
-     * @param   inchi
+     * @param inchi
+     *
+     * @brief Construtor for instantiating with just the InChI string
      */
     public InChI(String accession) {
         this("", accession, "", "");
@@ -76,26 +79,28 @@ public class InChI
 
 
     /**
-     * @brief Constructor for setting the InChi, InChIKey and AuxInfo
      * @param inchi
      * @param key
      * @param auxInfo
+     *
+     * @brief Constructor for setting the InChi, InChIKey and AuxInfo
      */
     public InChI(
-      String inchi,
-      String key,
-      String auxInfo) {
+            String inchi,
+            String key,
+            String auxInfo) {
         this("", inchi, key, auxInfo);
     }
 
 
     /**
-     * @brief Constructor for setting the Molecule name, InChI, InChI-Key and AuxInfo.
-     *        the InChI layers are split and stored
      * @param name
      * @param inchi
      * @param key
      * @param auxInfo
+     *
+     * @brief Constructor for setting the Molecule name, InChI, InChI-Key and AuxInfo.
+     * the InChI layers are split and stored
      */
     public InChI(String name,
                  String inchi,
@@ -112,29 +117,30 @@ public class InChI
         setAccession(inchi);
 
         String[] layers = this.inchi.split("/");
-        if( standardInChIMatcher.matcher(layers[0]).find() ) {
+        if (standardInChIMatcher.matcher(layers[0]).find()) {
             standard = true;
         }
-//
-//
-//        for( String inchiLayer : layers ) {
-//        }
+        //
+        //
+        //        for( String inchiLayer : layers ) {
+        //        }
 
         // no to test if the part exists
-//        this.formula = new MolecularFormula();
-//        this.connectivity = layers[2];
-//        this.hydrogens = layers[3];
-//
-//        if ( layers.length > 4 ) {
-//            this.charges = layers[4];
-//        }
+        //        this.formula = new MolecularFormula();
+        //        this.connectivity = layers[2];
+        //        this.hydrogens = layers[3];
+        //
+        //        if ( layers.length > 4 ) {
+        //            this.charges = layers[4];
+        //        }
 
     }
 
 
     /**
-     * @brief  Accessor for the stored name
      * @return
+     *
+     * @brief Accessor for the stored name
      */
     public String getName() {
         return name;
@@ -142,8 +148,9 @@ public class InChI
 
 
     /**
-     * @brief  Accessor for the InChI string
      * @return InChI string
+     *
+     * @brief Accessor for the InChI string
      */
     public String getInchi() {
         return inchi;
@@ -151,8 +158,9 @@ public class InChI
 
 
     /**
-     * @brief Mutator for the InChI string
      * @param inchi
+     *
+     * @brief Mutator for the InChI string
      */
     public void setInchi(String inchi) {
         this.inchi = inchi;
@@ -160,8 +168,9 @@ public class InChI
 
 
     /**
-     * @brief  Accessor for the hashed InChI Key
      * @return 27 character InChIKey
+     *
+     * @brief Accessor for the hashed InChI Key
      */
     public String getInchiKey() {
         return key;
@@ -169,8 +178,9 @@ public class InChI
 
 
     /**
-     * @brief Mutator for the InChI Key
      * @param inchiKey
+     *
+     * @brief Mutator for the InChI Key
      */
     public void setInchiKey(String inchiKey) {
         this.key = inchiKey;
@@ -178,8 +188,9 @@ public class InChI
 
 
     /**
-     * @brief  Accessor for the AuxInfo string
      * @return AuxInfo string
+     *
+     * @brief Accessor for the AuxInfo string
      */
     public String getAuxInfo() {
         return auxInfo;
@@ -187,8 +198,9 @@ public class InChI
 
 
     /**
-     * @brief Mutator for the AuxInfo string
      * @param auxInfo new AuxInfo value
+     *
+     * @brief Mutator for the AuxInfo string
      */
     public void setAuxInfo(String auxInfo) {
         this.auxInfo = auxInfo;
@@ -199,9 +211,9 @@ public class InChI
         return standard;
     }
 
-//    public MolecularFormula getFormula() {
-//        return formula;
-//    }
+    //    public MolecularFormula getFormula() {
+    //        return formula;
+    //    }
 
     public String getConnectivity() {
         return connectivity;
@@ -214,33 +226,35 @@ public class InChI
 
 
     /**
-     * @brief  Compares the this InChI with another. The method checks the inheritance of the
-     *         object and then the InChI, InChIKey and AuxInfo. If the InChIKey or AuxInfo is
-     *         absent from either object these values are not checked.
-     * @param  obj Object to compare if equals
+     * @param obj Object to compare if equals
+     *
      * @return Whether the objects are equal
+     *
+     * @brief Compares the this InChI with another. The method checks the inheritance of the
+     * object and then the InChI, InChIKey and AuxInfo. If the InChIKey or AuxInfo is
+     * absent from either object these values are not checked.
      */
     @Override
     public boolean equals(Object obj) {
 
-        if( obj == null ) {
+        if (obj == null) {
             return false;
         }
-        if( getClass() != obj.getClass() ) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
         final InChI other = (InChI) obj;
         // check the InChI regardless
-        if( this.inchi.isEmpty() ? other.inchi.isEmpty() : !this.inchi.equals(other.inchi) ) {
+        if (this.inchi.isEmpty() ? other.inchi.isEmpty() : !this.inchi.equals(other.inchi)) {
             return false;
         }
         // if either of the InChIKeys are empty don't check these
-        if( this.key.isEmpty() || other.key.isEmpty() ? false : !this.key.equals(other.key) ) {
+        if (this.key.isEmpty() || other.key.isEmpty() ? false : !this.key.equals(other.key)) {
             return false;
         }
         // if either of the AuxInfos are empty don't check these
-        if( this.auxInfo.isEmpty() || other.auxInfo.isEmpty() ? false :
-            !this.auxInfo.equals(other.auxInfo) ) {
+        if (this.auxInfo.isEmpty() || other.auxInfo.isEmpty() ? false :
+                !this.auxInfo.equals(other.auxInfo)) {
             return false;
         }
         return true;
@@ -248,8 +262,9 @@ public class InChI
 
 
     /**
-     * @brief Generates a hash code on the InChI string
      * @return
+     *
+     * @brief Generates a hash code on the InChI string
      */
     @Override
     public int hashCode() {
@@ -260,8 +275,9 @@ public class InChI
 
 
     /**
-     * @brief   Returns the InChI string and ignores InChIKey and AuxInfo
      * @return
+     *
+     * @brief Returns the InChI string and ignores InChIKey and AuxInfo
      */
     @Override
     public String toString() {
@@ -270,9 +286,10 @@ public class InChI
 
 
     /**
-     * @brief   Clone method returns a clone of the InChI object
-     *          and it's underlying inchi, inchiKey and AuxInfo fiels
      * @return Clone of the object
+     *
+     * @brief Clone method returns a clone of the InChI object
+     * and it's underlying inchi, inchiKey and AuxInfo fiels
      */
     @Override
     public InChI clone() {
@@ -307,13 +324,7 @@ public class InChI
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return DESCRIPTION.index;
-    }
+
 
 
     /**

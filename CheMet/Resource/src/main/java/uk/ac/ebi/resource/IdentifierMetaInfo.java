@@ -41,9 +41,8 @@ public class IdentifierMetaInfo
     public IdentifierMetaInfo(MIRIAMEntry miriam,
                               String brief,
                               String description,
-                              Byte index,
                               Collection<String> synonyms) {
-        super(brief, description, index);
+        super(brief, description);
         this.resource = miriam;
         this.synonyms = synonyms;
     }
@@ -51,7 +50,7 @@ public class IdentifierMetaInfo
     public IdentifierMetaInfo(MetaInfo metaInfo,
                               MIRIAMEntry miriam,
                               Collection<String> synonyms) {
-        super(metaInfo.brief, metaInfo.description, metaInfo.index);
+        super(metaInfo.brief, metaInfo.description);
         this.resource = miriam;
         this.synonyms = synonyms;
     }

@@ -18,18 +18,21 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.PrintStream;
+
 import uk.ac.ebi.resource.MIR;
+import uk.ac.ebi.resource.Synonyms;
 
 
 /**
  * ECNumber.java
- *
+ * <p/>
  * Object to unify, store and compare the Enzyme Commission (EC) classification system
  *
  * @author johnmay
  * @date Mar 11, 2011
  */
-@MIR(value = 4)
+@MIR(4)
+@Synonyms("IUBMB Enzyme Nomenclature")
 public class ECNumber
         extends ClassificationIdentifier implements Comparable<ECNumber> {
 
@@ -45,10 +48,10 @@ public class ECNumber
 
     /**
      * Value to indicate compared values have no match (see. {@link #compare(ECNumber ec1)}) <br/>
-     *
+     * <p/>
      * <b>Example Code:</b> <pre>
      * {@code
-     * if( ec1.compare(ec2) == ECNumber.MATCHING_NONE ) {
+     * if(ec1.compare(ec2) == ECNumber.MATCHING_NONE ) {
      *   // logic
      * }
      * </pre>
@@ -57,7 +60,7 @@ public class ECNumber
 
     /**
      * Value to indicate compared values are matching at the class level (see. {@link #compare(ECNumber ec1)}) <br/>
-     *
+     * <p/>
      * <b>Example Code:</b> <pre>
      * {@code
      * ECNumber ec1 = new ECNumber("1.2.4.-");
@@ -71,7 +74,7 @@ public class ECNumber
 
     /**
      * Value to indicate compared values are matching at the class level (see. {@link #compare(ECNumber ec1)}) <br/>
-     *
+     * <p/>
      * <b>Example Code:</b> <pre>
      * {@code
      * ECNumber ec1 = new ECNumber("1.2.2.5");
@@ -85,7 +88,7 @@ public class ECNumber
 
     /**
      * Value to indicate compared values are matching at the class level (see. {@link #compare(ECNumber ec1)}) <br/>
-     *
+     * <p/>
      * <b>Example Code:</b> <pre>
      * {@code
      * ECNumber ec1 = new ECNumber("1.2.4.5");
@@ -99,7 +102,7 @@ public class ECNumber
 
     /**
      * Value to indicate compared values are matching at the entry level (see. {@link #compare(ECNumber ec1)}) <br/>
-     *
+     * <p/>
      * <b>Example Code:</b> <pre>
      * {@code
      * ECNumber ec1 = new ECNumber("1.2.4.1");
@@ -126,8 +129,8 @@ public class ECNumber
 
     /**
      * Construct a new entry from an EC accession
-     * @param ecNumber EC accession (e.g. {@code "1.1.4.3", "1.1.-.-"})
      *
+     * @param ecNumber EC accession (e.g. {@code "1.1.4.3", "1.1.-.-"})
      */
     public ECNumber(String ecNumber) {
         setAccession(ecNumber);
@@ -154,7 +157,6 @@ public class ECNumber
 
 
     /**
-     *
      * @param enzymeClass
      * @param enzymeSubClass
      * @param enzymeSubSubClass
@@ -170,6 +172,7 @@ public class ECNumber
 
     /**
      * Converts a string to the int ident, 0 represents a '-' in the EC number
+     *
      * @return
      */
     private int StringToIdent(String value) {
@@ -201,7 +204,7 @@ public class ECNumber
     private String removePostfix(String value, int end) {
         // walkbackwards until we find ending in .- or .1 .n1 etc..
         return value.substring(0, end).matches(".*?[-0-9]") ? value.substring(0, end)
-               : removePostfix(value, end - 1);
+                : removePostfix(value, end - 1);
     }
 
 
@@ -212,6 +215,7 @@ public class ECNumber
 
     /**
      * prints the enzyme number to the provided stream
+     *
      * @param stream The stream to print to (e.g. System.out)
      */
     public void print(PrintStream stream) {
@@ -220,8 +224,8 @@ public class ECNumber
 
 
     /**
-     *
      * @param ec
+     *
      * @return
      */
     public int compare(ECNumber ec) {
@@ -230,9 +234,9 @@ public class ECNumber
 
 
     /**
-     *
      * @param ec1
      * @param ec2
+     *
      * @return
      */
     public static int compare(ECNumber ec1, ECNumber ec2) {
@@ -244,10 +248,12 @@ public class ECNumber
 
     /**
      * Recursive function to find the depth at which entries match
+     *
      * @param ec1ValueArray
      * @param ec2ValueArray
      * @param index
      * @param matchLevel
+     *
      * @return
      */
     private static int compareValues(int ec1ValueArray[], int ec2ValueArray[], int index,
@@ -258,34 +264,36 @@ public class ECNumber
         return ec1ValueArray[index] == ec2ValueArray[index] ? compareValues(ec1ValueArray,
                                                                             ec2ValueArray, index + 1,
                                                                             matchLevel + 1)
-               : matchLevel;
+                : matchLevel;
     }
 
 
     /**
      * Prints out the EC number including any preliminary tags
+     *
      * @return
      */
     @Override
     public String toString() {
         return StringToIdent(enzymeClass)
-               + "." + StringToIdent(enzymeSubClass)
-               + "." + StringToIdent(enzymeSubSubClass)
-               + "." + (preliminary ? "n" : "") + StringToIdent(enzymeEntry);
+                + "." + StringToIdent(enzymeSubClass)
+                + "." + StringToIdent(enzymeSubSubClass)
+                + "." + (preliminary ? "n" : "") + StringToIdent(enzymeEntry);
     }
 
 
     private int[] getValueArray() {
         return new int[]{
-                    enzymeClass,
-                    enzymeSubClass,
-                    enzymeSubSubClass,
-                    enzymeEntry};
+                enzymeClass,
+                enzymeSubClass,
+                enzymeSubSubClass,
+                enzymeEntry};
     }
 
 
     /**
      * Returns whether this EC number is preliminary (e.g. 1.1.1.n1)
+     *
      * @return
      */
     public boolean isPreliminary() {
@@ -295,6 +303,7 @@ public class ECNumber
 
     /**
      * Sets whether this EC is preliminary or not
+     *
      * @param preliminary
      */
     public void setPreliminary(boolean preliminary) {
@@ -304,7 +313,9 @@ public class ECNumber
 
     /**
      * Creates an array of multiple EC Numbers found in the string (splitting on ';')
+     *
      * @param ecContaingString
+     *
      * @return
      */
     public static ECNumber[] getMultipleECs(String ecContaingString) {

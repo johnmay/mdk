@@ -17,15 +17,17 @@
  */
 package uk.ac.ebi.annotation;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.StringAnnotation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
+import uk.ac.ebi.resource.DefaultLoader;
+
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
 
 /**
@@ -36,8 +38,8 @@ import uk.ac.ebi.interfaces.annotation.MetaInfo;
  * @author  $Author$ (this version)
  */
 @Context
-@MetaInfo(brief = "Comment",
-            description = "Short comment that has been added by an author")
+@Brief("Comment")
+@Description("Short comment that has been added by an author")
 public class AuthorAnnotation
         extends AbstractAnnotation
         implements StringAnnotation {
@@ -48,7 +50,7 @@ public class AuthorAnnotation
 
     private String annotation;
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             AuthorAnnotation.class);
 
 
@@ -155,13 +157,6 @@ public class AuthorAnnotation
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return metaInfo.index;
-    }
 
 
     /**

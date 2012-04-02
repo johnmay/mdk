@@ -18,9 +18,10 @@ package uk.ac.ebi.annotation.chemical;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.annotation.Unique;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
@@ -36,8 +37,8 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  */
 @Unique
 @Context(Metabolite.class)
-@MetaInfo(brief       = "Charge",
-            description = "The chare of this chemical")
+@Brief("Charge")
+@Description("The charge of this metabolite")
 public class Charge
         extends AbstractDoubleAnnotation {
 

@@ -17,22 +17,24 @@
  */
 package uk.ac.ebi.annotation;
 
-import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 
 /**
- *          SynonymAnnotation - 2011.10.24 <br>
- *          An annotation of a synonym/alternate name
+ * SynonymAnnotation - 2011.10.24 <br>
+ * An annotation of a synonym/alternate name
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 @Context
-@MetaInfo(brief = "Synonym",
-            description = "An alternative name for this entity")
+@Brief("Synonym")
+@Description("An alternative name for this entity")
 public class Synonym extends AbstractStringAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(Synonym.class);

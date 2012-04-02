@@ -17,6 +17,17 @@
  */
 package uk.ac.ebi.annotation.crossreference;
 
+import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.AbstractAnnotation;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
+import uk.ac.ebi.resource.DefaultLoader;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -24,16 +35,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AbstractAnnotation;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
-import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
-import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
-import uk.ac.ebi.resource.IdentifierFactory;
 
 
 /**
@@ -44,8 +45,8 @@ import uk.ac.ebi.resource.IdentifierFactory;
  * @author  $Author$ (this version)
  */
 @Context
-@MetaInfo(brief       = "Crossreference",
-            description = "A crossreference to an alternative identifier")
+@Brief("Crossreference")
+@Description("A crossreference to an alternative identifier")
 public class CrossReference<E extends Identifier, O extends Observation>
         extends AbstractAnnotation
         implements ObservationBasedAnnotation<O> {
@@ -54,7 +55,7 @@ public class CrossReference<E extends Identifier, O extends Observation>
 
     private E identifier;
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             CrossReference.class);
 
     private List<O> observations = new ArrayList<O>();

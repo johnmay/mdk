@@ -34,9 +34,9 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.interfaces.services.ChemicalNameQueryService;
 import uk.ac.ebi.io.remote.ChEBINames;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 /**
  *          ChEBINameService - 2011.10.26 <br>

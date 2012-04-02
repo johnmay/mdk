@@ -34,11 +34,11 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
+import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
 import uk.ac.ebi.interfaces.services.ChemicalNameQueryService;
 import uk.ac.ebi.io.remote.PubChemCompoundNames;
 import uk.ac.ebi.io.remote.PubChemCompoundNames.PCCompNamesLuceneFields;
 import uk.ac.ebi.io.remote.PubChemCompoundNames.PCCompNameTypes;
-import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
  *          PubChemCompoundNameService - 2011.10.26 <br>

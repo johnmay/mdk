@@ -22,6 +22,8 @@
 package uk.ac.ebi.chemet.resource.basic;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 
 
@@ -32,6 +34,8 @@ import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Brief("Task")
+@Description("Internal reference identifier for a task")
 public class TaskIdentifier
   extends AbstractIdentifier {
 

@@ -24,9 +24,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
 import uk.ac.ebi.interfaces.services.ChemicalNameQueryService;
 import uk.ac.ebi.io.remote.PubChemComp2ParentCompound;
-import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
  *          PubChemCompoundPrimaryOnlyNameService - 2012.01.22 <br>

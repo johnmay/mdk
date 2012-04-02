@@ -23,6 +23,7 @@ package uk.ac.ebi.chemet.resource.protein;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.MIR;
+import uk.ac.ebi.resource.Synonyms;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,6 +38,7 @@ import java.util.Iterator;
  * @version $Rev$ : Last Changed $Date$
  */
 @MIR(value = 5)
+@Synonyms(value = {"UniProtKB/SwissProt", "SwissProt", "UniProtKB/Swiss-Prot", "UniProt/SwissProt", "UniProt/Swiss-Prot", "SProt"})
 public class SwissProtIdentifier
         extends UniProtIdentifier {
 
@@ -59,13 +61,6 @@ public class SwissProtIdentifier
         return new SwissProtIdentifier();
     }
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return DESCRIPTION.index;
-    }
 
     @Override
     public UniProtIdentifier.Status getStatus() {
@@ -76,7 +71,7 @@ public class SwissProtIdentifier
     public SwissProtIdentifier ofHeader(Iterator<String> token) {
 
         String accession = token.hasNext() ? token.next() : "";
-        String name      = token.hasNext() ? token.next() : "";
+        String name = token.hasNext() ? token.next() : "";
 
         return new SwissProtIdentifier(accession);
 

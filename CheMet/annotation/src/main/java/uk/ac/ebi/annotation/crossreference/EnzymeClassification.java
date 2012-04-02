@@ -18,13 +18,14 @@
 package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.Reaction;
+import uk.ac.ebi.resource.DefaultLoader;
 
 
 /**
@@ -34,15 +35,15 @@ import uk.ac.ebi.interfaces.entities.Reaction;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@Context(value = {GeneProduct.class, Reaction.class})
-@MetaInfo(brief = "Enzyme Classification",
-            description = "A crossreference to the Enzyme Classification (E.C.) number")
+@Context({GeneProduct.class, Reaction.class})
+@Brief("Enzyme Classification")
+@Description("A cross-reference to the Enzyme Classification (E.C.) number")
 public class EnzymeClassification<O extends Observation>
         extends Classification<ECNumber, O> {
 
     private static final Logger LOGGER = Logger.getLogger(EnzymeClassification.class);
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             EnzymeClassification.class);
 
 
@@ -73,13 +74,7 @@ public class EnzymeClassification<O extends Observation>
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return metaInfo.index;
-    }
+
 
 
     /**

@@ -25,11 +25,11 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
@@ -43,8 +43,8 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  *
  */
 @Context(Metabolite.class)
-@MetaInfo(brief       = "SMILES",
-            description = "The simplified molecular-input line-entry specification representation of chemical structure")
+@Brief("SMILES")
+@Description("The simplified molecular-input line-entry specification representation of chemical structure")
 public class SMILES
         extends AbstractStringAnnotation
         implements ChemicalStructure {
@@ -54,8 +54,6 @@ public class SMILES
     private static final SmilesParser    SMILES_PARSER   = new SmilesParser(DefaultChemObjectBuilder.getInstance());
     private static final SmilesGenerator SMILES_GENERATOR = new SmilesGenerator();
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
-            SMILES.class);
     
     private IAtomContainer atomContainer;
 
@@ -86,18 +84,6 @@ public class SMILES
     public void setValue(String SMILES){
         super.setValue(SMILES);
         parseSMILES();
-    }
-
-
-    @Override
-    public String getShortDescription() {
-        return metaInfo.brief;
-    }
-
-
-    @Override
-    public String getLongDescription() {
-        return metaInfo.description;
     }
 
 

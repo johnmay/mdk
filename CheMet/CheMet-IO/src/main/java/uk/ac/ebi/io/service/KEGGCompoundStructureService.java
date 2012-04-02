@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.logging.Level;
+
 import org.apache.log4j.Logger;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.NumericRangeQuery;
@@ -36,9 +36,9 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.interfaces.services.StructureQueryService;
 import uk.ac.ebi.io.remote.KEGGCompoundMols;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 /**
  *          KEGGCompoundStructureService - 2011.10.28 <br>

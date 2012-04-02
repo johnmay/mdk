@@ -22,6 +22,9 @@
 package uk.ac.ebi.chemet.resource.classification;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.resource.Synonyms;
 
 
 /**
@@ -31,6 +34,9 @@ import org.apache.log4j.Logger;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@Brief("UniProtKB-GOA")
+@Description("The UniProtKB GO annotation program aims to provide high-quality Gene Ontology (GO) annotations to proteins in the UniProt Knowledgebase (UniProtKB)")
+@Synonyms("GOA")
 public class GeneOntologyAnnotation
   extends ClassificationIdentifier {
 

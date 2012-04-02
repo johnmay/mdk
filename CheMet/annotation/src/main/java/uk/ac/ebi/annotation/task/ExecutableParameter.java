@@ -18,10 +18,12 @@
 
 package uk.ac.ebi.annotation.task;
 
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.interfaces.annotation.Context;
+
 import java.io.File;
 import java.security.InvalidParameterException;
-import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 
 /**
@@ -32,8 +34,8 @@ import uk.ac.ebi.interfaces.annotation.MetaInfo;
  * @author  $Author$ (this version)
  */
 @Context
-@MetaInfo(brief = "Excutable",
-            description = "A parameter for an external task that describes the executable")
+@Brief("Executable")
+@Description("A parameter for an external task that describes the executable")
 public class ExecutableParameter
         extends FileParameter {
 

@@ -18,6 +18,7 @@ package uk.ac.ebi.resource;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.resource.IdentifierSet;
+import uk.ac.ebi.chemet.resource.chemical.*;
 import uk.ac.ebi.chemet.resource.classification.*;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
@@ -25,8 +26,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.chemet.resource.basic.*;
-import uk.ac.ebi.resource.chemical.*;
-import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
+import uk.ac.ebi.chemet.resource.basic.ChromosomeNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.chemet.resource.structure.HSSPIdentifier;
 import uk.ac.ebi.chemet.resource.structure.PDBIdentifier;
@@ -66,7 +66,7 @@ public class IdentifierFactory {
             new BasicRNAIdentifier(),
             new BasicProteinIdentifier(),
             new ReconstructionIdentifier(),
-            new ChromosomeIdentifier(),
+            new ChromosomeNumber(),
             new TaskIdentifier(),
             new DrugBankIdentifier(),
             new HMDBIdentifier(),

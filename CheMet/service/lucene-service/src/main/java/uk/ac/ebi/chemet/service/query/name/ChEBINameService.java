@@ -1,11 +1,11 @@
 package uk.ac.ebi.chemet.service.query.name;
 
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.service.index.name.ChEBINameIndex;
 import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
 import uk.ac.ebi.chemet.service.loader.location.ZIPSystemLocation;
 import uk.ac.ebi.chemet.service.loader.name.ChEBINameLoader;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.service.ResourceLoader;
 import uk.ac.ebi.service.query.name.*;
 

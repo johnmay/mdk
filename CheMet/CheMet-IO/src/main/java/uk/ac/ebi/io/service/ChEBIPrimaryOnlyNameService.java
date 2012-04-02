@@ -20,14 +20,13 @@
  */
 package uk.ac.ebi.io.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.interfaces.services.ChemicalNameQueryService;
 import uk.ac.ebi.io.remote.ChEBINames;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 /**
  * @name    ChEBIPrimaryOnlyNameService

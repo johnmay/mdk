@@ -5,9 +5,9 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.service.index.data.KEGGCompoundDataIndex;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.service.query.data.MolecularFormulaService;
 
 import java.util.Collection;

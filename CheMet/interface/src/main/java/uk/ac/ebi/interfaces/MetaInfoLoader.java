@@ -36,14 +36,5 @@ public interface MetaInfoLoader {
 
     public String getLongDescription(Class clazz);
 
-
-    /**
-     * Return the index of a given class
-     * @param clazz
-     * @return
-     */
-    public Byte getIndex(Class clazz);
-
-
 }
 

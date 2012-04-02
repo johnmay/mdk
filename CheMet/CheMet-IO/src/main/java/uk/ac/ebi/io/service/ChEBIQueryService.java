@@ -20,10 +20,9 @@
  */
 package uk.ac.ebi.io.service;
 
-import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.interfaces.services.QueryService;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 /**
  * ChEBIQueryService - 2011.10.26 <br>

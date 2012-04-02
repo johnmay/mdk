@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.io.remote;
 
+import uk.ac.ebi.chemet.resource.chemical.DrugBankIdentifier;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +40,6 @@ import org.apache.lucene.util.Version;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.xml.DrugBankEntry;
 import uk.ac.ebi.io.xml.DrugBankXMLReader;
-import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
 
 /**
  *          ChEBISearch - 2011.10.25 <br>

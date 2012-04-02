@@ -17,30 +17,33 @@
  */
 package uk.ac.ebi.annotation.chemical;
 
-import java.io.IOException;
-import java.io.ObjectInput;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.resource.DefaultLoader;
+
+import java.io.IOException;
+import java.io.ObjectInput;
 
 
 /**
- *          MolecularFormula – 2011.09.14 <br>
- *          Annotation of molecular formula
+ * MolecularFormula – 2011.09.14 <br>
+ * Annotation of molecular formula
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 @Context(Metabolite.class)
-@MetaInfo(brief = "Molecular Formula",
-            description = "The chemical formula of a metabolite")
+@Brief("Molecular Formula")
+@Description("The chemical formula of a metabolite")
 public class MolecularFormula
         extends AbstractStringAnnotation {
 
@@ -50,25 +53,21 @@ public class MolecularFormula
 
     private String html; // speeds up rendering
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             MolecularFormula.class);
 
 
     /**
-     *
      * Default constructor need for externalization
-     *
      */
     public MolecularFormula() {
     }
 
 
     /**
-     *
      * Constructs a formula annotation with a provided {@see MolecularFormula} from CDK library
      *
      * @param formula
-     *
      */
     public MolecularFormula(IMolecularFormula formula) {
         this.formula = formula;
@@ -80,11 +79,9 @@ public class MolecularFormula
 
 
     /**
-     *
      * Construct a MolecularFormula annotation from a string
      *
      * @param formula
-     *
      */
     public MolecularFormula(String formula) {
         super(formula);
@@ -98,11 +95,9 @@ public class MolecularFormula
 
 
     /**
-     *
      * Accessor to the underlying formula object
      *
      * @return An instance of IMolecularFormula
-     *
      */
     public IMolecularFormula getFormula() {
         return formula;
@@ -133,6 +128,7 @@ public class MolecularFormula
 
     /**
      * Returns HTML formula
+     *
      * @return
      */
     public String toHTML() {
@@ -155,15 +151,6 @@ public class MolecularFormula
     @Override
     public String getLongDescription() {
         return metaInfo.description;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return metaInfo.index;
     }
 
 

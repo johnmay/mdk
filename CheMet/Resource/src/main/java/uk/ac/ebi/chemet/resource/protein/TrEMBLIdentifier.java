@@ -23,6 +23,7 @@ package uk.ac.ebi.chemet.resource.protein;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.MIR;
+import uk.ac.ebi.resource.Synonyms;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,7 +37,8 @@ import java.util.Iterator;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@MIR(value = 5)
+@MIR(5)
+@Synonyms({ "UniProtKB/TrEMBL", "TrEMBL", "UniProt" })
 public class TrEMBLIdentifier
         extends UniProtIdentifier {
 
@@ -63,14 +65,6 @@ public class TrEMBLIdentifier
         return new TrEMBLIdentifier();
     }
 
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Byte getIndex() {
-        return DESCRIPTION.index;
-    }
 
 
     @Override

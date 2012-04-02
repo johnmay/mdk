@@ -17,12 +17,16 @@
  */
 package uk.ac.ebi.annotation;
 
-import uk.ac.ebi.annotation.util.AnnotationLoader;
-import java.io.*;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.core.AbstractDescriptor;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
-import uk.ac.ebi.core.AbstractDescriptor;
+import uk.ac.ebi.resource.DefaultLoader;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
 
 /**
@@ -40,7 +44,7 @@ public abstract class AbstractAnnotation
 
 
     public AbstractAnnotation() {
-        super(AnnotationLoader.getInstance());
+        super(DefaultLoader.getInstance());
     }
 
 

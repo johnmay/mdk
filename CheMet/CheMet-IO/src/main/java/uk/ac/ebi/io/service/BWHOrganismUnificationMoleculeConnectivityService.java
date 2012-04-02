@@ -32,12 +32,12 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
+import uk.ac.ebi.chemet.resource.chemical.ChemicalIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.remote.ChEBICrossRefs.ChEBICrossRefsLuceneFields;
 import uk.ac.ebi.io.remote.MoleculeCollectionConnectivity;
 import uk.ac.ebi.io.remote.MoleculeCollectionConnectivity.MoleculeCollectionConnectivityLuceneFields;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.interfaces.services.ChemicalConnectivityQueryService;
 

@@ -20,7 +20,6 @@ package uk.ac.ebi.core;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 
 /**

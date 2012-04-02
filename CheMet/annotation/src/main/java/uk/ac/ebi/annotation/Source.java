@@ -17,26 +17,26 @@
  */
 package uk.ac.ebi.annotation;
 
-import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 
 /**
+ * Source 2012.02.01
  *
- *          Source 2012.02.01
+ * @author johnmay
+ * @author $Author$ (this version)
+ *         <p/>
+ *         Source annotation describes where the entity came from (e.g. ChEBI Database)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Source annotation describes where the entity came from (e.g. ChEBI Database)
- *
  */
 @Context
-@MetaInfo(brief = "Soruce",
-            description = "Non-semantic description of where the entity has come from")
+@Brief("Soruce")
+@Description("Non-semantic description of where the entity has come from")
 public class Source extends AbstractStringAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(Source.class);

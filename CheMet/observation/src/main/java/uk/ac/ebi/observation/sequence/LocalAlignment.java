@@ -20,16 +20,12 @@
  */
 package uk.ac.ebi.observation.sequence;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Objects;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.chemet.Brief;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 /**
@@ -40,6 +36,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
+@Brief("Local Alignment")
 public class LocalAlignment
         extends Alignment
         implements Serializable {

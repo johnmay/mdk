@@ -19,11 +19,12 @@ package uk.ac.ebi.annotation.chemical;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.base.AbstractFloatAnnotation;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.resource.DefaultLoader;
 
 
 /**
@@ -36,13 +37,13 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  *
  */
 @Context(Metabolite.class)
-@MetaInfo(brief = "Exact Mass",
-            description = "DThe exact mass is the sum of the masses of the atoms in a molecule using the most abundant isotope for each element")
+@Brief("Exact Mass")
+@Description("The exact mass is the sum of the masses of the atoms in a molecule using the most abundant isotope for each element")
 public class ExactMass extends AbstractFloatAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(ExactMass.class);
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
+    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             ExactMass.class);
 
 

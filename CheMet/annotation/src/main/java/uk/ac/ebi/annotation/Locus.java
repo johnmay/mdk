@@ -17,11 +17,12 @@
  */
 package uk.ac.ebi.annotation;
 
-import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.entities.Reaction;
 
@@ -32,9 +33,9 @@ import uk.ac.ebi.interfaces.entities.Reaction;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@Context(value={Gene.class, GeneProduct.class, Reaction.class})
-@MetaInfo(brief = "Locus",
-            description = "The gene locus/association")
+@Context({Gene.class, GeneProduct.class, Reaction.class})
+@Brief("Locus")
+@Description("The gene locus/association")
 public class Locus
         extends AbstractStringAnnotation {
 

@@ -1,8 +1,8 @@
 package uk.ac.ebi.chemet.service.query.name;
 
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.service.index.name.KEGGCompoundNameIndex;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.service.query.name.NameService;
 import uk.ac.ebi.service.query.name.PreferredNameService;
 import uk.ac.ebi.service.query.name.SynonymService;

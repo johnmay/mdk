@@ -17,13 +17,15 @@
  */
 package uk.ac.ebi.annotation.task;
 
+import org.apache.log4j.Logger;
+import uk.ac.ebi.annotation.AbstractAnnotation;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.interfaces.annotation.Context;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AbstractAnnotation;
-import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 
 
 /**
@@ -34,8 +36,8 @@ import uk.ac.ebi.interfaces.annotation.MetaInfo;
  * @author  $Author$ (this version)
  */
 @Context
-@MetaInfo(brief = "Parameter",
-            description = "A parameter for a task (not necessarily external)")
+@Brief("Parameter")
+@Description("A parameter for a task (not necessarily external)")
 public class Parameter extends AbstractAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(Parameter.class);

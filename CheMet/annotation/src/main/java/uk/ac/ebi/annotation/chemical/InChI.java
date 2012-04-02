@@ -25,34 +25,31 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
-import uk.ac.ebi.annotation.util.AnnotationLoader;
+import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.chemet.Description;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
 /**
- * @name    SMILESAnnotation
- * @date    2012.02.03
+ * @author pmoreno
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  pmoreno
- * @author  $Author$ (this version)
- * @brief   ...class metaInfo...
- *
+ * @name SMILESAnnotation
+ * @date 2012.02.03
+ * @brief ...class metaInfo...
  */
 @Context(Metabolite.class)
-@MetaInfo(brief = "InChI",
-            description = "The IUPAC International Chemical Identifier string representation of chemical structure")
+@Brief("InChI")
+@Description("The IUPAC International Chemical Identifier line notation of chemical structure")
 public class InChI
         extends AbstractStringAnnotation
         implements ChemicalStructure {
 
     private static final Logger LOGGER = Logger.getLogger(InChI.class);
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = AnnotationLoader.getInstance().getMetaInfo(
-            InChI.class);
 
     private IAtomContainer structure;
 
@@ -80,24 +77,6 @@ public class InChI
     public void setValue(String value) {
         super.setValue(value);
         generateStructure();
-    }
-
-
-    @Override
-    public String getShortDescription() {
-        return metaInfo.brief;
-    }
-
-
-    @Override
-    public String getLongDescription() {
-        return metaInfo.description;
-    }
-
-
-    @Override
-    public Byte getIndex() {
-        return metaInfo.index;
     }
 
 

@@ -21,6 +21,7 @@
 package uk.ac.ebi.io.remote;
 
 import org.apache.lucene.analysis.Analyzer;
+import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
 import uk.ac.ebi.interfaces.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +50,6 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.metabolomes.webservices.EUtilsWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemNamesResult;
-import uk.ac.ebi.resource.chemical.PubChemCompoundIdentifier;
 
 /**
  *          PubChemCompoundNames - 2011.10.25 <br>

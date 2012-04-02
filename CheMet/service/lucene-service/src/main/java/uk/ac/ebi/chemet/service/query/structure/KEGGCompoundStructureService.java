@@ -1,7 +1,7 @@
 package uk.ac.ebi.chemet.service.query.structure;
 
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.service.index.structure.KEGGCompoundStructureIndex;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
 
 /**
  * ${Name}.java - 21.02.2012 <br/> MetaInfo...

@@ -33,12 +33,10 @@ public class MetaInfo {
 
     public final String brief;
     public final String description;
-    public final Byte index;
 
-    public MetaInfo(String shortDescription, String description, Byte index) {
+    public MetaInfo(String shortDescription, String description) {
         this.brief       = shortDescription;
         this.description = description;
-        this.index = index;
     }
 
 

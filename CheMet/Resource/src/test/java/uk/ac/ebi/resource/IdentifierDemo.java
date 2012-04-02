@@ -25,9 +25,9 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
-import uk.ac.ebi.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.ChemicalIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 
 
 /**
@@ -52,7 +52,7 @@ public class IdentifierDemo {
         id1.equals(id2);
         // true   - future support will allow comparisson to a String
 
-        if( id1 instanceof ChemicalIdentifier ) {
+        if( id1 instanceof ChemicalIdentifier) {
             // true
         }
 

@@ -27,12 +27,12 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chebi.webapps.chebiWS.client.ChebiWebServiceClient;
 import uk.ac.ebi.chebi.webapps.chebiWS.model.*;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 //import uk.ac.ebi.metabolomes.util.ExternalReference;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.resource.chemical.ChEBIIdentifier;
 
 public class ChEBIWebServiceConnection extends ChemicalDBWebService implements ICrossReferenceProvider {
 
