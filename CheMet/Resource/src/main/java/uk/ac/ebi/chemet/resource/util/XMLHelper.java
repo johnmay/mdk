@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.chemet.resource;
+package uk.ac.ebi.chemet.resource.util;
 
 import java.io.BufferedInputStream;
 import java.io.File;

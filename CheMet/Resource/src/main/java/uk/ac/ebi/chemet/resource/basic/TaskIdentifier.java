@@ -19,11 +19,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource;
+package uk.ac.ebi.chemet.resource.basic;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 
 
 /**
@@ -33,25 +32,25 @@ import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ReconstructionIdentifier
+public class TaskIdentifier
   extends AbstractIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(ReconstructionIdentifier.class);
+    private static final Logger LOGGER = Logger.getLogger(TaskIdentifier.class);
 
 
-    public ReconstructionIdentifier() {
+    public TaskIdentifier() {
     }
 
 
-    public ReconstructionIdentifier(String accession) {
+    public TaskIdentifier(String accession) {
         super(accession);
     }
 
     /**
      * @inheritDoc
      */
-    public ReconstructionIdentifier newInstance() {
-        return new ReconstructionIdentifier();
+    public TaskIdentifier newInstance() {
+        return new TaskIdentifier();
     }
 
 

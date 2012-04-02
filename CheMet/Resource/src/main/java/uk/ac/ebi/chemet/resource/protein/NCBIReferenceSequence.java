@@ -1,9 +1,9 @@
 package uk.ac.ebi.chemet.resource.protein;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
 import uk.ac.ebi.resource.MIR;
 
 import java.util.Arrays;

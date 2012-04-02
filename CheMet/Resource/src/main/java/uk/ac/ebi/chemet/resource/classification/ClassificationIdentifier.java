@@ -22,7 +22,7 @@
 package uk.ac.ebi.chemet.resource.classification;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 
 
 /**

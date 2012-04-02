@@ -22,10 +22,9 @@ package uk.ac.ebi.resource.gene;
 
 import java.io.IOException;
 import java.io.ObjectInput;
-import java.io.ObjectOutput;
+
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 
 /**
  *          ChromosomeIdentifier - 2011.10.17 <br>

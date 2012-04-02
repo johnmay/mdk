@@ -24,10 +24,10 @@ import au.com.bytecode.opencsv.CSVReader;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.resource.IdentifierSet;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
-import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.resource.IdentifierFactory;
 
 /**

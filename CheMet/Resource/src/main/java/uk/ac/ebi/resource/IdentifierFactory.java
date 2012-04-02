@@ -17,10 +17,10 @@
 package uk.ac.ebi.resource;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.resource.IdentifierSet;
 import uk.ac.ebi.chemet.resource.classification.*;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
-import uk.ac.ebi.core.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
 import uk.ac.ebi.metabolomes.identifier.InChI;
@@ -31,9 +31,6 @@ import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.chemet.resource.structure.HSSPIdentifier;
 import uk.ac.ebi.chemet.resource.structure.PDBIdentifier;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -222,7 +219,7 @@ public class IdentifierFactory {
     }
 
     /**
-     * Returns and identifier
+     * Construct an identifier of a given class
      *
      * @param type
      *
@@ -280,7 +277,7 @@ public class IdentifierFactory {
             return synonyms.get(key).newInstance();
         }
 
-        throw new InvalidParameterException("No matching identifier synonym found for: " + synonym);
+        throw new InvalidParameterException("No matching identifier synonym found for: " + synonym + " please invoke hasSynonym() to avoid this error");
     }
 
     public Identifier ofSynonym(String synonym, String accession) {

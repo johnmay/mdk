@@ -1,7 +1,8 @@
+
 /**
- * GeneIdentifier.java
+ * ReconstructionIdentifier.java
  *
- * 2011.10.17
+ * 2011.10.01
  *
  * This file is part of the CheMet library
  * 
@@ -18,30 +19,40 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource.gene;
+package uk.ac.ebi.chemet.resource.basic;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
+
 
 /**
- *          GeneIdentifier - 2011.10.17 <br>
- *          A base class description for gene identifiers
+ *          ReconstructionIdentifier – 2011.10.01 <br>
+ *          Class description
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class GeneIdentifier extends AbstractIdentifier {
+public class ReconstructionIdentifier
+  extends AbstractIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(GeneIdentifier.class);
+    private static final Logger LOGGER = Logger.getLogger(ReconstructionIdentifier.class);
 
-    public GeneIdentifier() {
+
+    public ReconstructionIdentifier() {
     }
 
-    public GeneIdentifier(String accession) {
+
+    public ReconstructionIdentifier(String accession) {
         super(accession);
     }
 
-    
+    /**
+     * @inheritDoc
+     */
+    public ReconstructionIdentifier newInstance() {
+        return new ReconstructionIdentifier();
+    }
+
 
 }
+

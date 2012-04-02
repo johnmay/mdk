@@ -28,8 +28,7 @@ import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.chemet.resource.Brief;
 import uk.ac.ebi.chemet.resource.Description;
-import uk.ac.ebi.interfaces.annotation.MetaInfo;
-import uk.ac.ebi.resource.ResourcePreferences;
+import uk.ac.ebi.chemet.resource.ResourcePreferences;
 import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
 
 

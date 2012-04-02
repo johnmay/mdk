@@ -24,6 +24,7 @@ package uk.ac.ebi.metabolomes.identifier;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
+import uk.ac.ebi.chemet.resource.util.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.chemical.ChemicalIdentifier;
 

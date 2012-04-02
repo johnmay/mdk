@@ -20,7 +20,7 @@ import uk.ac.ebi.interfaces.Chromosome;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.interfaces.reaction.Direction;
-import uk.ac.ebi.resource.ReconstructionIdentifier;
+import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicGeneIdentifier;
 import uk.ac.ebi.resource.gene.ChromosomeIdentifier;
 import uk.ac.ebi.resource.organism.Kingdom;

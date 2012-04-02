@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.io.xml;
 
-import uk.ac.ebi.core.IdentifierSet;
+import uk.ac.ebi.chemet.resource.IdentifierSet;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.chemical.DrugBankIdentifier;
 

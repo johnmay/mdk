@@ -21,8 +21,9 @@
 package uk.ac.ebi.resource;
 
 import java.util.Collection;
+
+import uk.ac.ebi.chemet.resource.util.MIRIAMEntry;
 import uk.ac.ebi.core.MetaInfo;
-import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 
 /**
  *          IdentifierMetaInfo – 2011.09.15 <br>

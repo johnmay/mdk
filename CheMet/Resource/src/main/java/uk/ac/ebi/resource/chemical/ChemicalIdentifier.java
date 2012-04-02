@@ -21,7 +21,7 @@ package uk.ac.ebi.resource.chemical;
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 
 /**
  * @name    ChemicalIdentifier – 2011.08.16

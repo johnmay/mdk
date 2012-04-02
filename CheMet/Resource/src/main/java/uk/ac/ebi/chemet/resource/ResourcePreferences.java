@@ -1,8 +1,7 @@
-
 /**
- * ReconstructionIdentifier.java
+ * CheMetPreferences.java
  *
- * 2011.10.01
+ * 2012.01.29
  *
  * This file is part of the CheMet library
  * 
@@ -19,41 +18,51 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource;
+package uk.ac.ebi.chemet.resource;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
+import uk.ac.ebi.caf.utility.preference.AbstractPreferenceLoader;
 
 
 /**
- *          ReconstructionIdentifier – 2011.10.01 <br>
- *          Class description
+ *
+ *          CheMetPreferences 2012.01.29
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ *
+ *          Class description
+ *
  */
-public class TaskIdentifier
-  extends AbstractIdentifier {
+public class ResourcePreferences extends AbstractPreferenceLoader {
 
-    private static final Logger LOGGER = Logger.getLogger(TaskIdentifier.class);
+    private static final Logger LOGGER = Logger.getLogger(ResourcePreferences.class);
 
 
-    public TaskIdentifier() {
+    private ResourcePreferences() {
+     
     }
 
 
-    public TaskIdentifier(String accession) {
-        super(accession);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public TaskIdentifier newInstance() {
-        return new TaskIdentifier();
+    public static ResourcePreferences getInstance() {
+        return CheMetPreferencesHolder.INSTANCE;
     }
 
 
+    private static class CheMetPreferencesHolder {
+
+        private static final ResourcePreferences INSTANCE = new ResourcePreferences();
+    }
+
+
+    @Override
+    public InputStream getConfig() throws IOException {
+        return getClass().getResource("preference.properties").openStream();
+    }
+
+
+    
 }
-

@@ -28,11 +28,11 @@ import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.chemet.exceptions.MissingPreferencesException;
+import uk.ac.ebi.chemet.resource.basic.TaskIdentifier;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.core.HomologyDatabaseManager;
 import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.resource.TaskIdentifier;
 
 import java.io.File;
 import java.io.IOException;

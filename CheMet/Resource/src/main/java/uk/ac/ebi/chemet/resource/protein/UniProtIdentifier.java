@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
+import uk.ac.ebi.chemet.resource.util.MIRIAMEntry;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.MIR;
 

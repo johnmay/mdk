@@ -14,9 +14,8 @@
  *     You should have received a copy of the GNU Lesser General Public License
  *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.resource;
+package uk.ac.ebi.chemet.resource.util;
 
-import uk.ac.ebi.metabolomes.identifier.MIRIAMEntry;
 import java.io.InputStream;
 import java.io.Reader;
 import java.security.InvalidParameterException;
@@ -27,9 +26,9 @@ import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import uk.ac.ebi.chemet.resource.XMLHelper;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.resource.IdentifierFactory;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;

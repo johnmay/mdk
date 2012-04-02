@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.core;
+package uk.ac.ebi.chemet.resource;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
@@ -26,7 +26,6 @@ import java.io.*;
 import java.util.*;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.*;
 
 /**
  *          IdentifierSet – 2011.09.18 <br>

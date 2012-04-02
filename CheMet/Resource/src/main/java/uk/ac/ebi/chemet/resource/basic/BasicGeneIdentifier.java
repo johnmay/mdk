@@ -21,13 +21,13 @@
 package uk.ac.ebi.chemet.resource.basic;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.resource.Brief;
-import uk.ac.ebi.chemet.resource.Description;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
-import uk.ac.ebi.resource.ResourcePreferences;
-import uk.ac.ebi.resource.gene.GeneIdentifier;
+import uk.ac.ebi.chemet.resource.Brief;
+import uk.ac.ebi.chemet.resource.Description;
+import uk.ac.ebi.chemet.resource.ResourcePreferences;
+import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 
 /**
@@ -39,7 +39,7 @@ import uk.ac.ebi.resource.gene.GeneIdentifier;
  */
 @Brief("Gene")
 @Description("A basic auto-incrementing identifier for genes")
-public class BasicGeneIdentifier extends GeneIdentifier {
+public class BasicGeneIdentifier extends AbstractIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicGeneIdentifier.class);
 

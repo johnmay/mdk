@@ -25,9 +25,9 @@ import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.chemet.resource.Brief;
 import uk.ac.ebi.chemet.resource.Description;
+import uk.ac.ebi.chemet.resource.ResourcePreferences;
+import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
-import uk.ac.ebi.metabolomes.identifier.AbstractIdentifier;
-import uk.ac.ebi.resource.ResourcePreferences;
 
 import java.util.Arrays;
 import java.util.Collection;
