@@ -20,11 +20,11 @@
  */
 package uk.ac.ebi.io.blast;
 
+import org.apache.log4j.Logger;
+
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.resource.BlastProgram;
 
 /**
  * @name    AlignmentFactory - 2011.10.06 <br>

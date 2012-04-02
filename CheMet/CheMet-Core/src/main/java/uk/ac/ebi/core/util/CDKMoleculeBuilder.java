@@ -25,7 +25,6 @@ import net.sf.jniinchi.INCHI_RET;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
-import org.openscience.cdk.config.AtomTypeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
@@ -35,7 +34,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
 import org.openscience.cdk.tools.AtomTypeTools;
-import uk.ac.ebi.metabolomes.identifier.InChI;
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 
 /**
  * @name    CDKMoleculeBuilder

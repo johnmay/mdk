@@ -24,7 +24,7 @@ import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
-import uk.ac.ebi.metabolomes.identifier.InChI;
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.chemet.resource.basic.*;
 import uk.ac.ebi.chemet.resource.basic.ChromosomeNumber;
 import uk.ac.ebi.resource.organism.Taxonomy;

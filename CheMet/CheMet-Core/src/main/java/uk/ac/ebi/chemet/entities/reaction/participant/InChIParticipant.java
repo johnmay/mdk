@@ -21,11 +21,10 @@
 package uk.ac.ebi.chemet.entities.reaction.participant;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.CompartmentImplementation;
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.interfaces.reaction.Participant;
-import uk.ac.ebi.metabolomes.identifier.InChI;
 
 
 /**

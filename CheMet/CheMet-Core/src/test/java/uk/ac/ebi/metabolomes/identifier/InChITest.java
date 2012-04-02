@@ -8,6 +8,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.ac.ebi.chemet.InChIBank;
+import uk.ac.ebi.chemet.resource.chemical.InChI;
+
 import static org.junit.Assert.*;
 
 /**

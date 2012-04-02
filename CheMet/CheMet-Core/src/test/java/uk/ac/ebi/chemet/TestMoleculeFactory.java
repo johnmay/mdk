@@ -21,21 +21,18 @@ package uk.ac.ebi.chemet;
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 import java.io.InputStream;
-import java.util.logging.Level;
+
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.MDLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
-import org.openscience.cdk.io.MDLV3000Reader;
-import org.openscience.cdk.io.formats.SDFFormat;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.core.util.CDKMoleculeBuilder;
-import uk.ac.ebi.metabolomes.identifier.InChI;
 import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
 
 /**

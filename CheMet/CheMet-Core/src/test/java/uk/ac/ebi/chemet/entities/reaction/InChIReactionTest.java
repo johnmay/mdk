@@ -4,11 +4,12 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.core.CompartmentImplementation;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.metabolomes.identifier.InChI;
+
 import static org.junit.Assert.*;
 
 /**

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.metabolomes.identifier.InChI;
 
 
 /**

@@ -21,8 +21,8 @@
 package uk.ac.ebi.chemet;
 
 import java.util.HashMap;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.identifier.InChI;
+
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 
 /**
  * @name    InChIBank

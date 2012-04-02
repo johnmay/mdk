@@ -20,7 +20,7 @@
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.identifier.InChI;
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 
 
 /**

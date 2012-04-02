@@ -25,7 +25,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.participant.InChIParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.metabolomes.identifier.InChI;
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 
 /**
  * InChIFilter – 2011.08.14

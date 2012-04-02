@@ -22,12 +22,12 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
+import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.InChIStoichiometricMatrix;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
-import uk.ac.ebi.metabolomes.identifier.InChI;
 
 
 /**
