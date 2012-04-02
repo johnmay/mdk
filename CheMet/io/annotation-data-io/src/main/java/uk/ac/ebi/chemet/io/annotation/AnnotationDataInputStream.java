@@ -1,6 +1,6 @@
 package uk.ac.ebi.chemet.io.annotation;
 
-import identifier.IdentifierDataInputStream;
+import uk.ac.ebi.chemet.io.identifier.IdentifierDataInputStream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.*;
 import uk.ac.ebi.annotation.chemical.*;
@@ -47,7 +47,6 @@ public class AnnotationDataInputStream
         implements AnnotationInput {
 
     private static final Logger LOGGER = Logger.getLogger(AnnotationDataInputStream.class);
-    private Version v;
     private DataInput in;
     private ObservationInput observationInput;
     private IdentifierInput  identifierInput;
@@ -60,13 +59,12 @@ public class AnnotationDataInputStream
                                      ObservationInput observationInput,
                                      Version v) {
 
-        super(in);
+        super(in, v);
 
         this.identifierInput = new IdentifierDataInputStream(in, v);
 
 
         this.in = in;
-        this.v  = v;
         this.observationInput = observationInput;
 
         // default readers
@@ -106,7 +104,7 @@ public class AnnotationDataInputStream
     }
     
     public AnnotationReader getReader(Class c){
-        return hasMarshaller(c, v) ? getMarshaller(c, v) : add(c, createReader(c), v);
+        return hasMarshaller(c, getVersion()) ? getMarshaller(c, getVersion()) : add(c, createReader(c), getVersion());
     }
 
 

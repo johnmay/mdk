@@ -28,7 +28,6 @@ public class ObservationDataOutputStream
     private static final Logger LOGGER = Logger.getLogger(ObservationDataOutputStream.class);
 
     private DataOutputStream out;
-    private Version v;
 
     /**
      * Create a new observation input stream for the specified
@@ -43,10 +42,9 @@ public class ObservationDataOutputStream
 
     public ObservationDataOutputStream(DataOutputStream out, Version v) {
 
-        super(out);
+        super(out, v);
 
         this.out = out;
-        this.v   = v;
 
         // default writers
         add(LocalAlignment.class, new LocalAlignmentWriter(this.out));
@@ -107,7 +105,7 @@ public class ObservationDataOutputStream
      * @return
      */
     public ObservationWriter getWriter(Class c) {
-        return getMarshaller(c, v);
+        return getMarshaller(c, getVersion());
     }
 
 

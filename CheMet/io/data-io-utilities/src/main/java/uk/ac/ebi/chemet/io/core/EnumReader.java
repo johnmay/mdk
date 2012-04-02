@@ -19,7 +19,7 @@ public class EnumReader extends AbstractDataInput {
     private static final Logger LOGGER = Logger.getLogger(EnumReader.class);
 
     public EnumReader(DataInput in) {
-        super(in);
+        super(in, null);
     }
 
     public Enum readEnum() throws IOException, ClassNotFoundException {

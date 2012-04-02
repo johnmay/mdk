@@ -1,6 +1,6 @@
 package uk.ac.ebi.chemet.io.domain;
 
-import identifier.IdentifierDataInputStream;
+import uk.ac.ebi.chemet.io.identifier.IdentifierDataInputStream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationInput;
@@ -41,7 +41,6 @@ public class EntityDataInputStream
 
     private static final Logger LOGGER = Logger.getLogger(EntityDataInputStream.class);
 
-    private Version version;
     private DataInputStream in;
     private EntityFactory factory;
     private AnnotationInput annotationIn;
@@ -58,9 +57,8 @@ public class EntityDataInputStream
                                  AnnotationInput annotationIn,
                                  ObservationInput observationInn) {
 
-        super(in);
+        super(in, version);
 
-        this.version = version;
         this.in = in;
         this.annotationIn = annotationIn;
         this.observationInn = observationInn;
@@ -105,7 +103,7 @@ public class EntityDataInputStream
 
     public Entity readNewEntity(Class c) throws IOException, ClassNotFoundException {
 
-        EntityReader reader = getMarshaller(c, version);
+        EntityReader reader = getMarshaller(c, getVersion());
         Entity       entity = reader.readEntity();
 
         if (entity instanceof AnnotatedEntity) {

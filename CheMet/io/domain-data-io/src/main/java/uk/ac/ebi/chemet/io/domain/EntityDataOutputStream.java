@@ -1,6 +1,6 @@
 package uk.ac.ebi.chemet.io.domain;
 
-import identifier.IdentifierDataOutputStream;
+import uk.ac.ebi.chemet.io.identifier.IdentifierDataOutputStream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationOutput;
@@ -41,12 +41,11 @@ public class EntityDataOutputStream
 
     private static final Logger LOGGER = Logger.getLogger(EntityDataOutputStream.class);
 
-    private Version version;
     private DataOutputStream out;
     private EntityFactory factory;
-    private AnnotationOutput annotationOut;
+    private AnnotationOutput  annotationOut;
     private ObservationOutput observationOut;
-    private IdentifierOutput identifierOutput;
+    private IdentifierOutput  identifierOutput;
 
 
     private EntityDataWriter entityWriter;
@@ -58,9 +57,8 @@ public class EntityDataOutputStream
                                   AnnotationOutput annotationOut,
                                   ObservationOutput observationOut) {
 
-        super(out);
+        super(out, version);
 
-        this.version = version;
         this.out = out;
         this.annotationOut = annotationOut;
         this.observationOut = observationOut;
@@ -98,7 +96,7 @@ public class EntityDataOutputStream
 
             Class c = factory.getEntityClass(entity.getClass());
 
-            EntityWriter writer = getMarshaller(c, version);
+            EntityWriter writer = getMarshaller(c, getVersion());
 
             writer.write(entity);                                  // entity specifics
             if (entity instanceof AnnotatedEntity) {

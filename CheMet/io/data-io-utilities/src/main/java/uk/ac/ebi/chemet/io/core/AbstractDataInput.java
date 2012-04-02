@@ -1,6 +1,8 @@
 package uk.ac.ebi.chemet.io.core;
 
 
+import uk.ac.ebi.caf.utility.version.Version;
+
 import java.io.DataInput;
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,7 +23,8 @@ public class AbstractDataInput<M>
     private DataInput in;
     private Map<Short,Object> objectMap = new HashMap<Short,Object>(300);
     
-    public AbstractDataInput(DataInput in){
+    public AbstractDataInput(DataInput in, Version version){
+        super(version);
         this.in = in;
     }
 

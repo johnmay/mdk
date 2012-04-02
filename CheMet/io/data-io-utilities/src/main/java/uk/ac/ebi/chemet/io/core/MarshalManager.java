@@ -22,6 +22,20 @@ public class MarshalManager<T> {
 
     public Map<Class, VersionMap<T>> marshals = new HashMap<Class, VersionMap<T>>();
 
+    private final Version version;
+
+    public MarshalManager(Version version){
+        this.version = version;
+    }
+
+    public Map<Class, VersionMap<T>> getMarshals() {
+        return marshals;
+    }
+
+    public Version getVersion() {
+        return version;
+    }
+
     private static Version getVersion(Class<?> c) {
 
         CompatibleSince annotation = c.getAnnotation(CompatibleSince.class);

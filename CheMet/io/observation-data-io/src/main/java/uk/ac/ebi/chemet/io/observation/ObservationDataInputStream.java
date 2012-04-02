@@ -31,13 +31,11 @@ public class ObservationDataInputStream
     public Map<Class, VersionMap<ObservationReader>> readers = new HashMap<Class, VersionMap<ObservationReader>>();
 
     private DataInputStream in;
-    private Version v;
 
     public ObservationDataInputStream(InputStream in, Version v) {
-        super(new DataInputStream(in));
+        super(new DataInputStream(in), v);
 
         this.in = new DataInputStream(in);
-        this.v  = v;
 
         // default readers
         add(LocalAlignment.class, new LocalAlignmentReader(this.in));
@@ -64,7 +62,7 @@ public class ObservationDataInputStream
     }
 
     public ObservationReader getReader(Class c) {
-        return getMarshaller(c, v);
+        return getMarshaller(c, getVersion());
     }
 
 

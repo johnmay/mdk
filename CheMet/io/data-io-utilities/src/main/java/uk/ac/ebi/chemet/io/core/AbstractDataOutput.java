@@ -2,6 +2,7 @@ package uk.ac.ebi.chemet.io.core;
 
 
 import org.apache.commons.lang.mutable.MutableShort;
+import uk.ac.ebi.caf.utility.version.Version;
 
 import java.io.DataOutput;
 import java.io.IOException;
@@ -24,7 +25,8 @@ public class AbstractDataOutput<M> extends MarshalManager<M> {
     private Map<Object,Short> objectIds = new HashMap<Object,Short>();
     private MutableShort      iterator  = new MutableShort(Short.MIN_VALUE + 10);
 
-    public AbstractDataOutput(DataOutput out) {
+    public AbstractDataOutput(DataOutput out, Version v) {
+        super(v);
         this.out = out;
     }
 

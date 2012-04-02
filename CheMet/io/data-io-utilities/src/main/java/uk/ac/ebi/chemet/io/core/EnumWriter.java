@@ -20,7 +20,7 @@ public class EnumWriter extends AbstractDataOutput {
 
     
     public EnumWriter(DataOutput out) {
-        super(out);
+        super(out, null);
     }
     
     public void writeEnum(Enum e) throws IOException {

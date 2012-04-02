@@ -1,6 +1,6 @@
 package uk.ac.ebi.chemet.io.annotation;
 
-import identifier.IdentifierDataOutputStream;
+import uk.ac.ebi.chemet.io.identifier.IdentifierDataOutputStream;
 import uk.ac.ebi.annotation.*;
 import uk.ac.ebi.annotation.chemical.*;
 import uk.ac.ebi.annotation.crossreference.*;
@@ -61,7 +61,6 @@ public class AnnotationDataOutputStream
         extends AbstractDataOutput<AnnotationWriter>
         implements AnnotationOutput {
 
-    private Version v;
     private DataOutput out;
     private ObservationOutput observationOutput;
     private IdentifierOutput  identifierOutput;
@@ -75,12 +74,11 @@ public class AnnotationDataOutputStream
                                       ObservationOutput observationOutput,
                                       Version v) {
 
-        super(out);
+        super(out, v);
 
         this.identifierOutput = new IdentifierDataOutputStream(out, v);
 
         this.out = out;
-        this.v   = v;
         this.observationOutput = observationOutput;
 
         // default readers
@@ -144,7 +142,7 @@ public class AnnotationDataOutputStream
      * @return
      */
     public AnnotationWriter getWriter(Class c) {
-        return hasMarshaller(c, v) ? getMarshaller(c, v) : add(c, createWriter(c), v);
+        return hasMarshaller(c, getVersion()) ? getMarshaller(c, getVersion()) : add(c, createWriter(c), getVersion());
     }
 
     public AnnotationWriter createWriter(Class c){
