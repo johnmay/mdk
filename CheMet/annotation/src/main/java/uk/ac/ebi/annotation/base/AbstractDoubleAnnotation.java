@@ -46,4 +46,6 @@ public abstract class AbstractDoubleAnnotation
     public AbstractDoubleAnnotation(Double value) {
         super(value);
     }
+
+
 }

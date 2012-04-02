@@ -4,6 +4,7 @@ import uk.ac.ebi.chemet.io.annotation.base.DoubleAnnotationWriterTest;
 import uk.ac.ebi.chemet.io.annotation.base.StringAnnotationWriterTest;
 import uk.ac.ebi.chemet.io.annotation.chemical.AtomContainerAnnotationWriterTest;
 import uk.ac.ebi.chemet.io.annotation.crossreference.CrossReferenceWriterTest;
+import uk.ac.ebi.chemet.io.annotation.reaction.GibbsEnergyWriterTest;
 
 import java.io.IOException;
 
@@ -25,6 +26,7 @@ public class RewriteTestFiles {
         new DoubleAnnotationWriterTest().rewrite();
         new AtomContainerAnnotationWriterTest().rewrite();
         new CrossReferenceWriterTest().rewrite();
+        new GibbsEnergyWriterTest().rewrite();
 
     }
 

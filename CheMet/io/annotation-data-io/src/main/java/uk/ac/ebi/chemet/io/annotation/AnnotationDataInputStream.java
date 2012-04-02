@@ -1,5 +1,7 @@
 package uk.ac.ebi.chemet.io.annotation;
 
+import uk.ac.ebi.annotation.reaction.GibbsEnergy;
+import uk.ac.ebi.chemet.io.annotation.reaction.GibbsEnergyReader;
 import uk.ac.ebi.chemet.io.identifier.IdentifierDataInputStream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.*;
@@ -67,38 +69,15 @@ public class AnnotationDataInputStream
         this.in = in;
         this.observationInput = observationInput;
 
-        // default readers
-        // general
-        add(Locus.class,            new StringAnnotationReader(Locus.class, in));
-        add(Subsystem.class,        new StringAnnotationReader(Subsystem.class, in));
-        add(Synonym.class,          new StringAnnotationReader(Synonym.class, in));
-        add(Source.class,           new StringAnnotationReader(Source.class, in));
-        add(AuthorAnnotation.class, new AuthorCommentReader(in));
+        // special readers
+       add(AuthorAnnotation.class, new AuthorCommentReader(in));
+       add(AtomContainerAnnotation.class, new AtomContainerAnnotationReader(in));
+       add(GibbsEnergy.class, new GibbsEnergyReader(in));
 
-        // model
-        add(FluxUpperBound.class, new DoubleAnnotationReader(FluxUpperBound.class, in));
-        add(FluxLowerBound.class, new DoubleAnnotationReader(FluxLowerBound.class, in));
-
-        // chemical
-        add(MolecularFormula.class, new StringAnnotationReader(MolecularFormula.class, in));
-        add(InChI.class,            new StringAnnotationReader(InChI.class, in));
-        add(SMILES.class,           new StringAnnotationReader(SMILES.class, in));
-        add(ExactMass.class,        new FloatAnnotationReader(ExactMass.class, in));
-        add(Charge.class,           new DoubleAnnotationReader(Charge.class, in));
-        add(AtomContainerAnnotation.class, new AtomContainerAnnotationReader(in));
-
-        // cross-reference
-        add(CrossReference.class,       new CrossReferenceReader(CrossReference.class, identifierInput, observationInput));
-        add(ChEBICrossReference.class,  new CrossReferenceReader(ChEBICrossReference.class, identifierInput, observationInput));
-        add(KEGGCrossReference.class,   new CrossReferenceReader(KEGGCrossReference.class, identifierInput, observationInput));
-        add(EnzymeClassification.class, new CrossReferenceReader(EnzymeClassification.class, identifierInput, observationInput));
-        add(Citation.class,             new CrossReferenceReader(Citation.class, identifierInput, observationInput));
-        add(Classification.class,       new CrossReferenceReader(Classification.class, identifierInput, observationInput));
-        
-        // task
-        add(Parameter.class,           new ParameterReader(in));
-        add(FileParameter.class,       new FileParameterReader(in));
-        add(ExecutableParameter.class, new ExecutableParameterReader(in));
+       // special readers for tasks
+       add(Parameter.class,           new ParameterReader(in));
+       add(FileParameter.class,       new FileParameterReader(in));
+       add(ExecutableParameter.class, new ExecutableParameterReader(in));
 
 
     }

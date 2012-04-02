@@ -27,7 +27,6 @@ import uk.ac.ebi.annotation.model.FluxLowerBound;
 import uk.ac.ebi.annotation.model.FluxUpperBound;
 import uk.ac.ebi.annotation.model.Lumped;
 import uk.ac.ebi.annotation.reaction.GibbsEnergy;
-import uk.ac.ebi.annotation.reaction.GibbsEnergyError;
 import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
@@ -107,7 +106,6 @@ public class AnnotationFactory {
                                                    new InChI(),
                                                    new Charge(),
                                                    new GibbsEnergy(),
-                                                   new GibbsEnergyError(),
                                                    Lumped.getInstance(),
                                                    ACPAssociated.getInstance())) {
 

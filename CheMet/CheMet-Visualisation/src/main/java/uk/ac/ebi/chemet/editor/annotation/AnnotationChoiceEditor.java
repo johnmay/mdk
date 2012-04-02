@@ -51,6 +51,8 @@ public class AnnotationChoiceEditor extends JComponent {
 
     private ItemListener listener;
 
+    private AnnotationEditor editor;
+
 
     public AnnotationChoiceEditor(final Window window) {
 
@@ -75,9 +77,10 @@ public class AnnotationChoiceEditor extends JComponent {
                     remove(1);
                 }
 
-                AbstractAnnotationEditor editor = EDITOR_FACTORY.newEditor((Class<Annotation>) type.getSelectedItem().getClass());
-                editor.setAnnotationClass(type.getSelectedItem().getClass());
-                add(editor.getComponent(), 1);
+                AbstractAnnotationEditor localEditor = EDITOR_FACTORY.newEditor((Class<Annotation>) type.getSelectedItem().getClass());
+                localEditor.setAnnotationClass(type.getSelectedItem().getClass());
+                editor = localEditor;
+                add(localEditor.getComponent(), 1);
                 window.pack();
 
             }
@@ -101,9 +104,6 @@ public class AnnotationChoiceEditor extends JComponent {
 
 
     public AnnotationEditor getEditor() {
-        if (getComponentCount() > 1) {
-            return (AnnotationEditor) getComponent(1);
-        }
-        return null;
+       return editor;
     }
 }

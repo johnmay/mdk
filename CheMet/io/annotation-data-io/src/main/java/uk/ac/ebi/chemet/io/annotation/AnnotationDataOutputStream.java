@@ -1,5 +1,7 @@
 package uk.ac.ebi.chemet.io.annotation;
 
+import uk.ac.ebi.annotation.reaction.GibbsEnergy;
+import uk.ac.ebi.chemet.io.annotation.reaction.GibbsEnergyWriter;
 import uk.ac.ebi.chemet.io.identifier.IdentifierDataOutputStream;
 import uk.ac.ebi.annotation.*;
 import uk.ac.ebi.annotation.chemical.*;
@@ -81,35 +83,12 @@ public class AnnotationDataOutputStream
         this.out = out;
         this.observationOutput = observationOutput;
 
-        // default readers
-        // general
-//        add(Locus.class,            new StringAnnotationWriter(out));
-//        add(Subsystem.class,        new StringAnnotationWriter(out));
-//        add(Synonym.class,          new StringAnnotationWriter(out));
-//        add(Source.class,           new StringAnnotationWriter(out));
+        // specialised writers
         add(AuthorAnnotation.class, new AuthorCommentWriter(out));
-
-        // model
-//        add(FluxUpperBound.class, new DoubleAnnotationWriter(out));
-//        add(FluxLowerBound.class, new DoubleAnnotationWriter(out));
-
-        // chemical
-//        add(MolecularFormula.class,        new StringAnnotationWriter(out));
-//        add(InChI.class,                   new StringAnnotationWriter(out));
-//        add(SMILES.class,                  new StringAnnotationWriter(out));
-//        add(ExactMass.class,               new FloatAnnotationWriter(out));
-//        add(Charge.class,                  new DoubleAnnotationWriter(out));
         add(AtomContainerAnnotation.class, new AtomContainerAnnotationWriter(out));
+        add(GibbsEnergy.class, new GibbsEnergyWriter(out));
 
-        // cross-reference (uses tagged output stream for identifier class)
-//        add(CrossReference.class,       new CrossReferenceWriter(identifierOutput, observationOutput));
-//        add(ChEBICrossReference.class,  new CrossReferenceWriter(identifierOutput, observationOutput));
-//        add(KEGGCrossReference.class,   new CrossReferenceWriter(identifierOutput, observationOutput));
-//        add(EnzymeClassification.class, new CrossReferenceWriter(identifierOutput, observationOutput));
-//        add(Citation.class,             new CrossReferenceWriter(identifierOutput, observationOutput));
-//        add(Classification.class,       new CrossReferenceWriter(identifierOutput, observationOutput));
-
-        // task
+        // specialised specialised readers for tasks
         add(Parameter.class,           new ParameterWriter(out));
         add(FileParameter.class,       new FileParameterWriter(out));
         add(ExecutableParameter.class, new ExecutableParameterWriter(out));

@@ -26,6 +26,7 @@ import com.jgoodies.animation.Animator;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AuthorAnnotation;
 import uk.ac.ebi.annotation.crossreference.*;
+import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.annotation.Flag;
 import uk.ac.ebi.interfaces.Annotation;
@@ -89,6 +90,7 @@ public class AnnotationEditorFactory {
         editors.put(DoubleAnnotation.class, new DoubleAnnotationEditor());
         editors.put(BooleanAnnotation.class, new BooleanAnnotationEditor());
         editors.put(Flag.class, new FlagEditor());
+        editors.put(GibbsEnergy.class, new GibbsEnergyEditor());
     }
 
     public AbstractAnnotationEditor newEditor(Class<? extends Annotation> c) {

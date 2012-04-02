@@ -64,6 +64,19 @@ public class DoubleAnnotationReaderTest {
 
     }
 
+    @Test public void readAnnotation_GibbsEnergy() throws IOException, ClassNotFoundException {
+
+
+        DataInputStream           input  = new DataInputStream(getStream("flux-lb-annotation"));
+        AnnotationDataInputStream reader = new AnnotationDataInputStream(input, new Version("0.9"));
+        DoubleAnnotation          fluxUB = reader.read();
+
+        input.close();
+
+        Assert.assertEquals(0.0005, (double) fluxUB.getValue(), 0);
+
+    }
+
     private InputStream getStream(String path){
         return getClass().getResourceAsStream(path);
     }
