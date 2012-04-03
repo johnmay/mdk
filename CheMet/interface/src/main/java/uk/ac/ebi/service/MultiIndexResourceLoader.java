@@ -17,6 +17,14 @@ public interface MultiIndexResourceLoader
         extends ResourceLoader {
 
     /**
+     * Add a keyed index to the loader. This will overwrite any existing indexes
+     *
+     * @param key   for the index
+     * @param index the index
+     */
+    public void addIndex(String key, LuceneIndex index);
+
+    /**
      * Access an index for the required key
      *
      * @param key key for the index

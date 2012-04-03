@@ -22,4 +22,11 @@ public interface SingleIndexResourceLoader
      */
     public LuceneIndex getIndex();
 
+    /**
+     * Set the index to load data into. This will be primarily used
+     * for testing purposes
+     * @param index the index for the loader
+     */
+    public void setIndex(LuceneIndex index);
+
 }

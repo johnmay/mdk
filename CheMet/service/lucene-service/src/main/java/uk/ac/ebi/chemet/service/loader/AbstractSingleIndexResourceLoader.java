@@ -29,6 +29,15 @@ public abstract class AbstractSingleIndexResourceLoader
         this.index = index;
     }
 
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void setIndex(LuceneIndex index) {
+        this.index = index;
+    }
+
     /**
      * @inheritDoc
      */
