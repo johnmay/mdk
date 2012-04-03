@@ -1,5 +1,6 @@
 package uk.ac.ebi.chemet.editor.annotation;
 
+import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
@@ -20,10 +21,10 @@ public class GibbsEnergyEditor extends AbstractAnnotationEditor<GibbsEnergy> {
 
     private JTextField value = FieldFactory.newField(4);
     private JTextField error = FieldFactory.newField(4);
-    ;
 
     public GibbsEnergyEditor() {
         JComponent component = getComponent();
+        component.setBorder(Borders.EMPTY_BORDER);
         component.setLayout(new FormLayout("p, 2dlu, p", "p"));
         CellConstraints cc = new CellConstraints();
         component.add(value, cc.xy(1, 1));

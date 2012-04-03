@@ -35,7 +35,7 @@ public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoad
         super(new KEGGCompoundStructureIndex());
 
         addRequiredResource("KEGG Mol files",
-                            "a directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/ligand/mol/C00009.mol)",
+                            "a directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/compound/mol/C00009.mol)",
                             ResourceDirectoryLocation.class);
 
     }

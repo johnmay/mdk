@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 /**
  * KEGGCompoundLoader - 27.02.2012 <br/>
  * <p/>
- * Loads names and formula's from the kegg/ligand/compound file into lucene indexes
+ * Loads names and formula's from the kegg/compound/compound file into lucene indexes
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -36,10 +36,10 @@ public class KEGGCompoundLoader
     public KEGGCompoundLoader() {
 
         addIndex("kegg.names", new KEGGCompoundNameIndex());
-        addIndex("kegg.data", new KEGGCompoundDataIndex());
+        addIndex("kegg.data",  new KEGGCompoundDataIndex());
 
         addRequiredResource("KEGG Compound",
-                            "File with compound information (i.e. 'ligand/compound') file",
+                            "File with compound information (i.e. 'compound/compound') file",
                             ResourceFileLocation.class);
 
     }
