@@ -113,7 +113,7 @@ public abstract class AbstractAnnotatedEntity
 
     @Override
     public boolean hasAnnotation(Annotation annotation) {
-        return annotations.containsKey(annotation.getClass());
+        return annotations.containsKey(annotation.getClass()) && annotations.get(annotation.getClass()).contains(annotation);
     }
 
     @Override

@@ -71,7 +71,7 @@ public interface AnnotatedEntity extends Entity {
 
     /**
      * Determine whether the entity has the specific annotation
-     * using the class of that annotation
+     * class of that annotation
      * @param c
      * @return 
      */

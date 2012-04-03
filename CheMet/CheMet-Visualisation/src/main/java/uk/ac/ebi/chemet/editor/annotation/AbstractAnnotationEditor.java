@@ -5,6 +5,7 @@ import com.jgoodies.forms.factories.Borders;
 import javax.swing.*;
 
 import uk.ac.ebi.annotation.util.AnnotationFactory;
+import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.interfaces.Annotation;
 
 
@@ -69,8 +70,10 @@ public abstract class AbstractAnnotationEditor<A extends Annotation>
 
     @Override
     public JComponent getComponent() {
-        if(component == null)
-            component = new JPanel();
+        if(component == null) {
+            component = PanelFactory.createInfoPanel();
+            component.setBorder(Borders.EMPTY_BORDER);
+        }
         return component;
     }
 }
