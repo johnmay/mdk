@@ -1,7 +1,9 @@
 package uk.ac.ebi.chemet.service.loader;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
 import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.service.location.ResourceLocation;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +35,10 @@ public class LoaderTestUtil {
         return temp;
 
     }
+    
+    public static ResourceLocation getLocation(String path){
+        return new SystemLocation(LoaderTestUtil.class.getResourceAsStream(path));
+    }
 
     /**
      * Creates the inspector and loads the data
@@ -45,7 +51,8 @@ public class LoaderTestUtil {
      */
     public static LuceneIndexInspector getIndexInspector(LuceneIndex index) throws IOException {
         return new LuceneIndexInspector(index).load();
-    }
+    }   
+    
 
     /**
      * Test that the index was create an the inspector can read it

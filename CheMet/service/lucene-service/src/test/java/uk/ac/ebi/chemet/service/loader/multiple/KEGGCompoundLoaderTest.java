@@ -8,7 +8,6 @@ import uk.ac.ebi.chemet.service.index.data.KEGGCompoundDataIndex;
 import uk.ac.ebi.chemet.service.index.name.KEGGCompoundNameIndex;
 import uk.ac.ebi.chemet.service.loader.LoaderTestUtil;
 import uk.ac.ebi.chemet.service.loader.LuceneIndexInspector;
-import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
 import uk.ac.ebi.service.MultiIndexResourceLoader;
 import uk.ac.ebi.service.index.LuceneIndex;
 
@@ -42,7 +41,7 @@ public class KEGGCompoundLoaderTest {
         loader.addIndex("kegg.data", data);
 
         // added location
-        loader.addLocation("KEGG Compound", new SystemLocation(KEGGCompoundLoaderTest.class.getResourceAsStream("compound")));
+        loader.addLocation("KEGG Compound", LoaderTestUtil.getLocation("data/kegg/compound"));
 
         loader.update();
     }
