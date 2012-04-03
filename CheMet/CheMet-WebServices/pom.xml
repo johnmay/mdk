@@ -183,6 +183,7 @@
                     <wsdlFiles>
                         <wsdlFile>chebi.wsdl</wsdlFile>
                     </wsdlFiles>
+                    <wsdlLocation>http://www.ebi.ac.uk/webservices/chebi/2.0/webservice?wsdl</wsdlLocation>
                     <packageName>uk.ac.ebi.chebi.webapps.chebiWS.model</packageName>
                     <keep>true</keep>
                     <extension>true</extension>
