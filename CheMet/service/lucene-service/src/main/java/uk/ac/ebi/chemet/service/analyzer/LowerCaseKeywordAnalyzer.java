@@ -1,9 +1,9 @@
 package uk.ac.ebi.chemet.service.analyzer;
 
-import org.apache.log4j.Logger;
-import org.apache.lucene.analysis.*;
-import org.apache.lucene.analysis.standard.StandardFilter;
-import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.KeywordTokenizer;
+import org.apache.lucene.analysis.LowerCaseFilter;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.util.Version;
 
 import java.io.Reader;
@@ -17,7 +17,7 @@ import java.io.Reader;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class LowerCaseKeywordAnalyzer extends Analyzer {
+public final class LowerCaseKeywordAnalyzer extends Analyzer {
 
     @Override
     public TokenStream tokenStream(String fieldName, Reader reader) {
