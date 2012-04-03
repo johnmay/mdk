@@ -4,15 +4,13 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
-import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.chemet.service.BasicServiceLocation;
-import uk.ac.ebi.chemet.service.ServicePreferences;
 import uk.ac.ebi.chemet.service.analyzer.ChemicalNameAnalyzer;
 import uk.ac.ebi.chemet.service.analyzer.LowerCaseKeywordAnalyzer;
-import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.service.query.QueryService;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -31,8 +29,6 @@ public class DefaultNameIndex extends BasicServiceLocation implements LuceneInde
     private Directory directory;
     private PerFieldAnalyzerWrapper analyzer;
 
-    private static final FilePreference SERVICE_ROOT = ServicePreferences.getInstance().getPreference("SERVICE_ROOT");
-
     /**
      * @param name
      * @param path from service root
@@ -45,7 +41,24 @@ public class DefaultNameIndex extends BasicServiceLocation implements LuceneInde
 
         analyzer.addAnalyzer(QueryService.IDENTIFIER.field(), new LowerCaseKeywordAnalyzer());
 
+
+
     }
+
+    /**
+     * @param name
+     * @param f location of the index
+     */
+    public DefaultNameIndex(String name, File f) {
+        super(name, f);
+
+        // by default we use the ChemicalNameAnalyzer
+        analyzer = new PerFieldAnalyzerWrapper(new ChemicalNameAnalyzer());
+
+        analyzer.addAnalyzer(QueryService.IDENTIFIER.field(), new LowerCaseKeywordAnalyzer());
+
+    }
+
 
 
     @Override

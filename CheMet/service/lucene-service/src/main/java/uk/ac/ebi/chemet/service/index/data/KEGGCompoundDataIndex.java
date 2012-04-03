@@ -3,6 +3,8 @@ package uk.ac.ebi.chemet.service.index.data;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.service.index.KeywordNIOIndex;
 
+import java.io.File;
+
 /**
  * KEGGCompoundDataIndex - 28.02.2012 <br/>
  * <p/>
@@ -19,5 +21,10 @@ public class KEGGCompoundDataIndex extends KeywordNIOIndex {
     public KEGGCompoundDataIndex(){
         super("KEGG Compound Data", "data/kegg-compound");
     }
+
+    public KEGGCompoundDataIndex(File f){
+        super("KEGG Compound Data", f);
+    }
+
 
 }
