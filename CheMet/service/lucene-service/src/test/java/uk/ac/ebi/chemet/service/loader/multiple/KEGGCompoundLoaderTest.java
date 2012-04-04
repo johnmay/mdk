@@ -1,6 +1,7 @@
 package uk.ac.ebi.chemet.service.loader.multiple;
 
 import org.apache.log4j.Logger;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -9,7 +10,12 @@ import uk.ac.ebi.chemet.service.index.name.KEGGCompoundNameIndex;
 import uk.ac.ebi.chemet.service.loader.LoaderTestUtil;
 import uk.ac.ebi.chemet.service.loader.LuceneIndexInspector;
 import uk.ac.ebi.service.MultiIndexResourceLoader;
+import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.service.query.QueryService;
+import uk.ac.ebi.service.query.data.MolecularFormulaService;
+import uk.ac.ebi.service.query.name.PreferredNameService;
+import uk.ac.ebi.service.query.name.SynonymService;
 
 import java.io.IOException;
 
@@ -25,14 +31,14 @@ public class KEGGCompoundLoaderTest {
     private static LuceneIndex name;
     private static LuceneIndex data;
 
-    @BeforeClass
-    public static void createIndexes() throws IOException {
-        name = new KEGGCompoundNameIndex(LoaderTestUtil.createTemporaryDirectory("kegg.names"));
-        data = new KEGGCompoundDataIndex(LoaderTestUtil.createTemporaryDirectory("kegg.data"));
-    }
+    private static LuceneIndexInspector nameInspector;
+    private static LuceneIndexInspector dataInspector;
 
     @BeforeClass
-    public static void update() throws Exception {
+    public static void createIndexes() throws IOException, MissingLocationException {
+
+        name = new KEGGCompoundNameIndex(LoaderTestUtil.createTemporaryDirectory("kegg.names"));
+        data = new KEGGCompoundDataIndex(LoaderTestUtil.createTemporaryDirectory("kegg.data"));
 
         MultiIndexResourceLoader loader = new KEGGCompoundLoader();
 
@@ -44,37 +50,90 @@ public class KEGGCompoundLoaderTest {
         loader.addLocation("KEGG Compound", LoaderTestUtil.getLocation("data/kegg/compound"));
 
         loader.update();
+
     }
 
-    @Test public void testUpdate_created() {
+    @AfterClass
+    public static void tearDownClass() throws IOException {
+        if (nameInspector != null) nameInspector.close();
+        if (dataInspector != null) dataInspector.close();
+    }
+
+
+    @Test
+    public void testUpdate_created() {
         Assert.assertTrue("Name index was not created/found", LoaderTestUtil.testInspector(name));
         Assert.assertTrue("Data index was not created/found", LoaderTestUtil.testInspector(data));
     }
 
 
     @Test
-    public void testUpdate_name() throws IOException {
+    public void testUpdate_name_fields() throws IOException {
 
-        LuceneIndexInspector inspector = LoaderTestUtil.getIndexInspector(name);
+        nameInspector = nameInspector == null ? LoaderTestUtil.getIndexInspector(name) : nameInspector;
+
 
         // test fields are in place
-        Assert.assertTrue(inspector.hasField("Identifier"));
-        Assert.assertTrue(inspector.hasField("PreferredName"));
-        Assert.assertTrue(inspector.hasField("Synonym"));
+        Assert.assertTrue(nameInspector.hasField(QueryService.IDENTIFIER.field()));
+        Assert.assertTrue(nameInspector.hasField(PreferredNameService.PREFERRED_NAME.field()));
+        Assert.assertTrue(nameInspector.hasField(SynonymService.SYNONYM.field()));
+
+    }
+
+    @Test
+    public void testUpdate_name_identifiers() throws IOException {
+
+        nameInspector = nameInspector == null ? LoaderTestUtil.getIndexInspector(name) : nameInspector;
+
+        String field = QueryService.IDENTIFIER.field();
 
         // test identifiers are in place
-        Assert.assertTrue(inspector.hasValue("Identifier", "C15303"));
-        Assert.assertTrue(inspector.hasValue("Identifier", "C15304"));
-        Assert.assertTrue(inspector.hasValue("Identifier", "C15305"));
-        Assert.assertTrue(inspector.hasValue("Identifier", "C15306"));
+        Assert.assertTrue("C15303 was not loaded", nameInspector.hasValue(field, "C15303"));
+        Assert.assertTrue("C15304 was not loaded", nameInspector.hasValue(field, "C15304"));
+        Assert.assertTrue("C15305 was not loaded", nameInspector.hasValue(field, "C15305"));
+        Assert.assertTrue("C15306 was not loaded", nameInspector.hasValue(field, "C15306"));
+
+    }
+
+
+    @Test
+    public void testUpdate_name() throws IOException {
+
+        nameInspector = nameInspector == null ? LoaderTestUtil.getIndexInspector(name) : nameInspector;
+
+        String field = PreferredNameService.PREFERRED_NAME.field();
 
         // preferred names
-        Assert.assertTrue(inspector.hasValue("PreferredName", "(Z)-11beta,21-Dihydroxypregna-1,4,17(20)-trien-3-one"));
-        Assert.assertTrue(inspector.hasValue("PreferredName", "3beta,19-Dihydroxyandrost-5-en-17-one 3-acetate"));
-        Assert.assertTrue(inspector.hasValue("PreferredName", "9-Chloro-11beta,17,21-trihydroxypregn-4-ene-3,20-dione 21-acetate"));
-        Assert.assertTrue(inspector.hasValue("PreferredName", "11alpha,17beta-Dihydroxyandrost-4-en-3-one"));
+        Assert.assertTrue(nameInspector.hasValue(field, "(Z)-11beta,21-Dihydroxypregna-1,4,17(20)-trien-3-one"));
+        Assert.assertTrue(nameInspector.hasValue(field, "3beta,19-Dihydroxyandrost-5-en-17-one 3-acetate"));
+        Assert.assertTrue(nameInspector.hasValue(field, "9-Chloro-11beta,17,21-trihydroxypregn-4-ene-3,20-dione 21-acetate"));
+        Assert.assertTrue(nameInspector.hasValue(field, "11alpha,17beta-Dihydroxyandrost-4-en-3-one"));
 
-        inspector.close();
+    }
+
+    @Test
+    public void testUpdate_data_fields() throws IOException {
+
+        dataInspector = dataInspector == null ? LoaderTestUtil.getIndexInspector(name) : dataInspector;
+
+        // test fields are in place
+        Assert.assertTrue(dataInspector.hasField(QueryService.IDENTIFIER.field()));
+        Assert.assertTrue(dataInspector.hasField(MolecularFormulaService.MOLECULAR_FORMULA.field()));
+
+    }
+
+    @Test
+    public void testUpdate_data_identifiers() throws IOException {
+
+        dataInspector = dataInspector == null ? LoaderTestUtil.getIndexInspector(name) : dataInspector;
+        
+        String field = QueryService.IDENTIFIER.field();
+        
+        // test identifiers are in place
+        Assert.assertTrue("C15303 was not loaded", nameInspector.hasValue(field, "C15303"));
+        Assert.assertTrue("C15304 was not loaded", nameInspector.hasValue(field, "C15304"));
+        Assert.assertTrue("C15305 was not loaded", nameInspector.hasValue(field, "C15305"));
+        Assert.assertTrue("C15306 was not loaded", nameInspector.hasValue(field, "C15306"));
 
     }
 
@@ -84,15 +143,6 @@ public class KEGGCompoundLoaderTest {
 
         LuceneIndexInspector inspector = LoaderTestUtil.getIndexInspector(data);
 
-        // test fields are in place
-        Assert.assertTrue(inspector.hasField("Identifier"));
-        Assert.assertTrue(inspector.hasField("MolecularFormula"));
-
-        // test identifiers are in place
-        Assert.assertTrue(inspector.hasValue("Identifier", "C15303"));
-        Assert.assertTrue(inspector.hasValue("Identifier", "C15304"));
-        Assert.assertTrue(inspector.hasValue("Identifier", "C15305"));
-        Assert.assertTrue(inspector.hasValue("Identifier", "C15306"));
 
         // preferred names
         Assert.assertTrue(inspector.hasValue("MolecularFormula", "C19H28O3"));

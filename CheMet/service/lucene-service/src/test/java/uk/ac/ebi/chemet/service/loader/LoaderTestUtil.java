@@ -1,9 +1,9 @@
 package uk.ac.ebi.chemet.service.loader;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
+import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.location.ResourceLocation;
+import uk.ac.ebi.service.location.ResourceFileLocation;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +36,8 @@ public class LoaderTestUtil {
 
     }
     
-    public static ResourceLocation getLocation(String path){
-        return new SystemLocation(LoaderTestUtil.class.getResourceAsStream(path));
+    public static ResourceFileLocation getLocation(String path) {
+        return new RemoteLocation(LoaderTestUtil.class.getResource(path));
     }
 
     /**
