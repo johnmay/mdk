@@ -40,15 +40,13 @@ public class ChEBINameLoaderTest {
         // set test-indexes
         loader.setIndex(name);
 
-        System.out.println(LoaderTestUtil.class.getResourceAsStream("data/chebi/compounds.tsv"));
-
         // added location
         loader.addLocation("ChEBI Compounds", LoaderTestUtil.getLocation("data/chebi/compounds.tsv"));
         loader.addLocation("ChEBI Names",     LoaderTestUtil.getLocation("data/chebi/names.tsv"));
 
         loader.update();
 
-        System.out.println(name.getLocation());
+        System.out.println("ChEBI Names Test Index: " + name.getLocation());
 
     }
 
