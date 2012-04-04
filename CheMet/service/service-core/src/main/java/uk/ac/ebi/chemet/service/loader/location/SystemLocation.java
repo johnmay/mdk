@@ -24,10 +24,6 @@ public class SystemLocation
 
     private InputStream stream;
 
-    public SystemLocation(InputStream stream) {
-        this.stream = stream;
-    }
-
     public SystemLocation(File location) {
         this.location = location;
     }
