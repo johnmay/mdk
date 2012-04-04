@@ -114,7 +114,7 @@ public class KEGGCompoundLoaderTest {
     @Test
     public void testUpdate_data_fields() throws IOException {
 
-        dataInspector = dataInspector == null ? LoaderTestUtil.getIndexInspector(name) : dataInspector;
+        dataInspector = dataInspector == null ? LoaderTestUtil.getIndexInspector(data) : dataInspector;
 
         // test fields are in place
         Assert.assertTrue(dataInspector.hasField(QueryService.IDENTIFIER.field()));
@@ -125,7 +125,7 @@ public class KEGGCompoundLoaderTest {
     @Test
     public void testUpdate_data_identifiers() throws IOException {
 
-        dataInspector = dataInspector == null ? LoaderTestUtil.getIndexInspector(name) : dataInspector;
+        dataInspector = dataInspector == null ? LoaderTestUtil.getIndexInspector(data) : dataInspector;
         
         String field = QueryService.IDENTIFIER.field();
         
@@ -141,16 +141,15 @@ public class KEGGCompoundLoaderTest {
     @Test
     public void testUpdate_data() throws IOException {
 
-        LuceneIndexInspector inspector = LoaderTestUtil.getIndexInspector(data);
+        dataInspector = dataInspector == null ? LoaderTestUtil.getIndexInspector(data) : dataInspector;
 
+        String field = MolecularFormulaService.MOLECULAR_FORMULA.field();
 
         // preferred names
-        Assert.assertTrue(inspector.hasValue("MolecularFormula", "C19H28O3"));
-        Assert.assertTrue(inspector.hasValue("MolecularFormula", "C21H28O3"));
-        Assert.assertTrue(inspector.hasValue("MolecularFormula", "C21H30O4"));
-        Assert.assertTrue(inspector.hasValue("MolecularFormula", "C23H31ClO6"));
-
-        inspector.close();
+        Assert.assertTrue(dataInspector.hasValue(field, "C19H28O3"));
+        Assert.assertTrue(dataInspector.hasValue(field, "C21H28O3"));
+        Assert.assertTrue(dataInspector.hasValue(field, "C21H30O4"));
+        Assert.assertTrue(dataInspector.hasValue(field, "C23H31ClO6"));
 
     }
 
