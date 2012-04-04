@@ -1,0 +1,29 @@
+ID	COMPOUND_ID	TYPE	SOURCE	NAME	ADAPTED	LANGUAGE
+13408	8776	NAME	KEGG COMPOUND	Ranitidine	F	en
+100438	8776	IUPAC NAME	IUPAC	(E)-N-{2-[({5-[(dimethylamino)methyl]-2-furyl}methyl)sulfanyl]ethyl}-N'-methyl-2-nitroethene-1,1-diamine	F	en
+100437	8776	INN	ChemIDplus	ranitidinum	T	la
+100436	8776	INN	ChemIDplus	ranitidina	T	es
+100435	8776	INN	ChemIDplus	ranitidine	T	en
+12414	8113	SYNONYM	KEGG COMPOUND	Phloridzin	F	en
+12413	8113	SYNONYM	KEGG COMPOUND	Phlorhizin	F	en
+12412	8113	NAME	KEGG COMPOUND	Phlorizin	F	en
+69144	8113	SYNONYM	ChemIDplus	Floridzin	F	en
+69142	8113	SYNONYM	ChemIDplus	Phlorizoside	F	en
+69141	8113	SYNONYM	ChemIDplus	Phloretin 2'-glucoside	F	en
+69140	8113	IUPAC NAME	IUPAC	3,5-dihydroxy-2-[3-(4-hydroxyphenyl)propanoyl]phenyl beta-D-glucopyranoside	F	en
+12768	8364	NAME	KEGG COMPOUND	Prazosin	F	en
+105648	8364	IUPAC NAME	IUPAC	2-[4-(2-furoyl)piperazin-1-yl]-6,7-dimethoxyquinazolin-4-amine	F	en
+105492	8364	SYNONYM	ChemIDplus	2-(4-(2-Furoyl)piperazin-1-yl)-4-amino-6,7-dimethoxyquinazoline	F	en
+105491	8364	SYNONYM	ChemIDplus	1-(4-Amino-6,7-dimethoxy-2-quinazolinyl)-4-(2-furanylcarbonyl)piperazine	F	en
+105490	8364	INN	WHO MedNet	prazosina	F	es
+105489	8364	INN	WHO MedNet	prazosine	F	fr
+105488	8364	INN	WHO MedNet	prazosinum	F	la
+105487	8364	INN	WHO MedNet	prazosin	F	en
+9256	6031	NAME	KEGG COMPOUND	Isonicotineamide	F	en
+49962	6031	SYNONYM	IUPAC	isn	F	en
+49919	6031	SYNONYM	NIST Chemistry WebBook	isonicotinamide	F	en
+49905	6031	SYNONYM	NIST Chemistry WebBook	4-carbamoylpyridine	F	en
+49904	6031	SYNONYM	NIST Chemistry WebBook	4-pyridinecarboxamide	F	en
+49903	6031	SYNONYM	NIST Chemistry WebBook	isonicotinic acid amide	F	en
+49902	6031	SYNONYM	NIST Chemistry WebBook	pyridine-4-carboxylic acid amide	F	en
+49901	6031	IUPAC NAME	IUPAC	pyridine-4-carboxamide	F	en
