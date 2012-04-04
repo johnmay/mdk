@@ -2,6 +2,8 @@ package uk.ac.ebi.chemet.service.index.name;
 
 import org.apache.log4j.Logger;
 
+import java.io.File;
+
 /**
  * ChEBINameIndex - 28.02.2012 <br/>
  * <p/>
@@ -17,6 +19,10 @@ public class ChEBINameIndex extends DefaultNameIndex {
 
     public ChEBINameIndex() {
         super("ChEBI Names", "name/chebi");
+    }
+
+    public ChEBINameIndex(File file){
+        super("ChEBI Name", file);
     }
 
 }
