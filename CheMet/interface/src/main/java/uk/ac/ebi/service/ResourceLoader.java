@@ -59,10 +59,9 @@ public interface ResourceLoader {
      * thousands. This should be logged and not thrown (note: logging access
      * has not currently been implemented).
      *
-     * @throws MissingLocationException if a required location is missing
      * @throws IOException              could not load resources
      */
-    public void update() throws MissingLocationException, IOException;
+    public void update() throws IOException;
 
     /**
      * Cancel the update process. This method should inform the update
