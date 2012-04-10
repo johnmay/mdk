@@ -16,13 +16,6 @@
  */
 package uk.ac.ebi.chemet.resource.util;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -30,10 +23,12 @@ import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.IdentifierFactory;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import static javax.xml.stream.events.XMLEvent.*;
+import java.io.InputStream;
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -44,8 +39,8 @@ import static javax.xml.stream.events.XMLEvent.*;
 public class MIRIAMLoader {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-            MIRIAMLoader.class);
+            org.apache.log4j.Logger.getLogger(
+                    MIRIAMLoader.class);
 
     private Map<String, MIRIAMEntry> nameEntryMap = new HashMap<String, MIRIAMEntry>(50);
 
@@ -71,43 +66,12 @@ public class MIRIAMLoader {
 
 
     private MIRIAMLoader() {
+        long start = System.currentTimeMillis();
         load();
+        long end = System.currentTimeMillis();
+        logger.info("Loaded miriam xml in " + (end - start) + " (ms)");
     }
 
-
-    private void fastload() throws XMLStreamException {
-        XMLInputFactory factory = XMLInputFactory.newInstance();
-        XMLStreamReader xmlr  = factory.createXMLStreamReader((Reader)null);
-        while(xmlr.hasNext()){
-            int event = xmlr.next();
-            switch (event) {
-                case START_ELEMENT:
-                    if(xmlr.getLocalName().equals("datatype")){
-
-                    }
-                    break;
-            }
-
-        }
-    }
-
-    private MIRIAMEntry getEntry(XMLStreamReader xmlr) throws XMLStreamException {
-        while(xmlr.hasNext()){
-            int event = xmlr.next();
-            switch (event) {
-                case START_ELEMENT:
-                    String name = xmlr.getLocalName();
-                    if(name.equals("name")){
-                        // parse name
-                    } else if(name.equals("definition")){
-                        //
-                    }
-                    break;
-            }
-
-        }
-        return null;
-    }
 
     private void load() {
 
@@ -179,7 +143,6 @@ public class MIRIAMLoader {
         }
 
 
-
     }
 
 
@@ -193,7 +156,9 @@ public class MIRIAMLoader {
 
     /**
      * Access a MIRIAM resource entry by it's name, such as, 'chebi'.
+     *
      * @param name A Lower case name of resource with any space characters included, 'kegg compound
+     *
      * @return The MIRIAM entry associated with that name
      */
     public MIRIAMEntry getEntry(String name) {
@@ -215,7 +180,9 @@ public class MIRIAMLoader {
 
     /**
      * Converts a provided URN into a string identifier
+     *
      * @param urn such as urn:miriam:obo.chebi:CHEBI%3A17196
+     *
      * @return the identifier i.e. "CHEBI:17196" in the above example
      */
     public static String getAccession(String urn) {
