@@ -6,6 +6,7 @@ import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
 import uk.ac.ebi.chemet.service.loader.location.ZIPSystemLocation;
 import uk.ac.ebi.chemet.service.loader.name.ChEBINameLoader;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
 import uk.ac.ebi.service.ResourceLoader;
 import uk.ac.ebi.service.query.name.*;
 
@@ -97,10 +98,6 @@ public class ChEBINameService
         return getIdentifiers(construct(name, PREFERRED_NAME, approximate));
     }
 
-    public Collection<ChEBIIdentifier> searchPreferredName_split(String name, boolean approximate) {
-        return getIdentifiers(construct(name, PREFERRED_NAME, approximate));
-    }
-
     /**
      * @inheritDoc
      */
@@ -177,67 +174,14 @@ public class ChEBINameService
 
         }
 
-        ChEBINameService service = new ChEBINameService();
+        LuceneServiceManager manager = LuceneServiceManager.getInstance();
+        if(manager.hasService(ChEBIIdentifier.class, IUPACNameService.class)){
+            IUPACNameService service = manager.getService(ChEBIIdentifier.class, IUPACNameService.class);
+        }
 
 
-        System.out.println(service.values(service.construct("chebi:15390", IDENTIFIER, false), SYNONYM));
 
 
-        //        Collection<String> names = new HashSet<String>();
-        //        for (int i = 0; i < 8000; i++) {
-        //            ChEBIIdentifier id = new ChEBIIdentifier(i);
-        //            String preferredName = service.getPreferredName(id);
-        //            if (!preferredName.isEmpty()) {
-        //                names.add(preferredName);
-        //            }
-        //        }
-        //
-        //        for (String name : names) {
-        //            service.searchPreferredName_split(name, false);
-        //            service.searchPreferredName(name, false);
-        //        }
-        //
-        //
-        //        {
-        //            System.out.print("getIdentifiers_split(\"...\", false) : ");
-        //            long start = System.currentTimeMillis();
-        //            ChEBINameService newService = new ChEBINameService();
-        //            for (String name : names) {
-        //                newService.searchPreferredName_split(name, false);
-        //            }
-        //            long end = System.currentTimeMillis();
-        //            System.out.println(end - start);
-        //        }
-        //
-        //        {
-        //            ChEBINameService newService = new ChEBINameService();
-        //            System.out.print("getIdentifiers(\"...\", false) : ");
-        //            long start = System.currentTimeMillis();
-        //            for (String name : names) {
-        //                newService.searchPreferredName(name, false);
-        //            }
-        //            long end = System.currentTimeMillis();
-        //            System.out.println(end - start);
-        //        }
 
-
-        //        for (String name : Arrays.asList("(R)-Acetoin", "Coenzyme A")) {
-        //            Collection<ChEBIIdentifier> results = service.searchPreferredName(name, false);
-        //            System.out.println(name + ":");
-        //            for (ChEBIIdentifier id : results) {
-        //                System.out.println(id + "\t" + service.getPreferredName(id));
-        //            }
-        //        }
-
-
-        //          Collection<ChEBIIdentifier> results = service.searchName("Coenzyme A", true);
-        //        Collection<ChEBIIdentifier> results = service.searchName("D-glucose 6-phosphate", true);
-        //        Collection<ChEBIIdentifier> results = service.searchName("phenyl lactate", true);
-        //        System.out.println(results.size() + " results");
-        //        for(ChEBIIdentifier id : results){
-        //            System.out.println(id + "\t" + service.getNames(id));
-        //        }
-        //        long end = System.currentTimeMillis();
-        //        System.out.println("time: " + (end - start));
     }
 }

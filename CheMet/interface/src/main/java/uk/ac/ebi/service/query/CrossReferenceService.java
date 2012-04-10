@@ -1,6 +1,5 @@
 package uk.ac.ebi.service.query;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 
@@ -18,8 +17,12 @@ import java.util.Collection;
 public interface CrossReferenceService<I extends Identifier>
         extends QueryService<I> {
 
-    public static final Term DATABASE_IDENTIFIER_INDEX = new Term("DatabaseName");
-    public static final Term DATABASE_ACCESSION = new Term("DatabaseAccession");
+    public static final Term DATABASE_IDENTIFIER_INDEX = new Term("Xref.Name");
+    public static final Term DATABASE_ACCESSION        = new Term("Xref.Accession");
+
+    // used for compressed storage of identifiers
+    public static final Term CLASS_NAME                = new Term("Class.Name");
+    public static final Term CLASS_ID                  = new Term("Class.Id");
 
     /**
      * Access all cross-references for a given identifier

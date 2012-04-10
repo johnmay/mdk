@@ -1,7 +1,6 @@
 package uk.ac.ebi.chemet.service.query.crossreference;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
@@ -41,19 +40,19 @@ public class ChEBICrossReferenceService
         super(new ChEBICrossReferenceIndex());
     }
 
-    private Class getIdentifierClass(String index){
+    private Class getIdentifierClass(String id){
 
         // to save space we store the class name's in the index with a 'class-index' link
 
-        if(indexMap.containsKey(index)){
-            return indexMap.get(index);
+        if(indexMap.containsKey(id)){
+            return indexMap.get(id);
         }
 
-        Query  q    = new TermQuery(new Term("class-index", index));
-        String name = firstValue(q, "class");
+        Query  q    = new TermQuery(CLASS_ID.createTerm(id));
+        String name = firstValue(q, CLASS_NAME);
         try {
             Class c =  Class.forName(name);
-            indexMap.put(index, c);
+            indexMap.put(id, c);
             return c;
         } catch (ClassNotFoundException ex){
             LOGGER.error("Could not find class for name " + name);
