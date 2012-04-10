@@ -10,7 +10,6 @@ import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultCrossReferenceIndexWriter;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.resource.IdentifierFactory;
-import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.location.ResourceFileLocation;
 
 import java.io.IOException;
@@ -18,8 +17,6 @@ import java.io.InputStreamReader;
 import java.util.Map;
 
 /**
- * ChEBICrossReferenceLoader - 29.02.2012 <br/>
- * <p/>
  * Loader will create a lucene index with cross-references for the ChEBI
  * database. The current implementation only write the the cross-references
  * for ChEBI primary identifiers.
@@ -44,7 +41,9 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
                             ResourceFileLocation.class,
                             new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession.tsv"));
 
-        // ekk! this file is huge for just getting the pubchem identifiers?
+        // ekk! this file is huge for just getting the pubchem identifiers.
+        // PubChem Identifiers are ignored until we can figure a better way of doing this
+        //
         //        addRequiredResource("ChEBI References",
         //                            "...",
         //                            ResourceFileLocation.class,
@@ -56,7 +55,7 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
      * @inheritDoc
      */
     @Override
-    public void update() throws MissingLocationException, IOException {
+    public void update() throws IOException {
 
         // open the database accession file
         ResourceFileLocation location = getLocation("ChEBI Database Accession");

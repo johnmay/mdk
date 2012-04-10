@@ -9,7 +9,6 @@ import uk.ac.ebi.chemet.service.index.data.ChEBIDataIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractChEBILoader;
 import uk.ac.ebi.chemet.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultDataIndexWriter;
-import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.location.ResourceFileLocation;
 
 import java.io.IOException;
@@ -45,7 +44,7 @@ public class ChEBIDataLoader extends AbstractChEBILoader {
     }
 
     @Override
-    public void update() throws MissingLocationException, IOException {
+    public void update() throws IOException {
 
         ResourceFileLocation location = getLocation("ChEBI Chemical Data");
         CSVReader csv = new CSVReader(new InputStreamReader(location.open()), '\t', '\0');

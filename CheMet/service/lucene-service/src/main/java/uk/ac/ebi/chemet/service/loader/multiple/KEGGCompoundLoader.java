@@ -6,14 +6,16 @@ import uk.ac.ebi.chemet.service.index.name.KEGGCompoundNameIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractMultiIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultDataIndexWriter;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultNameIndexWriter;
-import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.location.ResourceFileLocation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +47,7 @@ public class KEGGCompoundLoader
     }
 
     @Override
-    public void update() throws MissingLocationException, IOException {
+    public void update() throws IOException {
 
         ResourceFileLocation location = getLocation("KEGG Compound");
         KEGGCompoundParser parser = new KEGGCompoundParser(location.open(),

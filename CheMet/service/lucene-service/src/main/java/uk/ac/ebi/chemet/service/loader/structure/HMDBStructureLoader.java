@@ -9,7 +9,6 @@ import uk.ac.ebi.chemet.service.index.structure.HMDBStructureIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.location.GZIPRemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter;
-import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.location.ResourceFileLocation;
 
 import java.io.IOException;
@@ -52,7 +51,7 @@ public class HMDBStructureLoader
      * @inheritDoc
      */
     @Override
-    public void update() throws MissingLocationException, IOException {
+    public void update() throws IOException {
 
         ResourceFileLocation location = getLocation("HMDB SDF");
 

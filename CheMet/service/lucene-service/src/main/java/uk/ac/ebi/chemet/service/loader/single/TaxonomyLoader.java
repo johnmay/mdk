@@ -10,12 +10,11 @@ import uk.ac.ebi.chemet.service.index.other.TaxonomyIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.chemet.service.query.taxonmy.TaxonomyQueryService;
-import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.location.ResourceFileLocation;
 import uk.ac.ebi.service.query.name.NameService;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +44,7 @@ public class TaxonomyLoader
 
     private static Pattern ENTRY = Pattern.compile("(\\w{5})\\s([EBVA])\\s+(\\d+): N=(.+)");
 
-    public void update() throws IOException, MissingLocationException {
+    public void update() throws IOException {
 
         ResourceFileLocation species = getLocation("UniProt Species List");
         Scanner scanner = new Scanner(species.open());

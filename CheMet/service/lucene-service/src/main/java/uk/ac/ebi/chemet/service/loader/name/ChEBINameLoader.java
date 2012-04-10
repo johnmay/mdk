@@ -3,7 +3,6 @@ package uk.ac.ebi.chemet.service.loader.name;
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.service.index.name.ChEBINameIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractChEBILoader;
@@ -61,7 +60,7 @@ public class ChEBINameLoader extends AbstractChEBILoader {
      * @inheritDoc
      */
     @Override
-    public void update() throws MissingLocationException, IOException {
+    public void update() throws IOException {
 
         // get the preferred names first
         Map<String, String> preferredNameMap = getPreferredNameMap();

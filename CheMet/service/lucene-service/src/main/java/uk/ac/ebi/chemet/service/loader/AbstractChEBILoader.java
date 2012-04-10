@@ -18,8 +18,8 @@ import java.util.regex.Pattern;
 /**
  * AbstractChEBILoader - 28.02.2012 <br/>
  * <p/>
- * Provides methods for resolving ChEBI secondary parentMap to their primary equivalent
- * and the status of an entry. The loader uses the compounds.tsv flat-file from ChEBI.
+ * Provides methods for resolving ChEBI secondary identifiers to their primary identifier
+ * and the status of an entry. The loader requires the ChEBI compounds.tsv flat-file from ChEBI.
  *
  *
  * @author johnmay
@@ -30,9 +30,9 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
 
     private static final Logger LOGGER = Logger.getLogger(AbstractChEBILoader.class);
 
-    private Map<String, String> parentMap = new HashMap<String, String>();
+    private Map<String, String>     parentMap = new HashMap<String, String>();
     private Multimap<String, String> childMap = HashMultimap.create();
-    private Map<String,Character> statusMap = new HashMap<String,Character>();
+    private Map<String,Character>   statusMap = new HashMap<String,Character>();
 
     /**
      * @inheritDoc
@@ -109,7 +109,7 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
      * @throws MissingLocationException thrown if compounds.tsv is not provided
      * @throws IOException
      */
-    public boolean isActive(String accession) throws MissingLocationException, IOException {
+    public boolean isActive(String accession) throws IOException {
         if(statusMap.isEmpty())
             createMap();
 

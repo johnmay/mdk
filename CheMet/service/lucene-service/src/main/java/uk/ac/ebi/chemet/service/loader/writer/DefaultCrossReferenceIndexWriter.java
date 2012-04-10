@@ -1,26 +1,20 @@
 package uk.ac.ebi.chemet.service.loader.writer;
 
 import org.apache.commons.lang.mutable.MutableByte;
-import org.apache.commons.lang.mutable.MutableShort;
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.util.Version;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.query.CrossReferenceService;
 import uk.ac.ebi.service.query.QueryService;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static uk.ac.ebi.service.query.CrossReferenceService.*;
+
 /**
- * DefaultCrossReferenceIndexWriter - 29.02.2012 <br/>
- * <p/>
- * Class descriptions.
+ * Unified writing of cross-references to a lucene-index
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -40,9 +34,9 @@ public class DefaultCrossReferenceIndexWriter extends AbstractIndexWriter {
         Document document = new Document();
 
         document.add(create(QueryService.IDENTIFIER, accession));
-        document.add(create(CrossReferenceService.DATABASE_IDENTIFIER_INDEX,
+        document.add(create(DATABASE_IDENTIFIER_INDEX,
                             getIndex(xref).toString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-        document.add(create(CrossReferenceService.DATABASE_ACCESSION,
+        document.add(create(DATABASE_ACCESSION,
                             xref.getAccession()));
 
         add(document);
@@ -64,17 +58,24 @@ public class DefaultCrossReferenceIndexWriter extends AbstractIndexWriter {
 
     public Byte newIdentifierDocument(Class c) throws IOException {
 
-        Byte value = ticker.byteValue();
-        map.put(c, value);
+        Byte id = ticker.byteValue();
+        map.put(c, id);
         ticker.increment();
 
         Document document = new Document();
-        document.add(new Field("class", c.getName(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
-        document.add(new Field("class-index", value.toString(), Field.Store.YES, Field.Index.NOT_ANALYZED_NO_NORMS));
+
+        document.add(create(CLASS_NAME,
+                            c.getName(),
+                            Field.Store.YES,
+                            Field.Index.NOT_ANALYZED));
+        document.add(create(CLASS_ID,
+                            id.toString(),
+                            Field.Store.YES,
+                            Field.Index.NOT_ANALYZED));
 
         add(document);
 
-        return value;
+        return id;
     }
 
 
