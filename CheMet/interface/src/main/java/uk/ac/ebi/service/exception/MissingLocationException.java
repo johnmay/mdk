@@ -9,7 +9,7 @@ package uk.ac.ebi.service.exception;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class MissingLocationException extends Exception {
+public class MissingLocationException extends RuntimeException {
 
     /**
      * Construct an instance of the exception with the specified message
