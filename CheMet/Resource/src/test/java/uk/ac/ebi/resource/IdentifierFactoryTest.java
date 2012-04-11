@@ -22,7 +22,11 @@ public class IdentifierFactoryTest {
 
 
 
-
+    @Test public void testOfName(){
+        IdentifierFactory factory    = IdentifierFactory.getInstance();
+        Identifier        identifier = factory.ofName("ChEBI identifier", "ChEBI:12");
+        System.out.println(identifier.getSummary());
+    }
 
 
     @Test

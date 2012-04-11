@@ -49,7 +49,8 @@ public class IdentifierFactory {
 
     private static final String IDENTIFIER_MAPPING_FILE = "IdentifierResourceMapping.properties";
 
-    private static final Map<Class,Identifier> identifiers = new HashMap<Class,Identifier>(60);
+    private static final Map<Class, Identifier> identifiers = new HashMap<Class, Identifier>(60);
+    private static final Map<String, Identifier> identifierNames = new HashMap<String, Identifier>(60);
 
     private List<Identifier> supportedIdentifiers = new ArrayList<Identifier>(Arrays.asList(
             new ChEBIIdentifier(),
@@ -107,7 +108,7 @@ public class IdentifierFactory {
                                                                                       new SwissProtIdentifier()));
 
     private Set<Identifier> unmapped = new HashSet<Identifier>();
-    private Set<Identifier> mapped   = new HashSet<Identifier>();
+    private Set<Identifier> mapped = new HashSet<Identifier>();
 
     private Map<String, SequenceIdentifier> proteinIdMap = new HashMap();
 
@@ -126,8 +127,10 @@ public class IdentifierFactory {
     private IdentifierFactory() {
 
         for (Identifier identifier : supportedIdentifiers) {
-            
+
             identifiers.put(identifier.getClass(), identifier);
+            identifierNames.put(identifier.getShortDescription().toLowerCase(Locale.ENGLISH),
+                                identifier);
 
             // add to the mapped/unmapped set
             Set set = identifier.getResource().isMapped() ? mapped : unmapped;
@@ -150,12 +153,12 @@ public class IdentifierFactory {
 
             }
 
-            if(identifier instanceof SequenceIdentifier){
+            if (identifier instanceof SequenceIdentifier) {
 
                 SequenceIdentifier sequenceIdentifier = (SequenceIdentifier) identifier;
 
-                for(String code : sequenceIdentifier.getHeaderCodes()){
-                    if(proteinIdMap.containsKey(code)) {
+                for (String code : sequenceIdentifier.getHeaderCodes()) {
+                    if (proteinIdMap.containsKey(code)) {
                         System.err.println("Clashing header codes");
                     }
                     proteinIdMap.put(code, sequenceIdentifier);
@@ -192,23 +195,23 @@ public class IdentifierFactory {
      */
     public IdentifierSet resolveSequenceHeader(String header) {
 
-        IdentifierSet    resolved = new IdentifierSet();
-        Iterator<String> token    = Arrays.asList(header.split("\\|")).iterator();
+        IdentifierSet resolved = new IdentifierSet();
+        Iterator<String> token = Arrays.asList(header.split("\\|")).iterator();
 
         while (token.hasNext()) {
 
             String code = token.next();
 
-            if(code.equals("gnl")){
+            if (code.equals("gnl")) {
 
-                String db        = token.hasNext() ? token.next() : "";
+                String db = token.hasNext() ? token.next() : "";
                 String accession = token.hasNext() ? token.next() : "";
 
-                if(hasSynonym(db)){
+                if (hasSynonym(db)) {
                     resolved.add(ofSynonym(db, accession));
                 }
 
-            } else if(proteinIdMap.containsKey(code)){
+            } else if (proteinIdMap.containsKey(code)) {
                 resolved.add(proteinIdMap.get(code).ofHeader(token));
             }
 
@@ -235,12 +238,51 @@ public class IdentifierFactory {
         return identifier;
     }
 
+    /**
+     * Construct an identifier of a given name
+     *
+     * @param name
+     *
+     * @return
+     */
+    public Identifier ofName(String name) {
 
-    public Collection<Class<? extends Identifier>> ofPattern(String accession){
+        String normalisedName = name.toLowerCase(Locale.ENGLISH).trim();
+
+        if (identifierNames.containsKey(normalisedName)) {
+            return identifierNames.get(normalisedName).newInstance();
+        }
+
+        // could simplify to a loop which removes common postfix words
+
+        if (normalisedName.contains("accession")) {
+            return ofName(normalisedName.replaceAll("accession", ""));
+        }
+
+        if (normalisedName.contains("identifier")) {
+            return ofName(normalisedName.replaceAll("identifier", ""));
+        }
+
+        if (normalisedName.contains("id")) {
+            return ofName(normalisedName.replaceAll("id", ""));
+        }
+
+        throw new InvalidParameterException("No identifier of name: " + name);
+
+    }
+
+    public Identifier ofName(String name, String accession) {
+        Identifier identifier = ofName(name);
+        identifier.setAccession(accession);
+        return identifier;
+    }
+
+
+    public Collection<Class<? extends Identifier>> ofPattern(String accession) {
         Collection<Class<? extends Identifier>> matched = new ArrayList<Class<? extends Identifier>>();
-        for(Identifier identifier : mapped){
+        for (Identifier identifier : mapped) {
             Pattern pattern = identifier.getResource().getCompiledPattern();
-            if(pattern.matcher(accession).matches()){
+            if (pattern.matcher(accession).matches()) {
                 matched.add(identifier.getClass());
             }
         }
@@ -248,7 +290,7 @@ public class IdentifierFactory {
     }
 
 
-    public boolean hasSynonym(String synonym){
+    public boolean hasSynonym(String synonym) {
 
         String key = synonym.toLowerCase(Locale.ENGLISH);
 
