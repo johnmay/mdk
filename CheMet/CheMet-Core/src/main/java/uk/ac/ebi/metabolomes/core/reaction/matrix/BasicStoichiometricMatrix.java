@@ -16,12 +16,13 @@
  */
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.interfaces.reaction.Direction;
 import uk.ac.ebi.interfaces.reaction.Participant;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -114,7 +115,6 @@ public class BasicStoichiometricMatrix
         }
 
 
-
         return addReaction(reaction.getName(),
                            metabolites,
                            coefficients,
@@ -163,6 +163,13 @@ public class BasicStoichiometricMatrix
         return addReactionWithName(name, compounds[0], compounds[1]);
     }
 
+    public int addProduction(String compound, boolean reversible) {
+        return addReaction(new String[0], new String[]{compound}, reversible);
+    }
+
+    public int addConsumption(String compound, boolean reversible) {
+        return addReaction(new String[]{compound}, new String[0], reversible);
+    }
 
     public int addReaction(String substrates, String products) {
         return addReaction(substrates, products, true);
