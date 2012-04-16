@@ -6,11 +6,11 @@
     <parent>
         <artifactId>CheMet</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
     </parent>
     <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>CheMet-Core</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <name>Core</name>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/core</url>
     <properties>

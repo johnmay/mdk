@@ -4,7 +4,7 @@
     <parent>
         <artifactId>CheMet</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2</version>
     </parent>
     <modules>
         <module>lucene-service</module>
