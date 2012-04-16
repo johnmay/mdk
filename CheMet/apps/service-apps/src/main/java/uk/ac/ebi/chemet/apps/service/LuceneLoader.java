@@ -5,6 +5,7 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PreferencePanelFactory;
 import uk.ac.ebi.chemet.service.ServicePreferences;
 import uk.ac.ebi.chemet.service.loader.crossreference.ChEBICrossReferenceLoader;
+import uk.ac.ebi.chemet.service.loader.crossreference.UniProtCrossReferenceLoader;
 import uk.ac.ebi.chemet.service.loader.data.ChEBIDataLoader;
 import uk.ac.ebi.chemet.service.loader.location.DefaultLocationFactory;
 import uk.ac.ebi.chemet.service.loader.multiple.HMDBMetabocardsLoader;
@@ -14,7 +15,9 @@ import uk.ac.ebi.chemet.service.loader.single.TaxonomyLoader;
 import uk.ac.ebi.chemet.service.loader.structure.ChEBIStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
+import uk.ac.ebi.resource.IdentifierFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +39,7 @@ public class LuceneLoader extends Box {
 
         setOpaque(true);
         setBackground(Color.WHITE);
-        
+
         LoaderGroupFactory factory = new LoaderGroupFactory(window, DefaultLocationFactory.getInstance());
         try {
 
@@ -49,8 +52,7 @@ public class LuceneLoader extends Box {
             add(label);
             add(Box.createVerticalStrut(15));
             add(PreferencePanelFactory.getPreferencePanel(ServicePreferences.getInstance().getPreference("SERVICE_ROOT")));
-            add(factory.createGroup("Miscellaneous",
-                                    new TaxonomyLoader()));
+
             add(factory.createGroup("ChEBI",
                                     new ChEBIStructureLoader(),
                                     new ChEBINameLoader(),
@@ -62,6 +64,11 @@ public class LuceneLoader extends Box {
             add(factory.createGroup("HMDB",
                                     new HMDBMetabocardsLoader(),
                                     new HMDBStructureLoader()));
+            add(factory.createGroup("UniProt",
+                                    new UniProtCrossReferenceLoader(DefaultEntityFactory.getInstance(),
+                                                                    IdentifierFactory.getInstance()),
+                                    new TaxonomyLoader()));
+
             add(Box.createGlue());
 
             CellConstraints cc = new CellConstraints();
