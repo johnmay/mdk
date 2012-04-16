@@ -5,11 +5,11 @@
     <parent>
         <artifactId>CheMet</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
-        <version>1.2</version>
+        <version>1.3-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi.chemet</groupId>
     <artifactId>chemet-resource</artifactId>
-    <version>1.2</version>
+    <version>1.3-SNAPSHOT</version>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/resource</url>
 
     <properties>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-interface</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

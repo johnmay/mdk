@@ -5,7 +5,7 @@
     <parent>
         <artifactId>chemet-apps</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
-        <version>1.2</version>
+        <version>1.3-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,12 +15,12 @@
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-lucene-service</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>CheMet-Visualisation</artifactId>
-            <version>1.2</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
