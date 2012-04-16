@@ -14,20 +14,10 @@
     <groupId>uk.ac.ebi.chemet</groupId>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/service/lucene-service</url>
 
-
     <dependencies>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-analyzers</artifactId>
-            <version>3.4.0</version>
-        </dependency>
+
+        <!-- chemet -->
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
             <artifactId>chemet-service-core</artifactId>
@@ -35,24 +25,51 @@
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-resource</artifactId>
+            <artifactId>chemet-xml-parsers</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers</artifactId>
+            <version>3.4.0</version>
+        </dependency>
+
+
+        <!-- chemistry development kit -->
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
-            <version>${cdk.version}</version>
+            <version>1.4.8</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-formula</artifactId>
-            <version>${cdk.version}</version>
+            <version>1.4.8</version>
         </dependency>
+
+        <!-- convenience/util  -->
         <dependency>
             <groupId>net.sf.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>2.1</version>
         </dependency>
+
+        <!-- testing  -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.chemet</groupId>
+            <artifactId>CheMet-Core</artifactId>
+            <version>1.2-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -68,7 +85,6 @@
             </plugin>
         </plugins>
     </build>
-
 
 
 </project>
