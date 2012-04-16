@@ -95,6 +95,14 @@ public abstract class ESummaryXMLResponseParser<T extends ESummaryResult> {
                             }
                         }
                     }
+                    if(xmlr.getLocalName().equalsIgnoreCase("Id")) {
+                        for (Enum keyword : currentResult.getScalarKeywords()) {
+                            if(keyword.toString().equalsIgnoreCase("Id")) {
+                                currentResult.addScalarForKeyword(keyword, getFollowingCharacters(xmlr));
+                                break switch1;
+                            }
+                        }
+                    }
                     /*
                     if (xmlr.getLocalName().equalsIgnoreCase("Item") && hasAttributeNameWithValue(xmlr, "SID")) {
                         currentResult.setId(getFollowingCharacters(xmlr));

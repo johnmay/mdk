@@ -21,6 +21,7 @@
 package uk.ac.ebi.io.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -183,6 +184,7 @@ public class ChEBINameService
     }
 
     public Collection<String> getNames(ChEBIIdentifier identifier) {
+        Collection<String> names = new HashSet<String>();
         try {
             Query q = new TermQuery(idTerm.createTerm("CHEBI:" + identifier.getNumericPartOfAccession()));
 
@@ -192,7 +194,6 @@ public class ChEBINameService
             //if (hits.length > 1) {
             //    LOGGER.info("more then one hit found for an id! this shouldn't happen");
             //}
-            Collection<String> names = new HashSet<String>(hits.length);
             for (ScoreDoc scoreDoc : hits) {
                 names.add(getValue(scoreDoc, ChEBINames.ChEBINameLuceneFields.name.toString()));
                 //return Arrays.asList(getValues(scoreDoc, "name"));
@@ -201,6 +202,6 @@ public class ChEBINameService
         } catch (IOException ex) {
             LOGGER.info(ex.getMessage());
         }
-        return null;
+        return names;
     }
 }

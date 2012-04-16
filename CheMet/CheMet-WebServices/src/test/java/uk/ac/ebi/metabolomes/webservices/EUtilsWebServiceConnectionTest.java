@@ -16,6 +16,7 @@ import org.junit.Test;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemNamesResult;
+import uk.ac.ebi.metabolomes.webservices.eutils.MeSHResult;
 import static org.junit.Assert.*;
 
 /**
@@ -185,6 +186,20 @@ public class EUtilsWebServiceConnectionTest {
             for (String syn : res.getSynonyms(pccompId)) {
                 System.out.println(pccompId + "\tS:" + syn);
             }
+        }
+    }
+    
+    @Test
+    public void testGetMeSHTerms() {
+        System.out.println("testGetMeSHTerms");
+        List<String> meshTermIDs = new ArrayList<String>();
+        meshTermIDs.add("68001685");
+        meshTermIDs.add("68018925");
+        
+        MeSHResult res = instance.getMeSHObjects(meshTermIDs);
+        
+        for (String meshId : meshTermIDs) {
+            System.out.println(meshId+"\t"+res.getMeSHTermName(meshId));
         }
     }
 

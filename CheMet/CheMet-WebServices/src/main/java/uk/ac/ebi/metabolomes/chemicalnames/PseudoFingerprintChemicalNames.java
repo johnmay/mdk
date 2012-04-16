@@ -45,13 +45,20 @@ public class PseudoFingerprintChemicalNames implements Comparator<String> {
         s = alphanum.matcher(s).replaceAll(""); // then remove all punctuation and control chars
         s = s.replaceAll("-", ""); // removes - 
         s = s.replaceAll(" ", ""); // removes whitespace
-        String[] frags = StringUtils.split(s); // split by whitespace
+        //String[] frags = StringUtils.split(s); // split by whitespace
+        char[] chars = s.toCharArray();
         List<String> listOfTokens = new ArrayList<String>();
         List<String> numericTokens = new ArrayList<String>();
-        for (String frag : frags) {
+        /*for (String frag : frags) {
             if(digit.matcher(frag).find())
                 numericTokens.add(frag);
             else listOfTokens.add(frag);
+        }*/
+        for (char letter : chars) {
+            String character = Character.toString(letter);
+            if(digit.matcher(character).find())
+                numericTokens.add(character);
+            else listOfTokens.add(character);
         }
         Collections.sort(listOfTokens); 
         /*

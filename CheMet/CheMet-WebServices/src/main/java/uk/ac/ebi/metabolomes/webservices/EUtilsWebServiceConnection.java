@@ -48,6 +48,9 @@ import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.PubChemSubstanceIdentifier;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.metabolomes.webservices.eutils.ELinkXMLResponseParser;
+import uk.ac.ebi.metabolomes.webservices.eutils.MeSHESummaryResult;
+import uk.ac.ebi.metabolomes.webservices.eutils.MeSHResult;
+import uk.ac.ebi.metabolomes.webservices.eutils.MeSHXMLResponseParser;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemCompoundESummaryResult;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemCompoundXMLResponseParser;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemNamesResult;
@@ -309,8 +312,6 @@ public class EUtilsWebServiceConnection {
                     + resp.getStatus() +" : "+ resp.toString());
         }
 
-        
-        Map<String,String> cids2name = new HashMap<String, String>();
         PubChemCompoundXMLResponseParser parser = new PubChemCompoundXMLResponseParser();
         PubChemNamesResult result = new PubChemNamesResult();
         try {
@@ -324,6 +325,35 @@ public class EUtilsWebServiceConnection {
             LOGGER.warn("Could not parse output XML adequately... returning empty result", ex);
         }
         return result;   
+    }
+    
+    public MeSHResult getMeSHObjects(Collection<String> meshIds) {
+        WebResource webRes = client.resource(baseURL + "esummary.fcgi");
+        MultivaluedMap queryParams = new MultivaluedMapImpl();
+        queryParams.add("db", "mesh");
+        queryParams.add("id", StringUtils.join(meshIds, ","));
+        ClientResponse resp = submitPost(webRes, queryParams);
+        
+        LOGGER.info("Resp: "+resp.toString());
+
+        if (resp.getStatus() != 200) {
+            throw new RuntimeException("Failed : HTTP error code : "
+                    + resp.getStatus() +" : "+ resp.toString());
+        }
+        
+        MeSHXMLResponseParser parser = new MeSHXMLResponseParser();
+        MeSHResult result = new MeSHResult();
+        try {
+            List<MeSHESummaryResult> resultsParse = parser.parseESummaryResult(resp.getEntityInputStream());
+            for (MeSHESummaryResult eSummaryResult : resultsParse) {
+                result.addMeSHName(eSummaryResult.getID(),eSummaryResult.getMeSHTermName());
+                result.addParent(eSummaryResult.getID(),eSummaryResult.getParent());
+                result.addChildren(eSummaryResult.getID(),eSummaryResult.getChildren());
+            }
+        } catch (XMLStreamException ex) {
+            LOGGER.warn("Could not parse output XML adequately... returning empty result", ex);
+        }
+        return result;
     }
 
     /**
