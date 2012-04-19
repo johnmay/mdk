@@ -112,6 +112,9 @@ public class AuthorAnnotation
     }
 
 
+
+
+
     /**
      *
      * Returns the author annotation in the form: <pre> @author ...annotation..</pre>
@@ -119,7 +122,7 @@ public class AuthorAnnotation
      */
     @Override
     public String toString() {
-        return "@" + author + " " + annotation;
+        return annotation;
     }
 
 
@@ -144,7 +147,7 @@ public class AuthorAnnotation
      */
     @Override
     public String getShortDescription() {
-        return metaInfo.brief;
+        return "@" + author;
     }
 
 
