@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.resource.IdentifierSet;
 import uk.ac.ebi.chemet.resource.chemical.*;
 import uk.ac.ebi.chemet.resource.classification.*;
+import uk.ac.ebi.chemet.resource.literature.PubMedIdentifier;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
@@ -93,6 +94,7 @@ public class IdentifierFactory {
             new ChemSpiderIdentifier(),
             new PubChemCompoundIdentifier(),
             new PubChemSubstanceIdentifier(),
+            new PubMedIdentifier(),
             new ChemIDplusIdentifier(),
             new InChI(),
             new ExperimentalFactorOntologyIdentifier(),
