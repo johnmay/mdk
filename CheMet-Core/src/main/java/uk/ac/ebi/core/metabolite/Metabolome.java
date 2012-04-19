@@ -16,11 +16,12 @@
  */
 package uk.ac.ebi.core.metabolite;
 
+import uk.ac.ebi.core.EntityList;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import uk.ac.ebi.core.EntityList;
-import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
 /**
@@ -47,6 +48,24 @@ public class Metabolome
         return super.add(e);
     }
 
+    @Override
+    public boolean remove(Object o) {
+        unique.remove(o);
+        return super.remove(o);
+    }
+
+    @Override
+    public Metabolite remove(int index) {
+        Metabolite m = super.remove(index);
+        unique.remove(m);
+        return m;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        unique.removeAll(c);
+        return super.removeAll(c);
+    }
 
     @Override
     public boolean addAll(Collection<? extends Metabolite> c) {

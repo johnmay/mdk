@@ -20,13 +20,14 @@
  */
 package uk.ac.ebi.core;
 
+import uk.ac.ebi.core.reaction.compartment.Membrane;
+import uk.ac.ebi.core.reaction.compartment.Organelle;
+import uk.ac.ebi.core.reaction.compartment.Tissue;
+import uk.ac.ebi.interfaces.reaction.Compartment;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import uk.ac.ebi.core.reaction.Membrane;
-import uk.ac.ebi.core.reaction.Tissue;
-import uk.ac.ebi.core.reaction.compartment.Organelle;
-import uk.ac.ebi.interfaces.reaction.Compartment;
 
 
 /**

@@ -5,22 +5,21 @@ package uk.ac.ebi.core;
  * and open the template in the editor.
  */
 
+import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
+import uk.ac.ebi.core.metabolite.Metabolome;
+import uk.ac.ebi.core.product.ProductCollection;
+import uk.ac.ebi.core.reaction.ReactionList;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.Genome;
+import uk.ac.ebi.interfaces.entities.*;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.resource.organism.Taxonomy;
+
 import java.io.*;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
-import uk.ac.ebi.core.product.ProductCollection;
-import uk.ac.ebi.core.reaction.ReactionList;
-import uk.ac.ebi.core.metabolite.Metabolome;
-import uk.ac.ebi.interfaces.entities.*;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
-import uk.ac.ebi.resource.organism.Taxonomy;
-
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.Genome;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
 
 
 /**
@@ -59,7 +58,7 @@ public class Reconstruction
 
     private ReactionList reactions;
 
-    private Metabolome metabolites;
+    private Metabolome metabolome;
 
     private Collection<EntityCollection> subsets;
 
@@ -78,7 +77,7 @@ public class Reconstruction
         super(id, org.getCommonName(), org.getCode());
         taxonomy = org;
         reactions = new ReactionList();
-        metabolites = new Metabolome();
+        metabolome = new Metabolome();
         products = new ProductCollection();
         genome = new GenomeImplementation();
         subsets = new ArrayList<EntityCollection>();
@@ -88,7 +87,7 @@ public class Reconstruction
     public Reconstruction(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
         reactions = new ReactionList();
-        metabolites = new Metabolome();
+        metabolome = new Metabolome();
         products = new ProductCollection();
         genome = new GenomeImplementation();
         subsets = new ArrayList<EntityCollection>();
@@ -99,7 +98,7 @@ public class Reconstruction
     * Default constructor
     */
     public Reconstruction() {
-        metabolites = new Metabolome();
+        metabolome = new Metabolome();
         reactions = new ReactionList();
         genome = new GenomeImplementation();
         products = new ProductCollection();
@@ -126,7 +125,7 @@ public class Reconstruction
     public String getAccession() {
         String accession = super.getAccession();
         if (accession.contains("%m")) {
-            accession = accession.replaceAll("%m", Integer.toString(metabolites.size()));
+            accession = accession.replaceAll("%m", Integer.toString(metabolome.size()));
         }
         if (accession.contains("%n")) {
             accession = accession.replaceAll("%n", Integer.toString(reactions.size()));
@@ -209,7 +208,7 @@ public class Reconstruction
      * @return
      */
     public Metabolome getMetabolome() {
-        return metabolites;
+        return metabolome;
     }
 
 
@@ -224,12 +223,12 @@ public class Reconstruction
         reactions.add(reaction);
 
         for (MetabolicParticipant p : reaction.getReactants()) {
-            if (metabolites.contains(p.getMolecule()) == false) {
+            if (metabolome.contains(p.getMolecule()) == false) {
                 addMetabolite(p.getMolecule());
             }
         }
         for (MetabolicParticipant p : reaction.getProducts()) {
-            if (metabolites.contains(p.getMolecule()) == false) {
+            if (metabolome.contains(p.getMolecule()) == false) {
                 addMetabolite(p.getMolecule());
             }
         }
@@ -243,8 +242,8 @@ public class Reconstruction
      *
      * @param metabolite a new metabolite
      */
-    public void addMetabolite(uk.ac.ebi.interfaces.entities.Metabolite metabolite) {
-        metabolites.add(metabolite);
+    public void addMetabolite(Metabolite metabolite) {
+        metabolome.add(metabolite);
     }
 
 

@@ -22,15 +22,15 @@ package uk.ac.ebi.core.reaction;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import java.util.ArrayList;
-import java.util.Collection;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.reaction.Participant;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 /**
@@ -45,7 +45,6 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     private static final Logger LOGGER = Logger.getLogger(ReactionList.class);
 
     private Multimap<Identifier, MetabolicReaction> participantMap = ArrayListMultimap.create();
-
 
     public ReactionList() {
     }
