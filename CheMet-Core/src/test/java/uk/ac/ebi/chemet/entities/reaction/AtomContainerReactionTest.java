@@ -4,16 +4,18 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import uk.ac.ebi.core.CompartmentImplementation;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
-import static uk.ac.ebi.chemet.TestMoleculeFactory.*;
-import static org.junit.Assert.*;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
-import uk.ac.ebi.core.reaction.Membrane;
+import uk.ac.ebi.core.CompartmentImplementation;
+import uk.ac.ebi.core.reaction.compartment.Membrane;
 import uk.ac.ebi.core.reaction.compartment.Organelle;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static uk.ac.ebi.chemet.TestMoleculeFactory.*;
 
 
 /**
