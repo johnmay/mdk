@@ -102,7 +102,7 @@ public class SBMLReactionReader {
     private AbstractParticipantFilter filter;
     //
 
-    private Map<SpeciesReference, Species> speciesRefMap = new HashMap<SpeciesReference, Species>();
+    private Map<SpeciesReference, Species> speciesReferences = new HashMap<SpeciesReference, Species>();
 
     private Map<Species, Metabolite> speciesMap = new HashMap<Species, Metabolite>();
 
@@ -214,6 +214,29 @@ public class SBMLReactionReader {
     }
 
 
+    public Species getSpecies(SpeciesReference speciesReference){
+
+        if(speciesReferences.containsKey(speciesReference)){
+            return speciesReferences.get(speciesReference);
+        }
+
+        Species species = speciesReference.getSpeciesInstance();
+
+        if(species != null){
+            return species;
+        }
+
+        species = model.getSpecies(speciesReference.getSpecies());
+
+        if(species != null){
+            return species;
+        }
+
+        return new Species("error");
+
+
+    }
+    
     /**
      * Constructs a reaction participant from a species reference
      *
@@ -229,23 +252,8 @@ public class SBMLReactionReader {
     public MetabolicParticipantImplementation getMetaboliteParticipant(SpeciesReference speciesReference)
             throws UnknownCompartmentException {
 
-        Species species = null;
-        if (speciesRefMap.containsKey(speciesReference)) {
-            species = speciesRefMap.get(species);
-        } else {
-            species = speciesReference.getSpeciesInstance();
-            speciesRefMap.put(speciesReference, species);
-        }
+        Species species = getSpecies(speciesReference);
 
-        if (species == null) {
-            species = model.getSpecies(speciesReference.getId());
-        }
-        if (species == null) {
-            LOGGER.error("ERROR!");
-            return new MetabolicParticipantImplementation(new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(),
-                                                                                       "unparsed",
-                                                                                       "unparsed"));
-        }
 
         org.sbml.jsbml.Compartment sbmlCompartment = species.getCompartmentInstance();
 
