@@ -46,7 +46,7 @@ public class MIRIAMLoader {
 
     private Map<String, MIRIAMEntry> urnEntryMap = new HashMap<String, MIRIAMEntry>(50);
 
-    private Map<Resource, Identifier> idMap = new HashMap<Resource, Identifier>(50);
+    private Map<Resource, Identifier> resources = new HashMap<Resource, Identifier>(50);
 
     private Map<Integer, MIRIAMEntry> mirMap = new HashMap<Integer, MIRIAMEntry>(500);
 
@@ -190,24 +190,39 @@ public class MIRIAMLoader {
     }
 
 
+    public Identifier getIdentifier(MIRIAMEntry e) {
+        if (resources.containsKey(e)) {
+            return resources.get(e).newInstance();
+        } else {
+            logger.error("No entry found for resource: " + e.getId());
+            return null;
+        }
+    }
+
     public Identifier getIdentifier(String urn) {
 
-        String urnPart = urn.substring(0, urn.lastIndexOf(":"));
+        String prefix = urn.substring(0, urn.lastIndexOf(":"));
 
         // build the map if it's empty
-        if (idMap.isEmpty()) {
+        if (resources.isEmpty()) {
             for (Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers()) {
-                idMap.put(id.getResource(), id);
+                resources.put(id.getResource(), id);
             }
         }
 
-        // get a new instance of the identifier and set the accession if not null
-        Identifier id = idMap.get(urnEntryMap.get(urnPart)).newInstance();
+        if (urnEntryMap.containsKey(prefix)) {
+            Identifier id = getIdentifier(urnEntryMap.get(prefix));
+            if(id != null){
+                id.setAccession(getAccession(urn));
+            }
+            return id;
 
-        if (id != null) {
-            id.setAccession(getAccession(urn)); // could throw exception for missing URN
+        } else {
+            logger.error("No entry for " + prefix);
+            return null;
         }
-        return id;
+
+
 
     }
 
