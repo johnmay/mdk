@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.Collection;
 
 /**
- * IReconstruction - 12.03.2012 <br/>
+ * Reconstruction - 12.03.2012 <br/>
  * <p/>
  * Class descriptions.
  *
@@ -16,7 +16,7 @@ import java.util.Collection;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public interface IReconstruction extends AnnotatedEntity {
+public interface Reconstruction extends AnnotatedEntity {
 
     public Genome getGenome();
 
@@ -41,6 +41,9 @@ public interface IReconstruction extends AnnotatedEntity {
     public void addProduct(GeneProduct product);
 
     public void addReaction(MetabolicReaction reaction);
+
+
+    public boolean hasMatrix();
 
 
 }

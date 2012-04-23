@@ -23,18 +23,18 @@ import java.util.Collection;
 
 
 /**
- * Reconstruction.java
+ * ReconstructionImpl.java
  * Object to represent a complete reconstruction with genes, reactions and metabolites
  *
  * @author johnmay
  * @date Apr 13, 2011
  */
-public class Reconstruction
+public class ReconstructionImpl
         extends AbstractAnnotatedEntity
         implements Externalizable, IReconstruction {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
-            Reconstruction.class);
+            ReconstructionImpl.class);
 
     public static final String PROJECT_FILE_EXTENSION = ".mnb";
 
@@ -67,13 +67,13 @@ public class Reconstruction
 
 
     /**
-     * Constructor mainly used for creating a new Reconstruction
+     * Constructor mainly used for creating a new ReconstructionImpl
      *
      * @param id  The identifier of the project
      * @param org The organism identifier
      */
-    public Reconstruction(ReconstructionIdentifier id,
-                          Taxonomy org) {
+    public ReconstructionImpl(ReconstructionIdentifier id,
+                              Taxonomy org) {
         super(id, org.getCommonName(), org.getCode());
         taxonomy = org;
         reactions = new ReactionList();
@@ -84,7 +84,7 @@ public class Reconstruction
     }
 
 
-    public Reconstruction(Identifier identifier, String abbreviation, String name) {
+    public ReconstructionImpl(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
         reactions = new ReactionList();
         metabolome = new Metabolome();
@@ -97,7 +97,7 @@ public class Reconstruction
     /*
     * Default constructor
     */
-    public Reconstruction() {
+    public ReconstructionImpl() {
         metabolome = new Metabolome();
         reactions = new ReactionList();
         genome = new GenomeImplementation();
@@ -106,8 +106,8 @@ public class Reconstruction
     }
 
 
-    public Reconstruction newInstance() {
-        return new Reconstruction();
+    public ReconstructionImpl newInstance() {
+        return new ReconstructionImpl();
     }
 
 
@@ -327,12 +327,12 @@ public class Reconstruction
     /**
      * Loads a reconstruction from a given container
      */
-    //    public static Reconstruction load(File container) throws IOException, ClassNotFoundException {
+    //    public static ReconstructionImpl load(File container) throws IOException, ClassNotFoundException {
     //
     //        File file = new File(container, "recon.extern.gzip");
     //        ObjectInput in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file),
     //                                                                   1024 * 8)); // 8 mb
-    //        Reconstruction reconstruction = new Reconstruction();
+    //        ReconstructionImpl reconstruction = new ReconstructionImpl();
     //        reconstruction.readExternal(in);
     //
     //        return reconstruction;
