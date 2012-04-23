@@ -7,7 +7,6 @@ package uk.ac.ebi.metabolomes.core.reaction.matrix;
 import java.util.ArrayList;
 import java.util.List;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.reaction.Direction;
@@ -19,7 +18,7 @@ import uk.ac.ebi.interfaces.reaction.Participant;
  * @author johnmay
  */
 public class DefaultStoichiometricMatrix
-        extends StoichiometricMatrix<CompartmentalisedMetabolite, String> {
+        extends StoichiometricMatrixImpl<CompartmentalisedMetabolite, String> {
 
     protected DefaultStoichiometricMatrix() {
     }
@@ -95,13 +94,13 @@ public class DefaultStoichiometricMatrix
 
 
     @Override
-    public StoichiometricMatrix<CompartmentalisedMetabolite, String> newInstance() {
+    public StoichiometricMatrixImpl<CompartmentalisedMetabolite, String> newInstance() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
     @Override
-    public StoichiometricMatrix<CompartmentalisedMetabolite, String> newInstance(int n, int m) {
+    public StoichiometricMatrixImpl<CompartmentalisedMetabolite, String> newInstance(int n, int m) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -6,6 +6,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
 import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
 import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 
 import java.io.File;
 import java.util.Collection;
@@ -47,14 +48,14 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public void addReaction(MetabolicReaction reaction);
 
-    public boolean hasMatrix();
 
     public boolean addSubset(EntityCollection subset);
 
-    // TODO: Need interface for matrix
-    public void setMatrix(Object matrix);
+    public boolean hasMatrix();
 
-    public Object getMatrix();
+    public void setMatrix(StoichiometricMatrix matrix);
+
+    public StoichiometricMatrix getMatrix();
 
     public Iterable<? extends EntityCollection> getSubsets();
 }

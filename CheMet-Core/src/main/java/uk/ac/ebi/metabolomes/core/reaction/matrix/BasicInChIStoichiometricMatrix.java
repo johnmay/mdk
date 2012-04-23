@@ -31,7 +31,7 @@ import uk.ac.ebi.chemet.resource.chemical.InChI;
  * @author $Author$ (this version) @brief ...class description...
  *
  */
-public class BasicInChIStoichiometricMatrix extends StoichiometricMatrix<InChI, String> {
+public class BasicInChIStoichiometricMatrix extends StoichiometricMatrixImpl<InChI, String> {
 
     private static final Logger LOGGER = Logger.getLogger(BasicInChIStoichiometricMatrix.class);
 
@@ -76,13 +76,13 @@ public class BasicInChIStoichiometricMatrix extends StoichiometricMatrix<InChI, 
 
 
     @Override
-    public StoichiometricMatrix<InChI, String> newInstance() {
+    public StoichiometricMatrixImpl<InChI, String> newInstance() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
     @Override
-    public StoichiometricMatrix<InChI, String> newInstance(int n, int m) {
+    public StoichiometricMatrixImpl<InChI, String> newInstance(int n, int m) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

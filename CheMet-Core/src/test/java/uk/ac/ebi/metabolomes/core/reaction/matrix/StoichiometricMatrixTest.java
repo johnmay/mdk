@@ -161,7 +161,7 @@ public class StoichiometricMatrixTest {
 
 
     /**
-     * Test of merge method, of class StoichiometricMatrix.
+     * Test of merge method, of class StoichiometricMatrixImpl.
      */
     @Test
     public void testMerge() {

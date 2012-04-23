@@ -18,6 +18,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import org.apache.commons.lang.mutable.MutableInt;
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.matrix.ReactionMatrix;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -26,8 +30,6 @@ import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.Map.Entry;
-import org.apache.commons.lang.mutable.MutableInt;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -39,7 +41,7 @@ import org.apache.log4j.Logger;
  * to have the metabolites stored as InChIs,InChIKeys,IMolecules etc..
  * @param <R> The type of the reactions
  */
-public abstract class AbstractReactionMatrix<T, M, R> {
+public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<T,M,R> {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractReactionMatrix.class);
 
@@ -622,6 +624,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      * @param i
      * @return
      */
+    @Override
     public M getMolecule(Integer i) {
         return molecules[i];
     }
@@ -638,6 +641,7 @@ public abstract class AbstractReactionMatrix<T, M, R> {
      * @param j
      * @return
      */
+    @Override
     public R getReaction(Integer j) {
         return reactions[j];
     }

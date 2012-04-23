@@ -16,7 +16,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
 import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
 import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 import java.io.*;
@@ -299,16 +299,11 @@ public class ReconstructionImpl
     /**
      * Holding methods (likely to change) *
      */
-    public void setMatrix(StoichiometricMatrix<CompartmentalisedMetabolite, ?> matrix) {
+    public void setMatrix(StoichiometricMatrix matrix) {
         this.matrix = matrix;
     }
 
-    public void setMatrix(Object matrix){
-        this.matrix = (StoichiometricMatrix) matrix;
-    }
-
-
-    public StoichiometricMatrix<CompartmentalisedMetabolite, ?> getMatrix() {
+    public StoichiometricMatrix getMatrix() {
         return matrix;
     }
 

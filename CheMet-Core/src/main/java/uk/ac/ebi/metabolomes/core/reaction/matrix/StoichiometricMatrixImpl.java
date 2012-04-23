@@ -18,6 +18,8 @@ package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
+
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +34,8 @@ import java.util.Map;
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
 public abstract class StoichiometricMatrixImpl<M, R>
-        extends AbstractReactionMatrix<Double, M, R> {
+        extends AbstractReactionMatrix<Double, M, R>
+        implements StoichiometricMatrix<M,R> {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(StoichiometricMatrixImpl.class);
 
@@ -81,7 +84,7 @@ public abstract class StoichiometricMatrixImpl<M, R>
     }
 
 
-    public boolean isReversible(Integer j) {
+    public Boolean isReversible(Integer j) {
         return reversibilityMap.get(j);
     }
 
