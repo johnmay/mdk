@@ -4,6 +4,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
+import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
 import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 
 import java.io.File;
@@ -30,6 +31,8 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public Metabolome getMetabolome();
 
+    public Proteome getProteome();
+
     public Identifier getTaxonomy();
 
     public File getContainer();
@@ -44,8 +47,14 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public void addReaction(MetabolicReaction reaction);
 
-
     public boolean hasMatrix();
 
+    public boolean addSubset(EntityCollection subset);
 
+    // TODO: Need interface for matrix
+    public void setMatrix(Object matrix);
+
+    public Object getMatrix();
+
+    public Iterable<? extends EntityCollection> getSubsets();
 }

@@ -13,4 +13,6 @@ public interface ReconstructionManager {
 
     public boolean hasProjects();
 
+    public Reconstruction getActive();
+
 }

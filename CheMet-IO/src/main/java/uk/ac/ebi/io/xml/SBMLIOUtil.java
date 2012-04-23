@@ -24,11 +24,11 @@ import org.apache.log4j.Logger;
 import org.sbml.jsbml.*;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
@@ -78,13 +78,13 @@ public class SBMLIOUtil {
     }
 
 
-    public SBMLDocument getDocument(ReconstructionImpl reconstruction) {
+    public SBMLDocument getDocument(Reconstruction reconstruction) {
 
         SBMLDocument doc = new SBMLDocument(level, version);
         Model model = new Model(level, version);
         doc.setModel(model);
 
-        for (MetabolicReaction rxn : reconstruction.getReactions()) {
+        for (MetabolicReaction rxn : reconstruction.getReactome()) {
             addReaction(model, rxn);
         }
 

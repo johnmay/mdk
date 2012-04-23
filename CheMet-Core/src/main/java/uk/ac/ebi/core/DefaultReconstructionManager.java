@@ -7,6 +7,7 @@ package uk.ac.ebi.core;
 import uk.ac.ebi.caf.utility.preference.type.ListPreference;
 import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
 
 import java.io.File;
 import java.util.*;
@@ -20,7 +21,7 @@ import java.util.*;
  * @date Apr 13, 2011
  * 
  */
-public class DefaultReconstructionManager {
+public class DefaultReconstructionManager implements ReconstructionManager {
 
     private static final org.apache.log4j.Logger LOGGER =
                                                  org.apache.log4j.Logger.getLogger(

@@ -14,6 +14,7 @@ import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
+import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
 import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
 import uk.ac.ebi.resource.organism.Taxonomy;
@@ -203,6 +204,10 @@ public class ReconstructionImpl
     }
 
 
+    public Proteome getProteome(){
+        return products;
+    }
+
     /**
      * Access the collection of metabolites for this
      * reconstruction
@@ -294,8 +299,12 @@ public class ReconstructionImpl
     /**
      * Holding methods (likely to change) *
      */
-    public void setMatix(StoichiometricMatrix<CompartmentalisedMetabolite, ?> matrix) {
+    public void setMatrix(StoichiometricMatrix<CompartmentalisedMetabolite, ?> matrix) {
         this.matrix = matrix;
+    }
+
+    public void setMatrix(Object matrix){
+        this.matrix = (StoichiometricMatrix) matrix;
     }
 
 
