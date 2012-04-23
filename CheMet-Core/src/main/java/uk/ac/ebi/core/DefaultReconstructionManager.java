@@ -99,25 +99,11 @@ public class DefaultReconstructionManager {
     }
 
     /**
-     * 
-     * Accessor for the active reconstruction
-     *
-     * @return
-     * @deprecated  use getActive()
-     */
-    @Deprecated
-    public ReconstructionImpl getActiveReconstruction() {
-        // TODO remove cast
-        return (ReconstructionImpl) getProject(activeProjectIdentifier);
-    }
-
-    /**
      * Access the active reconstruction
      * @return 
      */
-    public ReconstructionImpl getActive() {
-        // XXX remove cast in future
-        return (ReconstructionImpl) getProject(activeProjectIdentifier);
+    public Reconstruction getActive() {
+        return getProject(activeProjectIdentifier);
     }
 
     /**
@@ -162,7 +148,7 @@ public class DefaultReconstructionManager {
      * @param reconstruction
      *
      */
-    public void setActiveReconstruction(ReconstructionImpl reconstruction) {
+    public void setActiveReconstruction(Reconstruction reconstruction) {
 
         String path = reconstruction.getContainer().getAbsolutePath();
         if (recent.contains(path)) {

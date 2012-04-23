@@ -34,12 +34,12 @@ import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.DefaultReconstructionManager;
-import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.core.reaction.compartment.*;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.render.molecule.MoleculeRenderer;
 
@@ -161,7 +161,7 @@ public class ParticipantEditor extends JPanel {
             participant = new MetabolicParticipantImplementation();
         }
 
-        ReconstructionImpl recon = MANAGER.getActive();
+        Reconstruction recon = MANAGER.getActive();
         Collection<Metabolite> candidates = recon.getMetabolome().get(metabolite.getText());
 
         Metabolite entity;

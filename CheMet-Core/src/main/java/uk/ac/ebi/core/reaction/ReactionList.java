@@ -28,6 +28,7 @@ import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +41,7 @@ import java.util.Collection;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public final class ReactionList extends ArrayList<MetabolicReaction> implements Collection<MetabolicReaction> {
+public final class ReactionList extends ArrayList<MetabolicReaction> implements Collection<MetabolicReaction>, Reactome {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionList.class);
 

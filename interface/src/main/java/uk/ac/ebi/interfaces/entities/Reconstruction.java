@@ -3,6 +3,8 @@ package uk.ac.ebi.interfaces.entities;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
+import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 
 import java.io.File;
 import java.util.Collection;
@@ -24,9 +26,9 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public Collection<GeneProduct> getProducts();
 
-    public Collection<MetabolicReaction> getReactome();
+    public Reactome getReactome();
 
-    public Collection<Metabolite> getMetabolome();
+    public Metabolome getMetabolome();
 
     public Identifier getTaxonomy();
 

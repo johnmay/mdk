@@ -18,6 +18,7 @@ package uk.ac.ebi.core.metabolite;
 
 import uk.ac.ebi.core.EntityList;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,12 +30,12 @@ import java.util.HashSet;
  * @author johnmay
  * @date May 15, 2011
  */
-public class Metabolome
-        extends EntityList<Metabolite> {
+public class MetabolomeImpl
+        extends EntityList<Metabolite> implements Metabolome {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
-            Metabolome.class);
+            MetabolomeImpl.class);
 
     HashSet<Metabolite> unique = new HashSet<Metabolite>();
 
