@@ -6,6 +6,7 @@ import uk.ac.ebi.chemet.io.core.EnumReader;
 import uk.ac.ebi.chemet.io.domain.EntityInput;
 import uk.ac.ebi.chemet.io.domain.EntityReader;
 import uk.ac.ebi.interfaces.entities.*;
+import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.Direction;
 
 import java.io.DataInput;
@@ -47,7 +48,7 @@ public class ReactionDataReader
         for(int i = 0; i < nReactants; i++){
             MetabolicParticipant p = factory.newInstance(MetabolicParticipant.class);
             p.setCoefficient(in.readDouble());
-            p.setCompartment(enumReader.readEnum());
+            p.setCompartment((Compartment)enumReader.readEnum());
             p.setMolecule(entityIn.read(Metabolite.class));
             rxn.addReactant(p);
         }
@@ -57,7 +58,7 @@ public class ReactionDataReader
         for(int i = 0; i < nProducts; i++){
             MetabolicParticipant p = factory.newInstance(MetabolicParticipant.class);
             p.setCoefficient(in.readDouble());
-            p.setCompartment(enumReader.readEnum());
+            p.setCompartment((Compartment)enumReader.readEnum());
             p.setMolecule(entityIn.read(Metabolite.class));
             rxn.addProduct(p);
         }

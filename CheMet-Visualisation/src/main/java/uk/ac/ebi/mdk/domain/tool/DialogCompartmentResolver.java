@@ -28,7 +28,7 @@ public class DialogCompartmentResolver implements CompartmentResolver {
 
     private CompartmentResolver resolver;
     private Window window;
-
+    private boolean okayClicked;
 
     public DialogCompartmentResolver(CompartmentResolver parent,
                                      Window window) {
@@ -79,10 +79,12 @@ public class DialogCompartmentResolver implements CompartmentResolver {
                    cc.xy(1, 3));
         panel.add(comboBox,
                    cc.xy(3, 3));
+        okayClicked = false;
         panel.add(ButtonFactory.newButton(new AbstractAction("Okay") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dialog.setVisible(false);
+                okayClicked = true;
             }
         }),
                    cc.xy(5, 3));
@@ -91,7 +93,7 @@ public class DialogCompartmentResolver implements CompartmentResolver {
 
         dialog.setVisible(true);
 
-        return (Compartment) comboBox.getSelectedItem();
+        return okayClicked ? (Compartment) comboBox.getSelectedItem() : null;
 
     }
 

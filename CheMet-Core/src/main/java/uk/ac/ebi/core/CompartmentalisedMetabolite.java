@@ -40,10 +40,10 @@ public class CompartmentalisedMetabolite {
 
     public final Metabolite metabolite;
 
-    public final Enum<? extends Compartment> compartment;
+    public final Compartment compartment;
 
 
-    public CompartmentalisedMetabolite(final Metabolite metabolite, Enum<? extends Compartment> compartment) {
+    public CompartmentalisedMetabolite(final Metabolite metabolite, Compartment compartment) {
         this.metabolite = metabolite;
         this.compartment = compartment;
     }

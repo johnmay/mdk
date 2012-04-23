@@ -20,10 +20,8 @@
  */
 package uk.ac.ebi.interfaces.entities;
 
-import org.apache.log4j.Logger;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
-import uk.ac.ebi.interfaces.reaction.Participant;
 
 
 /**
@@ -36,5 +34,5 @@ import uk.ac.ebi.interfaces.reaction.Participant;
  *          Class description
  *
  */
-public interface MetabolicParticipant extends CompartmentalisedParticipant<Metabolite, Double, Enum<? extends Compartment>> {
+public interface MetabolicParticipant extends CompartmentalisedParticipant<Metabolite, Double, Compartment> {
 }

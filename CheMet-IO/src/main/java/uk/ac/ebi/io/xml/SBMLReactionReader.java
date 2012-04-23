@@ -23,6 +23,7 @@ package uk.ac.ebi.io.xml;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.sbml.jsbml.*;
+import org.sbml.jsbml.Compartment;
 import uk.ac.ebi.annotation.util.AnnotationFactory;
 import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
@@ -39,14 +40,16 @@ import uk.ac.ebi.chemet.ws.CachedChemicalWS;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.CompartmentImplementation;
+import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
-import uk.ac.ebi.interfaces.reaction.Direction;
+import uk.ac.ebi.interfaces.reaction.*;
+import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
+import uk.ac.ebi.mdk.domain.tool.CompartmentResolver;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
@@ -107,8 +110,13 @@ public class SBMLReactionReader {
     private Map<Species, Metabolite> speciesMap = new HashMap<Species, Metabolite>();
 
     private Map<String, Metabolite> speciesNameMap = new HashMap<String, Metabolite>();
+    
+    private Map<Compartment, uk.ac.ebi.interfaces.reaction.Compartment> compartments = new HashMap<Compartment, uk.ac.ebi.interfaces.reaction.Compartment>();
 
     private EntityFactory factory;
+
+
+    private CompartmentResolver resolver;
 
 
     /**
@@ -119,9 +127,10 @@ public class SBMLReactionReader {
      *
      * @throws XMLStreamException
      */
-    public SBMLReactionReader(InputStream stream, EntityFactory factory) throws XMLStreamException {
+    public SBMLReactionReader(InputStream stream, EntityFactory factory, CompartmentResolver resolver) throws XMLStreamException {
         this(reader.readSBMLFromStream(stream));
         this.factory = factory;
+        this.resolver = resolver;
     }
 
 
@@ -136,7 +145,7 @@ public class SBMLReactionReader {
      */
     public SBMLReactionReader(InputStream stream, AbstractParticipantFilter filter) throws
             XMLStreamException {
-        this(reader.readSBMLFromStream(stream), filter);
+        this(reader.readSBMLFromStream(stream), filter, DefaultEntityFactory.getInstance(), new AutomaticCompartmentResolver());
     }
 
 
@@ -147,15 +156,17 @@ public class SBMLReactionReader {
      */
     public SBMLReactionReader(SBMLDocument document) {
         // default filter is an empty instantiation of BasicFilter (accepts all)
-        this(document, new AcceptAllFilter());
+        this(document, new AcceptAllFilter(), DefaultEntityFactory.getInstance(), new AutomaticCompartmentResolver());
     }
 
 
-    public SBMLReactionReader(SBMLDocument document, AbstractParticipantFilter filter) {
+    public SBMLReactionReader(SBMLDocument document, AbstractParticipantFilter filter, EntityFactory factory, CompartmentResolver resolver) {
         this.document = document;
         this.model = document.getModel();
         this.reactionCount = model.getNumReactions();
         this.filter = filter;
+        this.factory = factory;
+        this.resolver = resolver;
     }
 
 
@@ -214,21 +225,21 @@ public class SBMLReactionReader {
     }
 
 
-    public Species getSpecies(SpeciesReference speciesReference){
+    public Species getSpecies(SpeciesReference speciesReference) {
 
-        if(speciesReferences.containsKey(speciesReference)){
+        if (speciesReferences.containsKey(speciesReference)) {
             return speciesReferences.get(speciesReference);
         }
 
         Species species = speciesReference.getSpeciesInstance();
 
-        if(species != null){
+        if (species != null) {
             return species;
         }
 
         species = model.getSpecies(speciesReference.getSpecies());
 
-        if(species != null){
+        if (species != null) {
             return species;
         }
 
@@ -236,7 +247,34 @@ public class SBMLReactionReader {
 
 
     }
-    
+
+    public uk.ac.ebi.interfaces.reaction.Compartment getCompartment(Compartment compartment) {
+
+        if(compartments.containsKey(compartment)){
+            return compartments.get(compartment);
+        }
+
+        String id = compartment.getId();
+        String name = compartment.getName();
+
+        uk.ac.ebi.interfaces.reaction.Compartment c = resolver.getCompartment(id);
+
+        if(c != null){
+            compartments.put(compartment, c);
+            return c;
+        }
+
+        c = resolver.getCompartment(name);
+        if(c != null){
+            compartments.put(compartment, c);
+            return c;
+        }
+
+        compartments.put(compartment, CompartmentImplementation.UNKNOWN);
+        return CompartmentImplementation.UNKNOWN;
+
+    }
+
     /**
      * Constructs a reaction participant from a species reference
      *
@@ -254,14 +292,7 @@ public class SBMLReactionReader {
 
         Species species = getSpecies(speciesReference);
 
-
-        org.sbml.jsbml.Compartment sbmlCompartment = species.getCompartmentInstance();
-
-
-        CompartmentImplementation compartment = CompartmentImplementation.getCompartment(sbmlCompartment == null
-                                                                                                 ? ""
-                                                                                                 : sbmlCompartment.getId());
-
+        uk.ac.ebi.interfaces.reaction.Compartment compartment = getCompartment(species.getCompartmentInstance());
 
         Double coefficient = speciesReference.getStoichiometry();
 
@@ -283,7 +314,7 @@ public class SBMLReactionReader {
             for (CVTerm term : species.getCVTerms()) {
                 for (String resource : term.getResources()) {
                     Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(resource);
-                    if(identifier != null)
+                    if (identifier != null)
                         metabolite.addAnnotation(AnnotationFactory.getInstance().getCrossReference(identifier));
                 }
             }
@@ -389,7 +420,8 @@ public class SBMLReactionReader {
      * Constructs and IAtomContainer from the given SBML chemical {@see Species} using RDF MIRIAM annotations
      *
      * @param species An instance of an SBML Species using the attached Controlled Vocabulary (CV) terms. The CV
-     *                terms must contain a CHEBI identifier (MIRIAM Registry) to allow fetching of a structure using Web
+     *                terms must contain a CHEBI identifier (MIRIAM Registry) to allow fetching of a structure using
+     *                Web
      *                Services
      *
      * @return A instance of a CDK {@see IAtomContainer}

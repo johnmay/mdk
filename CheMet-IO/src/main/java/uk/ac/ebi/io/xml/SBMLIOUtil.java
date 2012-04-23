@@ -20,27 +20,22 @@
  */
 package uk.ac.ebi.io.xml;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
-import org.sbml.jsbml.CVTerm;
-import org.sbml.jsbml.Model;
-import org.sbml.jsbml.Reaction;
-import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.Species;
-import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.*;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.interfaces.reaction.Direction;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -174,7 +169,7 @@ public class SBMLIOUtil {
 
 
     public SpeciesReference getSpeciesReference(Model model,
-                                                CompartmentalisedParticipant<Metabolite, Double, Enum<? extends Compartment>> participant) {
+                                                CompartmentalisedParticipant<Metabolite, Double,  Compartment> participant) {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
@@ -205,7 +200,7 @@ public class SBMLIOUtil {
      * @return
      */
     public SpeciesReference addSpecies(Model model,
-                                       CompartmentalisedParticipant<Metabolite, Double, Enum<? extends Compartment>> participant) {
+                                       CompartmentalisedParticipant<Metabolite, Double, Compartment> participant) {
 
         Species species = new Species(level, version);
 
@@ -245,7 +240,7 @@ public class SBMLIOUtil {
     }
 
 
-    public org.sbml.jsbml.Compartment getCompartment(Model model, CompartmentalisedParticipant<?, ?, Enum<? extends Compartment>> participant) {
+    public org.sbml.jsbml.Compartment getCompartment(Model model, CompartmentalisedParticipant<?, ?,Compartment> participant) {
 
         if (compartmentMap.containsKey(participant.getCompartment())) {
             return compartmentMap.get(participant.getCompartment());
