@@ -31,7 +31,7 @@ import java.util.Collection;
  */
 public class ReconstructionImpl
         extends AbstractAnnotatedEntity
-        implements Externalizable, IReconstruction {
+        implements Externalizable, Reconstruction {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
             ReconstructionImpl.class);

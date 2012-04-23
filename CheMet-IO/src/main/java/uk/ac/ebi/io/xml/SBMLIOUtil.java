@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import org.sbml.jsbml.*;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
@@ -78,7 +78,7 @@ public class SBMLIOUtil {
     }
 
 
-    public SBMLDocument getDocument(Reconstruction reconstruction) {
+    public SBMLDocument getDocument(ReconstructionImpl reconstruction) {
 
         SBMLDocument doc = new SBMLDocument(level, version);
         Model model = new Model(level, version);

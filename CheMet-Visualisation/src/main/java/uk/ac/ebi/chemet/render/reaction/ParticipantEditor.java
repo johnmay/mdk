@@ -33,8 +33,8 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
+import uk.ac.ebi.core.DefaultReconstructionManager;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.core.reaction.compartment.*;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
@@ -75,7 +75,7 @@ public class ParticipantEditor extends JPanel {
 
     private JTextField stoichiometry;
 
-    private static ReconstructionManager MANAGER = ReconstructionManager.getInstance();
+    private static DefaultReconstructionManager MANAGER = DefaultReconstructionManager.getInstance();
 
     // factories
     private static final MoleculeRenderer RENDERER = MoleculeRenderer.getInstance();
@@ -161,7 +161,7 @@ public class ParticipantEditor extends JPanel {
             participant = new MetabolicParticipantImplementation();
         }
 
-        Reconstruction recon = MANAGER.getActive();
+        ReconstructionImpl recon = MANAGER.getActive();
         Collection<Metabolite> candidates = recon.getMetabolome().get(metabolite.getText());
 
         Metabolite entity;

@@ -5,7 +5,7 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SpeciesReference;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.IReconstruction;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 
@@ -20,7 +20,7 @@ public class SBMLReactionReader {
     private Model         model;
     private int           i = 0;
 
-    public SBMLReactionReader(SBMLDocument document, EntityFactory factory, IReconstruction reconstruction){
+    public SBMLReactionReader(SBMLDocument document, EntityFactory factory, Reconstruction reconstruction){
         this(document.getModel(), factory);
     }
     

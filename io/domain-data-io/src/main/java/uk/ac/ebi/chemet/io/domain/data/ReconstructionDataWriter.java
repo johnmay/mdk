@@ -8,7 +8,7 @@ import uk.ac.ebi.chemet.io.domain.EntityWriter;
 import uk.ac.ebi.chemet.io.identifier.IdentifierOutput;
 import uk.ac.ebi.interfaces.Genome;
 import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.IReconstruction;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.entities.MetabolicReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 
@@ -27,7 +27,7 @@ import java.util.Collection;
  */
 @CompatibleSince("0.9")
 public class ReconstructionDataWriter
-        implements EntityWriter<IReconstruction> {
+        implements EntityWriter<Reconstruction> {
 
     private static final Logger LOGGER = Logger.getLogger(ReconstructionDataWriter.class);
 
@@ -44,7 +44,7 @@ public class ReconstructionDataWriter
         this.entityOut = entityOut;
     }
 
-    public void write(IReconstruction reconstruction) throws IOException {
+    public void write(Reconstruction reconstruction) throws IOException {
 
         // write taxonomy identifier
         identifierOutput.write(reconstruction.getTaxonomy());

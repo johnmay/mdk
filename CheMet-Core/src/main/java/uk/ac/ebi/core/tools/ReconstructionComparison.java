@@ -30,7 +30,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.tools.hash.MolecularHash;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 import uk.ac.ebi.core.tools.hash.seeds.*;
@@ -48,9 +48,9 @@ public class ReconstructionComparison {
 
     private static final Logger LOGGER = Logger.getLogger(ReconstructionComparison.class);
 
-    private Reconstruction[] recons;
+    private ReconstructionImpl[] recons;
 
-    private Multimap<Reconstruction, Integer> metaboliteMap = ArrayListMultimap.create();
+    private Multimap<ReconstructionImpl, Integer> metaboliteMap = ArrayListMultimap.create();
 
     private Set<AtomSeed> methods = SeedFactory.getInstance().getSeeds(BondOrderSumSeed.class,
                                                                        AtomicNumberSeed.class,
@@ -63,7 +63,7 @@ public class ReconstructionComparison {
 
     public ReconstructionComparison(Set<AtomSeed> methods,
                                     boolean hydrogen,
-                                    Reconstruction... recons) {
+                                    ReconstructionImpl... recons) {
         if (recons.length < 1) {
             throw new InvalidParameterException("At least two reconstructons should be provided");
         }
@@ -71,7 +71,7 @@ public class ReconstructionComparison {
         this.methods = methods;
         this.hydrogen = hydrogen;
 
-        for (Reconstruction recon : recons) {
+        for (ReconstructionImpl recon : recons) {
             for (Metabolite m : recon.getMetabolome()) {
                 if (m.hasStructure()) {
                     IAtomContainer mol = m.getStructures().iterator().next().getStructure();
@@ -85,17 +85,17 @@ public class ReconstructionComparison {
     }
 
 
-    public int getMetaboliteTotal(Reconstruction recon) {
+    public int getMetaboliteTotal(ReconstructionImpl recon) {
         return new HashSet(metaboliteMap.get(recon)).size();
     }
 
 
-    public Reconstruction[] getReconstructions() {
+    public ReconstructionImpl[] getReconstructions() {
         return recons;
     }
 
 
-    public Map<Metabolite, Integer> getMoleculeHashMap(Reconstruction recon) {
+    public Map<Metabolite, Integer> getMoleculeHashMap(ReconstructionImpl recon) {
         HASH_FACTORY.setSeedWithMoleculeSize(true);
         Map<Metabolite, Integer> map = new HashMap<Metabolite, Integer>();
         LOGGER.debug("Generating hash code: " + methods);
@@ -112,11 +112,11 @@ public class ReconstructionComparison {
     }
 
 
-    public int getMetaboliteInstersect(Reconstruction... recons) {
+    public int getMetaboliteInstersect(ReconstructionImpl... recons) {
 
         Set<Integer> metabolites = null;
 
-        for (Reconstruction reconstruction : recons) {
+        for (ReconstructionImpl reconstruction : recons) {
 
             if (metabolites == null) {
                 metabolites = new HashSet(metaboliteMap.get(reconstruction));

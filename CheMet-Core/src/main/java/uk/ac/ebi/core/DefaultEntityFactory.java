@@ -32,10 +32,7 @@ import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
-import uk.ac.ebi.interfaces.reaction.Participant;
 
 
 /**
@@ -73,7 +70,7 @@ public class DefaultEntityFactory
                                            new ParticipantImplementation(),
                                            new MetabolicParticipantImplementation(),
                                            new AbstractReaction(),
-                                           new Reconstruction())) {
+                                           new ReconstructionImpl())) {
 
             entites.put(getEntityClass(entity.getClass()), entity);
 

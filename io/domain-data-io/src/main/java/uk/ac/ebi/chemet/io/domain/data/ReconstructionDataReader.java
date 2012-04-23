@@ -24,7 +24,7 @@ import java.io.IOException;
  */
 @CompatibleSince("0.9")
 public class ReconstructionDataReader
-        implements EntityReader<IReconstruction> {
+        implements EntityReader<Reconstruction> {
 
     private static final Logger LOGGER = Logger.getLogger(ReconstructionDataReader.class);
 
@@ -45,9 +45,9 @@ public class ReconstructionDataReader
         this.factory = factory;
     }
 
-    public IReconstruction readEntity() throws IOException, ClassNotFoundException {
+    public Reconstruction readEntity() throws IOException, ClassNotFoundException {
 
-        IReconstruction recon = factory.newInstance(IReconstruction.class);
+        Reconstruction recon = factory.newInstance(Reconstruction.class);
 
         recon.setIdentifier(identifierInput.read());
 

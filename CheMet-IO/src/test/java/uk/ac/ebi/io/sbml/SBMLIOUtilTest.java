@@ -18,7 +18,7 @@ import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.io.xml.SBMLIOUtil;
@@ -52,7 +52,7 @@ public class SBMLIOUtilTest {
     @Test
     public void testGetDocument() throws SBMLException, XMLStreamException,
                                          UnsupportedEncodingException {
-        Reconstruction recon = new Reconstruction(new ReconstructionIdentifier("mnb-project"),
+        ReconstructionImpl recon = new ReconstructionImpl(new ReconstructionIdentifier("mnb-project"),
                                                   new Taxonomy());
         Metabolite m = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
         m.setName("molecule name");

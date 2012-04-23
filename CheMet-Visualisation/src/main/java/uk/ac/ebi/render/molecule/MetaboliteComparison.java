@@ -34,8 +34,8 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.core.Reconstruction;
 import uk.ac.ebi.core.tools.ReconstructionComparison;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;
@@ -79,17 +79,17 @@ public class MetaboliteComparison {
 
         JTable table = new JTable();
 
-        Reconstruction[] recons = comparison.getReconstructions();
+        ReconstructionImpl[] recons = comparison.getReconstructions();
 
-        Map<Integer, Multimap<Reconstruction, Metabolite>> map = new HashMap();
+        Map<Integer, Multimap<ReconstructionImpl, Metabolite>> map = new HashMap();
 
         for (int i = 0; i < recons.length; i++) {
-            Reconstruction reconstruction = recons[i];
+            ReconstructionImpl reconstruction = recons[i];
             for (Entry<Metabolite, Integer> e : comparison.getMoleculeHashMap(reconstruction).entrySet()) {
 
                 Integer key = e.getValue();
                 if (!map.containsKey(key)) {
-                    Multimap<Reconstruction, Metabolite> sub = ArrayListMultimap.create();
+                    Multimap<ReconstructionImpl, Metabolite> sub = ArrayListMultimap.create();
                     map.put(key, sub);
                 }
                 map.get(key).put(reconstruction, e.getKey());
@@ -101,12 +101,12 @@ public class MetaboliteComparison {
 
         Object[][] data = new Object[map.keySet().size()][recons.length];
         int i = 0;
-        for (Entry<Integer, Multimap<Reconstruction, Metabolite>> e : map.entrySet()) {
+        for (Entry<Integer, Multimap<ReconstructionImpl, Metabolite>> e : map.entrySet()) {
             Integer key = e.getKey();
-            Multimap<Reconstruction, Metabolite> sub = e.getValue();
+            Multimap<ReconstructionImpl, Metabolite> sub = e.getValue();
             for (int j = 0; j < recons.length; j++) {
 
-                Reconstruction recon = recons[j];
+                ReconstructionImpl recon = recons[j];
 
                 switch (type) {
 

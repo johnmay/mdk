@@ -83,7 +83,7 @@ public class EntityDataInputStream
         add(Chromosome.class, new ChromosomeDataReader(in, factory, this));
         add(Genome.class, new GenomeDataReader(in, factory, this));
 
-        add(IReconstruction.class, new ReconstructionDataReader(in, factory, identifierInput, this));
+        add(Reconstruction.class, new ReconstructionDataReader(in, factory, identifierInput, this));
 
     }
 
