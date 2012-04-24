@@ -1,7 +1,7 @@
 package uk.ac.ebi.chemet.io.annotation.base;
 
 
-import uk.ac.ebi.annotation.util.AnnotationFactory;
+import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.chemet.io.annotation.AnnotationReader;
 import uk.ac.ebi.interfaces.StringAnnotation;
@@ -24,7 +24,7 @@ public class StringAnnotationReader
 
     private DataInput in;
     private Class<? extends StringAnnotation> c;
-    private static final AnnotationFactory FACTORY = AnnotationFactory.getInstance();
+    private static final DefaultAnnotationFactory FACTORY = DefaultAnnotationFactory.getInstance();
 
     public StringAnnotationReader(Class<? extends StringAnnotation> c, DataInput in){
         this.in = in;

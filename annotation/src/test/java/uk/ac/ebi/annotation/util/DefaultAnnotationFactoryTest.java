@@ -50,9 +50,9 @@ import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 /**
  * @author johnmay
  */
-public class AnnotationFactoryTest {
+public class DefaultAnnotationFactoryTest {
 
-    public AnnotationFactoryTest() {
+    public DefaultAnnotationFactoryTest() {
     }
 
 
@@ -84,7 +84,7 @@ public class AnnotationFactoryTest {
     @Test
     public void testOfClass() {
 
-        AnnotationFactory factory = AnnotationFactory.getInstance();
+        DefaultAnnotationFactory factory = DefaultAnnotationFactory.getInstance();
         for (Annotation annotation : factory.ofContext(AnnotatedEntity.class)) {
             Class c = annotation.getClass();
             Assert.assertEquals(c, factory.ofClass(c).getClass());
@@ -96,7 +96,7 @@ public class AnnotationFactoryTest {
     @Test
     public void testOfContext() {
 
-        AnnotationFactory factory = AnnotationFactory.getInstance();
+        DefaultAnnotationFactory factory = DefaultAnnotationFactory.getInstance();
 
         Set<Class> classes = new HashSet<Class>();
 
@@ -141,7 +141,7 @@ public class AnnotationFactoryTest {
     @Test
     public void testGetCrossReference() {
 
-        AnnotationFactory factory = AnnotationFactory.getInstance();
+        DefaultAnnotationFactory factory = DefaultAnnotationFactory.getInstance();
 
         assertEquals(ChEBICrossReference.class, factory.getCrossReference(new ChEBIIdentifier()).getClass());
         assertEquals(KEGGCrossReference.class, factory.getCrossReference(new KEGGCompoundIdentifier()).getClass());

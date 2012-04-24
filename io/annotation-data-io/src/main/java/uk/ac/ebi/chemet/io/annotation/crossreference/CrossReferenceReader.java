@@ -1,7 +1,7 @@
 package uk.ac.ebi.chemet.io.annotation.crossreference;
 
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.util.AnnotationFactory;
+import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.chemet.io.annotation.AnnotationReader;
 import uk.ac.ebi.chemet.io.identifier.IdentifierInput;
@@ -27,7 +27,7 @@ import java.io.IOException;
 public class CrossReferenceReader<X extends CrossReference>
         implements AnnotationReader<X> {
 
-    private static final AnnotationFactory ANNOTATION_FACTORY = AnnotationFactory.getInstance();
+    private static final DefaultAnnotationFactory ANNOTATION_FACTORY = DefaultAnnotationFactory.getInstance();
 
     private Class<? extends CrossReference> c;
     private IdentifierInput in;

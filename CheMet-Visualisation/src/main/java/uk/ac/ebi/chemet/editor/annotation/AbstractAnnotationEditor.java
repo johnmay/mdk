@@ -4,7 +4,7 @@ import com.jgoodies.forms.factories.Borders;
 
 import javax.swing.*;
 
-import uk.ac.ebi.annotation.util.AnnotationFactory;
+import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.interfaces.Annotation;
 
@@ -59,7 +59,7 @@ public abstract class AbstractAnnotationEditor<A extends Annotation>
      * @inheritDoc
      */
     public A newAnnotation() {
-        return AnnotationFactory.getInstance().ofClass(c);
+        return DefaultAnnotationFactory.getInstance().ofClass(c);
     }
 
 

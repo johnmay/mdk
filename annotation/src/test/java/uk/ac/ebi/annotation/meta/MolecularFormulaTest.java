@@ -22,18 +22,9 @@
 
 package uk.ac.ebi.annotation.meta;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import junit.framework.TestCase;
 import org.junit.Test;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.util.AnnotationFactory;
-import uk.ac.ebi.interfaces.Annotation;
 
 
 /**

@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.sbml.jsbml.*;
 import org.sbml.jsbml.Compartment;
-import uk.ac.ebi.annotation.util.AnnotationFactory;
+import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.filter.AcceptAllFilter;
@@ -315,7 +315,7 @@ public class SBMLReactionReader {
                 for (String resource : term.getResources()) {
                     Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(resource);
                     if (identifier != null)
-                        metabolite.addAnnotation(AnnotationFactory.getInstance().getCrossReference(identifier));
+                        metabolite.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(identifier));
                 }
             }
 

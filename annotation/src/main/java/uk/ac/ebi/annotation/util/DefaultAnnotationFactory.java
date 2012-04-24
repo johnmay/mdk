@@ -53,9 +53,9 @@ import java.util.*;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public class AnnotationFactory {
+public class DefaultAnnotationFactory {
 
-    private static final Logger LOGGER = Logger.getLogger(AnnotationFactory.class);
+    private static final Logger LOGGER = Logger.getLogger(DefaultAnnotationFactory.class);
 
     // reflective map
     private static Constructor[] constructors = new Constructor[Byte.MAX_VALUE];
@@ -70,18 +70,18 @@ public class AnnotationFactory {
     private Collection<Flag> flags = new ArrayList<Flag>();
 
 
-    public static AnnotationFactory getInstance() {
+    public static DefaultAnnotationFactory getInstance() {
         return AnnotationFactoryHolder.INSTANCE;
     }
 
 
     private static class AnnotationFactoryHolder {
 
-        private static AnnotationFactory INSTANCE = new AnnotationFactory();
+        private static DefaultAnnotationFactory INSTANCE = new DefaultAnnotationFactory();
     }
 
 
-    private AnnotationFactory() {
+    private DefaultAnnotationFactory() {
 
         for (Annotation annotation : Arrays.asList(new AtomContainerAnnotation(),
                                                    new MolecularFormula(),
