@@ -44,9 +44,9 @@ import java.util.regex.Pattern;
  * @author johnmay
  * @date May 6, 2011
  */
-public class IdentifierFactory {
+public class DefaultIdentifierFactory {
 
-    private static final Logger logger = Logger.getLogger(IdentifierFactory.class);
+    private static final Logger logger = Logger.getLogger(DefaultIdentifierFactory.class);
 
     private static final String IDENTIFIER_MAPPING_FILE = "IdentifierResourceMapping.properties";
 
@@ -126,7 +126,7 @@ public class IdentifierFactory {
     }
 
 
-    private IdentifierFactory() {
+    private DefaultIdentifierFactory() {
 
         for (Identifier identifier : supportedIdentifiers) {
 
@@ -183,11 +183,11 @@ public class IdentifierFactory {
 
     public static class IdentifierFactoryHolder {
 
-        public static IdentifierFactory INSTANCE = new IdentifierFactory();
+        public static DefaultIdentifierFactory INSTANCE = new DefaultIdentifierFactory();
     }
 
 
-    public static IdentifierFactory getInstance() {
+    public static DefaultIdentifierFactory getInstance() {
         return IdentifierFactoryHolder.INSTANCE;
     }
 
