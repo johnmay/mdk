@@ -40,6 +40,7 @@ import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.annotation.Context;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.tool.AnnotationFactory;
 
 import java.lang.reflect.Constructor;
 import java.security.InvalidParameterException;
@@ -53,7 +54,7 @@ import java.util.*;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public class DefaultAnnotationFactory {
+public class DefaultAnnotationFactory implements AnnotationFactory {
 
     private static final Logger LOGGER = Logger.getLogger(DefaultAnnotationFactory.class);
 
