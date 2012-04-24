@@ -38,7 +38,7 @@ import uk.ac.ebi.interfaces.services.PropertyQueryService;
 import uk.ac.ebi.io.plain.KEGGBriteEntry.KEGGCompBriteCategories;
 import uk.ac.ebi.io.remote.KEGGCompoundBrite;
 import uk.ac.ebi.io.remote.KEGGCompoundBrite.KEGGCompBriteLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          KEGGCompoundBriteService - 2011.10.26 <br>
@@ -53,7 +53,7 @@ public class KEGGCompoundBriteService
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundBriteService.class);
     private IndexSearcher searcher;
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private KEGGCompoundBriteService() {
         super(new KEGGCompoundBrite());

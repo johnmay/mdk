@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
@@ -44,7 +44,7 @@ import java.util.regex.Pattern;
 public class DrugBankEntryParser {
 
     private static final Logger LOGGER = Logger.getLogger(DrugBankEntryParser.class);
-    private static IdentifierFactory factory = IdentifierFactory.getInstance();
+    private static DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
     
     
     private DrugBankEntry entry;

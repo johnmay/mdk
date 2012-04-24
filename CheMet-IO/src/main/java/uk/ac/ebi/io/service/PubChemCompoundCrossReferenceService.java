@@ -38,7 +38,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.CrossReferenceQueryService;
 import uk.ac.ebi.io.remote.PubChemCompoundCrossRefs;
 import uk.ac.ebi.io.remote.PubChemCompoundCrossRefs.PubChemCompoundsCrossRefsLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          PubChemCompoundCrossReferenceService - 2011.10.26 <br>
@@ -53,7 +53,7 @@ public class PubChemCompoundCrossReferenceService
 
     private static final Logger LOGGER = Logger.getLogger(PubChemCompoundCrossReferenceService.class);
     private IndexSearcher searcher;
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private PubChemCompoundCrossReferenceService() {
         super(new PubChemCompoundCrossRefs());

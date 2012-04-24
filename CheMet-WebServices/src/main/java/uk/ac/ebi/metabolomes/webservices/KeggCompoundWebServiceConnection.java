@@ -27,7 +27,7 @@ import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
 
@@ -452,6 +452,6 @@ public class KeggCompoundWebServiceConnection extends ChemicalDBWebService {
 
     @Override
     public KEGGCompoundIdentifier getIdentifier() {
-        return (KEGGCompoundIdentifier) IdentifierFactory.getInstance().ofClass(KEGGCompoundIdentifier.class);
+        return (KEGGCompoundIdentifier) DefaultIdentifierFactory.getInstance().ofClass(KEGGCompoundIdentifier.class);
     }
 }

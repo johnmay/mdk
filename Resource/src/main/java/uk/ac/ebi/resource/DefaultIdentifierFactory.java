@@ -28,6 +28,7 @@ import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.chemet.resource.basic.*;
 import uk.ac.ebi.chemet.resource.basic.ChromosomeNumber;
+import uk.ac.ebi.mdk.domain.tool.IdentifierFactory;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.chemet.resource.structure.HSSPIdentifier;
 import uk.ac.ebi.chemet.resource.structure.PDBIdentifier;
@@ -44,7 +45,7 @@ import java.util.regex.Pattern;
  * @author johnmay
  * @date May 6, 2011
  */
-public class DefaultIdentifierFactory {
+public class DefaultIdentifierFactory implements IdentifierFactory {
 
     private static final Logger logger = Logger.getLogger(DefaultIdentifierFactory.class);
 
@@ -247,6 +248,7 @@ public class DefaultIdentifierFactory {
      *
      * @return
      */
+    @Override
     public Identifier ofName(String name) {
 
         String normalisedName = name.toLowerCase(Locale.ENGLISH).trim();
@@ -273,6 +275,7 @@ public class DefaultIdentifierFactory {
 
     }
 
+    @Override
     public Identifier ofName(String name, String accession) {
         Identifier identifier = ofName(name);
         identifier.setAccession(accession);
@@ -292,7 +295,7 @@ public class DefaultIdentifierFactory {
     }
 
 
-    public boolean hasSynonym(String synonym) {
+    @Override public boolean hasSynonym(String synonym) {
 
         String key = synonym.toLowerCase(Locale.ENGLISH);
 
@@ -313,7 +316,7 @@ public class DefaultIdentifierFactory {
      *
      * @return
      */
-    public Identifier ofSynonym(String synonym) {
+    @Override public Identifier ofSynonym(String synonym) {
 
         String key = synonym.toLowerCase(Locale.ENGLISH);
 
@@ -324,7 +327,7 @@ public class DefaultIdentifierFactory {
         throw new InvalidParameterException("No matching identifier synonym found for: " + synonym + " please invoke hasSynonym() to avoid this error");
     }
 
-    public Identifier ofSynonym(String synonym, String accession) {
+    @Override public Identifier ofSynonym(String synonym, String accession) {
 
         Identifier id = ofSynonym(synonym);
         id.setAccession(accession);

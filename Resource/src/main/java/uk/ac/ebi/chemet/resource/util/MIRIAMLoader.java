@@ -21,7 +21,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import uk.ac.ebi.interfaces.Resource;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import java.io.InputStream;
 import java.security.InvalidParameterException;
@@ -205,7 +205,7 @@ public class MIRIAMLoader {
 
         // build the map if it's empty
         if (resources.isEmpty()) {
-            for (Identifier id : IdentifierFactory.getInstance().getSupportedIdentifiers()) {
+            for (Identifier id : DefaultIdentifierFactory.getInstance().getSupportedIdentifiers()) {
                 resources.put(id.getResource(), id);
             }
         }

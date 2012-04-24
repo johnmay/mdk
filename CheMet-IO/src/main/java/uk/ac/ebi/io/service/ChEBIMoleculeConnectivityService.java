@@ -38,7 +38,7 @@ import uk.ac.ebi.io.remote.ChEBIMoleculeConnectivity;
 import uk.ac.ebi.io.remote.ChEBISecondaryID2PrimaryID.ChEBISecondary2PrimaryLuceneFields;
 import uk.ac.ebi.io.remote.MoleculeCollectionConnectivity;
 import uk.ac.ebi.io.remote.MoleculeCollectionConnectivity.MoleculeCollectionConnectivityLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          ChEBIMoleculeConnectivityService - 2011.10.26 <br>
@@ -51,7 +51,7 @@ public class ChEBIMoleculeConnectivityService
         extends MoleculeConnectivityQueryService implements ChemicalConnectivityQueryService<ChEBIIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIMoleculeConnectivityService.class);
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
     private final Query collectionQuery;
 
     private ChEBIMoleculeConnectivityService() {

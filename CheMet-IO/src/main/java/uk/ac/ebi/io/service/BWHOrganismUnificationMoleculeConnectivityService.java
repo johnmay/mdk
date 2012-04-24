@@ -37,7 +37,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.remote.ChEBICrossRefs.ChEBICrossRefsLuceneFields;
 import uk.ac.ebi.io.remote.MoleculeCollectionConnectivity;
 import uk.ac.ebi.io.remote.MoleculeCollectionConnectivity.MoleculeCollectionConnectivityLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.interfaces.services.ChemicalConnectivityQueryService;
 
@@ -66,7 +66,7 @@ public class BWHOrganismUnificationMoleculeConnectivityService
     }
 
     private static final Logger LOGGER = Logger.getLogger(BWHOrganismUnificationMoleculeConnectivityService.class);
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
     private final Query collectionQuery;
 
     private BWHOrganismUnificationMoleculeConnectivityService(Taxonomy tax, CollectionType type) {

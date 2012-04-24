@@ -38,7 +38,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.CrossReferenceQueryService;
 import uk.ac.ebi.io.remote.ChEBICrossRefs;
 import uk.ac.ebi.io.remote.ChEBICrossRefs.ChEBICrossRefsLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          ChEBINameService - 2011.10.26 <br>
@@ -55,7 +55,7 @@ public class ChEBICrossReferenceService
 
     private static final Logger LOGGER = Logger.getLogger(ChEBICrossReferenceService.class);
     private IndexSearcher searcher;
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private ChEBICrossReferenceService() {
         super(new ChEBICrossRefs());

@@ -22,11 +22,9 @@ package uk.ac.ebi.metabolomes.webservices.eutils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
-import uk.ac.ebi.resource.IdentifierFactory;
 
 /**
  * @name    PubChemCompoundESummaryResult

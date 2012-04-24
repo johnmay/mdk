@@ -28,7 +28,7 @@ import uk.ac.ebi.chemet.resource.IdentifierSet;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  * @name    UniProtECMapper
@@ -56,7 +56,7 @@ public class UniProtECMapper
 
     @Override
     public UniProtIdentifier parseKey( String keyString ) {
-        IdentifierSet identifiers = IdentifierFactory.getInstance().resolveSequenceHeader(keyString);
+        IdentifierSet identifiers = DefaultIdentifierFactory.getInstance().resolveSequenceHeader(keyString);
         if(!identifiers.getIdentifiers().isEmpty()){
             return (UniProtIdentifier) identifiers.getIdentifiers().iterator().next();
         }
