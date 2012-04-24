@@ -22,11 +22,10 @@ package uk.ac.ebi.metabolomes.webservices.eutils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  * @name    PubChemCompoundESummaryResult
@@ -40,7 +39,7 @@ import uk.ac.ebi.resource.IdentifierFactory;
 public class PubChemCompoundESummaryResult extends ESummaryResult {
 
     private static final Logger LOGGER = Logger.getLogger(PubChemCompoundESummaryResult.class);
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     /**
      * @return the preferredName

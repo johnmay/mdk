@@ -40,7 +40,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.webservices.ICrossReferenceProvider;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.chemet.resource.chemical.BRNIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.CASIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
@@ -67,7 +67,7 @@ public class CactusChemical implements ICrossReferenceProvider {
     private HttpClient client;
     private static final String BASE_DOMAIN = "cactus.nci.nih.gov";
     private static final String CHEMICAL_STRUCTURE_PATH = "/chemical/structure/";
-    private final IdentifierFactory factory = IdentifierFactory.getInstance();
+    private final DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
     //private static final String NAME_SEARCH = "/names";
     
     /**

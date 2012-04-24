@@ -28,7 +28,7 @@ import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -60,7 +60,7 @@ public class IdentifierEditor extends JComponent {
 
     private String DEFAULT_TEXT = "enter identifier";
 
-    private static final IdentifierFactory ID_FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory ID_FACTORY = DefaultIdentifierFactory.getInstance();
 
     private List<Class> classes;
 

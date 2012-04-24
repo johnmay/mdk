@@ -10,7 +10,7 @@ import uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal.UniProtIdentifierMarhsal;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.interfaces.entities.ProteinProduct;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class UniProtXMLReaderTest extends TestCase {
         UniProtXMLReader reader = new UniProtXMLReader(in, DefaultEntityFactory.getInstance());
 
         reader.addMarshal(new UniProtIdentifierMarhsal());
-        reader.addMarshal(new UniProtCrossreferenceMarshal(IdentifierFactory.getInstance(), ECNumber.class));
+        reader.addMarshal(new UniProtCrossreferenceMarshal(DefaultIdentifierFactory.getInstance(), ECNumber.class));
 
         List<ProteinProduct> productList = new ArrayList<ProteinProduct>();
         

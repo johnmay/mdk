@@ -9,7 +9,7 @@ import uk.ac.ebi.chemet.service.index.crossreference.UniProtCrossReferenceIndex;
 import uk.ac.ebi.chemet.service.loader.LoaderTestUtil;
 import uk.ac.ebi.chemet.service.loader.LuceneIndexInspector;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.service.SingleIndexResourceLoader;
 import uk.ac.ebi.service.exception.MissingLocationException;
 import uk.ac.ebi.service.index.LuceneIndex;
@@ -34,7 +34,7 @@ public class UniProtCrossReferenceLoaderTest {
 
         SingleIndexResourceLoader loader = new UniProtCrossReferenceLoader(index,
                                                                            DefaultEntityFactory.getInstance(),
-                                                                           IdentifierFactory.getInstance());
+                                                                           DefaultIdentifierFactory.getInstance());
 
         // set test-indexes
         loader.setIndex(index);

@@ -9,7 +9,7 @@ import uk.ac.ebi.chemet.io.observation.ObservationInput;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
 import uk.ac.ebi.interfaces.entities.Entity;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class AnnotatedEntityDataReader
 
     private static final Logger LOGGER = Logger.getLogger(AnnotatedEntityDataReader.class);
 
-    private static final IdentifierFactory factory = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
 
     private DataInput in;
     private EnumReader enumReader;

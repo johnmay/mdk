@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGDrugIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KeggGlycanIdentifier;
@@ -48,7 +48,7 @@ import uk.ac.ebi.chemet.resource.chemical.KeggGlycanIdentifier;
 public class PubChemSubstanceESummaryResult extends ESummaryResult {
 
     private static final Logger LOGGER = Logger.getLogger(PubChemSubstanceESummaryResult.class);
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     public enum PubChemSubstanceESummaryListFields {
 

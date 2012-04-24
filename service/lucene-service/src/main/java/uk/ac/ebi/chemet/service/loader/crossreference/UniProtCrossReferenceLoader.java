@@ -10,7 +10,7 @@ import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultCrossReferenceIndexWriter;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.ProteinProduct;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.service.location.ResourceFileLocation;
 
@@ -28,11 +28,11 @@ public class UniProtCrossReferenceLoader extends AbstractSingleIndexResourceLoad
 
     private static final Logger LOGGER = Logger.getLogger(UniProtCrossReferenceLoader.class);
     private EntityFactory     entityFactory;
-    private IdentifierFactory identifierFactory;
+    private DefaultIdentifierFactory identifierFactory;
 
     public UniProtCrossReferenceLoader(LuceneIndex index,
                                        EntityFactory entityFactory,
-                                       IdentifierFactory identifierFactory) {
+                                       DefaultIdentifierFactory identifierFactory) {
         super(index);
 
         // factories need for UniProt XML parser
@@ -48,7 +48,7 @@ public class UniProtCrossReferenceLoader extends AbstractSingleIndexResourceLoad
     }
 
     public UniProtCrossReferenceLoader(EntityFactory entityFactory,
-                                       IdentifierFactory identifierFactory) {
+                                       DefaultIdentifierFactory identifierFactory) {
         this(new UniProtCrossReferenceIndex(), entityFactory, identifierFactory);
     }
 

@@ -7,7 +7,7 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.service.query.CrossReferenceService;
 
@@ -54,7 +54,7 @@ public abstract class AbstractCrossreferenceService<I extends Identifier>
             for (ScoreDoc document : hits) {
                 Class c = getIdentifierClass(value(document, DATABASE_IDENTIFIER_INDEX.field()));
                 String accession = value(document, DATABASE_ACCESSION.field());
-                crossreferences.add(IdentifierFactory.getInstance().ofClass(c, accession));
+                crossreferences.add(DefaultIdentifierFactory.getInstance().ofClass(c, accession));
             }
         } catch (IOException ex) {
             LOGGER.error("IO Exception occurred on service: " + ex.getMessage());

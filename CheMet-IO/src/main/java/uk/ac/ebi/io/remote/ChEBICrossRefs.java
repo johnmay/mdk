@@ -63,7 +63,7 @@ import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.metabolomes.webservices.EUtilsWebServiceConnection;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          ChEBISearch - 2011.10.25 <br>
@@ -86,7 +86,7 @@ public class ChEBICrossRefs
             "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv"; // get parent - child compound
     private static final String referenceFile =
             "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/reference.tsv.zip"; // for pubchem substance
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private List<Identifier> getIdentsAssocToChEBIID(IndexSearcher searcher, String get) throws CorruptIndexException, IOException {
         Query chebiIDQuery = new TermQuery(new Term(ChEBICrossRefsLuceneFields.ChebiID.toString(), get));

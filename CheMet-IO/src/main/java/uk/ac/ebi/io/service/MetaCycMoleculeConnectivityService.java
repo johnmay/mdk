@@ -36,7 +36,7 @@ import uk.ac.ebi.chemet.resource.chemical.BioCycChemicalIdentifier;
 import uk.ac.ebi.interfaces.services.ChemicalConnectivityQueryService;
 import uk.ac.ebi.io.remote.MoleculeCollectionConnectivity;
 import uk.ac.ebi.io.remote.MoleculeCollectionConnectivity.MoleculeCollectionConnectivityLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          ChEBIMoleculeConnectivityService - 2011.10.26 <br>
@@ -49,7 +49,7 @@ public class MetaCycMoleculeConnectivityService
         extends MoleculeConnectivityQueryService implements ChemicalConnectivityQueryService<BioCycChemicalIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(MetaCycMoleculeConnectivityService.class);
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
     private final Query collectionQuery;
     private static final String COLLECTION = "BioCyc Chemical";
 

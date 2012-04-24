@@ -32,7 +32,7 @@ import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 //import uk.ac.ebi.metabolomes.util.ExternalReference;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 public class ChEBIWebServiceConnection extends ChemicalDBWebService implements ICrossReferenceProvider {
 
@@ -50,7 +50,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
     private ChebiWebServiceClient client;
     private static String serviceProviderName = "ChEBI";
     private static final Logger logger = Logger.getLogger(ChEBIWebServiceConnection.class);
-    private final IdentifierFactory factory = IdentifierFactory.getInstance();
+    private final DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
     private int maxResultsSearch;
     private StarsCategory starsCategory;
 
@@ -551,7 +551,7 @@ public class ChEBIWebServiceConnection extends ChemicalDBWebService implements I
 
     @Override
     public ChEBIIdentifier getIdentifier() {
-        return (ChEBIIdentifier) IdentifierFactory.getInstance().ofClass(ChEBIIdentifier.class);
+        return (ChEBIIdentifier) DefaultIdentifierFactory.getInstance().ofClass(ChEBIIdentifier.class);
     }
 
     public List<CrossReference> getCrossReferences(ChEBIIdentifier identifier) {

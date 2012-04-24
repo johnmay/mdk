@@ -34,7 +34,7 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.io.remote.ChEBISecondaryID2PrimaryID;
 import uk.ac.ebi.io.remote.ChEBISecondaryID2PrimaryID.ChEBISecondary2PrimaryLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          ChEBINameService - 2011.10.26 <br>
@@ -48,7 +48,7 @@ public class ChEBISecondary2PrimaryIDService
 
     private static final Logger LOGGER = Logger.getLogger(ChEBISecondary2PrimaryIDService.class);
     private IndexSearcher searcher;
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private ChEBISecondary2PrimaryIDService() {
         super(new ChEBISecondaryID2PrimaryID());

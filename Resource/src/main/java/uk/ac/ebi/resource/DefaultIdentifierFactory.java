@@ -28,6 +28,7 @@ import uk.ac.ebi.interfaces.identifiers.SequenceIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.chemet.resource.basic.*;
 import uk.ac.ebi.chemet.resource.basic.ChromosomeNumber;
+import uk.ac.ebi.mdk.domain.tool.IdentifierFactory;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.chemet.resource.structure.HSSPIdentifier;
 import uk.ac.ebi.chemet.resource.structure.PDBIdentifier;
@@ -44,9 +45,9 @@ import java.util.regex.Pattern;
  * @author johnmay
  * @date May 6, 2011
  */
-public class IdentifierFactory {
+public class DefaultIdentifierFactory implements IdentifierFactory {
 
-    private static final Logger logger = Logger.getLogger(IdentifierFactory.class);
+    private static final Logger logger = Logger.getLogger(DefaultIdentifierFactory.class);
 
     private static final String IDENTIFIER_MAPPING_FILE = "IdentifierResourceMapping.properties";
 
@@ -126,7 +127,7 @@ public class IdentifierFactory {
     }
 
 
-    private IdentifierFactory() {
+    private DefaultIdentifierFactory() {
 
         for (Identifier identifier : supportedIdentifiers) {
 
@@ -183,11 +184,11 @@ public class IdentifierFactory {
 
     public static class IdentifierFactoryHolder {
 
-        public static IdentifierFactory INSTANCE = new IdentifierFactory();
+        public static DefaultIdentifierFactory INSTANCE = new DefaultIdentifierFactory();
     }
 
 
-    public static IdentifierFactory getInstance() {
+    public static DefaultIdentifierFactory getInstance() {
         return IdentifierFactoryHolder.INSTANCE;
     }
 
@@ -247,6 +248,7 @@ public class IdentifierFactory {
      *
      * @return
      */
+    @Override
     public Identifier ofName(String name) {
 
         String normalisedName = name.toLowerCase(Locale.ENGLISH).trim();
@@ -273,6 +275,7 @@ public class IdentifierFactory {
 
     }
 
+    @Override
     public Identifier ofName(String name, String accession) {
         Identifier identifier = ofName(name);
         identifier.setAccession(accession);
@@ -292,7 +295,7 @@ public class IdentifierFactory {
     }
 
 
-    public boolean hasSynonym(String synonym) {
+    @Override public boolean hasSynonym(String synonym) {
 
         String key = synonym.toLowerCase(Locale.ENGLISH);
 
@@ -313,7 +316,7 @@ public class IdentifierFactory {
      *
      * @return
      */
-    public Identifier ofSynonym(String synonym) {
+    @Override public Identifier ofSynonym(String synonym) {
 
         String key = synonym.toLowerCase(Locale.ENGLISH);
 
@@ -324,7 +327,7 @@ public class IdentifierFactory {
         throw new InvalidParameterException("No matching identifier synonym found for: " + synonym + " please invoke hasSynonym() to avoid this error");
     }
 
-    public Identifier ofSynonym(String synonym, String accession) {
+    @Override public Identifier ofSynonym(String synonym, String accession) {
 
         Identifier id = ofSynonym(synonym);
         id.setAccession(accession);

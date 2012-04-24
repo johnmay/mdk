@@ -72,7 +72,7 @@ public class IdentifierDemo {
         // urn:miriam:obo.chebi:ChEBI%3A19435
 
         // example for kegg from the factory instance
-        Identifier id = IdentifierFactory.getInstance().ofClass(KEGGCompoundIdentifier.class);
+        Identifier id = DefaultIdentifierFactory.getInstance().ofClass(KEGGCompoundIdentifier.class);
         id.setAccession("C00023");
         System.out.println(id.getURN());
         System.out.println(new ECNumber().getSynonyms());

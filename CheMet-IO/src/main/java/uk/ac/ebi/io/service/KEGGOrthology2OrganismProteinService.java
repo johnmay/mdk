@@ -38,7 +38,7 @@ import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.remote.KEGGOrthology2OrganismProtein;
 import uk.ac.ebi.io.remote.KEGGOrthology2OrganismProtein.KEGGOrthologyOrgProtLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 /**
@@ -53,7 +53,7 @@ public class KEGGOrthology2OrganismProteinService
 
     private static final Logger LOGGER = Logger.getLogger(KEGGOrthology2OrganismProteinService.class);
     private IndexSearcher searcher;
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private KEGGOrthology2OrganismProteinService() {
         super(new KEGGOrthology2OrganismProtein());
