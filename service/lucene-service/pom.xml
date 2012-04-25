@@ -47,12 +47,6 @@
             <artifactId>cdk-formula</artifactId>
             <version>1.4.9</version>
         </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-fingerprint</artifactId>
-            <version>1.4.9</version>
-        </dependency>
-
 
         <!-- convenience/util  -->
         <dependency>
