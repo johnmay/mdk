@@ -5,7 +5,7 @@
     <parent>
         <artifactId>CheMet</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
-        <version>1.3-SNAPSHOT</version>
+        <version>1.3</version>
     </parent>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
@@ -26,7 +26,7 @@
     </modules>
 
     <artifactId>chemet-io-modules</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.3</version>
     <groupId>uk.ac.ebi.chemet</groupId>
 
 
