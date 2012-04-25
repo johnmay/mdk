@@ -13,11 +13,11 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 /**
  * @author John May
  */
-public class CrossReferenceComparatorTest {
+public class CrossreferenceComparatorTest {
 
-    private static final Logger LOGGER = Logger.getLogger(CrossReferenceComparatorTest.class);
+    private static final Logger LOGGER = Logger.getLogger(CrossreferenceComparatorTest.class);
 
-    private EntityComparator<Metabolite> comparator = new CrossReferenceComparator<Metabolite>();
+    private EntityComparator<Metabolite> comparator = new CrossreferenceComparator<Metabolite>();
 
     @Test
     public void testDirectReference() throws Exception {
