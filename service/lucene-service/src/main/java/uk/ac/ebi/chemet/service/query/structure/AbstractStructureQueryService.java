@@ -1,14 +1,25 @@
 package uk.ac.ebi.chemet.service.query.structure;
 
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.fingerprint.Fingerprinter;
+import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import uk.ac.ebi.chemet.service.analyzer.FingerprintSimilarity;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.service.index.LuceneIndex;
 import uk.ac.ebi.service.query.StructureService;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collection;
 
 /**
  * ${Name}.java - 20.02.2012 <br/> MetaInfo...
@@ -22,13 +33,13 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
         implements StructureService<I> {
 
     private IndexSearcher searcher;
+    private IFingerprinter fingerprinter = new Fingerprinter();
 
     private Term IDENTIFIER = new Term("Identifier");
 
     public AbstractStructureQueryService(LuceneIndex index) {
-
         super(index);
-
+        getSearcher().setSimilarity(new FingerprintSimilarity());
     }
 
     @Override
@@ -47,5 +58,46 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
 
     }
 
+    /**
+     * Set the fingerprint method. This method is needed if the fingerprint method
+     * used to write the index was different from the default. Note: changing the
+     * fingerprint method here and not when creating the index will not work
+     * @param fingerprinter
+     * @see IFingerprinter
+     * @see uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter#DefaultStructureIndexWriter(uk.ac.ebi.service.index.LuceneIndex, org.openscience.cdk.fingerprint.IFingerprinter)
+     */
+    public void setFingerprinter(IFingerprinter fingerprinter){
+        this.fingerprinter = fingerprinter;
+    }
 
+    /**
+     * Simple method use the set fingerprinter method to create a bitset
+     * which is then converted into a boolean query and searched in the index
+     *
+     * @param molecule the structure to search
+     *
+     * @return identifiers with similar structure
+     * @see #setFingerprinter(org.openscience.cdk.fingerprint.IFingerprinter)
+     * @see #searchStructure(java.util.BitSet)
+     */
+    @Override
+    public Collection<I> searchStructure(IAtomContainer molecule){
+        try{
+            return searchStructure(fingerprinter.getFingerprint(molecule));
+        } catch (CDKException ex){
+            return new ArrayList<I>();
+        }
+    }
+
+    public Collection<I> searchStructure(BitSet fp) {
+
+        // construct the query
+        BooleanQuery query = new BooleanQuery();
+        for(int i = fp.nextSetBit(0); i != -1; i = fp.nextSetBit(i + 1)){
+            query.add(construct(Integer.toString(i), FINGERPRINT_BIT), BooleanClause.Occur.SHOULD);
+        }
+
+        return getIdentifiers(query);
+
+    }
 }
