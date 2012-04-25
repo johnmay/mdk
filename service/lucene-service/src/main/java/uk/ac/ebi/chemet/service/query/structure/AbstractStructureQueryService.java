@@ -1,9 +1,11 @@
 package uk.ac.ebi.chemet.service.query.structure;
 
+import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.fingerprint.IFingerprinter;
@@ -35,6 +37,8 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
     private IndexSearcher searcher;
     private IFingerprinter fingerprinter = new Fingerprinter();
 
+    private static final Logger LOGGER = Logger.getLogger(AbstractStructureQueryService.class);
+
     private Term IDENTIFIER = new Term("Identifier");
 
     public AbstractStructureQueryService(LuceneIndex index) {
@@ -51,10 +55,10 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
             ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(bytes));
             return (IAtomContainer) in.readObject();
         } catch (Exception ex){
-            ex.printStackTrace();
+            LOGGER.warn("Error reading atom container");
         }
         
-        return null;
+        return new AtomContainer();
 
     }
 
