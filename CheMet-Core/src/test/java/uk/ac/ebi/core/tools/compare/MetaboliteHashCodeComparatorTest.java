@@ -21,9 +21,9 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  */
 public class MetaboliteHashCodeComparatorTest {
 
-    private MetaboliteComparator comparator;
+    private EntityComparator comparator;
 
-    private MetaboliteComparator comparatorWithCharge;
+    private EntityComparator comparatorWithCharge;
 
     private EntityFactory factory;
 

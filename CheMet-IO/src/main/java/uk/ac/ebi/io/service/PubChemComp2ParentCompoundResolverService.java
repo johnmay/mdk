@@ -34,7 +34,7 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.io.remote.PubChemComp2ParentCompound;
 import uk.ac.ebi.io.remote.PubChemComp2ParentCompound.PubChemComp2ParentComp;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          PubChemComp2ParentCompoundResolverService - 2011.10.26 <br>
@@ -48,7 +48,7 @@ public class PubChemComp2ParentCompoundResolverService
 
     private static final Logger LOGGER = Logger.getLogger(PubChemComp2ParentCompoundResolverService.class);
     private IndexSearcher searcher;
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private PubChemComp2ParentCompoundResolverService() {
         super(new PubChemComp2ParentCompound());

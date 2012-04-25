@@ -23,15 +23,6 @@ package uk.ac.ebi.chemet.render.reaction;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
-import java.awt.Component;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import javax.swing.*;
-
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.templates.MoleculeFactory;
@@ -40,20 +31,24 @@ import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.core.ReconstructionManager;
-import uk.ac.ebi.core.reaction.Membrane;
+import uk.ac.ebi.core.DefaultReconstructionManager;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.core.reaction.Tissue;
-import uk.ac.ebi.core.reaction.compartment.CellType;
-import uk.ac.ebi.core.reaction.compartment.Organ;
-import uk.ac.ebi.core.reaction.compartment.Organelle;
+import uk.ac.ebi.core.reaction.compartment.*;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.render.molecule.MoleculeRenderer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -80,7 +75,7 @@ public class ParticipantEditor extends JPanel {
 
     private JTextField stoichiometry;
 
-    private static ReconstructionManager MANAGER = ReconstructionManager.getInstance();
+    private static DefaultReconstructionManager MANAGER = DefaultReconstructionManager.getInstance();
 
     // factories
     private static final MoleculeRenderer RENDERER = MoleculeRenderer.getInstance();
@@ -120,7 +115,10 @@ public class ParticipantEditor extends JPanel {
         this.participant = participant;
 
         metabolite.setText(participant.getMolecule().getName());
-        compartment.setSelectedItem(((Compartment) participant.getCompartment()).getDescription());
+        compartment.setSelectedItem(((Compartment) participant.getCompartment()));
+        if(!compartment.getSelectedItem().equals(((Compartment) participant.getCompartment()))){
+            compartment.setSelectedItem(CompartmentImplementation.UNKNOWN); // fail safe
+        }
         stoichiometry.setText(participant.getCoefficient().toString());
 
 
@@ -183,7 +181,7 @@ public class ParticipantEditor extends JPanel {
 
         participant.setCoefficient(coef);
 
-        participant.setCompartment((Enum<? extends Compartment>) compartment.getSelectedItem());
+        participant.setCompartment((Compartment)compartment.getSelectedItem());
 
 
         return participant;
@@ -200,6 +198,7 @@ public class ParticipantEditor extends JPanel {
         compartments.addAll(Arrays.asList(CellType.values()));
         compartments.addAll(Arrays.asList(Tissue.values()));
         compartments.addAll(Arrays.asList(Organ.values()));
+        compartments.add(CompartmentImplementation.UNKNOWN);
 
         return compartments.toArray(new Compartment[0]);
 

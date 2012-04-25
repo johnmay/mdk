@@ -46,7 +46,7 @@ import uk.ac.ebi.core.TransferRNAImplementation;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          ENAFeatureParser - 2011.10.17 <br>
@@ -58,7 +58,7 @@ import uk.ac.ebi.resource.IdentifierFactory;
 public class ENAFeatureParser {
 
     private static final Logger LOGGER = Logger.getLogger(ENAFeatureParser.class);
-    private static IdentifierFactory factory = IdentifierFactory.getInstance();
+    private static DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
     private int start;
     private int end;
     private boolean complement;

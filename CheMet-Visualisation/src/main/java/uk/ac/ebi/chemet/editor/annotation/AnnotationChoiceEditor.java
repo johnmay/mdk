@@ -25,7 +25,7 @@ import java.awt.Window;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.*;
-import uk.ac.ebi.annotation.util.AnnotationFactory;
+import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Annotation;
@@ -43,7 +43,7 @@ import uk.ac.ebi.interfaces.Annotation;
  */
 public class AnnotationChoiceEditor extends JComponent {
 
-    private static AnnotationFactory ANNOTATION_FACTORY = AnnotationFactory.getInstance();
+    private static DefaultAnnotationFactory ANNOTATION_FACTORY = DefaultAnnotationFactory.getInstance();
 
     private static AnnotationEditorFactory EDITOR_FACTORY = AnnotationEditorFactory.getInstance();
 

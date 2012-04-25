@@ -9,7 +9,7 @@ import uk.ac.ebi.chemet.service.loader.AbstractChEBILoader;
 import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultCrossReferenceIndexWriter;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.service.location.ResourceFileLocation;
 
 import java.io.IOException;
@@ -77,7 +77,7 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
 
             // create an instance of the identifier and add it to the map
             try {
-                Identifier id = IdentifierFactory.getInstance().ofSynonym(type);
+                Identifier id = DefaultIdentifierFactory.getInstance().ofSynonym(type);
                 id.setAccession(accession);
                 if(isActive(identifier)){
                     crossreferences.put(getPrimaryIdentifier(identifier), id);

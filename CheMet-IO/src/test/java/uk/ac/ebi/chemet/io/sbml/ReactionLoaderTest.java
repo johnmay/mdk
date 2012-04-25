@@ -4,15 +4,18 @@
  */
 package uk.ac.ebi.chemet.io.sbml;
 
-import uk.ac.ebi.io.xml.SBMLReactionReader;
-import uk.ac.ebi.core.CompartmentImplementation;
-import java.io.InputStream;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.ac.ebi.chemet.entities.reaction.AtomContainerReaction;
-import static org.junit.Assert.*;
+import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.io.xml.SBMLReactionReader;
+import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
+
+import java.io.InputStream;
+
+import static org.junit.Assert.assertEquals;
 
 
 /**
@@ -40,7 +43,7 @@ public class ReactionLoaderTest {
         try {
             InputStream sbmlStream = getClass().getResourceAsStream(
                     "streptomyces-coelicolor-6.2005.xml");
-            SBMLReactionReader reactionReader = new SBMLReactionReader(sbmlStream, DefaultEntityFactory.getInstance());
+            SBMLReactionReader reactionReader = new SBMLReactionReader(sbmlStream, DefaultEntityFactory.getInstance(), new AutomaticCompartmentResolver());
             while (reactionReader.hasNext()) {
                 AtomContainerReaction r = reactionReader.next();
                 assertEquals(2, r.getAllReactionParticipants().size());

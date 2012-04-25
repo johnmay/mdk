@@ -84,7 +84,7 @@ public class EntityDataOutputStream
         add(Chromosome.class, new ChromosomeDataWriter(out, this));
         add(Genome.class, new GenomeDataWriter(out, this));
 
-        add(IReconstruction.class, new ReconstructionDataWriter(out, identifierOutput,  this));
+        add(Reconstruction.class, new ReconstructionDataWriter(out, identifierOutput,  this));
 
     }
 

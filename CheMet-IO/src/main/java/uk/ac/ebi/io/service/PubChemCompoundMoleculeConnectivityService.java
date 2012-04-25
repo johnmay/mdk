@@ -36,7 +36,7 @@ import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
 import uk.ac.ebi.interfaces.services.ChemicalConnectivityQueryService;
 import uk.ac.ebi.io.remote.PubChemCompoundConnectivity;
 import uk.ac.ebi.io.remote.PubChemCompoundConnectivity.PChemCompConnectivityLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          ChEBIMoleculeConnectivityService - 2011.10.26 <br>
@@ -49,7 +49,7 @@ public class PubChemCompoundMoleculeConnectivityService
         extends MoleculeConnectivityQueryService implements ChemicalConnectivityQueryService<PubChemCompoundIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(PubChemCompoundMoleculeConnectivityService.class);
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private PubChemCompoundMoleculeConnectivityService() {
         super(new PubChemCompoundConnectivity(1, 10));

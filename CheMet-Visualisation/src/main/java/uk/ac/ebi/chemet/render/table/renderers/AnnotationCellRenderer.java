@@ -21,11 +21,11 @@
 package uk.ac.ebi.chemet.render.table.renderers;
 
 import com.google.common.base.Joiner;
-import java.awt.Component;
-import java.util.Collection;
-import javax.swing.JTable;
 import uk.ac.ebi.caf.utility.TextUtility;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Collection;
 
 
 /**
@@ -69,6 +69,7 @@ public class AnnotationCellRenderer
 
 
         this.setText(html ? TextUtility.html(text) : text);
+        this.setToolTipText(html ? TextUtility.html(text) : text);
         this.setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
         this.setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
 

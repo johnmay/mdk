@@ -21,7 +21,7 @@
 package uk.ac.ebi.io.service;
 
 import java.io.IOException;
-import java.util.logging.Level;
+
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
@@ -35,7 +35,7 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.io.remote.IdentifierCurationStatus;
 import uk.ac.ebi.io.remote.IdentifierCurationStatus.CurationStatus;
 import uk.ac.ebi.io.remote.IdentifierCurationStatus.IdentifierPropertiesLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          PubChemCompoundCrossReferenceService - 2011.10.26 <br>
@@ -49,7 +49,7 @@ public class IdentifierCurationStatusService
 
     private static final Logger LOGGER = Logger.getLogger(IdentifierCurationStatusService.class);
     private IndexSearcher searcher;
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private IdentifierCurationStatusService() {
         super(new IdentifierCurationStatus());

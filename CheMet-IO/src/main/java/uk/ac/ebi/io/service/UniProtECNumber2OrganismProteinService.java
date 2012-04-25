@@ -37,7 +37,7 @@ import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.io.remote.UniProtECNumber2OrganismProtein;
 import uk.ac.ebi.io.remote.UniProtECNumber2OrganismProtein.UniProtECNumber2OrgProtLuceneFields;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 /**
@@ -52,7 +52,7 @@ public class UniProtECNumber2OrganismProteinService
 
     private static final Logger LOGGER = Logger.getLogger(UniProtECNumber2OrganismProteinService.class);
     private IndexSearcher searcher;
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private UniProtECNumber2OrganismProteinService() {
         super(new UniProtECNumber2OrganismProtein());

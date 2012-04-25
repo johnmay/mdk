@@ -5,37 +5,39 @@ package uk.ac.ebi.core;
  * and open the template in the editor.
  */
 
+import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
+import uk.ac.ebi.core.metabolite.MetabolomeImpl;
+import uk.ac.ebi.core.product.ProductCollection;
+import uk.ac.ebi.core.reaction.ReactionList;
+import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.interfaces.Genome;
+import uk.ac.ebi.interfaces.entities.*;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
+import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
+import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
+import uk.ac.ebi.resource.organism.Taxonomy;
+
 import java.io.*;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
-import uk.ac.ebi.core.product.ProductCollection;
-import uk.ac.ebi.core.reaction.ReactionList;
-import uk.ac.ebi.core.metabolite.Metabolome;
-import uk.ac.ebi.interfaces.entities.*;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
-import uk.ac.ebi.resource.organism.Taxonomy;
-
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.Genome;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-
 
 /**
- * Reconstruction.java
+ * ReconstructionImpl.java
  * Object to represent a complete reconstruction with genes, reactions and metabolites
  *
  * @author johnmay
  * @date Apr 13, 2011
  */
-public class Reconstruction
+public class ReconstructionImpl
         extends AbstractAnnotatedEntity
-        implements Externalizable, IReconstruction {
+        implements Externalizable, Reconstruction {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
-            Reconstruction.class);
+            ReconstructionImpl.class);
 
     public static final String PROJECT_FILE_EXTENSION = ".mnb";
 
@@ -57,9 +59,9 @@ public class Reconstruction
 
     private ProductCollection products;
 
-    private ReactionList reactions;
+    private Reactome reactions;
 
-    private Metabolome metabolites;
+    private Metabolome metabolome;
 
     private Collection<EntityCollection> subsets;
 
@@ -68,27 +70,27 @@ public class Reconstruction
 
 
     /**
-     * Constructor mainly used for creating a new Reconstruction
+     * Constructor mainly used for creating a new ReconstructionImpl
      *
      * @param id  The identifier of the project
      * @param org The organism identifier
      */
-    public Reconstruction(ReconstructionIdentifier id,
-                          Taxonomy org) {
+    public ReconstructionImpl(ReconstructionIdentifier id,
+                              Taxonomy org) {
         super(id, org.getCommonName(), org.getCode());
         taxonomy = org;
         reactions = new ReactionList();
-        metabolites = new Metabolome();
+        metabolome = new MetabolomeImpl();
         products = new ProductCollection();
         genome = new GenomeImplementation();
         subsets = new ArrayList<EntityCollection>();
     }
 
 
-    public Reconstruction(Identifier identifier, String abbreviation, String name) {
+    public ReconstructionImpl(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
         reactions = new ReactionList();
-        metabolites = new Metabolome();
+        metabolome = new MetabolomeImpl();
         products = new ProductCollection();
         genome = new GenomeImplementation();
         subsets = new ArrayList<EntityCollection>();
@@ -98,8 +100,8 @@ public class Reconstruction
     /*
     * Default constructor
     */
-    public Reconstruction() {
-        metabolites = new Metabolome();
+    public ReconstructionImpl() {
+        metabolome = new MetabolomeImpl();
         reactions = new ReactionList();
         genome = new GenomeImplementation();
         products = new ProductCollection();
@@ -107,8 +109,8 @@ public class Reconstruction
     }
 
 
-    public Reconstruction newInstance() {
-        return new Reconstruction();
+    public ReconstructionImpl newInstance() {
+        return new ReconstructionImpl();
     }
 
 
@@ -126,7 +128,7 @@ public class Reconstruction
     public String getAccession() {
         String accession = super.getAccession();
         if (accession.contains("%m")) {
-            accession = accession.replaceAll("%m", Integer.toString(metabolites.size()));
+            accession = accession.replaceAll("%m", Integer.toString(metabolome.size()));
         }
         if (accession.contains("%n")) {
             accession = accession.replaceAll("%n", Integer.toString(reactions.size()));
@@ -193,14 +195,18 @@ public class Reconstruction
      *
      * @return
      */
-    public ReactionList getReactions() {
+    public Reactome getReactions() {
         return reactions;
     }
 
-    public ReactionList getReactome() {
+    public Reactome getReactome() {
         return reactions;
     }
 
+
+    public Proteome getProteome(){
+        return products;
+    }
 
     /**
      * Access the collection of metabolites for this
@@ -209,7 +215,7 @@ public class Reconstruction
      * @return
      */
     public Metabolome getMetabolome() {
-        return metabolites;
+        return metabolome;
     }
 
 
@@ -224,12 +230,12 @@ public class Reconstruction
         reactions.add(reaction);
 
         for (MetabolicParticipant p : reaction.getReactants()) {
-            if (metabolites.contains(p.getMolecule()) == false) {
+            if (metabolome.contains(p.getMolecule()) == false) {
                 addMetabolite(p.getMolecule());
             }
         }
         for (MetabolicParticipant p : reaction.getProducts()) {
-            if (metabolites.contains(p.getMolecule()) == false) {
+            if (metabolome.contains(p.getMolecule()) == false) {
                 addMetabolite(p.getMolecule());
             }
         }
@@ -243,8 +249,8 @@ public class Reconstruction
      *
      * @param metabolite a new metabolite
      */
-    public void addMetabolite(uk.ac.ebi.interfaces.entities.Metabolite metabolite) {
-        metabolites.add(metabolite);
+    public void addMetabolite(Metabolite metabolite) {
+        metabolome.add(metabolite);
     }
 
 
@@ -293,12 +299,11 @@ public class Reconstruction
     /**
      * Holding methods (likely to change) *
      */
-    public void setMatix(StoichiometricMatrix<CompartmentalisedMetabolite, ?> matrix) {
+    public void setMatrix(StoichiometricMatrix matrix) {
         this.matrix = matrix;
     }
 
-
-    public StoichiometricMatrix<CompartmentalisedMetabolite, ?> getMatrix() {
+    public StoichiometricMatrix getMatrix() {
         return matrix;
     }
 
@@ -328,12 +333,12 @@ public class Reconstruction
     /**
      * Loads a reconstruction from a given container
      */
-    //    public static Reconstruction load(File container) throws IOException, ClassNotFoundException {
+    //    public static ReconstructionImpl load(File container) throws IOException, ClassNotFoundException {
     //
     //        File file = new File(container, "recon.extern.gzip");
     //        ObjectInput in = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file),
     //                                                                   1024 * 8)); // 8 mb
-    //        Reconstruction reconstruction = new Reconstruction();
+    //        ReconstructionImpl reconstruction = new ReconstructionImpl();
     //        reconstruction.readExternal(in);
     //
     //        return reconstruction;

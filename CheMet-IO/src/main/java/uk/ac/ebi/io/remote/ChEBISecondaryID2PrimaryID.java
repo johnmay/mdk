@@ -41,7 +41,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.interfaces.services.LuceneService;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  *          ChEBISecondaryID2PrimaryID - 2011.12.11 <br>
@@ -57,7 +57,7 @@ public class ChEBISecondaryID2PrimaryID
     private static final Logger LOGGER = Logger.getLogger(ChEBISecondaryID2PrimaryID.class);
     private Analyzer analzyer;
     private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/database_accession.tsv";
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     public enum ChEBISecondary2PrimaryLuceneFields {
 

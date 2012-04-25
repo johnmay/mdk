@@ -17,7 +17,7 @@ import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,7 +66,7 @@ public class LuceneLoader extends Box {
                                     new HMDBStructureLoader()));
             add(factory.createGroup("UniProt",
                                     new UniProtCrossReferenceLoader(DefaultEntityFactory.getInstance(),
-                                                                    IdentifierFactory.getInstance()),
+                                                                    DefaultIdentifierFactory.getInstance()),
                                     new TaxonomyLoader()));
 
             add(Box.createGlue());

@@ -22,28 +22,19 @@ package uk.ac.ebi.core.product;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.NotSerializableException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.ProteinProductImplementation;
-import uk.ac.ebi.core.RibosomalRNAImplementation;
-import uk.ac.ebi.core.TransferRNAImplementation;
 import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
 import uk.ac.ebi.interfaces.Genome;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.interfaces.Observation;
 import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
+
+import java.io.*;
+import java.util.*;
 
 
 /**
@@ -53,7 +44,7 @@ import uk.ac.ebi.interfaces.entities.EntityFactory;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct>, Externalizable {
+public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct>, Externalizable, Proteome {
 
     private static final Logger LOGGER = Logger.getLogger(ProductCollection.class);
 

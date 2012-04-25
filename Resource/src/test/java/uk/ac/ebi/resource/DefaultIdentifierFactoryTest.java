@@ -17,13 +17,13 @@ import uk.ac.ebi.chemet.resource.basic.*;
 /**
  * @author johnmay
  */
-public class IdentifierFactoryTest {
+public class DefaultIdentifierFactoryTest {
 
 
 
 
     @Test public void testOfName(){
-        IdentifierFactory factory    = IdentifierFactory.getInstance();
+        DefaultIdentifierFactory factory    = DefaultIdentifierFactory.getInstance();
         Identifier        identifier = factory.ofName("ChEBI identifier", "ChEBI:12");
         System.out.println(identifier.getSummary());
     }
@@ -31,7 +31,7 @@ public class IdentifierFactoryTest {
 
     @Test
     public void testSynonymLoading() {
-        IdentifierFactory factory = IdentifierFactory.getInstance();
+        DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
         Assert.assertEquals(ECNumber.class, factory.ofSynonym("EC").getClass());
         Assert.assertEquals(SwissProtIdentifier.class, factory.ofSynonym("Sprot").getClass());
         Assert.assertEquals(HMDBIdentifier.class, factory.ofSynonym("HMDB").getClass());
@@ -42,7 +42,7 @@ public class IdentifierFactoryTest {
     @Test
     public void testMapping() {
 
-        IdentifierFactory factory = IdentifierFactory.getInstance();
+        DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
         System.out.printf("%35s %-35s\n", "Class Name", "Mapped MetaInfo");
 
         for (Identifier id : factory.getSupportedIdentifiers()) {
@@ -66,7 +66,7 @@ public class IdentifierFactoryTest {
 
         // basic features
         String sequenceHeader = "sp|Q197F8|002R_IIV3|sp|Q6GZX1|004R_FRG3G|gnl|ec|1.1.1.1|lcl|chemet-id";
-        IdentifierSet ids = IdentifierFactory.getInstance().resolveSequenceHeader(sequenceHeader);
+        IdentifierSet ids = DefaultIdentifierFactory.getInstance().resolveSequenceHeader(sequenceHeader);
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q197F8")));
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q6GZX1")));
         Assert.assertTrue(ids.contains(new ECNumber("1.1.1.1")));
@@ -80,7 +80,7 @@ public class IdentifierFactoryTest {
 
         // basic features
         String sequenceHeader = "gi|2010202|sp|Q197F8|002R_IIV3|sp|Q6GZX1|004R_FRG3G|gnl|ec|1.1.1.1";
-        IdentifierSet ids = IdentifierFactory.getInstance().resolveSequenceHeader(sequenceHeader);
+        IdentifierSet ids = DefaultIdentifierFactory.getInstance().resolveSequenceHeader(sequenceHeader);
 
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q197F8")));
         Assert.assertTrue(ids.contains(new SwissProtIdentifier("Q6GZX1")));

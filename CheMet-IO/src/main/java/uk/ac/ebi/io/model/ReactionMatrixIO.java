@@ -18,16 +18,18 @@ package uk.ac.ebi.io.model;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
-import java.io.*;
-import java.util.HashMap;
-import java.util.List;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.core.CorePreferences;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.InChIStoichiometricMatrix;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrix;
+import uk.ac.ebi.metabolomes.core.reaction.matrix.StoichiometricMatrixImpl;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -242,12 +244,11 @@ public class ReactionMatrixIO {
      * @brief Writes a Stoichiometric Matrix (s) using the {@code toString()}
      * method of the molecule object to print the row name. Invoking {
      *
-     * @see setConvertDoubleToInChI(boolean)) informs the writer to write
      * doubles as integers. Note: the writer is not closed on completion
      * @param s – Class extending Stoichiometric matrix to write
      * @param writer - Where to write the matrix too
      */
-    public static void writeBasicStoichiometricMatrix(StoichiometricMatrix s,
+    public static void writeBasicStoichiometricMatrix(StoichiometricMatrix<?,?> s,
                                                       Writer writer) throws IOException {
         CSVWriter csv = new CSVWriter(new BufferedWriter(writer), separator, quoteCharacter);
 
@@ -277,7 +278,7 @@ public class ReactionMatrixIO {
     }
 
 
-    public static void writeCompressedBasicStoichiometricMatrix(StoichiometricMatrix s,
+    public static void writeCompressedBasicStoichiometricMatrix(StoichiometricMatrix<?,?> s,
                                                                 OutputStream writer) throws IOException {
         IntegerPreference BUFFER_SIZE_PREF = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
         DataOutputStream out = new DataOutputStream(new BufferedOutputStream(writer, BUFFER_SIZE_PREF.get()));
@@ -334,7 +335,7 @@ public class ReactionMatrixIO {
      * @param s - A stoichiometric matrix
      * @param writer
      */
-    public static void writeInChIAdditionalInfo(StoichiometricMatrix s,
+    public static void writeInChIAdditionalInfo(StoichiometricMatrixImpl s,
                                                 Writer writer) {
 
         CSVWriter csv = new CSVWriter(new BufferedWriter(writer), separator, quoteCharacter);

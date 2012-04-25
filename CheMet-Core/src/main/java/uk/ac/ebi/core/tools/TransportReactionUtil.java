@@ -22,17 +22,16 @@ package uk.ac.ebi.core.tools;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import java.util.AbstractMap.*;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.entities.Reaction;
 import uk.ac.ebi.interfaces.reaction.Compartment;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
+
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 
 
 /**
@@ -63,8 +62,8 @@ public class TransportReactionUtil {
      * @param transportReaction
      * @return
      */
-    public static <T> BiMap<CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>, CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>> getMappings(
-            Reaction<? extends CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>> transportReaction) {
+    public static <T> BiMap<CompartmentalisedParticipant<T, ?,   Compartment>, CompartmentalisedParticipant<T, ?,  Compartment>> getMappings(
+            Reaction<? extends CompartmentalisedParticipant<T, ?,   Compartment>> transportReaction) {
         return getMappings(transportReaction, new Comparator<T>() {
 
             public int compare(T o1,
@@ -75,14 +74,14 @@ public class TransportReactionUtil {
     }
 
 
-    public static <T> BiMap<CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>, CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>> getMappings(
-            Reaction<? extends CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>> transportReaction,
+    public static <T> BiMap<CompartmentalisedParticipant<T, ?,Compartment>, CompartmentalisedParticipant<T, ?,  Compartment>> getMappings(
+            Reaction<? extends CompartmentalisedParticipant<T, ?,  Compartment>> transportReaction,
             Comparator<T> comparator) {
 
-        BiMap<CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>, CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>> mappings = HashBiMap.create();
+        BiMap<CompartmentalisedParticipant<T, ?,  Compartment>, CompartmentalisedParticipant<T, ?,  Compartment>> mappings = HashBiMap.create();
 
-        for (CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>> p1 : transportReaction.getReactants()) {
-            for (CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>> p2 : transportReaction.getProducts()) {
+        for (CompartmentalisedParticipant<T, ?,  Compartment> p1 : transportReaction.getReactants()) {
+            for (CompartmentalisedParticipant<T, ?,  Compartment> p2 : transportReaction.getProducts()) {
                 if (comparator.compare(p1.getMolecule(), p2.getMolecule()) == 0) {
                     mappings.put(p1, p2);
                 }
@@ -96,7 +95,7 @@ public class TransportReactionUtil {
     /**
      * Classifies the provided MetabolicReaction
      */
-    public static Classification getClassification(Reaction<? extends CompartmentalisedParticipant<Metabolite, ?, Enum<? extends Compartment>>> rxn) {
+    public static Classification getClassification(Reaction<? extends CompartmentalisedParticipant<Metabolite, ?, Compartment>> rxn) {
 
         if (!isTransport(rxn)) {
             return Classification.UNKNOWN;
@@ -109,7 +108,7 @@ public class TransportReactionUtil {
     }
 
 
-    public static boolean isTransport(Reaction<? extends CompartmentalisedParticipant<?, ?, Enum<? extends Compartment>>> rxn) {
+    public static boolean isTransport(Reaction<? extends CompartmentalisedParticipant<?, ?,  Compartment>> rxn) {
         Set uniqueCompartments = new HashSet();
         for (CompartmentalisedParticipant p : rxn.getReactants()) {
             uniqueCompartments.add(p.getCompartment());
@@ -122,15 +121,15 @@ public class TransportReactionUtil {
 
 
     private static <T> Classification getClassification(
-            BiMap<CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>, CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>> mappings) {
+            BiMap<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?, Compartment>> mappings) {
 
         int total = 0;
         Set<Integer> movement = new HashSet<Integer>();
 
-        for (Entry<CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>, CompartmentalisedParticipant<T, ?, Enum<? extends Compartment>>> entry : mappings.entrySet()) {
+        for (Entry<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?,  Compartment>> entry : mappings.entrySet()) {
 
-            CompartmentalisedParticipant<?, ?, Enum<? extends Compartment>> p1 = entry.getKey();
-            CompartmentalisedParticipant<?, ?, Enum<? extends Compartment>> p2 = entry.getValue();
+            CompartmentalisedParticipant<?, ?, Compartment> p1 = entry.getKey();
+            CompartmentalisedParticipant<?, ?, Compartment> p2 = entry.getValue();
 
             Compartment c1 = (Compartment) p1.getCompartment();
             Compartment c2 = (Compartment) p2.getCompartment();

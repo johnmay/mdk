@@ -20,19 +20,12 @@
  */
 package uk.ac.ebi.core.reaction;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.metabolite.Metabolome;
 import uk.ac.ebi.core.reaction.compartment.Organelle;
 import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.interfaces.reaction.Compartment;
-import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 
 
 /**
@@ -43,7 +36,7 @@ import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
  * @author  $Author$ (this version)
  */
 public class MetabolicParticipantImplementation
-        extends ParticipantImplementation<Metabolite, Double, Enum<? extends Compartment>>
+        extends ParticipantImplementation<Metabolite, Double, Compartment>
         implements MetabolicParticipant {
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicParticipantImplementation.class);
@@ -53,12 +46,12 @@ public class MetabolicParticipantImplementation
     }
 
 
-    public MetabolicParticipantImplementation(Metabolite molecule, Enum<? extends Compartment> compartment) {
+    public MetabolicParticipantImplementation(Metabolite molecule, Compartment compartment) {
         super(molecule, 1d, compartment);
     }
 
 
-    public MetabolicParticipantImplementation(Metabolite molecule, Double coefficient, Enum<? extends Compartment> compartment) {
+    public MetabolicParticipantImplementation(Metabolite molecule, Double coefficient, Compartment compartment) {
         super(molecule, coefficient, compartment);
     }
 

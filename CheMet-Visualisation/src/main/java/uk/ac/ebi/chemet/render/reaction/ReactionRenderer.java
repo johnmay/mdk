@@ -21,6 +21,28 @@
 package uk.ac.ebi.chemet.render.reaction;
 
 import com.google.common.collect.BiMap;
+import org.apache.log4j.Logger;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.renderer.AtomContainerRenderer;
+import org.openscience.cdk.renderer.font.AWTFontManager;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator;
+import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
+import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
+import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.core.tools.TransportReactionUtil;
+import uk.ac.ebi.core.tools.TransportReactionUtil.Classification;
+import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.interfaces.entities.Reaction;
+import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.interfaces.reaction.Direction;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
@@ -32,30 +54,6 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import org.apache.log4j.Logger;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
-import org.openscience.cdk.renderer.AtomContainerRenderer;
-import org.openscience.cdk.renderer.font.AWTFontManager;
-import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
-import org.openscience.cdk.renderer.generators.BasicBondGenerator;
-import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
-import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
-import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.core.tools.TransportReactionUtil;
-import uk.ac.ebi.core.tools.TransportReactionUtil.*;
-import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
-import uk.ac.ebi.interfaces.entities.Reaction;
-import uk.ac.ebi.interfaces.reaction.Compartment;
-import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
-import uk.ac.ebi.interfaces.reaction.Direction;
 
 
 /**
@@ -120,11 +118,11 @@ public class ReactionRenderer {
      */
     public ImageIcon renderUniporterReaction(AbstractReaction<MetabolicParticipantImplementation> rxn) {
 
-        BiMap<CompartmentalisedParticipant<Metabolite, ?, Enum<? extends Compartment>>, CompartmentalisedParticipant<Metabolite, ?, Enum<? extends Compartment>>> mapping = TransportReactionUtil.getMappings(
+        BiMap<CompartmentalisedParticipant<Metabolite, ?, Compartment>, CompartmentalisedParticipant<Metabolite, ?, Compartment>> mapping = TransportReactionUtil.getMappings(
                 rxn);
 
-        CompartmentalisedParticipant<Metabolite, ?, Enum<? extends Compartment>> left = mapping.keySet().iterator().next();
-        CompartmentalisedParticipant<Metabolite, ?, Enum<? extends Compartment>> right = mapping.get(left);
+        CompartmentalisedParticipant<Metabolite, ?, Compartment> left = mapping.keySet().iterator().next();
+        CompartmentalisedParticipant<Metabolite, ?, Compartment> right = mapping.get(left);
 
         int n = mapping.size();
 

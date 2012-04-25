@@ -31,7 +31,7 @@ import java.util.prefs.Preferences;
 
 import uk.ac.ebi.interfaces.services.LuceneService;
 import uk.ac.ebi.interfaces.services.RemoteResource;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.*;
@@ -56,7 +56,7 @@ public class ChEBIChemicalData
     private static final Logger LOGGER = Logger.getLogger(ChEBIChemicalData.class);
     private Analyzer analzyer;
     private static final String location = "ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/chemical_data.tsv";
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     public ChEBIChemicalData() {
         super(location, getFile());

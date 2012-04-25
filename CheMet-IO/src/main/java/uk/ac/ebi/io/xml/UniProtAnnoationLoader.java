@@ -49,7 +49,7 @@ import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
 import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  * @name    UniprotAnnotations - 2011.10.13 <br>
@@ -119,7 +119,7 @@ public class UniProtAnnoationLoader implements Externalizable {
      */
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
 
-        IdentifierFactory factory = IdentifierFactory.getInstance();
+        DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
         int size = in.readInt();
         Identifier[] references = new Identifier[size];
         for (int i = 0; i < size; i++) {

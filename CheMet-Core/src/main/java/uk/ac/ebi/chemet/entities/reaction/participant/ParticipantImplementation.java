@@ -24,9 +24,6 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AbstractReconstructionEntity;
-import uk.ac.ebi.core.Reconstruction;
-import uk.ac.ebi.interfaces.entities.Entity;
 import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.interfaces.reaction.Participant;
 

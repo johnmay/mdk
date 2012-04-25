@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  * @name    Record
@@ -43,7 +43,7 @@ public class SDFRecord {
     private final List<String> secondaryId = new ArrayList<String>();
     private final List<String> synonyms = new ArrayList<String>();
     private final List<CrossReference> crossRefs = new ArrayList<CrossReference>();
-    private final static IdentifierFactory factory = IdentifierFactory.getInstance();
+    private final static DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
 
     /**
      * @return the name

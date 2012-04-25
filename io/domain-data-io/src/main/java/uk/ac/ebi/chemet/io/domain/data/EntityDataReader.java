@@ -5,7 +5,7 @@ import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.chemet.io.domain.EntityReader;
 import uk.ac.ebi.chemet.io.identifier.IdentifierInput;
 import uk.ac.ebi.interfaces.entities.Entity;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class EntityDataReader
 
     private static final Logger LOGGER = Logger.getLogger(EntityDataReader.class);
 
-    private static final IdentifierFactory factory = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
 
     private DataInput in;
     private IdentifierInput identifierInput;

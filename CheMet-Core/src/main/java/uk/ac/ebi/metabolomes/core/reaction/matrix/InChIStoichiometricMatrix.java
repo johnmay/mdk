@@ -19,7 +19,7 @@ import uk.ac.ebi.chemet.resource.classification.ECNumber;
  * @author johnmay @date Apr 6, 2011
  */
 public class InChIStoichiometricMatrix
-        extends StoichiometricMatrix<InChI, ECNumber> {
+        extends StoichiometricMatrixImpl<InChI, ECNumber> {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
             InChIStoichiometricMatrix.class);
@@ -128,13 +128,13 @@ public class InChIStoichiometricMatrix
 
 
     @Override
-    public StoichiometricMatrix<InChI, ECNumber> newInstance() {
+    public StoichiometricMatrixImpl<InChI, ECNumber> newInstance() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
     @Override
-    public StoichiometricMatrix<InChI, ECNumber> newInstance(int n, int m) {
+    public StoichiometricMatrixImpl<InChI, ECNumber> newInstance(int n, int m) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

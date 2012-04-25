@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.Map;
 import uk.ac.ebi.interfaces.TaskOptions;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
 
 /**
  * @name    Parameters - 2011.10.07 <br>

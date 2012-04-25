@@ -18,26 +18,26 @@ package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
+
 import java.io.PrintStream;
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 /**
- * StoichiometricMatrix.java – MetabolicDevelopmentKit – Jun 26, 2011 Class
+ * StoichiometricMatrixImpl.java – MetabolicDevelopmentKit – Jun 26, 2011 Class
  * extends the abstract reaction matrix and stores the indices of which
  * reactions are reversible, irreversible or extracellular Note custom objects
  * should override the generic hashCode and equals methods
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
-public abstract class StoichiometricMatrix<M, R>
-        extends AbstractReactionMatrix<Double, M, R> {
+public abstract class StoichiometricMatrixImpl<M, R>
+        extends AbstractReactionMatrix<Double, M, R>
+        implements StoichiometricMatrix<M,R> {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(StoichiometricMatrix.class);
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(StoichiometricMatrixImpl.class);
 
     private Map<Integer, Boolean> reversibilityMap = new HashMap<Integer, Boolean>();
 
@@ -45,7 +45,7 @@ public abstract class StoichiometricMatrix<M, R>
     /**
      * {@inheritDoc}
      */
-    protected StoichiometricMatrix() {
+    protected StoichiometricMatrixImpl() {
         super();
     }
 
@@ -53,7 +53,7 @@ public abstract class StoichiometricMatrix<M, R>
     /**
      * {@inheritDoc}
      */
-    protected StoichiometricMatrix(int n, int m) {
+    protected StoichiometricMatrixImpl(int n, int m) {
         super(n, m);
     }
 
@@ -84,7 +84,7 @@ public abstract class StoichiometricMatrix<M, R>
     }
 
 
-    public boolean isReversible(Integer j) {
+    public Boolean isReversible(Integer j) {
         return reversibilityMap.get(j);
     }
 
@@ -109,7 +109,7 @@ public abstract class StoichiometricMatrix<M, R>
      * @param other
      * @return
      */
-    public BiMap<Integer, Integer> assign(StoichiometricMatrix< M, R> other) {
+    public BiMap<Integer, Integer> assign(StoichiometricMatrixImpl< M, R> other) {
 
         // ensure there is enough space
         this.ensure(getMoleculeCount() + other.getReactionCount(),
@@ -150,8 +150,8 @@ public abstract class StoichiometricMatrix<M, R>
     @Override
     public BiMap<Integer, Integer> assign(AbstractReactionMatrix<Double, M, R> other) {
 
-        if (other instanceof StoichiometricMatrix) {
-            return this.assign((StoichiometricMatrix<M, R>) other);
+        if (other instanceof StoichiometricMatrixImpl) {
+            return this.assign((StoichiometricMatrixImpl<M, R>) other);
         }
 
         BiMap<Integer, Integer> map = super.assign(other);
@@ -171,10 +171,10 @@ public abstract class StoichiometricMatrix<M, R>
     /**
      * Create a new composite of s1 and s2
      */
-    public StoichiometricMatrix merge(StoichiometricMatrix<M, R> s1,
-                                      StoichiometricMatrix<M, R> s2) {
+    public StoichiometricMatrixImpl merge(StoichiometricMatrixImpl<M, R> s1,
+                                      StoichiometricMatrixImpl<M, R> s2) {
 
-        StoichiometricMatrix s = s1.newInstance(s1.getMoleculeCount() + s2.getMoleculeCount(),
+        StoichiometricMatrixImpl s = s1.newInstance(s1.getMoleculeCount() + s2.getMoleculeCount(),
                                                 s1.getReactionCount() + s2.getReactionCount());
 
         for (int j = 0; j < s1.getReactionCount(); j++) {
@@ -191,8 +191,8 @@ public abstract class StoichiometricMatrix<M, R>
     }
 
 
-    public abstract StoichiometricMatrix<M, R> newInstance();
+    public abstract StoichiometricMatrixImpl<M, R> newInstance();
 
 
-    public abstract StoichiometricMatrix<M, R> newInstance(int n, int m);
+    public abstract StoichiometricMatrixImpl<M, R> newInstance(int n, int m);
 }

@@ -13,7 +13,7 @@ import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
 import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
 import uk.ac.ebi.chemet.resource.basic.*;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.Reconstruction;
+import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.core.reaction.compartment.Organelle;
 import uk.ac.ebi.interfaces.Chromosome;
@@ -64,7 +64,7 @@ public class ReconstructionDataWriterTest {
                                                          new ObservationDataInputStream(din, v));
 
 
-        Reconstruction recon = in.read();
+        ReconstructionImpl recon = in.read();
 
         for(Metabolite m : recon.getMetabolome()){
             System.out.println(m);
@@ -81,9 +81,9 @@ public class ReconstructionDataWriterTest {
 
     }
 
-    public Reconstruction createReconstruction() {
+    public ReconstructionImpl createReconstruction() {
 
-        Reconstruction reconstruction = new Reconstruction(new ReconstructionIdentifier("recon-1"),
+        ReconstructionImpl reconstruction = new ReconstructionImpl(new ReconstructionIdentifier("recon-1"),
                                                            "a reconstruction",
                                                            "recon");
 

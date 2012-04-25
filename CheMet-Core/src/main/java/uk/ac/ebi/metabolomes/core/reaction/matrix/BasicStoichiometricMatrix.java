@@ -31,7 +31,7 @@ import java.util.List;
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
 public class BasicStoichiometricMatrix
-        extends StoichiometricMatrix<String, String> {
+        extends StoichiometricMatrixImpl<String, String> {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(BasicStoichiometricMatrix.class);
 

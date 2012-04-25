@@ -22,24 +22,23 @@ package uk.ac.ebi.chemet.render.components;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
-import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.*;
-import java.util.List;
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
-import uk.ac.ebi.chemet.render.table.renderers.DefaultRenderer;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 /**
@@ -61,7 +60,7 @@ public class IdentifierEditor extends JComponent {
 
     private String DEFAULT_TEXT = "enter identifier";
 
-    private static final IdentifierFactory ID_FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory ID_FACTORY = DefaultIdentifierFactory.getInstance();
 
     private List<Class> classes;
 
@@ -97,8 +96,7 @@ public class IdentifierEditor extends JComponent {
         }
 
 
-
-        field = FieldFactory.newField(8);
+        field = FieldFactory.newField(12);
         type  = ComboBoxFactory.newComboBox(classes);
         type.setPreferredSize(new Dimension(150, 27));
         type.setBackground(ThemeManager.getInstance().getTheme().getDialogBackground());
@@ -108,12 +106,15 @@ public class IdentifierEditor extends JComponent {
 
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                label.setFont(field.getFont().deriveFont(10.0f));
                 label.setText(ID_FACTORY.ofClass((Class<Identifier>)value).getShortDescription());
                 label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
                 label.setBackground(isSelected ? list.getSelectionForeground() : list.getForeground());
                 return label;
             }
         });
+        type.setEnabled(false);
+
 
         CellConstraints cc = new CellConstraints();
 
@@ -205,6 +206,7 @@ public class IdentifierEditor extends JComponent {
 
         field.setText(identifier.getAccession());
         type.setSelectedItem(identifier.getShortDescription());
+        type.setEnabled(isFilled());
 
     }
 
@@ -230,6 +232,13 @@ public class IdentifierEditor extends JComponent {
 
 
         public void suggest() {
+
+            type.setEnabled(isFilled());
+
+            if(!isFilled()){
+                return;
+            }
+
             String accession = field.getText().trim();
             DefaultComboBoxModel model = (DefaultComboBoxModel) type.getModel();
             model.removeAllElements();

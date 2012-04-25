@@ -4,15 +4,13 @@
  */
 package uk.ac.ebi.core;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
 import uk.ac.ebi.caf.utility.preference.type.ListPreference;
+import uk.ac.ebi.interfaces.entities.Reconstruction;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.tool.ReconstructionManager;
+
+import java.io.File;
+import java.util.*;
 
 /**
  * 
@@ -23,11 +21,11 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
  * @date Apr 13, 2011
  * 
  */
-public class ReconstructionManager {
+public class DefaultReconstructionManager implements ReconstructionManager {
 
     private static final org.apache.log4j.Logger LOGGER =
                                                  org.apache.log4j.Logger.getLogger(
-            ReconstructionManager.class);
+            DefaultReconstructionManager.class);
     private Identifier activeProjectIdentifier;
     private ArrayList<Reconstruction> projects = new ArrayList<Reconstruction>();
     private LinkedHashMap<Identifier, Integer> projectMap =
@@ -37,7 +35,7 @@ public class ReconstructionManager {
     
     private ListPreference RECENT_FILES = CorePreferences.getInstance().getPreference("RECENT_RECONSTRUCTIONS");
 
-    private ReconstructionManager() {
+    private DefaultReconstructionManager() {
 
         // get the recently open files, remove entries that don't exists
         List<String> valid = new ArrayList();
@@ -55,7 +53,7 @@ public class ReconstructionManager {
 
     private static class ProjectManagerHolder {
 
-        private static ReconstructionManager INSTANCE = new ReconstructionManager();
+        private static DefaultReconstructionManager INSTANCE = new DefaultReconstructionManager();
     }
 
     /**
@@ -65,7 +63,7 @@ public class ReconstructionManager {
      * @return Instance of the manager
      *
      */
-    public static ReconstructionManager getInstance() {
+    public static DefaultReconstructionManager getInstance() {
         return ProjectManagerHolder.INSTANCE;
     }
 
@@ -99,18 +97,6 @@ public class ReconstructionManager {
      */
     public boolean hasProjects() {
         return !projects.isEmpty();
-    }
-
-    /**
-     * 
-     * Accessor for the active reconstruction
-     *
-     * @return
-     * @deprecated  use getActive()
-     */
-    @Deprecated
-    public Reconstruction getActiveReconstruction() {
-        return getProject(activeProjectIdentifier);
     }
 
     /**

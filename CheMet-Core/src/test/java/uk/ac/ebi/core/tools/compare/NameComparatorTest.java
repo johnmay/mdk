@@ -17,9 +17,9 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  *
  * @author johnmay
  */
-public class MetaboliteNameComparatorTest {
+public class NameComparatorTest {
 
-    private MetaboliteComparator comparator;
+    private EntityComparator comparator;
 
     private EntityFactory factory;
 
@@ -28,9 +28,9 @@ public class MetaboliteNameComparatorTest {
     private Metabolite m2;
 
 
-    public MetaboliteNameComparatorTest() {
+    public NameComparatorTest() {
 
-        comparator = new MetaboliteNameComparator();
+        comparator = new NameComparator();
         factory = DefaultEntityFactory.getInstance();
     }
 

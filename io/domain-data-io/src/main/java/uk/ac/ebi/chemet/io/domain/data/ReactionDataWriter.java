@@ -46,7 +46,7 @@ public class ReactionDataWriter
 
         for (MetabolicParticipant p : rxn.getReactants()) {
             out.writeDouble(p.getCoefficient());
-            enumWriter.writeEnum(p.getCompartment());
+            enumWriter.writeEnum((Enum)p.getCompartment()); // throw error about compartment not being an enum
             entityOut.writeData(p.getMolecule());
         }
 
@@ -54,7 +54,7 @@ public class ReactionDataWriter
 
         for (MetabolicParticipant p : rxn.getProducts()) {
             out.writeDouble(p.getCoefficient());
-            enumWriter.writeEnum(p.getCompartment());
+            enumWriter.writeEnum((Enum)p.getCompartment());
             entityOut.writeData(p.getMolecule());
         }
 

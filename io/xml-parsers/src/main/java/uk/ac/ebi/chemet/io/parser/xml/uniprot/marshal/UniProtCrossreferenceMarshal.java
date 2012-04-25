@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.interfaces.entities.ProteinProduct;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -19,22 +19,22 @@ public class UniProtCrossreferenceMarshal implements UniProtXMLMarshal {
 
     private static final Logger LOGGER = Logger.getLogger(UniProtCrossreferenceMarshal.class);
 
-    private IdentifierFactory factory;
+    private DefaultIdentifierFactory factory;
 
     private Map<String, String> attributes = new HashMap<String, String>(4);
 
     private Set<Class<? extends Identifier>> include = new HashSet<Class<? extends Identifier>>();
     private Set<String>                      ignored = new HashSet<String>();
 
-    public UniProtCrossreferenceMarshal(IdentifierFactory factory) {
+    public UniProtCrossreferenceMarshal(DefaultIdentifierFactory factory) {
         this.factory = factory;
     }
 
-    public UniProtCrossreferenceMarshal(IdentifierFactory factory, Set<Class<? extends Identifier>> include) {
+    public UniProtCrossreferenceMarshal(DefaultIdentifierFactory factory, Set<Class<? extends Identifier>> include) {
         this.factory = factory;
         this.include = include;
     }
-    public UniProtCrossreferenceMarshal(IdentifierFactory factory, Class<? extends Identifier> ... include) {
+    public UniProtCrossreferenceMarshal(DefaultIdentifierFactory factory, Class<? extends Identifier> ... include) {
         this.factory = factory;
         this.include = new HashSet<Class<? extends Identifier>>(Arrays.asList(include));
     }

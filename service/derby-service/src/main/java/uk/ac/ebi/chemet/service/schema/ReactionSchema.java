@@ -1,15 +1,8 @@
 package uk.ac.ebi.chemet.service.schema;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import sun.net.idn.StringPrep;
 import uk.ac.ebi.chemet.service.connection.AbstractDerbyConnection;
-import uk.ac.ebi.chemet.service.connection.reaction.KEGGReactionConnection;
 import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.IdentifierReaction;
-import uk.ac.ebi.interfaces.entities.Reaction;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.reaction.Participant;
 
 import java.sql.*;
 

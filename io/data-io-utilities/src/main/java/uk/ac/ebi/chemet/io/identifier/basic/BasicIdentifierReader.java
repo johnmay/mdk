@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.chemet.io.identifier.IdentifierReader;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class BasicIdentifierReader implements IdentifierReader<Identifier> {
 
     private static final Logger LOGGER = Logger.getLogger(BasicIdentifierReader.class);
 
-    private static final IdentifierFactory FACTORY = IdentifierFactory.getInstance();
+    private static final DefaultIdentifierFactory FACTORY = DefaultIdentifierFactory.getInstance();
 
     private DataInput in;
     private Class     c;

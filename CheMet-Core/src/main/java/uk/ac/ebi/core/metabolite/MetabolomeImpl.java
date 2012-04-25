@@ -16,11 +16,13 @@
  */
 package uk.ac.ebi.core.metabolite;
 
+import uk.ac.ebi.core.EntityList;
+import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import uk.ac.ebi.core.EntityList;
-import uk.ac.ebi.interfaces.entities.Metabolite;
 
 
 /**
@@ -28,12 +30,12 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @author johnmay
  * @date May 15, 2011
  */
-public class Metabolome
-        extends EntityList<Metabolite> {
+public class MetabolomeImpl
+        extends EntityList<Metabolite> implements Metabolome {
 
     private static final org.apache.log4j.Logger logger =
                                                  org.apache.log4j.Logger.getLogger(
-            Metabolome.class);
+            MetabolomeImpl.class);
 
     HashSet<Metabolite> unique = new HashSet<Metabolite>();
 
@@ -47,6 +49,24 @@ public class Metabolome
         return super.add(e);
     }
 
+    @Override
+    public boolean remove(Object o) {
+        unique.remove(o);
+        return super.remove(o);
+    }
+
+    @Override
+    public Metabolite remove(int index) {
+        Metabolite m = super.remove(index);
+        unique.remove(m);
+        return m;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        unique.removeAll(c);
+        return super.removeAll(c);
+    }
 
     @Override
     public boolean addAll(Collection<? extends Metabolite> c) {

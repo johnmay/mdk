@@ -35,7 +35,7 @@ import uk.ac.ebi.interfaces.AnnotatedEntity;
 import uk.ac.ebi.interfaces.Gene;
 import uk.ac.ebi.interfaces.entities.*;
 import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.IdentifierFactory;
+import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
@@ -54,7 +54,7 @@ import java.util.regex.Pattern;
 public class ENAFeatureParser {
 
     private static final Logger LOGGER = Logger.getLogger(ENAFeatureParser.class);
-    private static IdentifierFactory IDENTIFIER_FACTORY = IdentifierFactory.getInstance();
+    private static DefaultIdentifierFactory IDENTIFIER_FACTORY = DefaultIdentifierFactory.getInstance();
     private int start;
     private int end;
     private boolean complement;
