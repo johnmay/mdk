@@ -16,7 +16,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.BitSet;
 
-import static org.apache.lucene.document.Field.Index.NOT_ANALYZED_NO_NORMS;
+import static org.apache.lucene.document.Field.Index.ANALYZED;
 import static org.apache.lucene.document.Field.Store.NO;
 import static uk.ac.ebi.service.query.StructureService.*;
 
@@ -85,7 +85,7 @@ public class DefaultStructureIndexWriter extends AbstractIndexWriter {
 
         // index the fingerprint
         for(int i = fp.nextSetBit(0); i != -1; i = fp.nextSetBit(i + 1)){
-            document.add(create(FINGERPRINT_BIT, Integer.toString(i), NO, NOT_ANALYZED_NO_NORMS));
+            document.add(create(FINGERPRINT_BIT, Integer.toString(i), NO, ANALYZED));
         }
 
         add(document);
