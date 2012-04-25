@@ -2,3 +2,4 @@
 */*/target/*
 */src/main/autogen/*
 */src/main/generated-sources/*
+*.versionsBackup
