@@ -96,6 +96,14 @@ public class AbstractIndexWriter {
     }
 
     /**
+     * Access the underlying IndexWriter
+     * @return
+     */
+    public IndexWriter getWriter() {
+        return writer;
+    }
+
+    /**
      * Close the underlying index writer
      *
      * @throws IOException low-level IO error
