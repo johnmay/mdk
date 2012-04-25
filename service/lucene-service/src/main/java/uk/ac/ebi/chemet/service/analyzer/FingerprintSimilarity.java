@@ -2,6 +2,7 @@ package uk.ac.ebi.chemet.service.analyzer;
 
 import org.apache.lucene.index.FieldInvertState;
 import org.apache.lucene.search.DefaultSimilarity;
+
 import static uk.ac.ebi.service.query.StructureService.FINGERPRINT_BIT;
 
 /**
@@ -11,7 +12,21 @@ public class FingerprintSimilarity extends DefaultSimilarity {
 
     @Override
     public float computeNorm(String field, FieldInvertState state) {
-        return field.equals(FINGERPRINT_BIT.field()) ? 1.0f / state.getLength() : super.computeNorm(field, state);
+        return isFingerprintField(field) ? fingerprintNorm(state) : super.computeNorm(field, state);
     }
+
+    @Override
+    public float idf(int docFreq, int numDocs) {
+        return 1.0f; // we don't want higher contribution from rare bit's
+    }
+
+    private boolean isFingerprintField(String field) {
+        return field.equals(FINGERPRINT_BIT.field());
+    }
+
+    private float fingerprintNorm(FieldInvertState state) {
+        return state.getBoost() * (1.0f / state.getLength());
+    }
+
 
 }
