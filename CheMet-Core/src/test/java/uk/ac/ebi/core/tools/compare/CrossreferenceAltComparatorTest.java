@@ -13,9 +13,9 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
 /**
  * @author John May
  */
-public class CrossreferenceComparatorTest {
+public class CrossreferenceAltComparatorTest {
 
-    private static final Logger LOGGER = Logger.getLogger(CrossreferenceComparatorTest.class);
+    private static final Logger LOGGER = Logger.getLogger(CrossreferenceAltComparatorTest.class);
 
     private EntityComparator<Metabolite> comparator = new CrossreferenceComparator<Metabolite>();
 
