@@ -487,7 +487,7 @@ public abstract class AbstractQueryService<I extends Identifier>
                 return value;
 
         } catch (Exception ex) {
-            LOGGER.error("Could not access field value " + field + " in service " + getClass(), ex);
+            LOGGER.error("Could not access field value " + field + " in service " + getClass() + " cause: " + ex.getCause() + "  message: "+ ex.getMessage());
         }
 
         return new byte[0];
