@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * @author John May
  */
-public class CrossReferenceComparator<E extends AnnotatedEntity> implements EntityComparator<E> {
+public class CrossreferenceComparator<E extends AnnotatedEntity> implements EntityComparator<E> {
 
     @Override
     public Boolean equal(E query, E subject) {
