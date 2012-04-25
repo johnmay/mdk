@@ -95,6 +95,15 @@ public class AbstractIndexWriter {
         writer.addDocument(document);
     }
 
+
+    /**
+     * Access the underlying index writer
+     * @return
+     */
+    public IndexWriter getWriter(){
+        return writer;
+    }
+
     /**
      * Close the underlying index writer
      *

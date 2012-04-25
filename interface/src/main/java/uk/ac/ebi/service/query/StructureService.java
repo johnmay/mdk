@@ -16,6 +16,8 @@ import uk.ac.ebi.interfaces.identifiers.Identifier;
 public interface StructureService<I extends Identifier> extends QueryService<I>{
 
     public static final Term ATOM_CONTAINER = new Term("AtomContainer");
+    public static final Term FINGERPRINT_BIT = new Term("Fingerprint.Bit");
+
 
     public IAtomContainer getStructure(I identifier);
 
