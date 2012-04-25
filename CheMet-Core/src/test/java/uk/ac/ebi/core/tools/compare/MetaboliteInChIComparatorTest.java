@@ -19,9 +19,9 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  */
 public class MetaboliteInChIComparatorTest {
 
-    private MetaboliteComparator comparator;
+    private EntityComparator comparator;
 
-    private MetaboliteComparator comparatorLessSpecific;
+    private EntityComparator comparatorLessSpecific;
 
     private EntityFactory factory;
 

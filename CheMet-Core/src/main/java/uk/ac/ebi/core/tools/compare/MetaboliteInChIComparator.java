@@ -1,11 +1,12 @@
 package uk.ac.ebi.core.tools.compare;
 
-import java.util.HashSet;
-import java.util.Set;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.interfaces.entities.Metabolite;
 import uk.ac.ebi.metabolomes.util.inchi.InChIConnectivity;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -21,7 +22,7 @@ import uk.ac.ebi.metabolomes.util.inchi.InChIConnectivity;
  * @author  $Author$ (this version)
  */
 public class MetaboliteInChIComparator
-        implements MetaboliteComparator {
+        implements  EntityComparator<Metabolite> {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteInChIComparator.class);
 
@@ -50,7 +51,7 @@ public class MetaboliteInChIComparator
      * InChIs are equal they metabolites are considered equal
      * @inheritDoc
      */
-    public boolean equal(Metabolite query, Metabolite subject) {
+    public Boolean equal(Metabolite query, Metabolite subject) {
 
         Set<String> queryInChIs = new HashSet<String>();
         Set<String> subjectInChIs = new HashSet<String>();

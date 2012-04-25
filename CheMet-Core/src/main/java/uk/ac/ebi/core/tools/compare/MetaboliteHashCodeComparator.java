@@ -1,13 +1,14 @@
 package uk.ac.ebi.core.tools.compare;
 
-import java.util.HashSet;
-import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 import uk.ac.ebi.core.tools.hash.seeds.*;
 import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
 import uk.ac.ebi.interfaces.entities.Metabolite;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -19,7 +20,7 @@ import uk.ac.ebi.interfaces.entities.Metabolite;
  * @author  $Author$ (this version)
  */
 public class MetaboliteHashCodeComparator
-        implements MetaboliteComparator {
+        implements EntityComparator<Metabolite> {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteHashCodeComparator.class);
 
@@ -45,7 +46,7 @@ public class MetaboliteHashCodeComparator
      * are considered equal
      * @inheritDoc
      */
-    public boolean equal(Metabolite query, Metabolite subject) {
+    public Boolean equal(Metabolite query, Metabolite subject) {
 
         Set<Integer> queryHashes = new HashSet<Integer>();
         Set<Integer> subjectHashes = new HashSet<Integer>();
