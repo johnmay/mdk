@@ -191,7 +191,25 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <distributionManagement>
+        <repository>
+            <id>ebi-repo</id>
+            <url>${ebi.maven.repo.deploy.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ebi-repo-snapshpts</id>
+            <url>${ebi.maven.repo.snapshots.deploy.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.2</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -230,6 +248,15 @@
                 <configuration>
                     <aggregate>true</aggregate>
 
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
         </plugins>

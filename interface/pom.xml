@@ -65,30 +65,4 @@
 
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-
-    <distributionManagement>
-        <repository>
-            <id>ebi-repo</id>
-            <url>${ebi.maven.repo.deploy.url}</url>
-        </repository>
-        <snapshotRepository>
-            <id>ebi-repo-snapshpts</id>
-            <url>${ebi.maven.repo.snapshots.deploy.url}</url>
-        </snapshotRepository>
-    </distributionManagement>
-
 </project>
