@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.chemet.entities.reaction;
+package uk.ac.ebi.mdk.domain.entity.reaction;
 
 import java.util.Iterator;
 import org.apache.log4j.Logger;
@@ -28,7 +28,6 @@ import org.openscience.cdk.interfaces.*;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
-import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 

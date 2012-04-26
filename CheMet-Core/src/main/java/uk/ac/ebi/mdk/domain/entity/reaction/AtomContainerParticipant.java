@@ -20,7 +20,7 @@
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package uk.ac.ebi.chemet.entities.reaction.participant;
+package uk.ac.ebi.mdk.domain.entity.reaction;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -32,9 +32,6 @@ import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
-import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
-import uk.ac.ebi.mdk.domain.entity.reaction.CompartmentalisedParticipant;
-import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 

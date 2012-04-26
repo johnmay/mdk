@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.chemet.entities.reaction.filter;
+package uk.ac.ebi.mdk.domain.entity.reaction.filter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +35,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLReader;
-import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.ParticipantImplementation;
 
 
 /**
