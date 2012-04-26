@@ -31,7 +31,8 @@ import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Entity;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 
@@ -57,7 +58,7 @@ public class DefaultEntityFactory
     private DefaultEntityFactory() {
 
         for (Entity entity : Arrays.asList(new MetaboliteImplementation(),
-                                           new MetabolicReactionImplementation(),
+                                           new MetabolicReactionImpl(),
                                            new ProteinProductImplementation(),
                                            new RibosomalRNAImplementation(),
                                            new TransferRNAImplementation(),

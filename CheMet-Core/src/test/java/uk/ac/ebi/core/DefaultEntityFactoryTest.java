@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 
 
 /**

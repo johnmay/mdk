@@ -40,7 +40,7 @@ import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.tool.AnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.AnnotationFactory;
 
 import java.lang.reflect.Constructor;
 import java.security.InvalidParameterException;

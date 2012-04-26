@@ -22,7 +22,7 @@ package uk.ac.ebi.mdk.domain.entity;
 
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.observation.Observation;
-import uk.ac.ebi.mdk.tool.ObservationManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ObservationManager;
 
 import java.io.IOException;
 import java.io.ObjectInput;

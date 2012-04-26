@@ -21,7 +21,7 @@ import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.observation.Observation;
-import uk.ac.ebi.mdk.tool.ObservationManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ObservationManager;
 
 import java.util.Collection;
 

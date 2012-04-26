@@ -1,51 +1,70 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <artifactId>CheMet</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
         <version>1.4.0-SNAPSHOT</version>
     </parent>
-    <groupId>uk.ac.ebi.chemet</groupId>
+
     <artifactId>chemet-interface</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
-    <name>Interface</name>
-    <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/interface</url>
+    <packaging>jar</packaging>
+
+    <url>http://www.ebi.ac.uk/steinbeck-srv/mdk/interface</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <developers>
+        <developer>
+            <name>John May</name>
+            <email>johnmay@ebi.ac.uk</email>
+            <organization>EMBL-EBI</organization>
+            <organizationUrl>http://www.ebi.ac.uk</organizationUrl>
+        </developer>
+        <developer>
+            <name>Pablo Moreno</name>
+            <email>pmoreno@ebi.ac.uk</email>
+            <organization>EMBL-EBI</organization>
+            <organizationUrl>http://www.ebi.ac.uk</organizationUrl>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>LGPL v3</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <dependencies>
+
         <dependency>
             <artifactId>biojava3-core</artifactId>
             <groupId>org.biojava</groupId>
             <type>jar</type>
             <version>3.0.3-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
             <version>3.4.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-interfaces</artifactId>
             <version>${cdk.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>12.0-rc2</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.caf</groupId>
-            <artifactId>caf-utility</artifactId>
-            <version>0.8.5-SNAPSHOT</version>
-        </dependency>
+
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -59,5 +78,17 @@
             </plugin>
         </plugins>
     </build>
+
+
+    <distributionManagement>
+        <repository>
+            <id>ebi-repo</id>
+            <url>${ebi.maven.repo.deploy.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>ebi-repo-snapshpts</id>
+            <url>${ebi.maven.repo.snapshots.deploy.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

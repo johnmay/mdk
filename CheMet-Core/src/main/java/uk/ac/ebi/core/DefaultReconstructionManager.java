@@ -7,7 +7,7 @@ package uk.ac.ebi.core;
 import uk.ac.ebi.caf.utility.preference.type.ListPreference;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.tool.ReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 
 import java.io.File;
 import java.util.*;

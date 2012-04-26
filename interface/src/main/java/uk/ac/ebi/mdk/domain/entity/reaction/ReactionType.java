@@ -20,7 +20,6 @@
  */
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
-import org.apache.log4j.Logger;
 
 
 /**

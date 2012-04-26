@@ -23,7 +23,7 @@ package uk.ac.ebi.core.reaction;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -51,7 +51,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     }
 
 
-    public ReactionList(Collection<MetabolicReactionImplementation> reactions) {
+    public ReactionList(Collection<MetabolicReactionImpl> reactions) {
         super(reactions);
     }
 
@@ -86,7 +86,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     }
 
 
-    public boolean remove(MetabolicReactionImplementation rxn) {
+    public boolean remove(MetabolicReactionImpl rxn) {
         for (Metabolite m : rxn.getAllReactionMolecules()) {
             participantMap.get(m.getIdentifier()).remove(rxn);
             if (participantMap.get(m.getIdentifier()).isEmpty()) {
@@ -103,7 +103,7 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
         boolean changed = false;
 
         for (Object reaction : rxns) {
-            changed = remove((MetabolicReactionImplementation) reaction) || changed;
+            changed = remove((MetabolicReactionImpl) reaction) || changed;
         }
 
         return changed;

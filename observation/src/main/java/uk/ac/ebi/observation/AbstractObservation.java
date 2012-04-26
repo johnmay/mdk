@@ -20,17 +20,18 @@
  */
 package uk.ac.ebi.observation;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractDescriptor;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.domain.observation.ObservationVisitor;
 import uk.ac.ebi.resource.DefaultLoader;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.List;
 
 /**
  *          AbstractObservation – 2011.09.14 <br>
@@ -82,12 +83,11 @@ public abstract class AbstractObservation
 
     public void readExternal(ObjectInput in,
                              List<AnnotatedEntity> options) throws IOException, ClassNotFoundException {
-        source = (AnnotatedEntity) options.get(in.readInt());
+        throw new UnsupportedOperationException();
     }
 
-    @Override
     public void writeExternal(ObjectOutput out,
                               List<AnnotatedEntity> options) throws IOException {
-        out.writeInt(options.indexOf(source));
+        throw new UnsupportedOperationException();
     }
 }

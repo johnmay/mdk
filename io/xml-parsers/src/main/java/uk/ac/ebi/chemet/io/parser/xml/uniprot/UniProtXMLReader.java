@@ -2,7 +2,7 @@ package uk.ac.ebi.chemet.io.parser.xml.uniprot;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal.UniProtXMLMarshal;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 
 import javax.xml.stream.XMLInputFactory;

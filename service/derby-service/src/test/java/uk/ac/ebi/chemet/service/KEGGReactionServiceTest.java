@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 
 import java.sql.SQLException;
 

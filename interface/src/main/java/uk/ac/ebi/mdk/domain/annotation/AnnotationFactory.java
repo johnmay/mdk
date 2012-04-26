@@ -1,4 +1,4 @@
-package uk.ac.ebi.mdk.tool;
+package uk.ac.ebi.mdk.domain.annotation;
 
 import uk.ac.ebi.mdk.domain.annotation.Flag;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;

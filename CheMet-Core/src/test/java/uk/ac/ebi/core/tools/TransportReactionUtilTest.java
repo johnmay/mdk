@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.core.MetaboliteImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.core.reaction.compartment.Organelle;
@@ -47,7 +47,7 @@ public class TransportReactionUtilTest {
         Metabolite atp = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
         Metabolite alanine = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
 
-        MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
+        MetabolicReactionImpl rxn = new MetabolicReactionImpl(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
         rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
         rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
@@ -73,7 +73,7 @@ public class TransportReactionUtilTest {
         MetaboliteImplementation atp = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
         MetaboliteImplementation alanine = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
 
-        MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
+        MetabolicReactionImpl rxn = new MetabolicReactionImpl(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
         rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
         rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULA));
@@ -98,7 +98,7 @@ public class TransportReactionUtilTest {
         MetaboliteImplementation atp = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
         MetaboliteImplementation alanine = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
 
-        MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
+        MetabolicReactionImpl rxn = new MetabolicReactionImpl(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
         rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
         rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULA));

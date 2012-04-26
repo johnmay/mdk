@@ -8,7 +8,7 @@ import uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal.UniProtIdentifierMarhsal;
 import uk.ac.ebi.chemet.service.index.crossreference.UniProtCrossReferenceIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultCrossReferenceIndexWriter;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;

@@ -1,4 +1,4 @@
-package uk.ac.ebi.mdk.tool;
+package uk.ac.ebi.mdk.domain.entity.collection;
 
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 

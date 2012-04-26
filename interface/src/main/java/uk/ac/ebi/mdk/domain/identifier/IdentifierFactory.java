@@ -1,4 +1,4 @@
-package uk.ac.ebi.mdk.tool;
+package uk.ac.ebi.mdk.domain.identifier;
 
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 

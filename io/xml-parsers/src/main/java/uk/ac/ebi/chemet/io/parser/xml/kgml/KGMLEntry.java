@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.io.parser.xml.kgml;
 
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 
 import javax.xml.stream.XMLStreamException;
 import java.awt.*;

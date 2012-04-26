@@ -6,7 +6,7 @@ import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.reaction.KEGGReactionIdentifier;
 import uk.ac.ebi.chemet.service.connection.AbstractDerbyConnection;
 import uk.ac.ebi.chemet.service.connection.reaction.KEGGReactionConnection;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.reaction.IdentifierReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 

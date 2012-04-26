@@ -2,7 +2,7 @@ package uk.ac.ebi.chemet.service.schema;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.service.connection.AbstractDerbyConnection;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 
 import java.sql.*;
 

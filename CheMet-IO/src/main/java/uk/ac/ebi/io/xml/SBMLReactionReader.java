@@ -41,9 +41,9 @@ import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.type.KEGGIdentifier;
@@ -201,10 +201,10 @@ public class SBMLReactionReader {
     }
 
 
-    public MetabolicReactionImplementation getMetabolicReaction(Reaction sbmlReaction)
+    public MetabolicReactionImpl getMetabolicReaction(Reaction sbmlReaction)
             throws UnknownCompartmentException {
 
-        MetabolicReactionImplementation reaction = new MetabolicReactionImplementation(new BasicReactionIdentifier(sbmlReaction.getId()),
+        MetabolicReactionImpl reaction = new MetabolicReactionImpl(new BasicReactionIdentifier(sbmlReaction.getId()),
                                                                                        sbmlReaction.getMetaId(),
                                                                                        sbmlReaction.getName());
         LOGGER.info("Reading SBML reaction " + reaction);
@@ -483,7 +483,7 @@ public class SBMLReactionReader {
     }
 
 
-    public MetabolicReactionImplementation nextMetabolicReaction() throws UnknownCompartmentException {
+    public MetabolicReactionImpl nextMetabolicReaction() throws UnknownCompartmentException {
         reactionIndex++;
         Reaction sbmlReaction = model.getReaction(reactionIndex);
 

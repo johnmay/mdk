@@ -28,7 +28,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Rating;
 import uk.ac.ebi.mdk.domain.observation.Observation;
-import uk.ac.ebi.mdk.tool.ObservationManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ObservationManager;
 import uk.ac.ebi.observation.ObservationCollection;
 
 import java.io.Externalizable;

@@ -30,8 +30,6 @@ public interface Observation
      */
     public void accept(ObservationVisitor visitor);
 
-    public AnnotatedEntity getSource();
-
     public AnnotatedEntity getEntity();
 
     public void setEntity(AnnotatedEntity entity);

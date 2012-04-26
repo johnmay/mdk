@@ -20,7 +20,6 @@
 package uk.ac.ebi.chemet.render.matrix;
 
 import java.awt.Component;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -31,11 +30,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
-import javax.swing.UIManager;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.metabolomes.core.reaction.matrix.AbstractReactionMatrix;
 import uk.ac.ebi.chemet.render.table.renderers.VerticalTableHeaderCellRenderer;
 import uk.ac.ebi.chemet.render.ViewUtilities;
@@ -64,8 +61,8 @@ public class MatrixPane extends JScrollPane {
         String[] rxns = new String[matrix.getReactionCount()];
         for (int i = 0; i < rxns.length; i++) {
             Object rxn = matrix.getReaction(i);
-            if (rxn instanceof MetabolicReactionImplementation) {
-                rxns[i] = ((MetabolicReactionImplementation) rxn).getAbbreviation();
+            if (rxn instanceof MetabolicReactionImpl) {
+                rxns[i] = ((MetabolicReactionImpl) rxn).getAbbreviation();
             } else {
                 rxns[i] = "rxn" + i;
             }

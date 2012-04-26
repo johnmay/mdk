@@ -28,7 +28,7 @@ import uk.ac.ebi.mdk.domain.identifier.type.SequenceIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.chemet.resource.basic.*;
 import uk.ac.ebi.chemet.resource.basic.ChromosomeNumber;
-import uk.ac.ebi.mdk.tool.IdentifierFactory;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.chemet.resource.structure.HSSPIdentifier;
 import uk.ac.ebi.chemet.resource.structure.PDBIdentifier;

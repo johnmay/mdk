@@ -17,7 +17,7 @@ import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -64,7 +64,7 @@ public class SBMLIOUtilTest {
         m.addAnnotation(new ChEBICrossReference(new ChEBIIdentifier("CHEBI:12436")));
         recon.addMetabolite(m2);
 
-        MetabolicReactionImplementation rxn = new MetabolicReactionImplementation();
+        MetabolicReactionImpl rxn = new MetabolicReactionImpl();
         rxn.addReactant(new MetabolicParticipantImplementation(m, 1.0, CompartmentImplementation.CYTOPLASM));
         rxn.addProduct(new MetabolicParticipantImplementation(m2, 2.0, CompartmentImplementation.EXTRACELLULA));
         rxn.addCrossReference(new ECNumber("1.1.1.1"));

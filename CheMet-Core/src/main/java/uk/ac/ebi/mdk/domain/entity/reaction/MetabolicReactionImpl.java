@@ -18,19 +18,18 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.core;
+package uk.ac.ebi.mdk.domain.entity.reaction;
+
+import org.apache.log4j.Logger;
+import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
+import uk.ac.ebi.core.reaction.ReactionType;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
-import uk.ac.ebi.mdk.domain.entity.GeneProduct;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.core.reaction.ReactionType;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
-import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**
@@ -40,22 +39,22 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetabolicReactionImplementation
+public class MetabolicReactionImpl
         extends AbstractReaction<MetabolicParticipant>
         implements MetabolicReaction {
 
-    private static final Logger LOGGER = Logger.getLogger(MetabolicReactionImplementation.class);
+    private static final Logger LOGGER = Logger.getLogger(MetabolicReactionImpl.class);
 
     private List<GeneProduct> modifiers = new ArrayList();
 
     private ReactionType type = ReactionType.ENZYMATIC;
 
 
-    public MetabolicReactionImplementation() {
+    public MetabolicReactionImpl() {
     }
 
 
-    public MetabolicReactionImplementation(Identifier identifier, String abbreviation, String name) {
+    public MetabolicReactionImpl(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
@@ -81,8 +80,8 @@ public class MetabolicReactionImplementation
 
 
     @Override
-    public MetabolicReactionImplementation newInstance() {
-        return new MetabolicReactionImplementation();
+    public MetabolicReactionImpl newInstance() {
+        return new MetabolicReactionImpl();
     }
 
 

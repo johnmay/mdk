@@ -9,7 +9,7 @@ import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.chemet.io.util.SequenceSerializer;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
 import uk.ac.ebi.mdk.domain.entity.Gene;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 
 import java.io.DataInput;
 import java.io.IOException;

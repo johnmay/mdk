@@ -6,7 +6,7 @@ import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.chemet.io.util.SequenceSerializer;
 import uk.ac.ebi.mdk.domain.entity.Gene;
-import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.TransferRNA;
 
 import java.io.DataInput;

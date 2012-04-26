@@ -20,20 +20,18 @@
  */
 package uk.ac.ebi.chemet.render.list.renderers;
 
-import java.awt.Color;
-import java.awt.Rectangle;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.ColorUtility;
+import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.chemet.render.alignment.AlignmentRenderer;
 import uk.ac.ebi.chemet.render.alignment.BasicAlignmentColor;
 import uk.ac.ebi.chemet.render.alignment.BlastConsensusScorer;
 import uk.ac.ebi.chemet.render.alignment.ConservationRenderer;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *          LocalAlignmentListCellRenderer - 2011.12.12 <br>
@@ -49,6 +47,7 @@ public class LocalAlignmentListCellRenderer
     private static final BasicAlignmentColor color = new BasicAlignmentColor(ColorUtility.EMBL_PETROL,
                                                                              ColorUtility.EMBL_PETROL,
                                                                              Color.lightGray);
+    private GeneProduct entity;
     private final static ConservationRenderer COMPLEX_RENDERER = new ConservationRenderer(new Rectangle(0, 0, 750, 10),
                                                                                           color,
                                                                                           new BlastConsensusScorer(),
