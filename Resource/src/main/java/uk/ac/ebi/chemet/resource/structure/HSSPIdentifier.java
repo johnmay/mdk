@@ -21,10 +21,10 @@
 package uk.ac.ebi.chemet.resource.structure;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.Synonyms;
 
 /**

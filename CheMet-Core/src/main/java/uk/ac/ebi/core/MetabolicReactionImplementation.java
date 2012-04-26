@@ -25,12 +25,12 @@ import java.util.Collection;
 import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.core.reaction.ReactionType;
-import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**

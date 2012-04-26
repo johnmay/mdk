@@ -21,7 +21,7 @@ import java.io.ObjectOutput;
 
 import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 import uk.ac.ebi.chemet.resource.util.MIRIAMEntry;
-import uk.ac.ebi.interfaces.identifiers.ProteinIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.type.ProteinIdentifier;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.MIR;
 

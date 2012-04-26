@@ -6,7 +6,7 @@ package uk.ac.ebi.metabolomes.webservices;
 
 import java.util.List;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 //import uk.ac.ebi.metabolomes.util.ExternalReference;
 
 /**

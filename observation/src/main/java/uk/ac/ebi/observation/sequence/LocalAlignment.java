@@ -25,8 +25,8 @@ import java.util.Set;
 
 import com.google.common.base.Objects;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  * LocalAlignment – 2011.09.12 <br>

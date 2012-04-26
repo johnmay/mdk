@@ -23,8 +23,8 @@ package uk.ac.ebi.visualisation.molecule.access;
 import java.util.ArrayList;
 import java.util.Collection;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**

@@ -32,7 +32,7 @@ import uk.ac.ebi.chemet.resource.basic.TaskIdentifier;
 import uk.ac.ebi.core.CorePreferences;
 import uk.ac.ebi.core.HomologyDatabaseManager;
 import uk.ac.ebi.core.ProteinProductImplementation;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 
 import java.io.File;
 import java.io.IOException;

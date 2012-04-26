@@ -28,10 +28,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.Genome;
-import uk.ac.ebi.interfaces.entities.ProteinProduct;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.collection.Genome;
+import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  * @name    ProteinProduct - 2011.10.07 <br>

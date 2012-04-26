@@ -23,7 +23,7 @@ package uk.ac.ebi.metabolomes.io;
 import java.util.ArrayList;
 import java.util.List;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**

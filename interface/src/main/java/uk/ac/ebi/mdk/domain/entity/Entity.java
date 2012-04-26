@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.mdk.domain.entity;
 
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 
 /**

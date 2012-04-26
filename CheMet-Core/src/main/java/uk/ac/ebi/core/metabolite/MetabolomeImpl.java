@@ -17,7 +17,7 @@
 package uk.ac.ebi.core.metabolite;
 
 import uk.ac.ebi.core.EntityList;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
 
 import java.util.ArrayList;
@@ -70,7 +70,7 @@ public class MetabolomeImpl
 
     @Override
     public boolean addAll(Collection<? extends Metabolite> c) {
-        for (uk.ac.ebi.interfaces.entities.Metabolite metabolite : c) {
+        for (Metabolite metabolite : c) {
             boolean results = add(metabolite);
         }
         return true;

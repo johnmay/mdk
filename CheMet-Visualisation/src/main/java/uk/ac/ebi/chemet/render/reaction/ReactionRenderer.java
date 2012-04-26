@@ -34,12 +34,12 @@ import uk.ac.ebi.chemet.render.ViewUtilities;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.core.tools.TransportReactionUtil;
 import uk.ac.ebi.core.tools.TransportReactionUtil.Classification;
-import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.Reaction;
-import uk.ac.ebi.interfaces.reaction.Compartment;
-import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
-import uk.ac.ebi.interfaces.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

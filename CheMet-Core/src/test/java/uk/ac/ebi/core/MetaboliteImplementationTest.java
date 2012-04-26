@@ -12,9 +12,9 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.InChI;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**

@@ -20,14 +20,12 @@
  */
 package uk.ac.ebi.render.crossreference.modules;
 
-import com.google.common.collect.Multimap;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import java.awt.Dimension;
 import java.awt.event.*;
 import java.util.Collection;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -43,8 +41,8 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.chemet.render.components.MetaboliteMatchIndication;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 import uk.ac.ebi.render.molecule.MoleculeTable;
 import uk.ac.ebi.visualisation.molecule.access.AccessionAccessor;
 import uk.ac.ebi.visualisation.molecule.access.AnnotationAccess;

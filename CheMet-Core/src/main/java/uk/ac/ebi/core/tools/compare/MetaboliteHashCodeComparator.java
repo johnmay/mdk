@@ -4,8 +4,9 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 import uk.ac.ebi.core.tools.hash.seeds.*;
-import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.tool.compare.EntityComparator;
 
 import java.util.HashSet;
 import java.util.Set;

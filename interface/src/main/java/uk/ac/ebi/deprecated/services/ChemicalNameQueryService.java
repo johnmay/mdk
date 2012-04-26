@@ -4,7 +4,7 @@
  */
 package uk.ac.ebi.deprecated.services;
 
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  * @author pmoreno

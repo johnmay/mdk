@@ -25,10 +25,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
-import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.interfaces.reaction.Compartment;
-import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
-import uk.ac.ebi.interfaces.reaction.Participant;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 

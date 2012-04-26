@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 
 /**

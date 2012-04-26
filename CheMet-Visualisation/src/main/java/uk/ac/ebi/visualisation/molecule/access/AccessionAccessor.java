@@ -20,8 +20,7 @@
  */
 package uk.ac.ebi.visualisation.molecule.access;
 
-import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 /**
  *          NameAccessor - 2011.11.24 <br>

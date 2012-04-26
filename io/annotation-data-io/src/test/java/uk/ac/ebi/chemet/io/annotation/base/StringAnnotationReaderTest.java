@@ -6,7 +6,7 @@ import org.junit.Test;
 import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
-import uk.ac.ebi.interfaces.StringAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 
 import java.io.DataInputStream;
 import java.io.IOException;

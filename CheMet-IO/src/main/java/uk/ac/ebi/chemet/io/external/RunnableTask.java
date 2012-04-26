@@ -4,17 +4,17 @@
  */
 package uk.ac.ebi.chemet.io.external;
 
+import uk.ac.ebi.annotation.task.ExecutableParameter;
+import uk.ac.ebi.annotation.task.Parameter;
+import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+
 import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import uk.ac.ebi.annotation.task.ExecutableParameter;
-import uk.ac.ebi.annotation.task.Parameter;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.TaskOptions;
 
 /**
  * RunnableTask.java
@@ -38,10 +38,6 @@ public abstract class RunnableTask
 
     public RunnableTask(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
-    }
-
-    public RunnableTask(TaskOptions options) {
-        super(options.getIdentifier(), options.getName(), options.getDescription());
     }
 
     /**
@@ -69,7 +65,7 @@ public abstract class RunnableTask
     /**
      * Adds a collection  entities to the task. All added entities will be pushed for update (if required)
      * at task termination
-     * @param entity
+     * @param entities
      * @return
      */
     public boolean addAll(Collection<? extends AnnotatedEntity> entities) {

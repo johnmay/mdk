@@ -9,14 +9,14 @@ import uk.ac.ebi.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
-import uk.ac.ebi.chemet.io.annotation.AnnotationInput;
+import uk.ac.ebi.mdk.io.AnnotationInput;
 import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
-import uk.ac.ebi.chemet.io.observation.ObservationInput;
+import uk.ac.ebi.mdk.io.ObservationInput;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.classification.GeneOntologyTerm;
-import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 
 import java.io.DataInputStream;
 import java.io.IOException;

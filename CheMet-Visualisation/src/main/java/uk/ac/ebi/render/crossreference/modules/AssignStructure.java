@@ -45,8 +45,8 @@ import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 
 
 /**

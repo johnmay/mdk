@@ -9,7 +9,7 @@ import uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal.UniProtCrossreferenceMarsh
 import uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal.UniProtIdentifierMarhsal;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.ProteinProduct;
+import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;

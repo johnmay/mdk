@@ -6,9 +6,9 @@ import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.reaction.KEGGReactionIdentifier;
 import uk.ac.ebi.chemet.service.connection.AbstractDerbyConnection;
 import uk.ac.ebi.chemet.service.connection.reaction.KEGGReactionConnection;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.IdentifierReaction;
-import uk.ac.ebi.interfaces.reaction.Participant;
+import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.reaction.IdentifierReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

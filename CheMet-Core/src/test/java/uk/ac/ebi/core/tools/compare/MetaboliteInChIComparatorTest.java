@@ -9,8 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.tool.compare.EntityComparator;
 
 
 /**

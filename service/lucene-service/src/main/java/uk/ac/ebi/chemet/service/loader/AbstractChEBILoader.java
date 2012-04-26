@@ -5,9 +5,9 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.service.loader.location.ZIPRemoteLocation;
-import uk.ac.ebi.service.exception.MissingLocationException;
-import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.location.ResourceFileLocation;
+import uk.ac.ebi.mdk.service.exception.MissingLocationException;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

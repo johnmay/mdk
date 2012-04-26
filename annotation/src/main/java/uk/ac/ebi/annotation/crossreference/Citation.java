@@ -18,10 +18,10 @@
 package uk.ac.ebi.annotation.crossreference;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultLoader;
 
 

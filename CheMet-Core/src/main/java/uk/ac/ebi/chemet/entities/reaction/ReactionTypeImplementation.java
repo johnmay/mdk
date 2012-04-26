@@ -4,8 +4,7 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import uk.ac.ebi.interfaces.reaction.Direction;
-import uk.ac.ebi.interfaces.reaction.ReactionType;
+import uk.ac.ebi.mdk.domain.entity.reaction.ReactionType;
 
 
 /**

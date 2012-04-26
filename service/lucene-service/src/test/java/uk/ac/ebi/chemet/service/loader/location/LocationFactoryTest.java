@@ -2,8 +2,8 @@ package uk.ac.ebi.chemet.service.loader.location;
 
 import org.junit.Test;
 import org.junit.Assert;
-import uk.ac.ebi.service.location.LocationFactory;
-import uk.ac.ebi.service.location.ResourceLocation;
+import uk.ac.ebi.mdk.service.location.LocationFactory;
+import uk.ac.ebi.mdk.service.location.ResourceLocation;
 
 /**
  * LocationFactoryTest - 20.02.2012 <br/>

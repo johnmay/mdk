@@ -23,10 +23,10 @@ package uk.ac.ebi.core.tools;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.entities.Reaction;
-import uk.ac.ebi.interfaces.reaction.Compartment;
-import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.CompartmentalisedParticipant;
 
 import java.util.Comparator;
 import java.util.HashSet;

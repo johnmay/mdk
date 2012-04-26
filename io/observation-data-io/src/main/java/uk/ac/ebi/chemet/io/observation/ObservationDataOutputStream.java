@@ -4,7 +4,9 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.core.AbstractDataOutput;
 import uk.ac.ebi.chemet.io.observation.sequence.LocalAlignmentWriter;
-import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mdk.io.ObservationOutput;
+import uk.ac.ebi.mdk.io.ObservationWriter;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 import java.io.DataOutputStream;

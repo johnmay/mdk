@@ -4,7 +4,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.reaction.compartment.*;
-import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.tool.CompartmentResolver;
 
 import java.security.InvalidParameterException;
 import java.util.*;

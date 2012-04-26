@@ -2,9 +2,9 @@ package uk.ac.ebi.chemet.io.domain.data;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.domain.EntityWriter;
-import uk.ac.ebi.chemet.io.identifier.IdentifierOutput;
-import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.mdk.io.EntityWriter;
+import uk.ac.ebi.mdk.io.IdentifierOutput;
+import uk.ac.ebi.mdk.domain.entity.Entity;
 
 import java.io.DataOutput;
 import java.io.IOException;

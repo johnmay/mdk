@@ -35,7 +35,7 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.chemet.resource.classification.KEGGOrthology;
 import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.io.remote.KEGGOrthology2OrganismProtein;
 import uk.ac.ebi.io.remote.KEGGOrthology2OrganismProtein.KEGGOrthologyOrgProtLuceneFields;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;

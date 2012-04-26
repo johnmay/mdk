@@ -1,7 +1,7 @@
 package uk.ac.ebi.render.resource.location;
 
-import uk.ac.ebi.service.location.LocationDescription;
-import uk.ac.ebi.service.location.ResourceLocation;
+import uk.ac.ebi.mdk.service.location.LocationDescription;
+import uk.ac.ebi.mdk.service.location.ResourceLocation;
 
 import java.io.IOException;
 

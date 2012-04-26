@@ -22,8 +22,8 @@ package uk.ac.ebi.core;
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.MetaInfoLoader;
-import uk.ac.ebi.interfaces.Descriptor;
+import uk.ac.ebi.mdk.tool.MetaInfoLoader;
+import uk.ac.ebi.mdk.domain.Descriptor;
 
 
 /**

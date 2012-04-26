@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.core;
 
-import uk.ac.ebi.interfaces.Rating;
+import uk.ac.ebi.mdk.domain.entity.Rating;
 
 
 /**

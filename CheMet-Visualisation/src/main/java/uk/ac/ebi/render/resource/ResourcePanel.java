@@ -45,7 +45,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 import uk.ac.ebi.io.remote.RemoteResourceManager;
 
 

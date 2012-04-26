@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.deprecated.services;
 
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  *          QueryService - 2011.10.26 <br>

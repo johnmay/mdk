@@ -25,8 +25,8 @@ import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.core.CorePreferences;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.io.blast.BlastReader;
 
 import java.io.File;

@@ -19,9 +19,9 @@ package uk.ac.ebi.annotation.task;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.AbstractAnnotation;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.chemet.Description;
-import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
+import uk.ac.ebi.mdk.lang.annotation.Context;
 
 import java.io.IOException;
 import java.io.ObjectInput;

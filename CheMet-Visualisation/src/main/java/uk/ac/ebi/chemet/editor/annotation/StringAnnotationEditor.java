@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.chemet.editor.annotation;
 
-import uk.ac.ebi.interfaces.StringAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 
 
 /**

@@ -3,14 +3,12 @@ package uk.ac.ebi.render.resource.location;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
-import uk.ac.ebi.service.location.LocationDescription;
-import uk.ac.ebi.service.location.LocationFactory;
-import uk.ac.ebi.service.location.ResourceLocation;
+import uk.ac.ebi.mdk.service.location.LocationDescription;
+import uk.ac.ebi.mdk.service.location.LocationFactory;
+import uk.ac.ebi.mdk.service.location.ResourceLocation;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
 import java.io.IOException;
 
 /**

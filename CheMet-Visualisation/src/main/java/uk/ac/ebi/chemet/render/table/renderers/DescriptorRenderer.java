@@ -23,12 +23,9 @@ package uk.ac.ebi.chemet.render.table.renderers;
 import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.caf.component.theme.Theme;
-import uk.ac.ebi.caf.component.theme.ThemeManager;
+
 import uk.ac.ebi.caf.utility.ColorUtility;
-import uk.ac.ebi.interfaces.Descriptor;
+import uk.ac.ebi.mdk.domain.Descriptor;
 
 
 /**

@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.resource.chemical;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.chemet.resource.util.MIRIAMEntry;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
 

@@ -3,11 +3,11 @@ package uk.ac.ebi.chemet.io.domain.data;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.RNASequence;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.domain.EntityOutput;
-import uk.ac.ebi.chemet.io.domain.EntityWriter;
+import uk.ac.ebi.mdk.io.EntityOutput;
+import uk.ac.ebi.mdk.io.EntityWriter;
 import uk.ac.ebi.chemet.io.util.SequenceSerializer;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.TransferRNA;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.TransferRNA;
 
 import java.io.DataOutput;
 import java.io.IOException;

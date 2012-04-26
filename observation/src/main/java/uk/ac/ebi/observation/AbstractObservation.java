@@ -27,9 +27,9 @@ import java.io.ObjectOutput;
 import java.util.List;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractDescriptor;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.vistors.ObservationVisitor;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mdk.domain.observation.ObservationVisitor;
 import uk.ac.ebi.resource.DefaultLoader;
 
 /**

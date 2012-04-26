@@ -4,13 +4,13 @@
  */
 package uk.ac.ebi.mdk.domain.observation;
 
+import uk.ac.ebi.mdk.domain.Descriptor;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.List;
-import uk.ac.ebi.interfaces.vistors.ObservationVisitor;
-import uk.ac.ebi.mdk.domain.Descriptor;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 /**
  *

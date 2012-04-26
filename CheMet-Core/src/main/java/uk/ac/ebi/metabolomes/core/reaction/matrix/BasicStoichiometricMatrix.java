@@ -16,9 +16,9 @@
  */
 package uk.ac.ebi.metabolomes.core.reaction.matrix;
 
-import uk.ac.ebi.interfaces.entities.Reaction;
-import uk.ac.ebi.interfaces.reaction.Direction;
-import uk.ac.ebi.interfaces.reaction.Participant;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 
 import java.util.ArrayList;
 import java.util.Arrays;

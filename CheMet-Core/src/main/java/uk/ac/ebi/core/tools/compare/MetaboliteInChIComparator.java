@@ -2,7 +2,8 @@ package uk.ac.ebi.core.tools.compare;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.InChI;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.tool.compare.EntityComparator;
 import uk.ac.ebi.metabolomes.util.inchi.InChIConnectivity;
 
 import java.util.HashSet;
@@ -22,7 +23,7 @@ import java.util.Set;
  * @author  $Author$ (this version)
  */
 public class MetaboliteInChIComparator
-        implements  EntityComparator<Metabolite> {
+        implements EntityComparator<Metabolite> {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteInChIComparator.class);
 

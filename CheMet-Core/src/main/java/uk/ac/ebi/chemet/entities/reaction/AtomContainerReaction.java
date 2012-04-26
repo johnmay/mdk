@@ -28,7 +28,7 @@ import org.openscience.cdk.interfaces.*;
 import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
 import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
-import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 

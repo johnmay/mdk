@@ -2,7 +2,7 @@ package uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
-import uk.ac.ebi.interfaces.entities.ProteinProduct;
+import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;

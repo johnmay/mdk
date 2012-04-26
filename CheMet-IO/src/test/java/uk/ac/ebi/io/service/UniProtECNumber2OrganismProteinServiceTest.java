@@ -16,7 +16,7 @@ import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  *

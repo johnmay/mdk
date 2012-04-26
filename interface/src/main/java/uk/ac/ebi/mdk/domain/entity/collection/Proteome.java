@@ -1,6 +1,6 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
-import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 
 import java.util.Collection;
 import java.util.List;

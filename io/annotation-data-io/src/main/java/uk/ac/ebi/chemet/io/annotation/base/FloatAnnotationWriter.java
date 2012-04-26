@@ -2,8 +2,8 @@ package uk.ac.ebi.chemet.io.annotation.base;
 
 
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.annotation.AnnotationWriter;
-import uk.ac.ebi.interfaces.FloatAnnotation;
+import uk.ac.ebi.mdk.io.AnnotationWriter;
+import uk.ac.ebi.mdk.domain.annotation.primitive.FloatAnnotation;
 
 import java.io.DataOutput;
 import java.io.IOException;

@@ -26,8 +26,8 @@ import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.chemet.resource.ResourcePreferences;
 import uk.ac.ebi.chemet.resource.chemical.ChemicalIdentifier;
 

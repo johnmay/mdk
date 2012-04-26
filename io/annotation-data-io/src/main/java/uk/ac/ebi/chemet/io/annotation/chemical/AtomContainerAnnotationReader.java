@@ -7,7 +7,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.annotation.AnnotationReader;
+import uk.ac.ebi.mdk.io.AnnotationReader;
 
 import java.io.DataInput;
 import java.io.IOException;

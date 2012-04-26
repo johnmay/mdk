@@ -1,7 +1,7 @@
 package uk.ac.ebi.mdk.service.query;
 
 import org.apache.lucene.index.Term;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  * QueryService - 2011.10.26 <br>

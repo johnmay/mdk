@@ -1,10 +1,8 @@
 package uk.ac.ebi.chemet.service.connection;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.chemet.service.BasicServiceLocation;
-import uk.ac.ebi.chemet.service.ServicePreferences;
-import uk.ac.ebi.service.ServiceLocation;
+import uk.ac.ebi.mdk.service.ServiceLocation;
 
 import java.io.File;
 import java.sql.Connection;

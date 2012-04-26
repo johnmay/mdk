@@ -2,7 +2,7 @@ package uk.ac.ebi.chemet.service.query.crossreference;
 
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.service.index.crossreference.ChEBICrossReferenceIndex;
-import uk.ac.ebi.service.query.CrossReferenceService;
+import uk.ac.ebi.mdk.service.query.CrossReferenceService;
 
 /**
  * ChEBICrossReferenceService - 29.02.2012 <br/>

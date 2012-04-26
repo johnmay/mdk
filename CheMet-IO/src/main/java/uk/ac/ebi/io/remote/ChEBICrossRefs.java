@@ -22,7 +22,7 @@ package uk.ac.ebi.io.remote;
 
 import org.apache.lucene.index.CorruptIndexException;
 import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
@@ -60,8 +60,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.deprecated.services.LuceneService;
 import uk.ac.ebi.metabolomes.webservices.EUtilsWebServiceConnection;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 

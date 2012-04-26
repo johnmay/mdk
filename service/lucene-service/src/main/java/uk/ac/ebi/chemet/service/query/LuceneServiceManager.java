@@ -13,9 +13,9 @@ import uk.ac.ebi.chemet.service.query.name.KEGGCompoundNameService;
 import uk.ac.ebi.chemet.service.query.structure.ChEBIStructureService;
 import uk.ac.ebi.chemet.service.query.structure.HMDBStructureService;
 import uk.ac.ebi.chemet.service.query.structure.KEGGCompoundStructureService;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.service.ServiceManager;
-import uk.ac.ebi.service.query.QueryService;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.ServiceManager;
+import uk.ac.ebi.mdk.service.query.QueryService;
 
 import java.security.InvalidParameterException;
 

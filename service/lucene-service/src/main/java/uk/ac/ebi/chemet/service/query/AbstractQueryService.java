@@ -13,9 +13,9 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.query.QueryService;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.query.QueryService;
 
 import java.io.IOException;
 import java.io.StringReader;

@@ -2,7 +2,7 @@ package uk.ac.ebi.mdk.service.query;
 
 import org.apache.lucene.index.Term;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.Collection;
 

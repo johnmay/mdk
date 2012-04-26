@@ -22,7 +22,7 @@ package uk.ac.ebi.chemet.render.alignment;
  */
 import java.awt.Color;
 
-import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 
 /**
  * @name    AbstractAlignmentColor

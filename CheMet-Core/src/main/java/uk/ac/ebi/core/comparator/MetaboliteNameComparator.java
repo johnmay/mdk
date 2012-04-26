@@ -21,7 +21,7 @@
 package uk.ac.ebi.core.comparator;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 /**
  * @name    MetaboliteMassComparator

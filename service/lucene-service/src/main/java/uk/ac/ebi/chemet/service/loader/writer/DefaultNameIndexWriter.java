@@ -1,14 +1,9 @@
 package uk.ac.ebi.chemet.service.loader.writer;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.util.Version;
-import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.query.name.*;
-import uk.ac.ebi.service.query.QueryService;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.query.QueryService;
+import uk.ac.ebi.mdk.service.query.name.*;
 
 import java.io.IOException;
 import java.util.ArrayList;

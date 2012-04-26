@@ -19,8 +19,8 @@ import static org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator.
 import static org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator.getMolecularFormula;
 import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**

@@ -25,12 +25,12 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.chemet.Description;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
-import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**

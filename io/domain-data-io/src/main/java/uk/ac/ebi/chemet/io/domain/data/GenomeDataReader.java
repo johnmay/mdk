@@ -2,11 +2,11 @@ package uk.ac.ebi.chemet.io.domain.data;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.domain.EntityInput;
-import uk.ac.ebi.chemet.io.domain.EntityReader;
-import uk.ac.ebi.interfaces.Chromosome;
-import uk.ac.ebi.interfaces.Genome;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.mdk.io.EntityInput;
+import uk.ac.ebi.mdk.io.EntityReader;
+import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
+import uk.ac.ebi.mdk.domain.entity.collection.Genome;
+import uk.ac.ebi.mdk.tool.EntityFactory;
 
 import java.io.DataInput;
 import java.io.IOException;

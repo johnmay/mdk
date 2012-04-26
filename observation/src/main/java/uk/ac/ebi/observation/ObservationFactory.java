@@ -20,18 +20,13 @@
  */
 package uk.ac.ebi.observation;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.security.InvalidParameterException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**

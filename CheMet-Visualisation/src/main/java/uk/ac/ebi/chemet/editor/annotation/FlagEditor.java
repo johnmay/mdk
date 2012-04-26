@@ -19,8 +19,7 @@
 
 package uk.ac.ebi.chemet.editor.annotation;
 
-import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.annotation.Flag;
+import uk.ac.ebi.mdk.domain.annotation.Flag;
 
 /**
  * @author johnmay

@@ -21,9 +21,9 @@
 package uk.ac.ebi.core;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.RibosomalRNA;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.RibosomalRNA;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 
 /**

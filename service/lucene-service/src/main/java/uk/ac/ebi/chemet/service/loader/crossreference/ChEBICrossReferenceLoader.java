@@ -8,9 +8,9 @@ import uk.ac.ebi.chemet.service.index.crossreference.ChEBICrossReferenceIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractChEBILoader;
 import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultCrossReferenceIndexWriter;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
-import uk.ac.ebi.service.location.ResourceFileLocation;
+import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

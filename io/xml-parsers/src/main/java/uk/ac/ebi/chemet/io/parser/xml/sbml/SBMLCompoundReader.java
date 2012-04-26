@@ -1,7 +1,6 @@
 package uk.ac.ebi.chemet.io.parser.xml.sbml;
 
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 /**
  * @author johnmay

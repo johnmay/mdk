@@ -4,9 +4,9 @@ import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.Strand;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.chemet.io.core.EnumReader;
-import uk.ac.ebi.chemet.io.domain.EntityReader;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
+import uk.ac.ebi.mdk.io.EntityReader;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.tool.EntityFactory;
 
 import java.io.DataInput;
 import java.io.IOException;

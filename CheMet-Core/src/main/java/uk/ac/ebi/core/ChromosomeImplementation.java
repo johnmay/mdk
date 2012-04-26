@@ -23,8 +23,8 @@ package uk.ac.ebi.core;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.chemet.resource.basic.ChromosomeNumber;
-import uk.ac.ebi.interfaces.Chromosome;
-import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
+import uk.ac.ebi.mdk.domain.entity.Gene;
 
 import java.io.Externalizable;
 import java.io.IOException;

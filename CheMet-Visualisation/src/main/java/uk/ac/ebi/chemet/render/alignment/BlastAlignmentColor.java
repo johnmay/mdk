@@ -23,7 +23,7 @@ package uk.ac.ebi.chemet.render.alignment;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**

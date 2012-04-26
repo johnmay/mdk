@@ -22,7 +22,6 @@ package uk.ac.ebi.mdk.domain.entity;
 
 import java.util.List;
 import org.biojava3.core.sequence.RNASequence;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
 
 
 /**

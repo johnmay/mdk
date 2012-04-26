@@ -8,7 +8,7 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.service.index.data.KEGGCompoundDataIndex;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
-import uk.ac.ebi.service.query.data.MolecularFormulaService;
+import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
 
 import java.util.Collection;
 

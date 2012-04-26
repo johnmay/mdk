@@ -2,9 +2,6 @@ package uk.ac.ebi.chemet.service.loader;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.service.connection.AbstractDerbyConnection;
-import uk.ac.ebi.service.exception.MissingLocationException;
-
-import java.io.IOException;
 
 /**
  * AbstractDerbyLoader - 05.03.2012 <br/>

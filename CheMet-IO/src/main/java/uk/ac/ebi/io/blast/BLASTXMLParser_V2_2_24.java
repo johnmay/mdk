@@ -29,8 +29,7 @@ import javax.xml.stream.events.XMLEvent;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.TaskOptions;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.io.blast.xml.setters.*;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 

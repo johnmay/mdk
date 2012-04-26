@@ -25,8 +25,8 @@ import com.hp.hpl.jena.reasoner.IllegalParameterException;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 import javax.xml.stream.XMLInputFactory;

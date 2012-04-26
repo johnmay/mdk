@@ -20,7 +20,7 @@ import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.io.xml.SBMLIOUtil;
 import uk.ac.ebi.resource.organism.Taxonomy;
 

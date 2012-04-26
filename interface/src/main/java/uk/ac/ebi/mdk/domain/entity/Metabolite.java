@@ -6,9 +6,8 @@ package uk.ac.ebi.mdk.domain.entity;
 
 import java.util.Collection;
 
-import uk.ac.ebi.interfaces.MetaboliteClass;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
-import uk.ac.ebi.interfaces.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.entity.metabolite.MetaboliteClass;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 
 
 /**

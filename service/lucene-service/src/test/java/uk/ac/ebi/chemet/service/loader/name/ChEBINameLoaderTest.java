@@ -8,13 +8,13 @@ import org.junit.Test;
 import uk.ac.ebi.chemet.service.index.name.ChEBINameIndex;
 import uk.ac.ebi.chemet.service.loader.LoaderTestUtil;
 import uk.ac.ebi.chemet.service.loader.LuceneIndexInspector;
-import uk.ac.ebi.service.SingleIndexResourceLoader;
-import uk.ac.ebi.service.exception.MissingLocationException;
-import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.query.QueryService;
-import uk.ac.ebi.service.query.name.InternationalNonproprietaryNameService;
-import uk.ac.ebi.service.query.name.PreferredNameService;
-import uk.ac.ebi.service.query.name.SynonymService;
+import uk.ac.ebi.mdk.service.SingleIndexResourceLoader;
+import uk.ac.ebi.mdk.service.exception.MissingLocationException;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.query.QueryService;
+import uk.ac.ebi.mdk.service.query.name.InternationalNonproprietaryNameService;
+import uk.ac.ebi.mdk.service.query.name.PreferredNameService;
+import uk.ac.ebi.mdk.service.query.name.SynonymService;
 
 import java.io.IOException;
 

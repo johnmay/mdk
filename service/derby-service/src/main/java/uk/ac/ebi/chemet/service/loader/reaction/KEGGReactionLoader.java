@@ -6,8 +6,8 @@ import uk.ac.ebi.chemet.service.connection.reaction.KEGGReactionConnection;
 import uk.ac.ebi.chemet.service.loader.AbstractDerbyLoader;
 import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
 import uk.ac.ebi.chemet.service.schema.ReactionSchema;
-import uk.ac.ebi.service.exception.MissingLocationException;
-import uk.ac.ebi.service.location.ResourceFileLocation;
+import uk.ac.ebi.mdk.service.exception.MissingLocationException;
+import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.BufferedReader;
 import java.io.IOException;

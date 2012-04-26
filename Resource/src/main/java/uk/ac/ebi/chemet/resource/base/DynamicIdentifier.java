@@ -1,7 +1,7 @@
 package uk.ac.ebi.chemet.resource.base;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  * Provides a dynamic identifier where the brief/description

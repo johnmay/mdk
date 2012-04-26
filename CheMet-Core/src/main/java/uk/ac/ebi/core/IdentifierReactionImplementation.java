@@ -2,11 +2,9 @@ package uk.ac.ebi.core;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.entities.reaction.AbstractReaction;
-import uk.ac.ebi.interfaces.entities.Entity;
-import uk.ac.ebi.interfaces.entities.IdentifierReaction;
-import uk.ac.ebi.interfaces.entities.Reaction;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.reaction.Participant;
+import uk.ac.ebi.mdk.domain.entity.reaction.IdentifierReaction;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 
 /**
  * IdentifierReactionImplementation - 05.03.2012 <br/>

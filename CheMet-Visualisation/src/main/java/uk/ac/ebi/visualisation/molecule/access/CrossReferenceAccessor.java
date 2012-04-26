@@ -22,7 +22,7 @@ package uk.ac.ebi.visualisation.molecule.access;
 
 import com.google.common.base.Joiner;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 /**
  *          NameAccessor - 2011.11.24 <br>

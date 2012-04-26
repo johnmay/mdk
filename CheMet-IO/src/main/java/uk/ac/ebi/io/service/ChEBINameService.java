@@ -21,7 +21,6 @@
 package uk.ac.ebi.io.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -36,7 +35,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.interfaces.services.ChemicalNameQueryService;
+import uk.ac.ebi.deprecated.services.ChemicalNameQueryService;
 import uk.ac.ebi.io.remote.ChEBINames;
 
 /**

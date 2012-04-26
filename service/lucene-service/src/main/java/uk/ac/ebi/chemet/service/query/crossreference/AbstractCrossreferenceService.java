@@ -6,10 +6,10 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
-import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.query.CrossReferenceService;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.query.CrossReferenceService;
 
 import java.io.IOException;
 import java.util.ArrayList;

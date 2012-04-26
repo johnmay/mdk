@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.resource.classification;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.MIR;
 
 /**

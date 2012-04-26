@@ -21,7 +21,7 @@
 package uk.ac.ebi.io.service;
 
 import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
-import uk.ac.ebi.interfaces.services.SecondaryToPrimaryIDResolverService;
+import uk.ac.ebi.deprecated.services.SecondaryToPrimaryIDResolverService;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;

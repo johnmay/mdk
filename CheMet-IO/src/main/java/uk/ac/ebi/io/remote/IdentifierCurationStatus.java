@@ -21,7 +21,7 @@
 package uk.ac.ebi.io.remote;
 
 import org.apache.lucene.analysis.Analyzer;
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -36,8 +36,8 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.deprecated.services.LuceneService;
 /**
  *          Writes a Lucene index for a set chemical identifiers for which a property has been previously 
  *          calculated. This can be any single property-value type of property. 

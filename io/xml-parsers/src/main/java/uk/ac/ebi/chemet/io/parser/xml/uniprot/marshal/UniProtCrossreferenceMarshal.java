@@ -2,8 +2,8 @@ package uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.entities.ProteinProduct;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;

@@ -21,9 +21,9 @@
 package uk.ac.ebi.mdk.domain.entity;
 
 import java.util.List;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
-import uk.ac.ebi.interfaces.reaction.Direction;
-import uk.ac.ebi.interfaces.reaction.Participant;
+
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 
 
 /**

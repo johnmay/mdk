@@ -11,8 +11,9 @@ import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.chemet.TestMoleculeFactory;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.tools.hash.seeds.*;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.tool.compare.EntityComparator;
 
 
 /**

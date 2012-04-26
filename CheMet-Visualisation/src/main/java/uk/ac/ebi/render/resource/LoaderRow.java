@@ -10,12 +10,12 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.mdk.service.ResourceLoader;
+import uk.ac.ebi.mdk.service.exception.MissingLocationException;
+import uk.ac.ebi.mdk.service.location.*;
 import uk.ac.ebi.render.resource.location.DirectoryLocationEditor;
 import uk.ac.ebi.render.resource.location.FileLocationEditor;
 import uk.ac.ebi.render.resource.location.LocationEditor;
-import uk.ac.ebi.service.ResourceLoader;
-import uk.ac.ebi.service.exception.MissingLocationException;
-import uk.ac.ebi.service.location.*;
 
 import javax.swing.*;
 import java.awt.*;

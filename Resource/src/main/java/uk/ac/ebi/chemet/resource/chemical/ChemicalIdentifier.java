@@ -31,7 +31,7 @@ import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
  * @author  $Author$ (this version)
  */
 public abstract class ChemicalIdentifier
-        extends AbstractIdentifier implements uk.ac.ebi.interfaces.identifiers.ChemicalIdentifier{
+        extends AbstractIdentifier implements uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger( ChemicalIdentifier.class );
 

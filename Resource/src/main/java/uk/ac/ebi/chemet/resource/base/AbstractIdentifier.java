@@ -20,9 +20,9 @@ import java.io.ObjectOutput;
 import java.net.URL;
 import java.util.Collection;
 
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.core.AbstractDescriptor;
-import uk.ac.ebi.interfaces.Resource;
+import uk.ac.ebi.mdk.domain.identifier.Resource;
 import uk.ac.ebi.resource.IdentifierLoader;
 
 /**

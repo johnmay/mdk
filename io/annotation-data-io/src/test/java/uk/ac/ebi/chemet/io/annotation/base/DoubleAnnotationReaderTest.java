@@ -6,7 +6,7 @@ import org.junit.Test;
 import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
-import uk.ac.ebi.interfaces.annotation.DoubleAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;
 
 import java.io.DataInputStream;
 import java.io.IOException;

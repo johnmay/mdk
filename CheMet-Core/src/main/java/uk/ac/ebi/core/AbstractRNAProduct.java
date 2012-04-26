@@ -28,9 +28,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.RNASequence;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.interfaces.Genome;
-import uk.ac.ebi.interfaces.entities.RNAProduct;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.collection.Genome;
+import uk.ac.ebi.mdk.domain.entity.RNAProduct;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 
 /**

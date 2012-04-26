@@ -6,7 +6,7 @@ import uk.ac.ebi.chemet.service.index.other.TaxonomyIndex;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
-import uk.ac.ebi.service.query.name.NameService;
+import uk.ac.ebi.mdk.service.query.name.NameService;
 
 import java.util.Arrays;
 import java.util.Collection;

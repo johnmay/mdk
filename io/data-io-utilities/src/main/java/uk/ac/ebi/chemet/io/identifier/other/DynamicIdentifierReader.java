@@ -2,7 +2,7 @@ package uk.ac.ebi.chemet.io.identifier.other;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.identifier.IdentifierReader;
+import uk.ac.ebi.mdk.io.IdentifierReader;
 import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;
 
 import java.io.DataInput;

@@ -43,13 +43,13 @@ import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.MetabolicReactionImplementation;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.identifiers.KEGGIdentifier;
-import uk.ac.ebi.interfaces.reaction.*;
+import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.type.KEGGIdentifier;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
-import uk.ac.ebi.mdk.domain.tool.CompartmentResolver;
+import uk.ac.ebi.mdk.tool.CompartmentResolver;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
@@ -111,7 +111,7 @@ public class SBMLReactionReader {
 
     private Map<String, Metabolite> speciesNameMap = new HashMap<String, Metabolite>();
     
-    private Map<Compartment, uk.ac.ebi.interfaces.reaction.Compartment> compartments = new HashMap<Compartment, uk.ac.ebi.interfaces.reaction.Compartment>();
+    private Map<Compartment, uk.ac.ebi.mdk.domain.entity.reaction.Compartment> compartments = new HashMap<Compartment, uk.ac.ebi.mdk.domain.entity.reaction.Compartment>();
 
     private EntityFactory factory;
 
@@ -248,7 +248,7 @@ public class SBMLReactionReader {
 
     }
 
-    public uk.ac.ebi.interfaces.reaction.Compartment getCompartment(Compartment compartment) {
+    public uk.ac.ebi.mdk.domain.entity.reaction.Compartment getCompartment(Compartment compartment) {
 
         if(compartments.containsKey(compartment)){
             return compartments.get(compartment);
@@ -257,7 +257,7 @@ public class SBMLReactionReader {
         String id = compartment.getId();
         String name = compartment.getName();
 
-        uk.ac.ebi.interfaces.reaction.Compartment c = resolver.getCompartment(id);
+        uk.ac.ebi.mdk.domain.entity.reaction.Compartment c = resolver.getCompartment(id);
 
         if(c != null){
             compartments.put(compartment, c);
@@ -292,7 +292,7 @@ public class SBMLReactionReader {
 
         Species species = getSpecies(speciesReference);
 
-        uk.ac.ebi.interfaces.reaction.Compartment compartment = getCompartment(species.getCompartmentInstance());
+        uk.ac.ebi.mdk.domain.entity.reaction.Compartment compartment = getCompartment(species.getCompartmentInstance());
 
         Double coefficient = speciesReference.getStoichiometry();
 

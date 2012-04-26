@@ -10,8 +10,8 @@ import uk.ac.ebi.chemet.service.index.other.TaxonomyIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.chemet.service.query.taxonmy.TaxonomyQueryService;
-import uk.ac.ebi.service.location.ResourceFileLocation;
-import uk.ac.ebi.service.query.name.NameService;
+import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
+import uk.ac.ebi.mdk.service.query.name.NameService;
 
 import java.io.IOException;
 import java.util.Scanner;

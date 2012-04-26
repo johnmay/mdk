@@ -34,12 +34,11 @@ import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.core.tools.PeptideFactory;
 import uk.ac.ebi.core.tools.PeptideFactory.AminoAcid;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.renderers.CrossreferenceModule;
+import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 
 
 /**

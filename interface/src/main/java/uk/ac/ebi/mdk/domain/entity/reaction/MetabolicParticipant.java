@@ -20,8 +20,6 @@
  */
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
-import uk.ac.ebi.interfaces.reaction.Compartment;
-import uk.ac.ebi.interfaces.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 

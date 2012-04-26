@@ -17,7 +17,7 @@
 package uk.ac.ebi.io.xml;
 
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamConstants;

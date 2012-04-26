@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.BeforeClass;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**

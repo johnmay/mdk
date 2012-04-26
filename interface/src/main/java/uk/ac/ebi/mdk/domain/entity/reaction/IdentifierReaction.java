@@ -1,7 +1,6 @@
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.reaction.Participant;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
 
 

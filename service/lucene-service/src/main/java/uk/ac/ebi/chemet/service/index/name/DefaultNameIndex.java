@@ -7,8 +7,8 @@ import org.apache.lucene.store.NIOFSDirectory;
 import uk.ac.ebi.chemet.service.BasicServiceLocation;
 import uk.ac.ebi.chemet.service.analyzer.ChemicalNameAnalyzer;
 import uk.ac.ebi.chemet.service.analyzer.LowerCaseKeywordAnalyzer;
-import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.query.QueryService;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.query.QueryService;
 
 import java.io.File;
 import java.io.IOException;

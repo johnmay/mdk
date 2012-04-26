@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.io.remote;
 
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 import com.google.common.base.Joiner;
 
 import java.io.PrintStream;
@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 /**
  * RemoteResourceManager - 2011.10.27 <br> Singleton description

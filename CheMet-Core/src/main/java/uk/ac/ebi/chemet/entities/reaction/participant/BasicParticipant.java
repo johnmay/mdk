@@ -3,7 +3,7 @@ package uk.ac.ebi.chemet.entities.reaction.participant;
 import org.apache.log4j.Logger;
 
 import uk.ac.ebi.core.AbstractReconstructionEntity;
-import uk.ac.ebi.interfaces.reaction.Participant;
+import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 
 import java.io.IOException;
 import java.io.ObjectInput;

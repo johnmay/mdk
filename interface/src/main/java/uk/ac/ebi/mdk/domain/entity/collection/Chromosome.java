@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.biojava3.core.sequence.ChromosomeSequence;
-import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 
 

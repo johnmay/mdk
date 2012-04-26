@@ -43,9 +43,9 @@ import uk.ac.ebi.core.ProteinProductImplementation;
 import uk.ac.ebi.core.AbstractRNAProduct;
 import uk.ac.ebi.core.RibosomalRNAImplementation;
 import uk.ac.ebi.core.TransferRNAImplementation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**

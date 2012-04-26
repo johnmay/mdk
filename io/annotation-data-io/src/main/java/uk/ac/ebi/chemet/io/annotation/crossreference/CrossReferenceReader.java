@@ -3,10 +3,10 @@ package uk.ac.ebi.chemet.io.annotation.crossreference;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.annotation.AnnotationReader;
-import uk.ac.ebi.chemet.io.identifier.IdentifierInput;
-import uk.ac.ebi.chemet.io.observation.ObservationInput;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.io.AnnotationReader;
+import uk.ac.ebi.mdk.io.IdentifierInput;
+import uk.ac.ebi.mdk.io.ObservationInput;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.io.IOException;
 

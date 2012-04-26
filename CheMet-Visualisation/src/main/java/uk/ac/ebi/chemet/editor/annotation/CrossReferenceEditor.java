@@ -24,7 +24,7 @@ import javax.swing.*;
 
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.render.components.IdentifierEditor;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.Arrays;
 import java.util.Collection;

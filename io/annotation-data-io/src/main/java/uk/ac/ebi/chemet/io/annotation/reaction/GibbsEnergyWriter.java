@@ -3,10 +3,8 @@ package uk.ac.ebi.chemet.io.annotation.reaction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.annotation.AnnotationReader;
-import uk.ac.ebi.chemet.io.annotation.AnnotationWriter;
+import uk.ac.ebi.mdk.io.AnnotationWriter;
 
-import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 

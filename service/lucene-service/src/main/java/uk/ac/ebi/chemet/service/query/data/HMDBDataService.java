@@ -9,8 +9,8 @@ import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.chemet.service.index.data.HMDBDataIndex;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultDataIndexWriter;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
-import uk.ac.ebi.service.query.data.MolecularChargeService;
-import uk.ac.ebi.service.query.data.MolecularFormulaService;
+import uk.ac.ebi.mdk.service.query.data.MolecularChargeService;
+import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
 
 import java.util.Collection;
 

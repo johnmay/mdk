@@ -13,7 +13,7 @@ import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.chemet.TestMoleculeFactory;
 import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**

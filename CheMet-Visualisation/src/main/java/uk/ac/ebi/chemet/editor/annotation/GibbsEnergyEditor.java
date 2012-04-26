@@ -6,7 +6,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
-import uk.ac.ebi.interfaces.Annotation;
 
 import javax.swing.*;
 

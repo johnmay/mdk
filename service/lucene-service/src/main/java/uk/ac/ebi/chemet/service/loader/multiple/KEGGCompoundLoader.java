@@ -6,7 +6,7 @@ import uk.ac.ebi.chemet.service.index.name.KEGGCompoundNameIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractMultiIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultDataIndexWriter;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultNameIndexWriter;
-import uk.ac.ebi.service.location.ResourceFileLocation;
+import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.BufferedReader;
 import java.io.IOException;

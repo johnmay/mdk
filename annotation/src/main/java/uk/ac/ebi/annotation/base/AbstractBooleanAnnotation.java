@@ -18,7 +18,7 @@
 package uk.ac.ebi.annotation.base;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.annotation.BooleanAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.BooleanAnnotation;
 
 
 /**

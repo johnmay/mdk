@@ -19,14 +19,11 @@
 
 package uk.ac.ebi.chemet.editor.annotation;
 
-import com.jgoodies.forms.factories.Borders;
-import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * @author johnmay

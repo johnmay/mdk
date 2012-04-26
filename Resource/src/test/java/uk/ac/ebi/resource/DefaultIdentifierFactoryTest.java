@@ -10,7 +10,7 @@ import uk.ac.ebi.chemet.resource.IdentifierSet;
 import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.chemet.resource.basic.*;
 
 

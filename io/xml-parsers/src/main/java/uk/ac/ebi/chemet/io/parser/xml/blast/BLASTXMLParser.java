@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.io.parser.xml.blast;
 
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 import javax.xml.stream.XMLStreamException;

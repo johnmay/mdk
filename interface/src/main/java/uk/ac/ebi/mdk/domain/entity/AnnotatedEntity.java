@@ -20,12 +20,10 @@
  */
 package uk.ac.ebi.mdk.domain.entity;
 
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.ObservationManager;
-import uk.ac.ebi.interfaces.Rating;
-import uk.ac.ebi.interfaces.entities.Entity;
-import com.google.common.collect.ListMultimap;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mdk.tool.ObservationManager;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;

@@ -3,7 +3,7 @@ package uk.ac.ebi.chemet.service.query.crossreference;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
 import uk.ac.ebi.chemet.service.index.crossreference.UniProtCrossReferenceIndex;
-import uk.ac.ebi.service.query.CrossReferenceService;
+import uk.ac.ebi.mdk.service.query.CrossReferenceService;
 
 /**
  * UniProtCrossReferenceService - 29.02.2012 <br/>

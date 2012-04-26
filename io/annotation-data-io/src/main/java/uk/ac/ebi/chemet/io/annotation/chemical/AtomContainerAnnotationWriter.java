@@ -6,7 +6,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.annotation.AnnotationWriter;
+import uk.ac.ebi.mdk.io.AnnotationWriter;
 
 import java.io.DataOutput;
 import java.io.IOException;

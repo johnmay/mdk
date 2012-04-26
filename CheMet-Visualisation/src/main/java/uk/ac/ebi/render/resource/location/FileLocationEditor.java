@@ -4,19 +4,15 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
-import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.chemet.render.ViewUtilities;
-import uk.ac.ebi.service.location.LocationDescription;
-import uk.ac.ebi.service.location.LocationFactory;
-import uk.ac.ebi.service.location.ResourceLocation;
+import uk.ac.ebi.mdk.service.location.LocationDescription;
+import uk.ac.ebi.mdk.service.location.LocationFactory;
+import uk.ac.ebi.mdk.service.location.ResourceLocation;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.IOException;
 
 /**

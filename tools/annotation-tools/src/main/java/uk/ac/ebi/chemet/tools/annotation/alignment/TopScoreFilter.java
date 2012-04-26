@@ -1,8 +1,7 @@
 package uk.ac.ebi.chemet.tools.annotation.alignment;
 
-import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.tools.annotation.AnnotationFilter;
-import uk.ac.ebi.interfaces.annotation.ObservationBasedAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.ObservationBasedAnnotation;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 import java.util.ArrayList;

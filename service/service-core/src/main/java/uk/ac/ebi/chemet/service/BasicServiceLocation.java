@@ -1,9 +1,7 @@
 package uk.ac.ebi.chemet.service;
 
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
-import uk.ac.ebi.chemet.service.ServicePreferences;
-import uk.ac.ebi.service.ServiceLocation;
-import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.ServiceLocation;
 
 import java.io.File;
 

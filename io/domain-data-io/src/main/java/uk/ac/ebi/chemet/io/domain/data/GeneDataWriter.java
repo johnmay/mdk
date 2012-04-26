@@ -3,8 +3,8 @@ package uk.ac.ebi.chemet.io.domain.data;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.chemet.io.core.EnumWriter;
-import uk.ac.ebi.chemet.io.domain.EntityWriter;
-import uk.ac.ebi.interfaces.Gene;
+import uk.ac.ebi.mdk.io.EntityWriter;
+import uk.ac.ebi.mdk.domain.entity.Gene;
 
 import java.io.DataOutput;
 import java.io.IOException;

@@ -5,7 +5,9 @@ import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.caf.utility.version.VersionMap;
 import uk.ac.ebi.chemet.io.core.AbstractDataInput;
 import uk.ac.ebi.chemet.io.observation.sequence.LocalAlignmentReader;
-import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mdk.io.ObservationInput;
+import uk.ac.ebi.mdk.io.ObservationReader;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 import java.io.DataInputStream;

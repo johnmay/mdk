@@ -1,6 +1,6 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 import java.util.Collection;
 

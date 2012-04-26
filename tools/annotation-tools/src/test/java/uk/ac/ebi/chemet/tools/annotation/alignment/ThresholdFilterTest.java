@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.ebi.chemet.tools.annotation.AnnotationFilter;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 
 import java.util.Arrays;
 import java.util.Collection;

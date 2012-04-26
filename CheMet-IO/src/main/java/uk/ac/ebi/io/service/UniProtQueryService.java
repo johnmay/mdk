@@ -20,8 +20,8 @@
  */
 package uk.ac.ebi.io.service;
 
-import uk.ac.ebi.interfaces.services.LuceneService;
-import uk.ac.ebi.interfaces.services.QueryService;
+import uk.ac.ebi.deprecated.services.LuceneService;
+import uk.ac.ebi.deprecated.services.QueryService;
 import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
 import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
 import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;

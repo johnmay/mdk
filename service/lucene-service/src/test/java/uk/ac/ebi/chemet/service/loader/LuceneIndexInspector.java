@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.index.IndexReader;
-import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
 
 import java.io.IOException;
 import java.util.HashSet;

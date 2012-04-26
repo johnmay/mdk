@@ -34,7 +34,7 @@ import uk.ac.ebi.core.ReconstructionImpl;
 import uk.ac.ebi.core.tools.hash.MolecularHash;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 import uk.ac.ebi.core.tools.hash.seeds.*;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**

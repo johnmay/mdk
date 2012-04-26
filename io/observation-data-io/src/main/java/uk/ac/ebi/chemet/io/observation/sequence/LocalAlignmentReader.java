@@ -2,7 +2,7 @@ package uk.ac.ebi.chemet.io.observation.sequence;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.observation.ObservationReader;
+import uk.ac.ebi.mdk.io.ObservationReader;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 import java.io.DataInput;

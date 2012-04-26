@@ -9,7 +9,7 @@ import uk.ac.ebi.chemet.service.index.data.ChEBIDataIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractChEBILoader;
 import uk.ac.ebi.chemet.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultDataIndexWriter;
-import uk.ac.ebi.service.location.ResourceFileLocation;
+import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

@@ -25,8 +25,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Collection;
 
-import uk.ac.ebi.interfaces.Chromosome;
-import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 
 

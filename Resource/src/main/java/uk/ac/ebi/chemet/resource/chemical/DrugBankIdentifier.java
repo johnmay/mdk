@@ -22,7 +22,7 @@ package uk.ac.ebi.chemet.resource.chemical;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.MIR;
 import uk.ac.ebi.resource.Synonyms;
 

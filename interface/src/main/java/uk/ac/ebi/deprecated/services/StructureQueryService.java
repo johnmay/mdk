@@ -21,7 +21,7 @@
 package uk.ac.ebi.deprecated.services;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  *          NameQueryService - 2011.10.25 <br>

@@ -7,7 +7,9 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.core.AbstractDataOutput;
 import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.io.IdentifierOutput;
+import uk.ac.ebi.mdk.io.IdentifierWriter;
 import uk.ac.ebi.resource.organism.Taxonomy;
 
 import java.io.DataOutput;

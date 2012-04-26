@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
 import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 

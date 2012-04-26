@@ -19,7 +19,7 @@
 
 package uk.ac.ebi.mdk.io;
 
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.io.IOException;
 

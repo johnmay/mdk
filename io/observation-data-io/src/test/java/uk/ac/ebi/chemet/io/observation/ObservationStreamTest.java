@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 import java.io.*;

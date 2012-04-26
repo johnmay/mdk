@@ -38,7 +38,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.metabolomes.webservices.ICrossReferenceProvider;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.chemet.resource.chemical.BRNIdentifier;

@@ -1,17 +1,13 @@
 package uk.ac.ebi.chemet.service.loader.writer;
 
-import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.document.NumericField;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.util.Version;
-import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.query.QueryService;
-import uk.ac.ebi.service.query.data.MolecularChargeService;
-import uk.ac.ebi.service.query.data.MolecularFormulaService;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.query.QueryService;
+import uk.ac.ebi.mdk.service.query.data.MolecularChargeService;
+import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
 
 import java.io.IOException;
 

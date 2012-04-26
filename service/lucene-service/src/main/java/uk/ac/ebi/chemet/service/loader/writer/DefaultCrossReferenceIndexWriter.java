@@ -3,15 +3,15 @@ package uk.ac.ebi.chemet.service.loader.writer;
 import org.apache.commons.lang.mutable.MutableByte;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.query.QueryService;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.query.QueryService;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static uk.ac.ebi.service.query.CrossReferenceService.*;
+import static uk.ac.ebi.mdk.service.query.CrossReferenceService.*;
 
 /**
  * Unified writing of cross-references to a lucene-index

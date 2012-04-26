@@ -5,7 +5,6 @@
 package uk.ac.ebi.mdk.domain.annotation;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.interfaces.Annotation;
 
 
 /**

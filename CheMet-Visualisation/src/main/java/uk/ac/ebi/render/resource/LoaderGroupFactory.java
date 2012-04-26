@@ -4,8 +4,8 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.service.ResourceLoader;
-import uk.ac.ebi.service.location.LocationFactory;
+import uk.ac.ebi.mdk.service.ResourceLoader;
+import uk.ac.ebi.mdk.service.location.LocationFactory;
 
 import javax.swing.*;
 import java.awt.*;

@@ -21,11 +21,11 @@
 package uk.ac.ebi.core;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Chromosome;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.Genome;
-import uk.ac.ebi.interfaces.entities.Entity;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.collection.Genome;
+import uk.ac.ebi.mdk.domain.entity.Entity;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.io.IOException;
 import java.io.ObjectInput;

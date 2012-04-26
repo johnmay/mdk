@@ -23,7 +23,7 @@ package uk.ac.ebi.chemet.io.parser.xml.drugbank;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;

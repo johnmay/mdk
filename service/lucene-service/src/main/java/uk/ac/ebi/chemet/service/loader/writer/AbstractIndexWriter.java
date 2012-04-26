@@ -7,7 +7,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
 
 import java.io.IOException;
 

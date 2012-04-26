@@ -19,12 +19,12 @@ package uk.ac.ebi.annotation;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.base.AbstractStringAnnotation;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.chemet.Description;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
-import uk.ac.ebi.interfaces.entities.Reaction;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 
 /**
  *          Subsystem – 2011.09.26 <br>

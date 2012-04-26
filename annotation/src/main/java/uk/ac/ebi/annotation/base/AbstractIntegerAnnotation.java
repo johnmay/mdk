@@ -18,8 +18,7 @@
 package uk.ac.ebi.annotation.base;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.base.AbstractValueAnnotation;
-import uk.ac.ebi.interfaces.IntegerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.IntegerAnnotation;
 
 
 /**

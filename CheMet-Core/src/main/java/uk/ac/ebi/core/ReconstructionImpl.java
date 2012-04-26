@@ -9,13 +9,11 @@ import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
 import uk.ac.ebi.core.metabolite.MetabolomeImpl;
 import uk.ac.ebi.core.product.ProductCollection;
 import uk.ac.ebi.core.reaction.ReactionList;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.Genome;
-import uk.ac.ebi.interfaces.entities.*;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
-import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
-import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
+import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mdk.domain.entity.collection.*;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.resource.organism.Taxonomy;
 

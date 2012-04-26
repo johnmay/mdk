@@ -1,8 +1,9 @@
 package uk.ac.ebi.core.tools.compare;
 
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.tool.compare.EntityComparator;
 
 import java.util.Collection;
 import java.util.HashSet;

@@ -1,7 +1,7 @@
 package uk.ac.ebi.mdk.service;
 
 
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.query.QueryService;
 
 /**

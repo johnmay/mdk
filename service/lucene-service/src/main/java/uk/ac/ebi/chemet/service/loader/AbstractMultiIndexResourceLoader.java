@@ -2,8 +2,8 @@ package uk.ac.ebi.chemet.service.loader;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.service.loader.location.DefaultLocationFactory;
-import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.MultiIndexResourceLoader;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.MultiIndexResourceLoader;
 
 import java.util.*;
 

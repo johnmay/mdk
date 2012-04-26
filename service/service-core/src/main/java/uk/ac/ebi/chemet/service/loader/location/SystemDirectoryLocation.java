@@ -1,6 +1,6 @@
 package uk.ac.ebi.chemet.service.loader.location;
 
-import uk.ac.ebi.service.location.ResourceDirectoryLocation;
+import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
 
 import java.io.*;
 

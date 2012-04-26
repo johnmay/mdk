@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.resource.chemical;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.Resource;
+import uk.ac.ebi.mdk.domain.identifier.Resource;
 import uk.ac.ebi.resource.IdentifierMetaInfo;
 import uk.ac.ebi.resource.MIR;
 

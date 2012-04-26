@@ -9,8 +9,8 @@ import uk.ac.ebi.chemet.service.loader.AbstractChEBILoader;
 import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.chemet.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultNameIndexWriter;
-import uk.ac.ebi.service.exception.MissingLocationException;
-import uk.ac.ebi.service.location.ResourceFileLocation;
+import uk.ac.ebi.mdk.service.exception.MissingLocationException;
+import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

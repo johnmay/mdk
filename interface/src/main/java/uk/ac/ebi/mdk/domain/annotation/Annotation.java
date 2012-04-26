@@ -21,8 +21,7 @@
  */
 package uk.ac.ebi.mdk.domain.annotation;
 
-import uk.ac.ebi.interfaces.Descriptor;
-import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
+import uk.ac.ebi.mdk.domain.Descriptor;
 
 
 /**

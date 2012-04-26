@@ -22,8 +22,7 @@ package uk.ac.ebi.mdk.domain.annotation;
 
 import java.util.Collection;
 
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.Observation;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 
 /**
  *          ObservationBasedAnnotation - 2011.12.12 <br>

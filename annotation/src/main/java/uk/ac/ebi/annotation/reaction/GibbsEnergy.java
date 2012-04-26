@@ -2,10 +2,10 @@ package uk.ac.ebi.annotation.reaction;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.chemet.Description;
-import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
+import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 
 /**
  * GibbsEnergy - 16.03.2012 <br/>

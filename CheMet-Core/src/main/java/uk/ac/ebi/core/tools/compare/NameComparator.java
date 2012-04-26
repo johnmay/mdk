@@ -1,7 +1,8 @@
 package uk.ac.ebi.core.tools.compare;
 
 import uk.ac.ebi.annotation.Synonym;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.tool.compare.EntityComparator;
 
 import java.util.Locale;
 import java.util.Set;

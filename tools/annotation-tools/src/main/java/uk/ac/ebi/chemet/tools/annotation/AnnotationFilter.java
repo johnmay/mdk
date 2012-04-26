@@ -1,7 +1,7 @@
 package uk.ac.ebi.chemet.tools.annotation;
 
 
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 
 import java.util.Collection;
 

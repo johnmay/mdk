@@ -22,7 +22,7 @@ package uk.ac.ebi.deprecated.services;
 
 import java.util.Collection;
 import org.openscience.cdk.interfaces.IMolecularFormula;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  *          ChemicalDataQueryService - 2011.11.14 <br>

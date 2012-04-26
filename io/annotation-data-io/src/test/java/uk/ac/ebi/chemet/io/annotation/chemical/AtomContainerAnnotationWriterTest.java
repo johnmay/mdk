@@ -7,7 +7,7 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
-import uk.ac.ebi.chemet.io.annotation.AnnotationOutput;
+import uk.ac.ebi.mdk.io.AnnotationOutput;
 
 import java.io.*;
 

@@ -23,11 +23,11 @@ package uk.ac.ebi.chemet.resource.basic;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.chemet.resource.ResourcePreferences;
 import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  *          BasicGeneIdentifier - 2011.10.17 <br>

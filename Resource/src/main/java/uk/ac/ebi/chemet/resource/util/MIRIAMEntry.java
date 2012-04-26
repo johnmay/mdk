@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import uk.ac.ebi.interfaces.Resource;
+import uk.ac.ebi.mdk.domain.identifier.Resource;
 
 /**
  * MIRIAMEntry.java – MetabolicDevelopmentKit – Jun 25, 2011

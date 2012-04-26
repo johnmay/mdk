@@ -3,7 +3,7 @@ package uk.ac.ebi.chemet.io.annotation.task;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.annotation.AnnotationReader;
+import uk.ac.ebi.mdk.io.AnnotationReader;
 
 import java.io.DataInput;
 import java.io.File;

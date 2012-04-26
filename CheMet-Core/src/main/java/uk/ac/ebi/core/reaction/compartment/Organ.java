@@ -21,7 +21,7 @@
 package uk.ac.ebi.core.reaction.compartment;
 
 import java.util.Set;
-import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 
 
 /**

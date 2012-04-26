@@ -22,8 +22,7 @@ package uk.ac.ebi.mdk.domain.entity;
 
 import org.biojava3.core.sequence.Strand;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.interfaces.Chromosome;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
 
 /**
  *          Gene – 2011.09.12 <br>

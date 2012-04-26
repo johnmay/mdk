@@ -34,7 +34,7 @@ import javax.swing.JLabel;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 
 
 /**

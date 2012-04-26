@@ -19,8 +19,8 @@ package uk.ac.ebi.annotation;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.core.AbstractDescriptor;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.AnnotationVisitor;
 import uk.ac.ebi.resource.DefaultLoader;
 
 import java.io.Externalizable;

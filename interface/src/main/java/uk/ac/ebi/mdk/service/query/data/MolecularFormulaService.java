@@ -2,7 +2,7 @@ package uk.ac.ebi.mdk.service.query.data;
 
 import org.apache.lucene.index.Term;
 import org.openscience.cdk.interfaces.IMolecularFormula;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.query.QueryService;
 
 import java.util.Collection;

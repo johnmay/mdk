@@ -3,7 +3,7 @@ package uk.ac.ebi.chemet.service.analyzer;
 import org.apache.lucene.index.FieldInvertState;
 import org.apache.lucene.search.DefaultSimilarity;
 
-import static uk.ac.ebi.service.query.StructureService.FINGERPRINT_BIT;
+import static uk.ac.ebi.mdk.service.query.StructureService.FINGERPRINT_BIT;
 
 /**
  * @author John May

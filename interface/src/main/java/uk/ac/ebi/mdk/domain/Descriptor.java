@@ -22,7 +22,6 @@
 package uk.ac.ebi.mdk.domain;
 
 import java.io.Externalizable;
-import uk.ac.ebi.interfaces.vistors.AnnotationVisitor;
 
 
 /**

@@ -6,7 +6,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.chemet.service.index.structure.KEGGCompoundStructureIndex;
 import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter;
-import uk.ac.ebi.service.location.ResourceDirectoryLocation;
+import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
 
 import java.io.File;
 import java.io.FileInputStream;

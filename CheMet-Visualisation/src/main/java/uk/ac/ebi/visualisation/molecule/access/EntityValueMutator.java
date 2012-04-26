@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.visualisation.molecule.access;
 
-import uk.ac.ebi.interfaces.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 /**
  *          EntityMutator - 2011.12.15 <br>

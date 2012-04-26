@@ -40,7 +40,7 @@
 package uk.ac.ebi.chemet.editor.annotation;
 
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
-import uk.ac.ebi.interfaces.annotation.BooleanAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.BooleanAnnotation;
 
 import javax.swing.*;
 

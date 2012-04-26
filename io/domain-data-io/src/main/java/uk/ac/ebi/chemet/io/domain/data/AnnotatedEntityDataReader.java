@@ -2,13 +2,13 @@ package uk.ac.ebi.chemet.io.domain.data;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.annotation.AnnotationInput;
+import uk.ac.ebi.mdk.io.AnnotationInput;
 import uk.ac.ebi.chemet.io.core.EnumReader;
-import uk.ac.ebi.chemet.io.domain.EntityReader;
-import uk.ac.ebi.chemet.io.observation.ObservationInput;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.entities.Entity;
+import uk.ac.ebi.mdk.io.EntityReader;
+import uk.ac.ebi.mdk.io.ObservationInput;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import java.io.DataInput;

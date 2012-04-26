@@ -7,7 +7,7 @@ import org.apache.lucene.store.NIOFSDirectory;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.chemet.service.BasicServiceLocation;
 import uk.ac.ebi.chemet.service.ServicePreferences;
-import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
 
 import java.io.File;
 import java.io.IOException;

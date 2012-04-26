@@ -36,12 +36,12 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.services.ChemicalDataQueryService;
+import uk.ac.ebi.mdk.tool.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.deprecated.services.ChemicalDataQueryService;
 import uk.ac.ebi.reconciliation.StringEncoder;
-import uk.ac.ebi.service.query.name.NameService;
+import uk.ac.ebi.mdk.service.query.name.NameService;
 
 
 /**
@@ -105,7 +105,7 @@ public class CandidateFactory<I extends Identifier> {
                                               String source,
                                               EntityFactory factory) {
 
-        List<uk.ac.ebi.interfaces.entities.Metabolite> metabolites = new ArrayList<uk.ac.ebi.interfaces.entities.Metabolite>(candidates.size());
+        List<Metabolite> metabolites = new ArrayList<Metabolite>(candidates.size());
 
         for (CandidateEntry candidate : candidates) {
 

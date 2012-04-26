@@ -20,7 +20,6 @@ package uk.ac.ebi.annotation.model;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
-import uk.ac.ebi.interfaces.Annotation;
 
 
 /**

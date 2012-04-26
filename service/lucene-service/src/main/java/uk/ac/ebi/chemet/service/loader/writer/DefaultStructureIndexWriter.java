@@ -8,7 +8,7 @@ import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.chemet.service.analyzer.FingerprintSimilarity;
-import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.BitSet;
 
 import static org.apache.lucene.document.Field.Index.ANALYZED;
 import static org.apache.lucene.document.Field.Store.NO;
-import static uk.ac.ebi.service.query.StructureService.*;
+import static uk.ac.ebi.mdk.service.query.StructureService.*;
 
 /**
  * ${Name}.java - 20.02.2012 <br/> MetaInfo...

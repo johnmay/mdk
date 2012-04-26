@@ -20,7 +20,6 @@
 package uk.ac.ebi.mdk.domain.annotation;
 
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
 
 /**
  * Indicate an 'singleton' annotation that flags an entity either by the presence or

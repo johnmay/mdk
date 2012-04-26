@@ -9,7 +9,8 @@ import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.core.reaction.compartment.Organelle;
-import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.tool.CompartmentResolver;
 
 import javax.swing.*;
 import java.awt.*;

@@ -4,8 +4,7 @@
  */
 package uk.ac.ebi.core.metabolite;
 
-import uk.ac.ebi.interfaces.MetaboliteClass;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.metabolite.MetaboliteClass;
 
 
 /**

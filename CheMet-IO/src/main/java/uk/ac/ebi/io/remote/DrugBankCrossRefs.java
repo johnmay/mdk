@@ -21,7 +21,7 @@
 package uk.ac.ebi.io.remote;
 
 import uk.ac.ebi.chemet.resource.chemical.DrugBankIdentifier;
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -37,7 +37,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.io.xml.DrugBankEntry;
 import uk.ac.ebi.io.xml.DrugBankXMLReader;
 

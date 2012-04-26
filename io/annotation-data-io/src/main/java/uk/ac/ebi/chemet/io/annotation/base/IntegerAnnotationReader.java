@@ -3,8 +3,8 @@ package uk.ac.ebi.chemet.io.annotation.base;
 
 import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.chemet.io.annotation.AnnotationReader;
-import uk.ac.ebi.interfaces.IntegerAnnotation;
+import uk.ac.ebi.mdk.io.AnnotationReader;
+import uk.ac.ebi.mdk.domain.annotation.primitive.IntegerAnnotation;
 
 import java.io.DataInput;
 import java.io.IOException;

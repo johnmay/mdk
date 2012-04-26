@@ -1,6 +1,6 @@
 package uk.ac.ebi.chemet.editor.annotation;
 
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 
 import javax.swing.*;
 

@@ -20,9 +20,8 @@
  */
 package uk.ac.ebi.visualisation.molecule.access;
 
-import java.util.Set;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 
 /**
  *          NameAccessor - 2011.11.24 <br>

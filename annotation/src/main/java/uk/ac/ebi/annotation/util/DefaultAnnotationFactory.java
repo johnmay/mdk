@@ -30,17 +30,17 @@ import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
-import uk.ac.ebi.chemet.annotation.Flag;
+import uk.ac.ebi.mdk.domain.annotation.Flag;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ClassificationIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.interfaces.Observation;
-import uk.ac.ebi.interfaces.annotation.Context;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.mdk.domain.tool.AnnotationFactory;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.tool.AnnotationFactory;
 
 import java.lang.reflect.Constructor;
 import java.security.InvalidParameterException;
@@ -248,7 +248,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
      *
      * @return annotations which could be added to the entity (may need user prompt)
      *
-     * @see Flag#matches(uk.ac.ebi.interfaces.AnnotatedEntity)
+     * @see Flag#matches(uk.ac.ebi.mdk.domain.entity.AnnotatedEntity)
      */
     public Set<Flag> getMatchingFlags(AnnotatedEntity entity) {
 

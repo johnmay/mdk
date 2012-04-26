@@ -21,8 +21,8 @@
 package uk.ac.ebi.core;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 
 
 /**

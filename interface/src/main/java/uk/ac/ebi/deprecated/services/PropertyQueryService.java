@@ -21,7 +21,7 @@
 package uk.ac.ebi.deprecated.services;
 
 import java.util.Collection;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  *          PropertyQueryService - 2011.10.25 <br>

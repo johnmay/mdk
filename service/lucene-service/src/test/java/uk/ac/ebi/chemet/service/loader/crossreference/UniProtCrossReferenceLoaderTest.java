@@ -10,9 +10,9 @@ import uk.ac.ebi.chemet.service.loader.LoaderTestUtil;
 import uk.ac.ebi.chemet.service.loader.LuceneIndexInspector;
 import uk.ac.ebi.core.DefaultEntityFactory;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
-import uk.ac.ebi.service.SingleIndexResourceLoader;
-import uk.ac.ebi.service.exception.MissingLocationException;
-import uk.ac.ebi.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.SingleIndexResourceLoader;
+import uk.ac.ebi.mdk.service.exception.MissingLocationException;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
 
 import java.io.IOException;
 

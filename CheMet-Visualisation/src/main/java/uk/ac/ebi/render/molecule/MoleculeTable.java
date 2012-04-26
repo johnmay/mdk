@@ -22,24 +22,17 @@ package uk.ac.ebi.render.molecule;
 
 import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
+
 import org.apache.log4j.Logger;
-import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;
-import uk.ac.ebi.interfaces.Annotation;
-import uk.ac.ebi.visualisation.molecule.access.AtomContainerAnnotationAccessor;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
-import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
 
 
 /**

@@ -12,9 +12,9 @@ import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.chemet.service.analyzer.FingerprintSimilarity;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.service.index.LuceneIndex;
-import uk.ac.ebi.service.query.StructureService;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.query.StructureService;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInput;
@@ -68,7 +68,7 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
      * fingerprint method here and not when creating the index will not work
      * @param fingerprinter
      * @see IFingerprinter
-     * @see uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter#DefaultStructureIndexWriter(uk.ac.ebi.service.index.LuceneIndex, org.openscience.cdk.fingerprint.IFingerprinter)
+     * @see uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter#DefaultStructureIndexWriter(uk.ac.ebi.mdk.service.index.LuceneIndex, org.openscience.cdk.fingerprint.IFingerprinter)
      */
     public void setFingerprinter(IFingerprinter fingerprinter){
         this.fingerprinter = fingerprinter;

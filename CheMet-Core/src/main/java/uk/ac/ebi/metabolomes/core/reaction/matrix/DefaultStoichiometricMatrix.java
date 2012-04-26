@@ -7,10 +7,10 @@ package uk.ac.ebi.metabolomes.core.reaction.matrix;
 import java.util.ArrayList;
 import java.util.List;
 import uk.ac.ebi.core.CompartmentalisedMetabolite;
-import uk.ac.ebi.interfaces.entities.MetabolicParticipant;
-import uk.ac.ebi.interfaces.entities.MetabolicReaction;
-import uk.ac.ebi.interfaces.reaction.Direction;
-import uk.ac.ebi.interfaces.reaction.Participant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 
 
 /**

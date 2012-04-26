@@ -5,7 +5,7 @@
 package uk.ac.ebi.deprecated.services;
 
 import java.util.Collection;
-import uk.ac.ebi.interfaces.identifiers.ChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier;
 
 /**
  *

@@ -8,10 +8,10 @@ import org.openscience.cdk.similarity.Tanimoto;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.service.loader.location.SystemDirectoryLocation;
 import uk.ac.ebi.chemet.service.query.structure.KEGGCompoundStructureService;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.service.ResourceLoader;
-import uk.ac.ebi.service.exception.MissingLocationException;
-import uk.ac.ebi.service.query.StructureService;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.ResourceLoader;
+import uk.ac.ebi.mdk.service.exception.MissingLocationException;
+import uk.ac.ebi.mdk.service.query.StructureService;
 
 import java.io.File;
 import java.io.IOException;

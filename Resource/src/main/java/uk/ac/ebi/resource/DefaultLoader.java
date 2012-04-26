@@ -21,10 +21,10 @@
 package uk.ac.ebi.resource;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.chemet.Description;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.core.MetaInfo;
-import uk.ac.ebi.interfaces.MetaInfoLoader;
+import uk.ac.ebi.mdk.tool.MetaInfoLoader;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -25,7 +25,7 @@ import java.util.*;
 import uk.ac.ebi.chemet.resource.base.AbstractIdentifier;
 import uk.ac.ebi.chemet.resource.util.MIRIAMEntry;
 import uk.ac.ebi.chemet.resource.util.MIRIAMLoader;
-import uk.ac.ebi.interfaces.MetaInfoLoader;
+import uk.ac.ebi.mdk.tool.MetaInfoLoader;
 
 
 /**

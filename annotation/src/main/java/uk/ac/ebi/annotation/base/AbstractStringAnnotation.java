@@ -17,12 +17,8 @@
  */
 package uk.ac.ebi.annotation.base;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.base.AbstractValueAnnotation;
-import uk.ac.ebi.interfaces.StringAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 
 
 /**

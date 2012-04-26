@@ -18,9 +18,9 @@
 
 package uk.ac.ebi.annotation.task;
 
-import uk.ac.ebi.chemet.Brief;
-import uk.ac.ebi.chemet.Description;
-import uk.ac.ebi.interfaces.annotation.Context;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
+import uk.ac.ebi.mdk.lang.annotation.Context;
 
 import java.io.File;
 import java.security.InvalidParameterException;

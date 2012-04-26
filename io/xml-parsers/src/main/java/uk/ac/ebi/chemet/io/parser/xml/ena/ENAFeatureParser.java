@@ -31,10 +31,9 @@ import uk.ac.ebi.chemet.resource.IdentifierSet;
 import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicRNAIdentifier;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.*;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.tool.EntityFactory;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;

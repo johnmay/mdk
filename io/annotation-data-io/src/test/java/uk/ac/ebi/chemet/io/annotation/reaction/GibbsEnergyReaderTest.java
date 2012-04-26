@@ -1,12 +1,10 @@
 package uk.ac.ebi.chemet.io.annotation.reaction;
 
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.ebi.annotation.reaction.GibbsEnergy;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
-import uk.ac.ebi.interfaces.annotation.DoubleAnnotation;
 
 import java.io.DataInputStream;
 import java.io.IOException;

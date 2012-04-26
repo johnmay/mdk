@@ -9,8 +9,9 @@ import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.BeforeClass;
 import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.*;
+import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.tool.EntityFactory;
 
 
 /**

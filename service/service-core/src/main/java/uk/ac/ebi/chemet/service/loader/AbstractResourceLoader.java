@@ -2,10 +2,10 @@ package uk.ac.ebi.chemet.service.loader;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.chemet.service.loader.location.DefaultLocationDescription;
-import uk.ac.ebi.service.ResourceLoader;
-import uk.ac.ebi.service.exception.MissingLocationException;
-import uk.ac.ebi.service.location.LocationDescription;
-import uk.ac.ebi.service.location.ResourceLocation;
+import uk.ac.ebi.mdk.service.ResourceLoader;
+import uk.ac.ebi.mdk.service.exception.MissingLocationException;
+import uk.ac.ebi.mdk.service.location.LocationDescription;
+import uk.ac.ebi.mdk.service.location.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map;

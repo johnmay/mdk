@@ -24,7 +24,7 @@ package uk.ac.ebi.annotation.meta;
 
 import junit.framework.TestCase;
 import uk.ac.ebi.annotation.AuthorAnnotation;
-import uk.ac.ebi.interfaces.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 
 
 /**
