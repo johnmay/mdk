@@ -51,7 +51,7 @@ import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.chemet.resource.reaction.KEGGReactionIdentifier;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 
 
 /**

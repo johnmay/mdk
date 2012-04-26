@@ -29,9 +29,9 @@ import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.chemet.exceptions.MissingPreferencesException;
 import uk.ac.ebi.chemet.resource.basic.TaskIdentifier;
-import uk.ac.ebi.core.CorePreferences;
+import uk.ac.ebi.mdk.domain.CorePreferences;
 import uk.ac.ebi.core.HomologyDatabaseManager;
-import uk.ac.ebi.core.ProteinProductImplementation;
+import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 
 import java.io.File;
@@ -120,8 +120,8 @@ public class HomologySearchFactory {
         Collection<ProteinSequence> sequences = new ArrayList();
 
         for (GeneProduct p : products) {
-            if (p instanceof ProteinProductImplementation) {
-                ProteinProductImplementation protein = (ProteinProductImplementation) p;
+            if (p instanceof ProteinProductImpl) {
+                ProteinProductImpl protein = (ProteinProductImpl) p;
                 if (protein.getSequences().size() > 1) {
                     LOGGER.info("Protein with multiple sequences");
                 }

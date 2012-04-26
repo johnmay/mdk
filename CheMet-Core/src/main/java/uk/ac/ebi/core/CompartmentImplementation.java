@@ -20,9 +20,9 @@
  */
 package uk.ac.ebi.core;
 
-import uk.ac.ebi.core.reaction.compartment.Membrane;
-import uk.ac.ebi.core.reaction.compartment.Organelle;
-import uk.ac.ebi.core.reaction.compartment.Tissue;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Membrane;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Tissue;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 
 import java.util.HashMap;

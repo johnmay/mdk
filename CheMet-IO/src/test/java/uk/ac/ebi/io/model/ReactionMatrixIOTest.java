@@ -12,7 +12,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.BasicStoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
 
 
 /**

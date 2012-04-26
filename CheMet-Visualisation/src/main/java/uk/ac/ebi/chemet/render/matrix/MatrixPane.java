@@ -33,7 +33,7 @@ import javax.swing.ListModel;
 import javax.swing.table.TableColumn;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
-import uk.ac.ebi.metabolomes.core.reaction.matrix.AbstractReactionMatrix;
+import uk.ac.ebi.mdk.domain.matrix.AbstractReactionMatrix;
 import uk.ac.ebi.chemet.render.table.renderers.VerticalTableHeaderCellRenderer;
 import uk.ac.ebi.chemet.render.ViewUtilities;
 

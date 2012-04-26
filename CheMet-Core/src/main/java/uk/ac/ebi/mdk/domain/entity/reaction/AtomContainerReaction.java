@@ -25,9 +25,7 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.*;
-import uk.ac.ebi.chemet.entities.reaction.filter.AbstractParticipantFilter;
-import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.filter.AbstractParticipantFilter;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
 
 

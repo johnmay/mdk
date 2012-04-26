@@ -34,7 +34,7 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.core.tools.ReconstructionComparison;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;

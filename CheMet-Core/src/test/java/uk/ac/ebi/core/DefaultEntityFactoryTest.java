@@ -8,7 +8,7 @@ import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.BeforeClass;
-import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
@@ -40,10 +40,10 @@ public class DefaultEntityFactoryTest {
         EntityFactory factory = DefaultEntityFactory.getInstance();
 
         Gene gene = factory.newInstance(Gene.class);
-        Assert.assertEquals(GeneImplementation.class, gene.getClass());
+        Assert.assertEquals(GeneImpl.class, gene.getClass());
 
         Metabolite metabolite = factory.newInstance(Metabolite.class);
-        Assert.assertEquals(uk.ac.ebi.core.MetaboliteImplementation.class, metabolite.getClass());
+        Assert.assertEquals(MetaboliteImpl.class, metabolite.getClass());
 
         Entity p = factory.newInstance(MetabolicParticipant.class);
         Assert.assertEquals(MetabolicParticipantImplementation.class, p.getClass());
@@ -58,8 +58,8 @@ public class DefaultEntityFactoryTest {
 
         EntityFactory factory = DefaultEntityFactory.getInstance();
 
-        Assert.assertEquals(Gene.class, factory.getEntityClass(GeneImplementation.class));
-        Assert.assertEquals(Metabolite.class, factory.getEntityClass(MetaboliteImplementation.class));
+        Assert.assertEquals(Gene.class, factory.getEntityClass(GeneImpl.class));
+        Assert.assertEquals(Metabolite.class, factory.getEntityClass(MetaboliteImpl.class));
 
     }
 
@@ -71,11 +71,11 @@ public class DefaultEntityFactoryTest {
         EntityFactory factory = DefaultEntityFactory.getInstance();
 
         Assert.assertEquals(GeneProduct.class, factory.getRootClass(RibosomalRNA.class));
-        Assert.assertEquals(GeneProduct.class, factory.getRootClass(RibosomalRNAImplementation.class));
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(RibosomalRNAImpl.class));
         Assert.assertEquals(GeneProduct.class, factory.getRootClass(TransferRNA.class));
-        Assert.assertEquals(GeneProduct.class, factory.getRootClass(TransferRNAImplementation.class));
-        Assert.assertEquals(GeneProduct.class, factory.getRootClass(ProteinProductImplementation.class));
-        Assert.assertEquals(GeneProduct.class, factory.getRootClass(MultimerImplementation.class));
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(TransferRNAImpl.class));
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(ProteinProductImpl.class));
+        Assert.assertEquals(GeneProduct.class, factory.getRootClass(MultimerImpl.class));
 
     }
 }

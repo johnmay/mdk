@@ -7,6 +7,10 @@ package uk.ac.ebi.chemet.entities.reaction.participant;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.GenericParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.ParticipantImplementation;
+
 import static org.junit.Assert.*;
 import static uk.ac.ebi.chemet.TestMoleculeFactory.*;
 

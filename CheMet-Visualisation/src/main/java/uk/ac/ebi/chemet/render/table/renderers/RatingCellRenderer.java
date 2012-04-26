@@ -26,7 +26,7 @@ import java.awt.Component;
 import java.util.EnumMap;
 import java.util.Map;
 import javax.swing.JTable;
-import uk.ac.ebi.core.StarRating;
+import uk.ac.ebi.mdk.domain.entity.StarRating;
 
 /**
  *          RatingCellRenderer - 2011.12.09 <br>

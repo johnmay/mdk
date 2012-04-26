@@ -22,12 +22,12 @@ package uk.ac.ebi.chemet.render.table.editors;
 
 import com.explodingpixels.data.Rating;
 import com.explodingpixels.macwidgets.ITunesRatingTableCellEditor;
-import com.explodingpixels.macwidgets.RatingStarEditorPanel;
+
 import java.awt.Component;
 import java.util.EnumMap;
 import java.util.Map;
 import javax.swing.JTable;
-import uk.ac.ebi.core.StarRating;
+import uk.ac.ebi.mdk.domain.entity.StarRating;
 
 /**
  *          RatingCellEditor - 2011.12.09 <br>

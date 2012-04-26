@@ -8,7 +8,7 @@ import org.junit.Test;
 import uk.ac.ebi.chemet.service.index.crossreference.UniProtCrossReferenceIndex;
 import uk.ac.ebi.chemet.service.loader.LoaderTestUtil;
 import uk.ac.ebi.chemet.service.loader.LuceneIndexInspector;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.service.SingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;

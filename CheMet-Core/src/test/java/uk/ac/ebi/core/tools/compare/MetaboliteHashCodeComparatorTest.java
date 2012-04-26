@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.chemet.TestMoleculeFactory;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.core.tools.hash.seeds.*;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;

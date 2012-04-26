@@ -28,6 +28,11 @@
         <!-- chemet dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>chemet-interface</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -69,6 +74,16 @@
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-reaction</artifactId>
             <version>${cdk.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xercesImpl</artifactId>
+                    <groupId>xerces</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>xml-apis</artifactId>
+                    <groupId>xml-apis</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
@@ -79,6 +94,12 @@
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-inchi</artifactId>
             <version>${cdk.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>

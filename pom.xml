@@ -22,6 +22,7 @@
         <module>CheMet-Visualisation</module>
         <module>CheMet-WebServices</module>
         <module>Resource</module>
+        <module>mdk-domain</module>
 
     </modules>
 
@@ -31,6 +32,20 @@
         <cdk.version>1.3.8-SNAPSHOT</cdk.version>
         <caf.version>0.8.5-SNAPSHOT</caf.version>
     </properties>
+    
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI Snapshots Repoistory</name>
+            <url>${ebi.maven.repo.snapshots.deploy.url}</url>
+        </snapshotRepository>  
+        <repository>
+            <id>ebi-repo</id>
+            <name>EBI Repoistory</name>
+            <url>${ebi.maven.repo.deploy.url}</url>
+        </repository>
+    </distributionManagement>
+    
 
     <repositories>
 
@@ -191,18 +206,9 @@
         </pluginRepository>
     </pluginRepositories>
 
-    <distributionManagement>
-        <repository>
-            <id>ebi-repo</id>
-            <url>${ebi.maven.repo.deploy.url}</url>
-        </repository>
-        <snapshotRepository>
-            <id>ebi-repo-snapshpts</id>
-            <url>${ebi.maven.repo.snapshots.deploy.url}</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <build>
+        
         <extensions>
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
@@ -210,6 +216,7 @@
                 <version>2.2</version>
             </extension>
         </extensions>
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

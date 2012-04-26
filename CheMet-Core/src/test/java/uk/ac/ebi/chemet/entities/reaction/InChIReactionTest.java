@@ -9,6 +9,7 @@ import uk.ac.ebi.core.CompartmentImplementation;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.ac.ebi.mdk.domain.entity.reaction.InChIReaction;
 
 import static org.junit.Assert.*;
 

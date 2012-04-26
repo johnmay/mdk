@@ -3,7 +3,7 @@ package uk.ac.ebi.mdk.domain.tool;
 import junit.framework.Assert;
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import uk.ac.ebi.core.reaction.compartment.Organelle;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 
 import java.security.InvalidParameterException;
 

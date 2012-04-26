@@ -10,11 +10,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemObject;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import uk.ac.ebi.chemet.TestMoleculeFactory;
 import uk.ac.ebi.core.util.CDKMoleculeBuilder;
+import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerParticipant;
+
 import static org.junit.Assert.*;
 
 /**

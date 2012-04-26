@@ -15,7 +15,7 @@ import uk.ac.ebi.chemet.service.loader.single.TaxonomyLoader;
 import uk.ac.ebi.chemet.service.loader.structure.ChEBIStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.HMDBStructureLoader;
 import uk.ac.ebi.chemet.service.loader.structure.KEGGCompoundStructureLoader;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 

@@ -21,13 +21,6 @@
  */
 package uk.ac.ebi.mdk.domain.entity.reaction.filter;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
@@ -37,6 +30,10 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLReader;
 import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.ParticipantImplementation;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 
 /**

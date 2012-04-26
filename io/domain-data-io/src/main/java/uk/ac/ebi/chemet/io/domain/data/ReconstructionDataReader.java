@@ -3,15 +3,15 @@ package uk.ac.ebi.chemet.io.domain.data;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.chemet.io.core.EnumReader;
-import uk.ac.ebi.mdk.io.EntityInput;
-import uk.ac.ebi.mdk.io.EntityReader;
-import uk.ac.ebi.mdk.io.IdentifierInput;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Genome;
-import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.io.EntityInput;
+import uk.ac.ebi.mdk.io.EntityReader;
+import uk.ac.ebi.mdk.io.IdentifierInput;
 
 import java.io.DataInput;
 import java.io.File;
@@ -53,7 +53,7 @@ public class ReconstructionDataReader
 
         Reconstruction recon = factory.newInstance(Reconstruction.class);
 
-        recon.setIdentifier(identifierInput.read());
+        recon.setTaxonomy(identifierInput.read());
 
         // container
         recon.setContainer(new File(in.readUTF())); // set container

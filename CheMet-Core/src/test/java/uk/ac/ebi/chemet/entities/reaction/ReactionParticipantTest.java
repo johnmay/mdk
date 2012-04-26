@@ -4,17 +4,8 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

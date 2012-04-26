@@ -8,7 +8,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ebi.annotation.chemical.InChI;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.tool.compare.EntityComparator;

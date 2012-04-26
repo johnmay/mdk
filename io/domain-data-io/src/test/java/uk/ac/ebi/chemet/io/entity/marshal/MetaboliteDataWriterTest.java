@@ -7,15 +7,15 @@ import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
 import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
 import uk.ac.ebi.chemet.io.domain.EntityDataInputStream;
 import uk.ac.ebi.chemet.io.domain.EntityDataOutputStream;
+import uk.ac.ebi.mdk.domain.entity.MetaboliteImpl;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityOutput;
 import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
 import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.MetaboliteImplementation;
-import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -48,12 +48,12 @@ public class MetaboliteDataWriterTest {
 
         MetabolicReaction rxn = factory.newInstance(MetabolicReaction.class, BasicReactionIdentifier.nextIdentifier(), "Reaction", "rxn");
 
-        Metabolite duplicate = new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "adp", "ADP");
+        Metabolite duplicate = new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(), "adp", "ADP");
 
-        rxn.addReactant(new MetabolicParticipantImplementation(new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP")));
+        rxn.addReactant(new MetabolicParticipantImplementation(new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP")));
         rxn.addReactant(new MetabolicParticipantImplementation(duplicate));
-        rxn.addProduct(new MetabolicParticipantImplementation(new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "gtp", "GTP")));
-        rxn.addProduct(new MetabolicParticipantImplementation(new MetaboliteImplementation(BasicChemicalIdentifier.nextIdentifier(), "gdp", "GDP")));
+        rxn.addProduct(new MetabolicParticipantImplementation(new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(), "gtp", "GTP")));
+        rxn.addProduct(new MetabolicParticipantImplementation(new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(), "gdp", "GDP")));
         rxn.addProduct(new MetabolicParticipantImplementation(duplicate));
         rxn.setDirection(Direction.FORWARD);
 

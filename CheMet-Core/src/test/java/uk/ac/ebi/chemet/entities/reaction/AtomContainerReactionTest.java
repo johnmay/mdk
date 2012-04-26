@@ -8,10 +8,11 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.templates.MoleculeFactory;
-import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerParticipant;
 import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.core.reaction.compartment.Membrane;
-import uk.ac.ebi.core.reaction.compartment.Organelle;
+import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Membrane;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;

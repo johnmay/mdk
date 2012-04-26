@@ -6,7 +6,7 @@ package uk.ac.ebi.chemet.io.external;
 
 import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.Parameter;
-import uk.ac.ebi.core.AbstractAnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 

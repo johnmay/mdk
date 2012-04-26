@@ -30,7 +30,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.core.ReconstructionImpl;
+import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.core.tools.hash.MolecularHash;
 import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
 import uk.ac.ebi.core.tools.hash.seeds.*;

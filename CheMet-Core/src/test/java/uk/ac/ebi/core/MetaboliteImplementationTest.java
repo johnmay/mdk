@@ -14,6 +14,7 @@ import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 

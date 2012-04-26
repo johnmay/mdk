@@ -8,7 +8,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal.UniProtCrossreferenceMarshal;
 import uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal.UniProtIdentifierMarhsal;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 

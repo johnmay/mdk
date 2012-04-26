@@ -7,7 +7,7 @@ import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.core.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 /**
