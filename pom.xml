@@ -22,7 +22,7 @@
         <module>CheMet-Visualisation</module>
         <module>CheMet-WebServices</module>
         <module>Resource</module>
-        <module>mdk-domain</module>
+        <module>domain</module>
 
     </modules>
 
