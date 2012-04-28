@@ -38,7 +38,7 @@ public class AtomContainerParticipantTest {
     @Test
     public void testDiffDatabases() {
 
-        System.out.printf( "%-120s" , "[TEST] ATP from ChEBI and ATP from KEGG should be equal" );
+        System.out.printf( "%-120s" , "[TEST] ATP from ChEBI and ATP from KEGG should be matches" );
 
         // raw downloads
         InputStream chebiATPStream = getClass().getResourceAsStream( "ATP-chebi-15422.mol" );

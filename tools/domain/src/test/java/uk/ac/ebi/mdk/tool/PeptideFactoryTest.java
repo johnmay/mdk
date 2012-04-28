@@ -4,15 +4,17 @@
  */
 package uk.ac.ebi.mdk.tool;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import org.junit.AfterClass;
-import org.junit.Test;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.tool.domain.PeptideFactory;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 /**

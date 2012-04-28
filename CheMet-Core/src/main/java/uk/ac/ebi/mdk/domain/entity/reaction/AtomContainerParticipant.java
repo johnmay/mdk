@@ -22,17 +22,20 @@
  */
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Map;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.interfaces.*;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.smsd.Isomorphism;
 import org.openscience.cdk.smsd.interfaces.Algorithm;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.mdk.tool.hash.MolecularHashFactory;
+import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
 import uk.ac.ebi.metabolomes.util.CDKUtils;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Map;
 
 
 /**
@@ -172,7 +175,7 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
 
     /**
      *
-     * Determines whether this participant is equal to the other. TODO(write doc)
+     * Determines whether this participant is matches to the other. TODO(write doc)
      *
      *
      * @param other
@@ -205,13 +208,13 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
 
         if (this.coefficient != other.getCoefficient()
             && (this.coefficient == null || !this.coefficient.equals(other.getCoefficient()))) {
-            LOGGER.debug("Coefficients are not equal");
+            LOGGER.debug("Coefficients are not matches");
 
             return false;
         }
         if (this.compartment != other.getCompartment()
             && (this.compartment == null || !this.compartment.equals(other.getCompartment()))) {
-            LOGGER.debug("Compartments are not equal");
+            LOGGER.debug("Compartments are not matches");
             return false;
         }
         if (this.molecule == other.getMolecule()) {
@@ -221,11 +224,11 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
         try {
 
             if (this.skeleton.getAtomCount() != ((AtomContainerParticipant) other).skeleton.getAtomCount()) {
-                LOGGER.debug("Atom counts are not equal");
+                LOGGER.debug("Atom counts are not matches");
                 return false;
             }
             if (this.skeleton.getBondCount() != ((AtomContainerParticipant) other).skeleton.getBondCount()) {
-                LOGGER.debug("Bond counts are not equal");
+                LOGGER.debug("Bond counts are not matches");
                 return false;
             }
 
@@ -285,7 +288,7 @@ public class AtomContainerParticipant extends ParticipantImplementation<IAtomCon
      *                      to store the participants)
      *
      * @throws UnsupportedOperationException The method will throw and UnsupportedOperationException if the molecules
-     *         are equal. This is unlikely to happen but is there as a precaution to warn the user.
+     *         are matches. This is unlikely to happen but is there as a precaution to warn the user.
      *
      */
     @Override

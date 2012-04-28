@@ -22,19 +22,20 @@ package uk.ac.ebi.core.tools;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import org.apache.log4j.Logger;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
+import uk.ac.ebi.mdk.tool.domain.MolecularHash;
+import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
+import uk.ac.ebi.mdk.tool.domain.hash.*;
+
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import org.apache.log4j.Logger;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
-import uk.ac.ebi.mdk.tool.hash.MolecularHash;
-import uk.ac.ebi.mdk.tool.hash.MolecularHashFactory;
-import uk.ac.ebi.mdk.tool.domain.hash.*;
-import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**

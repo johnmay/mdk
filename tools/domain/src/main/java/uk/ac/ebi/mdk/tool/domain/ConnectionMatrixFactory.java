@@ -20,13 +20,14 @@
  */
 package uk.ac.ebi.mdk.tool.domain;
 
-import java.util.EnumMap;
-import java.util.HashMap;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.metabolomes.util.CDKUtils;
+
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *          ConnectionMatrixFactory - 2011.11.09 <br>
@@ -37,9 +38,20 @@ import uk.ac.ebi.metabolomes.util.CDKUtils;
  */
 public class ConnectionMatrixFactory {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(ConnectionMatrixFactory.class);
+    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(ConnectionMatrixFactory.class);
     private HashMap<IAtom, Integer> atomIndexMap = new HashMap(50);
     private EnumMap<IBond.Order, Byte> electronPairs = new EnumMap(IBond.Order.class);
+    private static final Map<String, Integer> symbolToOuterElectronCount = new HashMap();
+
+
+    static {
+        symbolToOuterElectronCount.put("H", 1);
+        symbolToOuterElectronCount.put("C", 4);
+        symbolToOuterElectronCount.put("N", 5);
+        symbolToOuterElectronCount.put("O", 6);
+        symbolToOuterElectronCount.put("P", 5);
+        symbolToOuterElectronCount.put("S", 6);
+    }
 
     private ConnectionMatrixFactory() {
 
@@ -126,7 +138,7 @@ public class ConnectionMatrixFactory {
 
                 IAtom jAtom = bond.getAtom(j);
                 int jIndex = getIndex(jAtom, atoms);
-                connections[jIndex][jIndex] = CDKUtils.getNonBondedValenceElectronCount(molecule, jAtom).byteValue();
+                connections[jIndex][jIndex] = getNonBondedValenceElectronCount(molecule, jAtom).byteValue();
 
                 for (int k = j + 1; k < bond.getAtomCount(); k++) {
 
@@ -172,5 +184,25 @@ public class ConnectionMatrixFactory {
 
         throw new UnsupportedOperationException("Could not find index of atom in array!");
     }
-    
+
+    public static Integer getNonBondedValenceElectronCount(IAtomContainer molecule, IAtom atom) {
+
+        if (atom.getProperties().containsKey("nb-valence-electrons")) {
+            return (Integer) atom.getProperties().get("nb-valence-electrons");
+        }
+
+        Integer shellCount = symbolToOuterElectronCount.get(atom.getSymbol());
+
+        if (shellCount != null) {
+            int adjusted = shellCount - atom.getFormalCharge();
+            int nonbondedvalence = adjusted - ((Double) AtomContainerManipulator.getBondOrderSum(molecule, atom)).intValue();
+            atom.getProperties().put("nb-valence-electrons", nonbondedvalence);
+            return nonbondedvalence;
+        } else {
+            LOGGER.error("Unhandled atom symbol: " + atom.getSymbol());
+        }
+        return 0;
+    }
+
+
 }

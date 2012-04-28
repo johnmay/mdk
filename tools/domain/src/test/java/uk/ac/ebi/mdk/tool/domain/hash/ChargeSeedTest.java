@@ -8,10 +8,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.chemet.TestMoleculeFactory;
 import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import uk.ac.ebi.mdk.tool.domain.TestMoleculeFactory;
+
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  *

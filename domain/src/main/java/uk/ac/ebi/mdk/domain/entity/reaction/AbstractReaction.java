@@ -542,7 +542,7 @@ public class AbstractReaction<P extends Participant>
 
 
     /**
-     * A simple hack that checks will be improved in future. Checks whether the unsorted lists are equal
+     * A simple hack that checks will be improved in future. Checks whether the unsorted lists are matches
      *
      * @param query
      * @param other

@@ -6,32 +6,29 @@ package uk.ac.ebi.mdk.tool.domain.hash;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.vecmath.Point3d;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.hamcrest.CoreMatchers;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.Assert;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.interfaces.*;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Stereo;
+import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
-import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.stereo.StereoTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.chemet.TestMoleculeFactory;
 import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
+import uk.ac.ebi.mdk.tool.domain.TestMoleculeFactory;
+
+import javax.vecmath.Point3d;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 
 /**
@@ -77,7 +74,7 @@ public class StereoSeedTest {
     public void testWithAlanine() throws Exception {
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
-        IAtomContainer lAlaUp = TestMoleculeFactory.loadMol("l-ala-up.mol", "L-Ala", Boolean.FALSE);
+        IAtomContainer lAlaUp   = TestMoleculeFactory.loadMol("l-ala-up.mol", "L-Ala", Boolean.FALSE);
         IAtomContainer lAlaDown = TestMoleculeFactory.dAlanine();//TestMoleculeFactory.loadMol("l-ala-down.mol", "L-Ala", Boolean.FALSE);
 
         System.out.println(lAlaUp);
@@ -114,8 +111,8 @@ public class StereoSeedTest {
                 }
             }
             
-            new StructureDiagramGenerator(new Molecule(lAlaDown)).generateCoordinates();
-            
+//            new StructureDiagramGenerator(new Molecule(lAlaDown)).generateCoordinates();
+
             for (int i : Arrays.asList(1, 0, 5, 4, 6)) {
                 lAlaDown.getAtom(i).setPoint3d(new Point3d(lAlaDown.getAtom(i).getPoint2d().x,
                                                            lAlaDown.getAtom(i).getPoint2d().y,

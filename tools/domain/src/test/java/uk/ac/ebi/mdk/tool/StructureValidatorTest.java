@@ -6,14 +6,15 @@ package uk.ac.ebi.mdk.tool;
 
 import junit.framework.Assert;
 import org.junit.AfterClass;
-import org.junit.Test;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.annotation.chemical.Charge;
 import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.chemet.TestMoleculeFactory;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
+import uk.ac.ebi.mdk.tool.domain.TestMoleculeFactory;
 
 
 /**

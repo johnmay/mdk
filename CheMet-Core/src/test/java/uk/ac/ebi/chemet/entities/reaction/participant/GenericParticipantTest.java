@@ -86,7 +86,7 @@ public class GenericParticipantTest {
     @Test
     public void testGenericNotEquals() {
 
-        System.out.printf( "%-120s" , "[TEST] Aldehyde (removed R) does not equal Primary Alcohol (removed R)" );
+        System.out.printf( "%-120s" , "[TEST] Aldehyde (removed R) does not matches Primary Alcohol (removed R)" );
 
         ParticipantImplementation aldehyde = new GenericParticipant( aldehyde_no_r() );
         ParticipantImplementation primaryAlochol = new GenericParticipant( primary_alcohol_no_r() );

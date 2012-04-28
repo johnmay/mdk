@@ -43,11 +43,11 @@ public class MetaboliteHashCodeMatcher
     /**
      * Compares the {@see ChemicalStructure} annotations of the metabolites
      * using the {@see MolecularHashFactory} to generate molecular hash codes.
-     * If any of the chemical structure hashes are equal they metabolites
-     * are considered equal
+     * If any of the chemical structure hashes are matches they metabolites
+     * are considered matches
      * @inheritDoc
      */
-    public Boolean equal(Metabolite query, Metabolite subject) {
+    public Boolean matches(Metabolite query, Metabolite subject) {
 
         Set<Integer> queryHashes = new HashSet<Integer>();
         Set<Integer> subjectHashes = new HashSet<Integer>();

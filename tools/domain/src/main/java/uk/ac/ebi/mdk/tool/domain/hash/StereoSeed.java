@@ -20,15 +20,15 @@
  */
 package uk.ac.ebi.mdk.tool.domain.hash;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.commons.lang.mutable.MutableInt;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IBond.Stereo;
-import uk.ac.ebi.core.util.Util;
+import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -100,7 +100,7 @@ public class StereoSeed implements AtomSeed {
                 }
 
 
-                hash ^= Util.rotate(code, occurrences);
+                hash ^= MolecularHashFactory.rotate(code, occurrences);
 
 
             }

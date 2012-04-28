@@ -9,12 +9,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
-import uk.ac.ebi.mdk.domain.entity.MetaboliteImpl;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.MetaboliteImpl;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
+import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil;
 
 import static org.junit.Assert.assertEquals;
 

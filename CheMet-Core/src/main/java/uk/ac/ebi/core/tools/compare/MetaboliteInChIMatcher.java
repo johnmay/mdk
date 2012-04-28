@@ -49,10 +49,10 @@ public class MetaboliteInChIMatcher
 
     /**
      * Compares the {@see InChI} annotations of the metabolites. If any of the
-     * InChIs are equal they metabolites are considered equal
+     * InChIs are matches they metabolites are considered matches
      * @inheritDoc
      */
-    public Boolean equal(Metabolite query, Metabolite subject) {
+    public Boolean matches(Metabolite query, Metabolite subject) {
 
         Set<String> queryInChIs = new HashSet<String>();
         Set<String> subjectInChIs = new HashSet<String>();

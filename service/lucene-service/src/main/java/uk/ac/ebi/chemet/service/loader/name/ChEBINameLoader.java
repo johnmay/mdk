@@ -122,7 +122,7 @@ public class ChEBINameLoader extends AbstractChEBILoader {
 
             /* IUPAC
              * Add the iupac name, if there is already an iupac
-             * name and they are not equal, add the iupac name
+             * name and they are not matches, add the iupac name
              * to the synonym's list
              */
             if (type.equals("IUPAC NAME")) {

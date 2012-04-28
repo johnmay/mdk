@@ -20,21 +20,15 @@
  */
 package uk.ac.ebi.mdk.tool.domain;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.core.tools.ConnectionMatrixFactory;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
-import uk.ac.ebi.core.util.Util;
+
+import java.util.*;
 
 /**
  *          MolecularHashFactory - 2011.11.09 <br>
@@ -195,7 +189,7 @@ public class MolecularHashFactory {
             }
 
             atomSeeds[i]      = value;
-            completedSeeds[i] = Util.rotate(value, postoccurences);
+            completedSeeds[i] = rotate(value, postoccurences);
 
             hash ^= completedSeeds[i];
 
@@ -227,7 +221,7 @@ public class MolecularHashFactory {
         for (int j = 0; j < table[index].length; j++) {
 
             if (table[index][j] != 0) {
-                value ^= Util.rotate(precursorSeeds[j], occurences);
+                value ^= rotate(precursorSeeds[j], occurences);
                 value = depth <= maxDepth ? neighbourHash(j, value, depth + 1) : value;
             }
         }
@@ -283,11 +277,60 @@ public class MolecularHashFactory {
             }
 
             // rotate the seed 1-7 times (using mask to get the lower bits)
-            seeds[i] = Util.rotate(seeds[i], seeds[i] & 0x7);
+            seeds[i] = rotate(seeds[i], seeds[i] & 0x7);
 
         }
 
         return seeds;
 
+    }
+
+    /**
+     *
+     * Performs pseudo random number generation on the provided seed
+     *
+     * @param seed
+     * @return
+     */
+    public static int xorShift(int seed) {
+        seed ^= seed << 6;
+        seed ^= seed >>> 21;
+        seed ^= (seed << 7);
+        return seed;
+    }
+
+    /**
+     *
+     * Rotates the seed using xor shift (pseudo random number generation) the
+     * specified number of times.
+     *
+     * @param seed the starting seed
+     * @param rotation Number of xor rotations to perform
+     * @return The starting seed rotated the specified number of times
+     */
+    public static int rotate(int seed, int rotation) {
+        for (int j = 0; j < rotation; j++) {
+            seed = xorShift(seed);
+        }
+        return seed;
+    }
+
+    /**
+     *
+     * Rotates the seed if the seed has already been seen in the provided
+     * occurrences map
+     *
+     * @param seed
+     * @param occurences
+     * @return
+     */
+    public static int rotate(int seed, Map<Integer, MutableInt> occurences) {
+        if (occurences.get(seed) == null) {
+            occurences.put(seed, new MutableInt());
+        } else {
+            occurences.get(seed).increment();
+        }
+        // System.out.printf("%10s", occMap.get(seed).value);
+        return rotate(seed, occurences.get(seed).intValue());
     }
 }

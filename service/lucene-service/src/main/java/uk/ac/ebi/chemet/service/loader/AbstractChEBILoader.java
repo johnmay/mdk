@@ -102,7 +102,7 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
 
     /**
      * Access whether the accession is active using the STATUS column in the compounds.tsv file.
-     * If status is equal to 'C' then the entry is active. (default = false)
+     * If status is matches to 'C' then the entry is active. (default = false)
      * @see #getStatus(String)
      * @param accession
      * @return

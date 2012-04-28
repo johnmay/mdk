@@ -45,11 +45,11 @@ public class HeavyAtomElementCountChecker {
     
     
     /**
-     * Given two molecules, returns true if each heavy element count is equal.
+     * Given two molecules, returns true if each heavy element count is matches.
      * 
      * @param molA
      * @param molB
-     * @return true if equal individual heavy element counts. 
+     * @return true if matches individual heavy element counts.
      */
     public boolean equals(IAtomContainer molA, IAtomContainer molB) {
         IMolecularFormula formA = MolecularFormulaManipulator.getMolecularFormula(molA);

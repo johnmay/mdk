@@ -21,11 +21,11 @@ public class NameMatcher<E extends AnnotatedEntity>
     /**
      * Compares the names, abbreviations and synonyms of two annotated entities. The names
      * are normalised to lower case (Locale.ENGLISH) and trimmed of excess space. If
-     * any name/synonym matches then the metabolites are considered equal.
+     * any name/synonym matches then the metabolites are considered matches.
      *
      * @inheritDoc
      */
-    public Boolean equal(E query, E subject) {
+    public Boolean matches(E query, E subject) {
 
         Set<String> queryNames   = new TreeSet<String>();
         Set<String> subjectNames = new TreeSet<String>();

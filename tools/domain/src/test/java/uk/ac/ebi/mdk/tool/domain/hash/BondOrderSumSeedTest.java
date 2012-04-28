@@ -4,8 +4,6 @@
  */
 package uk.ac.ebi.mdk.tool.domain.hash;
 
-import java.io.IOException;
-
 import org.hamcrest.CoreMatchers;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -14,9 +12,13 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.chemet.TestMoleculeFactory;
 import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
-import static org.junit.Assert.*;
+import uk.ac.ebi.mdk.tool.domain.TestMoleculeFactory;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  *

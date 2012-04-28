@@ -14,10 +14,10 @@ import java.util.HashSet;
 public class CrossReferenceMatcher<E extends AnnotatedEntity> implements EntityMatcher<E> {
 
     @Override
-    public Boolean equal(E query, E subject) {
+    public Boolean matches(E query, E subject) {
 
         // extract identifiers to avoid corrupting the #equals() methods in CrossReference.
-        // if we changed them so that KEGGCompoundCrossReference could equal CrossReference
+        // if we changed them so that KEGGCompoundCrossReference could matches CrossReference
         // we might get unexpected behaviour in maps
         Collection<Identifier> queryXrefs   = getIdentifiers(query.getAnnotationsExtending(CrossReference.class));
         Collection<Identifier> subjectXrefs = getIdentifiers(subject.getAnnotationsExtending(CrossReference.class));

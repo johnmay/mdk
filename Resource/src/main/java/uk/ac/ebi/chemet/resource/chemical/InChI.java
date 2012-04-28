@@ -227,7 +227,7 @@ public class InChI
     /**
      * @param obj Object to compare if equals
      *
-     * @return Whether the objects are equal
+     * @return Whether the objects are matches
      *
      * @brief Compares the this InChI with another. The method checks the inheritance of the
      * object and then the InChI, InChIKey and AuxInfo. If the InChIKey or AuxInfo is
