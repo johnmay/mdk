@@ -2,7 +2,7 @@ package uk.ac.ebi.core.tools.compare;
 
 import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
-import uk.ac.ebi.mdk.tool.compare.EntityComparator;
+import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
 
 import java.util.Locale;
 import java.util.Set;
@@ -10,13 +10,13 @@ import java.util.TreeSet;
 
 
 /**
- * Class realises EntityComparator using the names, abbreviations and synonyms of
+ * Class realises EntityMatcher using the names, abbreviations and synonyms of
  * the annotated entities.
  *
  * @author johnmay
  */
-public class NameComparator<E extends AnnotatedEntity>
-        implements EntityComparator<E> {
+public class NameMatcher<E extends AnnotatedEntity>
+        implements EntityMatcher<E> {
 
     /**
      * Compares the names, abbreviations and synonyms of two annotated entities. The names

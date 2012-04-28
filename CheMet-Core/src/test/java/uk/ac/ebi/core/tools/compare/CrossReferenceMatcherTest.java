@@ -13,11 +13,11 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 /**
  * @author John May
  */
-public class CrossReferenceComparatorTest {
+public class CrossReferenceMatcherTest {
 
-    private static final Logger LOGGER = Logger.getLogger(CrossReferenceComparatorTest.class);
+    private static final Logger LOGGER = Logger.getLogger(CrossReferenceMatcherTest.class);
 
-    private CrossReferenceComparator<Metabolite> comparator = new CrossReferenceComparator<Metabolite>();
+    private CrossReferenceMatcher<Metabolite> matcher = new CrossReferenceMatcher<Metabolite>();
 
     @Test
     public void testEqual_direct() throws Exception {
@@ -25,12 +25,12 @@ public class CrossReferenceComparatorTest {
         Metabolite m1 = DefaultEntityFactory.getInstance().ofClass(Metabolite.class, new BasicChemicalIdentifier("test-1"), "", "");
         Metabolite m2 = DefaultEntityFactory.getInstance().ofClass(Metabolite.class, new BasicChemicalIdentifier("test-2"), "", "");
 
-        Assert.assertFalse(comparator.equal(m1, m2));
+        Assert.assertFalse(matcher.matches(m1, m2));
 
         m1.addAnnotation(new CrossReference(new BasicChemicalIdentifier("test-2")));
 
-        Assert.assertTrue(comparator.equal(m1, m2));
-        Assert.assertTrue(comparator.equal(m2, m1));
+        Assert.assertTrue(matcher.matches(m1, m2));
+        Assert.assertTrue(matcher.matches(m2, m1));
 
     }
 
@@ -40,13 +40,13 @@ public class CrossReferenceComparatorTest {
         Metabolite m1 = DefaultEntityFactory.getInstance().ofClass(Metabolite.class, new BasicChemicalIdentifier("test-1"), "", "");
         Metabolite m2 = DefaultEntityFactory.getInstance().ofClass(Metabolite.class, new BasicChemicalIdentifier("test-2"), "", "");
 
-        Assert.assertFalse(comparator.equal(m1, m2));
+        Assert.assertFalse(matcher.matches(m1, m2));
 
         m1.addAnnotation(new CrossReference(new KEGGCompoundIdentifier("C00009")));
         m2.addAnnotation(new CrossReference(new KEGGCompoundIdentifier("C00009")));
 
-        Assert.assertTrue(comparator.equal(m1, m2));
-        Assert.assertTrue(comparator.equal(m2, m1));
+        Assert.assertTrue(matcher.matches(m1, m2));
+        Assert.assertTrue(matcher.matches(m2, m1));
 
     }
 
@@ -56,13 +56,13 @@ public class CrossReferenceComparatorTest {
         Metabolite m1 = DefaultEntityFactory.getInstance().ofClass(Metabolite.class, new BasicChemicalIdentifier("test-1"), "", "");
         Metabolite m2 = DefaultEntityFactory.getInstance().ofClass(Metabolite.class, new BasicChemicalIdentifier("test-2"), "", "");
 
-        Assert.assertFalse(comparator.equal(m1, m2));
+        Assert.assertFalse(matcher.matches(m1, m2));
 
         m1.addAnnotation(new CrossReference(new KEGGCompoundIdentifier("C00009")));
         m2.addAnnotation(new KEGGCrossReference(new KEGGCompoundIdentifier("C00009")));
 
-        Assert.assertTrue(comparator.equal(m1, m2));
-        Assert.assertTrue(comparator.equal(m2, m1));
+        Assert.assertTrue(matcher.matches(m1, m2));
+        Assert.assertTrue(matcher.matches(m2, m1));
 
     }
 

@@ -3,7 +3,7 @@ package uk.ac.ebi.core.tools.compare;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.tool.compare.EntityComparator;
+import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,7 +11,7 @@ import java.util.HashSet;
 /**
  * @author John May
  */
-public class CrossReferenceComparator<E extends AnnotatedEntity> implements EntityComparator<E> {
+public class CrossReferenceMatcher<E extends AnnotatedEntity> implements EntityMatcher<E> {
 
     @Override
     public Boolean equal(E query, E subject) {

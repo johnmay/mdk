@@ -27,7 +27,7 @@ import uk.ac.ebi.mdk.domain.entity.Entity;
  *
  * @author johnmay
  */
-public interface EntityComparator<E extends Entity> {
+public interface EntityMatcher<E extends Entity> {
 
     /**
      * Determines whether the query entities are equal in the score of the

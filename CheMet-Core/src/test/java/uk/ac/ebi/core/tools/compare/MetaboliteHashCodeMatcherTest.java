@@ -10,21 +10,21 @@ import org.junit.Test;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.chemet.TestMoleculeFactory;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
 import uk.ac.ebi.mdk.tool.domain.hash.*;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.tool.compare.EntityComparator;
 
 
 /**
  *
  * @author johnmay
  */
-public class MetaboliteHashCodeComparatorTest {
+public class MetaboliteHashCodeMatcherTest {
 
-    private EntityComparator comparator;
+    private EntityMatcher matcher;
 
-    private EntityComparator comparatorWithCharge;
+    private EntityMatcher comparatorWithCharge;
 
     private EntityFactory factory;
 
@@ -33,9 +33,9 @@ public class MetaboliteHashCodeComparatorTest {
     private Metabolite m2;
 
 
-    public MetaboliteHashCodeComparatorTest() {
-        comparator = new MetaboliteHashCodeComparator();
-        comparatorWithCharge = new MetaboliteHashCodeComparator(SeedFactory.getInstance().getSeeds(ChargeSeed.class,
+    public MetaboliteHashCodeMatcherTest() {
+        matcher = new MetaboliteHashCodeMatcher();
+        comparatorWithCharge = new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(ChargeSeed.class,
                                                                                                    ConnectedAtomSeed.class,
                                                                                                    AtomicNumberSeed.class,
                                                                                                    BondOrderSumSeed.class));
@@ -61,12 +61,12 @@ public class MetaboliteHashCodeComparatorTest {
         // InChI for ATP(3-) 
         m2.addAnnotation(new AtomContainerAnnotation(TestMoleculeFactory.atp_minus_3()));
 
-        Assert.assertFalse(comparatorWithCharge.equal(m1, m2));
+        Assert.assertFalse(comparatorWithCharge.matches(m1, m2));
 
         // InChI for ATP(3-) 
         m1.addAnnotation(new AtomContainerAnnotation(TestMoleculeFactory.atp_minus_3()));
 
-        Assert.assertTrue(comparatorWithCharge.equal(m1, m2));
+        Assert.assertTrue(comparatorWithCharge.matches(m1, m2));
 
     }
 
@@ -82,7 +82,7 @@ public class MetaboliteHashCodeComparatorTest {
         // InChI for ATP(3-)
         m2.addAnnotation(new AtomContainerAnnotation(TestMoleculeFactory.atp_minus_3()));
 
-        Assert.assertTrue(comparator.equal(m1, m2));
+        Assert.assertTrue(matcher.matches(m1, m2));
 
     }
 }

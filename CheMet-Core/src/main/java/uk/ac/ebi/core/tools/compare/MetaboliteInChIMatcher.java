@@ -3,7 +3,7 @@ package uk.ac.ebi.core.tools.compare;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.tool.compare.EntityComparator;
+import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
 import uk.ac.ebi.metabolomes.util.inchi.InChIConnectivity;
 
 import java.util.HashSet;
@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 /**
- *          MetaboliteInChIComparator 2012.02.16 <br/>
+ *          MetaboliteInChIMatcher 2012.02.16 <br/>
  *          Class realises MetaboliteComparator using the InChI of the
  *          structures to compare metabolites. The InChI's can be compared
  *          straight or using only the connectivity (see. 
@@ -22,10 +22,10 @@ import java.util.Set;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetaboliteInChIComparator
-        implements EntityComparator<Metabolite> {
+public class MetaboliteInChIMatcher
+        implements EntityMatcher<Metabolite> {
 
-    private static final Logger LOGGER = Logger.getLogger(MetaboliteInChIComparator.class);
+    private static final Logger LOGGER = Logger.getLogger(MetaboliteInChIMatcher.class);
 
     private boolean connectivity;
 
@@ -33,7 +33,7 @@ public class MetaboliteInChIComparator
     /**
      * Default constructor will compare InChIs using direct string comparison
      */
-    public MetaboliteInChIComparator() {
+    public MetaboliteInChIMatcher() {
     }
 
 
@@ -42,7 +42,7 @@ public class MetaboliteInChIComparator
      * the comparison less specific.
      * @param connectivity make the comparison less specific
      */
-    public MetaboliteInChIComparator(boolean connectivity) {
+    public MetaboliteInChIMatcher(boolean connectivity) {
         this.connectivity = connectivity;
     }
 

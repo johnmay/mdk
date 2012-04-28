@@ -2,40 +2,40 @@ package uk.ac.ebi.core.tools.compare;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.mdk.tool.hash.MolecularHashFactory;
-import uk.ac.ebi.mdk.tool.domain.hash.*;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.tool.compare.EntityComparator;
+import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
+import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
+import uk.ac.ebi.mdk.tool.domain.hash.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 
 /**
- *          MetaboliteHashCodeComparator 2012.02.16 <br/>
+ *          MetaboliteHashCodeMatcher 2012.02.16 <br/>
  *          Class realises MetaboliteComparator using the hash codes of the
  *          structures to compare metabolites
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class MetaboliteHashCodeComparator
-        implements EntityComparator<Metabolite> {
+public class MetaboliteHashCodeMatcher
+        implements EntityMatcher<Metabolite> {
 
-    private static final Logger LOGGER = Logger.getLogger(MetaboliteHashCodeComparator.class);
+    private static final Logger LOGGER = Logger.getLogger(MetaboliteHashCodeMatcher.class);
 
     private final MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
     private final Set<AtomSeed> seeds;
 
 
-    public MetaboliteHashCodeComparator() {
+    public MetaboliteHashCodeMatcher() {
         seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class, ConnectedAtomSeed.class, BondOrderSumSeed.class);
     }
 
 
-    public MetaboliteHashCodeComparator(Set<AtomSeed> seeds) {
+    public MetaboliteHashCodeMatcher(Set<AtomSeed> seeds) {
         this.seeds = seeds;
     }
 

@@ -11,16 +11,16 @@ import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.tool.compare.EntityComparator;
+import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
 
 
 /**
  *
  * @author johnmay
  */
-public class NameComparatorTest {
+public class NameMatcherTest {
 
-    private EntityComparator comparator;
+    private EntityMatcher matcher;
 
     private EntityFactory factory;
 
@@ -29,9 +29,9 @@ public class NameComparatorTest {
     private Metabolite m2;
 
 
-    public NameComparatorTest() {
+    public NameMatcherTest() {
 
-        comparator = new NameComparator();
+        matcher = new NameMatcher();
         factory = DefaultEntityFactory.getInstance();
     }
 
@@ -49,11 +49,11 @@ public class NameComparatorTest {
         m1.setName("ATP");
         m2.setName("Adenosine TP");
 
-        Assert.assertFalse(comparator.equal(m1, m2));
+        Assert.assertFalse(matcher.matches(m1, m2));
 
         m2.setName("atp");
 
-        Assert.assertTrue(comparator.equal(m1, m2));
+        Assert.assertTrue(matcher.matches(m1, m2));
 
     }
 
@@ -64,11 +64,11 @@ public class NameComparatorTest {
         m1.setName("ATP");
         m2.setName("Adenosine TP");
 
-        Assert.assertFalse(comparator.equal(m1, m2));
+        Assert.assertFalse(matcher.matches(m1, m2));
 
         m2.addAnnotation(new Synonym("atp"));
 
-        Assert.assertTrue(comparator.equal(m1, m2));
+        Assert.assertTrue(matcher.matches(m1, m2));
 
     }
 }

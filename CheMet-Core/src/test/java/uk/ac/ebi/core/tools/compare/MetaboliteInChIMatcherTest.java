@@ -11,18 +11,18 @@ import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.tool.compare.EntityComparator;
+import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
 
 
 /**
  *
  * @author johnmay
  */
-public class MetaboliteInChIComparatorTest {
+public class MetaboliteInChIMatcherTest {
 
-    private EntityComparator comparator;
+    private EntityMatcher matcher;
 
-    private EntityComparator comparatorLessSpecific;
+    private EntityMatcher comparatorLessSpecific;
 
     private EntityFactory factory;
 
@@ -31,9 +31,9 @@ public class MetaboliteInChIComparatorTest {
     private Metabolite m2;
 
 
-    public MetaboliteInChIComparatorTest() {
-        comparator = new MetaboliteInChIComparator();
-        comparatorLessSpecific = new MetaboliteInChIComparator(true);
+    public MetaboliteInChIMatcherTest() {
+        matcher = new MetaboliteInChIMatcher();
+        comparatorLessSpecific = new MetaboliteInChIMatcher(true);
         factory = DefaultEntityFactory.getInstance();
     }
 
@@ -64,7 +64,7 @@ public class MetaboliteInChIComparatorTest {
                                    + "h2-4,6-7,10,16-17H,1H2,(H,21,22)(H,23,24)(H2,11,12,13)(H2,18,19,20)/"
                                    + "p-3/t4-,6-,7-,10-/m1/s1"));
 
-        Assert.assertFalse(comparator.equal(m1, m2));
+        Assert.assertFalse(matcher.matches(m1, m2));
 
         // InChI for ATP(3-) 
         m1.addAnnotation(new InChI("InChI=1S/"
@@ -73,7 +73,7 @@ public class MetaboliteInChIComparatorTest {
                                    + "h2-4,6-7,10,16-17H,1H2,(H,21,22)(H,23,24)(H2,11,12,13)(H2,18,19,20)/"
                                    + "p-3/t4-,6-,7-,10-/m1/s1"));
 
-        Assert.assertTrue(comparator.equal(m1, m2));
+        Assert.assertTrue(matcher.matches(m1, m2));
 
     }
 
@@ -97,7 +97,7 @@ public class MetaboliteInChIComparatorTest {
                                    + "h2-4,6-7,10,16-17H,1H2,(H,21,22)(H,23,24)(H2,11,12,13)(H2,18,19,20)/"
                                    + "p-3/t4-,6-,7-,10-/m1/s1"));
 
-        Assert.assertTrue(comparatorLessSpecific.equal(m1, m2));
+        Assert.assertTrue(comparatorLessSpecific.matches(m1, m2));
 
     }
 }
