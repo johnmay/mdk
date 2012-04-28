@@ -1,4 +1,4 @@
-package uk.ac.ebi.mdk.domain.tool;
+package uk.ac.ebi.mdk.tool.domain;
 
 import junit.framework.Assert;
 import org.apache.log4j.Logger;
