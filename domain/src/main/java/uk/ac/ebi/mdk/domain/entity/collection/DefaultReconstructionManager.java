@@ -18,7 +18,7 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import uk.ac.ebi.caf.utility.preference.type.ListPreference;
-import uk.ac.ebi.mdk.domain.CorePreferences;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
@@ -46,7 +46,7 @@ public class DefaultReconstructionManager implements ReconstructionManager {
     private Properties properties = new Properties();
     private LinkedList<String> recent = new LinkedList<String>();
     
-    private ListPreference RECENT_FILES = CorePreferences.getInstance().getPreference("RECENT_RECONSTRUCTIONS");
+    private ListPreference RECENT_FILES = DomainPreferences.getInstance().getPreference("RECENT_RECONSTRUCTIONS");
 
     private DefaultReconstructionManager() {
 

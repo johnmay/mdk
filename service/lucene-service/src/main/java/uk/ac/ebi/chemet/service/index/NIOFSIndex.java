@@ -23,7 +23,7 @@ public abstract class NIOFSIndex extends BasicServiceLocation implements LuceneI
 
     /**
      * Creates an index description for the path relative to the RESOURCE_ROOT property
-     * available via {@see CorePreferences}.
+     * available via {@see DomainPreferences}.
      * @param name
      * @param path
      */

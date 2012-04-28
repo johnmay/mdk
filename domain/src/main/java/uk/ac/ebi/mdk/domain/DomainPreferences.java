@@ -25,7 +25,7 @@ import java.io.InputStream;
 
 /**
  *
- *          CorePreferences 2012.01.29
+ *          DomainPreferences 2012.01.29
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
@@ -33,16 +33,16 @@ import java.io.InputStream;
  *          Singleton description
  *
  */
-public class CorePreferences extends AbstractPreferenceLoader {
+public class DomainPreferences extends AbstractPreferenceLoader {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(CorePreferences.class);
+    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(DomainPreferences.class);
 
 
-    private CorePreferences() {
+    private DomainPreferences() {
     }
 
 
-    public static CorePreferences getInstance() {
+    public static DomainPreferences getInstance() {
         return CorePreferencesHolder.INSTANCE;
     }
 
@@ -55,6 +55,6 @@ public class CorePreferences extends AbstractPreferenceLoader {
 
     private static class CorePreferencesHolder {
 
-        private static final CorePreferences INSTANCE = new CorePreferences();
+        private static final DomainPreferences INSTANCE = new DomainPreferences();
     }
 }

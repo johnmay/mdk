@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
-import uk.ac.ebi.mdk.domain.CorePreferences;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.io.blast.BlastReader;
@@ -132,7 +132,7 @@ public class BLASTHomologySearch extends RunnableTask {
                 throw new InvalidParameterException("Output or format missing");
             }
 
-            CorePreferences pref = CorePreferences.getInstance();
+            DomainPreferences pref = DomainPreferences.getInstance();
             String version = ((StringPreference)pref.getPreference("BLASTP_VERSION")).get();
             
             // load results into object

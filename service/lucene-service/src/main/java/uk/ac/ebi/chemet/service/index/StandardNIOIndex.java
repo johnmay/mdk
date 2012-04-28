@@ -32,7 +32,7 @@ public abstract class StandardNIOIndex extends BasicServiceLocation implements L
 
     /**
      * Creates an index description for the path relative to the RESOURCE_ROOT property
-     * available via {@see CorePreferences}.
+     * available via {@see DomainPreferences}.
      * @param name
      * @param path
      */

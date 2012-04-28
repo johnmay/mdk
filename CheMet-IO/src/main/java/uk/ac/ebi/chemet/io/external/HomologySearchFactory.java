@@ -29,7 +29,7 @@ import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.chemet.exceptions.MissingPreferencesException;
 import uk.ac.ebi.chemet.resource.basic.TaskIdentifier;
-import uk.ac.ebi.mdk.domain.CorePreferences;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.core.HomologyDatabaseManager;
 import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
@@ -105,7 +105,7 @@ public class HomologySearchFactory {
                                   int results,
                                   int format) throws IOException, Exception {
 
-        FilePreference blastpath = CorePreferences.getInstance().getPreference("BLASTP_PATH");
+        FilePreference blastpath = DomainPreferences.getInstance().getPreference("BLASTP_PATH");
         String blastp = blastpath.get().getAbsolutePath();
 
         if (blastp == null) {

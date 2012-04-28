@@ -21,7 +21,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.chemet.resource.chemical.InChI;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.mdk.domain.CorePreferences;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
 import uk.ac.ebi.mdk.domain.matrix.InChIStoichiometricMatrix;
@@ -280,7 +280,7 @@ public class ReactionMatrixIO {
 
     public static void writeCompressedBasicStoichiometricMatrix(StoichiometricMatrix<?,?> s,
                                                                 OutputStream writer) throws IOException {
-        IntegerPreference BUFFER_SIZE_PREF = CorePreferences.getInstance().getPreference("BUFFER_SIZE");
+        IntegerPreference BUFFER_SIZE_PREF = DomainPreferences.getInstance().getPreference("BUFFER_SIZE");
         DataOutputStream out = new DataOutputStream(new BufferedOutputStream(writer, BUFFER_SIZE_PREF.get()));
 
         int n = s.getMoleculeCount();
