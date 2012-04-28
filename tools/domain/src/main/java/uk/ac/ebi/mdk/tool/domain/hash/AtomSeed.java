@@ -1,5 +1,5 @@
 /**
- * AtomicNumberSeed.java
+ * AtomSeed.java
  *
  * 2011.11.09
  *
@@ -18,25 +18,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.core.tools.hash.seeds;
+package uk.ac.ebi.mdk.tool.domain.hash;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+
 /**
- *          AtomicNumberSeed - 2011.11.09 <br>
- *          Atomic number seed used the atomic number to provide a seed
+ *          AtomSeed - 2011.11.09 <br>
+ *          Interface defines an AtomSeed for use in the MolecularHashFactory.
+ *          Because many of CDK method are non-object orientated the molecule
+ *          must be provided also
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class AtomicNumberSeed implements AtomSeed {
+public interface AtomSeed {
+    
 
-    protected AtomicNumberSeed(){
+    public int seed(IAtomContainer molecule, IAtom atom);
 
-    }
 
-    public int seed(IAtomContainer molecule, IAtom atom) {
-        return atom.getAtomicNumber();
-    }
 }

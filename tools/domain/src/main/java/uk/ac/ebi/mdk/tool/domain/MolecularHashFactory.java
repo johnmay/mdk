@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.core.tools.hash;
+package uk.ac.ebi.mdk.tool.domain;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -30,10 +30,10 @@ import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.core.tools.ConnectionMatrixFactory;
-import uk.ac.ebi.core.tools.hash.seeds.AtomSeed;
-import uk.ac.ebi.core.tools.hash.seeds.AtomicNumberSeed;
-import uk.ac.ebi.core.tools.hash.seeds.ConnectedAtomSeed;
-import uk.ac.ebi.core.tools.hash.seeds.SeedFactory;
+import uk.ac.ebi.mdk.tool.domain.hash.AtomSeed;
+import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
+import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
 import uk.ac.ebi.core.util.Util;
 
 /**

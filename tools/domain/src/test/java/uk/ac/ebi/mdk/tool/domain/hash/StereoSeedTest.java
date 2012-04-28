@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.core.tools.hash.seeds;
+package uk.ac.ebi.mdk.tool.domain.hash;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -31,7 +31,7 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.stereo.StereoTool;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.chemet.TestMoleculeFactory;
-import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
+import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
 
 
 /**
@@ -166,13 +166,13 @@ public class StereoSeedTest {
         IMolecule mol1, mol2 = null;
 
         {
-            InputStream stream = getClass().getResourceAsStream("C00129.mol");
+            InputStream stream = getClass().getResourceAsStream("uk/ac/ebi/mdk/tool/domain/hash/C00129.mol");
             MDLV2000Reader reader = new MDLV2000Reader(stream);
             mol1 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
             reader.close();
         }
         {
-            InputStream stream = getClass().getResourceAsStream("C00235.mol");
+            InputStream stream = getClass().getResourceAsStream("uk/ac/ebi/mdk/tool/domain/hash/C00235.mol");
             MDLV2000Reader reader = new MDLV2000Reader(stream);
             mol2 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
             reader.close();
@@ -202,7 +202,7 @@ public class StereoSeedTest {
     public void testRotation() throws IOException, CDKException {
 
 
-        InputStream stream = getClass().getResourceAsStream("ChEBI_9630.mol");
+        InputStream stream = getClass().getResourceAsStream("uk/ac/ebi/mdk/tool/domain/hash/ChEBI_9630.mol");
 
         MDLV2000Reader reader = new MDLV2000Reader(stream);
 

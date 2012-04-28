@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.core.tools.hash.seeds;
+package uk.ac.ebi.mdk.tool.domain.hash;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.chemet.TestMoleculeFactory;
-import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
+import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 

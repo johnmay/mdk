@@ -1,5 +1,5 @@
 /**
- * AtomNeighbourSeed.java
+ * AtomicNumberSeed.java
  *
  * 2011.11.09
  *
@@ -18,25 +18,32 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.core.tools.hash.seeds;
+package uk.ac.ebi.mdk.tool.domain.hash;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 /**
- *          AtomNeighbourSeed - 2011.11.09 <br>
- *          ConnectedAtomSeed uses the number of neighbours this atom has
- *          to seed a value
+ *          AtomicNumberSeed - 2011.11.09 <br>
+ *          Atomic number seed used the bond order sum to provide a seed
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ConnectedAtomSeed implements AtomSeed {
+public class BondOrderSumSeed implements AtomSeed {
 
-    protected ConnectedAtomSeed() {
+    protected BondOrderSumSeed() {
     }
 
     public int seed(IAtomContainer molecule, IAtom atom) {
-        return molecule.getConnectedAtomsCount(atom);
+
+        Double value = AtomContainerManipulator.getBondOrderSum(molecule, atom);
+
+        if (value == null) {
+            return 0;
+        }
+
+        return value.hashCode();
     }
 }

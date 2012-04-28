@@ -18,13 +18,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.core.tools.hash;
+package uk.ac.ebi.mdk.tool.domain;
+
+import org.apache.commons.lang.mutable.MutableInt;
+import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import org.apache.commons.lang.mutable.MutableInt;
-import org.apache.log4j.Logger;
 
 /**
  *          MolecularHash - 2011.11.09 <br>

@@ -1,7 +1,7 @@
 /**
- * ChargeSeed.java
+ * AtomicNumberSeed.java
  *
- * 2011.11.11
+ * 2011.11.09
  *
  * This file is part of the CheMet library
  * 
@@ -18,27 +18,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.core.tools.hash.seeds;
+package uk.ac.ebi.mdk.tool.domain.hash;
 
-import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
- *          ChargeSeed - 2011.11.11 <br>
- *          Seed method used the formal charge of an atom to generate the seed
+ *          AtomicNumberSeed - 2011.11.09 <br>
+ *          Atomic number seed used the atomic number to provide a seed
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public class ChargeSeed implements AtomSeed {
+public class AtomicNumberSeed implements AtomSeed {
 
-    private static final Logger LOGGER = Logger.getLogger(ChargeSeed.class);
+    protected AtomicNumberSeed(){
 
-    protected ChargeSeed() {
     }
 
     public int seed(IAtomContainer molecule, IAtom atom) {
-        return atom.getFormalCharge();
+        return atom.getAtomicNumber();
     }
 }

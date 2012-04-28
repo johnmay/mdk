@@ -31,9 +31,9 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
-import uk.ac.ebi.core.tools.hash.MolecularHash;
-import uk.ac.ebi.core.tools.hash.MolecularHashFactory;
-import uk.ac.ebi.core.tools.hash.seeds.*;
+import uk.ac.ebi.mdk.tool.hash.MolecularHash;
+import uk.ac.ebi.mdk.tool.hash.MolecularHashFactory;
+import uk.ac.ebi.mdk.tool.domain.hash.*;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
