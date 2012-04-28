@@ -72,6 +72,11 @@ public class StereoSeedTest {
 
     @Test
     public void testWithAlanine() throws Exception {
+
+        /**
+         * This test shows that StereoSeed doesn't always work if the molecules are flipped....
+         * Need to implemented propper test for stereo center
+         */
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
         IAtomContainer lAlaUp   = TestMoleculeFactory.loadMol("l-ala-up.mol", "L-Ala", Boolean.FALSE);
@@ -113,15 +118,15 @@ public class StereoSeedTest {
             
 //            new StructureDiagramGenerator(new Molecule(lAlaDown)).generateCoordinates();
 
-            for (int i : Arrays.asList(1, 0, 5, 4, 6)) {
-                lAlaDown.getAtom(i).setPoint3d(new Point3d(lAlaDown.getAtom(i).getPoint2d().x,
-                                                           lAlaDown.getAtom(i).getPoint2d().y,
-                                                           0));
-            }
-            System.out.println(StereoTool.getStereo(lAlaDown.getAtom(6),
-                                                    lAlaDown.getAtom(0),
-                                                    lAlaDown.getAtom(5),
-                                                    lAlaDown.getAtom(4)));
+//            for (int i : Arrays.asList(1, 0, 5, 4, 6)) {
+//                lAlaDown.getAtom(i).setPoint3d(new Point3d(lAlaDown.getAtom(i).getPoint2d().x,
+//                                                           lAlaDown.getAtom(i).getPoint2d().y,
+//                                                           0));
+//            }
+//            System.out.println(StereoTool.getStereo(lAlaDown.getAtom(6),
+//                                                    lAlaDown.getAtom(0),
+//                                                    lAlaDown.getAtom(5),
+//                                                    lAlaDown.getAtom(4)));
 
         }
 
@@ -163,13 +168,13 @@ public class StereoSeedTest {
         IMolecule mol1, mol2 = null;
 
         {
-            InputStream stream = getClass().getResourceAsStream("uk/ac/ebi/mdk/tool/domain/hash/C00129.mol");
+            InputStream stream = getClass().getResourceAsStream("C00129.mol");
             MDLV2000Reader reader = new MDLV2000Reader(stream);
             mol1 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
             reader.close();
         }
         {
-            InputStream stream = getClass().getResourceAsStream("uk/ac/ebi/mdk/tool/domain/hash/C00235.mol");
+            InputStream stream = getClass().getResourceAsStream("C00235.mol");
             MDLV2000Reader reader = new MDLV2000Reader(stream);
             mol2 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
             reader.close();
@@ -199,7 +204,7 @@ public class StereoSeedTest {
     public void testRotation() throws IOException, CDKException {
 
 
-        InputStream stream = getClass().getResourceAsStream("uk/ac/ebi/mdk/tool/domain/hash/ChEBI_9630.mol");
+        InputStream stream = getClass().getResourceAsStream("ChEBI_9630.mol");
 
         MDLV2000Reader reader = new MDLV2000Reader(stream);
 

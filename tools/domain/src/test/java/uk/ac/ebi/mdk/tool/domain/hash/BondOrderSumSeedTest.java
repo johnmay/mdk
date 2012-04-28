@@ -51,7 +51,7 @@ public class BondOrderSumSeedTest {
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();       
 
-        assertEquals(factory.getHash(butane), factory.getHash(but1ene));
+        assertEquals(factory.getHash(butane).hash, factory.getHash(but1ene).hash);
 
         factory.addSeedMethod(SeedFactory.getInstance().getSeed(BondOrderSumSeed.class));
 
