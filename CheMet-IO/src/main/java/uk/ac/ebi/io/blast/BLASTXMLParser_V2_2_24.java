@@ -20,18 +20,19 @@
  */
 package uk.ac.ebi.io.blast;
 
+import org.apache.log4j.Logger;
+import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.io.blast.xml.setters.*;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
+import uk.ac.ebi.observation.sequence.LocalAlignment;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.XMLEvent;
-import org.apache.log4j.Logger;
-import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
-import uk.ac.ebi.io.blast.xml.setters.*;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
  * @name    BLASTXMLParser_V2_2_24 - 2011.10.10 <br>

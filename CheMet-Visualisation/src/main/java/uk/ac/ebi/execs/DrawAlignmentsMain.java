@@ -20,9 +20,7 @@
  */
 package uk.ac.ebi.execs;
 
-import org.apache.commons.cli.Option;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.metabolomes.execs.CommandLineMain;
 
 /**
  * @name    DrawAlignmentsMain
@@ -34,8 +32,8 @@ import uk.ac.ebi.metabolomes.execs.CommandLineMain;
  * @brief   ...class description...
  *
  */
-public class DrawAlignmentsMain
-        extends CommandLineMain {
+public class DrawAlignmentsMain      {
+        //extends CommandLineMain {
 
     private static final Logger LOGGER = Logger.getLogger( DrawAlignmentsMain.class );
 
@@ -44,15 +42,13 @@ public class DrawAlignmentsMain
     }
 
     public DrawAlignmentsMain( String[] args ) {
-        super( args );
+        //super( args );
     }
 
-    @Override
     public void setupOptions() {
-        add( new Option( "x" , "xml" , true , "BLAST input file (produced by BLASTP -m 7 options)" ) );
+       // add( new Option( "x" , "xml" , true , "BLAST input file (produced by BLASTP -m 7 options)" ) );
     }
 
-    @Override
     public void process() {
 
 //        File xmlFile = getCmd().hasOption( "x" ) ? new File( getCmd().getOptionValue( "x" ) ) : null;

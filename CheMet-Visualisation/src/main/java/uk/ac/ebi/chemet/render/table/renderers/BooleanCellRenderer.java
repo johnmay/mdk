@@ -20,12 +20,12 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
-import java.awt.Component;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mnb.settings.Settings;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
 
 /**
  *          BasicAnnotationCellRenderer – 2011.09.29 <br>
@@ -41,8 +41,8 @@ public class BooleanCellRenderer extends DefaultTableCellRenderer {
     private JLabel no = new JLabel("No");
 
     public BooleanCellRenderer() {
-        yes.setFont(Settings.getInstance().getTheme().getBodyFont());
-        no.setFont(Settings.getInstance().getTheme().getBodyFont());
+        yes.setFont(ThemeManager.getInstance().getTheme().getBodyFont());
+        no.setFont(ThemeManager.getInstance().getTheme().getBodyFont());
     }
 
     @Override

@@ -20,13 +20,14 @@
  */
 package uk.ac.ebi.io.blast;
 
+import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
+import uk.ac.ebi.observation.sequence.LocalAlignment;
+
+import javax.xml.stream.XMLStreamException;
 import java.util.Collection;
 import java.util.Map;
-import javax.xml.stream.XMLStreamException;
-import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 /**
  * @name    BLASTXMLParser - 2011.10.10 <br>

@@ -4,20 +4,15 @@
  */
 package uk.ac.ebi.io.blast;
 
-import java.io.File;
+import org.junit.*;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+
+import javax.xml.stream.XMLStreamException;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
-import javax.xml.stream.XMLStreamException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import uk.ac.ebi.chemet.io.external.BLASTHomologySearch;
-import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 
 /**
  *
@@ -60,8 +55,8 @@ public class BlastReaderTest {
   
     @Test
     public void testLargeXML() throws XMLStreamException, FileNotFoundException {
-        File largeXml = new File("/Users/johnmay/Desktop/blast4372477819469635580");
-        Map<String, GeneProduct> products = new HashMap();
-        new BlastReader().loadFromXML(products, largeXml.getAbsolutePath(), "2.2.25", new BLASTHomologySearch(products, null));
+//        File largeXml = new File("/Users/johnmay/Desktop/blast4372477819469635580");
+//        Map<String, GeneProduct> products = new HashMap();
+//        new BlastReader().loadFromXML(products, largeXml.getAbsolutePath(), "2.2.25", new BLASTHomologySearch(products, null));
     }
 }

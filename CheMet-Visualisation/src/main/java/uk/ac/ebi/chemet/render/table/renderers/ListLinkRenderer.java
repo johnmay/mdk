@@ -21,14 +21,13 @@
 package uk.ac.ebi.chemet.render.table.renderers;
 
 import com.jgoodies.forms.factories.Borders;
-import java.awt.Component;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.caf.component.theme.Theme;
-import uk.ac.ebi.mnb.settings.Settings;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * @name    ListLinkRenderer - 2011.10.06 <br>
@@ -42,7 +41,7 @@ public class ListLinkRenderer extends JLabel implements ListCellRenderer {
     private static final Logger LOGGER = Logger.getLogger(ListLinkRenderer.class);
 
     public ListLinkRenderer() {
-        setFont(Settings.getInstance().getTheme().getLinkFont());
+        setFont(ThemeManager.getInstance().getTheme().getLinkFont());
         setBorder(Borders.EMPTY_BORDER);
     }
 
@@ -51,7 +50,7 @@ public class ListLinkRenderer extends JLabel implements ListCellRenderer {
         String name = entity.getAbbreviation() + " : " + entity.getName();
         setText(name.substring(0, Math.min(40, name.length())));
         setToolTipText(name);
-        Theme theme = Settings.getInstance().getTheme();
+        Theme theme = ThemeManager.getInstance().getTheme();
         setForeground(isSelected ? theme.getEmphasisedForeground() : theme.getForeground());
         return this;
     }

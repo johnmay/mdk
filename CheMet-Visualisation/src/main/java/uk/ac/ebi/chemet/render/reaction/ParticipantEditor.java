@@ -31,16 +31,15 @@ import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
-import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.mdk.domain.entity.reaction.compartment.*;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.*;
 import uk.ac.ebi.render.molecule.MoleculeRenderer;
 
 import javax.swing.*;
@@ -117,7 +116,7 @@ public class ParticipantEditor extends JPanel {
         metabolite.setText(participant.getMolecule().getName());
         compartment.setSelectedItem(((Compartment) participant.getCompartment()));
         if(!compartment.getSelectedItem().equals(((Compartment) participant.getCompartment()))){
-            compartment.setSelectedItem(CompartmentImplementation.UNKNOWN); // fail safe
+            compartment.setSelectedItem(Organelle.UNKNOWN); // fail safe
         }
         stoichiometry.setText(participant.getCoefficient().toString());
 
@@ -198,7 +197,7 @@ public class ParticipantEditor extends JPanel {
         compartments.addAll(Arrays.asList(CellType.values()));
         compartments.addAll(Arrays.asList(Tissue.values()));
         compartments.addAll(Arrays.asList(Organ.values()));
-        compartments.add(CompartmentImplementation.UNKNOWN);
+        compartments.add(Organelle.UNKNOWN);
 
         return compartments.toArray(new Compartment[0]);
 

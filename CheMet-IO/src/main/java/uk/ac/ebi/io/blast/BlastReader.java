@@ -24,9 +24,9 @@ import au.com.bytecode.opencsv.CSVReader;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
 
 import javax.xml.stream.XMLInputFactory;

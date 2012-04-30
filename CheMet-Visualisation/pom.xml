@@ -15,7 +15,6 @@
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/visualisation</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cdk.render.version>1.4.5</cdk.render.version>
     </properties>
 
     <dependencies>
@@ -35,17 +34,12 @@
         <!-- NOTE: CheMet-Core and WebServices and IO need to be removed in future -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>CheMet-Core</artifactId>
+            <artifactId>mdk-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>CheMet-WebServices</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>CheMet-IO</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -73,32 +67,32 @@
         <dependency>
             <artifactId>cdk-render</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <version>${cdk.render.version}</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <artifactId>cdk-sdg</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <version>${cdk.render.version}</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <artifactId>cdk-renderawt</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <version>${cdk.render.version}</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <artifactId>cdk-renderbasic</artifactId>
             <groupId>org.openscience.cdk</groupId>
-            <version>${cdk.render.version}</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-extra</artifactId>
-            <version>${cdk.render.version}</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-core</artifactId>
-            <version>${cdk.render.version}</version>
+            <version>${cdk.version}</version>
         </dependency>
 
         <!-- Layout and Components -->

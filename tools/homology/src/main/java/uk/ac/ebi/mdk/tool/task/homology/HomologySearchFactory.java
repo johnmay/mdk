@@ -27,7 +27,6 @@ import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
-import uk.ac.ebi.chemet.exceptions.MissingPreferencesException;
 import uk.ac.ebi.chemet.resource.basic.TaskIdentifier;
 import uk.ac.ebi.core.HomologyDatabaseManager;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
@@ -110,7 +109,7 @@ public class HomologySearchFactory {
         String blastp = blastpath.get().getAbsolutePath();
 
         if (blastp == null) {
-            throw new MissingPreferencesException("No path found for blastp, please configure the user preference");
+            throw new InvalidParameterException("No path found for blastp, please configure the user preference");
         }
 
 

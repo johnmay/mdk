@@ -13,6 +13,8 @@
         <module>annotation-tools</module>
         <module>domain</module>
         <module>compare</module>
+        <module>core</module>
+        <module>homology</module>
     </modules>
     <artifactId>chemet-tools</artifactId>
 

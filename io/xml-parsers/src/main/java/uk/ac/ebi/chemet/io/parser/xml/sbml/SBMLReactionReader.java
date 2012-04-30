@@ -21,39 +21,26 @@
 package uk.ac.ebi.chemet.io.parser.xml.sbml;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.interfaces.IAtomContainer;
 import org.sbml.jsbml.*;
-import org.sbml.jsbml.Compartment;
 import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
-import uk.ac.ebi.chemet.exceptions.AbsentAnnotationException;
-import uk.ac.ebi.chemet.exceptions.UnknownCompartmentException;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.util.MIRIAMLoader;
-import uk.ac.ebi.chemet.ws.CachedChemicalWS;
-import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
-import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
-import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.entity.reaction.*;
-import uk.ac.ebi.mdk.domain.entity.reaction.filter.AbstractParticipantFilter;
-import uk.ac.ebi.mdk.domain.entity.reaction.filter.AcceptAllFilter;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.domain.identifier.type.KEGGIdentifier;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
 import uk.ac.ebi.mdk.tool.domain.AutomaticCompartmentResolver;
-import uk.ac.ebi.metabolomes.util.CDKUtils;
-import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
-import uk.ac.ebi.metabolomes.webservices.KeggCompoundWebServiceConnection;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -83,11 +70,6 @@ public class SBMLReactionReader {
     private static final SBMLReader reader = new SBMLReader();
     // web service clients
 
-    private final CachedChemicalWS chebiWS = new CachedChemicalWS(new ChEBIWebServiceConnection());
-
-    private final CachedChemicalWS keggWS = new CachedChemicalWS(new KeggCompoundWebServiceConnection());
-    // sbml storage
-
     private final SBMLDocument document;
 
     private final Model model;
@@ -97,7 +79,6 @@ public class SBMLReactionReader {
 
     private final Integer reactionCount;
 
-    private AbstractParticipantFilter filter;
     //
 
     private Map<SpeciesReference, Species> speciesReferences = new HashMap<SpeciesReference, Species>();
@@ -134,13 +115,12 @@ public class SBMLReactionReader {
      * filter
      *
      * @param stream
-     * @param filter
      *
      * @throws XMLStreamException
      */
-    public SBMLReactionReader(InputStream stream, AbstractParticipantFilter filter) throws
+    public SBMLReactionReader(InputStream stream) throws
             XMLStreamException {
-        this(reader.readSBMLFromStream(stream), filter, DefaultEntityFactory.getInstance(), new AutomaticCompartmentResolver());
+        this(reader.readSBMLFromStream(stream),  DefaultEntityFactory.getInstance(), new AutomaticCompartmentResolver());
     }
 
 
@@ -151,53 +131,20 @@ public class SBMLReactionReader {
      */
     public SBMLReactionReader(SBMLDocument document) {
         // default filter is an empty instantiation of BasicFilter (accepts all)
-        this(document, new AcceptAllFilter(), DefaultEntityFactory.getInstance(), new AutomaticCompartmentResolver());
+        this(document, DefaultEntityFactory.getInstance(), new AutomaticCompartmentResolver());
     }
 
 
-    public SBMLReactionReader(SBMLDocument document, AbstractParticipantFilter filter, EntityFactory factory, CompartmentResolver resolver) {
+    public SBMLReactionReader(SBMLDocument document, EntityFactory factory, CompartmentResolver resolver) {
         this.document = document;
         this.model = document.getModel();
         this.reactionCount = model.getNumReactions();
-        this.filter = filter;
         this.factory = factory;
         this.resolver = resolver;
     }
 
 
-    /**
-     * Loads the specified Reactions as an AtomContainer reaction (Note: RDF annotations) for
-     * ChEBI (KEGG also in future) is required.
-     *
-     * @param Model SBML Model
-     *
-     * @return A collection of fully structured reactions
-     */
-    public List<AtomContainerReaction> getReactions() {
-
-        List<AtomContainerReaction> loadedReactions = new ArrayList<AtomContainerReaction>(
-                reactionCount);
-
-        while (hasNext()) {
-            try {
-                AtomContainerReaction reaction = next();
-                loadedReactions.add(reaction);
-            } catch (UnknownCompartmentException ex) {
-                LOGGER.warn(ex.getMessage());
-            } catch (AbsentAnnotationException ex) {
-                LOGGER.warn(ex.getMessage());
-            } catch (MissingStructureException ex) {
-                LOGGER.warn(ex.getMessage());
-            }
-        }
-
-        return loadedReactions;
-
-    }
-
-
-    public MetabolicReactionImpl getMetabolicReaction(Reaction sbmlReaction)
-            throws UnknownCompartmentException {
+    public MetabolicReactionImpl getMetabolicReaction(Reaction sbmlReaction) {
 
         MetabolicReactionImpl reaction = new MetabolicReactionImpl(new BasicReactionIdentifier(sbmlReaction.getId()),
                                                                                        sbmlReaction.getMetaId(),
@@ -265,8 +212,8 @@ public class SBMLReactionReader {
             return c;
         }
 
-        compartments.put(compartment, CompartmentImplementation.UNKNOWN);
-        return CompartmentImplementation.UNKNOWN;
+        compartments.put(compartment, Organelle.UNKNOWN);
+        return Organelle.UNKNOWN;
 
     }
 
@@ -277,13 +224,9 @@ public class SBMLReactionReader {
      *
      * @return An MetaboliteParticipant
      *
-     * @throws UnknownCompartmentException Thrown if compartment identifier is not recognised (valid names are found
-     *                                     in the {@see Compartment} class)
-     * @throws MissingAnnotationException  Thrown
-     * @throws MissingStructureException
      */
     public MetabolicParticipantImplementation getMetaboliteParticipant(SpeciesReference speciesReference)
-            throws UnknownCompartmentException {
+              {
 
         Species species = getSpecies(speciesReference);
 
@@ -323,162 +266,13 @@ public class SBMLReactionReader {
                                                       compartment);
     }
 
-
-    /**
-     * Loads the SBML {@see Reaction} object as a custom {@see AtomContainerReaction} instance.
-     *
-     * @param sbmlReaction Instance of a loaded SBML reaction
-     *
-     * @return Instance of {@see AtomContainerReaction}
-     *
-     * @throws UnknownCompartmentException Thrown if a compartment name cannot be matched
-     * @throws AbsentAnnotationException   Thrown if a reaction is missing RDF CV terms
-     * @throws MissingStructureException   Thrown if a structure for the molecule could not be loaded
-     */
-    public AtomContainerReaction getReaction(Reaction sbmlReaction) throws
-            UnknownCompartmentException,
-            AbsentAnnotationException,
-            MissingStructureException {
-        AtomContainerReaction reaction = new AtomContainerReaction(filter);
-
-        for (int i = 0; i < sbmlReaction.getNumReactants(); i++) {
-
-            reaction.addReactant(getParticipant(sbmlReaction.getReactant(i)));
-        }
-
-        for (int i = 0; i < sbmlReaction.getNumProducts(); i++) {
-
-            reaction.addProduct(getParticipant(sbmlReaction.getProduct(i)));
-        }
-
-        // set the reversibility
-        reaction.setDirection(sbmlReaction.isReversible() ? Direction.BIDIRECTIONAL : Direction.FORWARD);
-
-        // TODO(johnmay): Add Enzyme annotations and modifiers
-
-        return reaction;
-    }
-
-
-    /**
-     * Constructs a reaction participant (i.e. AtomContainerParticipant or GenericParticipant if the molecule contains
-     * and R/Alkyl group)
-     *
-     * @param speciesReference An instance of SBML {@see SpeciesReference}
-     *
-     * @return An {@see AtomContainerParticipant} or {@see GenericParticipant}.
-     *         The class {@see GenericParticipant} extends {@see AtomContainerParticipant} and so can
-     *         be handled identically.
-     *
-     * @throws UnknownCompartmentException Thrown if compartment identifier is not recognised (valid names are found
-     *                                     in the {@see Compartment} class)
-     * @throws MissingAnnotationException  Thrown
-     * @throws MissingStructureException
-     */
-    public AtomContainerParticipant getParticipant(SpeciesReference speciesReference)
-            throws
-            UnknownCompartmentException,
-            AbsentAnnotationException,
-            MissingStructureException {
-
-        Species species = speciesReference.getSpeciesInstance();
-        org.sbml.jsbml.Compartment sbmlCompartment = species.getCompartmentInstance();
-
-
-        CompartmentImplementation compartment = CompartmentImplementation.getCompartment(sbmlCompartment == null
-                                                                                                 ? ""
-                                                                                                 : sbmlCompartment.getId());
-
-        if (compartment == CompartmentImplementation.UNKNOWN) {
-            throw new UnknownCompartmentException("Compartment " + species.getCompartmentInstance().
-                    getId()
-                                                          + " was not identifiable");
-        }
-
-        if (species.getNumCVTerms() == 0) {
-            throw new AbsentAnnotationException(
-                    "Species " + species.getId()
-                            + " did not have any associated Controlled Vocabulary terms");
-        }
-
-        IAtomContainer molecule = getAtomContainer(species);
-        Double coefficient = speciesReference.getStoichiometry();
-
-        return CDKUtils.isMoleculeGeneric(molecule)
-                ? new GenericParticipant(molecule, coefficient, compartment)
-                : new AtomContainerParticipant(molecule, coefficient, compartment);
-
-    }
-
-
-    /**
-     * Constructs and IAtomContainer from the given SBML chemical {@see Species} using RDF MIRIAM annotations
-     *
-     * @param species An instance of an SBML Species using the attached Controlled Vocabulary (CV) terms. The CV
-     *                terms must contain a CHEBI identifier (MIRIAM Registry) to allow fetching of a structure using
-     *                Web
-     *                Services
-     *
-     * @return A instance of a CDK {@see IAtomContainer}
-     *
-     * @throws MissingStructureException Thrown if an {@see IAtomContainer} can not be built
-     */
-    public IAtomContainer getAtomContainer(Species species) throws MissingStructureException {
-
-        for (int i = 0; i < species.getNumCVTerms(); i++) {
-            for (String resource : species.getCVTerm(i).getResources()) {
-
-                Identifier id = MIRIAMLoader.getInstance().getIdentifier(resource);
-
-                if (id == null) {
-                    continue;
-                }
-
-                if (id instanceof ChEBIIdentifier) {
-                    LOGGER.debug("Fetching molecule for " + id);
-                    try {
-                        return chebiWS.getAtomContainer(id.getAccession());
-                    } catch (UnfetchableEntry ex) {
-                        LOGGER.debug("There was a problem loading: " + id + " : " + ex.getMessage());
-                    }
-
-                } else if (id instanceof KEGGIdentifier) {
-                    LOGGER.debug("Fetching molecule for " + id);
-                    try {
-                        return keggWS.getAtomContainer(id.getAccession());
-                    } catch (UnfetchableEntry ex) {
-                        LOGGER.debug("There was a problem loading: " + id + " : " + ex.getMessage());
-                    }
-
-                }
-            }
-        }
-
-        throw new MissingStructureException(species.getId());
-
-    }
-
-
     public boolean hasNext() {
         return reactionIndex + 1 < reactionCount;
     }
 
 
-    public AtomContainerReaction next() throws UnknownCompartmentException,
-            AbsentAnnotationException,
-            MissingStructureException {
 
-        reactionIndex++;
-        Reaction sbmlReaction = model.getReaction(reactionIndex);
-
-        AtomContainerReaction reaction = getReaction(sbmlReaction);
-
-        return reaction;
-
-    }
-
-
-    public MetabolicReactionImpl nextMetabolicReaction() throws UnknownCompartmentException {
+    public MetabolicReaction next() {
         reactionIndex++;
         Reaction sbmlReaction = model.getReaction(reactionIndex);
 
