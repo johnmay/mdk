@@ -42,7 +42,9 @@ import java.util.Set;
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
+ * @deprecated show be more generic and just accept comparisson methods
  */
+@Deprecated
 public class ReconstructionComparison {
 
     private static final Logger LOGGER = Logger.getLogger(ReconstructionComparison.class);

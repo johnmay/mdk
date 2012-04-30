@@ -1,10 +1,8 @@
 package uk.ac.ebi.mdk.tool.match;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
-import uk.ac.ebi.metabolomes.util.inchi.InChIConnectivity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -57,27 +55,29 @@ public class MetaboliteInChIMatcher
         Set<String> queryInChIs = new HashSet<String>();
         Set<String> subjectInChIs = new HashSet<String>();
 
-        for (InChI inchi : query.getAnnotations(InChI.class)) {
-            queryInChIs.add(connectivity
-                            ? InChIConnectivity.getInChIConnectivity(inchi.getValue())
-                            : inchi.getValue());
-        }
+        throw new UnsupportedOperationException("needs to more loosley coupled");
 
-        for (InChI inchi : subject.getAnnotations(InChI.class)) {
-            subjectInChIs.add(connectivity
-                              ? InChIConnectivity.getInChIConnectivity(inchi.getValue())
-                              : inchi.getValue());
-        }
+//        for (InChI inchi : query.getAnnotations(InChI.class)) {
+//            queryInChIs.add(connectivity
+//                            ? InChIConnectivity.getInChIConnectivity(inchi.getValue())
+//                            : inchi.getValue());
+//        }
+//
+//        for (InChI inchi : subject.getAnnotations(InChI.class)) {
+//            subjectInChIs.add(connectivity
+//                              ? InChIConnectivity.getInChIConnectivity(inchi.getValue())
+//                              : inchi.getValue());
+//        }
 
-        for (String queryInChI : queryInChIs) {
-            for (String subjectInChI : subjectInChIs) {
-                if (queryInChI.equals(subjectInChI)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+//        for (String queryInChI : queryInChIs) {
+//            for (String subjectInChI : subjectInChIs) {
+//                if (queryInChI.equals(subjectInChI)) {
+//                    return true;
+//                }
+//            }
+//        }
+//
+//        return false;
 
     }
 }

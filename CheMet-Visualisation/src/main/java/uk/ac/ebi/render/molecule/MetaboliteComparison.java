@@ -22,23 +22,19 @@ package uk.ac.ebi.render.molecule;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import java.lang.String;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
-import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.core.tools.ReconstructionComparison;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
+import uk.ac.ebi.mdk.tool.domain.ReconstructionComparison;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.*;
+import java.util.Map.Entry;
 
 
 /**
