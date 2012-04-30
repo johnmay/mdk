@@ -1,4 +1,4 @@
-package uk.ac.ebi.core.tools.compare;
+package uk.ac.ebi.mdk.tool.match;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;

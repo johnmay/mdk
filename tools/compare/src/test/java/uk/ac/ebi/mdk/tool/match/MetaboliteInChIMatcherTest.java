@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.core.tools.compare;
+package uk.ac.ebi.mdk.tool.match;
 
 import junit.framework.Assert;
 import org.junit.Before;

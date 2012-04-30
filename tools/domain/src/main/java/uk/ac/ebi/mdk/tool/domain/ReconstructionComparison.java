@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.core.tools;
+package uk.ac.ebi.mdk.tool.domain;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -27,8 +27,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
-import uk.ac.ebi.mdk.tool.domain.MolecularHash;
-import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
 import uk.ac.ebi.mdk.tool.domain.hash.*;
 
 import java.security.InvalidParameterException;

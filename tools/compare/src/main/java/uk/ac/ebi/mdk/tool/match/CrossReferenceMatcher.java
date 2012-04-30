@@ -1,4 +1,4 @@
-package uk.ac.ebi.core.tools.compare;
+package uk.ac.ebi.mdk.tool.match;
 
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
