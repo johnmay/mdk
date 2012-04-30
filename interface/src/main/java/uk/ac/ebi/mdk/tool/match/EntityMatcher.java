@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package uk.ac.ebi.mdk.tool.compare;
+package uk.ac.ebi.mdk.tool.match;
 
 import uk.ac.ebi.mdk.domain.entity.Entity;
 

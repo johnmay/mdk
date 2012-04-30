@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.metabolomes.util.inchi;
+package uk.ac.ebi.mdk.tool.inchi;
 
 import uk.ac.ebi.metabolomes.util.*;
 import org.apache.log4j.Level;

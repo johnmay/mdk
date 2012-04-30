@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.metabolomes.util.inchi;
+package uk.ac.ebi.mdk.tool.inchi;
 
 import com.google.common.io.Files;
 import java.io.BufferedReader;
@@ -15,7 +15,7 @@ import net.sf.jniinchi.INCHI_OPTION;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
-import uk.ac.ebi.metabolomes.util.inchi.InChIMoleculeChecker.InChIMoleculeCheckerResult;
+import uk.ac.ebi.mdk.tool.inchi.InChIMoleculeChecker.InChIMoleculeCheckerResult;
 
 /**
  *

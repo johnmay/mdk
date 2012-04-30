@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.metabolomes.util.inchi;
+package uk.ac.ebi.mdk.tool.inchi;
 
 import java.util.List;
 import net.sf.jniinchi.INCHI_OPTION;
@@ -13,7 +13,7 @@ import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.metabolomes.util.inchi.InChIMoleculeChecker.InChIMoleculeCheckerResult;
+import uk.ac.ebi.mdk.tool.inchi.InChIMoleculeChecker.InChIMoleculeCheckerResult;
 
 
 /**

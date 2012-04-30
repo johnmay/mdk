@@ -3,14 +3,13 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.metabolomes.util.inchi;
+package uk.ac.ebi.mdk.tool.inchi;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

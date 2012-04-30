@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.metabolomes.util.inchi;
+package uk.ac.ebi.mdk.tool.inchi;
 
 import java.util.List;
 import net.sf.jniinchi.INCHI_OPTION;
