@@ -11,7 +11,6 @@ import uk.ac.ebi.annotation.chemical.InChI;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
 
 
 /**

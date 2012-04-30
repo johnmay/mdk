@@ -42,7 +42,7 @@ import uk.ac.ebi.deprecated.services.LuceneService;
 import uk.ac.ebi.metabolomes.io.PubChemCompoundSDFFieldExtractor;
 import uk.ac.ebi.metabolomes.io.SDFFieldReader;
 import uk.ac.ebi.metabolomes.io.SDFRecord;
-import uk.ac.ebi.metabolomes.util.inchi.InChIConnectivity;
+import uk.ac.ebi.mdk.tool.inchi.InChIConnectivity;
 
 /**
  *          UniProtCrossRefs - 2011.12.10 <br>

@@ -11,7 +11,6 @@ import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
 
 
 /**
@@ -20,7 +19,6 @@ import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
  */
 public class NameMatcherTest {
 
-    private EntityMatcher matcher;
 
     private EntityFactory factory;
 
@@ -31,7 +29,6 @@ public class NameMatcherTest {
 
     public NameMatcherTest() {
 
-        matcher = new NameMatcher();
         factory = DefaultEntityFactory.getInstance();
     }
 
@@ -46,6 +43,24 @@ public class NameMatcherTest {
     @Test
     public void testNameEquality() {
 
+        EntityMatcher matcher = new NameMatcher();
+
+        m1.setName("ATP");
+        m2.setName("Adenosine TP");
+
+        Assert.assertFalse(matcher.matches(m1, m2));
+
+        m2.setName("ATP");
+
+        Assert.assertTrue(matcher.matches(m1, m2));
+
+    }
+
+    @Test
+    public void testNameEquality_inequalCase() {
+
+        EntityMatcher matcher = new NameMatcher();
+
         m1.setName("ATP");
         m2.setName("Adenosine TP");
 
@@ -59,7 +74,9 @@ public class NameMatcherTest {
 
 
     @Test
-    public void testSynonymEquality() {
+         public void testSynonymEquality() {
+
+        EntityMatcher matcher = new NameMatcher(false, true);
 
         m1.setName("ATP");
         m2.setName("Adenosine TP");
@@ -71,4 +88,21 @@ public class NameMatcherTest {
         Assert.assertTrue(matcher.matches(m1, m2));
 
     }
+
+    @Test
+    public void testNormalisedEquality() {
+
+        EntityMatcher matcher = new NameMatcher(false, false);
+
+        m1.setName("Adenosine triphosphate");
+        m2.setName("Adenosine-triphosphate");
+
+        Assert.assertFalse(matcher.matches(m1, m2));
+
+        matcher = new NameMatcher(true, false);
+
+        Assert.assertTrue(matcher.matches(m1, m2));
+
+    }
+
 }

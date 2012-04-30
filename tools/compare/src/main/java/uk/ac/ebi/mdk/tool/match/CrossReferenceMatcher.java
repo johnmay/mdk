@@ -3,7 +3,6 @@ package uk.ac.ebi.mdk.tool.match;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.tool.compare.EntityMatcher;
 
 import java.util.Collection;
 import java.util.HashSet;
