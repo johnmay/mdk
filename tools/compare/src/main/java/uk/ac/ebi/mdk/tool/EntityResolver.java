@@ -27,7 +27,8 @@ import java.util.Collection;
 import java.util.Stack;
 
 /**
- * Entity resolver controls matching of query entities to a reference using a stack of matching methods
+ * Entity resolver controls matching of query entities to a reference using a stack of matching
+ * methods. Methods at the top of the stack have the highest priority and are tested first
  *
  * @author John May
  */
@@ -38,14 +39,29 @@ public class EntityResolver<E extends Entity> {
     private Stack<EntityMatcher<E>> matchers = new Stack<EntityMatcher<E>>();
     private Collection<E> reference;
 
+    public EntityResolver() {
+        this(new ArrayList<E>());
+    }
+
     public EntityResolver(Collection<E> reference) {
         // take a shallow copy
         this.reference = new ArrayList<E>(reference);
     }
 
     /**
-     * Add a method to the top of the stack (lowest priority)
+     * Add a reference entity to the reference collection
+     *
+     * @param reference
+     */
+    public void addReference(E reference) {
+        this.reference.add(reference);
+    }
+
+    /**
+     * Add a method to the top of the stack (highest priority)
+     *
      * @param matcher new method
+     *
      * @see Stack#push(Object)
      */
     public void push(EntityMatcher<E> matcher) {
@@ -53,8 +69,10 @@ public class EntityResolver<E extends Entity> {
     }
 
     /**
-     * Remove a matcher from the top of the stack (lowest priority)
+     * Remove a matcher from the top of the stack (highest priority)
+     *
      * @return
+     *
      * @see java.util.Stack#pop()
      */
     public EntityMatcher<E> pop() {
@@ -62,8 +80,10 @@ public class EntityResolver<E extends Entity> {
     }
 
     /**
-     * Peak at the matcher at the top of the stack (lowest priority)
+     * Peak at the matcher at the top of the stack (highest priority)
+     *
      * @return matcher at the top of the stack
+     *
      * @see java.util.Stack#peek()
      */
     public EntityMatcher<E> peek() {
