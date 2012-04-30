@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.chemet.io.external;
+package uk.ac.ebi.mdk.tool.task.homology;
 
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
@@ -29,10 +29,11 @@ import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.chemet.exceptions.MissingPreferencesException;
 import uk.ac.ebi.chemet.resource.basic.TaskIdentifier;
-import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.core.HomologyDatabaseManager;
-import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
 
 import java.io.File;
 import java.io.IOException;

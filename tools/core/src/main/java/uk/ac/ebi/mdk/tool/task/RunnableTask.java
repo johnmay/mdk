@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.chemet.io.external;
+package uk.ac.ebi.mdk.tool.task;
 
 import uk.ac.ebi.annotation.task.ExecutableParameter;
 import uk.ac.ebi.annotation.task.Parameter;

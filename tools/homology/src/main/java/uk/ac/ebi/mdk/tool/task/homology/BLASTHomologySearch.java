@@ -18,16 +18,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.chemet.io.external;
+package uk.ac.ebi.mdk.tool.task.homology;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.annotation.task.FileParameter;
 import uk.ac.ebi.annotation.task.Parameter;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.io.blast.BlastReader;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.io.blast.BlastReader;
+import uk.ac.ebi.mdk.tool.task.RunnableTask;
 
 import java.io.File;
 import java.io.IOException;
