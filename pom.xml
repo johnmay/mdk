@@ -29,7 +29,7 @@
     <url>http://www.ebi.ac.uk/steinbeck</url>
 
     <properties>
-        <cdk.version>1.3.8-SNAPSHOT</cdk.version>
+        <cdk.version>1.4.9</cdk.version>
         <caf.version>0.8.5-SNAPSHOT</caf.version>
     </properties>
     

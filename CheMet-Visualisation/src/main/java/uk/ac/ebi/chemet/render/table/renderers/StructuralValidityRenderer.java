@@ -20,16 +20,14 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import javax.swing.ImageIcon;
-import javax.swing.JTable;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.ResourceUtility;
-import uk.ac.ebi.core.tools.StructuralValidity;
+import uk.ac.ebi.mdk.tool.domain.StructuralValidity;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.EnumMap;
+import java.util.Map;
 
 
 /**

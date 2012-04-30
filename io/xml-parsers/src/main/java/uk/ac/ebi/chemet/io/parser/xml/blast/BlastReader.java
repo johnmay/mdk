@@ -21,7 +21,6 @@
 package uk.ac.ebi.chemet.io.parser.xml.blast;
 
 import au.com.bytecode.opencsv.CSVReader;
-import com.hp.hpl.jena.reasoner.IllegalParameterException;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
@@ -33,6 +32,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import java.io.*;
+import java.security.InvalidParameterException;
 import java.util.*;
 
 /**
@@ -66,7 +66,7 @@ public class BlastReader {
         LOGGER.debug("parsing blast file: " + outputFile + " outfmt: " + format + " version: " + version);
 
         if (supportedFormats.contains(format) == false) {
-            throw new IllegalParameterException("Unsupported format " + format
+            throw new InvalidParameterException("Unsupported format " + format
                                                         + ". Currently supported:" + supportedFormats);
         } else {
             switch (format) {

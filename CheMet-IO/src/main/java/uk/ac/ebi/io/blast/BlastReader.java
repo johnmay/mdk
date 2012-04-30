@@ -21,21 +21,6 @@
 package uk.ac.ebi.io.blast;
 
 import au.com.bytecode.opencsv.CSVReader;
-import com.hp.hpl.jena.reasoner.IllegalParameterException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.XMLEvent;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
@@ -43,6 +28,13 @@ import uk.ac.ebi.chemet.io.external.RunnableTask;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.observation.sequence.LocalAlignment;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
+import java.io.*;
+import java.security.InvalidParameterException;
+import java.util.*;
 
 /**
  *          BlastReader – 2011.09.19 <br>
@@ -74,7 +66,7 @@ public class BlastReader {
         LOGGER.debug("parsing blast file: " + outputFile + " outfmt: " + format + " version: " + version);
 
         if (supportedFormats.contains(format) == false) {
-            throw new IllegalParameterException("Unsupported format " + format
+            throw new InvalidParameterException("Unsupported format " + format
                                                 + ". Currently supported:" + supportedFormats);
         } else {
             switch (format) {

@@ -98,20 +98,6 @@ public class DialogCompartmentResolver implements CompartmentResolver {
 
     }
 
-    public static void main(String[] args) {
-
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        CompartmentResolver resolver = new DialogCompartmentResolver(new AutomaticCompartmentResolver(), frame);
-
-        frame.setVisible(true);
-
-        for (Compartment compartment : Organelle.values()) {
-            System.out.println(compartment.getAbbreviation() + " = " + resolver.getCompartment(compartment.getAbbreviation()).getDescription());
-        }
-
-    }
-
     @Override
     public boolean isAmbiguous(String compartment) {
         return resolver.isAmbiguous(compartment);

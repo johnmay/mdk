@@ -21,24 +21,22 @@
 package uk.ac.ebi.render.crossreference.modules;
 
 import com.jgoodies.forms.layout.CellConstraints;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import uk.ac.ebi.annotation.Synonym;
 import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
-import uk.ac.ebi.core.tools.PeptideFactory;
-import uk.ac.ebi.core.tools.PeptideFactory.AminoAcid;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.tool.domain.PeptideFactory;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 
 /**
@@ -97,7 +95,7 @@ public class PeptideGenerator implements CrossreferenceModule {
     public void setup(Metabolite metabolite) {
         context = metabolite;
 
-        AminoAcid[] aa = factory.guessPeptide(context.getName());
+        PeptideFactory.AminoAcid[] aa = factory.guessPeptide(context.getName());
 
         for (int i = 0; i < boxes.length; i++) {
             boxes[i].setSelectedItem(i < aa.length ? aa[i] : null);

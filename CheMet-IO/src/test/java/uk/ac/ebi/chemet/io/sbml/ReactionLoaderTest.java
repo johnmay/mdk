@@ -7,11 +7,11 @@ package uk.ac.ebi.chemet.io.sbml;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerReaction;
 import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.io.xml.SBMLReactionReader;
-import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerReaction;
+import uk.ac.ebi.mdk.tool.domain.AutomaticCompartmentResolver;
 
 import java.io.InputStream;
 
