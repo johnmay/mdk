@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.prefs.Preferences;
 
 /**
- * AbstractQueryService - 23.02.2012 <br/>
+ * AbstractLuceneService - 23.02.2012 <br/>
  * <p/>
  * Provides a base for which other lucene query services can build upon. This
  * class provides a lot of utility methods for building queries, accessing score docs
@@ -33,10 +33,10 @@ import java.util.prefs.Preferences;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public abstract class AbstractQueryService<I extends Identifier>
+public abstract class AbstractLuceneService<I extends Identifier>
         implements QueryService<I> {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractQueryService.class);
+    private static final Logger LOGGER = Logger.getLogger(AbstractLuceneService.class);
 
     private Document[] documents;
     private Directory directory;
@@ -48,11 +48,11 @@ public abstract class AbstractQueryService<I extends Identifier>
 
     private Map<String, QueryParser> parserMap = new HashMap<String, QueryParser>();
 
-    private int max = Preferences.userNodeForPackage(AbstractQueryService.class).getInt("default.max.results", 100);
+    private int max = Preferences.userNodeForPackage(AbstractLuceneService.class).getInt("default.max.results", 100);
     private float minSimilarity = 0.5f; // for fuzzy queries
 
 
-    public AbstractQueryService(LuceneIndex index) {
+    public AbstractLuceneService(LuceneIndex index) {
 
         this.index = index;
 
@@ -140,7 +140,7 @@ public abstract class AbstractQueryService<I extends Identifier>
      * @inheritDoc
      */
     @Override
-    public boolean isAvailable() {
+    public boolean startup() {
         return directory != null
                 && analyzer != null
                 && index != null
