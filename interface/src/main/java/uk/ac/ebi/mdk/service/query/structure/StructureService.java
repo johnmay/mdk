@@ -16,11 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package uk.ac.ebi.mdk.service.query;
+package uk.ac.ebi.mdk.service.query.structure;
 
 import org.apache.lucene.index.Term;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.query.QueryService;
 
 import java.util.Collection;
 

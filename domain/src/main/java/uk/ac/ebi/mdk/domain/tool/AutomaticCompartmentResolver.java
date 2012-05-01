@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package uk.ac.ebi.mdk.tool.domain;
+package uk.ac.ebi.mdk.domain.tool;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
