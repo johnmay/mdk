@@ -18,7 +18,7 @@ import java.util.BitSet;
 
 import static org.apache.lucene.document.Field.Index.ANALYZED;
 import static org.apache.lucene.document.Field.Store.NO;
-import static uk.ac.ebi.mdk.service.query.StructureService.*;
+import static uk.ac.ebi.mdk.service.query.structure.StructureService.*;
 
 /**
  * ${Name}.java - 20.02.2012 <br/> MetaInfo...

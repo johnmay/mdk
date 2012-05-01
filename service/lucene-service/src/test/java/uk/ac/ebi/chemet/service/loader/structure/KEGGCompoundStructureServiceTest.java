@@ -11,7 +11,7 @@ import uk.ac.ebi.chemet.service.query.structure.KEGGCompoundStructureService;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.ResourceLoader;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;
-import uk.ac.ebi.mdk.service.query.StructureService;
+import uk.ac.ebi.mdk.service.query.structure.StructureService;
 
 import java.io.File;
 import java.io.IOException;

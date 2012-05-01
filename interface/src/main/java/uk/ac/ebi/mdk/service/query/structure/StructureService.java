@@ -23,8 +23,6 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.query.QueryService;
 
-import java.util.Collection;
-
 /**
  * StructureService - 28.02.2012 <br/>
  * <p/>
@@ -47,16 +45,5 @@ public interface StructureService<I extends Identifier> extends QueryService<I> 
      * @return
      */
     public IAtomContainer getStructure(I identifier);
-
-    /**
-     * Search for similar structures
-     * <p/>
-     * <b>NOTE: API may change in future</b>
-     *
-     * @param molecule the structure to search
-     *
-     * @return identifiers in this service which have similar structure
-     */
-    public Collection<I> searchStructure(IAtomContainer molecule);
 
 }

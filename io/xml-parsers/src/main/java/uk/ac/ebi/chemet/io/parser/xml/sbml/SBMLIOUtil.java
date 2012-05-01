@@ -23,16 +23,12 @@ package uk.ac.ebi.chemet.io.parser.xml.sbml;
 import org.apache.log4j.Logger;
 import org.sbml.jsbml.*;
 import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.mdk.domain.entity.reaction.ParticipantImplementation;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
-import uk.ac.ebi.mdk.domain.entity.reaction.CompartmentalisedParticipant;
-import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.*;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,15 +56,17 @@ public class SBMLIOUtil {
 
     private Map<Compartment, org.sbml.jsbml.Compartment> compartmentMap = new HashMap<Compartment, org.sbml.jsbml.Compartment>();
 
+    private EntityFactory factory;
 
-    public SBMLIOUtil(int level, int version) {
+    public SBMLIOUtil(EntityFactory factory, int level, int version) {
         this.level = level;
         this.version = version;
+        this.factory = factory;
     }
 
 
-    public SBMLIOUtil() {
-        this(2, 2);
+    public SBMLIOUtil(EntityFactory factory) {
+        this(factory, 2, 2);
     }
 
 
@@ -173,7 +171,11 @@ public class SBMLIOUtil {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
-        ParticipantImplementation key = new MetabolicParticipantImplementation(participant.getMolecule(), 1d, participant.getCompartment());
+
+        MetabolicParticipant key = factory.newInstance(MetabolicParticipant.class);
+        key.setCoefficient(1d);
+        key.setCompartment(participant.getCompartment());
+        key.setMolecule(participant.getMolecule());
 
         // create a new entry if one doesn't exists
         if (speciesReferences.containsKey(key) == false) {

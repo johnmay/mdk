@@ -14,7 +14,9 @@ import uk.ac.ebi.chemet.service.analyzer.FingerprintSimilarity;
 import uk.ac.ebi.chemet.service.query.AbstractQueryService;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
-import uk.ac.ebi.mdk.service.query.StructureService;
+import uk.ac.ebi.mdk.service.query.structure.StructureSearch;
+import uk.ac.ebi.mdk.service.query.structure.StructureService;
+import uk.ac.ebi.mdk.service.query.structure.SubstructureSearch;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInput;
@@ -32,7 +34,9 @@ import java.util.Collection;
  */
 public abstract class AbstractStructureQueryService<I extends Identifier>
         extends AbstractQueryService<I>
-        implements StructureService<I> {
+        implements StructureService<I>,
+                   StructureSearch<I>,
+                   SubstructureSearch<I> {
 
     private IndexSearcher searcher;
     private IFingerprinter fingerprinter = new Fingerprinter();
@@ -51,13 +55,13 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
 
         byte[] bytes = firstBinaryValue(construct(identifier.getAccession(), IDENTIFIER), ATOM_CONTAINER);
 
-        try{
+        try {
             ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(bytes));
             return (IAtomContainer) in.readObject();
-        } catch (Exception ex){
+        } catch (Exception ex) {
             LOGGER.warn("Error reading atom container");
         }
-        
+
         return new AtomContainer();
 
     }
@@ -66,11 +70,14 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
      * Set the fingerprint method. This method is needed if the fingerprint method
      * used to write the index was different from the default. Note: changing the
      * fingerprint method here and not when creating the index will not work
+     *
      * @param fingerprinter
+     *
      * @see IFingerprinter
-     * @see uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter#DefaultStructureIndexWriter(uk.ac.ebi.mdk.service.index.LuceneIndex, org.openscience.cdk.fingerprint.IFingerprinter)
+     * @see uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter#DefaultStructureIndexWriter(uk.ac.ebi.mdk.service.index.LuceneIndex,
+     *      org.openscience.cdk.fingerprint.IFingerprinter)
      */
-    public void setFingerprinter(IFingerprinter fingerprinter){
+    public void setFingerprinter(IFingerprinter fingerprinter) {
         this.fingerprinter = fingerprinter;
     }
 
@@ -81,24 +88,36 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
      * @param molecule the structure to search
      *
      * @return identifiers with similar structure
+     *
      * @see #setFingerprinter(org.openscience.cdk.fingerprint.IFingerprinter)
-     * @see #searchStructure(java.util.BitSet)
+     * @see #searchStructure(java.util.BitSet, boolean, boolean)
      */
     @Override
-    public Collection<I> searchStructure(IAtomContainer molecule){
-        try{
-            return searchStructure(fingerprinter.getFingerprint(molecule));
-        } catch (CDKException ex){
+    public Collection<I> structureSearch(IAtomContainer molecule, boolean approximate) {
+        LOGGER.error("Approximate variable not used!");
+        try {
+            return searchStructure(fingerprinter.getFingerprint(molecule), approximate, false);
+        } catch (CDKException ex) {
             return new ArrayList<I>();
         }
     }
 
-    public Collection<I> searchStructure(BitSet fp) {
+    @Override
+    public Collection<I> substructureSearch(IAtomContainer molecule) {
+        try {
+            return searchStructure(fingerprinter.getFingerprint(molecule), true, true);
+        } catch (CDKException ex) {
+            return new ArrayList<I>();
+        }
+    }
+
+    public Collection<I> searchStructure(BitSet fp, boolean approximate, boolean substructure) {
 
         // construct the query
         BooleanQuery query = new BooleanQuery();
-        for(int i = fp.nextSetBit(0); i != -1; i = fp.nextSetBit(i + 1)){
-            query.add(construct(Integer.toString(i), FINGERPRINT_BIT), BooleanClause.Occur.SHOULD);
+        for (int i = fp.nextSetBit(0); i != -1; i = fp.nextSetBit(i + 1)) {
+            query.add(construct(Integer.toString(i), FINGERPRINT_BIT),
+                      substructure ? BooleanClause.Occur.MUST : BooleanClause.Occur.SHOULD);
         }
 
         return getIdentifiers(query);

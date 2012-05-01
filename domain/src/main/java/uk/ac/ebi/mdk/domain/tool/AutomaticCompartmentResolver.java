@@ -25,7 +25,6 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.*;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
 
-import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
@@ -172,8 +171,7 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
     /**
      * Access an appropriate instance of a compartment for the given string notation. If
      * the notation is ambiguous a warning will be logged. If no appropriate instance is
-     * available then a runtime exception ({@see InvalidParameterException}) will be thrown
-     * and the returned instance will be null.
+     * available then an Unknown compartment is returned
      *
      * @param compartment name or abbreviation of a compartment (i.e. 'c', 'e', 'cytoplasm')
      *
@@ -193,7 +191,7 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
             return compartments.get(compartment).iterator().next();
         }
 
-        throw new InvalidParameterException("No compartment found for input " + compartment);
+        return Organelle.UNKNOWN;
 
     }
 

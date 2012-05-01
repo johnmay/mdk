@@ -10,6 +10,7 @@
         <module>lucene-service</module>
         <module>derby-service</module>
         <module>service-core</module>
+        <module>soap</module>
     </modules>
     <packaging>pom</packaging>
 

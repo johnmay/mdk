@@ -28,9 +28,9 @@ import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.resource.reaction.KEGGReactionIdentifier;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
-import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;

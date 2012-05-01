@@ -26,17 +26,13 @@ import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
 import uk.ac.ebi.chemet.resource.util.MIRIAMLoader;
-import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
-import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
-import uk.ac.ebi.mdk.tool.domain.AutomaticCompartmentResolver;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.InputStream;
@@ -86,7 +82,7 @@ public class SBMLReactionReader {
     private Map<Species, Metabolite> speciesMap = new HashMap<Species, Metabolite>();
 
     private Map<String, Metabolite> speciesNameMap = new HashMap<String, Metabolite>();
-    
+
     private Map<Compartment, uk.ac.ebi.mdk.domain.entity.reaction.Compartment> compartments = new HashMap<Compartment, uk.ac.ebi.mdk.domain.entity.reaction.Compartment>();
 
     private EntityFactory factory;
@@ -104,36 +100,10 @@ public class SBMLReactionReader {
      * @throws XMLStreamException
      */
     public SBMLReactionReader(InputStream stream, EntityFactory factory, CompartmentResolver resolver) throws XMLStreamException {
-        this(reader.readSBMLFromStream(stream));
+        this(reader.readSBMLFromStream(stream), factory, resolver);
         this.factory = factory;
         this.resolver = resolver;
     }
-
-
-    /**
-     * Construct an SBML reaction reader using an input stream using a specified participant
-     * filter
-     *
-     * @param stream
-     *
-     * @throws XMLStreamException
-     */
-    public SBMLReactionReader(InputStream stream) throws
-            XMLStreamException {
-        this(reader.readSBMLFromStream(stream),  DefaultEntityFactory.getInstance(), new AutomaticCompartmentResolver());
-    }
-
-
-    /**
-     * This constructor uses an empty {@see AcceptAllFilter} (i.e. accept all participants)
-     *
-     * @param document
-     */
-    public SBMLReactionReader(SBMLDocument document) {
-        // default filter is an empty instantiation of BasicFilter (accepts all)
-        this(document, DefaultEntityFactory.getInstance(), new AutomaticCompartmentResolver());
-    }
-
 
     public SBMLReactionReader(SBMLDocument document, EntityFactory factory, CompartmentResolver resolver) {
         this.document = document;
@@ -144,11 +114,12 @@ public class SBMLReactionReader {
     }
 
 
-    public MetabolicReactionImpl getMetabolicReaction(Reaction sbmlReaction) {
+    public MetabolicReaction getMetabolicReaction(Reaction sbmlReaction) {
 
-        MetabolicReactionImpl reaction = new MetabolicReactionImpl(new BasicReactionIdentifier(sbmlReaction.getId()),
-                                                                                       sbmlReaction.getMetaId(),
-                                                                                       sbmlReaction.getName());
+        MetabolicReaction reaction = factory.ofClass(MetabolicReaction.class,
+                                                     new BasicReactionIdentifier(sbmlReaction.getId()),
+                                                     sbmlReaction.getName(),
+                                                     sbmlReaction.getMetaId());
         LOGGER.info("Reading SBML reaction " + reaction);
 
         for (int i = 0; i < sbmlReaction.getNumReactants(); i++) {
@@ -192,7 +163,7 @@ public class SBMLReactionReader {
 
     public uk.ac.ebi.mdk.domain.entity.reaction.Compartment getCompartment(Compartment compartment) {
 
-        if(compartments.containsKey(compartment)){
+        if (compartments.containsKey(compartment)) {
             return compartments.get(compartment);
         }
 
@@ -201,19 +172,18 @@ public class SBMLReactionReader {
 
         uk.ac.ebi.mdk.domain.entity.reaction.Compartment c = resolver.getCompartment(id);
 
-        if(c != null){
+        if (c != null) {
             compartments.put(compartment, c);
             return c;
         }
 
         c = resolver.getCompartment(name);
-        if(c != null){
+        if (c != null) {
             compartments.put(compartment, c);
             return c;
         }
 
-        compartments.put(compartment, Organelle.UNKNOWN);
-        return Organelle.UNKNOWN;
+        throw new UnsupportedOperationException("No compartment resolved");
 
     }
 
@@ -223,10 +193,8 @@ public class SBMLReactionReader {
      * @param speciesReference An instance of SBML {@see SpeciesReference}
      *
      * @return An MetaboliteParticipant
-     *
      */
-    public MetabolicParticipantImplementation getMetaboliteParticipant(SpeciesReference speciesReference)
-              {
+    public MetabolicParticipant getMetaboliteParticipant(SpeciesReference speciesReference) {
 
         Species species = getSpecies(speciesReference);
 
@@ -261,15 +229,18 @@ public class SBMLReactionReader {
             speciesNameMap.put(metabolite.getName(), metabolite);
         }
 
-        return new MetabolicParticipantImplementation(metabolite,
-                                                      coefficient,
-                                                      compartment);
+        MetabolicParticipant participant = factory.newInstance(MetabolicParticipant.class);
+        participant.setMolecule(metabolite);
+        participant.setCoefficient(coefficient);
+        participant.setCompartment(compartment);
+
+        return participant;
+
     }
 
     public boolean hasNext() {
         return reactionIndex + 1 < reactionCount;
     }
-
 
 
     public MetabolicReaction next() {

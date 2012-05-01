@@ -62,6 +62,7 @@ public class LuceneServiceManager
 
     /**
      * Acces the singleton instance of this {@see ServiceManager}
+     *
      * @return instance of the manager
      */
     public static LuceneServiceManager getInstance() {
@@ -101,6 +102,51 @@ public class LuceneServiceManager
 
         // may want to do something better
         throw new InvalidParameterException("No " + c + "service available for " + identifier.getSimpleName());
+    }
+
+    /**
+     * Access a service that implements multiple interfaces
+     * @param identifier
+     * @param classes
+     * @param <S>
+     * @param <I>
+     *
+     * Example:
+     * <pre>{@code
+     * QueryService<ChEBIIdentifier> service = ServiceManager.getService(ChEBIIdentifier.class,
+     *                                                                   BrandNameService.class,
+     *                                                                   IUPACNameService.class,
+     *                                                                   PreferredNameService.class);
+     *
+     *
+     * BrandNameService<ChEBIIdentifier> brandService    = (BrandNameService<ChEBIIdentifier>) service;
+     * IUPACNameService<ChEBIIdentifier> iupacService    = (IUPACNameService<ChEBIIdentifier>) service;
+     * PreferredNameService<ChEBIIdentifier> prefService = (PreferredNameService<ChEBIIdentifier>) service;
+     *
+     * ChEBIIdentifier chebiId = new ChEBIIdentifier("CHEBI:15422");
+     *
+     * System.out.println("Brand: "     + brandService.getBrandName(chebiId));
+     * System.out.println("IUPAC: "     + iupacService.getIUPACName(chebiId));
+     * System.out.println("Preferred: " + prefService.getPreferredName(chebiId));
+     *}</pre>
+     *
+     * @return
+     */
+    public <S extends QueryService<I>,
+            I extends Identifier> S getService(Class<I> identifier, Class... classes) {
+
+        for (QueryService service : services.get(identifier)) {
+            for (Class c : classes) {
+                if (!c.isAssignableFrom(service.getClass())) {
+                    break;
+                }
+                return (S) service;
+            }
+        }
+
+        // may want to do something better
+        throw new InvalidParameterException("No " + classes + "service available for " + identifier.getSimpleName());
+
     }
 
 }

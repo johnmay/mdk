@@ -28,6 +28,7 @@ import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.tool.domain.ReconstructionComparison;
 
@@ -75,17 +76,17 @@ public class MetaboliteComparison {
 
         JTable table = new JTable();
 
-        ReconstructionImpl[] recons = comparison.getReconstructions();
+        Reconstruction[] recons = comparison.getReconstructions();
 
-        Map<Integer, Multimap<ReconstructionImpl, Metabolite>> map = new HashMap();
+        Map<Integer, Multimap<Reconstruction, Metabolite>> map = new HashMap();
 
         for (int i = 0; i < recons.length; i++) {
-            ReconstructionImpl reconstruction = recons[i];
+            Reconstruction reconstruction = recons[i];
             for (Entry<Metabolite, Integer> e : comparison.getMoleculeHashMap(reconstruction).entrySet()) {
 
                 Integer key = e.getValue();
                 if (!map.containsKey(key)) {
-                    Multimap<ReconstructionImpl, Metabolite> sub = ArrayListMultimap.create();
+                    Multimap<Reconstruction, Metabolite> sub = ArrayListMultimap.create();
                     map.put(key, sub);
                 }
                 map.get(key).put(reconstruction, e.getKey());
@@ -97,12 +98,12 @@ public class MetaboliteComparison {
 
         Object[][] data = new Object[map.keySet().size()][recons.length];
         int i = 0;
-        for (Entry<Integer, Multimap<ReconstructionImpl, Metabolite>> e : map.entrySet()) {
+        for (Entry<Integer, Multimap<Reconstruction, Metabolite>> e : map.entrySet()) {
             Integer key = e.getKey();
-            Multimap<ReconstructionImpl, Metabolite> sub = e.getValue();
+            Multimap<Reconstruction, Metabolite> sub = e.getValue();
             for (int j = 0; j < recons.length; j++) {
 
-                ReconstructionImpl recon = recons[j];
+                Reconstruction recon = recons[j];
 
                 switch (type) {
 
