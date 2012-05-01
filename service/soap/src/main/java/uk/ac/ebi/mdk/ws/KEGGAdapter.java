@@ -1,15 +1,10 @@
-package uk.ac.ebi.mdk.ws.kegg;
+package uk.ac.ebi.mdk.ws;
 
 import jp.genome.ws.kegg.KEGGLocator;
 import jp.genome.ws.kegg.KEGGPortType;
 import jp.genome.ws.kegg.StructureAlignment;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.io.MDLV2000Reader;
-import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGDrugIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KeggGlycanIdentifier;
@@ -21,42 +16,33 @@ import uk.ac.ebi.mdk.service.query.structure.StructureSearch;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 
 import javax.xml.rpc.ServiceException;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.rmi.RemoteException;
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author John May
  */
-public abstract class KEGGWSAdapter<I extends Identifier>
+public abstract class KEGGAdapter<I extends Identifier>
+        extends AbstractSoapService<I>
         implements StructureService<I>,
                    StructureSearch<I>,
                    PreferredNameService<I>,
                    NameService<I>,
                    SynonymService<I> {
 
-    private static final Logger LOGGER = Logger.getLogger(KEGGWSAdapter.class);
+    private static final Logger LOGGER = Logger.getLogger(KEGGAdapter.class);
 
+    private KEGGLocator locator = new KEGGLocator();
     private KEGGPortType service;
-
-    private MDLV2000Reader reader = new MDLV2000Reader();
-    private MDLV2000Writer writer = new MDLV2000Writer();
-
-    private static final IChemObjectBuilder BUILDER = DefaultChemObjectBuilder.getInstance();
 
     private Map<Class<? extends Identifier>, String> prefixes = new HashMap<Class<? extends Identifier>, String>(5);
 
-    private Integer maxResults = 100;
-    private Float similarity = 0.5f;
-
-
-    public KEGGWSAdapter() throws ServiceException {
-
+    public KEGGAdapter() {
         prefixes.put(KEGGCompoundIdentifier.class, "cpd");
-
-        service = new KEGGLocator().getKEGGPort();
     }
 
     @Override
@@ -108,11 +94,7 @@ public abstract class KEGGWSAdapter<I extends Identifier>
 
         try {
             for (String id : search(name)) {
-
-                I identifier = getIdentifier();
-                identifier.setAccession(id.substring(4));
-                identifies.add(identifier);
-
+                identifies.add(getIdentifier(id.substring(4)));
             }
         } catch (RemoteException ex) {
             LOGGER.error("Remote exception: " + ex.getMessage());
@@ -148,20 +130,15 @@ public abstract class KEGGWSAdapter<I extends Identifier>
 
                 String prefix = prefixes.get(identifier.getClass());
                 String query = "-f m " + prefix + ":" + identifier.getAccession();
-                String mol = service.bget(query);
 
-                reader.setReader(new StringReader(mol));
-
-                return reader.read(BUILDER.newInstance(IAtomContainer.class));
+                return mol2Structure(service.bget(query));
 
             } catch (RemoteException ex) {
                 LOGGER.error("RemoteException: " + ex.getMessage());
-            } catch (CDKException ex) {
-                LOGGER.error("CDKException: " + ex.getMessage());
             }
 
             // return an empty atom container
-            return BUILDER.newInstance(IAtomContainer.class);
+            return mol2Structure(null);
 
         }
         throw new InvalidParameterException("Identifier class is not supported");
@@ -178,31 +155,21 @@ public abstract class KEGGWSAdapter<I extends Identifier>
         if (identifier instanceof KEGGCompoundIdentifier) {
 
             try {
-                StringWriter sw = new StringWriter();
-                writer.setWriter(sw);
-                writer.writeMolecule(molecule);
 
-                System.out.println(sw.toString());
-
-                for (StructureAlignment alignment : service.search_compounds_by_subcomp(sw.toString(),
+                for (StructureAlignment alignment : service.search_compounds_by_subcomp(structure2Mol(molecule),
                                                                                         0,            // 0= start at first result
-                                                                                        maxResults)) {
+                                                                                        getMaxResults())) {
 
                     // if approximate is set the alignment score must equal 1.0f....
                     // if not set the score must be greate then the similarity
-                    if (!approximate && alignment.getScore() > similarity
+                    if (!approximate && alignment.getScore() > getSimilarity()
                             || alignment.getScore() == 1.0f) {
-                        I target = getIdentifier();
-                        target.setAccession(alignment.getTarget_id());
-                        identifiers.add(target);
+                        identifiers.add(getIdentifier(alignment.getTarget_id().substring(4)));
                     }
                 }
 
-            } catch (CDKException ex) {
-                LOGGER.error("Could not create molfile from structure");
-                ex.printStackTrace();
-            } catch (Exception ex) {
-                LOGGER.error("Could not create molfile from structure");
+            } catch (RemoteException ex) {
+                LOGGER.error("Could not search structure");
                 ex.printStackTrace();
             }
 
@@ -240,29 +207,14 @@ public abstract class KEGGWSAdapter<I extends Identifier>
     }
 
 
-    /**
-     * Currently only used in structure search
-     *
-     * @param maxResults number of results
-     */
     @Override
-    public void setMaxResults(int maxResults) {
-        this.maxResults = maxResults;
-    }
-
-    /**
-     * Currently only used in structure search
-     *
-     * @param similarity new minimum similarity
-     */
-    @Override
-    public void setMinSimilarity(float similarity) {
-        this.similarity = similarity;
-    }
-
-    @Override
-    public boolean isAvailable() {
-        // whether the service connected?
+    public boolean startup() {
+        if (service != null) return true;
+        try {
+            service = locator.getKEGGPort();
+        } catch (ServiceException ex) {
+            LOGGER.error("Startup failed on SOAP Web Service: " + ex.getMessage());
+        }
         return service != null;
     }
 }

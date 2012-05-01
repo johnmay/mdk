@@ -8,7 +8,7 @@ import java.io.File;
 /**
  * BasicServiceLocation.java - 21.02.2012 <br/> Description...
  * <p/>
- * Provides name storage and isAvailable/lastModified implementations
+ * Provides name storage and startup/lastModified implementations
  * as well as backup and revert operations on a single file
  *
  * @author johnmay

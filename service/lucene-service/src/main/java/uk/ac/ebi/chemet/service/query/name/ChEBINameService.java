@@ -5,7 +5,7 @@ import uk.ac.ebi.chemet.service.index.name.ChEBINameIndex;
 import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
 import uk.ac.ebi.chemet.service.loader.location.ZIPSystemLocation;
 import uk.ac.ebi.chemet.service.loader.name.ChEBINameLoader;
-import uk.ac.ebi.chemet.service.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.AbstractLuceneService;
 import uk.ac.ebi.chemet.service.query.LuceneServiceManager;
 import uk.ac.ebi.mdk.service.ResourceLoader;
 import uk.ac.ebi.mdk.service.query.name.*;
@@ -23,7 +23,7 @@ import java.util.HashSet;
  * @version $Rev$
  */
 public class ChEBINameService
-        extends AbstractQueryService<ChEBIIdentifier>
+        extends AbstractLuceneService<ChEBIIdentifier>
         implements IUPACNameService<ChEBIIdentifier>,
                    PreferredNameService<ChEBIIdentifier>,
                    SynonymService<ChEBIIdentifier>,

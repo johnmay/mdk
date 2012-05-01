@@ -28,7 +28,7 @@ import java.io.IOException;
  * LuceneIndex.java - 20.02.2012 <br/>
  * <p/>
  * Lucene index describes the location of the index as well as the Directory and Analyzer used to create the index.
- * It should indicate whether a) isAvailable() for a service to use and b) getLastUpdate() to inform the user if
+ * It should indicate whether a) startup() for a service to use and b) getLastUpdate() to inform the user if
  * an update is needed
  *
  * @author johnmay

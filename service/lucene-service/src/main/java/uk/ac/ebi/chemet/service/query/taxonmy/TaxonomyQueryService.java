@@ -3,7 +3,7 @@ package uk.ac.ebi.chemet.service.query.taxonmy;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import uk.ac.ebi.chemet.service.index.other.TaxonomyIndex;
-import uk.ac.ebi.chemet.service.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.AbstractLuceneService;
 import uk.ac.ebi.resource.organism.Kingdom;
 import uk.ac.ebi.resource.organism.Taxonomy;
 import uk.ac.ebi.mdk.service.query.name.NameService;
@@ -21,7 +21,7 @@ import java.util.Collection;
  * @version $Rev$
  */
 public class TaxonomyQueryService
-        extends AbstractQueryService<Taxonomy>
+        extends AbstractLuceneService<Taxonomy>
         implements NameService<Taxonomy> {
 
     private static final Logger LOGGER = Logger.getLogger(TaxonomyQueryService.class);

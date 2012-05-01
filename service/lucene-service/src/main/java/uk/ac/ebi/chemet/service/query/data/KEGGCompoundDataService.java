@@ -7,7 +7,7 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.service.index.data.KEGGCompoundDataIndex;
-import uk.ac.ebi.chemet.service.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.AbstractLuceneService;
 import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
 
 import java.util.Collection;
@@ -23,7 +23,7 @@ import java.util.Collection;
  * @version $Rev$
  */
 public class KEGGCompoundDataService
-        extends AbstractQueryService<KEGGCompoundIdentifier>
+        extends AbstractLuceneService<KEGGCompoundIdentifier>
         implements MolecularFormulaService<KEGGCompoundIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundDataService.class);

@@ -58,6 +58,7 @@ public class HMDBStructureLoader
         // reader the sdf
         IteratingMDLReader sdf = new IteratingMDLReader(location.open(), DefaultChemObjectBuilder.getInstance());
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
+        sdf.setSkip(true);
 
         while (sdf.hasNext()) {
 

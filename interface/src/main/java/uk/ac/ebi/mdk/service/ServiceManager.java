@@ -36,7 +36,7 @@ public interface ServiceManager {
     /**
      * Determine whether a particular service is available in the manager. This method will
      * determine not only if the service is pressent in the manager but also whether the service
-     * is available (via. {@see QueryService#isAvailable()). <br/>
+     * is available (via. {@see QueryService#startup()). <br/>
      * <p/>
      * <b>Example:</b>
      * <pre>
@@ -51,7 +51,10 @@ public interface ServiceManager {
      *
      * @return
      */
-    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<I> identifierClass,
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifierClass,
+                                                                                Class<S> serviceClass);
+
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier,
                                                                                 Class<S> serviceClass);
 
     /**
@@ -65,15 +68,15 @@ public interface ServiceManager {
      * <pre>{@code
      * // get the required service manager
      * ServiceManager manager = ...;
-     *
+     * <p/>
      * ChEBIIdentifier identifier = new ChEBIIdentifier("CHEBI:15422");
-     *
+     * <p/>
      * // get the cross-reference service for a given identifier
      * if(manager.hasService(identifier.getClass(), CrossReferenceService.class)){
-     *
+     * <p/>
      *     CrossReferenceService service = manager.getService(identifier.getClass(),
      *                                                        CrossReferenceService.class);
-     *
+     * <p/>
      *     // use the service
      *     Collection crossreferences = service.getCrossReferences(identifier);
      * }}
@@ -87,7 +90,10 @@ public interface ServiceManager {
      * @return instance of the service that matches the criteria (if no service
      *         matches and invalid parameter exception is thrown)
      */
-    public <S extends QueryService<I>, I extends Identifier> S getService(Class<I> identifierClass,
+    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifierClass,
+                                                                          Class<S> serviceClass);
+
+    public <S extends QueryService<I>, I extends Identifier> S getService(I identifier,
                                                                           Class<S> serviceClass);
 
 }

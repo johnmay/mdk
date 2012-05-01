@@ -54,6 +54,7 @@ public class ChEBIStructureLoader
         // get the SDF ResourceFileLocation and open up an sdf-reader
         ResourceFileLocation location = getLocation("ChEBI SDF");
         IteratingMDLReader sdfReader = new IteratingMDLReader(location.open(), DefaultChemObjectBuilder.getInstance());
+        sdfReader.setSkip(true);
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
 
         while (sdfReader.hasNext()) {

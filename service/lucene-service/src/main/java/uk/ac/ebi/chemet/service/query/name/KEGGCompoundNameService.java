@@ -2,7 +2,7 @@ package uk.ac.ebi.chemet.service.query.name;
 
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.service.index.name.KEGGCompoundNameIndex;
-import uk.ac.ebi.chemet.service.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.AbstractLuceneService;
 import uk.ac.ebi.mdk.service.query.name.NameService;
 import uk.ac.ebi.mdk.service.query.name.PreferredNameService;
 import uk.ac.ebi.mdk.service.query.name.SynonymService;
@@ -20,7 +20,7 @@ import java.util.HashSet;
  * @version $Rev$
  */
 public class KEGGCompoundNameService
-        extends AbstractQueryService<KEGGCompoundIdentifier>
+        extends AbstractLuceneService<KEGGCompoundIdentifier>
         implements
                    PreferredNameService<KEGGCompoundIdentifier>,
                    SynonymService<KEGGCompoundIdentifier>,

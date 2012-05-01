@@ -34,6 +34,24 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
  */
 public interface QueryService<I extends Identifier> {
 
+    public enum ServiceType {
+        LUCENE_INDEX(1),
+        RELATIONAL_DATABASE(2),
+        REST_WEB_SERVICE(3),
+        SOAP_WEB_SERVICE(4);
+
+        private Integer priority;
+
+        private ServiceType(int priority) {
+            this.priority = priority;
+        }
+
+        public Integer getPriority() {
+            return priority;
+        }
+
+    }
+
     /**
      * Identifier term should be used to create and search any identifier
      * field in an index. This ensures naming consistency
@@ -42,19 +60,24 @@ public interface QueryService<I extends Identifier> {
 
     /**
      * Provides an instance of a identifier usable by the service.
+     *
      * @return instance of identifier specific to this service
      */
     public I getIdentifier();
 
+    public ServiceType getServiceType();
+
     /**
      * Set the maximum number of results to collection. This will limit
      * the query to return at maximum this number of results
+     *
      * @param maxResults number of results
      */
     public void setMaxResults(int maxResults);
 
     /**
      * Set the default minimum similarity for approximate searches.
+     *
      * @param similarity new minimum similarity
      */
     public void setMinSimilarity(float similarity);
@@ -64,8 +87,9 @@ public interface QueryService<I extends Identifier> {
      * of a database/webservice connection this method should return false
      * if a connection could not be made. In the case of a lucene index
      * service the index is checked whether it is available
+     *
      * @return whether the service is available
      */
-    public boolean isAvailable();
+    public boolean startup();
 
 }

@@ -8,7 +8,7 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.chemet.service.index.data.HMDBDataIndex;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultDataIndexWriter;
-import uk.ac.ebi.chemet.service.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.AbstractLuceneService;
 import uk.ac.ebi.mdk.service.query.data.MolecularChargeService;
 import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
 
@@ -25,7 +25,7 @@ import java.util.Collection;
  * @version $Rev$
  */
 public class HMDBDataService
-        extends AbstractQueryService<HMDBIdentifier>
+        extends AbstractLuceneService<HMDBIdentifier>
         implements MolecularChargeService<HMDBIdentifier>,
                    MolecularFormulaService<HMDBIdentifier> {
 

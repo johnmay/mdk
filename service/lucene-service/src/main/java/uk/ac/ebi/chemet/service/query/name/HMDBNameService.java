@@ -2,7 +2,7 @@ package uk.ac.ebi.chemet.service.query.name;
 
 import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
 import uk.ac.ebi.chemet.service.index.name.HMDBNameIndex;
-import uk.ac.ebi.chemet.service.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.AbstractLuceneService;
 import uk.ac.ebi.mdk.service.query.name.IUPACNameService;
 import uk.ac.ebi.mdk.service.query.name.NameService;
 import uk.ac.ebi.mdk.service.query.name.PreferredNameService;
@@ -21,7 +21,7 @@ import java.util.HashSet;
  * @version $Rev$
  */
 public class HMDBNameService
-        extends AbstractQueryService<HMDBIdentifier>
+        extends AbstractLuceneService<HMDBIdentifier>
         implements IUPACNameService<HMDBIdentifier>,
                    PreferredNameService<HMDBIdentifier>,
                    SynonymService<HMDBIdentifier>,

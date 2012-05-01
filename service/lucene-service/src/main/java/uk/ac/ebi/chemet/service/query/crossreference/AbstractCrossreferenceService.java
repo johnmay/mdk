@@ -5,7 +5,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
-import uk.ac.ebi.chemet.service.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.AbstractLuceneService;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @version $Rev$
  */
 public abstract class AbstractCrossreferenceService<I extends Identifier>
-        extends AbstractQueryService<I>
+        extends AbstractLuceneService<I>
         implements CrossReferenceService<I> {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractCrossreferenceService.class);

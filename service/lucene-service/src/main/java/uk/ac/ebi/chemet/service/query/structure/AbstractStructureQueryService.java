@@ -11,7 +11,7 @@ import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.chemet.service.analyzer.FingerprintSimilarity;
-import uk.ac.ebi.chemet.service.query.AbstractQueryService;
+import uk.ac.ebi.chemet.service.query.AbstractLuceneService;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
 import uk.ac.ebi.mdk.service.query.structure.StructureSearch;
@@ -33,7 +33,7 @@ import java.util.Collection;
  * @version $Rev$
  */
 public abstract class AbstractStructureQueryService<I extends Identifier>
-        extends AbstractQueryService<I>
+        extends AbstractLuceneService<I>
         implements StructureService<I>,
                    StructureSearch<I>,
                    SubstructureSearch<I> {
@@ -47,7 +47,15 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
 
     public AbstractStructureQueryService(LuceneIndex index) {
         super(index);
-        getSearcher().setSimilarity(new FingerprintSimilarity());
+    }
+
+    @Override
+    public boolean startup() {
+        if( super.startup() ){
+            getSearcher().setSimilarity(new FingerprintSimilarity());
+            return true;
+        }
+        return false;
     }
 
     @Override

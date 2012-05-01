@@ -13,16 +13,24 @@
 
 
     <dependencies>
-
-
         <dependency>
             <groupId>axis</groupId>
             <artifactId>axis</artifactId>
             <version>1.4</version>
         </dependency>
         <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>chemet-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>chemet-service-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -33,6 +41,11 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-inchi</artifactId>
             <version>${cdk.version}</version>
         </dependency>
         <dependency>
@@ -58,49 +71,57 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>axistools-maven-plugin</artifactId>
                 <version>1.4</version>
-                <configuration>                            
-                    <sourceDirectory>src/main/resources/wsdl</sourceDirectory>
-                    <outputDirectory>src/main/generated-sources</outputDirectory>
-                    <useEmitter>true</useEmitter>
-                    <mappings>
+                <executions>
+                    <execution>
+                        <id>build-clients</id>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                        <configuration>                            
+                            <sourceDirectory>src/main/resources/wsdl</sourceDirectory>
+                            <outputDirectory>src/main/generated-sources</outputDirectory>
+                            <useEmitter>true</useEmitter>
+                            <mappings>
 
-                        <!-- EBI -->
-                        <mapping>
-                            <namespace>http://www.ebi.ac.uk/webservices/chebi</namespace>
-                            <targetPackage>uk.ac.ebi.ws.chebi</targetPackage>
-                        </mapping>
-                        <mapping>
-                            <namespace>http://www.ebi.ac.uk/ontology-lookup/OntologyQuery</namespace>
-                            <targetPackage>uk.ac.ebi.ws.ols</targetPackage>
-                        </mapping>
-                        <mapping>
-                            <namespace>http://soap.jdispatcher.ebi.ac.uk</namespace>
-                            <targetPackage>uk.ac.ebi.ws.jdispatcher</targetPackage>
-                        </mapping>
+                                <!-- EBI -->
+                                <mapping>
+                                    <namespace>http://www.ebi.ac.uk/webservices/chebi</namespace>
+                                    <targetPackage>uk.ac.ebi.ws.chebi</targetPackage>
+                                </mapping>
+                                <mapping>
+                                    <namespace>http://www.ebi.ac.uk/ontology-lookup/OntologyQuery</namespace>
+                                    <targetPackage>uk.ac.ebi.ws.ols</targetPackage>
+                                </mapping>
+                                <mapping>
+                                    <namespace>http://soap.jdispatcher.ebi.ac.uk</namespace>
+                                    <targetPackage>uk.ac.ebi.ws.jdispatcher</targetPackage>
+                                </mapping>
 
-                        <!-- KEGG -->
-                        <mapping>
-                            <namespace>SOAP/KEGG</namespace>
-                            <targetPackage>jp.genome.ws.kegg</targetPackage>
-                        </mapping>
+                                <!-- KEGG -->
+                                <mapping>
+                                    <namespace>SOAP/KEGG</namespace>
+                                    <targetPackage>jp.genome.ws.kegg</targetPackage>
+                                </mapping>
 
-                        <!-- NCBI -->
-                        <mapping>
-                            <namespace>http://pubchem.ncbi.nlm.nih.gov/</namespace>
-                            <targetPackage>gov.nih.nlm.ncbi.pubchem.ws</targetPackage>
-                        </mapping>
+                                <!-- NCBI -->
+                                <mapping>
+                                    <namespace>http://pubchem.ncbi.nlm.nih.gov/</namespace>
+                                    <targetPackage>gov.nih.nlm.ncbi.pubchem.ws</targetPackage>
+                                </mapping>
 
-                        <mapping>
-                            <namespace>http://www.chemspider.com/</namespace>
-                            <targetPackage>com.chemspider</targetPackage>
-                        </mapping>
-                        <mapping>
-                            <namespace>http://sabio.eml.org/</namespace>
-                            <targetPackage>org.h_its.sabiork</targetPackage>
-                        </mapping>
+                                <mapping>
+                                    <namespace>http://www.chemspider.com/</namespace>
+                                    <targetPackage>com.chemspider</targetPackage>
+                                </mapping>
+                                <mapping>
+                                    <namespace>http://sabio.eml.org/</namespace>
+                                    <targetPackage>org.h_its.sabiork</targetPackage>
+                                </mapping>
 
-                    </mappings>
-                </configuration>
+                            </mappings>
+                        </configuration>
+                    </execution>
+                </executions>
                 <dependencies>
                     <dependency>
                         <groupId>javax.mail</groupId>
@@ -113,13 +134,6 @@
                         <version>1.1</version>
                     </dependency>
                 </dependencies>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>wsdl2java</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

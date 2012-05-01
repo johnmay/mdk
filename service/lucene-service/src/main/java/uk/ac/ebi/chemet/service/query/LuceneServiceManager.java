@@ -77,10 +77,10 @@ public class LuceneServiceManager
      * @inheritDoc
      */
     @Override
-    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<I> identifier, Class<S> c) {
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifier, Class<S> c) {
 
         for (QueryService service : services.get(identifier)) {
-            if (c.isAssignableFrom(service.getClass()) && service.isAvailable()) {
+            if (c.isAssignableFrom(service.getClass()) && service.startup()) {
                 return true;
             }
         }
@@ -92,7 +92,7 @@ public class LuceneServiceManager
      * @inheritDoc
      */
     @Override
-    public <S extends QueryService<I>, I extends Identifier> S getService(Class<I> identifier, Class<S> c) {
+    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifier, Class<S> c) {
 
         for (QueryService service : services.get(identifier)) {
             if (c.isAssignableFrom(service.getClass())) {
@@ -104,31 +104,43 @@ public class LuceneServiceManager
         throw new InvalidParameterException("No " + c + "service available for " + identifier.getSimpleName());
     }
 
+    @Override
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<S> serviceClass) {
+        return hasService((Class<? extends I>) identifier.getClass(), serviceClass);
+    }
+
+    @Override
+    public <S extends QueryService<I>, I extends Identifier> S getService(I identifier, Class<S> serviceClass) {
+        return getService((Class<? extends I>) identifier.getClass(), serviceClass);
+    }
+
     /**
      * Access a service that implements multiple interfaces
+     *
      * @param identifier
      * @param classes
      * @param <S>
-     * @param <I>
-     *
-     * Example:
-     * <pre>{@code
-     * QueryService<ChEBIIdentifier> service = ServiceManager.getService(ChEBIIdentifier.class,
-     *                                                                   BrandNameService.class,
-     *                                                                   IUPACNameService.class,
-     *                                                                   PreferredNameService.class);
-     *
-     *
-     * BrandNameService<ChEBIIdentifier> brandService    = (BrandNameService<ChEBIIdentifier>) service;
-     * IUPACNameService<ChEBIIdentifier> iupacService    = (IUPACNameService<ChEBIIdentifier>) service;
-     * PreferredNameService<ChEBIIdentifier> prefService = (PreferredNameService<ChEBIIdentifier>) service;
-     *
-     * ChEBIIdentifier chebiId = new ChEBIIdentifier("CHEBI:15422");
-     *
-     * System.out.println("Brand: "     + brandService.getBrandName(chebiId));
-     * System.out.println("IUPAC: "     + iupacService.getIUPACName(chebiId));
-     * System.out.println("Preferred: " + prefService.getPreferredName(chebiId));
-     *}</pre>
+     * @param <I>        Example:
+     *                   <pre>{@code
+     *                   QueryService<ChEBIIdentifier> service = ServiceManager.getService(ChEBIIdentifier.class,
+     *                                                                                     BrandNameService.class,
+     *                                                                                     IUPACNameService.class,
+     *                                                                                     PreferredNameService.class);
+     *                   <p/>
+     *                   <p/>
+     *                   BrandNameService<ChEBIIdentifier> brandService    = (BrandNameService<ChEBIIdentifier>)
+     *                   service;
+     *                   IUPACNameService<ChEBIIdentifier> iupacService    = (IUPACNameService<ChEBIIdentifier>)
+     *                   service;
+     *                   PreferredNameService<ChEBIIdentifier> prefService = (PreferredNameService<ChEBIIdentifier>)
+     *                   service;
+     *                   <p/>
+     *                   ChEBIIdentifier chebiId = new ChEBIIdentifier("CHEBI:15422");
+     *                   <p/>
+     *                   System.out.println("Brand: "     + brandService.getBrandName(chebiId));
+     *                   System.out.println("IUPAC: "     + iupacService.getIUPACName(chebiId));
+     *                   System.out.println("Preferred: " + prefService.getPreferredName(chebiId));
+     *                   }</pre>
      *
      * @return
      */

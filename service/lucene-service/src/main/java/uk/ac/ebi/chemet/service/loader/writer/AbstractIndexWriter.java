@@ -35,9 +35,13 @@ public class AbstractIndexWriter {
      * @throws IOException low level io error
      */
     public AbstractIndexWriter(LuceneIndex index) throws IOException {
+
+        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_34,
+                                                         index.getAnalyzer());
+        config.setRAMBufferSizeMB(50.0d);
         writer = new IndexWriter(index.getDirectory(),
-                                 new IndexWriterConfig(Version.LUCENE_34,
-                                                       index.getAnalyzer()));
+                                 config);
+
     }
 
     /**
@@ -97,6 +101,7 @@ public class AbstractIndexWriter {
 
     /**
      * Access the underlying IndexWriter
+     *
      * @return
      */
     public IndexWriter getWriter() {

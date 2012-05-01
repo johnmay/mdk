@@ -13,9 +13,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>uk.ac.ebi.chemet</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>chemet-lucene-service</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-service-soap</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>

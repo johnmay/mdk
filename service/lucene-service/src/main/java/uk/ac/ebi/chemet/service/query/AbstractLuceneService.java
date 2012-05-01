@@ -12,7 +12,6 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
-
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
 import uk.ac.ebi.mdk.service.query.QueryService;
@@ -53,16 +52,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
 
     public AbstractLuceneService(LuceneIndex index) {
-
         this.index = index;
-
-        try {
-            analyzer = index.getAnalyzer();
-            setDirectory(index.getDirectory());
-            searcher = new IndexSearcher(directory, true);
-        } catch (IOException ex) {
-            LOGGER.error("Could not create query service", ex);
-        }
     }
 
     /**
@@ -72,6 +62,11 @@ public abstract class AbstractLuceneService<I extends Identifier>
      */
     public IndexSearcher getSearcher() {
         return searcher;
+    }
+
+    @Override
+    public ServiceType getServiceType() {
+        return ServiceType.LUCENE_INDEX;
     }
 
     /**
@@ -141,10 +136,25 @@ public abstract class AbstractLuceneService<I extends Identifier>
      */
     @Override
     public boolean startup() {
+
+        if (!index.isAvailable()) {
+            return false;
+        }
+
+        if (analyzer != null && directory != null && searcher != null) {
+            return true;
+        }
+        try {
+            analyzer = index.getAnalyzer();
+            setDirectory(index.getDirectory());
+            searcher = new IndexSearcher(directory, true);
+        } catch (IOException ex) {
+            LOGGER.info("startup() failed: " + ex.getMessage());
+        }
+
         return directory != null
                 && analyzer != null
-                && index != null
-                && index.isAvailable();
+                && index != null;
     }
 
     /**
@@ -487,7 +497,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
                 return value;
 
         } catch (Exception ex) {
-            LOGGER.error("Could not access field value " + field + " in service " + getClass() + " cause: " + ex.getCause() + "  message: "+ ex.getMessage());
+            LOGGER.error("Could not access field value " + field + " in service " + getClass() + " cause: " + ex.getCause() + "  message: " + ex.getMessage());
         }
 
         return new byte[0];

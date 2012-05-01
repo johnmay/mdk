@@ -40,7 +40,7 @@ public class KEGGCompoundStructureServiceTest {
 
         Set<Identifier> errors = new HashSet<Identifier>();
 
-        StructureService service = new KEGGCompoundStructureService();
+        KEGGCompoundStructureService service = new KEGGCompoundStructureService();
         service.setMaxResults(10);
 
 
@@ -55,7 +55,7 @@ public class KEGGCompoundStructureServiceTest {
         Map<Identifier, IAtomContainer> identifiers = new HashMap<Identifier, IAtomContainer>();
         for (int i = 1; i < 50; i++) {
             Identifier identifier = new KEGGCompoundIdentifier(String.format("C%05d", i));
-            IAtomContainer structure = service.getStructure(identifier);
+            IAtomContainer structure = service.getStructure((KEGGCompoundIdentifier) identifier);
             if (structure.getAtomCount() > 0 && include.contains(identifier)) {
                 identifiers.put(identifier, structure);
             }
@@ -75,7 +75,7 @@ public class KEGGCompoundStructureServiceTest {
                 Identifier identifier = e.getKey();
                 IAtomContainer structure = e.getValue();
 
-                Collection<Identifier> results = service.searchStructure(e.getValue());
+                Collection<? extends Identifier> results = service.structureSearch(e.getValue(), true);
 
                 BitSet query = new Fingerprinter().getFingerprint(structure);
                 Collection<Float> coefs = getCoefficients(query, results, service);
@@ -103,7 +103,7 @@ public class KEGGCompoundStructureServiceTest {
     }
 
 
-    public static Collection<Float> getCoefficients(BitSet query, Collection<Identifier> ids, StructureService
+    public static Collection<Float> getCoefficients(BitSet query, Collection<? extends Identifier> ids, StructureService
             service) throws CDKException {
         List<Float> coefs = new ArrayList<Float>();
         Fingerprinter fp = new Fingerprinter();
