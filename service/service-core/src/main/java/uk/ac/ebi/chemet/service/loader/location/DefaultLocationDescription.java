@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.service.location.LocationDescription;
 import uk.ac.ebi.mdk.service.location.ResourceLocation;
 
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -26,8 +27,10 @@ public class DefaultLocationDescription implements LocationDescription {
     private ResourceLocation defaultLocation;
 
 
-    // key making pattern
-    private static final Pattern SPACE_MATCHER = Pattern.compile("\\s+");
+    // key making pattern removes all non-alphanumeric characters that are between alphanumeric chars
+    private static final Pattern ALPHANUMERIC = Pattern.compile("(?<=[A-z0-9]+)[^A-z0-9]+(?=[A-z0-9]+)");
+    // remove excess characters (at prefix/suffix)
+    private static final Pattern ALPHANUMERIC_DOT = Pattern.compile("[^A-z0-9\\.]+");
 
     public <T extends ResourceLocation> DefaultLocationDescription(String name,
                                                                    String description,
@@ -48,7 +51,8 @@ public class DefaultLocationDescription implements LocationDescription {
     }
 
     public static String createKey(String name) {
-        return SPACE_MATCHER.matcher(name).replaceAll(".");
+        String prekey = ALPHANUMERIC.matcher(name).replaceAll(".").toLowerCase(Locale.ENGLISH);
+        return ALPHANUMERIC_DOT.matcher(prekey).replaceAll("");
     }
 
     @Override
