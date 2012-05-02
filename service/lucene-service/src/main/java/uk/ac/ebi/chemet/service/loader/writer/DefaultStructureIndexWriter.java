@@ -7,13 +7,11 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.chemet.service.analyzer.FingerprintSimilarity;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.BitSet;
 
 import static org.apache.lucene.document.Field.Index.ANALYZED;
@@ -34,6 +32,7 @@ public class DefaultStructureIndexWriter extends AbstractIndexWriter {
     private IFingerprinter fingerprinter;
     private static final int DEFAULT_THRESHOLD = 80; // calculated by looking at atom count distribution in chebi -> 80 > 95% of data set
     private int threshold;
+    private MDLV2000Writer mdlWriter = new MDLV2000Writer();
 
     /**
      * Create a new structure index writer
@@ -71,13 +70,17 @@ public class DefaultStructureIndexWriter extends AbstractIndexWriter {
                       IAtomContainer molecule) throws IOException {
 
         // Serialize to a byte array
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutput out = new ObjectOutputStream(bos);
-        out.writeObject(molecule);
-        out.close();
+        StringWriter sw = new StringWriter();
+        try {
+            mdlWriter.setWriter(sw);
+            mdlWriter.write(molecule);
 
-        // Get the bytes of the serialized object
-        write(identifier, bos.toByteArray(), getFingerprint(molecule));
+            // Get the bytes of the serialized object
+            write(identifier, sw.toString().getBytes(), getFingerprint(molecule));
+
+        } catch (CDKException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
 
     }

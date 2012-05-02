@@ -5,11 +5,14 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.openscience.cdk.AtomContainer;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.fingerprint.IFingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.chemet.service.analyzer.FingerprintSimilarity;
 import uk.ac.ebi.chemet.service.query.AbstractLuceneService;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -18,9 +21,8 @@ import uk.ac.ebi.mdk.service.query.structure.StructureSearch;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 import uk.ac.ebi.mdk.service.query.structure.SubstructureSearch;
 
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collection;
@@ -40,6 +42,11 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
 
     private IndexSearcher searcher;
     private IFingerprinter fingerprinter = new Fingerprinter();
+    private MDLV2000Reader reader = new MDLV2000Reader();
+    private MDLV2000Writer writer = new MDLV2000Writer();
+
+    private static final IChemObjectBuilder BUILDER = DefaultChemObjectBuilder.getInstance();
+
 
     private static final Logger LOGGER = Logger.getLogger(AbstractStructureQueryService.class);
 
@@ -51,7 +58,7 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
 
     @Override
     public boolean startup() {
-        if( super.startup() ){
+        if (super.startup()) {
             getSearcher().setSimilarity(new FingerprintSimilarity());
             return true;
         }
@@ -63,15 +70,7 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
 
         byte[] bytes = firstBinaryValue(construct(identifier.getAccession(), IDENTIFIER), ATOM_CONTAINER);
 
-        try {
-            ObjectInput in = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            return (IAtomContainer) in.readObject();
-        } catch (Exception ex) {
-            LOGGER.warn("Error reading atom container");
-        }
-
-        return new AtomContainer();
-
+        return mol2Structure(new String(bytes));
     }
 
     /**
@@ -131,4 +130,47 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
         return getIdentifiers(query);
 
     }
+
+
+    public String structure2Mol(IAtomContainer structure) {
+
+        StringWriter sw = new StringWriter();
+
+        try {
+            writer.setWriter(sw);
+            writer.write(structure);
+        } catch (Exception ex) {
+            LOGGER.error("Unable to create mol entry from structure");
+        }
+
+        return sw.toString();
+
+    }
+
+    /**
+     * Convert a MDL molfile string to a CDK strucutre.
+     * emtpty structure returned by default
+     *
+     * @param mol
+     *
+     * @return
+     */
+    public IAtomContainer mol2Structure(String mol) {
+
+        if (mol == null || mol.isEmpty()) {
+            return BUILDER.newInstance(IAtomContainer.class);
+        }
+
+        StringReader sr = new StringReader(mol);
+
+        try {
+            reader.setReader(sr);
+            return reader.read(BUILDER.newInstance(IAtomContainer.class));
+        } catch (Exception ex) {
+            LOGGER.error("Unable to create mol entry from structure");
+        }
+
+        return BUILDER.newInstance(IAtomContainer.class);
+    }
+
 }
