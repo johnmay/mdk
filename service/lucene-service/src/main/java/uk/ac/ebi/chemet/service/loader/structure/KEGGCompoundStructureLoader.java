@@ -1,5 +1,6 @@
 package uk.ac.ebi.chemet.service.loader.structure;
 
+import org.apache.log4j.Logger;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
@@ -8,9 +9,8 @@ import uk.ac.ebi.chemet.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.chemet.service.loader.writer.DefaultStructureIndexWriter;
 import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * KEGGCompoundStructureLoader - 20.02.2012 <br/>
@@ -23,6 +23,8 @@ import java.io.IOException;
  * @version $Rev$
  */
 public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoader {
+
+    private static final Logger LOGGER = Logger.getLogger(KEGGCompoundStructureLoader.class);
 
     /**
      * Creates the loader with the {@see KEGGCompoundStructureIndex} and no default location.
@@ -50,21 +52,23 @@ public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoad
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
         MDLV2000Reader mdlReader = new MDLV2000Reader();
 
-        for (File file : location.list()) {
+        while (location.hasNext() && !isCancelled()) {
 
-            if(isCancelled()) break;
+            InputStream in   = location.next();
+            String      name = location.getEntryName();
+
+            // skip non-mol files
+            if (!name.endsWith(".mol"))
+                continue;
 
             try {
-                mdlReader.setReader(new FileInputStream(file));
+                mdlReader.setReader(in);
                 IAtomContainer molecule = mdlReader.read(new Molecule());
-                writer.write(file.getName().substring(0, 6), molecule);
+                writer.write(name.substring(0, 6), molecule);
                 mdlReader.close();
             } catch (Exception ex) {
-                // TODO: log error
-                ex.printStackTrace();
+                LOGGER.warn("Could not read entry: " + name);
             }
-
-
         }
 
         writer.close();
