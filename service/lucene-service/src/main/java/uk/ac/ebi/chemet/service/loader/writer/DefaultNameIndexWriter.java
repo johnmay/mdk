@@ -91,11 +91,13 @@ public class DefaultNameIndexWriter extends AbstractIndexWriter {
         if (synonyms != null && synonyms.size() > 0) {
             for (String synonym : synonyms) {
 
+                synonym = synonym.trim();
+
                 // skip those which are already in the index
-                if(matches(synonym, iupac) || matches(synonym, preferred))
+                if(synonym.isEmpty() || matches(synonym, iupac) || matches(synonym, preferred))
                     continue;
 
-                document.add(create(SynonymService.SYNONYM, synonym.trim()));
+                document.add(create(SynonymService.SYNONYM, synonym));
 
             }
         }
