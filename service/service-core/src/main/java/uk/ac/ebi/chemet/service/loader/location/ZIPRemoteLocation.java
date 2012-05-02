@@ -3,6 +3,7 @@ package uk.ac.ebi.chemet.service.loader.location;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -23,6 +24,7 @@ public class ZIPRemoteLocation
         extends RemoteLocation {
 
     private ZipInputStream stream;
+    private ZipEntry currentEntry;
 
     public ZIPRemoteLocation(URL location) {
         super(location);
@@ -32,6 +34,28 @@ public class ZIPRemoteLocation
         super(new URL(location));
     }
 
+    /**
+     * Move the stream to the next zip entry
+     *
+     * @return
+     *
+     * @throws IOException
+     */
+    public boolean next() throws IOException {
+        if (stream != null) {
+            currentEntry = stream.getNextEntry();
+        }
+        return currentEntry != null;
+    }
+
+    /**
+     * Get the current entry
+     *
+     * @return
+     */
+    public ZipEntry getCurrentEntry() {
+        return currentEntry;
+    }
 
     /**
      * Open a Zip stream to the remote resource. This first opens the URLConnection
@@ -48,13 +72,13 @@ public class ZIPRemoteLocation
     public InputStream open() throws IOException {
         if (stream == null) {
             stream = new ZipInputStream(super.open());
-            stream.getNextEntry();
         }
         return stream;
     }
 
     /**
      * Close the open stream and the {@see URLConnection}
+     *
      * @inheritDoc
      */
     @Override
