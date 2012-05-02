@@ -32,16 +32,34 @@ public class DefaultStructureIndexWriter extends AbstractIndexWriter {
     private static final Logger LOGGER = Logger.getLogger(DefaultStructureIndexWriter.class);
 
     private IFingerprinter fingerprinter;
+    private static final int DEFAULT_THRESHOLD = 80; // calculated by looking at atom count distribution in chebi -> 80 > 95% of data set
+    private int threshold;
 
-    public DefaultStructureIndexWriter(LuceneIndex index, IFingerprinter fingerprinter) throws IOException {
+    /**
+     * Create a new structure index writer
+     * @param index
+     * @param fingerprinter fingerprint method
+     * @param threshold number of atoms above which a fingerprint should not be calculated
+     * @throws IOException
+     */
+    public DefaultStructureIndexWriter(LuceneIndex index,
+                                       IFingerprinter fingerprinter,
+                                       int threshold) throws IOException {
         super(index);
         this.fingerprinter = fingerprinter;
         getWriter().getConfig().setSimilarity(new FingerprintSimilarity());
+        this.threshold = threshold;
     }
 
+    /**
+     * Use basic CDK fingerprinter and default theshold value (50).
+     * @param index
+     * @throws IOException
+     */
     public DefaultStructureIndexWriter(LuceneIndex index) throws IOException {
-        this(index, new Fingerprinter());
+        this(index, new Fingerprinter(), DEFAULT_THRESHOLD);
     }
+
 
     /**
      * Write a CDK molecule and it's identifier to the index
@@ -66,7 +84,7 @@ public class DefaultStructureIndexWriter extends AbstractIndexWriter {
 
     public BitSet getFingerprint(IAtomContainer molecule){
         try {
-            return fingerprinter.getFingerprint(molecule);
+            return molecule.getAtomCount() < threshold ? fingerprinter.getFingerprint(molecule) : new BitSet();
         } catch (CDKException ex){
             LOGGER.warn("Fingerprint was not calculated for molecule: " + molecule );
             return new BitSet();
