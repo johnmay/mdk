@@ -18,7 +18,8 @@
 
 package uk.ac.ebi.mdk.service.location;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * ResourceDirectoryLocation.java - 22.02.2012 <br/>
@@ -35,13 +36,12 @@ import java.io.File;
 public interface ResourceDirectoryLocation
         extends ResourceLocation {
 
-    /**
-     * List the file in the directory location, please
-     * note this is likely to change if an FTP directory
-     * is implemented as it may be better to return a list of
-     * remote resources
-     * @return
-     */
-    public File[] list();
+    public boolean hasNext();
+
+    public String getEntryName();
+
+    public InputStream next() throws IOException;
+
+    public void close() throws IOException;
 
 }

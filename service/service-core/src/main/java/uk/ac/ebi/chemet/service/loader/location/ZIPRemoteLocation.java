@@ -1,8 +1,11 @@
 package uk.ac.ebi.chemet.service.loader.location;
 
+import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.NoSuchElementException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -21,7 +24,8 @@ import java.util.zip.ZipInputStream;
  * @version $Rev: 1719 $
  */
 public class ZIPRemoteLocation
-        extends RemoteLocation {
+        extends RemoteLocation
+        implements ResourceDirectoryLocation {
 
     private ZipInputStream stream;
     private ZipEntry currentEntry;
@@ -34,6 +38,18 @@ public class ZIPRemoteLocation
         super(new URL(location));
     }
 
+
+    public InputStream next() {
+        return stream;
+    }
+
+    @Override
+    public String getEntryName() {
+        if (currentEntry != null)
+            return currentEntry.getName();
+        throw new NoSuchElementException("No name for current element, ensure next() is invoked prior to getEntryName()");
+    }
+
     /**
      * Move the stream to the next zip entry
      *
@@ -41,9 +57,14 @@ public class ZIPRemoteLocation
      *
      * @throws IOException
      */
-    public boolean next() throws IOException {
-        if (stream != null) {
+    public boolean hasNext() {
+        try {
+            if (stream == null) {
+                stream = new ZipInputStream(super.open());
+            }
             currentEntry = stream.getNextEntry();
+        } catch (IOException ex) {
+            System.err.println("Could not open ZIP Stream: " + ex.getMessage());
         }
         return currentEntry != null;
     }
@@ -72,6 +93,7 @@ public class ZIPRemoteLocation
     public InputStream open() throws IOException {
         if (stream == null) {
             stream = new ZipInputStream(super.open());
+            hasNext(); // move to fisrt entry
         }
         return stream;
     }
