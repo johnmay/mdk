@@ -73,6 +73,10 @@ public abstract class AbstractResourceLoader
         locationMap.put(key, location);
     }
 
+    public boolean hasLocation(String key){
+        return locationMap.containsKey(key) && locationMap.get(key).isAvailable();
+    }
+
     /**
      * @inheritDoc
      */
