@@ -18,11 +18,12 @@
 package uk.ac.ebi.mdk.domain.annotation.crossreference;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.MetaInfo;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.resource.DefaultLoader;
+import uk.ac.ebi.mdk.domain.DefaultLoader;
 
 
 /**
@@ -39,7 +40,7 @@ public class Citation extends CrossReference<Identifier, Observation> {
 
     private static final Logger LOGGER = Logger.getLogger(Citation.class);
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             Citation.class);
 
 

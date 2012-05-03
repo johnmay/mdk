@@ -10,7 +10,7 @@ import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import uk.ac.ebi.chemet.resource.chemical.ChemSpiderIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChemSpiderIdentifier;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 
 import javax.xml.rpc.ServiceException;

@@ -1,6 +1,6 @@
 package uk.ac.ebi.mdk.service.query.crossreference;
 
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.service.index.crossreference.ChEBICrossReferenceIndex;
 import uk.ac.ebi.mdk.service.query.CrossReferenceService;
 

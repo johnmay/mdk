@@ -3,7 +3,7 @@ package uk.ac.ebi.mdk.io.identifier;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.io.IdentifierWriter;
-import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.DynamicIdentifier;
 
 import java.io.DataOutput;
 import java.io.IOException;

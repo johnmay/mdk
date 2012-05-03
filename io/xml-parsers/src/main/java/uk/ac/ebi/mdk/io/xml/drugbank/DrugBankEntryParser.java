@@ -22,9 +22,9 @@ package uk.ac.ebi.mdk.io.xml.drugbank;
 
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;

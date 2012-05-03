@@ -21,7 +21,7 @@
 package uk.ac.ebi.io.service;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.deprecated.services.LuceneService;
 import uk.ac.ebi.deprecated.services.QueryService;
 

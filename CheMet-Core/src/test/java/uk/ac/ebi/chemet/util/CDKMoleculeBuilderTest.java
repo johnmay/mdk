@@ -9,7 +9,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
-import uk.ac.ebi.chemet.resource.chemical.InChI;
+import uk.ac.ebi.mdk.domain.identifier.InChI;
 import uk.ac.ebi.core.util.CDKMoleculeBuilder;
 
 /**

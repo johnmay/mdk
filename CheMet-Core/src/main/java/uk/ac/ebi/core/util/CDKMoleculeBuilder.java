@@ -34,7 +34,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
 import org.openscience.cdk.tools.AtomTypeTools;
-import uk.ac.ebi.chemet.resource.chemical.InChI;
+import uk.ac.ebi.mdk.domain.identifier.InChI;
 
 /**
  * @name    CDKMoleculeBuilder

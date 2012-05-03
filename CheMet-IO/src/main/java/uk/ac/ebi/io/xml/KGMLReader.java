@@ -48,7 +48,7 @@ import javax.xml.stream.events.XMLEvent;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.chemet.resource.reaction.KEGGReactionIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGReactionIdentifier;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;

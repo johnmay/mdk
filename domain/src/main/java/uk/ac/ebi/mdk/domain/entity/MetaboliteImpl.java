@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.Charge;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
-import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.collection.MetaboliteClassImplementation;
 import uk.ac.ebi.mdk.domain.entity.metabolite.MetaboliteClass;

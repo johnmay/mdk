@@ -22,7 +22,7 @@ package uk.ac.ebi.io.remote;
 
 import com.google.common.collect.Multimap;
 import org.apache.lucene.analysis.Analyzer;
-import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.UniProtIdentifier;
 import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +42,7 @@ import org.apache.lucene.util.Version;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.io.xml.UniProtAnnoationLoader;
 import uk.ac.ebi.deprecated.services.LuceneService;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 /**
  *          UniProtCrossRefs - 2011.12.10 <br>

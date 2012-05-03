@@ -1,6 +1,6 @@
 package uk.ac.ebi.mdk.service.query.name;
 
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.service.index.name.ChEBINameIndex;
 import uk.ac.ebi.mdk.service.loader.location.SystemLocation;
 import uk.ac.ebi.mdk.service.loader.location.ZIPSystemLocation;

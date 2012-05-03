@@ -1,9 +1,9 @@
 package uk.ac.ebi.mdk.service;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.chemet.resource.reaction.KEGGReactionIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.KEGGReactionIdentifier;
 import uk.ac.ebi.mdk.service.connection.AbstractDerbyConnection;
 import uk.ac.ebi.mdk.service.connection.reaction.KEGGReactionConnection;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;

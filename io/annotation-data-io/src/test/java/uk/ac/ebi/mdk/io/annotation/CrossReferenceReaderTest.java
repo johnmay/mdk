@@ -12,10 +12,10 @@ import uk.ac.ebi.mdk.io.AnnotationDataInputStream;
 import uk.ac.ebi.mdk.io.AnnotationInput;
 import uk.ac.ebi.mdk.io.ObservationDataInputStream;
 import uk.ac.ebi.mdk.io.ObservationInput;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.chemet.resource.classification.GeneOntologyTerm;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.classification.GeneOntologyTerm;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 
 import java.io.DataInputStream;

@@ -18,12 +18,13 @@
 package uk.ac.ebi.mdk.domain.annotation;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.MetaInfo;
 import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractFloatAnnotation;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.resource.DefaultLoader;
+import uk.ac.ebi.mdk.domain.DefaultLoader;
 
 
 /**
@@ -42,7 +43,7 @@ public class ExactMass extends AbstractFloatAnnotation {
 
     private static final Logger LOGGER = Logger.getLogger(ExactMass.class);
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             ExactMass.class);
 
 

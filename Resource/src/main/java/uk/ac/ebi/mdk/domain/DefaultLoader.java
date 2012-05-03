@@ -21,7 +21,6 @@
 package uk.ac.ebi.mdk.domain;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.MetaInfo;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.tool.MetaInfoLoader;

@@ -16,7 +16,7 @@
  */
 package uk.ac.ebi.metabolomes.execs;
 
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 import uk.ac.ebi.metabolomes.http.uniprot.UniProtSearchQuery;
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;

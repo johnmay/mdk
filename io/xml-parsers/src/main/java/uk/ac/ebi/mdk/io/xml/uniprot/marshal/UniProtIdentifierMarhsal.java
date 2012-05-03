@@ -1,7 +1,7 @@
 package uk.ac.ebi.mdk.io.xml.uniprot.marshal;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 
 import javax.xml.stream.XMLStreamException;

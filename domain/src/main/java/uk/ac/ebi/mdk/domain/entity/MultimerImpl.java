@@ -23,7 +23,7 @@ package uk.ac.ebi.mdk.domain.entity;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.template.AbstractCompound;
 import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 

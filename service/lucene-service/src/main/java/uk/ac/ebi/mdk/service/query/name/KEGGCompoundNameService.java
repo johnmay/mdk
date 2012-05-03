@@ -1,6 +1,6 @@
 package uk.ac.ebi.mdk.service.query.name;
 
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.service.index.name.KEGGCompoundNameIndex;
 import uk.ac.ebi.mdk.service.query.AbstractLuceneService;
 

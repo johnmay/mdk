@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.io.IdentifierReader;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import java.io.DataInput;
 import java.io.IOException;

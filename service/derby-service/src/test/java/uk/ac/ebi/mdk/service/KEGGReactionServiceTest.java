@@ -2,7 +2,7 @@ package uk.ac.ebi.mdk.service;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 

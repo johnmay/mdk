@@ -1,7 +1,7 @@
 package uk.ac.ebi.mdk.service.query.crossreference;
 
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
 import uk.ac.ebi.mdk.service.index.crossreference.UniProtCrossReferenceIndex;
 import uk.ac.ebi.mdk.service.query.CrossReferenceService;
 

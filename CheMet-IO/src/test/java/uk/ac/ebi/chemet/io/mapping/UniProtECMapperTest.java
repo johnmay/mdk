@@ -7,8 +7,8 @@ package uk.ac.ebi.chemet.io.mapping;
 import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.UniProtIdentifier;
 
 /**
  *

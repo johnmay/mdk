@@ -20,11 +20,11 @@
  */
 package uk.ac.ebi.mdk;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.AbstractPreferenceLoader;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**

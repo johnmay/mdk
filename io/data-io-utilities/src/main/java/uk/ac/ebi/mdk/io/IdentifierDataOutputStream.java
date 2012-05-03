@@ -5,9 +5,9 @@ import uk.ac.ebi.mdk.io.identifier.DynamicIdentifierWriter;
 import uk.ac.ebi.mdk.io.identifier.TaxonomyWriter;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.DynamicIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 import java.io.DataOutput;
 import java.io.IOException;

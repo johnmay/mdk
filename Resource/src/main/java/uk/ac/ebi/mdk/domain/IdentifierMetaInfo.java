@@ -23,7 +23,6 @@ package uk.ac.ebi.mdk.domain;
 import java.util.Collection;
 
 import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
-import uk.ac.ebi.mdk.MetaInfo;
 
 /**
  *          IdentifierMetaInfo – 2011.09.15 <br>

@@ -33,15 +33,15 @@ import org.biojava3.core.sequence.template.AbstractSequence;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.mdk.domain.annotation.Locus;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
-import uk.ac.ebi.chemet.resource.IdentifierSet;
-import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;
-import uk.ac.ebi.chemet.resource.basic.BasicGeneIdentifier;
-import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
-import uk.ac.ebi.chemet.resource.basic.BasicRNAIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
+import uk.ac.ebi.mdk.domain.identifier.DynamicIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicGeneIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicRNAIdentifier;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 /**
  *          ENAFeatureParser - 2011.10.17 <br>

@@ -18,6 +18,7 @@
 package uk.ac.ebi.mdk.domain.annotation.crossreference;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.MetaInfo;
 import uk.ac.ebi.mdk.domain.annotation.AbstractAnnotation;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
@@ -26,7 +27,7 @@ import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.domain.annotation.ObservationBasedAnnotation;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.annotation.AnnotationVisitor;
-import uk.ac.ebi.resource.DefaultLoader;
+import uk.ac.ebi.mdk.domain.DefaultLoader;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -55,7 +56,7 @@ public class CrossReference<E extends Identifier, O extends Observation>
 
     private E identifier;
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             CrossReference.class);
 
     private List<O> observations = new ArrayList<O>();

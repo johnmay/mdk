@@ -24,11 +24,11 @@ import au.com.bytecode.opencsv.CSVReader;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.resource.IdentifierSet;
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
-import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.UniProtIdentifier;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 /**
  * @name    UniProtECMapper

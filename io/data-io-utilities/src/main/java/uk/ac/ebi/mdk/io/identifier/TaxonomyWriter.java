@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.io.EnumWriter;
 import uk.ac.ebi.mdk.io.IdentifierWriter;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 import java.io.DataOutput;
 import java.io.IOException;

@@ -6,14 +6,12 @@ package uk.ac.ebi.mdk.domain;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
-import uk.ac.ebi.mdk.domain.IdentifierLoader;
-import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
 import uk.ac.ebi.mdk.domain.identifier.HMDBIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
-import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.domain.identifier.basic.*;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
+import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 
 
 /**

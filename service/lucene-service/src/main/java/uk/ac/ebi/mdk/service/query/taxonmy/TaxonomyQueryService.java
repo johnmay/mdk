@@ -4,8 +4,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import uk.ac.ebi.mdk.service.index.other.TaxonomyIndex;
 import uk.ac.ebi.mdk.service.query.AbstractLuceneService;
-import uk.ac.ebi.resource.organism.Kingdom;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.service.query.name.NameService;
 
 import java.util.Arrays;
@@ -54,7 +53,7 @@ public class TaxonomyQueryService
     private Collection<Taxonomy> setup(Collection<Taxonomy> identifiers) {
         for (Taxonomy id : identifiers) {
             id.setCode(getCode(id));
-            id.setKingdom(Kingdom.getKingdom(getKingdom(id)));
+            id.setKingdom(Taxonomy.Kingdom.getKingdom(getKingdom(id)));
             id.setOfficialName(getNames(id).iterator().next());
         }
         return identifiers;

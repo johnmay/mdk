@@ -22,7 +22,7 @@ package uk.ac.ebi.mdk.domain.entity.collection;
 
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
-import uk.ac.ebi.chemet.resource.basic.ChromosomeNumber;
+import uk.ac.ebi.mdk.domain.identifier.basic.ChromosomeNumber;
 import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 

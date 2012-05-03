@@ -23,11 +23,12 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
+import uk.ac.ebi.mdk.domain.MetaInfo;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.resource.DefaultLoader;
+import uk.ac.ebi.mdk.domain.DefaultLoader;
 
 import java.io.*;
 
@@ -50,7 +51,7 @@ public class AtomContainerAnnotation
 
     private IAtomContainer molecule;
 
-    private static uk.ac.ebi.core.MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
+    private static MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             AtomContainerAnnotation.class);
 
 

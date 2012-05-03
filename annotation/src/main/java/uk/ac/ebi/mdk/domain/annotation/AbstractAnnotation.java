@@ -18,8 +18,8 @@
 package uk.ac.ebi.mdk.domain.annotation;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AbstractDescriptor;
-import uk.ac.ebi.resource.DefaultLoader;
+import uk.ac.ebi.mdk.domain.AbstractDescriptor;
+import uk.ac.ebi.mdk.domain.DefaultLoader;
 
 import java.io.Externalizable;
 import java.io.IOException;

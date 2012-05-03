@@ -4,8 +4,8 @@
  */
 package uk.ac.ebi.mdk.domain.matrix;
 
-import uk.ac.ebi.chemet.resource.chemical.InChI;
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.InChI;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 
 import java.util.ArrayList;
 import java.util.Map;

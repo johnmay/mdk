@@ -21,9 +21,9 @@
 package uk.ac.ebi.mdk.domain.observation;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.core.AbstractDescriptor;
+import uk.ac.ebi.mdk.domain.AbstractDescriptor;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
-import uk.ac.ebi.resource.DefaultLoader;
+import uk.ac.ebi.mdk.domain.DefaultLoader;
 
 import java.io.Externalizable;
 import java.io.IOException;

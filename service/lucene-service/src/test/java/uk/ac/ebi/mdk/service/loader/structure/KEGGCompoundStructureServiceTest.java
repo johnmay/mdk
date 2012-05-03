@@ -5,7 +5,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.similarity.Tanimoto;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.service.loader.location.SystemDirectoryLocation;
 import uk.ac.ebi.mdk.service.query.structure.KEGGCompoundStructureService;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;

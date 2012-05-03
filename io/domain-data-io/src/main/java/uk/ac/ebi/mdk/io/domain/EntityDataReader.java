@@ -5,7 +5,7 @@ import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.mdk.io.IdentifierInput;
 import uk.ac.ebi.mdk.domain.entity.Entity;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import java.io.DataInput;
 import java.io.IOException;

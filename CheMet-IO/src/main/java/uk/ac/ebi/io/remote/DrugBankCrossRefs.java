@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.io.remote;
 
-import uk.ac.ebi.chemet.resource.chemical.DrugBankIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.DrugBankIdentifier;
 import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;

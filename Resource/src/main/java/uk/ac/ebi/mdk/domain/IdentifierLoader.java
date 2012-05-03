@@ -20,12 +20,11 @@
  */
 package uk.ac.ebi.mdk.domain;
 
-import uk.ac.ebi.mdk.DefaultLoader;
 import uk.ac.ebi.mdk.deprecated.MIR;
 import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
 import uk.ac.ebi.mdk.deprecated.MIRIAMLoader;
 import uk.ac.ebi.mdk.deprecated.Synonyms;
-import uk.ac.ebi.mdk.identifier.AbstractIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.AbstractIdentifier;
 import uk.ac.ebi.mdk.tool.MetaInfoLoader;
 
 import java.util.*;

@@ -4,7 +4,7 @@
  */
 package uk.ac.ebi.chemet.entities.reaction;
 
-import uk.ac.ebi.chemet.resource.chemical.InChI;
+import uk.ac.ebi.mdk.domain.identifier.InChI;
 import uk.ac.ebi.core.CompartmentImplementation;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

@@ -1,6 +1,6 @@
 package uk.ac.ebi.mdk.service.query.structure;
 
-import uk.ac.ebi.chemet.resource.chemical.HMDBIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.HMDBIdentifier;
 import uk.ac.ebi.mdk.service.index.structure.HMDBStructureIndex;
 
 /**

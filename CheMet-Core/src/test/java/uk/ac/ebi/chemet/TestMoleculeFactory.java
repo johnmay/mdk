@@ -31,7 +31,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.chemet.resource.chemical.InChI;
+import uk.ac.ebi.mdk.domain.identifier.InChI;
 import uk.ac.ebi.core.util.CDKMoleculeBuilder;
 import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
 

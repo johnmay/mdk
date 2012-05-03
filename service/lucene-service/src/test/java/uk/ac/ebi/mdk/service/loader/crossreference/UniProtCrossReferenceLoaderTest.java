@@ -9,7 +9,7 @@ import uk.ac.ebi.mdk.service.index.crossreference.UniProtCrossReferenceIndex;
 import uk.ac.ebi.mdk.service.loader.LoaderTestUtil;
 import uk.ac.ebi.mdk.service.loader.LuceneIndexInspector;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.service.SingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;

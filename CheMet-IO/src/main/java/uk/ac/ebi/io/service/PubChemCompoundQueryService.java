@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.io.service;
 
-import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
 import uk.ac.ebi.deprecated.services.LuceneService;
 
 /**

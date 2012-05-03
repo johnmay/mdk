@@ -4,9 +4,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.io.EnumReader;
 import uk.ac.ebi.mdk.io.IdentifierReader;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
-import uk.ac.ebi.resource.organism.Kingdom;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -44,7 +43,7 @@ public class TaxonomyReader implements IdentifierReader<Taxonomy> {
         identifier.setCode(in.readUTF());
         identifier.setCommonName(in.readUTF());
         identifier.setOfficialName(in.readUTF());
-        identifier.setKingdom((Kingdom) enumReader.readEnum());
+        identifier.setKingdom((Taxonomy.Kingdom) enumReader.readEnum());
 
         return identifier;
 

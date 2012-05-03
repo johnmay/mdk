@@ -31,7 +31,7 @@ import java.util.prefs.Preferences;
 
 import uk.ac.ebi.deprecated.services.LuceneService;
 import uk.ac.ebi.deprecated.services.RemoteResource;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.*;

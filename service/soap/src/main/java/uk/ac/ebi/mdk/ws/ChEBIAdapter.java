@@ -2,7 +2,7 @@ package uk.ac.ebi.mdk.ws;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.service.query.name.IUPACNameService;
 import uk.ac.ebi.mdk.service.query.name.NameService;
 import uk.ac.ebi.mdk.service.query.name.PreferredNameService;

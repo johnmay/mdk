@@ -21,8 +21,8 @@
 package uk.ac.ebi.io.remote;
 
 import org.apache.lucene.analysis.Analyzer;
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.UniProtIdentifier;
 import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +45,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.deprecated.services.LuceneService;
 import uk.ac.ebi.io.xml.IterativeUniProtAnnotationLoader;
 import uk.ac.ebi.io.xml.IterativeUniProtAnnotationLoader.UniProtEntry;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 /**
  *          KEGGOrthology2OrganismProtein - 2011.12.19 <br>

@@ -24,7 +24,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import uk.ac.ebi.chemet.resource.ResourcePreferences;
+import uk.ac.ebi.mdk.ResourcePreferences;
 
 import java.io.File;
 import java.security.InvalidParameterException;

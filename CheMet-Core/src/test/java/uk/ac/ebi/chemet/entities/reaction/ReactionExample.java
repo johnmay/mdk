@@ -21,7 +21,7 @@
 package uk.ac.ebi.chemet.entities.reaction;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.resource.chemical.InChI;
+import uk.ac.ebi.mdk.domain.identifier.InChI;
 import uk.ac.ebi.core.CompartmentImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.GenericParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.InChIParticipant;

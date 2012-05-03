@@ -44,12 +44,12 @@ import static javax.xml.stream.events.XMLEvent.*;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
-import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.UniProtIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.db.DatabaseProperties;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 /**
  * @name    UniprotAnnotations - 2011.10.13 <br>

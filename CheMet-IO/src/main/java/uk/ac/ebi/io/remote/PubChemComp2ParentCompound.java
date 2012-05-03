@@ -22,7 +22,7 @@ package uk.ac.ebi.io.remote;
 
 import com.google.common.collect.Multimap;
 import org.apache.lucene.analysis.Analyzer;
-import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
 import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;

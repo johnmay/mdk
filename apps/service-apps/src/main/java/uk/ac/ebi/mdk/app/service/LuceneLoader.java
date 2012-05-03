@@ -17,7 +17,7 @@ import uk.ac.ebi.mdk.service.loader.structure.HMDBStructureLoader;
 import uk.ac.ebi.mdk.service.loader.structure.KEGGCompoundStructureLoader;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import javax.swing.*;
 import java.awt.*;
