@@ -207,11 +207,13 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     /**
      * Add a reaction to the matrix
      *
+     *
      * @param reaction
      * @param newMolecules
      * @param values
      * @return the index of the reaction
      */
+    @Override
     public int addReaction(R reaction,
                            M[] newMolecules,
                            T[] values) {

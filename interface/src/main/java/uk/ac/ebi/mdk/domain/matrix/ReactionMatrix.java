@@ -21,7 +21,7 @@ package uk.ac.ebi.mdk.domain.matrix;
 /**
  * @author John May
  */
-public interface ReactionMatrix<T,M,R> {
+public interface ReactionMatrix<T, M, R> {
 
     public int getMoleculeCount();
 
@@ -35,4 +35,15 @@ public interface ReactionMatrix<T,M,R> {
 
     public int getNonNullCount();
 
+    public void ensure(int n, int m);
+
+    public boolean setReaction(int J, R rxn);
+
+    public boolean setMolecule(int I, M molecule);
+
+    public boolean setValue(int I, int J, T value);
+
+    public int addReaction(R rxn, M[] molecules, T[] values);
+
+    public T[][] getFixedMatrix();
 }

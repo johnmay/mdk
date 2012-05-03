@@ -4,19 +4,21 @@
  */
 package uk.ac.ebi.mdk.io;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import org.junit.AfterClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
+
+import static org.junit.Assert.assertArrayEquals;
 
 
 /**
- *
  * @author johnmay
  */
 public class ReactionMatrixIOTest {
@@ -61,7 +63,7 @@ public class ReactionMatrixIOTest {
         }
 
         {
-            BasicStoichiometricMatrix s = ReactionMatrixIO.readCompressedBasicStoichiometricMatrix(new FileInputStream(tmp));
+            StoichiometricMatrix<?,?> s = ReactionMatrixIO.readCompressedBasicStoichiometricMatrix(new FileInputStream(tmp), BasicStoichiometricMatrix.create());
             actual = s.getFixedMatrix();
         }
 

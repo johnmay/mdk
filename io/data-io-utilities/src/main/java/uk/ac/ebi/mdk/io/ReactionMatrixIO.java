@@ -18,14 +18,8 @@ package uk.ac.ebi.mdk.io;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
-import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.mdk.domain.identifier.InChI;
-import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
-import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
-import uk.ac.ebi.mdk.domain.matrix.BasicStoichiometricMatrix;
-import uk.ac.ebi.mdk.domain.matrix.InChIStoichiometricMatrix;
-import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrixImpl;
 
 import java.io.*;
 import java.util.HashMap;
@@ -74,10 +68,10 @@ public class ReactionMatrixIO {
 
 
     /**
+     * @param separator
+     *
      * @brief Sets the separator character used to delimit fields (default:
      * '\t')
-     *
-     * @param separator
      */
     public static void setSeparator(char separator) {
         ReactionMatrixIO.separator = separator;
@@ -96,18 +90,18 @@ public class ReactionMatrixIO {
      * Reads a matrix from a file, stream et al.
      *
      * @param reader Reader object to read from
+     *
      * @return
      */
-    public static BasicStoichiometricMatrix readBasicStoichiometricMatrix(Reader reader) {
+    public static StoichiometricMatrix readBasicStoichiometricMatrix(Reader reader, StoichiometricMatrix s) {
         CSVReader csv = new CSVReader(reader, separator, quoteCharacter);
-        BasicStoichiometricMatrix s = null;
         try {
 
             // grab the whole matrix
             List<String[]> matrix = csv.readAll();
             // we know the size so can specify this
-            s = BasicStoichiometricMatrix.create(matrix.size() - 1,
-                                                 matrix.get(0).length - 1);
+            s.ensure(matrix.size() - 1,
+                     matrix.get(0).length - 1);
 
             String[] molNames = new String[matrix.size() - 1];
             // get the molecule names
@@ -151,14 +145,14 @@ public class ReactionMatrixIO {
     }
 
 
-    public static BasicStoichiometricMatrix readCompressedBasicStoichiometricMatrix(InputStream stream) throws IOException {
+    public static StoichiometricMatrix readCompressedBasicStoichiometricMatrix(InputStream stream, StoichiometricMatrix s) throws IOException {
 
         DataInputStream in = new DataInputStream(stream);
 
         int n = in.readInt();
         int m = in.readInt();
 
-        BasicStoichiometricMatrix s = BasicStoichiometricMatrix.create(n, m);
+        s.ensure(n, m);
 
         for (int j = 0; j < m; j++) {
             s.setReaction(j, in.readUTF());
@@ -187,68 +181,69 @@ public class ReactionMatrixIO {
     }
 
 
-    public static InChIStoichiometricMatrix readInChIStoichiometricMatrix(Reader reader) {
-        CSVReader csv = new CSVReader(reader, separator, quoteCharacter);
-        InChIStoichiometricMatrix s = null;
-        try {
-
-            // grab the whole matrix
-            List<String[]> matrix = csv.readAll();
-            // we know the size so can specify this
-            s = InChIStoichiometricMatrix.create(matrix.size() - 1,
-                                                 matrix.get(0).length - 1);
-
-            InChI[] molNames = new InChI[matrix.size() - 1];
-            // get the molecule names
-            for (int i = 1; i < matrix.size(); i++) {
-                molNames[i - 1] = new InChI(matrix.get(i)[0]);
-            }
-
-            ECNumber[] reactionNames = new ECNumber[matrix.get(0).length - 1];
-            // get the molecule names
-            for (int j = 1; j < matrix.get(0).length; j++) {
-                reactionNames[j - 1] = new ECNumber(matrix.get(0)[j]);
-            }
-
-            // add the reactions
-            for (int j = 0; j < reactionNames.length; j++) {
-                HashMap<InChI, Double> molValueMap = new HashMap<InChI, Double>();
-                for (int i = 0; i < molNames.length; i++) {
-                    String value = matrix.get(i + 1)[j + 1];
-                    // if the value isn't empty
-                    if (value.isEmpty() == false) {
-                        molValueMap.put(molNames[i], Double.parseDouble(value));
-                    }
-                }
-                s.addReaction(reactionNames[j],
-                              molValueMap.keySet().toArray(new InChI[0]),
-                              molValueMap.values().toArray(new Double[0]));
-            }
-
-
-        } catch (IOException ex) {
-            logger.error("Unable to read from the CSV: " + reader);
-        } finally {
-            try {
-                csv.close();
-            } catch (IOException ex) {
-                logger.error("Could not close CSVReader");
-            }
-        }
-
-        return s;
-    }
+    //    public static InChIStoichiometricMatrix readInChIStoichiometricMatrix(Reader reader) {
+    //        CSVReader csv = new CSVReader(reader, separator, quoteCharacter);
+    //        InChIStoichiometricMatrix s = null;
+    //        try {
+    //
+    //            // grab the whole matrix
+    //            List<String[]> matrix = csv.readAll();
+    //            // we know the size so can specify this
+    //            s = InChIStoichiometricMatrix.create(matrix.size() - 1,
+    //                                                 matrix.get(0).length - 1);
+    //
+    //            InChI[] molNames = new InChI[matrix.size() - 1];
+    //            // get the molecule names
+    //            for (int i = 1; i < matrix.size(); i++) {
+    //                molNames[i - 1] = new InChI(matrix.get(i)[0]);
+    //            }
+    //
+    //            ECNumber[] reactionNames = new ECNumber[matrix.get(0).length - 1];
+    //            // get the molecule names
+    //            for (int j = 1; j < matrix.get(0).length; j++) {
+    //                reactionNames[j - 1] = new ECNumber(matrix.get(0)[j]);
+    //            }
+    //
+    //            // add the reactions
+    //            for (int j = 0; j < reactionNames.length; j++) {
+    //                HashMap<InChI, Double> molValueMap = new HashMap<InChI, Double>();
+    //                for (int i = 0; i < molNames.length; i++) {
+    //                    String value = matrix.get(i + 1)[j + 1];
+    //                    // if the value isn't empty
+    //                    if (value.isEmpty() == false) {
+    //                        molValueMap.put(molNames[i], Double.parseDouble(value));
+    //                    }
+    //                }
+    //                s.addReaction(reactionNames[j],
+    //                              molValueMap.keySet().toArray(new InChI[0]),
+    //                              molValueMap.values().toArray(new Double[0]));
+    //            }
+    //
+    //
+    //        } catch (IOException ex) {
+    //            logger.error("Unable to read from the CSV: " + reader);
+    //        } finally {
+    //            try {
+    //                csv.close();
+    //            } catch (IOException ex) {
+    //                logger.error("Could not close CSVReader");
+    //            }
+    //        }
+    //
+    //        return s;
+    //    }
 
 
     /**
+     * @param s      – Class extending Stoichiometric matrix to write
+     * @param writer - Where to write the matrix too
+     *
      * @brief Writes a Stoichiometric Matrix (s) using the {@code toString()}
      * method of the molecule object to print the row name. Invoking {
-     *
+     * <p/>
      * doubles as integers. Note: the writer is not closed on completion
-     * @param s – Class extending Stoichiometric matrix to write
-     * @param writer - Where to write the matrix too
      */
-    public static void writeBasicStoichiometricMatrix(StoichiometricMatrix<?,?> s,
+    public static void writeBasicStoichiometricMatrix(StoichiometricMatrix<?, ?> s,
                                                       Writer writer) throws IOException {
         CSVWriter csv = new CSVWriter(new BufferedWriter(writer), separator, quoteCharacter);
 
@@ -267,8 +262,8 @@ public class ReactionMatrixIO {
             for (int j = 0; j < m; j++) {
                 // if the value is null
                 copy[j + 1] = convertDoubles
-                              ? Integer.toString(s.get(i, j).intValue())
-                              : s.get(i, j).toString();
+                        ? Integer.toString(s.get(i, j).intValue())
+                        : s.get(i, j).toString();
             }
             csv.writeNext(copy);
         }
@@ -278,10 +273,10 @@ public class ReactionMatrixIO {
     }
 
 
-    public static void writeCompressedBasicStoichiometricMatrix(StoichiometricMatrix<?,?> s,
+    public static void writeCompressedBasicStoichiometricMatrix(StoichiometricMatrix<?, ?> s,
                                                                 OutputStream writer) throws IOException {
-        IntegerPreference BUFFER_SIZE_PREF = DomainPreferences.getInstance().getPreference("BUFFER_SIZE");
-        DataOutputStream out = new DataOutputStream(new BufferedOutputStream(writer, BUFFER_SIZE_PREF.get()));
+
+        DataOutputStream out = new DataOutputStream(new BufferedOutputStream(writer, 2048));
 
         int n = s.getMoleculeCount();
         int m = s.getReactionCount();
@@ -329,13 +324,13 @@ public class ReactionMatrixIO {
 
 
     /**
+     * @param s      - A stoichiometric matrix
+     * @param writer
+     *
      * @brief Writes the InChI additional info, molecule index, inchi, inchikey
      * and auxinfo
-     *
-     * @param s - A stoichiometric matrix
-     * @param writer
      */
-    public static void writeInChIAdditionalInfo(StoichiometricMatrixImpl s,
+    public static void writeInChIAdditionalInfo(StoichiometricMatrix s,
                                                 Writer writer) {
 
         CSVWriter csv = new CSVWriter(new BufferedWriter(writer), separator, quoteCharacter);
@@ -347,9 +342,9 @@ public class ReactionMatrixIO {
             if (obj instanceof InChI) {
                 InChI inchi = (InChI) obj;
                 csv.writeNext(new String[]{i.toString(),
-                                           inchi.getInchi(),
-                                           inchi.getInchiKey(),
-                                           inchi.getAuxInfo()});
+                        inchi.getInchi(),
+                        inchi.getInchiKey(),
+                        inchi.getAuxInfo()});
             } else {
                 logger.error("Object is not of type and does not inherit from InChI in matrix array");
             }
