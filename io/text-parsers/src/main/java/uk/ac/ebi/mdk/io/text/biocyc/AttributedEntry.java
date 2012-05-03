@@ -62,6 +62,10 @@ public class AttributedEntry<K, V> {
         return map.containsKey(key);
     }
 
+    public V getFirst(K key){
+        return get(key).iterator().next();
+    }
+
     public boolean isSingular(K key) {
         return get(key).size() == 1;
     }

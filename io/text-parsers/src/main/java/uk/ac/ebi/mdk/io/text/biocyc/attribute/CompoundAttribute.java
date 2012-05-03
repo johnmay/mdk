@@ -20,29 +20,31 @@ package uk.ac.ebi.mdk.io.text.biocyc.attribute;
 
 /**
  * Attributes for BioCyc compounds.dat file.
+ *
  * @author John May
  * @link http://bioinformatics.ai.sri.com/ptools/flatfile-format.html#compounds.dat
  */
 public enum CompoundAttribute implements Attribute {
     COMMON_NAME,
+    SYNONYMS,
+    ABBREV_NAME,
+    SYSTEMATIC_NAME,
+    N_MINUS_1_NAME("N-1-NAME"),
+    N_NAME,
+    N_PLUS_1_NAME("N+1-NAME", "N\\+1-NAME"),
     COFACTORS_OR_PROSTHETIC_GROUPS_OF,
     COMPONENTS,
     MONOISOTOPIC_MW,
     CHEMICAL_FORMULA,
-    N1_NAME("N+1-NAME", "N\\+1-NAME"),
     INCHI,
     TYPES,
-    SYSTEMATIC_NAME,
     GO_TERMS,
     IN_MIXTURE,
     MOLECULAR_WEIGHT,
     SUPERATOMS,
-    ABBREV_NAME,
     UNIQUE_ID,
     ANTICODON,
     COFACTORS_OF,
-    N_NAME,
-    SYNONYMS,
     COMPONENT_OF,
     HAS_NO_STRUCTURE("HAS-NO-STRUCTURE?", "HAS-NO-STRUCTURE\\?"),
     CHARGE,
@@ -53,7 +55,6 @@ public enum CompoundAttribute implements Attribute {
     CREDITS,
     PKA1,
     COMMENT,
-    N_1_NAME,
     CITATIONS,
     DBLINKS,
     REGULATES,
