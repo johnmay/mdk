@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.ebi.io.blast;
+package uk.ac.ebi.mdk.io.xml.blast;
 
 import org.junit.*;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
