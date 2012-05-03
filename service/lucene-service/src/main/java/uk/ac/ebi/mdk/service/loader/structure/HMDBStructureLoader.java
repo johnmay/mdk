@@ -7,7 +7,7 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import uk.ac.ebi.mdk.service.index.structure.HMDBStructureIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
-import uk.ac.ebi.chemet.service.loader.location.GZIPRemoteLocation;
+import uk.ac.ebi.mdk.service.loader.location.GZIPRemoteLocation;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultStructureIndexWriter;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 

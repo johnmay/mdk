@@ -1,12 +1,12 @@
-uk.ac.ebi.chemet.service.query.name.ChEBINameService
-uk.ac.ebi.chemet.service.query.name.HMDBNameService
-uk.ac.ebi.chemet.service.query.name.KEGGCompoundNameService
-uk.ac.ebi.chemet.service.query.structure.ChEBIStructureService
-uk.ac.ebi.chemet.service.query.structure.HMDBStructureService
-uk.ac.ebi.chemet.service.query.structure.KEGGCompoundStructureService
-uk.ac.ebi.chemet.service.query.data.ChEBIDataService
-uk.ac.ebi.chemet.service.query.data.HMDBDataService
-uk.ac.ebi.chemet.service.query.data.KEGGCompoundDataService
-uk.ac.ebi.chemet.service.query.crossreference.ChEBICrossReferenceService
-uk.ac.ebi.chemet.service.query.crossreference.UniProtCrossReferenceService
+uk.ac.ebi.mdk.service.query.name.ChEBINameService
+uk.ac.ebi.mdk.service.query.name.HMDBNameService
+uk.ac.ebi.mdk.service.query.name.KEGGCompoundNameService
+uk.ac.ebi.mdk.service.query.structure.ChEBIStructureService
+uk.ac.ebi.mdk.service.query.structure.HMDBStructureService
+uk.ac.ebi.mdk.service.query.structure.KEGGCompoundStructureService
+uk.ac.ebi.mdk.service.query.data.ChEBIDataService
+uk.ac.ebi.mdk.service.query.data.HMDBDataService
+uk.ac.ebi.mdk.service.query.data.KEGGCompoundDataService
+uk.ac.ebi.mdk.service.query.crossreference.ChEBICrossReferenceService
+uk.ac.ebi.mdk.service.query.crossreference.UniProtCrossReferenceService
 

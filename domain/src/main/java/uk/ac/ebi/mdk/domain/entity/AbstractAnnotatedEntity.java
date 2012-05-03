@@ -22,13 +22,13 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainerSet;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.collection.ObservationManager;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.lang.annotation.Unique;
-import uk.ac.ebi.observation.ObservationCollection;
+import uk.ac.ebi.mdk.domain.observation.ObservationCollection;
 
 import java.io.Externalizable;
 import java.io.IOException;

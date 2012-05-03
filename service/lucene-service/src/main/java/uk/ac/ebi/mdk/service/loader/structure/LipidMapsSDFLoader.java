@@ -7,7 +7,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import uk.ac.ebi.mdk.service.index.KeywordNIOIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
-import uk.ac.ebi.chemet.service.loader.location.ZIPRemoteLocation;
+import uk.ac.ebi.mdk.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultStructureIndexWriter;
 import uk.ac.ebi.mdk.service.ResourceLoader;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;

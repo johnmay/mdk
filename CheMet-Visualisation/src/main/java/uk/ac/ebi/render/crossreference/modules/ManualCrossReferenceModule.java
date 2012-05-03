@@ -23,7 +23,7 @@ package uk.ac.ebi.render.crossreference.modules;
 import java.awt.Window;
 import javax.swing.JComponent;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
 import uk.ac.ebi.chemet.render.components.IdentifierEditor;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;

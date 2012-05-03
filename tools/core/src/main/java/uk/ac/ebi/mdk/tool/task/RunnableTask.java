@@ -4,8 +4,8 @@
  */
 package uk.ac.ebi.mdk.tool.task;
 
-import uk.ac.ebi.annotation.task.ExecutableParameter;
-import uk.ac.ebi.annotation.task.Parameter;
+import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
+import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
 import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;

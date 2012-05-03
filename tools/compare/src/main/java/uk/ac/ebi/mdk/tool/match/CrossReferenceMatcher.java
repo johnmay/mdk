@@ -1,6 +1,6 @@
 package uk.ac.ebi.mdk.tool.match;
 
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 

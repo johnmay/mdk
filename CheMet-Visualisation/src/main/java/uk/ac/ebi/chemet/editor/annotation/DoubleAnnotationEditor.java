@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.chemet.editor.annotation;
 
-import uk.ac.ebi.annotation.base.AbstractDoubleAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractDoubleAnnotation;
 
 
 /**

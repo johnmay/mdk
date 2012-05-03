@@ -25,7 +25,7 @@ import java.awt.Window;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.*;
-import uk.ac.ebi.annotation.util.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;

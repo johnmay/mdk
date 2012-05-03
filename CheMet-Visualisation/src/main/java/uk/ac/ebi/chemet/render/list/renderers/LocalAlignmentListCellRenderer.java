@@ -28,7 +28,7 @@ import uk.ac.ebi.chemet.render.alignment.BasicAlignmentColor;
 import uk.ac.ebi.chemet.render.alignment.BlastConsensusScorer;
 import uk.ac.ebi.chemet.render.alignment.ConservationRenderer;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 
 import javax.swing.*;
 import java.awt.*;

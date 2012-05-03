@@ -21,9 +21,8 @@
 package uk.ac.ebi.chemet.editor.annotation;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AuthorAnnotation;
-import uk.ac.ebi.annotation.crossreference.*;
-import uk.ac.ebi.annotation.reaction.GibbsEnergy;
+import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mdk.domain.annotation.Flag;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
@@ -31,6 +30,7 @@ import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ClassificationIdentifier;
 import uk.ac.ebi.chemet.resource.classification.ECNumber;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.*;
 import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.primitive.BooleanAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;

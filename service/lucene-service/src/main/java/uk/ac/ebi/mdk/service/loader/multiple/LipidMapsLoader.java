@@ -4,7 +4,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.service.index.name.DefaultNameIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractMultiIndexResourceLoader;
-import uk.ac.ebi.chemet.service.loader.location.ZIPRemoteLocation;
+import uk.ac.ebi.mdk.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultNameIndexWriter;
 import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;

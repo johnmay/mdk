@@ -23,7 +23,7 @@ package uk.ac.ebi.core.comparator;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.ExactMass;
+import uk.ac.ebi.mdk.domain.annotation.ExactMass;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 /**

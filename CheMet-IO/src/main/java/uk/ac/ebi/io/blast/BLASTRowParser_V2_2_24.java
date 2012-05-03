@@ -21,7 +21,7 @@
 package uk.ac.ebi.io.blast;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 
 /**
  * @name    BLASTRowParser_V2_2_25 - 2011.10.06 <br>

@@ -10,7 +10,7 @@ import uk.ac.ebi.mdk.domain.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.mdk.io.AnnotationDataInputStream;
 import uk.ac.ebi.mdk.io.AnnotationInput;
-import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
+import uk.ac.ebi.mdk.io.ObservationDataInputStream;
 import uk.ac.ebi.mdk.io.ObservationInput;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;

@@ -1,7 +1,7 @@
 package uk.ac.ebi.mdk.service.loader;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
+import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 

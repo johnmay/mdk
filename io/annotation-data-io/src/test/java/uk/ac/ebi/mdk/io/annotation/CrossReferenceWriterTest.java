@@ -6,7 +6,7 @@ import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.mdk.io.AnnotationDataOutputStream;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.*;
 import uk.ac.ebi.mdk.io.AnnotationOutput;
-import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
+import uk.ac.ebi.mdk.io.ObservationDataOutputStream;
 import uk.ac.ebi.mdk.io.ObservationOutput;
 import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;

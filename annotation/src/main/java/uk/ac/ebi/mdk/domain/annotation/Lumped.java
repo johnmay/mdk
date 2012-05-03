@@ -21,7 +21,6 @@ package uk.ac.ebi.mdk.domain.annotation;
 
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;

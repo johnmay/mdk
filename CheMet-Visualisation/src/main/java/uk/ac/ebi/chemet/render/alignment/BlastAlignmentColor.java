@@ -24,7 +24,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.observation.Observation;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 
 /**
  * @name    BlastAlignmentColor

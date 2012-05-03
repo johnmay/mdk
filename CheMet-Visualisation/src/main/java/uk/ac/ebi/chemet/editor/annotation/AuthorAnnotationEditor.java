@@ -23,7 +23,7 @@ package uk.ac.ebi.chemet.editor.annotation;
 import javax.swing.*;
 
 import com.jgoodies.forms.factories.Borders;
-import uk.ac.ebi.annotation.AuthorAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 

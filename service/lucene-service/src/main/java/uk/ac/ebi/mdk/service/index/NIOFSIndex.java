@@ -2,8 +2,7 @@ package uk.ac.ebi.mdk.service.index;
 
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
-import uk.ac.ebi.chemet.service.BasicServiceLocation;
-import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.BasicServiceLocation;
 
 import java.io.File;
 import java.io.IOException;

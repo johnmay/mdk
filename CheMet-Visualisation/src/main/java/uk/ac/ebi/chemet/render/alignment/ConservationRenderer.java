@@ -30,7 +30,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 
 /**
  * @name    ConservationRenderer - 2011.10.11 <br>

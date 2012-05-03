@@ -42,7 +42,7 @@ import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;

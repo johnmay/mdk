@@ -22,9 +22,9 @@ package uk.ac.ebi.mdk.domain.entity;
 
 import com.google.common.base.Objects;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
-import uk.ac.ebi.annotation.chemical.Charge;
-import uk.ac.ebi.annotation.chemical.InChI;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.Charge;
+import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.chemet.resource.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.collection.MetaboliteClassImplementation;

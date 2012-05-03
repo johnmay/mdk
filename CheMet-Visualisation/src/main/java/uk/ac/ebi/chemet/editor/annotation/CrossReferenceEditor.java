@@ -22,7 +22,7 @@ package uk.ac.ebi.chemet.editor.annotation;
 
 import javax.swing.*;
 
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.render.components.IdentifierEditor;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 

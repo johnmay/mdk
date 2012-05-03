@@ -5,7 +5,7 @@ import org.biojava3.core.sequence.ProteinSequence;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.io.EntityOutput;
 import uk.ac.ebi.mdk.io.EntityWriter;
-import uk.ac.ebi.chemet.io.util.SequenceSerializer;
+import uk.ac.ebi.mdk.io.SequenceSerializer;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 

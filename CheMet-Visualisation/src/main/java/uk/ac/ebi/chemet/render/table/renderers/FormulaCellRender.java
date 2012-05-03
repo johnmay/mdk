@@ -25,9 +25,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import javax.swing.JTable;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.caf.utility.TextUtility;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 
 
 /**

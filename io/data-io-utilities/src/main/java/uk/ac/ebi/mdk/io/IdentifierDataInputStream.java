@@ -1,8 +1,8 @@
 package uk.ac.ebi.mdk.io;
 
-import uk.ac.ebi.chemet.io.identifier.basic.BasicIdentifierReader;
-import uk.ac.ebi.chemet.io.identifier.other.DynamicIdentifierReader;
-import uk.ac.ebi.chemet.io.identifier.other.TaxonomyReader;
+import uk.ac.ebi.mdk.io.identifier.BasicIdentifierReader;
+import uk.ac.ebi.mdk.io.identifier.DynamicIdentifierReader;
+import uk.ac.ebi.mdk.io.identifier.TaxonomyReader;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;

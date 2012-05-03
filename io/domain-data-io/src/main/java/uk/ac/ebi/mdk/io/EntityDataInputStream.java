@@ -1,24 +1,23 @@
 package uk.ac.ebi.mdk.io;
 
-import uk.ac.ebi.chemet.io.identifier.IdentifierDataInputStream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.chemet.io.core.AbstractDataInput;
-import uk.ac.ebi.chemet.io.domain.data.*;
-import uk.ac.ebi.chemet.io.domain.data.MetaboliteDataReader;
-import uk.ac.ebi.chemet.io.domain.data.ReactionDataReader;
-import uk.ac.ebi.chemet.io.domain.data.ReconstructionDataReader;
-import uk.ac.ebi.chemet.io.domain.data.ProteinProductDataReader;
-import uk.ac.ebi.chemet.io.domain.data.RibosomalRNADataReader;
-import uk.ac.ebi.chemet.io.domain.data.TransferRNADataReader;
-import uk.ac.ebi.chemet.io.domain.data.ChromosomeDataReader;
-import uk.ac.ebi.chemet.io.domain.data.GeneDataReader;
-import uk.ac.ebi.chemet.io.domain.data.GenomeDataReader;
+import uk.ac.ebi.mdk.io.domain.MetaboliteDataReader;
+import uk.ac.ebi.mdk.io.domain.ReactionDataReader;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader;
+import uk.ac.ebi.mdk.io.domain.ProteinProductDataReader;
+import uk.ac.ebi.mdk.io.domain.RibosomalRNADataReader;
+import uk.ac.ebi.mdk.io.domain.TransferRNADataReader;
+import uk.ac.ebi.mdk.io.domain.ChromosomeDataReader;
+import uk.ac.ebi.mdk.io.domain.GeneDataReader;
+import uk.ac.ebi.mdk.io.domain.GenomeDataReader;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
 import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.io.domain.AnnotatedEntityDataReader;
+import uk.ac.ebi.mdk.io.domain.EntityDataReader;
 
 import java.io.DataInputStream;
 import java.io.IOException;

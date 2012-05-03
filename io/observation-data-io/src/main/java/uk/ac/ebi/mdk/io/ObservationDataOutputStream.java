@@ -2,8 +2,7 @@ package uk.ac.ebi.mdk.io;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.chemet.io.core.AbstractDataOutput;
-import uk.ac.ebi.chemet.io.observation.sequence.LocalAlignmentWriter;
+import uk.ac.ebi.mdk.io.observation.LocalAlignmentWriter;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 

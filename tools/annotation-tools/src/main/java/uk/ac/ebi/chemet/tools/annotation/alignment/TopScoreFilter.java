@@ -2,7 +2,7 @@ package uk.ac.ebi.chemet.tools.annotation.alignment;
 
 import uk.ac.ebi.chemet.tools.annotation.AnnotationFilter;
 import uk.ac.ebi.mdk.domain.annotation.ObservationBasedAnnotation;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 
 import java.util.ArrayList;
 import java.util.Collection;

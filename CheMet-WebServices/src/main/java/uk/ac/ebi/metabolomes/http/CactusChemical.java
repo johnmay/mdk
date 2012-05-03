@@ -37,7 +37,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.metabolomes.webservices.ICrossReferenceProvider;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;

@@ -1,24 +1,23 @@
 package uk.ac.ebi.mdk.io;
 
-import uk.ac.ebi.chemet.io.identifier.IdentifierDataOutputStream;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.chemet.io.core.AbstractDataOutput;
-import uk.ac.ebi.chemet.io.domain.data.*;
-import uk.ac.ebi.chemet.io.domain.data.ProteinProductDataWriter;
-import uk.ac.ebi.chemet.io.domain.data.RibosomalRNADataWriter;
-import uk.ac.ebi.chemet.io.domain.data.TransferRNADataWriter;
-import uk.ac.ebi.chemet.io.domain.data.MetaboliteDataWriter;
-import uk.ac.ebi.chemet.io.domain.data.ReactionDataWriter;
-import uk.ac.ebi.chemet.io.domain.data.ReconstructionDataWriter;
-import uk.ac.ebi.chemet.io.domain.data.ChromosomeDataWriter;
-import uk.ac.ebi.chemet.io.domain.data.GeneDataWriter;
-import uk.ac.ebi.chemet.io.domain.data.GenomeDataWriter;
+import uk.ac.ebi.mdk.io.domain.ProteinProductDataWriter;
+import uk.ac.ebi.mdk.io.domain.RibosomalRNADataWriter;
+import uk.ac.ebi.mdk.io.domain.TransferRNADataWriter;
+import uk.ac.ebi.mdk.io.domain.MetaboliteDataWriter;
+import uk.ac.ebi.mdk.io.domain.ReactionDataWriter;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataWriter;
+import uk.ac.ebi.mdk.io.domain.ChromosomeDataWriter;
+import uk.ac.ebi.mdk.io.domain.GeneDataWriter;
+import uk.ac.ebi.mdk.io.domain.GenomeDataWriter;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
 import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.io.domain.AnnotatedEntityDataWriter;
+import uk.ac.ebi.mdk.io.domain.EntityDataWriter;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

@@ -26,8 +26,8 @@ import java.util.Collection;
 import javax.swing.JTable;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.Synonym;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.Synonym;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.chemet.render.table.renderers.AnnotationCellRenderer;
 import uk.ac.ebi.chemet.render.table.renderers.ChemicalStructureRenderer;

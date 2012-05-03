@@ -30,7 +30,7 @@ import org.openscience.cdk.Element;
 import org.openscience.cdk.Isotope;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.caf.utility.TextUtility;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 

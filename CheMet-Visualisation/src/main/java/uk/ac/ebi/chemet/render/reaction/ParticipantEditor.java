@@ -26,7 +26,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.templates.MoleculeFactory;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;

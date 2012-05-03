@@ -13,7 +13,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.metabolomes.webservices.eutils.PubChemNamesResult;
 import uk.ac.ebi.metabolomes.webservices.eutils.MeSHResult;

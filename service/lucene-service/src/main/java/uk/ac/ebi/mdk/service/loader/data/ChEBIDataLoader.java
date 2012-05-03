@@ -7,7 +7,7 @@ import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.service.index.data.ChEBIDataIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractChEBILoader;
-import uk.ac.ebi.chemet.service.loader.location.ZIPRemoteLocation;
+import uk.ac.ebi.mdk.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultDataIndexWriter;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 

@@ -1,10 +1,10 @@
 package uk.ac.ebi.mdk.service.loader.crossreference;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.chemet.io.parser.xml.uniprot.UniProtXMLReader;
-import uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal.UniProtCrossreferenceMarshal;
-import uk.ac.ebi.chemet.io.parser.xml.uniprot.marshal.UniProtIdentifierMarhsal;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.io.xml.uniprot.UniProtXMLReader;
+import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtCrossreferenceMarshal;
+import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtIdentifierMarhsal;
 import uk.ac.ebi.mdk.service.index.crossreference.UniProtCrossReferenceIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultCrossReferenceIndexWriter;

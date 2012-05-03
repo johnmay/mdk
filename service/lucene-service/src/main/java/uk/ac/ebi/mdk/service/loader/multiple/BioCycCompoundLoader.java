@@ -24,7 +24,7 @@ import org.openscience.cdk.formula.MolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.service.index.name.DefaultNameIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractMultiIndexResourceLoader;
-import uk.ac.ebi.chemet.service.loader.location.SystemLocation;
+import uk.ac.ebi.mdk.service.loader.location.SystemLocation;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultDataIndexWriter;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultNameIndexWriter;
 import uk.ac.ebi.mdk.io.text.biocyc.AttributedEntry;

@@ -4,7 +4,6 @@ import org.junit.Test;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.caf.utility.version.VersionMap;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.mdk.io.AnnotationDataOutputStream;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

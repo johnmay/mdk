@@ -22,7 +22,7 @@ package uk.ac.ebi.io.blast.xml.setters;
 
 import javax.xml.stream.XMLStreamException;
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 
 /**
  * @name    BLASTXMLSetter - 2011.10.10 <br>

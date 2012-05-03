@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;
 import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;

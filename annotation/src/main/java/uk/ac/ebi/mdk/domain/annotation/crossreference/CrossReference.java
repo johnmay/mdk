@@ -18,7 +18,7 @@
 package uk.ac.ebi.mdk.domain.annotation.crossreference;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AbstractAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.AbstractAnnotation;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.domain.observation.Observation;

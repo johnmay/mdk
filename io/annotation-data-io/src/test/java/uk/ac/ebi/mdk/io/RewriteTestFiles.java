@@ -1,10 +1,10 @@
 package uk.ac.ebi.mdk.io;
 
-import uk.ac.ebi.chemet.io.annotation.base.DoubleAnnotationWriterTest;
-import uk.ac.ebi.chemet.io.annotation.base.StringAnnotationWriterTest;
-import uk.ac.ebi.chemet.io.annotation.chemical.AtomContainerAnnotationWriterTest;
-import uk.ac.ebi.chemet.io.annotation.crossreference.CrossReferenceWriterTest;
-import uk.ac.ebi.chemet.io.annotation.reaction.GibbsEnergyWriterTest;
+import uk.ac.ebi.mdk.io.annotation.primitive.DoubleAnnotationWriterTest;
+import uk.ac.ebi.mdk.io.annotation.primitive.StringAnnotationWriterTest;
+import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationWriterTest;
+import uk.ac.ebi.mdk.io.annotation.CrossReferenceWriterTest;
+import uk.ac.ebi.mdk.io.annotation.GibbsEnergyWriterTest;
 
 import java.io.IOException;
 

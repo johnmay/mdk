@@ -6,7 +6,7 @@ import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.service.index.crossreference.ChEBICrossReferenceIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractChEBILoader;
-import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
+import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultCrossReferenceIndexWriter;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.resource.DefaultIdentifierFactory;

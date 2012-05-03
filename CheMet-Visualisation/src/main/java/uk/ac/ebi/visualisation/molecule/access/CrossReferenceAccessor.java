@@ -21,7 +21,7 @@
 package uk.ac.ebi.visualisation.molecule.access;
 
 import com.google.common.base.Joiner;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 /**

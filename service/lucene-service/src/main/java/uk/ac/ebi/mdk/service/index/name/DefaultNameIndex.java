@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
-import uk.ac.ebi.chemet.service.BasicServiceLocation;
+import uk.ac.ebi.mdk.service.BasicServiceLocation;
 import uk.ac.ebi.mdk.service.analyzer.ChemicalNameAnalyzer;
 import uk.ac.ebi.mdk.service.analyzer.LowerCaseKeywordAnalyzer;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;

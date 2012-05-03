@@ -51,7 +51,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.deprecated.services.LuceneService;

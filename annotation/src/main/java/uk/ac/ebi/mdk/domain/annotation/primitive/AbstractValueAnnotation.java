@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.AbstractAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.AbstractAnnotation;
 
 
 /** 

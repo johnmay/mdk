@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.io.EntityOutput;
 import uk.ac.ebi.mdk.io.EntityWriter;
-import uk.ac.ebi.chemet.io.util.SequenceSerializer;
+import uk.ac.ebi.mdk.io.SequenceSerializer;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 

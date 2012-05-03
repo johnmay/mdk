@@ -21,7 +21,7 @@
 package uk.ac.ebi.visualisation.molecule.access;
 
 import com.google.common.base.Joiner;
-import uk.ac.ebi.annotation.Synonym;
+import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 /**

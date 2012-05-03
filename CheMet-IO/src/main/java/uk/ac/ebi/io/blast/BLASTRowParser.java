@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.io.blast;
 
-import uk.ac.ebi.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 
 /**
  * @name    BlastTSVLoader - 2011.10.06 <br>

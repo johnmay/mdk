@@ -23,8 +23,6 @@
 package uk.ac.ebi.mdk.domain.annotation;
 
 import junit.framework.TestCase;
-import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
-import uk.ac.ebi.mdk.domain.annotation.Annotation;
 
 
 /**
@@ -43,7 +41,7 @@ public class AuthorAnnotationTest extends TestCase {
 
         Annotation annotation = new AuthorAnnotation("Added during gap filling");
 
-        String expected = "@" + System.getProperty("user.name") + " Added during gap filling";
+        String expected = "Added during gap filling";
 
         assertEquals(expected, annotation.toString());
 

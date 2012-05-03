@@ -1,6 +1,6 @@
 package uk.ac.ebi.mdk.tool.match;
 
-import uk.ac.ebi.annotation.Synonym;
+import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
 import java.util.Locale;

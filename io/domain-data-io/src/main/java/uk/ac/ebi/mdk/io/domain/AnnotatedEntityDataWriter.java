@@ -3,7 +3,7 @@ package uk.ac.ebi.mdk.io.domain;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.io.AnnotationOutput;
-import uk.ac.ebi.chemet.io.core.EnumWriter;
+import uk.ac.ebi.mdk.io.EnumWriter;
 import uk.ac.ebi.mdk.io.EntityWriter;
 import uk.ac.ebi.mdk.io.ObservationOutput;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;

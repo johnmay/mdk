@@ -1,7 +1,6 @@
 package uk.ac.ebi.mdk.service.loader;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.service.loader.AbstractResourceLoader;
 import uk.ac.ebi.mdk.service.SingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
 

@@ -29,8 +29,8 @@ import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.annotation.chemical.Charge;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.Charge;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 

@@ -21,10 +21,10 @@
 package uk.ac.ebi.mdk.tool.task.homology;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.task.FileParameter;
-import uk.ac.ebi.annotation.task.Parameter;
+import uk.ac.ebi.mdk.domain.annotation.task.FileParameter;
+import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
-import uk.ac.ebi.chemet.io.parser.xml.blast.BlastReader;
+import uk.ac.ebi.mdk.io.xml.blast.BlastReader;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;

@@ -2,8 +2,6 @@ package uk.ac.ebi.mdk.service.loader.location;
 
 import org.junit.Test;
 import org.junit.Assert;
-import uk.ac.ebi.chemet.service.loader.location.DefaultLocationFactory;
-import uk.ac.ebi.chemet.service.loader.location.RemoteLocation;
 import uk.ac.ebi.mdk.service.location.LocationFactory;
 import uk.ac.ebi.mdk.service.location.ResourceLocation;
 

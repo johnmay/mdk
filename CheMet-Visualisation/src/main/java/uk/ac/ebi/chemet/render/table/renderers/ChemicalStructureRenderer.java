@@ -20,7 +20,6 @@
  */
 package uk.ac.ebi.chemet.render.table.renderers;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.util.Arrays;
@@ -28,7 +27,7 @@ import java.util.Collection;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import org.openscience.cdk.exception.CDKException;
-import uk.ac.ebi.annotation.chemical.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.render.molecule.MoleculeRenderer;
 
 

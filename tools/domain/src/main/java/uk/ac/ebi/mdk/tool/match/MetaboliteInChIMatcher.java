@@ -1,7 +1,7 @@
 package uk.ac.ebi.mdk.tool.match;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.chemical.InChI;
+import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.tool.inchi.InChIConnectivity;
 

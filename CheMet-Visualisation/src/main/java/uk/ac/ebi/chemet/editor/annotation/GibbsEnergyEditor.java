@@ -4,7 +4,7 @@ import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.reaction.GibbsEnergy;
+import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 
 import javax.swing.*;
