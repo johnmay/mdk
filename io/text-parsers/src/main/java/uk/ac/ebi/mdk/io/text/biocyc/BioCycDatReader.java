@@ -42,18 +42,16 @@ import java.util.regex.Pattern;
  * <pre>{@code
  * File            reactions = new File("/databases/biocyc/MetaCyc/data/reactions.dat");
  * BioCycDatReader reader    = new BioCycDatReader(new FileInputStream(reactions), COMMON_NAME, SYNONYMS);
- * <p/>
+ *
  * while (reader.hasNext()) {
- * <p/>
+ *
  *    AttributedEntry<Attribute, String> entry = reader.next();
- * <p/>
+ *
  *    if (entry.has(COMMON_NAME) && entry.isSingular(COMMON_NAME))
  *        System.out.println(entry.get(COMMON_NAME).iterator().next());
- * <p/>
  *    // safe
  *    for (String synonym : entry.get(SYNONYMS))
  *        System.out.println("\t" + synonym);
- * <p/>
  * }
  * reader.close();
  * }</pre>
