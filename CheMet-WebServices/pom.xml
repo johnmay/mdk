@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>CheMet</artifactId>
+        <artifactId>mdk</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
         <version>1.4.0-SNAPSHOT</version>
     </parent>
@@ -146,7 +146,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>chemet-resource</artifactId>
+            <artifactId>mdk-domain-identifier</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

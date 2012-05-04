@@ -46,7 +46,7 @@
 
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>chemet-resource</artifactId>
+            <artifactId>mdk-domain-identifier</artifactId>
             <version>1.4.0-SNAPSHOT</version>
         </dependency>
 

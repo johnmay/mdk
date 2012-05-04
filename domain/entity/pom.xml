@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>chemet-resource</artifactId>
+            <artifactId>mdk-domain-identifier</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
