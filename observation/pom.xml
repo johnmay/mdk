@@ -10,7 +10,7 @@
     </parent>
     
     <groupId>uk.ac.ebi.chemet</groupId>
-    <artifactId>chemet-observation</artifactId>
+    <artifactId>mdk-domain-observation</artifactId>
     <version>1.4.0-SNAPSHOT</version>
     <name>Observation</name>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/observation</url>
