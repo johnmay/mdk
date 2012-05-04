@@ -1,4 +1,4 @@
-package uk.ac.ebi.mdk.ws;
+package uk.ac.ebi.mdk.service.query;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -7,7 +7,6 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.service.query.QueryService;
 
 import java.io.StringReader;
 import java.io.StringWriter;

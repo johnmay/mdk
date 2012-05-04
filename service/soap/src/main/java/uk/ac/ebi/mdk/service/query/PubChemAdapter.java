@@ -1,11 +1,10 @@
-package uk.ac.ebi.mdk.ws;
+package uk.ac.ebi.mdk.service.query;
 
 import gov.nih.nlm.ncbi.pubchem.ws.*;
 import gov.nih.nlm.ncbi.pubchem.ws.holders.DataBlobTypeHolder;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
-import uk.ac.ebi.mdk.service.query.QueryService;
 import uk.ac.ebi.mdk.service.query.structure.StructureSearch;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 import uk.ac.ebi.mdk.service.query.structure.SubstructureSearch;

@@ -1,4 +1,4 @@
-package uk.ac.ebi.mdk.ws;
+package uk.ac.ebi.mdk.service.query;
 
 import jp.genome.ws.kegg.KEGGLocator;
 import jp.genome.ws.kegg.KEGGPortType;

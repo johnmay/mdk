@@ -1,4 +1,4 @@
-package uk.ac.ebi.mdk.ws;
+package uk.ac.ebi.mdk.service.query;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;

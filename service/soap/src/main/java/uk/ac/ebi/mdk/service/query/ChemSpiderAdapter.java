@@ -1,4 +1,4 @@
-package uk.ac.ebi.mdk.ws;
+package uk.ac.ebi.mdk.service.query;
 
 import com.chemspider.CompoundInfo;
 import com.chemspider.SearchLocator;
