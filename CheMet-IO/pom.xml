@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>CheMet</artifactId>
-        <groupId>uk.ac.ebi.chemet</groupId>
+        <groupId>uk.ac.ebi.mdk</groupId>
         <version>1.4.0-SNAPSHOT</version>
     </parent>
-    <groupId>uk.ac.ebi.chemet</groupId>
+    <groupId>uk.ac.ebi.mdk</groupId>
     <artifactId>CheMet-IO</artifactId>
     <version>1.4.0-SNAPSHOT</version>
     <name>IO</name>
