@@ -21,7 +21,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>chemet-tools</artifactId>
+        <artifactId>mdk-tool</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
         <version>1.4.0-SNAPSHOT</version>
     </parent>
@@ -32,7 +32,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>chemet-interface</artifactId>
+            <artifactId>mdk-interface</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -47,7 +47,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>chemet-xml-parsers</artifactId>
+            <artifactId>mdk-io-xml-parsers</artifactId>
             <version>${project.version}</version>
         </dependency>
 

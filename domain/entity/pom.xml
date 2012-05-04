@@ -1,23 +1,23 @@
-<?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>CheMet</artifactId>
+        <artifactId>mdk-domain</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
         <version>1.4.0-SNAPSHOT</version>
     </parent>
-    <groupId>uk.ac.ebi.chemet</groupId>
-    <artifactId>CheMet-Core</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
-    <name>Core</name>
-    <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/core</url>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mdk-domain-entity</artifactId>
+    <packaging>jar</packaging>
+
+    <name>mdk-domain-entity</name>
+    <url>http://maven.apache.org</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <dependencies>
 
+    <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -26,16 +26,6 @@
         </dependency>
 
         <!-- chemet dependencies -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>mdk-domain-entity</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>mdk-tool-domain</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mdk-interface</artifactId>
@@ -55,13 +45,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>mdk-domain-observation</artifactId>
             <version>${project.version}</version>
-        </dependency>
-
-        <!-- local dependencies -->
-        <dependency>
-            <groupId>sf.net</groupId>
-            <artifactId>lpsolve</artifactId>
-            <version>5.5</version>
         </dependency>
 
         <!-- CDK Modules -->
@@ -143,8 +126,7 @@
             <version>${cdk.version}</version>
         </dependency>
 
-
-        <!-- BioJava SNAPSHOT -->
+        <!-- BioJava  -->
         <dependency>
             <artifactId>biojava3-core</artifactId>
             <groupId>org.biojava</groupId>
@@ -177,17 +159,4 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

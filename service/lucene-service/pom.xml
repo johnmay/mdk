@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>chemet-service</artifactId>
+        <artifactId>mdk-service</artifactId>
         <groupId>uk.ac.ebi.chemet</groupId>
         <version>1.4.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>chemet-lucene-service</artifactId>
+    <artifactId>mdk-service-lucene</artifactId>
     <version>1.4.0-SNAPSHOT</version>
     <groupId>uk.ac.ebi.chemet</groupId>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/service/lucene-service</url>
@@ -20,17 +20,17 @@
         <!-- chemet -->
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-service-core</artifactId>
+            <artifactId>mdk-service-core</artifactId>
             <version>1.4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>chemet-xml-parsers</artifactId>
+            <artifactId>mdk-io-xml-parsers</artifactId>
             <version>1.4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>uk.ac.ebi.chemet</groupId>
-            <artifactId>mdk-text-parsers</artifactId>
+            <artifactId>mdk-io-text-parsers</artifactId>
             <version>1.4.0-SNAPSHOT</version>
         </dependency>
 

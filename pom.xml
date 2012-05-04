@@ -8,21 +8,21 @@
     <packaging>pom</packaging>
     <name>CheMet</name>
     <modules>
-        <module>interface</module>
-        <module>observation</module>
-        <module>annotation</module>
-        <module>apps</module>
-        <module>service</module>
-        <module>tools</module>
+
+        <module>domain</module>
         <module>io</module>
+        <module>service</module>
+        <module>tool</module>
+
+
+        <module>interface</module>
+        <module>apps</module>
 
         <!-- old structure modules (to be converted) -->
         <module>CheMet-Core</module>
         <module>CheMet-IO</module>
         <module>CheMet-Visualisation</module>
         <module>CheMet-WebServices</module>
-        <module>Resource</module>
-        <module>domain</module>
 
     </modules>
 

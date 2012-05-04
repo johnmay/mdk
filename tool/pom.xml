@@ -10,13 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>annotation-tools</module>
+        <module>annotation</module>
         <module>domain</module>
         <module>compare</module>
         <module>core</module>
         <module>homology</module>
     </modules>
-    <artifactId>chemet-tools</artifactId>
+    <artifactId>mdk-tool</artifactId>
 
 
 </project>
