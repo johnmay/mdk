@@ -9,9 +9,8 @@
         <version>1.4.0-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi.chemet</groupId>
-    <artifactId>chemet-annotation</artifactId>
+    <artifactId>mdk-domain-annotation</artifactId>
     <version>1.4.0-SNAPSHOT</version>
-    <name>Annotation</name>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/annotation</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -38,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>chemet-annotation</artifactId>
+            <artifactId>mdk-domain-annotation</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
