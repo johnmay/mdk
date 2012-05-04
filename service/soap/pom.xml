@@ -79,7 +79,6 @@
                         </goals>
                         <configuration>                            
                             <sourceDirectory>src/main/resources/wsdl</sourceDirectory>
-                            <outputDirectory>src/main/generated-sources</outputDirectory>
                             <useEmitter>true</useEmitter>
                             <mappings>
 

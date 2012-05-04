@@ -34,7 +34,7 @@
         <!-- NOTE: CheMet-Core and WebServices and IO need to be removed in future -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mdk-domain</artifactId>
+            <artifactId>mdk-domain-entity</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

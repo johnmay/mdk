@@ -32,7 +32,7 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mdk-domain</artifactId>
+            <artifactId>mdk-domain-entity</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

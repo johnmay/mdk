@@ -7,10 +7,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>mdk-domain</artifactId>
+    <artifactId>mdk-domain-entity</artifactId>
     <packaging>jar</packaging>
 
-    <name>mdk-domain</name>
+    <name>mdk-domain-entity</name>
     <url>http://maven.apache.org</url>
 
     <properties>
