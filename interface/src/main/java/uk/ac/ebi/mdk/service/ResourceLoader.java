@@ -150,6 +150,11 @@ public interface ResourceLoader {
      */
     public void addLocation(String key, ResourceLocation location);
 
+    /**
+     * Remove a specified location (note this will not removed the requirement)
+     * @param key
+     */
+    public void removeLocation(String key);
 
     /**
      * Access the stored location for the specified key. If the location
