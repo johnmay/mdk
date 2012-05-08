@@ -66,6 +66,7 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -79,6 +80,7 @@
                         </goals>
                         <configuration>                            
                             <sourceDirectory>src/main/resources/wsdl</sourceDirectory>
+                            <outputDirectory>src/main/generated-sources</outputDirectory>
                             <useEmitter>true</useEmitter>
                             <mappings>
 
