@@ -22,15 +22,14 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.Isotope;
 import org.openscience.cdk.formula.MolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
-import uk.ac.ebi.mdk.service.index.name.DefaultNameIndex;
-import uk.ac.ebi.mdk.service.loader.AbstractMultiIndexResourceLoader;
-import uk.ac.ebi.mdk.service.loader.location.SystemLocation;
-import uk.ac.ebi.mdk.service.loader.writer.DefaultDataIndexWriter;
-import uk.ac.ebi.mdk.service.loader.writer.DefaultNameIndexWriter;
 import uk.ac.ebi.mdk.io.text.biocyc.AttributedEntry;
 import uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader;
 import uk.ac.ebi.mdk.io.text.biocyc.attribute.Attribute;
 import uk.ac.ebi.mdk.service.MultiIndexResourceLoader;
+import uk.ac.ebi.mdk.service.loader.AbstractMultiIndexResourceLoader;
+import uk.ac.ebi.mdk.service.loader.location.SystemLocation;
+import uk.ac.ebi.mdk.service.loader.writer.DefaultDataIndexWriter;
+import uk.ac.ebi.mdk.service.loader.writer.DefaultNameIndexWriter;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.IOException;
@@ -56,11 +55,7 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
 
     public BioCycCompoundLoader() {
 
-        addIndex("biocyc.names", new DefaultNameIndex("BioCyc Names",
-                                                      "name/biocyc"));
 
-        addIndex("biocyc.data", new DefaultNameIndex("BioCyc Data",
-                                                     "data/biocyc"));
 
         addRequiredResource("BioCyc Compounds",
                             "compounds.dat file from a BioCyc database",

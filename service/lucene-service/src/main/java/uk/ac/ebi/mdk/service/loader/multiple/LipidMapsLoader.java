@@ -2,7 +2,7 @@ package uk.ac.ebi.mdk.service.loader.multiple;
 
 import au.com.bytecode.opencsv.CSVReader;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.service.index.name.DefaultNameIndex;
+import uk.ac.ebi.mdk.service.index.name.LipidMapsNameIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractMultiIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultNameIndexWriter;
@@ -24,13 +24,15 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
     public LipidMapsLoader() throws IOException {
 
-        addIndex("lipid.maps.names", new DefaultNameIndex("Lipid Maps", "name/lipid-maps"));
+        addIndex("lipid.maps.names", new LipidMapsNameIndex());
 
-        addRequiredResource("Lipid Maps (.tsv)",
-                            "Single Lipid Maps TSV file",
+        addRequiredResource("Lipid Maps (File)",
+                            "Single '.tsv' file from LIPID MAPS. This should be used if you only want to load" +
+                                    " a specific class from LIPID MAPS (e.g. Fatty Acids) ",
                             ResourceFileLocation.class);
-        addRequiredResource("Lipid Maps (.zip)",
-                            "ZIPped archive with multiple '.tsv' entries",
+        addRequiredResource("Lipid Maps (Folder)",
+                            "Folder containing multiple '.tsv' entries (can be compressed with Zip). The" +
+                                    " file ending '...All.tsv' will be used to load the index ",
                             ResourceDirectoryLocation.class,
                             new ZIPRemoteLocation("http://www.lipidmaps.org/downloads/LMSD_20120125_tsv.zip"));
 
@@ -38,10 +40,10 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
     @Override
     public void update() throws IOException {
-        if (hasLocation("lipid.maps.zip")) {
-            updateFromZip();
-        } else if (hasLocation("lipid.maps.tsv")) {
-            ResourceFileLocation location = getLocation("Lipid Maps TSV");
+        if (hasLocation("lipid.maps.folder")) {
+            updateFromFolder();
+        } else if (hasLocation("lipid.maps.file")) {
+            ResourceFileLocation location = getLocation("lipid.maps.file");
             update(location.open());
             location.close();
         } else {
@@ -62,7 +64,7 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
         DefaultNameIndexWriter writer = new DefaultNameIndexWriter(getIndex("lipid.maps.names"));
 
         String[] row = reader.readNext();
-        while ((row = reader.readNext()) != null) {
+        while ((row = reader.readNext()) != null && !isCancelled()) {
 
             // name data
             String identifier = row[0];
@@ -83,9 +85,9 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
     }
 
-    public void updateFromZip() throws IOException {
+    public void updateFromFolder() throws IOException {
 
-        ResourceDirectoryLocation location = getLocation("lipid.maps.zip");
+        ResourceDirectoryLocation location = getLocation("lipid.maps.folder");
 
         while (location.hasNext()) {
 
@@ -103,24 +105,11 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
     @Override
     public boolean canUpdate() {
-        return hasLocation("lipid.maps.tsv") || hasLocation("lipid.maps.zip");
+        return hasLocation("lipid.maps.file") || hasLocation("lipid.maps.folder");
     }
 
     @Override
     public String getName() {
         return "Lipid Maps";
-    }
-
-    public static void main(String[] args) throws IOException {
-
-        LipidMapsLoader loader = new LipidMapsLoader();
-        if (loader.canBackup()) loader.backup();
-        if (loader.canUpdate()) {
-            loader.update();
-        } else {
-            LOGGER.error("Unable to update");
-        }
-
-
     }
 }

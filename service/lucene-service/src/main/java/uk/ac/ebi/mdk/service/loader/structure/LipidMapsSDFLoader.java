@@ -5,12 +5,13 @@ import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import uk.ac.ebi.mdk.service.ResourceLoader;
 import uk.ac.ebi.mdk.service.index.KeywordNIOIndex;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.index.structure.LipidMapsStructureIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultStructureIndexWriter;
-import uk.ac.ebi.mdk.service.ResourceLoader;
-import uk.ac.ebi.mdk.service.index.LuceneIndex;
 import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
 
 import java.io.IOException;
@@ -29,6 +30,10 @@ public class LipidMapsSDFLoader extends AbstractSingleIndexResourceLoader {
                             "A lipid maps SDF folder/directory (can be zipped)",
                             ResourceDirectoryLocation.class,
                             new ZIPRemoteLocation("http://www.lipidmaps.org/downloads/LMSDFDownload25Jan12.zip"));
+    }
+
+    public LipidMapsSDFLoader() throws IOException {
+        this(new LipidMapsStructureIndex());
     }
 
     @Override
@@ -51,7 +56,7 @@ public class LipidMapsSDFLoader extends AbstractSingleIndexResourceLoader {
                                                                DefaultChemObjectBuilder.getInstance(),
                                                                true);
 
-            while (reader.hasNext()){
+            while (reader.hasNext() && !isCancelled()){
                 IAtomContainer molecule = reader.next();
                 String identifier = molecule.getProperty(CDKConstants.TITLE).toString();
                 writer.write(identifier, molecule);
