@@ -3,6 +3,8 @@ package uk.ac.ebi.mdk.app.service;
 import com.jgoodies.forms.layout.CellConstraints;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PreferencePanelFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mdk.service.loader.crossreference.ChEBICrossReferenceLoader;
 import uk.ac.ebi.mdk.service.loader.crossreference.UniProtCrossReferenceLoader;
@@ -10,14 +12,12 @@ import uk.ac.ebi.mdk.service.loader.data.ChEBIDataLoader;
 import uk.ac.ebi.mdk.service.loader.location.DefaultLocationFactory;
 import uk.ac.ebi.mdk.service.loader.multiple.HMDBMetabocardsLoader;
 import uk.ac.ebi.mdk.service.loader.multiple.KEGGCompoundLoader;
+import uk.ac.ebi.mdk.service.loader.multiple.LipidMapsLoader;
+import uk.ac.ebi.mdk.service.loader.multiple.MetaCycCompoundLoader;
 import uk.ac.ebi.mdk.service.loader.name.ChEBINameLoader;
 import uk.ac.ebi.mdk.service.loader.single.TaxonomyLoader;
-import uk.ac.ebi.mdk.service.loader.structure.ChEBIStructureLoader;
-import uk.ac.ebi.mdk.service.loader.structure.HMDBStructureLoader;
-import uk.ac.ebi.mdk.service.loader.structure.KEGGCompoundStructureLoader;
-import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.service.loader.structure.*;
 import uk.ac.ebi.render.resource.LoaderGroupFactory;
-import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,6 +64,12 @@ public class LuceneLoader extends Box {
             add(factory.createGroup("HMDB",
                                     new HMDBMetabocardsLoader(),
                                     new HMDBStructureLoader()));
+            add(factory.createGroup("BioCyc",
+                                    new MetaCycCompoundLoader(),
+                                    new MetaCycStructureLoader()));
+            add(factory.createGroup("LIPID MAPS",
+                                    new LipidMapsLoader(),
+                                    new LipidMapsSDFLoader()));
             add(factory.createGroup("UniProt",
                                     new UniProtCrossReferenceLoader(DefaultEntityFactory.getInstance(),
                                                                     DefaultIdentifierFactory.getInstance()),
