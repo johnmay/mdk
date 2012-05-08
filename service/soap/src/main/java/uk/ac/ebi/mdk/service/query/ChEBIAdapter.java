@@ -51,6 +51,15 @@ public class ChEBIAdapter
 
     }
 
+    public Entity getCompleteEntity(ChEBIIdentifier identifier){
+        try {
+            return service.getCompleteEntity(identifier.getAccession());
+        } catch (RemoteException ex) {
+            LOGGER.error("ChEBI Remote Exception: " + ex.getMessage());
+        }
+        return null;
+    }
+
     @Override
     public Collection<ChEBIIdentifier> searchIUPACName(String name, boolean approximate) {
         return searchBy(name, SearchCategory.value6);
@@ -79,6 +88,7 @@ public class ChEBIAdapter
 
     @Override
     public Collection<String> getNames(ChEBIIdentifier identifier) {
+        System.out.println("soap invoked!");
         Collection<String> names = new ArrayList<String>();
         try {
             names.add(service.getCompleteEntity(identifier.getAccession()).getChebiAsciiName());
