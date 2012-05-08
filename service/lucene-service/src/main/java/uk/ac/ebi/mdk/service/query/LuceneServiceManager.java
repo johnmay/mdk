@@ -168,7 +168,7 @@ public class LuceneServiceManager
     }
 
     @Override
-    public Collection<Identifier> getCompatibleIdentifiers(Class<? extends QueryService> c) {
+    public Collection<Identifier> getIdentifiers(Class<? extends QueryService> c) {
         return null;
     }
 }

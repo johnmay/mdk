@@ -22,6 +22,8 @@ package uk.ac.ebi.mdk.service;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.query.QueryService;
 
+import java.util.Collection;
+
 /**
  * ServiceManager - 29.02.2012 <br/>
  * <p/>
@@ -180,4 +182,5 @@ public interface ServiceManager {
     public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass,
                                                                           Class<S>           serviceClass);
 
+    public Collection<Identifier> getIdentifiers(Class<? extends QueryService> c);
 }

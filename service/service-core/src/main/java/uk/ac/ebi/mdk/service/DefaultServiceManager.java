@@ -63,6 +63,21 @@ public class DefaultServiceManager implements ServiceManager {
         return getService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
 
+    @Override
+    public Collection<Identifier> getIdentifiers(Class<? extends QueryService> c) {
+
+        Set<Identifier> identifiers = new HashSet<Identifier>();
+
+        for (QueryService service : services.values()) {
+            if (c.isInstance(service)) {
+                identifiers.add(service.getIdentifier().newInstance());
+            }
+        }
+
+        return identifiers;
+
+    }
+
     /**
      * @inheritDoc
      */
@@ -89,7 +104,7 @@ public class DefaultServiceManager implements ServiceManager {
      * @inheritDOc
      */
     public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass,
-                                                                          Class<S>           serviceClass ) {
+                                                                          Class<S> serviceClass) {
 
         Collection<Class<? extends QueryService>> interfaces = getImplementingInterfaces(serviceClass);
         interfaces.add(serviceClass);
