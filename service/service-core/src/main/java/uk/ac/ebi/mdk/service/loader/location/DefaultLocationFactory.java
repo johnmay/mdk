@@ -57,7 +57,7 @@ public class DefaultLocationFactory implements LocationFactory {
     /**
      * Create a RemoteLocation with the provided compression and the given path
      *
-     * @param path path to the location
+     * @param path        path to the location
      * @param compression compression type (i.e. GZIP/ZIP or NONE)
      *
      * @return instance of a RemoteFileLocation appropriate to the compression level
@@ -78,7 +78,7 @@ public class DefaultLocationFactory implements LocationFactory {
     /**
      * Create a SystemLocation with the provided compression and the given path
      *
-     * @param path path to the location
+     * @param path        path to the location
      * @param compression compression type (i.e. GZIP/ZIP or NONE)
      *
      * @return instance of a SystemFileLocation appropriate to the compression level
@@ -100,7 +100,13 @@ public class DefaultLocationFactory implements LocationFactory {
      * @inheritDoc
      */
     @Override
-    public ResourceDirectoryLocation newDirectoryLocation(String desc, Compression compression, Location location) {
+    public ResourceDirectoryLocation newDirectoryLocation(String desc, Compression compression, Location location) throws IOException {
+
+        if (desc.isEmpty())
+            return null;
+
+        if (desc.endsWith(".zip") && desc.startsWith("http://"))
+            return new ZIPRemoteLocation(desc);
 
         // only one type at the moment
         return new SystemDirectoryLocation(new File(desc));
