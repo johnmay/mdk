@@ -2,13 +2,11 @@ package uk.ac.ebi.mdk.app.service;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.ChemSpiderIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
+import org.openscience.cdk.interfaces.IMolecularFormula;
+import uk.ac.ebi.mdk.domain.identifier.*;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.ServiceManager;
+import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 
 import java.util.Arrays;
@@ -27,28 +25,44 @@ public class ServiceManagerExample {
 
         List<? extends Identifier> identifiers = Arrays.asList(new ChEBIIdentifier("CHEBI:15422"),
                                                                new KEGGCompoundIdentifier("C00009"),
+                                                               new HMDBIdentifier("HMDB00538"),
                                                                new KEGGCompoundIdentifier("C00010"),
                                                                new ChEBIIdentifier("CHEBI:57299"),
-                                                               new PubChemCompoundIdentifier("5957"),
-                                                               new ChemSpiderIdentifier("5742"),
+                                                               new LIPIDMapsIdentifier("LMFA01010004"),
+                                                               new BioCycChemicalIdentifier("ATP"),
                                                                new PubChemCompoundIdentifier("5957"),
                                                                new ChemSpiderIdentifier("5742"));
 
 
+        System.out.printf("%-30s %-15s %-20s %-5s %s\n",
+                          "Resource",
+                          "Identifier",
+                          "Service Type",
+                          "Atoms",
+                          "Time (s)");
+        System.out.println();
+
         for (Identifier identifier : identifiers) {
             if (manager.hasService(identifier, StructureService.class)) {
-                StructureService service = manager.getService(identifier, StructureService.class);
-                System.out.println(service.getServiceType());
-
                 long start = System.currentTimeMillis();
-                IAtomContainer structure = service.getStructure(identifier);
+                StructureService service = manager.getService(identifier, StructureService.class);
                 long end = System.currentTimeMillis();
-
-                System.out.println(identifier.getSummary() + " - AtomCount = " + structure.getAtomCount() + " time: " + (end - start));
+                IAtomContainer structure = service.getStructure(identifier);
+                System.out.printf("%-30s %-15s %-20s %02d    %.3f\n",
+                                  identifier.getShortDescription(),
+                                  identifier,
+                                  service.getServiceType(),
+                                  structure.getAtomCount(),
+                                  (end - start) / 1000f);
 
             }
         }
 
+    }
+
+    public <S extends StructureService & MolecularFormulaService> void doSomethingNeat(S service, Identifier identifier){
+        IAtomContainer    ac = service.getStructure(identifier);
+        IMolecularFormula mf = service.getIMolecularFormula(identifier);
     }
 
 }
