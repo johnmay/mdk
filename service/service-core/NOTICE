@@ -1,0 +1,10 @@
+This software utilises the following dependencies directly. Each dependency may include one or more other dependencies
+under other licenses that are not listed here
+
+Code Generation Library -  http://cglib.sourceforge.net/
+    Apache Software License, Version 1.1 - http://cglib.sourceforge.net/license.html
+
+JUnit - http://junit.sourceforge.net
+    Common Public License - http://junit.sourceforge.net/cpl-v10.html
+
+
