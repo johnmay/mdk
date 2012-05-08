@@ -7,6 +7,7 @@ import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.AbstractService;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -14,7 +15,9 @@ import java.io.StringWriter;
 /**
  * @author John May
  */
-public abstract class AbstractSoapService<I extends Identifier> implements QueryService<I> {
+public abstract class AbstractSoapService<I extends Identifier>
+        extends AbstractService<I>
+        implements QueryService<I> {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractSoapService.class);
 
@@ -22,9 +25,6 @@ public abstract class AbstractSoapService<I extends Identifier> implements Query
     private MDLV2000Writer writer = new MDLV2000Writer();
 
     private static final IChemObjectBuilder BUILDER = DefaultChemObjectBuilder.getInstance();
-
-    private Integer maxResults = 100;
-    private Float   similarity = 0.5f;
 
     public I getIdentifier(String accession) {
         I identifier =  getIdentifier();
@@ -35,24 +35,6 @@ public abstract class AbstractSoapService<I extends Identifier> implements Query
     @Override
     public ServiceType getServiceType() {
         return ServiceType.SOAP_WEB_SERVICE;
-    }
-
-    public Integer getMaxResults() {
-        return maxResults;
-    }
-
-    public Float getSimilarity() {
-        return similarity;
-    }
-
-    @Override
-    public void setMaxResults(int maxResults) {
-        this.maxResults = maxResults;
-    }
-
-    @Override
-    public void setMinSimilarity(float similarity) {
-        this.similarity = similarity;
     }
 
     public String structure2Mol(IAtomContainer structure){

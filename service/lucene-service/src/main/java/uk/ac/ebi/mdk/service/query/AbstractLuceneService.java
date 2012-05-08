@@ -13,6 +13,7 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.AbstractService;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
 
 import java.io.IOException;
@@ -32,6 +33,7 @@ import java.util.prefs.Preferences;
  * @version $Rev$
  */
 public abstract class AbstractLuceneService<I extends Identifier>
+        extends AbstractService<I>
         implements QueryService<I> {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractLuceneService.class);
@@ -48,7 +50,6 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     private int max = Preferences.userNodeForPackage(AbstractLuceneService.class).getInt("default.max.results", 100);
     private float minSimilarity = 0.5f; // for fuzzy queries
-
 
     public AbstractLuceneService(LuceneIndex index) {
         this.index = index;
@@ -93,42 +94,6 @@ public abstract class AbstractLuceneService<I extends Identifier>
     public void setAnalyzer(Analyzer analyzer) {
         this.analyzer = analyzer;
     }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void setMaxResults(int max) {
-        this.max = max;
-    }
-
-
-    /**
-     * Accessor for the stored max results to fetch
-     *
-     * @return number of results
-     */
-    public int getMaxResults() {
-        return max;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void setMinSimilarity(float minSimilarity) {
-        this.minSimilarity = minSimilarity;
-    }
-
-    /**
-     * Accessor for the stored minimum similarity
-     *
-     * @return percentage of similarity
-     */
-    public float getMinSimilarity() {
-        return minSimilarity;
-    }
-
 
     /**
      * @inheritDoc
@@ -197,7 +162,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
      * @return the score documents for the query
      */
     public ScoreDoc[] search(Query query) {
-        return search(query, TopScoreDocCollector.create(max, true));
+        return search(query, TopScoreDocCollector.create(getMaxResults(), true));
     }
 
     /**

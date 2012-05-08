@@ -162,7 +162,7 @@ public abstract class KEGGAdapter<I extends Identifier>
 
                     // if approximate is set the alignment score must equal 1.0f....
                     // if not set the score must be greate then the similarity
-                    if (!approximate && alignment.getScore() > getSimilarity()
+                    if (!approximate && alignment.getScore() > getMinSimilarity()
                             || alignment.getScore() == 1.0f) {
                         identifiers.add(getIdentifier(alignment.getTarget_id().substring(4)));
                     }
