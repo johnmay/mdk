@@ -79,7 +79,7 @@ public class DefaultStructureIndexWriter extends AbstractIndexWriter {
             write(identifier, sw.toString().getBytes(), getFingerprint(molecule));
 
         } catch (CDKException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            LOGGER.error("Skipping unwritable structure for " + identifier + " reason " + e.getMessage());
         }
 
 
