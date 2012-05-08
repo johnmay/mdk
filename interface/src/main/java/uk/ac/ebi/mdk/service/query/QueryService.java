@@ -38,7 +38,8 @@ public interface QueryService<I extends Identifier> {
         LUCENE_INDEX(1),
         RELATIONAL_DATABASE(2),
         REST_WEB_SERVICE(3),
-        SOAP_WEB_SERVICE(4);
+        SOAP_WEB_SERVICE(4),
+        AGGREGATED(5);
 
         private Integer priority;
 
