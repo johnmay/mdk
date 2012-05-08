@@ -2,11 +2,9 @@ package uk.ac.ebi.mdk.app.service;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecularFormula;
 import uk.ac.ebi.mdk.domain.identifier.*;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
-import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 
 import java.util.Arrays;
@@ -60,9 +58,5 @@ public class ServiceManagerExample {
 
     }
 
-    public <S extends StructureService & MolecularFormulaService> void doSomethingNeat(S service, Identifier identifier){
-        IAtomContainer    ac = service.getStructure(identifier);
-        IMolecularFormula mf = service.getIMolecularFormula(identifier);
-    }
 
 }
