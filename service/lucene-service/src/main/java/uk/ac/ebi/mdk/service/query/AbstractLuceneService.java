@@ -19,7 +19,6 @@ import uk.ac.ebi.mdk.service.index.LuceneIndex;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
-import java.util.prefs.Preferences;
 
 /**
  * AbstractLuceneService - 23.02.2012 <br/>
@@ -38,7 +37,16 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     private static final Logger LOGGER = Logger.getLogger(AbstractLuceneService.class);
 
-    private Document[] documents;
+    private static final int DEFAULT_CACHE_SIZE = 200;
+    private int cacheSize;
+
+    private Map<Integer, Document> documents = new LinkedHashMap<Integer, Document>() {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<Integer, Document> eldest) {
+            return size() > cacheSize;
+        }
+    };
+
     private Directory directory;
     private Analyzer analyzer;
     private IndexReader reader;
@@ -48,11 +56,14 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     private Map<String, QueryParser> parserMap = new HashMap<String, QueryParser>();
 
-    private int max = Preferences.userNodeForPackage(AbstractLuceneService.class).getInt("default.max.results", 100);
-    private float minSimilarity = 0.5f; // for fuzzy queries
-
     public AbstractLuceneService(LuceneIndex index) {
+
+        this(index, DEFAULT_CACHE_SIZE);
+    }
+
+    public AbstractLuceneService(LuceneIndex index, int cacheSize) {
         this.index = index;
+        this.cacheSize = cacheSize;
     }
 
     /**
@@ -83,7 +94,6 @@ public abstract class AbstractLuceneService<I extends Identifier>
         }
         this.directory = directory;
         reader = IndexReader.open(directory, true);
-        documents = new Document[reader.numDocs()];
     }
 
     /**
@@ -261,13 +271,13 @@ public abstract class AbstractLuceneService<I extends Identifier>
      */
     public Document getDocument(ScoreDoc document) throws IOException {
 
-        int index = document.doc;
+        Integer index = document.doc;
 
-        if (documents[index] == null) {
-            documents[index] = reader.document(index);
+        if (!documents.containsKey(index)) {
+            documents.put(index, reader.document(index));
         }
 
-        return documents[index];
+        return documents.get(index);
     }
 
     /**
@@ -709,4 +719,12 @@ public abstract class AbstractLuceneService<I extends Identifier>
         }
     }
 
+    /**
+     * Emties document cached
+     */
+    @Override
+    public void renew() {
+        super.renew();
+        documents.clear();
+    }
 }

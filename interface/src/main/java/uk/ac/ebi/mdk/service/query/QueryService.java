@@ -69,6 +69,11 @@ public interface QueryService<I extends Identifier> {
     public ServiceType getServiceType();
 
     /**
+     * Used in benchmarking only
+     */
+    public void renew();
+
+    /**
      * Set the maximum number of results to collection. This will limit
      * the query to return at maximum this number of results
      *

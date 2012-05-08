@@ -32,6 +32,14 @@ public abstract class AbstractService<I extends Identifier> implements QueryServ
         return results;
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void renew() {
+        // do -nothing
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + ": " + getServiceType();
