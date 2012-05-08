@@ -160,4 +160,8 @@ public class LuceneServiceManager
 
     }
 
+    @Override
+    public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass, Class<S> service) {
+        return null;
+    }
 }

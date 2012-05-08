@@ -96,4 +96,88 @@ public interface ServiceManager {
     public <S extends QueryService<I>, I extends Identifier> S getService(I identifier,
                                                                           Class<S> serviceClass);
 
+    /**
+     * Provides creation of a proxy service where multiple services can be combined
+     * into a single instance. The proxy uses a the code generation library (cglib)
+     * MethodInterceptor to dispatch methods to the sub-services. Methods in the super type
+     * {@see QueryService} will be invoked across all delegates (e.g. setMaxResults(int))
+     * whilst other method methods are invoked on a first come first served with the order
+     * being determined by the priority given by the {@see ServiceType}. This means if you
+     * have two services providing the IUPAC name only the highest priority service will be
+     * invoked. This proxying has some overhead but method calls are cached the following benchmark
+     * shoes the difference over 80,000 inovocations of two service calls.
+     *
+     * <table>
+     *     <tr><td>Aggregated</td><td>19,368 ms</td></tr>
+     *     <tr><td>Separated</td><td>19,643 ms</td></tr>
+     * </table>
+     *
+     *
+     * To create an custom aggregated service you need provide an interface describing your
+     * requirements and pass it as the service class parameter. Currently the interface
+     * does not need to public and it is possible to use inner-interfaces:
+     *
+     * <pre>{@code
+     *
+     * public class AggregatedServiceExample {
+     *
+     *    interface MyCustomService extends StructureService,
+     *                                      PreferredNameService {
+     *    }
+     *
+     *    public static void main(String[] args) {
+     *        ServiceManager  manager = DefaultServiceManager.getInstance();
+     *        MyCustomService service = manager.createService(ChEBIIdentifier.class,
+     *                                                        MyCustomService.class);
+     *
+     *        service.getPreferredName(identifier); // in PreferredName
+    *         service.getStructure(identifier);     // in StructureService
+     *    }
+     *
+     * }
+     * }
+     * </pre>
+     *
+     * It is also possible to make the interface generically typed:
+     * <pre>{@code
+     * interface MyCustomService<I extends Identifier> extends StructureService<I>,
+     *                                                         PreferredNameService<I> {
+     * }
+     * }</pre>
+     *
+     * or even:
+     * <pre>{@code
+     * interface MyChEBIService extends StructureService<ChEBIIdentifier>,
+     *                                  PreferredNameService<ChEBIIdentifier> {
+     * }
+     * }</pre>
+     *
+     * If you are writing an algorithm to consuming the service you don't need to provide the interface
+     * required. Instead you can use generic typing on methods. In the following example we create a new type
+     * 'S' which we say must implement both {@see PreferredNameService} and {@see StructureService}. We
+     * then provide 'S' as a parameter type. Subsequently this allows the user of the method to provide their
+     * own implementation which could be via an aggregated service or for example a database connection.
+     * The algorithm should not be thinking about how it will be retrieving the object data but rather
+     * what it will be doing with the object data. In the below example we do not care how we get the name
+     * and structure we just describe that we need and allow another class to provide it.
+     *
+     * <pre>{@code
+     * public <S extends PreferredNameService & StructureService>
+     *  void printNameAndAtomCount(S service, Identifier identifier) {
+     *    System.out.println( service.getPreferredName(identifier) );
+     *    System.out.println( service.getStructure(identifier).getAtomCount() );
+     * }
+     * }
+     * </pre>
+     *
+     * @param identifierClass
+     * @param serviceClass
+     * @param <I>
+     * @param <S>
+     *
+     * @return
+     */
+    public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass,
+                                                                          Class<S>           serviceClass);
+
 }
