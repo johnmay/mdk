@@ -280,9 +280,15 @@ public class LoaderRow extends JComponent {
 
                 try {
                     // replace with individual UI components for selecting
-                    loader.addLocation(key, e.getValue().getResourceLocation());
+                    ResourceLocation location = e.getValue().getResourceLocation();
+                    // replace with individual UI components for selecting
+                    if (location != null) {
+                        loader.addLocation(key, location);
+                    } else {
+                        loader.removeLocation(key);
+                    }
                 } catch (IOException ex) {
-
+                    LOGGER.error(ex.getMessage());
                 }
 
 
@@ -366,7 +372,7 @@ public class LoaderRow extends JComponent {
             double position = (double) l / duration();
             double proportion = (Math.cos(position * Math.PI + Math.PI) + 1) / 2;
 
-            int width  = startSize.width + (int) ((xdiff) * proportion);
+            int width = startSize.width + (int) ((xdiff) * proportion);
             int height = startSize.height + (int) ((ydiff) * proportion);
             Dimension newSize = new Dimension(width,
                                               height);
