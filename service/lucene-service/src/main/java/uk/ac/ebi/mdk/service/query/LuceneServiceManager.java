@@ -17,6 +17,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.ServiceManager;
 
 import java.security.InvalidParameterException;
+import java.util.Collection;
 
 /**
  * LuceneServiceManager - 28.02.2012 <br/>
@@ -27,6 +28,7 @@ import java.security.InvalidParameterException;
  * @author $Author$ (this version)
  * @version $Rev$
  */
+@Deprecated
 public class LuceneServiceManager
         implements ServiceManager {
 
@@ -162,6 +164,11 @@ public class LuceneServiceManager
 
     @Override
     public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass, Class<S> service) {
+        return null;
+    }
+
+    @Override
+    public Collection<Identifier> getCompatibleIdentifiers(Class<? extends QueryService> c) {
         return null;
     }
 }

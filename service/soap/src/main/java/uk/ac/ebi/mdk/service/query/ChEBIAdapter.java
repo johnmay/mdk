@@ -14,6 +14,8 @@ import javax.xml.rpc.ServiceException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author John May
@@ -27,11 +29,25 @@ public class ChEBIAdapter
                    StructureService<ChEBIIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIAdapter.class);
+    private static int DEFAULT_CACHE_SIZE = 200;
+    private int cacheSize;
+
+    private Map<ChEBIIdentifier, Entity> entites = new LinkedHashMap<ChEBIIdentifier, Entity>() {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<ChEBIIdentifier, Entity> eldest) {
+            return size() > cacheSize;
+        }
+    };
 
     private ChebiWebServiceServiceLocator locator = new ChebiWebServiceServiceLocator();
     private ChebiWebServicePortType service;
 
     public ChEBIAdapter() {
+        this(DEFAULT_CACHE_SIZE);
+    }
+
+    public ChEBIAdapter(int cacheSize) {
+        this.cacheSize = cacheSize;
     }
 
     @Override
@@ -39,25 +55,42 @@ public class ChEBIAdapter
 
         Collection<String> names = new ArrayList<String>();
 
-        try {
-            for (DataItem item : service.getCompleteEntity(identifier.getAccession()).getIupacNames()) {
-                names.add(item.getData());
-            }
-        } catch (RemoteException ex) {
-            LOGGER.error("ChEBI Remote Exception: " + ex.getMessage());
+        for (DataItem item : getCompleteEntity(identifier).getIupacNames()) {
+            names.add(item.getData());
         }
 
         return names.isEmpty() ? "" : names.iterator().next(); // first only
 
     }
 
-    public Entity getCompleteEntity(ChEBIIdentifier identifier){
-        try {
-            return service.getCompleteEntity(identifier.getAccession());
-        } catch (RemoteException ex) {
-            LOGGER.error("ChEBI Remote Exception: " + ex.getMessage());
+    public Entity getCompleteEntity(ChEBIIdentifier identifier) {
+
+        if (entites.containsKey(identifier)) {
+            return entites.get(identifier);
         }
-        return null;
+
+        try {
+            Entity entity = service.getCompleteEntity(identifier.getAccession());
+            entites.put(identifier, entity);
+            return entity;
+        } catch (RemoteException ex) {
+            LOGGER.error("Remote exception occurred " + ex.getMessage());
+        }
+
+        Entity entity = new Entity();
+
+        // make sure we get no null pointers
+        entity.setChebiAsciiName("");
+        entity.setSynonyms(new DataItem[0]);
+        entity.setIupacNames(new DataItem[0]);
+        entity.setChemicalStructures(new StructureDataItem[0]);
+        entity.setCharge("0");
+        entity.setFormulae(new DataItem[0]);
+
+        entites.put(identifier, entity);
+
+        return entity;
+
     }
 
     @Override
@@ -72,13 +105,8 @@ public class ChEBIAdapter
 
     @Override
     public String getPreferredName(ChEBIIdentifier identifier) {
-        try {
-            Entity entity = service.getCompleteEntity(identifier.getAccession());
-            return entity.getChebiAsciiName();
-        } catch (RemoteException ex) {
-            LOGGER.error("ChEBI Remote Exception: " + ex.getMessage());
-        }
-        return "";
+        Entity entity = getCompleteEntity(identifier);
+        return entity.getChebiAsciiName();
     }
 
     @Override
@@ -88,20 +116,17 @@ public class ChEBIAdapter
 
     @Override
     public Collection<String> getNames(ChEBIIdentifier identifier) {
-        System.out.println("soap invoked!");
-        Collection<String> names = new ArrayList<String>();
-        try {
-            names.add(service.getCompleteEntity(identifier.getAccession()).getChebiAsciiName());
 
-            for (DataItem item : service.getCompleteEntity(identifier.getAccession()).getSynonyms()) {
-                names.add(item.getData());
-            }
-            for (DataItem item : service.getCompleteEntity(identifier.getAccession()).getIupacNames()) {
-                names.add(item.getData());
-            }
-        } catch (RemoteException ex) {
-            LOGGER.error("ChEBI Remote Exception: " + ex.getMessage());
+        Collection<String> names = new ArrayList<String>();
+        names.add(getCompleteEntity(identifier).getChebiAsciiName());
+
+        for (DataItem item : getCompleteEntity(identifier).getSynonyms()) {
+            names.add(item.getData());
         }
+        for (DataItem item : getCompleteEntity(identifier).getIupacNames()) {
+            names.add(item.getData());
+        }
+
         return names;
     }
 
@@ -114,13 +139,10 @@ public class ChEBIAdapter
     public Collection<String> getSynonyms(ChEBIIdentifier identifier) {
 
         Collection<String> synonyms = new ArrayList<String>();
-        try {
-            for (DataItem item : service.getCompleteEntity(identifier.getAccession()).getSynonyms()) {
-                synonyms.add(item.getData());
-            }
-        } catch (RemoteException ex) {
-            LOGGER.error("ChEBI Remote Exception: " + ex.getMessage());
+        for (DataItem item : getCompleteEntity(identifier).getSynonyms()) {
+            synonyms.add(item.getData());
         }
+
         return synonyms;
     }
 
@@ -161,20 +183,16 @@ public class ChEBIAdapter
     @Override
     public IAtomContainer getStructure(ChEBIIdentifier identifier) {
 
-        Entity entity = null;
-        try {
+        Entity entity = getCompleteEntity(identifier);
 
-            entity = service.getCompleteEntity(identifier.getAccession());
-
+        if (entity.getChemicalStructures() != null) {
             for (StructureDataItem item : entity.getChemicalStructures()) {
                 if (item.getType().equals("mol")) {
                     return mol2Structure(item.getStructure());
                 }
             }
-
-        } catch (RemoteException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+
 
         return mol2Structure(null);
 
