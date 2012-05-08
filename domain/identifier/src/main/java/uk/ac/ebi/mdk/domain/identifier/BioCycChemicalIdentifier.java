@@ -33,7 +33,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
  * An identifier for KEGG Compound
  */
 @Brief("BioCyc")
-@Description("BioCyc Chemical Accession")
+@Description("BioCyc Compound")
 @Synonyms({"MetaCyc accession", "BioCyc Chemical"})
 public class BioCycChemicalIdentifier
         extends ChemicalIdentifier {
