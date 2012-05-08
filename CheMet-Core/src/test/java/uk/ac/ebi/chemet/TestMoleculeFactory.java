@@ -20,8 +20,6 @@ package uk.ac.ebi.chemet;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-import java.io.InputStream;
-
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
@@ -32,8 +30,8 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.identifier.InChI;
-import uk.ac.ebi.core.util.CDKMoleculeBuilder;
-import uk.ac.ebi.metabolomes.util.CDKAtomTyper;
+
+import java.io.InputStream;
 
 /**
  * @name    TestMoleculeFactory
@@ -50,19 +48,14 @@ public class TestMoleculeFactory {
     private static final InChI but1ene = new InChI("InChI=1S/C4H8/c1-3-4-2/h3H,1,4H2,2H3");
     private static final InChI butane = new InChI("InChI=1S/C4H10/c1-3-4-2/h3-4H2,1-2H3");
 
-    public static IAtomContainer butane() {
-        IMolecule mol = CDKMoleculeBuilder.getInstance().buildFromInChI(butane);
-        mol.setID("Butane");
-        CDKAtomTyper.typeAtoms(mol);
-        return mol;
+    public static IAtomContainer but1ene() {
+        return loadMol("ChEBI_48362.mol",
+                       "But-1-ene", false);
     }
 
-    public static IAtomContainer but1ene() {
-        IMolecule mol = CDKMoleculeBuilder.getInstance().buildFromInChI(but1ene);
-        mol.setID("But-1-ene");
-        CDKAtomTyper.typeAtoms(mol);
-
-        return mol;
+    public static IAtomContainer butane() {
+        return loadMol("ChEBI_37808.mol",
+                       "Butane", false);
     }
 
     public static IAtomContainer _123Triazole() {
