@@ -73,6 +73,11 @@ public abstract class AbstractResourceLoader
         locationMap.put(key, location);
     }
 
+    @Override
+    public void removeLocation(String key) {
+        locationMap.remove(key);
+    }
+
     public boolean hasLocation(String key){
         return locationMap.containsKey(key) && locationMap.get(key).isAvailable();
     }
