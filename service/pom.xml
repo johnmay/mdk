@@ -7,9 +7,9 @@
         <version>1.4.0-SNAPSHOT</version>
     </parent>
     <modules>
-        <module>lucene-service</module>
-        <module>derby-service</module>
-        <module>service-core</module>
+        <module>lucene</module>
+        <module>derby</module>
+        <module>core</module>
         <module>soap</module>
     </modules>
     <packaging>pom</packaging>
