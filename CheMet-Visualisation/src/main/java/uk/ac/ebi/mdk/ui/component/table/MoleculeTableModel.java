@@ -20,17 +20,14 @@
  */
 package uk.ac.ebi.mdk.ui.component.table;
 
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.ui.component.table.accessor.EntityValueAccessor;
+
+import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import javax.swing.table.DefaultTableModel;
-
-import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.metabolomes.webservices.util.CandidateEntry;
-import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 
 
 /**
@@ -43,8 +40,6 @@ import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
 public class MoleculeTableModel extends DefaultTableModel {
 
     private List<Metabolite> metabolites = new ArrayList();
-
-    private Map<Metabolite, CandidateEntry> map = new HashMap();
 
     private List<EntityValueAccessor> columns = new ArrayList<EntityValueAccessor>();
 
@@ -79,9 +74,6 @@ public class MoleculeTableModel extends DefaultTableModel {
     }
 
 
-    public CandidateEntry getCandidate(Metabolite m) {
-        return map.get(m);
-    }
 
 
     @Override

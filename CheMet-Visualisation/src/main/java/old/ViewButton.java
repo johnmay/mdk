@@ -88,7 +88,7 @@ public class ViewButton extends JToggleButton {
     }
 
     public Paint getSelectedPaint() {
-        return new RadialGradientPaint(new Point2D.Double(getWidth() / 2, getHeight() / 2), getWidth() / 2, new float[]{0.0f, 1.0f}, new Color[]{new Color(0x6C6C6C), new Color(0x343434)});
+        return new RadialGradientPaint(new Point2D.Double(getWidth() / 2, getHeight() / 2), getWidth() / 2, new float[]{0.0f, 1.0f}, new Color[]{new Color(-9671572), new Color(0x343434)});
     }
 
     public Paint getUnselectedPaint() {

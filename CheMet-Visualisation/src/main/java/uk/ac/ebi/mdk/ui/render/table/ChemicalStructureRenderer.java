@@ -28,7 +28,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import org.openscience.cdk.exception.CDKException;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
-import uk.ac.ebi.render.molecule.MoleculeRenderer;
+import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 
 
 /**

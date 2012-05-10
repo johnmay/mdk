@@ -30,7 +30,7 @@ public class DefaultLocationFactory implements LocationFactory {
      *
      * @return singleton-instance
      */
-    public static DefaultLocationFactory getInstance() {
+    public static LocationFactory getInstance() {
         return LocationFactoryHolder.INSTANCE;
     }
 

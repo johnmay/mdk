@@ -29,7 +29,8 @@ import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
 import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
-import uk.ac.ebi.chemet.render.ViewUtilities;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.*;
@@ -75,10 +76,10 @@ public class ReactionRenderer {
 
     public ReactionRenderer() {
 
-        tClassMap.put(Classification.UNKNOWN, ViewUtilities.getIcon("images/classification/noport.png"));
-        tClassMap.put(Classification.SYMPORTER, ViewUtilities.getIcon("images/classification/symport.png"));
-        tClassMap.put(Classification.ANTIPORTER, ViewUtilities.getIcon("images/classification/antiport.png"));
-        tClassMap.put(Classification.UNIPORTER, ViewUtilities.getIcon("images/classification/uniport.png"));
+        tClassMap.put(Classification.UNKNOWN, ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/classification/noport.png"));
+        tClassMap.put(Classification.SYMPORTER, ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/classification/symport.png"));
+        tClassMap.put(Classification.ANTIPORTER, ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/classification/antiport.png"));
+        tClassMap.put(Classification.UNIPORTER, ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/classification/uniport.png"));
 
     }
 
@@ -251,7 +252,7 @@ public class ReactionRenderer {
         Metabolite metabolite = p.getMolecule();
         String compartment = "[" + ((Compartment)p.getCompartment()).getAbbreviation() + "]";
         g2.setColor(Color.LIGHT_GRAY);
-        g2.setFont(ViewUtilities.DEFAULT_MONO_SPACE_FONT.deriveFont(11.0f));
+        g2.setFont(new Font("Courier New", Font.PLAIN, 10));
         int compartmentWidth = g2.getFontMetrics().stringWidth(compartment);
         int compartmentHeight = g2.getFontMetrics().getHeight();
         g2.drawString(compartment, (int) bounds.getWidth() - compartmentWidth, compartmentHeight);
@@ -265,7 +266,7 @@ public class ReactionRenderer {
             g2.dispose();
         } else {
             g2.setColor(Color.LIGHT_GRAY);
-            g2.setFont(ViewUtilities.DEFAULT_BODY_FONT.deriveFont(18.0f));
+            g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(18f));
             String na = "unavailable";
             int mW = g2.getFontMetrics().stringWidth(na);
             int mH = g2.getFontMetrics().getHeight();
@@ -286,7 +287,7 @@ public class ReactionRenderer {
         g2.setColor(Color.LIGHT_GRAY);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         String direction = "+";
-        g2.setFont(ViewUtilities.DEFAULT_BODY_FONT.deriveFont(34.0f));
+        g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(34f));
         int width = g2.getFontMetrics().stringWidth(direction);
         int height = g2.getFontMetrics().getHeight();
         g2.drawString(direction, (int) bounds.getCenterX() - (width / 2), (int) bounds.getCenterY() + (height / 2));
@@ -314,7 +315,7 @@ public class ReactionRenderer {
 
 
         String symbol = direction.getSymbol();
-        g2.setFont(ViewUtilities.DEFAULT_BODY_FONT.deriveFont(34.0f * scale));
+        g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(34f * scale));
         Rectangle2D sBounds = g2.getFontMetrics().getStringBounds(symbol, g2);
         int width = (int) sBounds.getWidth();
         int height = (int) sBounds.getHeight();

@@ -25,7 +25,7 @@ import javax.swing.JComponent;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
-import uk.ac.ebi.chemet.render.components.IdentifierEditor;
+import uk.ac.ebi.mdk.ui.edit.crossreference.IdentifierEditor;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;

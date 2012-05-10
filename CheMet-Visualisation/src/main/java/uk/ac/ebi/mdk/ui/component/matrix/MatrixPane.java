@@ -20,7 +20,7 @@
 package uk.ac.ebi.mdk.ui.component.matrix;
 
 import org.apache.log4j.Logger;
-import old.ViewUtilities;
+import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.mdk.domain.matrix.AbstractReactionMatrix;
 import uk.ac.ebi.mdk.ui.render.table.VerticalTableHeaderCellRenderer;
@@ -62,14 +62,15 @@ public class MatrixPane extends JScrollPane {
             }
 
         }        
-        
+
+        //XXX it should use the matrix is the model
         table = new JTable(matrix.getFixedMatrix(),
                            rxns);
         
         setViewportView(table);
         
 
-        table.setFont(ViewUtilities.DEFAULT_BODY_FONT.deriveFont(10.0f));
+        table.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(8f));
 
         Enumeration<TableColumn> columns = table.getColumnModel().getColumns();
         while (columns.hasMoreElements()) {
@@ -111,7 +112,7 @@ public class MatrixPane extends JScrollPane {
         RowHeaderRenderer(JTable table) {
             setOpaque(true);
             setHorizontalAlignment(RIGHT);
-            setFont(ViewUtilities.DEFAULT_BODY_FONT);
+            setFont(ThemeManager.getInstance().getTheme().getBodyFont());
         }
 
 

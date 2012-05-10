@@ -20,16 +20,6 @@
  */
 package uk.ac.ebi.mdk.ui.render.molecule;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -44,6 +34,15 @@ import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -107,8 +106,8 @@ public class MoleculeRenderer {
         g2.fill(bounds);
         try {
             renderer.paint(molecule, new AWTDrawVisitor(g2), bounds, true);
-        } catch (NullPointerException ex) {
-            LOGGER.error("Molecule has null coordinates!");
+        } catch (IllegalArgumentException ex) {
+            LOGGER.debug("Molecule did not have coordinates!");
             String unrendered = "no-coordinates";
             g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(9.0f));
             int width = g2.getFontMetrics().stringWidth(unrendered);

@@ -21,18 +21,18 @@
 package uk.ac.ebi.mdk.ui.component.table;
 
 import com.explodingpixels.macwidgets.plaf.ITunesTableUI;
-import java.awt.Color;
-import java.util.Collection;
-import javax.swing.JTable;
-
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.annotation.Synonym;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.ui.component.table.accessor.EntityValueAccessor;
 import uk.ac.ebi.mdk.ui.render.table.AnnotationCellRenderer;
 import uk.ac.ebi.mdk.ui.render.table.ChemicalStructureRenderer;
-import uk.ac.ebi.mdk.domain.annotation.Annotation;
-import uk.ac.ebi.visualisation.molecule.access.EntityValueAccessor;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Collection;
 
 
 /**

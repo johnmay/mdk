@@ -17,7 +17,7 @@ import uk.ac.ebi.mdk.service.loader.multiple.MetaCycCompoundLoader;
 import uk.ac.ebi.mdk.service.loader.name.ChEBINameLoader;
 import uk.ac.ebi.mdk.service.loader.single.TaxonomyLoader;
 import uk.ac.ebi.mdk.service.loader.structure.*;
-import uk.ac.ebi.render.resource.LoaderGroupFactory;
+import uk.ac.ebi.mdk.ui.component.service.LoaderGroupFactory;
 
 import javax.swing.*;
 import java.awt.*;

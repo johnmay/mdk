@@ -7,12 +7,11 @@
         <version>1.4.0-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi.mdk</groupId>
-    <artifactId>CheMet-Visualisation</artifactId>
+    <artifactId>mdk-ui</artifactId>
     <version>1.4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>chemet-visualisation</name>
-    <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/visualisation</url>
+        <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/visualisation</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -31,15 +30,9 @@
         </dependency>
 
         <!-- Internal Dependencies -->
-        <!-- NOTE: CheMet-Core and WebServices and IO need to be removed in future -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mdk-domain-entity</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>CheMet-WebServices</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

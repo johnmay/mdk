@@ -40,7 +40,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.*;
-import uk.ac.ebi.render.molecule.MoleculeRenderer;
+import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 
 import javax.swing.*;
 import java.awt.*;

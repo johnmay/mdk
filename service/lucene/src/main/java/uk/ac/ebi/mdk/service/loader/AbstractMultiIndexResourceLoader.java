@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.service.loader.location.DefaultLocationFactory;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
 import uk.ac.ebi.mdk.service.MultiIndexResourceLoader;
+import uk.ac.ebi.mdk.service.location.LocationFactory;
 
 import java.util.*;
 
@@ -22,7 +23,7 @@ public abstract class AbstractMultiIndexResourceLoader
 
     private static final Logger LOGGER = Logger.getLogger(AbstractMultiIndexResourceLoader.class);
 
-    private DefaultLocationFactory factory = DefaultLocationFactory.getInstance();
+    private LocationFactory factory = DefaultLocationFactory.getInstance();
 
     private Map<String, LuceneIndex> indexMap = new HashMap<String, LuceneIndex>();
 

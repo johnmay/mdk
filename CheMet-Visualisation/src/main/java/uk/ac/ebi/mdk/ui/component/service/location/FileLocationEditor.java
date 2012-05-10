@@ -4,9 +4,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
-
 import uk.ac.ebi.caf.component.factory.FieldFactory;
-import old.ViewUtilities;
+import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.mdk.service.location.LocationDescription;
 import uk.ac.ebi.mdk.service.location.LocationFactory;
 import uk.ac.ebi.mdk.service.location.ResourceLocation;
@@ -45,7 +44,7 @@ public class FileLocationEditor
         this.factory = factory;
         final JComponent component = this;
 
-        browse = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/browse_16x16.png"), new AbstractAction() {
+        browse = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/browse_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int choice = chooser.showOpenDialog(component);

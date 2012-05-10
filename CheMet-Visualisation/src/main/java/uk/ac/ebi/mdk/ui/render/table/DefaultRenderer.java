@@ -20,13 +20,11 @@
  */
 package uk.ac.ebi.mdk.ui.render.table;
 
-import com.explodingpixels.macwidgets.MacFontUtils;
 import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
-import uk.ac.ebi.chemet.render.ViewUtilities;
 
 /**
  * @name    DefaultRenderer - 2011.10.06 <br>

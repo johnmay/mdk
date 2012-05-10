@@ -16,7 +16,7 @@ import uk.ac.ebi.mdk.service.location.ResourceLocation;
  */
 public class LocationFactoryTest {
 
-    private static DefaultLocationFactory factory = DefaultLocationFactory.getInstance();
+    private static LocationFactory factory = DefaultLocationFactory.getInstance();
 
     @Test
     public void testGetInstance() throws Exception {

@@ -11,8 +11,8 @@ public abstract class AbstractService<I extends Identifier> implements QueryServ
 
     private static final Logger LOGGER = Logger.getLogger(AbstractService.class);
 
-    private float similarity;
-    private int results;
+    private float similarity = 0.5f;
+    private int results = 100;
 
     @Override
     public void setMaxResults(int results) {

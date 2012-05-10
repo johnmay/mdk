@@ -40,13 +40,13 @@ import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
-import uk.ac.ebi.chemet.render.components.MetaboliteMatchIndication;
+import uk.ac.ebi.mdk.ui.component.MetaboliteMatchIndication;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
-import uk.ac.ebi.render.molecule.MoleculeTable;
-import uk.ac.ebi.visualisation.molecule.access.AccessionAccessor;
-import uk.ac.ebi.visualisation.molecule.access.AnnotationAccess;
-import uk.ac.ebi.visualisation.molecule.access.NameAccessor;
+import uk.ac.ebi.mdk.ui.component.table.MoleculeTable;
+import uk.ac.ebi.mdk.ui.component.table.accessor.AccessionAccessor;
+import uk.ac.ebi.mdk.ui.component.table.accessor.AnnotationAccess;
+import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
 
 
 /**

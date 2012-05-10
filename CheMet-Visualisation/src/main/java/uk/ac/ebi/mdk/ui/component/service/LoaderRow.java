@@ -9,7 +9,7 @@ import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import old.ViewUtilities;
+import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.mdk.service.ResourceLoader;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;
 import uk.ac.ebi.mdk.service.location.*;
@@ -58,7 +58,7 @@ public class LoaderRow extends JComponent {
 
         configuration.setVisible(false);
 
-        delete = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/trash_12x12.png"), new AbstractAction() {
+        delete = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/trash_12x12.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 loader.clean();
@@ -67,7 +67,7 @@ public class LoaderRow extends JComponent {
             }
         });
         delete.setToolTipText("Delete the current index and it's backup");
-        revert = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/revert_16x16.png"), new AbstractAction() {
+        revert = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/revert_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 loader.revert();
@@ -80,7 +80,7 @@ public class LoaderRow extends JComponent {
         final Animation expand = new Expand(configuration, 500);
         final Animation collapse = new Collapse(configuration, 500);
 
-        configure = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/cog_16x16.png"), new AbstractAction() {
+        configure = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/cog_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 update.setEnabled(loader.canUpdate());
@@ -100,7 +100,7 @@ public class LoaderRow extends JComponent {
         configure.setToolTipText("Configure loader");
         name = LabelFactory.newLabel(loader.getName());
 
-        update = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/update_16x16.png"), new AbstractAction() {
+        update = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/update_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
@@ -140,7 +140,7 @@ public class LoaderRow extends JComponent {
 
         );
 
-        cancel = ButtonFactory.newCleanButton(ViewUtilities.getIcon("images/cutout/cancel_16x16.png"), new AbstractAction() {
+        cancel = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/cancel_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loader.cancel();

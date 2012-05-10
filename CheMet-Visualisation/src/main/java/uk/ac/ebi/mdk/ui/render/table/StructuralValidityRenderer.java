@@ -49,10 +49,10 @@ public class StructuralValidityRenderer
 
 
     public StructuralValidityRenderer() {
-        iconMap.put(StructuralValidity.Category.ERROR, ResourceUtility.getIcon(getClass(), "validity_error_12x12.png"));
-        iconMap.put(StructuralValidity.Category.WARNING, ResourceUtility.getIcon(getClass(), "validity_warning_12x12.png"));
-        iconMap.put(StructuralValidity.Category.CORRECT, ResourceUtility.getIcon(getClass(), "validity_correct_12x12.png"));
-        iconMap.put(StructuralValidity.Category.UNKNOWN, ResourceUtility.getIcon(getClass(), "validity_unknown_12x12.png"));
+        iconMap.put(StructuralValidity.Category.ERROR, ResourceUtility.getIcon( "/uk/ac/ebi/chemet/render/table/renderers/validity_error_12x12.png"));
+        iconMap.put(StructuralValidity.Category.WARNING, ResourceUtility.getIcon( "/uk/ac/ebi/chemet/render/table/renderers/validity_warning_12x12.png"));
+        iconMap.put(StructuralValidity.Category.CORRECT, ResourceUtility.getIcon( "/uk/ac/ebi/chemet/render/table/renderers/validity_correct_12x12.png"));
+        iconMap.put(StructuralValidity.Category.UNKNOWN, ResourceUtility.getIcon( "/uk/ac/ebi/chemet/render/table/renderers/validity_unknown_12x12.png"));
     }
 
 
