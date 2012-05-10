@@ -1,0 +1,7 @@
+# SPI: Provides MDK QueryServices for this module
+uk.ac.ebi.mdk.service.query.structure.MetaCycStructureService
+uk.ac.ebi.mdk.service.query.structure.HMDBStructureService
+uk.ac.ebi.mdk.service.query.structure.ChEBIStructureService
+uk.ac.ebi.mdk.service.query.structure.KEGGCompoundStructureService
+uk.ac.ebi.mdk.service.query.structure.LipidMapsStructureService
+
