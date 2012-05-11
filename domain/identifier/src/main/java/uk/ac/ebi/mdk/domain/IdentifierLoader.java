@@ -107,7 +107,7 @@ public class IdentifierLoader
             return entry.getName();
         }
 
-        return super.getLongDescription(c);
+        return super.getShortDescription(c);
 
     }
 
