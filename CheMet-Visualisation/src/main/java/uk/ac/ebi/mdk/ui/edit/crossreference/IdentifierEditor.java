@@ -27,8 +27,9 @@ import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.IdentifierLoader;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -36,9 +37,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -62,7 +61,7 @@ public class IdentifierEditor extends JComponent {
 
     private static final DefaultIdentifierFactory ID_FACTORY = DefaultIdentifierFactory.getInstance();
 
-    private List<Class> classes;
+    private Set<Class> classes;
 
     private SuggestType suggestion = new SuggestType();
 
@@ -76,7 +75,13 @@ public class IdentifierEditor extends JComponent {
 
         setLayout(new FormLayout("pref, 4dlu, pref", "p"));
 
-        classes = new ArrayList<Class>();
+        classes = new TreeSet<Class>(new Comparator<Class>() {
+            @Override
+            public int compare(Class o1, Class o2) {
+                IdentifierLoader loader =  IdentifierLoader.getInstance();
+                return loader.getShortDescription(o1).compareTo(loader.getShortDescription(o2));
+            }
+        });
 
 
         for (Identifier factoryID : ID_FACTORY.getSupportedIdentifiers()) {
@@ -108,6 +113,7 @@ public class IdentifierEditor extends JComponent {
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 label.setFont(field.getFont().deriveFont(10.0f));
                 label.setText(ID_FACTORY.ofClass((Class<Identifier>)value).getShortDescription());
+                label.setToolTipText(ID_FACTORY.ofClass((Class<Identifier>)value).getLongDescription());
                 label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
                 label.setBackground(isSelected ? list.getSelectionForeground() : list.getForeground());
                 return label;
@@ -205,7 +211,7 @@ public class IdentifierEditor extends JComponent {
         this.identifier = identifier;
 
         field.setText(identifier.getAccession());
-        type.setSelectedItem(identifier.getShortDescription());
+        type.setSelectedItem(identifier.getClass());
         type.setEnabled(isFilled());
 
     }
@@ -250,7 +256,9 @@ public class IdentifierEditor extends JComponent {
                     model.addElement(c);
                 }
             }
+
             type.repaint();
+
         }
     }
 }
