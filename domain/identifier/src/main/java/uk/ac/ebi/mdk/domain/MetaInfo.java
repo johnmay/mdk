@@ -34,8 +34,8 @@ public class MetaInfo {
     public final String brief;
     public final String description;
 
-    public MetaInfo(String shortDescription, String description) {
-        this.brief       = shortDescription;
+    public MetaInfo(String brief, String description) {
+        this.brief       = brief;
         this.description = description;
     }
 
