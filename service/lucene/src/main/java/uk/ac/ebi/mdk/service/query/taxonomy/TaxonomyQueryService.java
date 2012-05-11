@@ -1,4 +1,4 @@
-package uk.ac.ebi.mdk.service.query.taxonmy;
+package uk.ac.ebi.mdk.service.query.taxonomy;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;

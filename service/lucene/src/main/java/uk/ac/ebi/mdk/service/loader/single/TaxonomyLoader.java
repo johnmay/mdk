@@ -9,7 +9,7 @@ import org.apache.lucene.util.Version;
 import uk.ac.ebi.mdk.service.index.other.TaxonomyIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
-import uk.ac.ebi.mdk.service.query.taxonmy.TaxonomyQueryService;
+import uk.ac.ebi.mdk.service.query.taxonomy.TaxonomyQueryService;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 import uk.ac.ebi.mdk.service.query.name.NameService;
 
