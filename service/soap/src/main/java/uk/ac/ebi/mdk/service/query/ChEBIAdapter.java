@@ -120,11 +120,15 @@ public class ChEBIAdapter
         Collection<String> names = new ArrayList<String>();
         names.add(getCompleteEntity(identifier).getChebiAsciiName());
 
-        for (DataItem item : getCompleteEntity(identifier).getSynonyms()) {
-            names.add(item.getData());
+        if (getCompleteEntity(identifier).getSynonyms() != null) {
+            for (DataItem item : getCompleteEntity(identifier).getSynonyms()) {
+                names.add(item.getData());
+            }
         }
-        for (DataItem item : getCompleteEntity(identifier).getIupacNames()) {
-            names.add(item.getData());
+        if (getCompleteEntity(identifier).getIupacNames() != null) {
+            for (DataItem item : getCompleteEntity(identifier).getIupacNames()) {
+                names.add(item.getData());
+            }
         }
 
         return names;
