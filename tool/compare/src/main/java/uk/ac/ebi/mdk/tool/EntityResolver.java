@@ -24,6 +24,7 @@ import uk.ac.ebi.mdk.tool.match.EntityMatcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -37,15 +38,15 @@ public class EntityResolver<E extends Entity> {
     private static final Logger LOGGER = Logger.getLogger(EntityResolver.class);
 
     private Stack<EntityMatcher<E>> matchers = new Stack<EntityMatcher<E>>();
-    private Collection<E> reference;
+    private Collection<E> references;
 
     public EntityResolver() {
         this(new ArrayList<E>());
     }
 
-    public EntityResolver(Collection<E> reference) {
+    public EntityResolver(Collection<E> references) {
         // take a shallow copy
-        this.reference = new ArrayList<E>(reference);
+        this.references = new ArrayList<E>(references);
     }
 
     /**
@@ -54,7 +55,7 @@ public class EntityResolver<E extends Entity> {
      * @param reference
      */
     public void addReference(E reference) {
-        this.reference.add(reference);
+        this.references.add(reference);
     }
 
     /**
@@ -88,6 +89,27 @@ public class EntityResolver<E extends Entity> {
      */
     public EntityMatcher<E> peek() {
         return matchers.peek();
+    }
+
+    public List<E> getMatches(E entity) {
+
+        List<E> matching = new ArrayList<E>();
+
+        for (EntityMatcher matcher : matchers) {
+
+            for (E reference : references) {
+                if (matcher.matches(entity, reference)) {
+                    matching.add(reference);
+                }
+            }
+
+            if (!matching.isEmpty()) {
+                return matching;
+            }
+
+        }
+
+        return matching;
     }
 
     /**
