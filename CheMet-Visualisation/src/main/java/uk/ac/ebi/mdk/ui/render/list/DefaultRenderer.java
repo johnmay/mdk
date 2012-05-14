@@ -11,7 +11,7 @@ import javax.swing.*;
  *
  * @author John May
  */
-public class DefaultRenderer
+public class DefaultRenderer<O>
         extends JLabel
         implements ListCellRenderer {
 
@@ -23,8 +23,7 @@ public class DefaultRenderer
         setOpaque(true); // needs to be opaque for background
     }
 
-    @Override
-    public JLabel getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public JLabel getRendererComponent(JList list, O value, int index, boolean isSelected, boolean cellHasFocus) {
 
         this.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
         this.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
@@ -32,7 +31,11 @@ public class DefaultRenderer
         this.setText(value.toString());
 
         return this;
+    }
 
+    @Override
+    public final JLabel getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        return getRendererComponent(list, (O) value, index, isSelected, cellHasFocus);
     }
 
 }
