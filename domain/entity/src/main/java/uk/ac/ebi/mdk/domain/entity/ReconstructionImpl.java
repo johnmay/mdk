@@ -51,7 +51,6 @@ public class ReconstructionImpl
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
             ReconstructionImpl.class);
 
-    public static final String PROJECT_FILE_EXTENSION = ".mnb";
 
     private static final String DATA_FOLDER_NAME = "data";
 
@@ -335,7 +334,7 @@ public class ReconstructionImpl
 
     public File getContainer() {
         if (container == null) {
-            container = new File(System.getProperty("user.home") + File.separator + getAccession() + PROJECT_FILE_EXTENSION);
+            container = new File(System.getProperty("user.home") + File.separator + getAccession() + RECONSTRUCTION_FILE_EXTENSION);
         }
         return container;
     }
