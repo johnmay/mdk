@@ -24,6 +24,7 @@ import uk.ac.ebi.mdk.service.index.LuceneIndex;
 import uk.ac.ebi.mdk.service.query.AbstractLuceneService;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * @author John May
@@ -62,7 +63,16 @@ public class BioCycNameService
      */
     @Override
     public Collection<BioCycChemicalIdentifier> searchName(String name, boolean approximate) {
-        throw new UnsupportedOperationException("To be implemented!");
+        // use set as to avoid duplicates
+        Collection<BioCycChemicalIdentifier> identifiers = new HashSet<BioCycChemicalIdentifier>();
+
+        // efficiency could be improved with multifield search
+        identifiers.addAll(searchPreferredName(name, approximate));
+        identifiers.addAll(searchSynonyms(name, approximate));
+        identifiers.addAll(searchIUPACName(name, approximate));
+
+        return identifiers;
+
     }
 
     /**
@@ -70,7 +80,17 @@ public class BioCycNameService
      */
     @Override
     public Collection<String> getNames(BioCycChemicalIdentifier identifier) {
-        throw new UnsupportedOperationException("To be implemented!");
+        // use set as to avoid duplicates
+        Collection<String> names = new HashSet<String>();
+
+        names.add(getIUPACName(identifier));
+        names.add(getPreferredName(identifier));
+        names.addAll(getSynonyms(identifier));
+
+        names.remove(""); // remove empty results
+
+        return names;
+
     }
 
     /**
