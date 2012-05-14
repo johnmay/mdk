@@ -33,4 +33,10 @@ public interface ReconstructionManager {
 
     public Reconstruction getActive();
 
+    /**
+     * Add a reconstruction without making it the active project
+     *
+     * @param reconstruction
+     */
+    public void addReconstruction(Reconstruction reconstruction);
 }
