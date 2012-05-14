@@ -26,26 +26,24 @@ import java.io.File;
 import java.util.*;
 
 /**
- * 
  * ReconstructionManager.java
  * Class to manage the multiple reconstructions and maintain an 'active' reconstruction
  *
  * @author johnmay
  * @date Apr 13, 2011
- * 
  */
 public class DefaultReconstructionManager implements ReconstructionManager {
 
     private static final org.apache.log4j.Logger LOGGER =
-                                                 org.apache.log4j.Logger.getLogger(
-            DefaultReconstructionManager.class);
+            org.apache.log4j.Logger.getLogger(
+                    DefaultReconstructionManager.class);
     private Identifier activeProjectIdentifier;
     private ArrayList<Reconstruction> projects = new ArrayList<Reconstruction>();
     private LinkedHashMap<Identifier, Integer> projectMap =
-                                               new LinkedHashMap();
+            new LinkedHashMap();
     private Properties properties = new Properties();
     private LinkedList<String> recent = new LinkedList<String>();
-    
+
     private ListPreference RECENT_FILES = DomainPreferences.getInstance().getPreference("RECENT_RECONSTRUCTIONS");
 
     private DefaultReconstructionManager() {
@@ -70,11 +68,9 @@ public class DefaultReconstructionManager implements ReconstructionManager {
     }
 
     /**
-     *
      * Access the singleton instance of the manager
      *
      * @return Instance of the manager
-     *
      */
     public static DefaultReconstructionManager getInstance() {
         return ProjectManagerHolder.INSTANCE;
@@ -85,12 +81,11 @@ public class DefaultReconstructionManager implements ReconstructionManager {
     }
 
     /**
-     *
      * Access the project bank
-     * 
+     *
      * @param identifier
+     *
      * @return The project related to the identifier if none is found null is returned
-     * 
      */
     private Reconstruction getProject(Identifier identifier) {
         for (Reconstruction project : projects) {
@@ -102,32 +97,57 @@ public class DefaultReconstructionManager implements ReconstructionManager {
     }
 
     /**
+     * Access whether the
      *
-     * Access whether the 
-     * 
      * @return
-     * 
      */
     public boolean hasProjects() {
         return !projects.isEmpty();
     }
 
+    @Override
+    public void addReconstruction(Reconstruction reconstruction) {
+        String path = reconstruction.getContainer().getAbsolutePath();
+        if (recent.contains(path)) {
+            recent.remove(path);
+        }
+        recent.add(path);
+        RECENT_FILES.put(recent);
+
+        for (Reconstruction entry : projects) {
+            if (entry.getIdentifier().equals(reconstruction)) {
+                setActiveReconstruction(entry.getIdentifier());
+                LOGGER.error("found matching project but clashing identifiers stored:"
+                                     + entry.getIdentifier()
+                                     + " new:"
+                                     + reconstruction.getIdentifier());
+                return;
+            }
+        }
+
+        LOGGER.debug(
+                "Setting active with a project which can not be found in the current collection. A new entry will be created");
+
+        projectMap.put(reconstruction.getIdentifier(), projects.size());
+        projects.add(reconstruction);
+
+    }
+
     /**
      * Access the active reconstruction
-     * @return 
+     *
+     * @return
      */
     public Reconstruction getActive() {
         return getProject(activeProjectIdentifier);
     }
 
     /**
-     *
      * Removes a project from the manager
      *
      * @param reconstruction The reconstruction to remove
-     * 
+     *
      * @return
-     * 
      */
     public boolean removeProject(Reconstruction reconstruction) {
 
@@ -148,7 +168,6 @@ public class DefaultReconstructionManager implements ReconstructionManager {
     }
 
     /**
-     *
      * @param activeProjectIdentifier
      */
     public void setActiveReconstruction(Identifier activeProjectIdentifier) {
@@ -156,11 +175,9 @@ public class DefaultReconstructionManager implements ReconstructionManager {
     }
 
     /**
-     * 
      * Set the active reconstruction given a reconstruction object
      *
      * @param reconstruction
-     *
      */
     public void setActiveReconstruction(Reconstruction reconstruction) {
 
@@ -181,9 +198,9 @@ public class DefaultReconstructionManager implements ReconstructionManager {
             if (entry.getIdentifier().equals(reconstruction)) {
                 setActiveReconstruction(entry.getIdentifier());
                 LOGGER.error("found matching project but clashing identifiers stored:"
-                             + entry.getIdentifier()
-                             + " new:"
-                             + reconstruction.getIdentifier());
+                                     + entry.getIdentifier()
+                                     + " new:"
+                                     + reconstruction.getIdentifier());
                 return;
             }
         }
@@ -199,21 +216,18 @@ public class DefaultReconstructionManager implements ReconstructionManager {
     }
 
     /**
-     * 
      * Access a stored project at the given index
      *
      * @param i
+     *
      * @return
-     * 
      */
     public Reconstruction getProject(int i) {
         return projects.get(i);
     }
 
     /**
-     *
      * Access the number of project currently managed
-     *
      */
     public int size() {
         return projects.size();
