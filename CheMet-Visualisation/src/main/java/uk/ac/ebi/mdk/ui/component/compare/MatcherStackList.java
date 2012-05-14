@@ -16,6 +16,7 @@ public class MatcherStackList extends MutableJList<MatcherDescription> {
     private static final Logger LOGGER = Logger.getLogger(MatcherStackList.class);
 
     public MatcherStackList() {
+        super(MatcherDescription.class);
         setCellRenderer(new DefaultRenderer<MatcherDescription>() {
             @Override
             public JLabel getRendererComponent(JList list, MatcherDescription matcher, int index, boolean isSelected, boolean cellHasFocus) {
