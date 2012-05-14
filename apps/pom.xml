@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>service</module>
+        <module>io</module>
     </modules>
 
     <artifactId>mdk-apps</artifactId>
