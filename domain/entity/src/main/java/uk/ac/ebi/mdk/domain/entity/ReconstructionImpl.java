@@ -89,7 +89,7 @@ public class ReconstructionImpl
      */
     public ReconstructionImpl(ReconstructionIdentifier id,
                               Taxonomy org) {
-        super(id, org.getCommonName(), org.getCode());
+        super(id, org.getCode(), org.getCommonName());
         taxonomy = org;
         reactions = new ReactionList();
         metabolome = new MetabolomeImpl();
