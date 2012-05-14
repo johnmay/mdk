@@ -55,7 +55,18 @@ public class DefaultServiceManager implements ServiceManager {
     @Override
     public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifierClass, Class<S> serviceClass) {
         ServiceKey key = new ServiceKey(identifierClass, serviceClass);
-        return services.containsKey(key);
+        if(!services.containsKey(key)){
+            return false;
+        }
+
+        for(QueryService service : services.get(key)){
+            if(service.startup()){
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     @Override
