@@ -34,7 +34,7 @@ public enum ReactionAttribute implements Attribute {
     ENZYMATIC_REACTION,
     IN_PATHWAY,
     LEFT,
-    OFFICIAL_EC("OFFICIAL_EC?", "OFFICIAL_EC\\?"),
+    OFFICIAL_EC("OFFICIAL-EC?", "OFFICIAL-EC\\?"),
     ORPHAN("ORPHAN?", "ORPHAN\\?"),
     RIGHT,
     SIGNAL,
