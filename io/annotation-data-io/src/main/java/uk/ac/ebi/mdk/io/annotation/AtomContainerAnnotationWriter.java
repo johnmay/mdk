@@ -4,13 +4,14 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
-import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.io.AnnotationWriter;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UTFDataFormatException;
 
 /**
  * AtomContainerAnnotationWriter - 09.03.2012 <br/>
@@ -26,10 +27,10 @@ public class AtomContainerAnnotationWriter implements AnnotationWriter<AtomConta
 
     private static final Logger LOGGER = Logger.getLogger(AtomContainerAnnotationWriter.class);
 
-    private MDLV2000Writer   mdl;
-    private DataOutput       out;
+    private MDLV2000Writer mdl;
+    private DataOutput out;
 
-    public AtomContainerAnnotationWriter(DataOutput out){
+    public AtomContainerAnnotationWriter(DataOutput out) {
         this.out = out;
         this.mdl = new MDLV2000Writer();
     }
@@ -44,14 +45,18 @@ public class AtomContainerAnnotationWriter implements AnnotationWriter<AtomConta
         try {
             mdl.setWriter(sw);
             mdl.write(molecule);
-        } catch (CDKException ex){
+        } catch (CDKException ex) {
             out.writeBoolean(false);
             LOGGER.error("Could not write chemical structure an empty structure will be stored");
             return;
         }
 
         out.writeBoolean(true);
-        out.writeUTF(sw.toString());
+        try {
+            out.writeUTF(sw.toString());
+        } catch (UTFDataFormatException ex) {
+            out.writeUTF("");
+        }
 
     }
 }

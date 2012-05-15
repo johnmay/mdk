@@ -2,11 +2,10 @@ package uk.ac.ebi.mdk.io.annotation;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.io.MDLV2000Reader;
-import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.io.AnnotationReader;
 
 import java.io.DataInput;
@@ -29,10 +28,10 @@ public class AtomContainerAnnotationReader
     private static final Logger LOGGER = Logger.getLogger(AtomContainerAnnotationReader.class);
 
     private MDLV2000Reader mdl;
-    private DataInput      in;
+    private DataInput in;
 
     public AtomContainerAnnotationReader(DataInput in) {
-        this.in  = in;
+        this.in = in;
         this.mdl = new MDLV2000Reader();
     }
 
@@ -46,9 +45,13 @@ public class AtomContainerAnnotationReader
         if (written) {
 
             try {
-                StringReader sr = new StringReader(in.readUTF());
+                String molString = in.readUTF();
+                StringReader sr = new StringReader(molString);
+                if (molString.isEmpty()) {
+                    return new AtomContainerAnnotation(new AtomContainer());
+                }
                 mdl.setReader(sr);
-                return new AtomContainerAnnotation(mdl.read(new Molecule()));
+                return new AtomContainerAnnotation(mdl.read(new AtomContainer()));
             } catch (CDKException ex) {
                 LOGGER.error("Could not read MDL V2000 file from stream (empty structure read)");
             }
