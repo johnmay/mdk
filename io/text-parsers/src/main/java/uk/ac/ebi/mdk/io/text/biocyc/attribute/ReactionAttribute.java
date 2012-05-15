@@ -28,6 +28,8 @@ public enum ReactionAttribute implements Attribute {
     TYPES,
     COMMON_NAME,
     CITATIONS,
+    COEFFICIENT("^COEFFICIENT", "\\^COEFFICIENT"),
+    COMPARTMENT("^COMPARTMENT", "\\^COMPARTMENT"),
     COMMENT,
     DELTAG0,
     EC_NUMBER,
