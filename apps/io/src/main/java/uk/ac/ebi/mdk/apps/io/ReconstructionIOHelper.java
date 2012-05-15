@@ -1,7 +1,9 @@
 package uk.ac.ebi.mdk.apps.io;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.version.Version;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
@@ -17,6 +19,63 @@ public class ReconstructionIOHelper {
 
     private static final Logger LOGGER = Logger.getLogger(ReconstructionIOHelper.class);
 
+    public static void write(Reconstruction reconstruction, File file) throws IOException {
+
+        reconstruction.setContainer(file);
+        file.mkdir();
+
+        IntegerPreference bufferPref = DomainPreferences.getInstance().getPreference("BUFFER_SIZE");
+
+        reconstruction.getContainer().mkdirs();
+
+        File entities = new File(reconstruction.getContainer(), "entities");
+        File annotations = new File(reconstruction.getContainer(), "entity-annotations");
+        File observations = new File(reconstruction.getContainer(), "entity-observations");
+        File info = new File(reconstruction.getContainer(), "info.properties");
+
+        Version version = IOConstants.VERSION;
+
+        Properties properties = new Properties();
+
+        if (info.exists()) {
+            FileInputStream propInput = new FileInputStream(info);
+            properties.load(propInput);
+            propInput.close();
+            String value = properties.getProperty("chemet.version");
+            version = value == null ? version : new Version(value);
+        }
+
+        properties.put("chemet.version", version.toString());
+        FileWriter writer = new FileWriter(info);
+        properties.store(writer, "Project info");
+        writer.close();
+
+        DataOutputStream entityDataOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(entities), bufferPref.get()));
+        DataOutputStream annotationDataOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(annotations), bufferPref.get()));
+        DataOutputStream observationDataOut = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(observations), bufferPref.get()));
+
+
+        EntityFactory factory = DefaultEntityFactory.getInstance();
+
+        AnnotationOutput annotationOutput = new AnnotationDataOutputStream(annotationDataOut, version);
+        ObservationOutput observationOutput = new ObservationDataOutputStream(observationDataOut, version);
+        EntityOutput entityOutput = new EntityDataOutputStream(version,
+                                                               entityDataOut,
+                                                               factory,
+                                                               annotationOutput,
+                                                               observationOutput);
+
+        long start = System.currentTimeMillis();
+        entityOutput.write(reconstruction);
+        long end = System.currentTimeMillis();
+
+        LOGGER.info("Wrote reconstruction in " + (end - start) + " ms");
+
+        entityDataOut.close();
+        annotationDataOut.close();
+        observationDataOut.close();
+
+    }
 
     public static Reconstruction read(File file) throws IOException, ClassNotFoundException {
 
@@ -57,7 +116,6 @@ public class ReconstructionIOHelper {
         return reconstruction;
 
     }
-
 
 
 }
