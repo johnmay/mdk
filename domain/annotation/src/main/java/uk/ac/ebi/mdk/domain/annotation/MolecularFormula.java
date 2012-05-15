@@ -22,13 +22,13 @@ import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
+import uk.ac.ebi.mdk.domain.DefaultLoader;
 import uk.ac.ebi.mdk.domain.MetaInfo;
 import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractStringAnnotation;
-import uk.ac.ebi.mdk.lang.annotation.Brief;
-import uk.ac.ebi.mdk.lang.annotation.Description;
-import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.DefaultLoader;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -50,9 +50,9 @@ public class MolecularFormula
 
     private static final Logger LOGGER = Logger.getLogger(MolecularFormula.class);
 
-    private IMolecularFormula formula;
+    private IMolecularFormula formula = null;
 
-    private String html; // speeds up rendering
+    private String html = null; // speeds up rendering by caching html
 
     private static MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             MolecularFormula.class);
@@ -73,9 +73,6 @@ public class MolecularFormula
     public MolecularFormula(IMolecularFormula formula) {
         this.formula = formula;
         super.setValue(MolecularFormulaManipulator.getString(formula));
-        if (formula != null) {
-            this.html = MolecularFormulaManipulator.getHTML(formula);
-        }
     }
 
 
@@ -86,12 +83,6 @@ public class MolecularFormula
      */
     public MolecularFormula(String formula) {
         super(formula);
-        IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
-        this.formula = MolecularFormulaManipulator.getMolecularFormula(formula, builder);
-        if (this.formula != null) {
-            this.html = MolecularFormulaManipulator.getHTML(this.formula);
-        }
-
     }
 
 
@@ -101,6 +92,10 @@ public class MolecularFormula
      * @return An instance of IMolecularFormula
      */
     public IMolecularFormula getFormula() {
+        if (formula == null) {
+            IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+            this.formula = MolecularFormulaManipulator.getMolecularFormula(getValue(), builder);
+        }
         return formula;
     }
 
@@ -112,12 +107,13 @@ public class MolecularFormula
 
 
     public void setFormula(String formula) {
-        IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+
         super.setValue(formula);
-        this.formula = MolecularFormulaManipulator.getMolecularFormula(formula, builder);
-        if (this.formula != null) {
-            this.html = MolecularFormulaManipulator.getHTML(this.formula);
-        }
+
+        // force re-calculation
+        this.formula = null;
+        this.html    = null;
+
     }
 
 
@@ -133,6 +129,9 @@ public class MolecularFormula
      * @return
      */
     public String toHTML() {
+        if (html == null || html.isEmpty()) {
+            this.html = MolecularFormulaManipulator.getHTML(getFormula());
+        }
         return html;
     }
 
@@ -171,8 +170,10 @@ public class MolecularFormula
 
     /**
      * @inheritDoc
+     * @deprecated not used anymore
      */
     @Override
+    @Deprecated
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
         IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
