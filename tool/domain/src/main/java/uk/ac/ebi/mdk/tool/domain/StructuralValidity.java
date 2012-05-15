@@ -30,8 +30,8 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.annotation.Charge;
-import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 import java.util.Collection;
@@ -44,15 +44,15 @@ import static org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator.
 
 
 /**
- *          StructureValidator 2012.02.14
- *          Class provides checking of structure validity when compared to a
- *          specified charge and formula. The main entry points are the
- *          getValidity methods that provides the validity at different
- *          levels
- * 
+ * StructureValidator 2012.02.14
+ * Class provides checking of structure validity when compared to a
+ * specified charge and formula. The main entry points are the
+ * getValidity methods that provides the validity at different
+ * levels
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class StructuralValidity {
 
@@ -65,7 +65,9 @@ public class StructuralValidity {
         ERROR,
         WARNING,
         CORRECT
-    };
+    }
+
+    ;
 
     private static StructuralValidity match = new StructuralValidity(Category.CORRECT, "The structure matches the specified formula and charge");
 
@@ -94,8 +96,9 @@ public class StructuralValidity {
 
     /**
      * Private constructor used in the {@see getValidity()} methods
+     *
      * @param category
-     * @param message 
+     * @param message
      */
     private StructuralValidity(Category category, String message) {
         this.category = category;
@@ -105,6 +108,7 @@ public class StructuralValidity {
 
     /**
      * Access the category of the validity
+     *
      * @return ERROR, WARNING or CORRECT
      */
     public Category getCategory() {
@@ -115,6 +119,7 @@ public class StructuralValidity {
     /**
      * Access a message providing detail of the structural validity. This
      * is useful as a tool tip
+     *
      * @return specific message
      */
     public String getMessage() {
@@ -126,13 +131,12 @@ public class StructuralValidity {
      * Access the validity for the specified metabolite. This method
      * calculates all scores for the metabolites multiple formulas/structures.
      * If the validity differs the best scoring validity will be returned.
-     * 
+     *
      * @param metabolite the metabolite to validate
-     * 
+     *
      * @return an instance of {@see StructuralValidity} with defined
      *         {@see Category} (see. {@see getCategory()}) and
      *         message (see. {@see getMessage()})
-     * 
      */
     public static StructuralValidity getValidity(Metabolite metabolite) {
 
@@ -141,12 +145,14 @@ public class StructuralValidity {
         Charge charge = metabolite.hasAnnotation(Charge.class) ? metabolite.getAnnotations(Charge.class).iterator().next() : new Charge(0d);
 
         for (ChemicalStructure structure : metabolite.getStructures()) {
-            StructuralValidity subvalidity = getValidity(metabolite.getAnnotations(MolecularFormula.class),
-                                                         structure,
-                                                         charge);
-            int rank = CATEGORY_RANK.get(subvalidity.category);
-            if (rank >= CATEGORY_RANK.get(validity.category)) {
-                validity = subvalidity;
+            if (structure.getStructure() != null && structure.getStructure().getAtomCount() < 85) {
+                StructuralValidity subvalidity = getValidity(metabolite.getAnnotations(MolecularFormula.class),
+                                                             structure,
+                                                             charge);
+                int rank = CATEGORY_RANK.get(subvalidity.category);
+                if (rank >= CATEGORY_RANK.get(validity.category)) {
+                    validity = subvalidity;
+                }
             }
         }
 
@@ -156,17 +162,16 @@ public class StructuralValidity {
 
 
     /**
-     * Access the validity for the specified formulas, structure and charge. If 
+     * Access the validity for the specified formulas, structure and charge. If
      * validity differs the best scoring validity will be returned.
-     * 
-     * @param formulas   a collection formulas to check against
+     *
+     * @param formulas  a collection formulas to check against
      * @param structure structure to validate
      * @param charge    charge to check against
-     * 
+     *
      * @return an instance of {@see StructuralValidity} with defined
      *         {@see Category} (see. {@see getCategory()}) and
      *         message (see. {@see getMessage()})
-     * 
      */
     public static StructuralValidity getValidity(Collection<MolecularFormula> formulas,
                                                  ChemicalStructure structure,
@@ -189,15 +194,14 @@ public class StructuralValidity {
 
     /**
      * Access the validity for the specified formula, structure and charge
-     * 
+     *
      * @param formula   formula to check against
      * @param structure structure to validate
      * @param charge    charge to check against
-     * 
+     *
      * @return an instance of {@see StructuralValidity} with defined
      *         {@see Category} (see. {@see getCategory()}) and
      *         message (see. {@see getMessage()})
-     * 
      */
     public static StructuralValidity getValidity(MolecularFormula formula,
                                                  ChemicalStructure structure,
@@ -257,10 +261,12 @@ public class StructuralValidity {
      * We use this instead of the CDK MolecularFormulatManipulate#compare as the CDK
      * version looks at formula charge and isotope mass. In this instance we are only
      * intrested in symbols. You can also match excluding protons.
+     *
      * @param formula1
      * @param formula2
      * @param excludeProtons
-     * @return 
+     *
+     * @return
      */
     private static boolean compareFormula(IMolecularFormula formula1, IMolecularFormula formula2, boolean excludeProtons) {
 
@@ -288,8 +294,6 @@ public class StructuralValidity {
                 }
             }
         }
-
-
 
 
         return true;
