@@ -35,7 +35,12 @@ public class AttributedEntry<K, V> {
 
     private static final Logger LOGGER = Logger.getLogger(AttributedEntry.class);
 
+    private int INDEX_TICKER = 0;
     private Map<K, List<V>> map = new HashMap<K, List<V>>();
+
+    // XXX could use a BiMap here
+    private Map<Integer, Map.Entry<K, V>> indexedEntries = new HashMap<Integer, Map.Entry<K, V>>();
+    private Map<Map.Entry<K, V>, Integer> indexMap = new HashMap<Map.Entry<K, V>, Integer>();
 
     public AttributedEntry() {
 
@@ -43,6 +48,8 @@ public class AttributedEntry<K, V> {
 
     public AttributedEntry(AttributedEntry<K, V> entry) {
         map = new HashMap<K, List<V>>(entry.map);
+        indexedEntries = new HashMap<Integer, Map.Entry<K, V>>(entry.indexedEntries);
+        indexMap = new HashMap<Map.Entry<K, V>, Integer>(entry.indexMap);
     }
 
     /**
@@ -52,17 +59,26 @@ public class AttributedEntry<K, V> {
      * @param value
      */
     public void put(K key, V value) {
+
+        Map.Entry entry = new HashMap.SimpleEntry<K, V>(key, value);
+
+        int index = INDEX_TICKER;
+        indexedEntries.put(INDEX_TICKER, entry); // incremented after addition
+        indexMap.put(entry, INDEX_TICKER);
+        INDEX_TICKER++;
+
         if (!map.containsKey(key)) {
             map.put(key, new ArrayList<V>());
         }
         map.get(key).add(value);
+
     }
 
     public boolean has(K key) {
         return map.containsKey(key);
     }
 
-    public V getFirst(K key){
+    public V getFirst(K key) {
         return get(key).iterator().next();
     }
 
@@ -82,6 +98,33 @@ public class AttributedEntry<K, V> {
         return has(key) ? map.get(key) : new ArrayList<V>();
     }
 
+    public boolean hasNext(K key, V value, K nextKey) {
+        Map.Entry next = getNext(key, value);
+        return next.getKey() != null && next.getKey().equals(nextKey);
+    }
+
+    /**
+     * Access the next entry that appeared in the input
+     *
+     * @param key
+     * @param value
+     *
+     * @return
+     */
+    public Map.Entry<K, V> getNext(K key, V value) {
+        return getNext(new HashMap.SimpleEntry<K, V>(key, value));
+    }
+
+    public Map.Entry<K, V> getNext(Map.Entry<K, V> entry) {
+        if (indexMap.containsKey(entry)) {
+            int index = indexMap.get(entry);
+            if (indexedEntries.containsKey(index + 1)) {
+                return indexedEntries.get(index + 1);
+            }
+        }
+        return new HashMap.SimpleEntry<K, V>(null, null);
+    }
+
     /**
      * Inverts results of {@see isEmpty()}
      *
@@ -99,6 +142,8 @@ public class AttributedEntry<K, V> {
 
     public void clear() {
         map.clear();
+        indexedEntries.clear();
+        indexMap.clear();
     }
 
     @Override
