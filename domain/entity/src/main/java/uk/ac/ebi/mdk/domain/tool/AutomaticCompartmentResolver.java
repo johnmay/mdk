@@ -95,11 +95,11 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
      * @param compartment the compartment to add
      */
     public void addCompartment(Compartment compartment) {
-        put(compartment.getAbbreviation().toLowerCase(Locale.ENGLISH),
+        put(compartment.getAbbreviation(),
             compartment);
-        put(compartment.getDescription().toLowerCase(Locale.ENGLISH),
+        put(compartment.getDescription(),
             compartment);
-        put("[" + compartment.getAbbreviation().toLowerCase(Locale.ENGLISH) + "]",
+        put("[" + compartment.getAbbreviation() + "]",
             compartment);
     }
 
@@ -110,7 +110,9 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
      * @param key         key to store
      * @param compartment compartment instance
      */
-    private void put(String key, Compartment compartment) {
+    public void put(String key, Compartment compartment) {
+
+        key = key.toLowerCase(Locale.ENGLISH);
 
         if (compartments.containsKey(key)) {
             ambiguous.add(key); // store clash
