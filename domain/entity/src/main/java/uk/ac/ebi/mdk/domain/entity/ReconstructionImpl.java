@@ -23,13 +23,13 @@ package uk.ac.ebi.mdk.domain.entity;
  * and open the template in the editor.
  */
 
-import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 import uk.ac.ebi.mdk.domain.entity.collection.*;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 
 import java.io.*;
 import java.security.InvalidParameterException;
@@ -191,6 +191,7 @@ public class ReconstructionImpl
 
     /**
      * Add a product to the reconstruction
+     *
      * @param product
      */
     public void addProduct(GeneProduct product) {
@@ -215,7 +216,7 @@ public class ReconstructionImpl
     }
 
 
-    public Proteome getProteome(){
+    public Proteome getProteome() {
         return products;
     }
 
@@ -240,15 +241,12 @@ public class ReconstructionImpl
     public void addReaction(MetabolicReaction reaction) {
         reactions.add(reaction);
 
+        // duplicates will not be added
         for (MetabolicParticipant p : reaction.getReactants()) {
-            if (metabolome.contains(p.getMolecule()) == false) {
-                addMetabolite(p.getMolecule());
-            }
+            addMetabolite(p.getMolecule());
         }
         for (MetabolicParticipant p : reaction.getProducts()) {
-            if (metabolome.contains(p.getMolecule()) == false) {
-                addMetabolite(p.getMolecule());
-            }
+            addMetabolite(p.getMolecule());
         }
 
     }
@@ -338,7 +336,6 @@ public class ReconstructionImpl
         }
         return container;
     }
-
 
 
     /**
@@ -468,8 +465,7 @@ public class ReconstructionImpl
     public void setTaxonomy(Identifier taxonomy) {
         if (taxonomy instanceof Taxonomy) {
             setTaxonomy((Taxonomy) taxonomy);
-        }
-        else {
+        } else {
             throw new InvalidParameterException("Not taxonomic identifier!");
         }
     }
