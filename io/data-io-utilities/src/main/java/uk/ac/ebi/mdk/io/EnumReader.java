@@ -29,6 +29,7 @@ public class EnumReader extends AbstractDataInput {
 
     public Enum readNewEnum() throws IOException, ClassNotFoundException {
         Class c = readClass();
-        return Enum.valueOf(c, getDataInput().readUTF());
+        String name = getDataInput().readUTF();
+        return Enum.valueOf(c, name);
     }
 }
