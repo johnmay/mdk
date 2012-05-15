@@ -24,7 +24,6 @@ import java.io.ObjectOutput;
 /**
  * ProjectIdentifier.java
  *
- *
  * @author johnmay
  * @date Apr 14, 2011
  */
@@ -32,7 +31,7 @@ import java.io.ObjectOutput;
 public class Taxonomy extends AbstractIdentifier {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(Taxonomy.class);
+            org.apache.log4j.Logger.getLogger(Taxonomy.class);
     // AADNV V 648330: N=Aedes albopictus densovirus (isolate Boublik/1994)
     //                 C=AalDNV
 
@@ -48,6 +47,10 @@ public class Taxonomy extends AbstractIdentifier {
 
 
     public Taxonomy() {
+        code = "";
+        kingdom = Kingdom.UNDEFINED;
+        officialName = "";
+        commonName = "";
     }
 
 
@@ -147,7 +150,6 @@ public class Taxonomy extends AbstractIdentifier {
     }
 
     /**
-     *
      * @author johnmay
      */
     public static enum Kingdom {
@@ -156,7 +158,7 @@ public class Taxonomy extends AbstractIdentifier {
         BACTERIA("bacteria,b"),
         EUKARYOTA("eukaryote,eukaryota,e"),
         VIRUSES_AND_PHAGES(
-        "virus,viruses,phage,phages,v"),
+                "virus,viruses,phage,phages,v"),
         UNDEFINED("");
         private String[] names;
 
@@ -167,8 +169,8 @@ public class Taxonomy extends AbstractIdentifier {
 
 
         private boolean matches(String name) {
-            for( String altName : names ) {
-                if( altName.equals(name) ) {
+            for (String altName : names) {
+                if (altName.equals(name)) {
                     return true;
                 }
             }
@@ -178,8 +180,8 @@ public class Taxonomy extends AbstractIdentifier {
 
         public static Kingdom getKingdom(String name) {
             String name_lc = name.toLowerCase();
-            for( Kingdom kingdom : Kingdom.values() ) {
-                if( kingdom.matches(name_lc) ) {
+            for (Kingdom kingdom : Kingdom.values()) {
+                if (kingdom.matches(name_lc)) {
                     return kingdom;
                 }
             }
