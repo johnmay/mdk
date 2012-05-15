@@ -21,7 +21,7 @@
         <!-- old structure modules (to be converted) -->
         <module>CheMet-Core</module>
         <module>CheMet-IO</module>
-        <module>CheMet-Visualisation</module>
+        <module>ui</module>
         <module>CheMet-WebServices</module>
 
     </modules>
