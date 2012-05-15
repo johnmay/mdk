@@ -20,69 +20,22 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 
 /**
- *
  * @author johnmay
  * @date May 15, 2011
  */
 public class MetabolomeImpl
-        extends EntityList<Metabolite> implements Metabolome {
-
-    private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-            MetabolomeImpl.class);
-
-    HashSet<Metabolite> unique = new HashSet<Metabolite>();
-
-
-    @Override
-    public boolean add(Metabolite e) {
-        if (unique.contains(e)) {
-            return false;
-        }
-        unique.add(e);
-        return super.add(e);
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        unique.remove(o);
-        return super.remove(o);
-    }
-
-    @Override
-    public Metabolite remove(int index) {
-        Metabolite m = super.remove(index);
-        unique.remove(m);
-        return m;
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        unique.removeAll(c);
-        return super.removeAll(c);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends Metabolite> c) {
-        for (Metabolite metabolite : c) {
-            boolean results = add(metabolite);
-        }
-        return true;
-    }
-
+        extends EntitySet<Metabolite> implements Metabolome {
 
     /**
-     * 
      * Retrieves the metabolites that match the specified name.
      * Note. this is not a search over the list (as the name can change)
-     * 
+     *
      * @param name
-     * @return 
-     * 
+     *
+     * @return
      */
     public Collection<Metabolite> get(String name) {
 
