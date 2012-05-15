@@ -126,7 +126,7 @@ public class AtomContainerAnnotation
 
     @Override
     public String toString() {
-        return getShortDescription() + ": " + molecule != null ? molecule.toString() : " null";
+        return getShortDescription() + ": " + ( molecule != null ? molecule.toString()  : " null" );
     }
 
 
