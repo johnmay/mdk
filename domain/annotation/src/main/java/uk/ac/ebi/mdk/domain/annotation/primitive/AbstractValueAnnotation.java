@@ -17,22 +17,22 @@
  */
 package uk.ac.ebi.mdk.domain.annotation.primitive;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.AbstractAnnotation;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
-/** 
+
+/**
  * AbstractValueAnnotation 2012.01.12 <br/>
  * Provides an abstract layer for other common (e.g. primitive) annotation types
  * to build upon.
- * 
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- * @param   T the type of value to store
  */
 public abstract class AbstractValueAnnotation<T>
         extends AbstractAnnotation {
@@ -57,6 +57,7 @@ public abstract class AbstractValueAnnotation<T>
 
     /**
      * Mutator for the underlying value
+     *
      * @param value new state
      */
     public void setValue(T value) {
@@ -70,12 +71,29 @@ public abstract class AbstractValueAnnotation<T>
         return value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbstractValueAnnotation that = (AbstractValueAnnotation) o;
+
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
+    }
+
     /**
      * @inheritDoc
      */
     @Override
     public String toString() {
-        return value == null ? "N/A" : value.toString();
+        return value != null ? value.toString() : "n/a";
     }
 
     @Override
