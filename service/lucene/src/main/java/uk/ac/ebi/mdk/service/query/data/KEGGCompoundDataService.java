@@ -1,9 +1,9 @@
 package uk.ac.ebi.mdk.service.query.data;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.service.index.data.KEGGCompoundDataIndex;
@@ -27,7 +27,7 @@ public class KEGGCompoundDataService
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundDataService.class);
 
-    private static final IChemObjectBuilder BUILDER = DefaultChemObjectBuilder.getInstance();
+    private static final IChemObjectBuilder BUILDER = SilentChemObjectBuilder.getInstance();
 
     public KEGGCompoundDataService() {
         super(new KEGGCompoundDataIndex());

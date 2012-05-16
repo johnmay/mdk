@@ -20,18 +20,18 @@ package uk.ac.ebi.mdk.tool.domain;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.normalize.SMSDNormalizer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
-import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,7 +67,7 @@ public class PeptideFactory {
 
 
     public IAtomContainer generateStructure(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
-        IAtomContainer peptide = DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
+        IAtomContainer peptide = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
 
 
         IAtomContainer current = SMSDNormalizer.makeDeepCopy(aminoacids[0].getMolecule());
@@ -349,7 +349,7 @@ public class PeptideFactory {
             try {
                 InputStream stream = getClass().getResourceAsStream(resource);
                 MDLV2000Reader reader = new MDLV2000Reader(stream);
-                this.molecule = DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class);
+                this.molecule = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class);
                 reader.read(molecule);
                 AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
             } catch (Exception ex) {

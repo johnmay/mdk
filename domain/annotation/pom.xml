@@ -53,6 +53,11 @@
             <artifactId>cdk-inchi</artifactId>
             <version>${cdk.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-silent</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

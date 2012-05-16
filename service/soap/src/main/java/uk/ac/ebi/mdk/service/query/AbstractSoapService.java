@@ -1,11 +1,11 @@
 package uk.ac.ebi.mdk.service.query;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.AbstractService;
 
@@ -24,7 +24,7 @@ public abstract class AbstractSoapService<I extends Identifier>
     private MDLV2000Reader reader = new MDLV2000Reader();
     private MDLV2000Writer writer = new MDLV2000Writer();
 
-    private static final IChemObjectBuilder BUILDER = DefaultChemObjectBuilder.getInstance();
+    private static final IChemObjectBuilder BUILDER = SilentChemObjectBuilder.getInstance();
 
     public I getIdentifier(String accession) {
         I identifier =  getIdentifier();

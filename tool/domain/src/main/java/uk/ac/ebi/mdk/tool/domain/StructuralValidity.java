@@ -19,7 +19,6 @@
 package uk.ac.ebi.mdk.tool.domain;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Element;
 import org.openscience.cdk.Isotope;
 import org.openscience.cdk.exception.CDKException;
@@ -27,6 +26,7 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.annotation.Charge;
@@ -219,11 +219,11 @@ public class StructuralValidity {
         }
         Double chargeDifference = charge.getValue() - otherCharge;
         try {
-            CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance()).addImplicitHydrogens(molecule);
+            CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance()).addImplicitHydrogens(molecule);
         } catch (CDKException ex) {
             try {
                 AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
-                CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance()).addImplicitHydrogens(molecule);
+                CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance()).addImplicitHydrogens(molecule);
             } catch (CDKException ex1) {
                 LOGGER.error("Unable to add implicit hydrogens " + ex.getMessage());
             }

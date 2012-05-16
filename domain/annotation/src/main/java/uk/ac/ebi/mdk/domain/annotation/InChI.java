@@ -18,17 +18,17 @@
 package uk.ac.ebi.mdk.domain.annotation;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractStringAnnotation;
-import uk.ac.ebi.mdk.lang.annotation.Brief;
-import uk.ac.ebi.mdk.lang.annotation.Description;
-import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 
 
 /**
@@ -100,7 +100,7 @@ public class InChI
 
         try {
             InChIGeneratorFactory inchiFactory = InChIGeneratorFactory.getInstance();
-            InChIToStructure inchi2structure = inchiFactory.getInChIToStructure(getValue(), DefaultChemObjectBuilder.getInstance());
+            InChIToStructure inchi2structure = inchiFactory.getInChIToStructure(getValue(), SilentChemObjectBuilder.getInstance());
             structure = inchi2structure.getAtomContainer();
         } catch (CDKException ex) {
             LOGGER.error("Unable to generate structure from provided inchi: " + ex.getMessage());

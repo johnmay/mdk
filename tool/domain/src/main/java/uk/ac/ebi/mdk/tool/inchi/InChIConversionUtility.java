@@ -7,12 +7,12 @@ package uk.ac.ebi.mdk.tool.inchi;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -23,7 +23,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 public class InChIConversionUtility {
 
     private static InChIGeneratorFactory inchiGenFact;
-    private static IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
+    private static IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
 
     public static String[] convertInChI2StdInChI(String inchi) {
         String ans[] = null;

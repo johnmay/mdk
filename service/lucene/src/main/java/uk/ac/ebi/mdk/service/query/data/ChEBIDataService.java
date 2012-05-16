@@ -1,9 +1,9 @@
 package uk.ac.ebi.mdk.service.query.data;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.service.index.data.ChEBIDataIndex;
@@ -29,7 +29,7 @@ public class ChEBIDataService
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIDataService.class);
 
-    private static final IChemObjectBuilder BUILDER = DefaultChemObjectBuilder.getInstance();
+    private static final IChemObjectBuilder BUILDER = SilentChemObjectBuilder.getInstance();
 
     public ChEBIDataService() {
         super(new ChEBIDataIndex());

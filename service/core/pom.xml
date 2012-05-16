@@ -34,6 +34,11 @@
             <artifactId>caf-utility</artifactId>
             <version>${caf.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-silent</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
 
     </dependencies>
 

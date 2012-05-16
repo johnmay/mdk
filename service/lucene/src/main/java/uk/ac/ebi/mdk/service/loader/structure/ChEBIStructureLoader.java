@@ -1,9 +1,9 @@
 package uk.ac.ebi.mdk.service.loader.structure;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.mdk.service.index.structure.ChEBIStructureIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractChEBILoader;
 import uk.ac.ebi.mdk.service.loader.location.GZIPRemoteLocation;
@@ -53,7 +53,7 @@ public class ChEBIStructureLoader
 
         // get the SDF ResourceFileLocation and open up an sdf-reader
         ResourceFileLocation location = getLocation("ChEBI SDF");
-        IteratingMDLReader sdfReader = new IteratingMDLReader(location.open(), DefaultChemObjectBuilder.getInstance());
+        IteratingMDLReader sdfReader = new IteratingMDLReader(location.open(), SilentChemObjectBuilder.getInstance());
         sdfReader.setSkip(true);
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
 

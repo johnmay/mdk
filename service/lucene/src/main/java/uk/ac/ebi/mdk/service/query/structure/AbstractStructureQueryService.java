@@ -5,7 +5,6 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.fingerprint.IFingerprinter;
@@ -13,10 +12,11 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
-import uk.ac.ebi.mdk.service.analyzer.FingerprintSimilarity;
-import uk.ac.ebi.mdk.service.query.AbstractLuceneService;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.analyzer.FingerprintSimilarity;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
+import uk.ac.ebi.mdk.service.query.AbstractLuceneService;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -42,7 +42,7 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
     private MDLV2000Reader reader = new MDLV2000Reader();
     private MDLV2000Writer writer = new MDLV2000Writer();
 
-    private static final IChemObjectBuilder BUILDER = DefaultChemObjectBuilder.getInstance();
+    private static final IChemObjectBuilder BUILDER = SilentChemObjectBuilder.getInstance();
 
 
     private static final Logger LOGGER = Logger.getLogger(AbstractStructureQueryService.class);

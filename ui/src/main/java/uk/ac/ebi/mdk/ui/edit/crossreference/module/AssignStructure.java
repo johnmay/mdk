@@ -20,15 +20,6 @@
 package uk.ac.ebi.mdk.ui.edit.crossreference.module;
 
 import com.jgoodies.forms.layout.CellConstraints;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.io.*;
-import java.security.InvalidParameterException;
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import net.sf.jniinchi.INCHI_RET;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.ChemFile;
@@ -41,12 +32,23 @@ import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.CMLReader;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
-import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.io.*;
+import java.security.InvalidParameterException;
 
 
 /**
@@ -195,7 +197,7 @@ public class AssignStructure
     public void transferCML() throws CDKException, UnsupportedEncodingException, IOException {
         String cmltext = area.getText();
         CMLReader cmlreader = new CMLReader(new ByteArrayInputStream(cmltext.getBytes("UTF-8")));
-        IChemFile chemfile = cmlreader.read(DefaultChemObjectBuilder.getInstance().newInstance(ChemFile.class));
+        IChemFile chemfile = cmlreader.read(SilentChemObjectBuilder.getInstance().newInstance(ChemFile.class));
         cmlreader.close();
         metabolite.addAnnotation(new AtomContainerAnnotation(ChemFileManipulator.getAllAtomContainers(chemfile).get(0)));
     }
@@ -203,7 +205,7 @@ public class AssignStructure
 
     public void transferMDLV2000() throws IOException, CDKException {
         MDLV2000Reader reader = new MDLV2000Reader(new StringReader(area.getText()));
-        IMolecule molecule = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+        IMolecule molecule = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class));
         reader.close();
         metabolite.addAnnotation(new AtomContainerAnnotation(molecule));
     }
@@ -211,7 +213,7 @@ public class AssignStructure
 
     public void transferMDLV3000() throws IOException, CDKException {
         MDLV3000Reader reader = new MDLV3000Reader(new StringReader(area.getText()));
-        IMolecule molecule = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+        IMolecule molecule = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class));
         reader.close();
         metabolite.addAnnotation(new AtomContainerAnnotation(molecule));
     }

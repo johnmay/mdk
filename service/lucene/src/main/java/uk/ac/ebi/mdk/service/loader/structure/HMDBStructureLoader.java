@@ -2,9 +2,9 @@ package uk.ac.ebi.mdk.service.loader.structure;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.mdk.service.index.structure.HMDBStructureIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.location.GZIPRemoteLocation;
@@ -56,7 +56,7 @@ public class HMDBStructureLoader
         ResourceFileLocation location = getLocation("HMDB SDF");
 
         // reader the sdf
-        IteratingMDLReader sdf = new IteratingMDLReader(location.open(), DefaultChemObjectBuilder.getInstance());
+        IteratingMDLReader sdf = new IteratingMDLReader(location.open(), SilentChemObjectBuilder.getInstance());
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
         sdf.setSkip(true);
 
