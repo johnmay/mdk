@@ -32,12 +32,13 @@ import java.util.Set;
 
 
 /**
- *          TransportReactionClassifier - 2011.12.12 <br>
- *          Utility class currently only used to determine the class of
- *          transport reaction (i.e. SYMPORTER, ANTIPORTER, UNIPORTER, UNKNOWN)
+ * TransportReactionClassifier - 2011.12.12 <br>
+ * Utility class currently only used to determine the class of
+ * transport reaction (i.e. SYMPORTER, ANTIPORTER, UNIPORTER, UNKNOWN)
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class TransportReactionUtil {
 
@@ -46,21 +47,37 @@ public class TransportReactionUtil {
 
     public enum Classification {
 
-        SYMPORTER,
-        ANTIPORTER,
-        UNIPORTER,
-        UNKNOWN;
-    };
+        SYMPORTER("Symporter - transport of two or more compounds or ions in the same direction across a membrane"),
+        ANTIPORTER("Antiporter - transport of two or more compounds or ions in different directions across a membrane"),
+        UNIPORTER("Uniporter - transport of a single molecule or ion across a membrane"),
+        UNKNOWN("Unknown - reaction is either not a transport reaction or the molecule is modified during transport");
+
+        private String description;
+
+        private Classification(String description) {
+            this.description = description;
+        }
+
+
+        @Override
+        public String toString() {
+            return description.toString();
+        }
+    }
+
+    ;
 
 
     /**
      * Uses a simple direct object reference comparison for mapping
+     *
      * @param <T>
      * @param transportReaction
+     *
      * @return
      */
-    public static <T> BiMap<CompartmentalisedParticipant<T, ?,   Compartment>, CompartmentalisedParticipant<T, ?,  Compartment>> getMappings(
-            Reaction<? extends CompartmentalisedParticipant<T, ?,   Compartment>> transportReaction) {
+    public static <T> BiMap<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?, Compartment>> getMappings(
+            Reaction<? extends CompartmentalisedParticipant<T, ?, Compartment>> transportReaction) {
         return getMappings(transportReaction, new Comparator<T>() {
 
             public int compare(T o1,
@@ -71,20 +88,20 @@ public class TransportReactionUtil {
     }
 
 
-    public static <T> BiMap<CompartmentalisedParticipant<T, ?,Compartment>, CompartmentalisedParticipant<T, ?,  Compartment>> getMappings(
-            Reaction<? extends CompartmentalisedParticipant<T, ?,  Compartment>> transportReaction,
+    public static <T> BiMap<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?, Compartment>> getMappings(
+            Reaction<? extends CompartmentalisedParticipant<T, ?, Compartment>> transportReaction,
             Comparator<T> comparator) {
 
-        BiMap<CompartmentalisedParticipant<T, ?,  Compartment>, CompartmentalisedParticipant<T, ?,  Compartment>> mappings = HashBiMap.create();
+        BiMap<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?, Compartment>> mappings = HashBiMap.create();
 
-        for (CompartmentalisedParticipant<T, ?,  Compartment> p1 : transportReaction.getReactants()) {
-            for (CompartmentalisedParticipant<T, ?,  Compartment> p2 : transportReaction.getProducts()) {
+        for (CompartmentalisedParticipant<T, ?, Compartment> p1 : transportReaction.getReactants()) {
+            for (CompartmentalisedParticipant<T, ?, Compartment> p2 : transportReaction.getProducts()) {
                 if (comparator.compare(p1.getMolecule(), p2.getMolecule()) == 0) {
                     mappings.put(p1, p2);
                 }
             }
         }
-        
+
         return mappings;
     }
 
@@ -105,7 +122,7 @@ public class TransportReactionUtil {
     }
 
 
-    public static boolean isTransport(Reaction<? extends CompartmentalisedParticipant<?, ?,  Compartment>> rxn) {
+    public static boolean isTransport(Reaction<? extends CompartmentalisedParticipant<?, ?, Compartment>> rxn) {
         Set uniqueCompartments = new HashSet();
         for (CompartmentalisedParticipant p : rxn.getReactants()) {
             uniqueCompartments.add(p.getCompartment());
@@ -123,7 +140,7 @@ public class TransportReactionUtil {
         int total = 0;
         Set<Integer> movement = new HashSet<Integer>();
 
-        for (Entry<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?,  Compartment>> entry : mappings.entrySet()) {
+        for (Entry<CompartmentalisedParticipant<T, ?, Compartment>, CompartmentalisedParticipant<T, ?, Compartment>> entry : mappings.entrySet()) {
 
             CompartmentalisedParticipant<?, ?, Compartment> p1 = entry.getKey();
             CompartmentalisedParticipant<?, ?, Compartment> p2 = entry.getValue();
@@ -132,8 +149,8 @@ public class TransportReactionUtil {
             Compartment c2 = (Compartment) p2.getCompartment();
 
             int value = c1.getRanking() > c2.getRanking() ? -1
-                        : c1.getRanking() < c2.getRanking() ? +1 : 0;
-            
+                    : c1.getRanking() < c2.getRanking() ? +1 : 0;
+
             if (value != 0) {
                 movement.add(value);
                 total++;

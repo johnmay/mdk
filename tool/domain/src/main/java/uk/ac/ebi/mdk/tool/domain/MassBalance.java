@@ -22,11 +22,23 @@ public class MassBalance {
     private static final Logger LOGGER = Logger.getLogger(MassBalance.class);
 
     public enum BalanceType {
-        HEAVY_LEFT,
-        HEAVY_RIGHT,
-        UNBALANCED,
-        BALANCED,
-        UNKNOWN;
+        HEAVY_LEFT("Unbalanced - left side is heavier then the right, potentially missing participants on the right"),
+        HEAVY_RIGHT("Unbalanced - right side is heavier then the left, potentially missing participants on the left"),
+        UNBALANCED("Unbalanced - unclear which side could be missing participants"),
+        BALANCED("Balanced"),
+        UNKNOWN("Unknown - no metabolites have a formula");
+
+        private String description;
+
+        private BalanceType(String description) {
+            this.description = description;
+        }
+
+
+        @Override
+        public String toString() {
+            return description;
+        }
     }
 
     public static BalanceType getBalanceClassification(MetabolicReaction reaction) {
