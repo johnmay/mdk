@@ -18,16 +18,16 @@
 package uk.ac.ebi.mdk.domain.annotation.crossreference;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.MetaInfo;
-import uk.ac.ebi.mdk.domain.annotation.AbstractAnnotation;
-import uk.ac.ebi.mdk.lang.annotation.Brief;
-import uk.ac.ebi.mdk.lang.annotation.Description;
-import uk.ac.ebi.mdk.domain.observation.Observation;
-import uk.ac.ebi.mdk.lang.annotation.Context;
-import uk.ac.ebi.mdk.domain.annotation.ObservationBasedAnnotation;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.domain.annotation.AnnotationVisitor;
 import uk.ac.ebi.mdk.domain.DefaultLoader;
+import uk.ac.ebi.mdk.domain.MetaInfo;
+import uk.ac.ebi.mdk.domain.annotation.AnnotationVisitor;
+import uk.ac.ebi.mdk.domain.annotation.ObservationBasedAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractValueAnnotation;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -49,12 +49,11 @@ import java.util.List;
 @Brief("Crossreference")
 @Description("A crossreference to an alternative identifier")
 public class CrossReference<E extends Identifier, O extends Observation>
-        extends AbstractAnnotation
+        extends AbstractValueAnnotation<E>
         implements ObservationBasedAnnotation<O> {
 
     private static final Logger LOGGER = Logger.getLogger(CrossReference.class);
 
-    private E identifier;
 
     private static MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
             CrossReference.class);
@@ -67,32 +66,25 @@ public class CrossReference<E extends Identifier, O extends Observation>
 
 
     public CrossReference(E identifier) {
-        this.identifier = identifier;
+        super(identifier);
     }
 
 
     public E getIdentifier() {
-        return identifier;
+        return getValue();
     }
 
 
     public void setIdentifier(E identifier) {
-        this.identifier = identifier;
+        setValue(identifier);
     }
-
-
-    @Override
-    public String toString() {
-        return identifier != null ? identifier.toString() : "null";
-    }
-
 
     /**
      * @inheritDoc
      */
     @Override
     public String getShortDescription() {
-        return identifier != null ? identifier.getShortDescription() : metaInfo.brief;
+        return getValue() != null ? getValue().getShortDescription() : metaInfo.brief;
     }
 
 
@@ -101,7 +93,7 @@ public class CrossReference<E extends Identifier, O extends Observation>
      */
     @Override
     public String getLongDescription() {
-        return identifier != null ? identifier.getLongDescription() : metaInfo.description;
+        return getValue() != null ? getValue().getLongDescription() : metaInfo.description;
     }
 
 
@@ -163,26 +155,4 @@ public class CrossReference<E extends Identifier, O extends Observation>
     }
 
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final CrossReference<E,O> other = (CrossReference<E,O>) obj;
-        if (this.identifier != other.identifier && (this.identifier == null || !this.identifier.equals(other.identifier))) {
-            return false;
-        }
-        return true;
-    }
-
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 53 * hash + (this.identifier != null ? this.identifier.hashCode() : 0);
-        return hash;
-    }
 }
