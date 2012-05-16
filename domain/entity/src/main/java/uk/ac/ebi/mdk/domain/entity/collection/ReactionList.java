@@ -58,13 +58,9 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     @Override
     public boolean add(MetabolicReaction rxn) {
 
-        for (MetabolicParticipant m : rxn.getReactants()) {
+        for (MetabolicParticipant m : rxn.getParticipants()) {
             participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
         }
-        for (MetabolicParticipant m : rxn.getProducts()) {
-            participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
-        }
-
 
         return super.add(rxn);
 
