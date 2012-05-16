@@ -2,12 +2,13 @@ package uk.ac.ebi.mdk.apps.io;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Isotope;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.*;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
@@ -227,7 +228,9 @@ public class BioCycConverter {
         m.setCharge(getCharge(entry.get(CompoundAttribute.ATOM_CHARGES)).doubleValue());
 
         if (entry.has(CHEMICAL_FORMULA)) {
-            m.addAnnotation(new MolecularFormula(getFormula(entry.get(CHEMICAL_FORMULA))));
+            IMolecularFormula mf = getFormula(entry.get(CHEMICAL_FORMULA));
+            if (mf != null)
+                m.addAnnotation(new MolecularFormula(mf));
         }
 
         m.addAnnotations(getCrossReferences(entry.get(DBLINKS)));
@@ -386,7 +389,7 @@ public class BioCycConverter {
 
     private static IMolecularFormula getFormula(Collection<String> formulaParts) {
 
-        IMolecularFormula formula = DefaultChemObjectBuilder.getInstance().newInstance(IMolecularFormula.class);
+        IMolecularFormula formula = SilentChemObjectBuilder.getInstance().newInstance(IMolecularFormula.class);
 
         for (String formulaPart : formulaParts) {
             String part = formulaPart.substring(1, formulaPart.length() - 1);
@@ -394,7 +397,7 @@ public class BioCycConverter {
             formula.addIsotope(new Isotope(subpart[0]), Integer.parseInt(subpart[1]));
         }
 
-        return formula;
+        return MolecularFormulaManipulator.getString(formula).isEmpty() ? null : formula;
 
     }
 
