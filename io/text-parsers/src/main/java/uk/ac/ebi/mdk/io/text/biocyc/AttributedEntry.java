@@ -82,6 +82,10 @@ public class AttributedEntry<K, V> {
         return get(key).iterator().next();
     }
 
+    public V getFirst(K key, V defaultValue) {
+        return has(key) ? get(key).iterator().next() : defaultValue;
+    }
+
     public boolean isSingular(K key) {
         return get(key).size() == 1;
     }
