@@ -4,13 +4,15 @@ import com.chemspider.CompoundInfo;
 import com.chemspider.SearchLocator;
 import com.chemspider.SearchSoap;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.mdk.domain.identifier.ChemSpiderIdentifier;
+import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 
 import javax.xml.rpc.ServiceException;
@@ -25,7 +27,7 @@ public class ChemSpiderAdapter
 
     private static final Logger LOGGER = Logger.getLogger(ChemSpiderAdapter.class);
 
-    private static final IChemObjectBuilder BUILDER = DefaultChemObjectBuilder.getInstance();
+    private static final IChemObjectBuilder BUILDER = SilentChemObjectBuilder.getInstance();
 
     private SearchSoap service;
     private SearchLocator locator = new SearchLocator();
@@ -39,7 +41,16 @@ public class ChemSpiderAdapter
     public IAtomContainer getStructure(ChemSpiderIdentifier identifier) {
 
         try {
-            CompoundInfo info = service.getCompoundInfo(Integer.parseInt(identifier.getAccession()), "b7048eec-07c1-496e-9266-ae18d34736b1");
+
+            StringPreference key = ServicePreferences.getInstance().getPreference("CHEM_SPIDER_KEY");
+
+            if (key.get().isEmpty()) {
+                System.err.println("No ChemSpider key available: please input the key via preferences!");
+                return BUILDER.newInstance(IAtomContainer.class);
+            }
+
+            CompoundInfo info = service.getCompoundInfo(Integer.parseInt(identifier.getAccession()),
+                                                        key.get());
 
             InChIGeneratorFactory inchiFactory = InChIGeneratorFactory.getInstance();
             InChIToStructure inchi2structure = inchiFactory.getInChIToStructure(info.getInChI(), BUILDER);
