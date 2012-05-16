@@ -49,7 +49,7 @@ import static uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute.*;
 public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
 
     private static final Logger LOGGER = Logger.getLogger(BioCycCompoundLoader.class);
-    private static final Pattern REMOVE_TAGS = Pattern.compile("</?(?:i|sub|sup)/?>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REMOVE_TAGS = Pattern.compile("</?(?:i|sub|sup|em|small)/?>", Pattern.CASE_INSENSITIVE);
     private static final Pattern ATOM_CHARGE = Pattern.compile("\\(.+?\\s(.+?)\\)");
 
 

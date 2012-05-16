@@ -1,31 +1,40 @@
 package uk.ac.ebi.mdk.apps.io;
 
 import org.apache.log4j.Logger;
+import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Isotope;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
-import uk.ac.ebi.mdk.domain.annotation.Annotation;
-import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
-import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.*;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.reaction.*;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mdk.io.text.biocyc.AttributedEntry;
 import uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader;
 import uk.ac.ebi.mdk.io.text.biocyc.attribute.Attribute;
 import uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute;
+import uk.ac.ebi.mdk.io.text.biocyc.attribute.ReactionAttribute;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +50,14 @@ public class BioCycConverter {
 
     private static final Logger LOGGER = Logger.getLogger(BioCycConverter.class);
 
+    private Map<String, Metabolite> metaboliteMap = new HashMap<String, Metabolite>();
+    // class map may also hold proteins classes etc.
+    private Map<String, Metabolite> classMap = new HashMap<String, Metabolite>();
+
+    private AutomaticCompartmentResolver resolver = new AutomaticCompartmentResolver();
+
     private File root;
+    private File data;
     private String name;
 
     private Reconstruction reconstruction;
@@ -50,9 +66,14 @@ public class BioCycConverter {
 
         this.root = root;
         this.name = name;
+        this.data = new File(root, "data");
 
 
         reconstruction = create();
+
+        resolver.put("cco-out", Organelle.EXTRACELLULA);
+        resolver.put("cco-in", Organelle.CYTOPLASM);
+        resolver.put("nill", Organelle.CYTOPLASM);
 
     }
 
@@ -81,12 +102,117 @@ public class BioCycConverter {
         while (reader.hasNext()) {
             Metabolite m = dat2Metabolite(reader.next());
             reconstruction.addMetabolite(m);
+            metaboliteMap.put(m.getAccession(), m);
         }
 
         reader.close();
 
     }
 
+    public void importClasses() throws IOException {
+
+        File compounds = new File(root, "data/classes.dat");
+        BioCycDatReader reader = new BioCycDatReader(new FileInputStream(compounds),
+                                                     CompoundAttribute.values());
+
+
+        while (reader.hasNext()) {
+            Metabolite m = dat2Metabolite(reader.next());
+            classMap.put(m.getAccession(), m);
+        }
+
+        reader.close();
+
+    }
+
+    public void importMetaboliteStructures() throws IOException {
+
+        if (reconstruction.getMetabolome().isEmpty())
+            importMetabolites();
+
+        Map<String, File> map = getMolFileMap();
+
+        MDLV2000Reader reader = new MDLV2000Reader();
+
+        for (Metabolite metabolite : reconstruction.getMetabolome()) {
+
+            String accession = metabolite.getAccession();
+            if (map.containsKey(accession)) {
+
+                try {
+                    reader.setReader(new FileReader(map.remove(accession)));
+                    IAtomContainer atomContainer = reader.read(new AtomContainer());
+                    if (atomContainer.getAtomCount() > 0) {
+                        metabolite.addAnnotation(new AtomContainerAnnotation(atomContainer));
+                    }
+                } catch (CDKException e) {
+                    System.err.println(e.getMessage());
+                }
+
+            }
+
+        }
+
+        System.out.println(map.keySet().size() + " structures were not injected");
+
+    }
+
+    public void importReactions() throws IOException {
+
+        if (reconstruction.getMetabolome().isEmpty()) {
+            importMetabolites();
+        }
+        if (classMap.isEmpty()) {
+            importClasses();
+        }
+
+        File compounds = new File(root, "data/reactions.dat");
+        BioCycDatReader reader = new BioCycDatReader(new FileInputStream(compounds),
+                                                     ReactionAttribute.values());
+
+
+        while (reader.hasNext()) {
+            MetabolicReaction reaction = dat2Reaction(reader.next());
+            reconstruction.addReaction(reaction);
+        }
+
+        reader.close();
+    }
+
+    public Map<String, File> getMolFileMap() {
+
+        final FileFilter molFilter = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.getName().endsWith(".mol");
+            }
+        };
+
+        // check if we have a mod directory
+        File[] files = data.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (!pathname.isDirectory())
+                    return false;
+                return pathname.listFiles(molFilter).length != 0;
+            }
+        });
+
+        File molRoot = null;
+
+        if (files.length == 1) {
+            molRoot = files[0];
+        }
+
+        Map<String, File> map = new HashMap<String, File>();
+
+        for (File mol : molRoot.listFiles(molFilter)) {
+            map.put(mol.getName().substring(0, mol.getName().lastIndexOf(".mol")), mol);
+        }
+
+        return map;
+
+    }
 
     public static Metabolite dat2Metabolite(AttributedEntry<Attribute, String> entry) {
 
@@ -106,6 +232,123 @@ public class BioCycConverter {
 
         m.addAnnotations(getCrossReferences(entry.get(DBLINKS)));
 
+
+        return m;
+
+    }
+
+    public MetabolicReaction dat2Reaction(AttributedEntry<Attribute, String> entry) {
+
+        MetabolicReaction rxn = DefaultEntityFactory.getInstance().ofClass(MetabolicReaction.class);
+
+        // basic info
+        rxn.setIdentifier(new BasicReactionIdentifier(entry.getFirst(ReactionAttribute.UNIQUE_ID)));
+        rxn.setName(clean(entry.getFirst(ReactionAttribute.COMMON_NAME, "unnamed entity")));
+        rxn.setAbbreviation("n/a");
+
+        if (entry.has(ReactionAttribute.REACTION_DIRECTION)) {
+
+            String direction = entry.getFirst(ReactionAttribute.REACTION_DIRECTION);
+
+            if (DIRECTION_MAP.containsKey(direction)) {
+                rxn.setDirection(DIRECTION_MAP.get(direction));
+            }
+
+        }
+
+        // synonyms and systematic name
+        for (String synonym : entry.get(ReactionAttribute.SYNONYMS)) {
+            rxn.addAnnotation(new Synonym(synonym));
+        }
+        for (String synonym : entry.get(ReactionAttribute.SYSTEMATIC_NAME)) {
+            rxn.addAnnotation(new Synonym(synonym));
+        }
+
+        rxn.addAnnotations(getCrossReferences(entry.get(ReactionAttribute.DBLINKS)));
+
+        // ec number if it's official or official isn't specified
+        if (entry.has(ReactionAttribute.EC_NUMBER)) {
+            if (!entry.has(ReactionAttribute.OFFICIAL_EC)
+                    || entry.getFirst(ReactionAttribute.OFFICIAL_EC).equals("T")) {
+                rxn.addAnnotation(new EnzymeClassification(new ECNumber(entry.getFirst(ReactionAttribute.EC_NUMBER))));
+            }
+        }
+
+        // gibbs energy
+        if (entry.has(ReactionAttribute.DELTAG0)) {
+            rxn.addAnnotation(new GibbsEnergy(Double.parseDouble(entry.getFirst(ReactionAttribute.DELTAG0)), 0d));
+        }
+
+        // p = participant
+        for (String uid : entry.get(ReactionAttribute.LEFT)) {
+            rxn.addReactant(getParticipant(entry, ReactionAttribute.LEFT, uid));
+        }
+
+        for (String uid : entry.get(ReactionAttribute.RIGHT)) {
+            rxn.addProduct(getParticipant(entry, ReactionAttribute.RIGHT, uid));
+        }
+
+        return rxn;
+    }
+
+    private MetabolicParticipant getParticipant(AttributedEntry<Attribute, String> entry, Attribute attribute, String uid) {
+
+        Metabolite m = getMetabolite(uid);
+        Double coef = 1d;
+        Compartment compartment = Organelle.CYTOPLASM;
+
+        if (entry.hasNext(attribute, uid, ReactionAttribute.COEFFICIENT)) {
+
+            String coefValue = entry.getNext(attribute, uid).getValue();
+            try {
+                coef = Double.parseDouble(coefValue);
+            } catch (NumberFormatException ex) {
+                System.err.println("Coefficient value was not a double: " + coefValue);
+            }
+
+            if (entry.hasNext(ReactionAttribute.COEFFICIENT, coefValue, ReactionAttribute.COMPARTMENT)) {
+                String compartmentValue = entry.getNext(ReactionAttribute.COEFFICIENT, coefValue).getValue();
+                compartment = resolver.getCompartment(compartmentValue);
+            }
+
+        }
+
+        if (entry.hasNext(attribute, uid, ReactionAttribute.COMPARTMENT)) {
+            String compartmentValue = entry.getNext(attribute, uid).getValue();
+            compartment = resolver.getCompartment(compartmentValue);
+        }
+
+
+        return new MetabolicParticipantImplementation(m, coef, compartment);
+
+    }
+
+    private Metabolite getMetabolite(String uid) {
+
+        // check for loaded metabolite
+        if (metaboliteMap.containsKey(uid))
+            return metaboliteMap.get(uid);
+
+        // could be a class
+        if (classMap.containsKey(uid))
+            return classMap.get(uid);
+
+        // try removing any pipe (|) bracing
+        Matcher matcher = PIPE_BRACE.matcher(uid);
+        if (matcher.matches()) {
+            return getMetabolite(matcher.group(1));
+        }
+
+
+        System.err.println("Unknown metabolite referenced in reaction. UID - " + uid + " a new entity will be created");
+
+        // create a new one
+        Metabolite m = DefaultEntityFactory.getInstance().ofClass(Metabolite.class);
+        m.setIdentifier(new BioCycChemicalIdentifier(uid));
+        m.setAbbreviation("n/a");
+        m.setName("unnamed metabolite");
+
+        metaboliteMap.put(m.getAccession(), m);
 
         return m;
 
@@ -183,7 +426,6 @@ public class BioCycConverter {
 
     }
 
-
     private static Integer getCharge(Collection<String> atomCharges) {
 
         Integer charge = 0;
@@ -201,9 +443,25 @@ public class BioCycConverter {
 
     // patterns
     private static final Pattern DB_LINK = Pattern.compile("\\((.+?)\"(.+?)\".*");
-    private static final Pattern REMOVE_TAGS = Pattern.compile("</?(?:i|sub|sup)/?>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REMOVE_TAGS = Pattern.compile("</?(?:i|sub|sup|em|small)/?>", Pattern.CASE_INSENSITIVE);
     private static final Pattern ATOM_CHARGE = Pattern.compile("\\(.+?\\s(.+?)\\)");
+    private static final Pattern PIPE_BRACE = Pattern.compile("\\|(.+?)\\|");
 
+    private static final Map<String, Direction> DIRECTION_MAP = new HashMap<String, Direction>();
+
+    static {
+
+        DIRECTION_MAP.put("LEFT-TO-RIGHT", Direction.FORWARD);
+        DIRECTION_MAP.put("IRREVERSIBLE-LEFT-TO-RIGHT", Direction.FORWARD);
+        DIRECTION_MAP.put("PHYSIOL-LEFT-TO-RIGHT", Direction.FORWARD);
+
+        DIRECTION_MAP.put("RIGHT-TO-LEFT", Direction.BACKWARD);
+        DIRECTION_MAP.put("PHYSIOL-RIGHT-TO-LEFT", Direction.BACKWARD);
+        DIRECTION_MAP.put("IRREVERSIBLE-RIGHT-TO-LEFT", Direction.BACKWARD);
+
+        DIRECTION_MAP.put("REVERSIBLE", Direction.BIDIRECTIONAL);
+
+    }
 
     // first arg: biocyc root folder
     // second arg name
@@ -211,11 +469,16 @@ public class BioCycConverter {
 
         BioCycConverter converter = new BioCycConverter(new File(args[0]), args[1]);
         converter.importMetabolites();
+        converter.importClasses();
+        converter.importReactions();
+        converter.importMetaboliteStructures();
 
         ReconstructionIOHelper.write(converter.reconstruction, converter.reconstruction.getContainer());
 
         System.out.println("Written reconstruction to " + converter.reconstruction.getContainer());
 
+
     }
+
 
 }

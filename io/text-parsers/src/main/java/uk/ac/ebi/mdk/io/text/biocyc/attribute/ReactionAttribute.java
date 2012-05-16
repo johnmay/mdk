@@ -20,6 +20,7 @@ package uk.ac.ebi.mdk.io.text.biocyc.attribute;
 
 /**
  * Attributes for BioCyc reactions.dat file
+ *
  * @author John May
  * @link http://bioinformatics.ai.sri.com/ptools/flatfile-format.html#compounds.dat
  */
@@ -34,6 +35,7 @@ public enum ReactionAttribute implements Attribute {
     DELTAG0,
     EC_NUMBER,
     ENZYMATIC_REACTION,
+    REACTION_DIRECTION,
     IN_PATHWAY,
     LEFT,
     OFFICIAL_EC("OFFICIAL-EC?", "OFFICIAL-EC\\?"),
@@ -42,7 +44,9 @@ public enum ReactionAttribute implements Attribute {
     SIGNAL,
     SPECIES,
     SPONTANEOUS("SPONTANEOUS?", "SPONTANEOUS\\?"),
-    SYNONYMS;
+    SYNONYMS,
+    SYSTEMATIC_NAME,
+    DBLINKS;
 
     private String name;
     private String pattern;
