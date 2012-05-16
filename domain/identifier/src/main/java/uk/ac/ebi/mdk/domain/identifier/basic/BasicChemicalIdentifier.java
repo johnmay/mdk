@@ -20,16 +20,17 @@
  */
 package uk.ac.ebi.mdk.domain.identifier.basic;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
-import uk.ac.ebi.mdk.lang.annotation.Brief;
-import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.ResourcePreferences;
 import uk.ac.ebi.mdk.domain.identifier.ChemicalIdentifier;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
+
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
 
 /**
@@ -50,7 +51,7 @@ public class BasicChemicalIdentifier
 
 
     public BasicChemicalIdentifier() {
-        super(nextAccession());
+        super();
     }
 
 
