@@ -60,6 +60,7 @@ public abstract class AbstractAnnotatedEntity
 
     private Enum<? extends Rating> rating = StarRating.ONE_STAR;
 
+    private static AnnotationFactory                ANNOTATION_FACTORY = DefaultAnnotationFactory.getInstance();
 
     public AbstractAnnotatedEntity() {
         AtomContainerSet set = new AtomContainerSet();
@@ -162,11 +163,9 @@ public abstract class AbstractAnnotatedEntity
      */
     public <T extends Annotation> Set<T> getAnnotationsExtending(final Class<T> c) {
 
-        AnnotationFactory factory = DefaultAnnotationFactory.getInstance();
-
         Set<T> subset = new HashSet<T>();
 
-        for (Class subclass : factory.getSubclasses(c)) {
+        for (Class subclass : ANNOTATION_FACTORY.getSubclasses(c)) {
             subset.addAll(getAnnotations(subclass));
         }
 
@@ -239,10 +238,9 @@ public abstract class AbstractAnnotatedEntity
     /**
      * Adds an identifier to the cross-reference collection
      */
-    @Deprecated
-    public boolean addCrossReference(Identifier id) {
-        CrossReference xref = new CrossReference(id);
-        return annotations.put(xref.getClass(), xref);
+    public boolean addCrossReference(Identifier identifier) {
+        addAnnotation(ANNOTATION_FACTORY.getCrossReference(identifier));
+        return true;
     }
 
 
