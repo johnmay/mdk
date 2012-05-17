@@ -52,12 +52,12 @@ public class BioCycConverter {
 
     private Map<String, Metabolite> metaboliteMap = new HashMap<String, Metabolite>();
     // class map may also hold proteins classes etc.
-    private Map<String, Metabolite> classMap = new HashMap<String, Metabolite>();
+    private Map<String, Metabolite> classMap      = new HashMap<String, Metabolite>();
 
     private AutomaticCompartmentResolver resolver = new AutomaticCompartmentResolver();
 
-    private File root;
-    private File data;
+    private File   root;
+    private File   data;
     private String name;
 
     private Reconstruction reconstruction;
@@ -454,10 +454,10 @@ public class BioCycConverter {
     }
 
     // patterns
-    private static final Pattern DB_LINK = Pattern.compile("\\((.+?)\"(.+?)\".*");
+    private static final Pattern DB_LINK     = Pattern.compile("\\((.+?)\"(.+?)\".*");
     private static final Pattern REMOVE_TAGS = Pattern.compile("</?(?:i|sub|sup|em|small)/?>", Pattern.CASE_INSENSITIVE);
     private static final Pattern ATOM_CHARGE = Pattern.compile("\\(.+?\\s(.+?)\\)");
-    private static final Pattern PIPE_BRACE = Pattern.compile("\\|(.+?)\\|");
+    private static final Pattern PIPE_BRACE  = Pattern.compile("\\|(.+?)\\|");
 
     private static final Map<String, Direction> DIRECTION_MAP = new HashMap<String, Direction>();
 
@@ -485,9 +485,11 @@ public class BioCycConverter {
         converter.importReactions();
         //converter.importMetaboliteStructures();
 
+        long start = System.currentTimeMillis();
         ReconstructionIOHelper.write(converter.reconstruction, converter.reconstruction.getContainer());
+        long end = System.currentTimeMillis();
 
-        System.out.println("Written reconstruction to " + converter.reconstruction.getContainer());
+        System.out.println("Written reconstruction [" + (end - start) + " ms] to " + converter.reconstruction.getContainer());
 
 
     }
