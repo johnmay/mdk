@@ -12,11 +12,16 @@ import java.util.regex.Pattern;
 /**
  * Class realises EntityMatcher using the names, abbreviations and synonyms of
  * the annotated entities.
+ * <p/>
+ * Compares the names, abbreviations and synonyms of two annotated entities. The names
+ * are normalised to lower case (Locale.ENGLISH) and trimmed of excess space. If
+ * any name/synonym matches then the metabolites are considered matches.
  *
  * @author johnmay
  */
 public class NameMatcher<E extends AnnotatedEntity>
-        implements EntityMatcher<E> {
+        extends AbstractMatcher<E, Set<String>>
+        implements EntityMatcher<E, Set<String>> {
 
     private Pattern pattern = Pattern.compile("[^A-z0-9]");
     private Boolean normalise = Boolean.FALSE;
@@ -36,55 +41,40 @@ public class NameMatcher<E extends AnnotatedEntity>
         this.pattern = pattern;
     }
 
-    /**
-     * Compares the names, abbreviations and synonyms of two annotated entities. The names
-     * are normalised to lower case (Locale.ENGLISH) and trimmed of excess space. If
-     * any name/synonym matches then the metabolites are considered matches.
-     *
-     * @inheritDoc
-     */
-    public Boolean matches(E query, E subject) {
+    @Override
+    public Set<String> calculatedMetric(E entity) {
 
-        Set<String> queryNames = new TreeSet<String>();
-        Set<String> subjectNames = new TreeSet<String>();
+        Set<String> names = new TreeSet<String>();
 
-        queryNames.add(normalise(query.getName()));
-        subjectNames.add(normalise(subject.getName()));
+        // add the entity name/abbreviation to the set
+        names.add(normalise(entity.getName()));
+        names.add(normalise(entity.getAbbreviation()));
 
-        queryNames.add(normalise(query.getAbbreviation()));
-        subjectNames.add(normalise(subject.getAbbreviation()));
-
-        if (containsMatch(queryNames, subjectNames)) {
-            return true;
+        // if we include synonyms fetch all synonym annotations
+        if (includeSynonyms) {
+            for (Synonym synonym : entity.getAnnotationsExtending(Synonym.class)) {
+                names.add(normalise(synonym.getValue()));
+            }
         }
 
-        if (!includeSynonyms) {
-            return false;
-        }
-        // no match found yet... include the synonyms
-
-        for (Synonym synonym : query.getAnnotations(Synonym.class)) {
-            queryNames.add(normalise(synonym.getValue()));
-        }
-        for (Synonym synonym : subject.getAnnotations(Synonym.class)) {
-            subjectNames.add(normalise(synonym.getValue()));
-        }
-
-        return containsMatch(queryNames, subjectNames);
+        return names;
 
     }
+
+    @Override
+    public Boolean matches(Set<String> queryMetric, Set<String> subjectMetric) {
+        for (String query : queryMetric) {
+            if (!query.isEmpty() && subjectMetric.contains(query)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public String normalise(String name) {
         name = name.toLowerCase(Locale.ENGLISH).trim();
         return normalise ? pattern.matcher(name).replaceAll("") : name;
     }
 
-    private Boolean containsMatch(Set<String> queryNames, Set<String> subjectNames) {
-        for (String query : queryNames) {
-            if (!query.isEmpty() && subjectNames.contains(query)) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

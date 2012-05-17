@@ -12,15 +12,23 @@ import java.util.Set;
 
 
 /**
- *          MetaboliteHashCodeMatcher 2012.02.16 <br/>
- *          Class realises MetaboliteComparator using the hash codes of the
- *          structures to compare metabolites
+ * MetaboliteHashCodeMatcher 2012.02.16 <br/>
+ * Class realises MetaboliteComparator using the hash codes of the
+ * structures to compare metabolites
+ * <p/>
+ * <p/>
+ * Compares the {@see ChemicalStructure} annotations of the metabolites
+ * using the {@see MolecularHashFactory} to generate molecular hash codes.
+ * If any of the chemical structure hashes are matches they metabolites
+ * are considered matches
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class MetaboliteHashCodeMatcher
-        implements EntityMatcher<Metabolite> {
+        extends AbstractMatcher<Metabolite, Set<Integer>>
+        implements EntityMatcher<Metabolite, Set<Integer>> {
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteHashCodeMatcher.class);
 
@@ -28,48 +36,61 @@ public class MetaboliteHashCodeMatcher
 
     private final Set<AtomSeed> seeds;
 
+    private static final Integer DEFAULT_ATOM_COUNT_THRESHOLD = 85;
+    private int atomCountThreshold = DEFAULT_ATOM_COUNT_THRESHOLD;
+
 
     public MetaboliteHashCodeMatcher() {
-        seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class, ConnectedAtomSeed.class, BondOrderSumSeed.class);
+        this(DEFAULT_ATOM_COUNT_THRESHOLD);
     }
 
+    public MetaboliteHashCodeMatcher(Integer threshold) {
+        this(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class, ConnectedAtomSeed.class, BondOrderSumSeed.class),
+             threshold);
+    }
 
     public MetaboliteHashCodeMatcher(Set<AtomSeed> seeds) {
+        this(seeds, DEFAULT_ATOM_COUNT_THRESHOLD);
+    }
+
+    /**
+     * Main constructor
+     *
+     * @param seeds
+     * @param threshold
+     */
+    public MetaboliteHashCodeMatcher(Set<AtomSeed> seeds, Integer threshold) {
         this.seeds = seeds;
     }
 
+    @Override
+    public Boolean matches(Set<Integer> queryMetric, Set<Integer> subjectMetric) {
 
-    /**
-     * Compares the {@see ChemicalStructure} annotations of the metabolites
-     * using the {@see MolecularHashFactory} to generate molecular hash codes.
-     * If any of the chemical structure hashes are matches they metabolites
-     * are considered matches
-     * @inheritDoc
-     */
-    public Boolean matches(Metabolite query, Metabolite subject) {
-
-        Set<Integer> queryHashes = new HashSet<Integer>();
-        Set<Integer> subjectHashes = new HashSet<Integer>();
-
-        for (ChemicalStructure structure : query.getStructures()) {
-            IAtomContainer atomcontainer = structure.getStructure();
-            queryHashes.add(factory.getHash(atomcontainer, seeds).hash);
-        }
-
-        for (ChemicalStructure structure : subject.getStructures()) {
-            IAtomContainer atomcontainer = structure.getStructure();
-            subjectHashes.add(factory.getHash(atomcontainer, seeds).hash);
-        }
-
-        for (Integer queryHash : queryHashes) {
-            for (Integer subjectHash : subjectHashes) {
-                if (queryHash.equals(subjectHash)) {
-                    return true;
-                }
+        for (Integer queryHash : queryMetric) {
+            if (subjectMetric.contains(queryHash)) {
+                return true;
             }
         }
 
         return false;
 
     }
+
+    @Override
+    public Set<Integer> calculatedMetric(Metabolite entity) {
+
+        Set<Integer> hashes = new HashSet<Integer>();
+
+        for (ChemicalStructure annotation : entity.getStructures()) {
+            IAtomContainer structure = annotation.getStructure();
+            if (structure.getAtomCount() < atomCountThreshold) {
+                hashes.add(factory.getHash(structure, seeds).hash);
+            }
+        }
+
+        return hashes;
+
+    }
+
+
 }

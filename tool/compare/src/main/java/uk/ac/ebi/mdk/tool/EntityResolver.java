@@ -37,7 +37,7 @@ public class EntityResolver<E extends Entity> {
 
     private static final Logger LOGGER = Logger.getLogger(EntityResolver.class);
 
-    private Stack<EntityMatcher<E>> matchers = new Stack<EntityMatcher<E>>();
+    private Stack<EntityMatcher<E, ?>> matchers = new Stack<EntityMatcher<E, ?>>();
     private Collection<E> references;
 
     public EntityResolver() {
@@ -65,7 +65,7 @@ public class EntityResolver<E extends Entity> {
      *
      * @see Stack#push(Object)
      */
-    public void push(EntityMatcher<E> matcher) {
+    public void push(EntityMatcher<E,?> matcher) {
         matchers.push(matcher);
     }
 
@@ -76,7 +76,7 @@ public class EntityResolver<E extends Entity> {
      *
      * @see java.util.Stack#pop()
      */
-    public EntityMatcher<E> pop() {
+    public EntityMatcher<E,?> pop() {
         return matchers.pop();
     }
 
@@ -87,7 +87,7 @@ public class EntityResolver<E extends Entity> {
      *
      * @see java.util.Stack#peek()
      */
-    public EntityMatcher<E> peek() {
+    public EntityMatcher<E,?> peek() {
         return matchers.peek();
     }
 

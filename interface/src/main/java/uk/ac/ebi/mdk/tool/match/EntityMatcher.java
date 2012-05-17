@@ -27,7 +27,7 @@ import uk.ac.ebi.mdk.domain.entity.Entity;
  *
  * @author johnmay
  */
-public interface EntityMatcher<E extends Entity> {
+public interface EntityMatcher<E extends Entity, M> {
 
     /**
      * Determines whether the query entities are matches in the score of the
@@ -39,5 +39,24 @@ public interface EntityMatcher<E extends Entity> {
      * @return whether the entities are matches in the score of this test
      */
     public Boolean matches(E query, E subject);
+
+    /**
+     * Calculates the required metric for this method metric.
+     *
+     * @param entity
+     *
+     * @return
+     */
+    public M calculatedMetric(E entity);
+
+    /**
+     * Compares metrics
+     *
+     * @param queryMetric
+     * @param subjectMetric
+     *
+     * @return
+     */
+    public Boolean matches(M queryMetric, M subjectMetric);
 
 }

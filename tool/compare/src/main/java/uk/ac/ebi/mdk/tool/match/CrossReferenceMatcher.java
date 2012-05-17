@@ -6,46 +6,43 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author John May
  */
-public class CrossReferenceMatcher<E extends AnnotatedEntity> implements EntityMatcher<E> {
+public class CrossReferenceMatcher<E extends AnnotatedEntity>
+        extends AbstractMatcher<E, Set<Identifier>>
+        implements EntityMatcher<E, Set<Identifier>> {
+
 
     @Override
-    public Boolean matches(E query, E subject) {
-
-        // extract identifiers to avoid corrupting the #equals() methods in CrossReference.
-        // if we changed them so that KEGGCompoundCrossReference could matches CrossReference
-        // we might get unexpected behaviour in maps
-        Collection<Identifier> queryXrefs   = getIdentifiers(query.getAnnotationsExtending(CrossReference.class));
-        Collection<Identifier> subjectXrefs = getIdentifiers(subject.getAnnotationsExtending(CrossReference.class));
-
-        // add self
-        queryXrefs.add(query.getIdentifier());
-        subjectXrefs.add(subject.getIdentifier());
-
-        // find match
-        for(Identifier reference : queryXrefs){
-            if(subjectXrefs.contains(reference)){
+    public Boolean matches(Set<Identifier> query, Set<Identifier> subject) {
+        for (Identifier reference : query) {
+            if (subject.contains(reference)) {
                 return true;
             }
         }
-
         return false;
-
     }
 
-    private Collection<Identifier> getIdentifiers(Collection<CrossReference> references){
+    @Override
+    public Set<Identifier> calculatedMetric(E entity) {
 
-        Collection<Identifier> identifiers = new HashSet<Identifier>();
 
-        for(CrossReference reference : references ){
+        Set<Identifier> identifiers = new HashSet<Identifier>();
+
+        Collection<CrossReference> references = entity.getAnnotationsExtending(CrossReference.class);
+
+        for (CrossReference reference : references) {
             identifiers.add(reference.getIdentifier());
         }
+
+        identifiers.add(entity.getIdentifier());
 
         return identifiers;
 
     }
+
 
 }
