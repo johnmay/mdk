@@ -5,8 +5,9 @@ import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author John May
@@ -15,22 +16,17 @@ public class CrossReferenceMatcher<E extends AnnotatedEntity>
         extends AbstractMatcher<E, Set<Identifier>>
         implements EntityMatcher<E, Set<Identifier>> {
 
+    private static Comparator<Identifier> COMPARATOR = new CrossReferenceComparator();
 
     @Override
-    public Boolean matches(Set<Identifier> query, Set<Identifier> subject) {
-        for (Identifier reference : query) {
-            if (subject.contains(reference)) {
-                return true;
-            }
-        }
-        return false;
+    public Boolean matches(Set<Identifier> queryMetric, Set<Identifier> subjectMetric) {
+        return matchAny(queryMetric, subjectMetric);
     }
 
     @Override
     public Set<Identifier> calculatedMetric(E entity) {
 
-
-        Set<Identifier> identifiers = new HashSet<Identifier>();
+        Set<Identifier> identifiers = new TreeSet<Identifier>(COMPARATOR);
 
         Collection<CrossReference> references = entity.getAnnotationsExtending(CrossReference.class);
 
@@ -42,6 +38,13 @@ public class CrossReferenceMatcher<E extends AnnotatedEntity>
 
         return identifiers;
 
+    }
+
+    private static class CrossReferenceComparator implements Comparator<Identifier> {
+        @Override
+        public int compare(Identifier o1, Identifier o2) {
+            return o1.getAccession().compareTo(o2.getAccession());
+        }
     }
 
 

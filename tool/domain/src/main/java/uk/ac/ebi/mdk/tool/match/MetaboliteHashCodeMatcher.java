@@ -65,15 +65,7 @@ public class MetaboliteHashCodeMatcher
 
     @Override
     public Boolean matches(Set<Integer> queryMetric, Set<Integer> subjectMetric) {
-
-        for (Integer queryHash : queryMetric) {
-            if (subjectMetric.contains(queryHash)) {
-                return true;
-            }
-        }
-
-        return false;
-
+        return matchAny(queryMetric, subjectMetric);
     }
 
     @Override

@@ -63,12 +63,7 @@ public class NameMatcher<E extends AnnotatedEntity>
 
     @Override
     public Boolean matches(Set<String> queryMetric, Set<String> subjectMetric) {
-        for (String query : queryMetric) {
-            if (!query.isEmpty() && subjectMetric.contains(query)) {
-                return true;
-            }
-        }
-        return false;
+        return matchAny(queryMetric, subjectMetric);
     }
 
 

@@ -50,12 +50,7 @@ public class MetaboliteInChIMatcher
 
     @Override
     public Boolean matches(Set<String> queryMetric, Set<String> subjectMetric) {
-        for (String queryInChI : queryMetric) {
-            if (subjectMetric.contains(queryInChI)) {
-                return true;
-            }
-        }
-        return false;
+        return matchAny(queryMetric, subjectMetric);
     }
 
     /**
