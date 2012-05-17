@@ -264,7 +264,7 @@ public class BioCycConverter {
             rxn.addAnnotation(new Synonym(synonym));
         }
         for (String synonym : entry.get(ReactionAttribute.SYSTEMATIC_NAME)) {
-            rxn.addAnnotation(new Synonym(synonym));
+            rxn.addAnnotation(new SystematicName(synonym));
         }
 
         rxn.addAnnotations(getCrossReferences(entry.get(ReactionAttribute.DBLINKS)));
@@ -474,7 +474,7 @@ public class BioCycConverter {
         converter.importMetabolites();
         converter.importClasses();
         converter.importReactions();
-        converter.importMetaboliteStructures();
+        //converter.importMetaboliteStructures();
 
         ReconstructionIOHelper.write(converter.reconstruction, converter.reconstruction.getContainer());
 
