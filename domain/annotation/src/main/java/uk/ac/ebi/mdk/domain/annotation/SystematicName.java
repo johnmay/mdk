@@ -21,7 +21,7 @@ public class SystematicName extends Synonym {
 
     @Override
     public SystematicName newInstance() {
-        return newInstance();
+        return new SystematicName();
     }
 
     @Override

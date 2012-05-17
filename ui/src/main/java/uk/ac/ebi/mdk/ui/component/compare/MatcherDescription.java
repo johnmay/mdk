@@ -15,11 +15,11 @@ public class MatcherDescription<E extends Entity> {
 
     private String name;
     private String description;
-    private EntityMatcher<E> matcher;
+    private EntityMatcher<E,?> matcher;
 
     public MatcherDescription(String name,
                               String description,
-                              EntityMatcher<E> matcher) {
+                              EntityMatcher<E,?> matcher) {
         this.name        = name;
         this.description = description;
         this.matcher     = matcher;
@@ -33,7 +33,7 @@ public class MatcherDescription<E extends Entity> {
         return description;
     }
 
-    public EntityMatcher<E> getMatcher() {
+    public EntityMatcher<E,?> getMatcher() {
         return matcher;
     }
 }
