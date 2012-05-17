@@ -21,7 +21,7 @@ public class AbstractDataInput<M>
         extends MarshalManager<M> {
 
     private DataInput in;
-    private Map<Short,Object> objectMap = new HashMap<Short,Object>(300);
+    private Map<Integer,Object> objectMap = new HashMap<Integer,Object>(300);
     
     public AbstractDataInput(DataInput in, Version version){
         super(version);
@@ -31,9 +31,9 @@ public class AbstractDataInput<M>
     public DataInput getDataInput(){
         return in;
     }
-    
+
     public Class readClass() throws IOException, ClassNotFoundException {
-        short id = readObjectId();
+        Integer id = readObjectId();
         return hasObject(id) ? (Class) get(id) : put(id, readNewClass());
     }
     
@@ -42,19 +42,19 @@ public class AbstractDataInput<M>
         return  Class.forName(name);
     }
     
-    public Short readObjectId() throws IOException {
-        return in.readShort();
+    public Integer readObjectId() throws IOException {
+        return in.readInt();
     }
     
-    public boolean hasObject(Short id){
+    public boolean hasObject(Integer id){
         return objectMap.containsKey(id);
     }
     
-    public <O> O get(Short id){
+    public <O> O get(Integer id){
         return (O) objectMap.get(id);
     }
     
-    public <O> O put(Short id, O obj){
+    public <O> O put(Integer id, O obj){
         objectMap.put(id, obj);
         return obj;
     }

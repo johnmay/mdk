@@ -41,8 +41,8 @@ public class AnnotationDataInputStream
     private static final Logger LOGGER = Logger.getLogger(AnnotationDataInputStream.class);
     private DataInput in;
     private ObservationInput observationInput;
-    private IdentifierInput  identifierInput;
-    
+    private IdentifierInput identifierInput;
+
     public AnnotationDataInputStream(DataInputStream in, Version v) {
         this(in, null, v);
     }
@@ -60,19 +60,19 @@ public class AnnotationDataInputStream
         this.observationInput = observationInput;
 
         // special readers
-       add(AuthorAnnotation.class, new AuthorCommentReader(in));
-       add(AtomContainerAnnotation.class, new AtomContainerAnnotationReader(in));
-       add(GibbsEnergy.class, new GibbsEnergyReader(in));
+        add(AuthorAnnotation.class, new AuthorCommentReader(in));
+        add(AtomContainerAnnotation.class, new AtomContainerAnnotationReader(in));
+        add(GibbsEnergy.class, new GibbsEnergyReader(in));
 
-       // special readers for tasks
-       add(Parameter.class,           new ParameterReader(in));
-       add(FileParameter.class,       new FileParameterReader(in));
-       add(ExecutableParameter.class, new ExecutableParameterReader(in));
+        // special readers for tasks
+        add(Parameter.class, new ParameterReader(in));
+        add(FileParameter.class, new FileParameterReader(in));
+        add(ExecutableParameter.class, new ExecutableParameterReader(in));
 
 
     }
-    
-    public AnnotationReader getReader(Class c){
+
+    public AnnotationReader getReader(Class c) {
         return hasMarshaller(c, getVersion()) ? getMarshaller(c, getVersion()) : add(c, createReader(c), getVersion());
     }
 
@@ -82,32 +82,34 @@ public class AnnotationDataInputStream
     }
 
     public <A extends Annotation> A read(Class<A> c) throws IOException, ClassNotFoundException {
-        Short id = readObjectId();
-        
+        Integer id = readObjectId();
+
         AnnotationReader reader = getReader(c);
-        return hasObject(id) ? (A) get(id) : (A) put(id, reader.readAnnotation());
+        if (hasObject(id)) {
+            return (A) get(id);
+        }
+        return (A) put(id, reader.readAnnotation());
     }
 
-    public AnnotationReader createReader(Class c){
+    public AnnotationReader createReader(Class c) {
 
-        if(StringAnnotation.class.isAssignableFrom(c)) {
+        if (StringAnnotation.class.isAssignableFrom(c)) {
             return new StringAnnotationReader(c, in);
-        } else if (DoubleAnnotation.class.isAssignableFrom(c)){
+        } else if (DoubleAnnotation.class.isAssignableFrom(c)) {
             return new DoubleAnnotationReader(c, in);
-        } else if (BooleanAnnotation.class.isAssignableFrom(c)){
+        } else if (BooleanAnnotation.class.isAssignableFrom(c)) {
             return new BooleanAnnotationReader(c, in);
-        } else if (FloatAnnotation.class.isAssignableFrom(c)){
+        } else if (FloatAnnotation.class.isAssignableFrom(c)) {
             return new FloatAnnotationReader(c, in);
-        } else if (IntegerAnnotation.class.isAssignableFrom(c)){
+        } else if (IntegerAnnotation.class.isAssignableFrom(c)) {
             return new IntegerAnnotationReader(c, in);
-        } else if (CrossReference.class.isAssignableFrom(c)){
+        } else if (CrossReference.class.isAssignableFrom(c)) {
             return new CrossReferenceReader(c, identifierInput, observationInput);
         }
 
-        throw new InvalidParameterException("Could not create writer for " + c.getName() );
+        throw new InvalidParameterException("Could not create writer for " + c.getName());
 
     }
-
 
 
 }

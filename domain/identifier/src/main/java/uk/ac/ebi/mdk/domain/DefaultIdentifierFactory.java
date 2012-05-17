@@ -17,21 +17,10 @@
 package uk.ac.ebi.mdk.domain;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
-import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
-import uk.ac.ebi.mdk.domain.identifier.classification.*;
-import uk.ac.ebi.mdk.domain.identifier.PubMedIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.TrEMBLIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.type.SequenceIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.InChI;
-import uk.ac.ebi.mdk.domain.identifier.basic.*;
-import uk.ac.ebi.mdk.domain.identifier.basic.ChromosomeNumber;
 import uk.ac.ebi.mdk.domain.identifier.*;
-import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
-import uk.ac.ebi.mdk.domain.identifier.HSSPIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.PDBIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.*;
+import uk.ac.ebi.mdk.domain.identifier.classification.*;
+import uk.ac.ebi.mdk.domain.identifier.type.SequenceIdentifier;
 
 import java.security.InvalidParameterException;
 import java.util.*;

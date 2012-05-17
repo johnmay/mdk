@@ -50,7 +50,7 @@ public class ObservationDataInputStream
     public Observation read(Class c) throws IOException, ClassNotFoundException {
         ObservationReader reader = getReader(c);
 
-        short id = readObjectId();
+        Integer id = readObjectId();
 
         // if we have an object for that id, return it or read the new object,
         // store and return

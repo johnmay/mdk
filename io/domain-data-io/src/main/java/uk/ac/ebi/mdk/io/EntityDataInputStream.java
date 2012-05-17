@@ -92,7 +92,7 @@ public class EntityDataInputStream
     @Override
     public <E extends Entity> E read(Class<E> c) throws IOException, ClassNotFoundException {
 
-        short id = readObjectId();
+        Integer id = readObjectId();
 
         return hasObject(id) ? (E) get(id) : (E) put(id, readNewEntity(c));
     }

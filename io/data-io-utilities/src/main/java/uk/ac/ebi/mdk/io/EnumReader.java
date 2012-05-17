@@ -23,7 +23,7 @@ public class EnumReader extends AbstractDataInput {
     }
 
     public Enum readEnum() throws IOException, ClassNotFoundException {
-        short id = readObjectId();
+        Integer id = readObjectId();
         return hasObject(id) ? (Enum) get(id) : (Enum) put(id, readNewEnum());
     }
 
