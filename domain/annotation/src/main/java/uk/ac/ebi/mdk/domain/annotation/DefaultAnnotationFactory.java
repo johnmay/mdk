@@ -91,6 +91,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
                                                    new FileParameter(),
                                                    new Parameter(),
                                                    new Synonym(),
+                                                   new SystematicName(),
                                                    new Locus(),
                                                    new Citation(),
                                                    new FluxLowerBound(),
