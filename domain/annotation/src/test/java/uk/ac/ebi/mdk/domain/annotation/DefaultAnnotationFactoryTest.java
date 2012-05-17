@@ -21,24 +21,24 @@
  */
 package uk.ac.ebi.mdk.domain.annotation;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.*;
-
-import static org.junit.Assert.*;
-
-import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
-import uk.ac.ebi.mdk.domain.identifier.classification.TransportClassificationNumber;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.HMDBIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.classification.TransportClassificationNumber;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.Assert.*;
 
 
 /**
@@ -131,6 +131,21 @@ public class DefaultAnnotationFactoryTest {
     public void testOfContext_Class() {
     }
 
+
+    @Test
+    public void testGetSubclasses() {
+
+        AnnotationFactory factory = DefaultAnnotationFactory.getInstance();
+        Collection<Class<? extends Annotation>> classes = factory.getSubclasses(CrossReference.class);
+
+        assertTrue(classes.contains(EnzymeClassification.class));
+        assertTrue(classes.contains(CrossReference.class));
+        assertTrue(classes.contains(Classification.class));
+        assertTrue(classes.contains(KEGGCrossReference.class));
+        assertTrue(classes.contains(ChEBICrossReference.class));
+
+
+    }
 
     @Test
     public void testGetCrossReference() {

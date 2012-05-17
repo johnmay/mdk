@@ -20,6 +20,7 @@ package uk.ac.ebi.mdk.domain.annotation;
 
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -62,7 +63,6 @@ public interface AnnotationFactory {
     public <A extends Annotation> A ofClass(Class<? extends A> c);
 
 
-
     /**
      * Access a set of annotation flags that could match this entity. This provides suggestion
      * of matching flag's for this entity using the {@see AbstractFlag.matches(AnnotatedEntity)}
@@ -74,6 +74,17 @@ public interface AnnotationFactory {
      * @see uk.ac.ebi.mdk.domain.annotation.Flag#matches(uk.ac.ebi.mdk.domain.entity.AnnotatedEntity)
      */
     public Set<Flag> getMatchingFlags(AnnotatedEntity entity);
+
+
+    /**
+     * Access a collection of all known sub-classes of the annotation. e.g. providing CrossReference
+     * should return KEGGCompoundCrossReference, ChEBICrossReference, EnzymeClassification etc..
+     *
+     * @param c super-class
+     *
+     * @return all known sub-classes and the provided class
+     */
+    public Collection<Class<? extends Annotation>> getSubclasses(Class<? extends Annotation> c);
 
 
 }

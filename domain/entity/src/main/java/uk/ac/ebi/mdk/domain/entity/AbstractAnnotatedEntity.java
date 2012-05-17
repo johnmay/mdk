@@ -22,13 +22,15 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.AtomContainerSet;
-import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.AnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.collection.ObservationManager;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
-import uk.ac.ebi.mdk.lang.annotation.Unique;
 import uk.ac.ebi.mdk.domain.observation.ObservationCollection;
+import uk.ac.ebi.mdk.lang.annotation.Unique;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -147,13 +149,7 @@ public abstract class AbstractAnnotatedEntity
      * @return
      */
     public <T extends Annotation> Set<T> getAnnotationsExtending(final T base) {
-        Set<T> annotationSubset = new HashSet<T>();
-        for (Annotation annotation : getAnnotations()) {
-            if (base.getClass().isInstance(annotation)) {
-                annotationSubset.add((T) annotation);
-            }
-        }
-        return annotationSubset;
+        return (Set<T>) getAnnotationsExtending(base.getClass());
     }
 
 
@@ -165,13 +161,17 @@ public abstract class AbstractAnnotatedEntity
      * @return
      */
     public <T extends Annotation> Set<T> getAnnotationsExtending(final Class<T> c) {
-        Set<T> annotationSubset = new HashSet<T>();
-        for (Annotation annotation : getAnnotations()) {
-            if (c.isAssignableFrom(annotation.getClass())) {
-                annotationSubset.add((T) annotation);
-            }
+
+        AnnotationFactory factory = DefaultAnnotationFactory.getInstance();
+
+        Set<T> subset = new HashSet<T>();
+
+        for (Class subclass : factory.getSubclasses(c)) {
+            subset.addAll(getAnnotations(subclass));
         }
-        return annotationSubset;
+
+        return subset;
+
     }
 
 
@@ -189,11 +189,11 @@ public abstract class AbstractAnnotatedEntity
     public Collection<Class<? extends Observation>> getObservationClasses() {
         return observations.getClasses();
     }
-    
-    public Collection<Observation> getObservations(Class<? extends Observation> c){
+
+    public Collection<Observation> getObservations(Class<? extends Observation> c) {
         return observations.get(c);
     }
-    
+
 
     /**
      * Accessor to the stored observations

@@ -18,20 +18,22 @@
 package uk.ac.ebi.mdk.domain.annotation;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.*;
 import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.FileParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ClassificationIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
-import uk.ac.ebi.mdk.domain.annotation.crossreference.*;
-import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.lang.annotation.Context;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.lang.reflect.Constructor;
 import java.security.InvalidParameterException;
@@ -53,6 +55,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
     private static Constructor[] constructors = new Constructor[Byte.MAX_VALUE];
 
     private static Map<Class, Annotation> instances = new HashMap<Class, Annotation>();
+    private Multimap<Class<? extends Annotation>, Class<? extends Annotation>> subclasses = HashMultimap.create();
 
     private ListMultimap<Class, Annotation> contextMap = ArrayListMultimap.create();
 
@@ -308,6 +311,30 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
         }
 
         return xrefs.isEmpty() ? new CrossReference() : xrefs.iterator().next();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Collection<Class<? extends Annotation>> getSubclasses(Class<? extends Annotation> c) {
+
+        // check if we have the subclasses already
+        if (subclasses.containsKey(c)) {
+            return subclasses.get(c);
+        }
+
+        // no cache - build the map
+        for (Annotation annotation : instances.values()) {
+
+            if (c.isInstance(annotation)) {
+                this.subclasses.put(c, annotation.getClass());
+            }
+
+        }
+
+        return subclasses.get(c);
+
     }
 
 
