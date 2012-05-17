@@ -40,7 +40,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute.CHEMICAL_FORMULA;
-import static uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute.DBLINKS;
 
 /**
  * Converts a BioCyc project to MDK domain objects
@@ -233,8 +232,16 @@ public class BioCycConverter {
                 m.addAnnotation(new MolecularFormula(mf));
         }
 
-        m.addAnnotations(getCrossReferences(entry.get(DBLINKS)));
+        m.addAnnotations(getCrossReferences(entry.get(CompoundAttribute.DBLINKS)));
 
+
+        // synonyms and systematic name
+        for (String synonym : entry.get(CompoundAttribute.SYNONYMS)) {
+            m.addAnnotation(new Synonym(clean(synonym)));
+        }
+        for (String synonym : entry.get(CompoundAttribute.SYSTEMATIC_NAME)) {
+            m.addAnnotation(new SystematicName(clean(synonym)));
+        }
 
         return m;
 
@@ -261,10 +268,10 @@ public class BioCycConverter {
 
         // synonyms and systematic name
         for (String synonym : entry.get(ReactionAttribute.SYNONYMS)) {
-            rxn.addAnnotation(new Synonym(synonym));
+            rxn.addAnnotation(new Synonym(clean(synonym)));
         }
         for (String synonym : entry.get(ReactionAttribute.SYSTEMATIC_NAME)) {
-            rxn.addAnnotation(new SystematicName(synonym));
+            rxn.addAnnotation(new SystematicName(clean(synonym)));
         }
 
         rxn.addAnnotations(getCrossReferences(entry.get(ReactionAttribute.DBLINKS)));
@@ -372,14 +379,16 @@ public class BioCycConverter {
         Matcher matcher = DB_LINK.matcher(dblink);
         if (matcher.find()) {
 
-            String resource = matcher.group(1);
-            String accession = matcher.group(2);
+            String resource = matcher.group(1).trim();
+            String accession = matcher.group(2).trim();
 
             IdentifierFactory ID_FACTORY = DefaultIdentifierFactory.getInstance();
 
             if (ID_FACTORY.hasSynonym(resource)) {
                 return DefaultAnnotationFactory.getInstance().getCrossReference(
                         ID_FACTORY.ofSynonym(resource, accession));
+            } else {
+                System.err.println("No synonym found for resource " + resource);
             }
 
         }
