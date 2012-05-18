@@ -19,6 +19,7 @@
 package uk.ac.ebi.mdk.domain.annotation;
 
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.Collection;
 import java.util.List;
