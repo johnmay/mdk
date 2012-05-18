@@ -33,7 +33,7 @@ public abstract class AbstractMatcher<E extends Entity, M> implements EntityMatc
     /**
      * Simple collection matching method determines whether there is any union between the
      * two collections. If the collection objects are not primitives should override the
-     * equals/hashCode methods. For optimal performance a TreeSet would work best with this
+     * equals/hashCode methods. For optimal performance a HashSet would work best with this
      * method.
      *
      * @param queryMetrics   collection of query metrics
