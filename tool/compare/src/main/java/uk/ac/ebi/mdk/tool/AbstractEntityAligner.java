@@ -20,12 +20,10 @@ package uk.ac.ebi.mdk.tool;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.Entity;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.tool.match.EntityMatcher;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Entity resolver controls matching of query entities to a reference using a stack of matching
@@ -33,18 +31,22 @@ import java.util.Stack;
  *
  * @author John May
  */
-public class EntityResolver<E extends Entity> {
+public class AbstractEntityAligner<E extends Entity> {
 
-    private static final Logger LOGGER = Logger.getLogger(EntityResolver.class);
+    private static final Logger LOGGER = Logger.getLogger(AbstractEntityAligner.class);
 
     private Stack<EntityMatcher<E, ?>> matchers = new Stack<EntityMatcher<E, ?>>();
     private Collection<E> references;
+    private Map<Identifier, Object[]> queryMetrics     = new HashMap<Identifier, Object[]>();
+    private Map<Identifier, Object[]> referenceMetrics = new HashMap<Identifier, Object[]>();
 
-    public EntityResolver() {
+    private boolean cache = false;
+
+    public AbstractEntityAligner() {
         this(new ArrayList<E>());
     }
 
-    public EntityResolver(Collection<E> references) {
+    public AbstractEntityAligner(Collection<E> references) {
         // take a shallow copy
         this.references = new ArrayList<E>(references);
     }
@@ -65,7 +67,7 @@ public class EntityResolver<E extends Entity> {
      *
      * @see Stack#push(Object)
      */
-    public void push(EntityMatcher<E,?> matcher) {
+    public void push(EntityMatcher<E, ?> matcher) {
         matchers.push(matcher);
     }
 
@@ -76,7 +78,7 @@ public class EntityResolver<E extends Entity> {
      *
      * @see java.util.Stack#pop()
      */
-    public EntityMatcher<E,?> pop() {
+    public EntityMatcher<E, ?> pop() {
         return matchers.pop();
     }
 
@@ -87,7 +89,7 @@ public class EntityResolver<E extends Entity> {
      *
      * @see java.util.Stack#peek()
      */
-    public EntityMatcher<E,?> peek() {
+    public EntityMatcher<E, ?> peek() {
         return matchers.peek();
     }
 
@@ -95,10 +97,12 @@ public class EntityResolver<E extends Entity> {
 
         List<E> matching = new ArrayList<E>();
 
-        for (EntityMatcher matcher : matchers) {
+        for (int i = 0; i < matchers.size(); i++) {
+
+            EntityMatcher matcher = matchers.get(i);
 
             for (E reference : references) {
-                if (matcher.matches(entity, reference)) {
+                if (matcher.matches(getQueryMetric(i, entity), getReferenceMetric(i, reference))) {
                     matching.add(reference);
                 }
             }
@@ -119,5 +123,43 @@ public class EntityResolver<E extends Entity> {
         matchers.clear();
     }
 
+    public Object getQueryMetric(int i, E entity) {
+        return getMetric(queryMetrics, i, entity);
+    }
 
+    public Object getReferenceMetric(int i, E entity) {
+        return getMetric(referenceMetrics, i, entity);
+    }
+
+    public Object getMetric(Map<Identifier, Object[]> cacheMap, int i, E entity) {
+
+        if(!cache)
+            return matchers.get(i).calculatedMetric(entity);
+
+        Identifier identifier = entity.getIdentifier();
+
+        if (cacheMap.containsKey(identifier)) {
+            return cacheMap.get(identifier)[i];
+        } else {
+            cacheMap.put(identifier, calculateMetrics(entity));
+        }
+
+        return cacheMap.get(identifier)[i];
+
+    }
+
+    public Object[] calculateMetrics(E entity) {
+
+        Object[] metrics = new Object[matchers.size()];
+        for (int i = 0; i < matchers.size(); i++) {
+            metrics[i] = matchers.get(i).calculatedMetric(entity);
+        }
+
+        return metrics;
+
+    }
+
+    public void setCache(boolean cache) {
+        this.cache = cache;
+    }
 }
