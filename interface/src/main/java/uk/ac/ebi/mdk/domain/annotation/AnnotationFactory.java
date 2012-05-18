@@ -86,5 +86,14 @@ public interface AnnotationFactory {
      */
     public Collection<Class<? extends Annotation>> getSubclasses(Class<? extends Annotation> c);
 
+    /**
+     * Creates an appropriate cross-reference
+     *
+     * @param identifier
+     * @param <I>
+     *
+     * @return
+     */
+    public <I extends Identifier> Annotation getCrossReference(I identifier);
 
 }
