@@ -4,17 +4,17 @@
  * 2012.02.01
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,41 +23,41 @@ package uk.ac.ebi.mdk.ui.edit.crossreference.module;
 import com.jgoodies.forms.factories.Borders;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.awt.Dimension;
-import java.awt.event.*;
-import java.util.Collection;
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.annotation.Source;
-import uk.ac.ebi.mdk.domain.annotation.Synonym;
-import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
-import uk.ac.ebi.mdk.ui.component.MetaboliteMatchIndication;
+import uk.ac.ebi.mdk.domain.annotation.Source;
+import uk.ac.ebi.mdk.domain.annotation.Synonym;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
+import uk.ac.ebi.mdk.ui.component.MetaboliteMatchIndication;
 import uk.ac.ebi.mdk.ui.component.table.MoleculeTable;
 import uk.ac.ebi.mdk.ui.component.table.accessor.AccessionAccessor;
 import uk.ac.ebi.mdk.ui.component.table.accessor.AnnotationAccess;
 import uk.ac.ebi.mdk.ui.component.table.accessor.NameAccessor;
+import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Collection;
 
 
 /**
+ * DatabaseSearch 2012.02.01
  *
- *          DatabaseSearch 2012.02.01
+ * @author johnmay
+ * @author $Author$ (this version)
+ *         <p/>
+ *         Class description
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Class description
- *
  */
 public class DatabaseSearch
         implements CrossreferenceModule {
@@ -72,14 +72,13 @@ public class DatabaseSearch
 
     private JTextField field;
 
-    private JCheckBox fuzzy;
+    private JCheckBox approximate;
 
     private Metabolite context;
 
     private Timer timer = new Timer(500, new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
-            System.out.println("fired!");
             updateTable(field.getText());
             timer.stop();
         }
@@ -92,7 +91,7 @@ public class DatabaseSearch
         component.setLayout(new FormLayout("p", "p, 4dlu, p"));
 
         field = FieldFactory.newField(25);
-        fuzzy = new JCheckBox("Fuzzy Search");
+        approximate = new JCheckBox("Approximate");
         table = new MoleculeTable(new NameAccessor(),
                                   new AccessionAccessor(),
                                   new AnnotationAccess(new Source()));
@@ -118,7 +117,7 @@ public class DatabaseSearch
                 timer.restart();
             }
         });
-        fuzzy.addItemListener(new ItemListener() {
+        approximate.addItemListener(new ItemListener() {
 
             public void itemStateChanged(ItemEvent e) {
                 timer.restart();
@@ -141,7 +140,6 @@ public class DatabaseSearch
                 match.setSubject(m);
             }
         });
-
 
 
         CellConstraints cc = new CellConstraints();
@@ -184,7 +182,7 @@ public class DatabaseSearch
 
         config.add(LabelFactory.newFormLabel("Query"), cc.xy(1, 1));
         config.add(field, cc.xy(3, 1));
-        config.add(fuzzy, cc.xyw(1, 3, 3));
+        config.add(approximate, cc.xyw(1, 3, 3));
         config.add(ButtonFactory.newButton(new AbstractAction("Assign") {
 
             public void actionPerformed(ActionEvent e) {
@@ -214,9 +212,10 @@ public class DatabaseSearch
 
 //        CandidateFactory<ChEBIIdentifier> factory = new CandidateFactory(LuceneService,
 //                                                                         new ChemicalFingerprintEncoder());
-
-//        Multimap<Integer, SynonymCandidateEntry> map = fuzzy.isSelected()
-//                                                       ? factory.getFuzzySynonymCandidates(name) : factory.getSynonymCandidates(name);
+//
+//        Multimap<Integer, SynonymCandidateEntry> map = approximate.isSelected()
+//                                                       ? factory.getFuzzySynonymCandidates(name)
+//                                                       : factory.getSynonymCandidates(name);
 //
 //
 //        List<Metabolite> metabolites = factory.getMetaboliteList(factory.getSortedList(map),
