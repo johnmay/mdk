@@ -195,9 +195,6 @@ public class MolecularHashFactory {
 
         }
 
-        Arrays.sort(completedSeeds);
-
-
         return new MolecularHash(hash, precursorSeeds);
 
     }
