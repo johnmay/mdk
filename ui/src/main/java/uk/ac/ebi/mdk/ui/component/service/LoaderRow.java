@@ -174,20 +174,25 @@ public class LoaderRow extends JComponent {
         CellConstraints cc = new CellConstraints();
 
         Box controls = Box.createHorizontalBox();
+        controls.add(Box.createHorizontalStrut(10));
         controls.add(delete);
+        controls.add(Box.createHorizontalStrut(10));
         controls.add(revert);
+        controls.add(Box.createHorizontalStrut(10));
         controls.add(configure);
+        controls.add(Box.createHorizontalStrut(10));
         controls.add(update);
+        controls.add(Box.createHorizontalStrut(10));
         controls.add(cancel);
 
         setLayout(new FormLayout("p, p:grow, min",
-                                 "p, p"));
+                                 "5px, p, 5px, p"));
 
 
-        add(controls, cc.xy(1, 1));
-        add(name, cc.xy(2, 1));
-        add(cancel, cc.xy(3, 1));
-        add(configuration, cc.xyw(1, 2, 3, cc.LEFT, cc.CENTER));
+        add(controls, cc.xy(1, 2));
+        add(name, cc.xy(2, 2));
+        add(cancel, cc.xy(3, 2));
+        add(configuration, cc.xyw(1, 4, 3, cc.LEFT, cc.CENTER));
         setBackground(Color.WHITE);
 
 
