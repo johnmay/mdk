@@ -3,9 +3,9 @@ package uk.ac.ebi.mdk.tool.match;
 import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 
@@ -44,7 +44,7 @@ public class NameMatcher<E extends AnnotatedEntity>
     @Override
     public Set<String> calculatedMetric(E entity) {
 
-        Set<String> names = new TreeSet<String>();
+        Set<String> names = new HashSet<String>();
 
         // add the entity name/abbreviation to the set
         names.add(normalise(entity.getName()));
