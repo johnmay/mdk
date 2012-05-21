@@ -2,10 +2,14 @@ package uk.ac.ebi.mdk.tool.match;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
-import uk.ac.ebi.mdk.tool.domain.hash.*;
+import uk.ac.ebi.mdk.tool.domain.hash.AtomSeed;
+import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
+import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,8 +40,8 @@ public class MetaboliteHashCodeMatcher
 
     private final Set<AtomSeed> seeds;
 
-    private static final Integer DEFAULT_ATOM_COUNT_THRESHOLD = 85;
-    private int atomCountThreshold = DEFAULT_ATOM_COUNT_THRESHOLD;
+    private static final Integer DEFAULT_ATOM_COUNT_THRESHOLD = 150;
+    private              int     atomCountThreshold           = DEFAULT_ATOM_COUNT_THRESHOLD;
 
 
     public MetaboliteHashCodeMatcher() {
@@ -45,7 +49,7 @@ public class MetaboliteHashCodeMatcher
     }
 
     public MetaboliteHashCodeMatcher(Integer threshold) {
-        this(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class, ConnectedAtomSeed.class, BondOrderSumSeed.class),
+        this(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class, ConnectedAtomSeed.class),
              threshold);
     }
 
@@ -75,6 +79,13 @@ public class MetaboliteHashCodeMatcher
 
         for (ChemicalStructure annotation : entity.getStructures()) {
             IAtomContainer structure = annotation.getStructure();
+
+            if (!(structure.getAtomCount() == 1
+                    && structure.getAtom(0).getSymbol().equals("H"))) {
+                structure = AtomContainerManipulator.removeHydrogens(structure);
+            }
+
+
             if (structure.getAtomCount() < atomCountThreshold) {
                 hashes.add(factory.getHash(structure, seeds).hash);
             }
