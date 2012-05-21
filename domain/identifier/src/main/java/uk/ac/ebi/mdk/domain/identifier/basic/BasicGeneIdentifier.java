@@ -44,7 +44,7 @@ public class BasicGeneIdentifier extends AbstractIdentifier {
     private static final Logger LOGGER = Logger.getLogger(BasicGeneIdentifier.class);
 
     public BasicGeneIdentifier() {
-        super(nextAccession());
+        super();
     }
 
     public BasicGeneIdentifier(String accession) {
@@ -59,6 +59,10 @@ public class BasicGeneIdentifier extends AbstractIdentifier {
 
     public Identifier newInstance() {
         return new BasicGeneIdentifier();
+    }
+
+    public static BasicGeneIdentifier nextIdentifier() {
+        return new BasicGeneIdentifier(nextAccession());
     }
 
 }

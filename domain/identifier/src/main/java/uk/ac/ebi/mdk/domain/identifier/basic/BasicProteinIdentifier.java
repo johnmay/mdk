@@ -23,11 +23,11 @@ package uk.ac.ebi.mdk.domain.identifier.basic;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
-import uk.ac.ebi.mdk.lang.annotation.Brief;
-import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.ResourcePreferences;
 import uk.ac.ebi.mdk.domain.identifier.AbstractIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.type.ProteinIdentifier;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -35,11 +35,12 @@ import java.util.Iterator;
 
 
 /**
- *          BasicProteinIdentifier – 2011.09.14 <br>
- *          A basic protein identifier
+ * BasicProteinIdentifier – 2011.09.14 <br>
+ * A basic protein identifier
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 @Brief("Protein")
 @Description("A basic auto-incrementing identifier for proteins")
@@ -50,15 +51,15 @@ public class BasicProteinIdentifier
 
 
     public BasicProteinIdentifier() {
-        super(nextAccession());
+        super();
     }
 
 
     public BasicProteinIdentifier(String accession) {
         super(accession);
     }
-    
-    private static String nextAccession(){
+
+    private static String nextAccession() {
         StringPreference format = ResourcePreferences.getInstance().getPreference("BASIC_PROT_ID_FORMAT");
         IncrementalPreference ticker = ResourcePreferences.getInstance().getPreference("BASIC_GENE_ID_TICK");
         return String.format(format.get(), ticker.get());
@@ -83,4 +84,10 @@ public class BasicProteinIdentifier
     public Collection<String> getHeaderCodes() {
         return Arrays.asList("lcl");
     }
+
+
+    public static BasicProteinIdentifier nextIdentifier() {
+        return new BasicProteinIdentifier(nextAccession());
+    }
+
 }
