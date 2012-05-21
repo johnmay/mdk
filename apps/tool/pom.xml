@@ -32,6 +32,16 @@
             <artifactId>mdk-tool-domain</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-ui</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-apps-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
