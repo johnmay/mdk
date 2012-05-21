@@ -25,7 +25,6 @@ import org.openscience.cdk.AtomContainerSet;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
-import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.collection.ObservationManager;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
@@ -75,7 +74,7 @@ public abstract class AbstractAnnotatedEntity
     }
 
 
-    public void addAnnotations(Collection<Annotation> annotations) {
+    public void addAnnotations(Collection<? extends Annotation> annotations) {
         for (Annotation annotation : annotations) {
             addAnnotation(annotation);
         }
