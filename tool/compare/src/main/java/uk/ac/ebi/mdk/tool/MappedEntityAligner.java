@@ -9,6 +9,7 @@ import uk.ac.ebi.mdk.tool.match.EntityMatcher;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Entity aligner flattens all metrics (per matcher) into a single map which
@@ -50,11 +51,12 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
 
         for (int i = 0; i < matchers.size(); i++) {
             // don't need to cache the query
-            Object metric = matchers.get(0).calculatedMetric(entity);
+            Object metric = matchers.get(i).calculatedMetric(entity);
             MetricMap map = getMetricMap(i);
 
             if (metric instanceof Collection) {
                 for (Object submetric : (Collection) metric) {
+
                     if (map.containsKey(submetric)) {
                         return map.get(submetric);
                     }
@@ -91,6 +93,10 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
 
         public List<E> get(Object o) {
             return map.get(o);
+        }
+
+        public Set<Object> getKeys() {
+            return map.keySet();
         }
 
         public boolean isEmpty() {
