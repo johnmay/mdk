@@ -21,29 +21,26 @@
 package uk.ac.ebi.mdk.domain.identifier;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
-import uk.ac.ebi.mdk.domain.identifier.type.KEGGIdentifier;
-import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
 import uk.ac.ebi.mdk.deprecated.MIR;
+import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
 import uk.ac.ebi.mdk.deprecated.Synonyms;
+import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
+import uk.ac.ebi.mdk.domain.identifier.type.KEGGIdentifier;
 
 
 /**
- *
- * @name    KEGGCompoundIdentifier – 2011.08.16
- *          An identifier for KEGG Compound
- *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- *
- * @author  johnmay
- * @author  $Author$ (this version)
- *
+ * @name KEGGCompoundIdentifier – 2011.08.16
+ * An identifier for KEGG Compound
  */
 @MIR(13)
-@Synonyms({"cpd","KEGG COMPOUND", "accession","LIGAND-CPD"})
+@Synonyms({"cpd",
+           "LIGAND-CPD"})
 public class KEGGCompoundIdentifier
         extends ChemicalIdentifier
-            implements KEGGIdentifier {
+        implements KEGGIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundIdentifier.class);
 
@@ -67,9 +64,6 @@ public class KEGGCompoundIdentifier
     public KEGGCompoundIdentifier newInstance() {
         return new KEGGCompoundIdentifier();
     }
-
-
-
 
 
     /**
@@ -101,6 +95,7 @@ public class KEGGCompoundIdentifier
 
     /**
      * Returns the numeric part of the compound id
+     *
      * @return
      */
     public int getValue() {
