@@ -13,6 +13,7 @@
         <module>service</module>
         <module>io</module>
         <module>tool</module>
+        <module>core</module>
     </modules>
 
     <artifactId>mdk-apps</artifactId>
