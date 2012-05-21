@@ -124,8 +124,8 @@ public abstract class CommandLineMain
     public void showHelp() {
         for (Object obj : options.getOptions().toArray(new Option[0])) {
             Option opt = (Option) obj;
-            System.out.println(String.format("  -%s|--%-30s ", opt.getOpt(), opt.getLongOpt()) +
-                                       opt.getDescription());
+            System.out.println(String.format("    [%s|%s]\n        %s \n", opt.getOpt(), opt.getLongOpt(),
+                                             opt.getDescription()));
         }
         System.exit(0);
     }
