@@ -41,20 +41,18 @@ import java.util.regex.Pattern;
 import static uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute.*;
 
 /**
- *
  * Loads BioCyc Compound data (Name and Charge)
  *
  * @author John May
  */
 public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
 
-    private static final Logger LOGGER = Logger.getLogger(BioCycCompoundLoader.class);
+    private static final Logger  LOGGER      = Logger.getLogger(BioCycCompoundLoader.class);
     private static final Pattern REMOVE_TAGS = Pattern.compile("</?(?:i|sub|sup|em|small)/?>", Pattern.CASE_INSENSITIVE);
     private static final Pattern ATOM_CHARGE = Pattern.compile("\\(.+?\\s(.+?)\\)");
 
 
     public BioCycCompoundLoader() {
-
 
 
         addRequiredResource("BioCyc Compounds",
@@ -85,7 +83,7 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
             nameWriter.write(identifier, clean(commonName), clean(systematicName), clean(synonyms));
 
             dataWriter.write(identifier,
-                             entry.has(ATOM_CHARGES)     ? getCharge(entry.get(ATOM_CHARGES)) : "",
+                             entry.has(ATOM_CHARGES) ? getCharge(entry.get(ATOM_CHARGES)) : "",
                              entry.has(CHEMICAL_FORMULA) ? getFormula(entry.get(CHEMICAL_FORMULA)) : "");
         }
 
@@ -156,6 +154,10 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
         name = name.replaceAll("&pi;", "π");
         name = name.replaceAll("&tau;", "τ");
         name = name.replaceAll("&zeta;", "ζ");
+
+        // arrows
+        name = name.replaceAll("&rarr;", "→");
+        name = name.replaceAll("&larr;", "←");
 
         return name;
 

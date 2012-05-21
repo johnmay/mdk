@@ -434,6 +434,11 @@ public class BioCycConverter {
         name = name.replaceAll("&tau;", "τ");
         name = name.replaceAll("&zeta;", "ζ");
 
+        // arrows
+        name = name.replaceAll("&rarr;", "→");
+        name = name.replaceAll("&larr;", "←");
+
+
         return name;
 
     }
