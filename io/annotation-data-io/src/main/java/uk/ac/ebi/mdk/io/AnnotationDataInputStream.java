@@ -2,10 +2,7 @@ package uk.ac.ebi.mdk.io;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.mdk.domain.annotation.Annotation;
-import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
-import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
-import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
+import uk.ac.ebi.mdk.domain.annotation.*;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.annotation.primitive.*;
 import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
@@ -39,9 +36,9 @@ public class AnnotationDataInputStream
         implements AnnotationInput {
 
     private static final Logger LOGGER = Logger.getLogger(AnnotationDataInputStream.class);
-    private DataInput in;
+    private DataInput        in;
     private ObservationInput observationInput;
-    private IdentifierInput identifierInput;
+    private IdentifierInput  identifierInput;
 
     public AnnotationDataInputStream(DataInputStream in, Version v) {
         this(in, null, v);
@@ -105,6 +102,8 @@ public class AnnotationDataInputStream
             return new IntegerAnnotationReader(c, in);
         } else if (CrossReference.class.isAssignableFrom(c)) {
             return new CrossReferenceReader(c, identifierInput, observationInput);
+        } else if (Flag.class.isAssignableFrom(c)) {
+            return new FlagReader(c);
         }
 
         throw new InvalidParameterException("Could not create writer for " + c.getName());

@@ -1,10 +1,7 @@
 package uk.ac.ebi.mdk.io;
 
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.mdk.domain.annotation.Annotation;
-import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
-import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
-import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
+import uk.ac.ebi.mdk.domain.annotation.*;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.annotation.primitive.*;
 import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
@@ -29,7 +26,7 @@ import java.security.InvalidParameterException;
  * Writes annotations to a data output stream. Each annotation class has a writer that
  * will write the data in the annotation to the stream. The writers marshall the annotation
  * data.
- *
+ * <p/>
  * Usage:
  * {@code
  * <pre>
@@ -46,7 +43,6 @@ import java.security.InvalidParameterException;
  *
  * </pre>}
  *
- *
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$
@@ -55,7 +51,7 @@ public class AnnotationDataOutputStream
         extends AbstractDataOutput<AnnotationWriter>
         implements AnnotationOutput {
 
-    private DataOutput out;
+    private DataOutput        out;
     private ObservationOutput observationOutput;
     private IdentifierOutput  identifierOutput;
 
@@ -81,8 +77,8 @@ public class AnnotationDataOutputStream
         add(GibbsEnergy.class, new GibbsEnergyWriter(out));
 
         // specialised specialised readers for tasks
-        add(Parameter.class,           new ParameterWriter(out));
-        add(FileParameter.class,       new FileParameterWriter(out));
+        add(Parameter.class, new ParameterWriter(out));
+        add(FileParameter.class, new FileParameterWriter(out));
         add(ExecutableParameter.class, new ExecutableParameterWriter(out));
 
     }
@@ -98,8 +94,8 @@ public class AnnotationDataOutputStream
 
     public void writeData(Annotation annotation) throws IOException {
 
-        if( writeObjectId(annotation) ) {
-            Class c                 = annotation.getClass();
+        if (writeObjectId(annotation)) {
+            Class c = annotation.getClass();
             AnnotationWriter writer = getWriter(c);
             writer.write(annotation);
         }
@@ -109,30 +105,34 @@ public class AnnotationDataOutputStream
      * Access the writer for the provided class. This method will
      * fetch a writer for the appropriate version the output stream
      * was initialised with.
+     *
      * @param c class to get the writer for
+     *
      * @return
      */
     public AnnotationWriter getWriter(Class c) {
         return hasMarshaller(c, getVersion()) ? getMarshaller(c, getVersion()) : add(c, createWriter(c), getVersion());
     }
 
-    public AnnotationWriter createWriter(Class c){
+    public AnnotationWriter createWriter(Class c) {
 
-        if(StringAnnotation.class.isAssignableFrom(c)) {
+        if (StringAnnotation.class.isAssignableFrom(c)) {
             return new StringAnnotationWriter(out);
-        } else if (DoubleAnnotation.class.isAssignableFrom(c)){
+        } else if (DoubleAnnotation.class.isAssignableFrom(c)) {
             return new DoubleAnnotationWriter(out);
-        } else if (BooleanAnnotation.class.isAssignableFrom(c)){
+        } else if (BooleanAnnotation.class.isAssignableFrom(c)) {
             return new BooleanAnnotationWriter(out);
-        } else if (FloatAnnotation.class.isAssignableFrom(c)){
+        } else if (FloatAnnotation.class.isAssignableFrom(c)) {
             return new FloatAnnotationWriter(out);
-        } else if (IntegerAnnotation.class.isAssignableFrom(c)){
+        } else if (IntegerAnnotation.class.isAssignableFrom(c)) {
             return new IntegerAnnotationWriter(out);
-        } else if (CrossReference.class.isAssignableFrom(c)){
+        } else if (CrossReference.class.isAssignableFrom(c)) {
             return new CrossReferenceWriter(identifierOutput, observationOutput);
+        } else if (Flag.class.isAssignableFrom(c)) {
+            return new FlagWriter();
         }
 
-        throw new InvalidParameterException("Could not create writer for " + c.getName() );
+        throw new InvalidParameterException("Could not create writer for " + c.getName());
 
     }
 
