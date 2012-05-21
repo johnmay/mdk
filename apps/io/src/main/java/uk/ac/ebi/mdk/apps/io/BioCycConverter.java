@@ -483,7 +483,7 @@ public class BioCycConverter {
         converter.importMetabolites();
         converter.importClasses();
         converter.importReactions();
-        //converter.importMetaboliteStructures();
+        converter.importMetaboliteStructures();
 
         long start = System.currentTimeMillis();
         ReconstructionIOHelper.write(converter.reconstruction, converter.reconstruction.getContainer());

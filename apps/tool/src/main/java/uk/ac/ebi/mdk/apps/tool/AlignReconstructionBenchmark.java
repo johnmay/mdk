@@ -7,8 +7,10 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.tool.AbstractEntityAligner;
 import uk.ac.ebi.mdk.tool.CachedEntityAligner;
+import uk.ac.ebi.mdk.tool.MappedEntityAligner;
 import uk.ac.ebi.mdk.tool.UncachedEntityAligner;
-import uk.ac.ebi.mdk.tool.match.CrossReferenceMatcher;
+import uk.ac.ebi.mdk.tool.match.MetaboliteHashCodeMatcher;
+import uk.ac.ebi.mdk.tool.match.NameMatcher;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +33,7 @@ public class AlignReconstructionBenchmark {
         Reconstruction query = ReconstructionIOHelper.read(queryFile);
         Reconstruction reference = ReconstructionIOHelper.read(referenceFile);
 
-        System.out.println("Aligning reconstruction " + query.getName() + " to " + reference.getName());
+        System.out.println("Aligning query reconstruction " + query.getName() + " to " + reference.getName());
 
         final List<Metabolite> referenceList = new ArrayList<Metabolite>(reference.getMetabolome());
         final List<Metabolite> queryList = new ArrayList<Metabolite>(reference.getMetabolome());
@@ -45,47 +47,80 @@ public class AlignReconstructionBenchmark {
             System.out.print("Ready to go? [y/n]:");
         }
 
+        final int intervalSize = 1000;
+        final int querySize = 1000;
+
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int referenceSize = 250; referenceSize <= Math.min(11000, referenceList.size()); referenceSize += 250) {
+                for (int referenceSize = intervalSize; referenceSize <= Math.min(11000, referenceList.size()); referenceSize += intervalSize) {
 
                     AbstractEntityAligner<Metabolite> uncachedAligner = new UncachedEntityAligner<Metabolite>(referenceList.subList(0, referenceSize));
                     AbstractEntityAligner<Metabolite> cachedAligner = new CachedEntityAligner<Metabolite>(referenceList.subList(0, referenceSize));
-                    uncachedAligner.push(new CrossReferenceMatcher<Metabolite>());
-                    cachedAligner.push(new CrossReferenceMatcher<Metabolite>());
+                    MappedEntityAligner<Metabolite> mappedEntityAligner = new MappedEntityAligner<Metabolite>(referenceList.subList(0, referenceSize));
 
-                    List<Metabolite> queries = referenceList.subList(0, Math.max(1000, referenceSize));
+                    uncachedAligner.push(new NameMatcher(true, true));
+                    cachedAligner.push(new NameMatcher());
+                    mappedEntityAligner.push(new MetaboliteHashCodeMatcher());
+                    mappedEntityAligner.push(new NameMatcher<Metabolite>());
+                    mappedEntityAligner.push(new NameMatcher<Metabolite>(true, true));
+
+                    List<Metabolite> queries = referenceList.subList(0, Math.max(querySize, referenceSize));
                     Collections.shuffle(queries);
-                    queries = queries.subList(0, 100);
+                    queries = queries.subList(0, querySize);
+
+
+                    long buildTime = 0l;
+                    {
+                        long start = System.currentTimeMillis();
+                        mappedEntityAligner.build();
+                        long end = System.currentTimeMillis();
+
+                        buildTime = end - start;
+                    }
+
 
                     long uncached = 0l;
                     long cached = 0l;
+                    long mapped = 0l;
 
+                    System.out.println("Benchmarking name");
+
+//                    {
+//                        for (Metabolite m : queries) {
+//                            uncachedAligner.getMatches(m);
+//                        }
+//                        long start = System.currentTimeMillis();
+//                        for (Metabolite m : queries) {
+//                            uncachedAligner.getMatches(m);
+//                        }
+//                        long end = System.currentTimeMillis();
+//                        uncached = end - start;
+//                    }
+//                    {
+//                        for (Metabolite m : queries) {
+//                            cachedAligner.getMatches(m);
+//                        }
+//                        long start = System.currentTimeMillis();
+//                        for (Metabolite m : queries) {
+//                            cachedAligner.getMatches(m);
+//                        }
+//                        long end = System.currentTimeMillis();
+//                        cached = end - start;
+//                    }
                     {
                         for (Metabolite m : queries) {
-                            uncachedAligner.getMatches(m);
+                            mappedEntityAligner.getMatches(m);
                         }
                         long start = System.currentTimeMillis();
                         for (Metabolite m : queries) {
-                            uncachedAligner.getMatches(m);
+                            System.out.println(m.getName() + ": " + mappedEntityAligner.getMatches(m));
                         }
                         long end = System.currentTimeMillis();
-                        uncached = end - start;
+                        mapped = buildTime + (end - start);
                     }
-                    {
-                        for (Metabolite m : queries) {
-                            cachedAligner.getMatches(m);
-                        }
-                        long start = System.currentTimeMillis();
-                        for (Metabolite m : queries) {
-                            cachedAligner.getMatches(m);
-                        }
-                        long end = System.currentTimeMillis();
-                        cached = end - start;
-                    }
-
-                    System.out.println(Joiner.on("\t").join(referenceSize, uncached, uncached / queries.size(), cached, cached / queries.size()));
+                    double size = queries.size();
+                    System.out.println(Joiner.on("\t").join(referenceSize, uncached, uncached / size, cached, cached / size, mapped, mapped / size, buildTime));
 
 
                 }
