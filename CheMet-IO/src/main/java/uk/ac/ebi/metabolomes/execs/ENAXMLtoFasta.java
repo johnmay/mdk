@@ -28,8 +28,8 @@ import org.apache.commons.cli.Option;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.io.FastaWriterHelper;
-import uk.ac.ebi.core.ProteinProductImplementation;
-import uk.ac.ebi.interfaces.entities.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.io.xml.ENAXMLReader;
 
 /**
@@ -76,7 +76,7 @@ public class ENAXMLtoFasta extends CommandLineMain {
 
             Collection<ProteinSequence> sequences = new ArrayList();
             for (GeneProduct product : products) {
-                if (product instanceof ProteinProductImplementation) {
+                if (product instanceof ProteinProductImpl) {
                     List<ProteinSequence> productSequences = (List<ProteinSequence>) product.getSequences();
                     int tick = 0;
                     for (ProteinSequence sequence : productSequences) {

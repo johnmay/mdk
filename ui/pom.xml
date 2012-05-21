@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>mdk</artifactId>
+        <groupId>uk.ac.ebi.mdk</groupId>
+        <version>1.4.0-SNAPSHOT</version>
+    </parent>
+    <groupId>uk.ac.ebi.mdk</groupId>
+    <artifactId>mdk-ui</artifactId>
+    <version>1.4.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <url>http://www.ebi.ac.uk/steinbeck-srv/mdk/ui</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+
+        <!-- Internal Dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-domain-entity</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-tool-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-tool-compare</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-domain-annotation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-domain-identifier</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Chemistry Development Kit -->
+        <dependency>
+            <artifactId>cdk-render</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>cdk-sdg</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>cdk-renderawt</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>cdk-renderbasic</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-extra</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-core</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+
+        <!-- Layout and Components -->
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>forms</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>animation</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+
+        <!-- Core Application Framework -->
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-utility</artifactId>
+            <version>${caf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-component</artifactId>
+            <version>${caf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.explodingpixels</groupId>
+            <artifactId>macwidgets</artifactId>
+            <version>0.9.6-SNAPSHOT</version>
+        </dependency>
+
+
+        <!-- other -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+    </dependencies>
+</project>

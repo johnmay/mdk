@@ -21,7 +21,7 @@
 package uk.ac.ebi.io.remote;
 
 import org.apache.lucene.analysis.Analyzer;
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -38,11 +38,11 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.deprecated.services.LuceneService;
 import uk.ac.ebi.metabolomes.io.PubChemCompoundSDFFieldExtractor;
 import uk.ac.ebi.metabolomes.io.SDFFieldReader;
 import uk.ac.ebi.metabolomes.io.SDFRecord;
-import uk.ac.ebi.metabolomes.util.inchi.InChIConnectivity;
+import uk.ac.ebi.mdk.tool.inchi.InChIConnectivity;
 
 /**
  *          UniProtCrossRefs - 2011.12.10 <br>

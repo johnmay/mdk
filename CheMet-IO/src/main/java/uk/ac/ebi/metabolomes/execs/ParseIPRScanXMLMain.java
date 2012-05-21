@@ -31,9 +31,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.chemet.resource.util.XMLHelper;
-import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.deprecated.XMLHelper;
+import uk.ac.ebi.mdk.db.DatabaseProperties;
 
 /**
  * ParseIPRScanXMLMain.java – MetabolicDevelopmentKit – Jun 3, 2011

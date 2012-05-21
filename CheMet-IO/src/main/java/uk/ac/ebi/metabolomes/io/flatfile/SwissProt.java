@@ -4,18 +4,18 @@
  */
 package uk.ac.ebi.metabolomes.io.flatfile;
 
-import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-import java.util.Set;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.compound.AminoAcidCompound;
 import org.biojava3.core.sequence.compound.AminoAcidCompoundSet;
 import org.biojava3.core.sequence.io.FastaReader;
-import org.biojava3.core.sequence.io.FastaReaderHelper;
 import org.biojava3.core.sequence.io.FileProxyProteinSequenceCreator;
 import org.biojava3.core.sequence.io.GenericFastaHeaderParser;
-import uk.ac.ebi.metabolomes.resource.UniProtDatabaseProperties;
+import uk.ac.ebi.mdk.db.UniProtDatabaseProperties;
+
+import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * SwissProt.java

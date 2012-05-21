@@ -22,7 +22,7 @@ package uk.ac.ebi.chemet;
 
 import java.util.HashMap;
 
-import uk.ac.ebi.chemet.resource.chemical.InChI;
+import uk.ac.ebi.mdk.domain.identifier.InChI;
 
 /**
  * @name    InChIBank

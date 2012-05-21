@@ -21,16 +21,16 @@
 package uk.ac.ebi.chemet.entities.reaction;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.resource.chemical.InChI;
-import uk.ac.ebi.core.CompartmentImplementation;
-import uk.ac.ebi.chemet.entities.reaction.participant.GenericParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.InChIParticipant;
-import uk.ac.ebi.chemet.entities.reaction.participant.ParticipantImplementation;
-import uk.ac.ebi.interfaces.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organ;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
+import uk.ac.ebi.mdk.domain.identifier.InChI;
+import uk.ac.ebi.mdk.domain.entity.reaction.GenericParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.InChIParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.ParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.*;
 
 import static uk.ac.ebi.chemet.TestMoleculeFactory.*;
-import uk.ac.ebi.chemet.entities.reaction.participant.AtomContainerParticipant;
-import uk.ac.ebi.interfaces.reaction.Participant;
+import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerParticipant;
 
 
 /**
@@ -65,7 +65,7 @@ public class ReactionExample {
         InChIReaction inchiReaction = new InChIReaction();
         inchiReaction.addReactant(new InChIParticipant(new InChI("InChI=1S/B...")));
         inchiReaction.addProduct(new InChIParticipant("InChI=1S/C..."));
-        inchiReaction.addProduct(new InChIParticipant(new InChI("InChI=1S/D..."), 1.0, CompartmentImplementation.CYTOPLASM));
+        inchiReaction.addProduct(new InChIParticipant(new InChI("InChI=1S/D..."), 1.0, Organelle.CYTOPLASM));
 
         /* Adding Generics
          Note: All molecules have implict H's added and then converted

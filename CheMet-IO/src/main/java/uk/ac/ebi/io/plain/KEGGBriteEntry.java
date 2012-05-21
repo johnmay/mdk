@@ -20,12 +20,13 @@
  */
 package uk.ac.ebi.io.plain;
 
+import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
 
 /**
  * @name    KEGGBriteEntry

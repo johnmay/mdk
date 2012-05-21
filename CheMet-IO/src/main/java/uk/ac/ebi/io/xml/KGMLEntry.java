@@ -31,10 +31,10 @@ import org.codehaus.stax2.XMLStreamReader2;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.KEGGCrossReference;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**

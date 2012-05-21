@@ -31,22 +31,17 @@ import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.Strand;
 import org.biojava3.core.sequence.template.AbstractSequence;
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.annotation.Locus;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.chemet.resource.IdentifierSet;
-import uk.ac.ebi.chemet.resource.base.DynamicIdentifier;
-import uk.ac.ebi.chemet.resource.basic.BasicGeneIdentifier;
-import uk.ac.ebi.chemet.resource.basic.BasicProteinIdentifier;
-import uk.ac.ebi.chemet.resource.basic.BasicRNAIdentifier;
-import uk.ac.ebi.core.GeneImplementation;
-import uk.ac.ebi.core.ProteinProductImplementation;
-import uk.ac.ebi.core.AbstractRNAProduct;
-import uk.ac.ebi.core.RibosomalRNAImplementation;
-import uk.ac.ebi.core.TransferRNAImplementation;
-import uk.ac.ebi.interfaces.AnnotatedEntity;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.annotation.Locus;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
+import uk.ac.ebi.mdk.domain.identifier.DynamicIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicGeneIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicRNAIdentifier;
+import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 /**
  *          ENAFeatureParser - 2011.10.17 <br>
@@ -200,9 +195,9 @@ public class ENAFeatureParser {
         return null;
     }
 
-    private ProteinProductImplementation getCodingSequence() {
+    private ProteinProductImpl getCodingSequence() {
 
-        ProteinProductImplementation cds = new ProteinProductImplementation(getProteinIdentifier(), getLocusTag(), getProduct());
+        ProteinProductImpl cds = new ProteinProductImpl(getProteinIdentifier(), getLocusTag(), getProduct());
 
         for (Identifier identifier : identifiers.getIdentifiers()) {
             cds.addAnnotation(new CrossReference(identifier));
@@ -216,16 +211,16 @@ public class ENAFeatureParser {
 
     private AbstractRNAProduct getRNA() {
         if (isRNA()) {
-            return new RibosomalRNAImplementation(new BasicRNAIdentifier(), getLocusTag(), getProduct());
+            return new RibosomalRNAImpl(new BasicRNAIdentifier(), getLocusTag(), getProduct());
         } else if (isTRNA()) {
-            return new TransferRNAImplementation(new BasicRNAIdentifier(), getLocusTag(), getProduct());
+            return new TransferRNAImpl(new BasicRNAIdentifier(), getLocusTag(), getProduct());
         }
         return null;
     }
 
     private Gene getGene() {
 
-        Gene gene = new GeneImplementation(new BasicGeneIdentifier(),
+        Gene gene = new GeneImpl(new BasicGeneIdentifier(),
                                            "",
                                            getLocusTag(),
                                            start,

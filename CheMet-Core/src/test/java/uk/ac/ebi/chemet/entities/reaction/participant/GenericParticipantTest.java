@@ -7,6 +7,10 @@ package uk.ac.ebi.chemet.entities.reaction.participant;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.ac.ebi.mdk.domain.entity.reaction.AtomContainerParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.GenericParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.ParticipantImplementation;
+
 import static org.junit.Assert.*;
 import static uk.ac.ebi.chemet.TestMoleculeFactory.*;
 
@@ -82,7 +86,7 @@ public class GenericParticipantTest {
     @Test
     public void testGenericNotEquals() {
 
-        System.out.printf( "%-120s" , "[TEST] Aldehyde (removed R) does not equal Primary Alcohol (removed R)" );
+        System.out.printf( "%-120s" , "[TEST] Aldehyde (removed R) does not matches Primary Alcohol (removed R)" );
 
         ParticipantImplementation aldehyde = new GenericParticipant( aldehyde_no_r() );
         ParticipantImplementation primaryAlochol = new GenericParticipant( primary_alcohol_no_r() );

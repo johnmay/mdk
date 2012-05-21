@@ -37,18 +37,18 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.metabolomes.webservices.ICrossReferenceProvider;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
-import uk.ac.ebi.chemet.resource.chemical.BRNIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.CASIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.EINECSIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.EPAPesticideIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.HSDBIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.ZINCIdentifier;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.identifier.BRNIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.CASIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.EINECSIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.EPAPesticideIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.HSDBIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ZINCIdentifier;
 
 /**
  * @name    CactusChemical

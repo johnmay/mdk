@@ -21,8 +21,8 @@
 package uk.ac.ebi.io.remote;
 
 import org.apache.lucene.analysis.Analyzer;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -38,7 +38,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.deprecated.services.LuceneService;
 import uk.ac.ebi.io.plain.KEGGBriteEntry;
 import uk.ac.ebi.io.plain.KEGGBriteReader;
 

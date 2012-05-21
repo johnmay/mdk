@@ -8,15 +8,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javax.xml.stream.XMLStreamException;
 
-import uk.ac.ebi.chemet.resource.classification.ECNumber;
-import uk.ac.ebi.chemet.resource.protein.SwissProtIdentifier;
-import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.UniProtIdentifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import uk.ac.ebi.metabolomes.resource.IntEnzDatabaseProperties;
+import uk.ac.ebi.mdk.db.IntEnzDatabaseProperties;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;

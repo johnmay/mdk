@@ -1,0 +1,27 @@
+# SPI: Provides MDK QueryServices for this module
+uk.ac.ebi.mdk.service.query.structure.MetaCycStructureService
+uk.ac.ebi.mdk.service.query.structure.HMDBStructureService
+uk.ac.ebi.mdk.service.query.structure.ChEBIStructureService
+uk.ac.ebi.mdk.service.query.structure.KEGGCompoundStructureService
+uk.ac.ebi.mdk.service.query.structure.LipidMapsStructureService
+
+uk.ac.ebi.mdk.service.query.name.ChEBINameService
+uk.ac.ebi.mdk.service.query.name.KEGGCompoundNameService
+uk.ac.ebi.mdk.service.query.name.HMDBNameService
+uk.ac.ebi.mdk.service.query.name.LipidMapsNameService
+uk.ac.ebi.mdk.service.query.name.MetaCycNameService
+
+uk.ac.ebi.mdk.service.query.data.HMDBDataService
+uk.ac.ebi.mdk.service.query.data.ChEBIDataService
+uk.ac.ebi.mdk.service.query.data.KEGGCompoundDataService
+
+uk.ac.ebi.mdk.service.query.crossreference.ChEBICrossReferenceService
+uk.ac.ebi.mdk.service.query.crossreference.UniProtCrossReferenceService
+
+uk.ac.ebi.mdk.service.query.taxonomy.TaxonomyQueryService
+
+
+
+
+
+

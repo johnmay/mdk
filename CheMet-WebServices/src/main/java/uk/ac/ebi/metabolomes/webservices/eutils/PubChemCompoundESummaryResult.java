@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 /**
  * @name    PubChemCompoundESummaryResult

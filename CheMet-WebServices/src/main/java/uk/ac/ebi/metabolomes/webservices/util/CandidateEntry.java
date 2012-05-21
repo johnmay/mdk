@@ -108,7 +108,7 @@ public class CandidateEntry
     /**
      * 
      * Compares two candidates on their set distance. If either distance is null the objects are
-     * considered equal '0'
+     * considered matches '0'
      *
      */
     @Override

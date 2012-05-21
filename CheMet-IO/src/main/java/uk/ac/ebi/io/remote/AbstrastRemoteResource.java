@@ -22,7 +22,7 @@ package uk.ac.ebi.io.remote;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;

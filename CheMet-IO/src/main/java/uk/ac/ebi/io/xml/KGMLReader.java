@@ -48,11 +48,10 @@ import javax.xml.stream.events.XMLEvent;
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.chemet.resource.basic.BasicReactionIdentifier;
-import uk.ac.ebi.chemet.resource.reaction.KEGGReactionIdentifier;
-import uk.ac.ebi.core.MetabolicReactionImplementation;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.identifier.KEGGReactionIdentifier;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 
 
 /**
@@ -132,8 +131,8 @@ public class KGMLReader {
     }
 
 
-    public Collection<MetabolicReactionImplementation> getReactions() {
-        Collection<MetabolicReactionImplementation> reactions = new ArrayList();
+    public Collection<MetabolicReactionImpl> getReactions() {
+        Collection<MetabolicReactionImpl> reactions = new ArrayList();
         Map<Integer, Metabolite> metabolites = getMetabolites();
         Map<Integer, KGMLEntry> entries = getEntries();
 
@@ -142,7 +141,7 @@ public class KGMLReader {
             KGMLEntry rxnEntry = entries.get(reaction.id);
 
             String[] names = rxnEntry.name.split(" ");
-            MetabolicReactionImplementation rxn = new MetabolicReactionImplementation(new KEGGReactionIdentifier(Integer.toString(rxnEntry.id)),
+            MetabolicReactionImpl rxn = new MetabolicReactionImpl(new KEGGReactionIdentifier(Integer.toString(rxnEntry.id)),
                                                                                       names[0].substring(3),
                                                                                       names[0].substring(3));
             for (String name : names) {

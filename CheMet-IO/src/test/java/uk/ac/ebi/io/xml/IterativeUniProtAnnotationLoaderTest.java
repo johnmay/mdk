@@ -12,10 +12,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import uk.ac.ebi.chemet.resource.classification.KEGGOrthology;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.KEGGOrthology;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.io.xml.IterativeUniProtAnnotationLoader.UniProtEntry;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 /**
  *

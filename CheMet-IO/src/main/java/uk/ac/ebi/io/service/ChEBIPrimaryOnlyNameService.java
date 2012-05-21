@@ -24,8 +24,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.interfaces.services.ChemicalNameQueryService;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
+import uk.ac.ebi.deprecated.services.ChemicalNameQueryService;
 import uk.ac.ebi.io.remote.ChEBINames;
 
 /**

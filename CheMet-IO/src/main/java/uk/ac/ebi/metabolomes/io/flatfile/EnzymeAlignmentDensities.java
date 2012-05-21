@@ -17,13 +17,10 @@
 package uk.ac.ebi.metabolomes.io.flatfile;
 
 import au.com.bytecode.opencsv.CSVReader;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import uk.ac.ebi.mdk.db.DatabaseProperties;
+
+import java.io.*;
 import java.util.HashMap;
-import uk.ac.ebi.metabolomes.resource.DatabaseProperties;
 
 /**
  * EnzymeAlignmentDensities.java – MetabolicDevelopmentKit – Jun 21, 2011

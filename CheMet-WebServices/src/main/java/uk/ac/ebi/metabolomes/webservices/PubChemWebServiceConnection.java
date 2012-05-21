@@ -41,7 +41,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import uk.ac.ebi.chemet.ws.exceptions.UnfetchableEntry;
 import uk.ac.ebi.chemet.ws.exceptions.MissingStructureException;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 public class PubChemWebServiceConnection extends ChemicalDBWebService {
 

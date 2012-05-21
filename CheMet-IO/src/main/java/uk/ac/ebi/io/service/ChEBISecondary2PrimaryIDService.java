@@ -20,8 +20,8 @@
  */
 package uk.ac.ebi.io.service;
 
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.interfaces.services.SecondaryToPrimaryIDResolverService;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
+import uk.ac.ebi.deprecated.services.SecondaryToPrimaryIDResolverService;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -34,7 +34,7 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
 import uk.ac.ebi.io.remote.ChEBISecondaryID2PrimaryID;
 import uk.ac.ebi.io.remote.ChEBISecondaryID2PrimaryID.ChEBISecondary2PrimaryLuceneFields;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 /**
  *          ChEBINameService - 2011.10.26 <br>

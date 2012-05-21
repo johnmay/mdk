@@ -9,7 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import uk.ac.ebi.metabolomes.util.inchi.InChIConversionUtility;
+import uk.ac.ebi.mdk.tool.inchi.InChIConversionUtility;
 import uk.ac.ebi.metabolomes.webservices.ChEBIWebServiceConnection;
 
 /**

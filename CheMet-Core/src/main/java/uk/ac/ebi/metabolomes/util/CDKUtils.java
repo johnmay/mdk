@@ -4,11 +4,6 @@
  */
 package uk.ac.ebi.metabolomes.util;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.Molecule;
@@ -17,6 +12,12 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.*;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -149,7 +150,13 @@ public class CDKUtils {
 
     }
 
-
+    /**
+     * @Deprecate now in domain-tools (Conectivity Matrix)
+     * @param molecule
+     * @param atom
+     * @return
+     */
+    @Deprecated
     public static Integer getNonBondedValenceElectronCount(IAtomContainer molecule, IAtom atom) {
 
         if (atom.getProperties().containsKey("nb-valence-electrons")) {

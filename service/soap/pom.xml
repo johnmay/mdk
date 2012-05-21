@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>mdk-service</artifactId>
+        <groupId>uk.ac.ebi.mdk</groupId>
+        <version>1.4.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mdk-service-soap</artifactId>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>axis</groupId>
+            <artifactId>axis</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-service-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-domain-identifier</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-io</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-inchi</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-silent</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/generated-sources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>axistools-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <id>build-clients</id>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                        <configuration>                            
+                            <sourceDirectory>src/main/resources/wsdl</sourceDirectory>
+                            <outputDirectory>src/main/generated-sources</outputDirectory>
+                            <useEmitter>true</useEmitter>
+                            <mappings>
+
+                                <!-- EBI -->
+                                <mapping>
+                                    <namespace>http://www.ebi.ac.uk/webservices/chebi</namespace>
+                                    <targetPackage>uk.ac.ebi.ws.chebi</targetPackage>
+                                </mapping>
+                                <mapping>
+                                    <namespace>http://www.ebi.ac.uk/ontology-lookup/OntologyQuery</namespace>
+                                    <targetPackage>uk.ac.ebi.ws.ols</targetPackage>
+                                </mapping>
+                                <mapping>
+                                    <namespace>http://soap.jdispatcher.ebi.ac.uk</namespace>
+                                    <targetPackage>uk.ac.ebi.ws.jdispatcher</targetPackage>
+                                </mapping>
+
+                                <!-- KEGG -->
+                                <mapping>
+                                    <namespace>SOAP/KEGG</namespace>
+                                    <targetPackage>jp.genome.ws.kegg</targetPackage>
+                                </mapping>
+
+                                <!-- NCBI -->
+                                <mapping>
+                                    <namespace>http://pubchem.ncbi.nlm.nih.gov/</namespace>
+                                    <targetPackage>gov.nih.nlm.ncbi.pubchem.ws</targetPackage>
+                                </mapping>
+
+                                <mapping>
+                                    <namespace>http://www.chemspider.com/</namespace>
+                                    <targetPackage>com.chemspider</targetPackage>
+                                </mapping>
+                                <mapping>
+                                    <namespace>http://sabio.eml.org/</namespace>
+                                    <targetPackage>org.h_its.sabiork</targetPackage>
+                                </mapping>
+
+                            </mappings>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.mail</groupId>
+                        <artifactId>mail</artifactId>
+                        <version>1.4.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.activation</groupId>
+                        <artifactId>activation</artifactId>
+                        <version>1.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

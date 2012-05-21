@@ -4,17 +4,17 @@
  * 2011.09.22
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,34 +22,36 @@ package uk.ac.ebi.metabolomes.webservices.util;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.openscience.cdk.interfaces.IMolecularFormula;
+import uk.ac.ebi.deprecated.services.ChemicalDataQueryService;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.Source;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.ChEBICrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.KEGGCrossReference;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.service.query.name.NameService;
+import uk.ac.ebi.reconciliation.StringEncoder;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.openscience.cdk.interfaces.IMolecularFormula;
-import uk.ac.ebi.annotation.Source;
-import uk.ac.ebi.annotation.chemical.MolecularFormula;
-import uk.ac.ebi.annotation.crossreference.ChEBICrossReference;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.annotation.crossreference.KEGGCrossReference;
-import uk.ac.ebi.chemet.resource.chemical.ChEBIIdentifier;
-import uk.ac.ebi.chemet.resource.chemical.KEGGCompoundIdentifier;
-import uk.ac.ebi.interfaces.entities.EntityFactory;
-import uk.ac.ebi.interfaces.entities.Metabolite;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.interfaces.services.ChemicalDataQueryService;
-import uk.ac.ebi.reconciliation.StringEncoder;
-import uk.ac.ebi.service.query.name.NameService;
 
 
 /**
- *          CandidateFactory – 2011.09.22 <br>
- *          Class description
+ * CandidateFactory – 2011.09.22 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class CandidateFactory<I extends Identifier> {
 
@@ -63,17 +65,17 @@ public class CandidateFactory<I extends Identifier> {
     public CandidateFactory(NameService<I> service, StringEncoder encoder) {
         this.service = service;
         this.encoder = encoder;
+        service.startup();
     }
 
 
     /**
-     *
      * Creates a {@see Multimap} of candidate entries ({@see CandidateEntry}) with key as their
      * distance
      *
      * @param name
+     *
      * @return
-     * 
      */
     public Multimap<Integer, SynonymCandidateEntry> getSynonymCandidates(String name) {
 
@@ -105,7 +107,7 @@ public class CandidateFactory<I extends Identifier> {
                                               String source,
                                               EntityFactory factory) {
 
-        List<uk.ac.ebi.interfaces.entities.Metabolite> metabolites = new ArrayList<uk.ac.ebi.interfaces.entities.Metabolite>(candidates.size());
+        List<Metabolite> metabolites = new ArrayList<Metabolite>(candidates.size());
 
         for (CandidateEntry candidate : candidates) {
 
@@ -146,7 +148,9 @@ public class CandidateFactory<I extends Identifier> {
 
     /**
      * Uses fuzzy match to search
+     *
      * @param name
+     *
      * @return
      */
     public Multimap<Integer, SynonymCandidateEntry> getFuzzySynonymCandidates(String name) {
@@ -183,7 +187,9 @@ public class CandidateFactory<I extends Identifier> {
 
     /**
      * Creates a multimap of possible candidates entries which are keyed by their distance
+     *
      * @param name
+     *
      * @return
      */
     public Multimap<Integer, CandidateEntry> getCandidates(String name) {
@@ -254,9 +260,10 @@ public class CandidateFactory<I extends Identifier> {
     /**
      * Calculates then Levenshtein distance for the query and subject strings using the set
      * StringEncoder
-     * 
+     *
      * @param encodedQuery query which is been pre-encoded
      * @param subject
+     *
      * @return
      */
     public Integer calculateDistance(String encodedQuery, String subject) {

@@ -22,8 +22,8 @@ package uk.ac.ebi.io.remote;
 
 import com.google.common.collect.Multimap;
 import org.apache.lucene.analysis.Analyzer;
-import uk.ac.ebi.chemet.resource.chemical.PubChemCompoundIdentifier;
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ import org.apache.lucene.store.NoSuchDirectoryException;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.chemet.ws.exceptions.WebServiceException;
-import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.deprecated.services.LuceneService;
 import uk.ac.ebi.metabolomes.webservices.EUtilsWebServiceConnection;
 
 /**

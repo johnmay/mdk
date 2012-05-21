@@ -20,11 +20,12 @@
  */
 package uk.ac.ebi.metabolomes.io;
 
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+
 import java.util.ArrayList;
 import java.util.List;
-import uk.ac.ebi.annotation.crossreference.CrossReference;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
 
 /**
  * @name    Record

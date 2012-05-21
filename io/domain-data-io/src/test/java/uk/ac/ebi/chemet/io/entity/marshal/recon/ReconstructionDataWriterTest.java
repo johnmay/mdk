@@ -4,27 +4,21 @@ import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import org.junit.Test;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.chemet.io.annotation.AnnotationDataInputStream;
-import uk.ac.ebi.chemet.io.annotation.AnnotationDataOutputStream;
-import uk.ac.ebi.chemet.io.domain.*;
-import uk.ac.ebi.chemet.io.domain.EntityInput;
-import uk.ac.ebi.chemet.io.domain.EntityOutput;
-import uk.ac.ebi.chemet.io.observation.ObservationDataInputStream;
-import uk.ac.ebi.chemet.io.observation.ObservationDataOutputStream;
-import uk.ac.ebi.chemet.resource.basic.*;
-import uk.ac.ebi.core.DefaultEntityFactory;
-import uk.ac.ebi.core.ReconstructionImpl;
-import uk.ac.ebi.core.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.core.reaction.compartment.Organelle;
-import uk.ac.ebi.interfaces.Chromosome;
-import uk.ac.ebi.interfaces.Gene;
-import uk.ac.ebi.interfaces.entities.*;
-import uk.ac.ebi.interfaces.reaction.Direction;
-import uk.ac.ebi.chemet.resource.basic.ReconstructionIdentifier;
-import uk.ac.ebi.chemet.resource.basic.BasicGeneIdentifier;
-import uk.ac.ebi.chemet.resource.basic.ChromosomeNumber;
-import uk.ac.ebi.resource.organism.Kingdom;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.io.*;
+import uk.ac.ebi.mdk.domain.identifier.basic.*;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
+import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicGeneIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.ChromosomeNumber;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 import java.io.*;
 
@@ -87,7 +81,7 @@ public class ReconstructionDataWriterTest {
                                                            "a reconstruction",
                                                            "recon");
 
-        reconstruction.setTaxonomy(new Taxonomy(12, "ecoli", Kingdom.BACTERIA, "", ""));
+        reconstruction.setTaxonomy(new Taxonomy(12, "ecoli", Taxonomy.Kingdom.BACTERIA, "", ""));
 
         EntityFactory factory = DefaultEntityFactory.getInstance();
 

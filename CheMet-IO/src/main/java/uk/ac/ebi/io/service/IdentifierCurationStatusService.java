@@ -31,11 +31,11 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.io.remote.IdentifierCurationStatus;
 import uk.ac.ebi.io.remote.IdentifierCurationStatus.CurationStatus;
 import uk.ac.ebi.io.remote.IdentifierCurationStatus.IdentifierPropertiesLuceneFields;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 /**
  *          PubChemCompoundCrossReferenceService - 2011.10.26 <br>

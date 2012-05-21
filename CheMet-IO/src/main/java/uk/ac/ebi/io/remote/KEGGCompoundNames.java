@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.io.remote;
 
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -40,7 +40,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.KeywordAnalyzer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
-import uk.ac.ebi.interfaces.services.LuceneService;
+import uk.ac.ebi.deprecated.services.LuceneService;
 
 /**
  *          ChEBISearch - 2011.10.25 <br>

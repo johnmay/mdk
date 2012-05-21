@@ -20,7 +20,7 @@
  */
 package uk.ac.ebi.io.remote;
 
-import uk.ac.ebi.interfaces.services.RemoteResource;
+import uk.ac.ebi.deprecated.services.RemoteResource;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,8 +40,8 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
-import uk.ac.ebi.interfaces.services.LuceneService;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
+import uk.ac.ebi.deprecated.services.LuceneService;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 /**
  *          ChEBISecondaryID2PrimaryID - 2011.12.11 <br>

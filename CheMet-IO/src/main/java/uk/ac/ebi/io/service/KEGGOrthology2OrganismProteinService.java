@@ -32,14 +32,14 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopScoreDocCollector;
-import uk.ac.ebi.chemet.resource.classification.KEGGOrthology;
-import uk.ac.ebi.chemet.resource.protein.TrEMBLIdentifier;
-import uk.ac.ebi.chemet.resource.protein.UniProtIdentifier;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.KEGGOrthology;
+import uk.ac.ebi.mdk.domain.identifier.TrEMBLIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.UniProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.io.remote.KEGGOrthology2OrganismProtein;
 import uk.ac.ebi.io.remote.KEGGOrthology2OrganismProtein.KEGGOrthologyOrgProtLuceneFields;
-import uk.ac.ebi.resource.DefaultIdentifierFactory;
-import uk.ac.ebi.resource.organism.Taxonomy;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 
 /**
  *          UniProtCrossReferenceService - 2011.10.26 <br>

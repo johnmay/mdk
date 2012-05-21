@@ -20,9 +20,9 @@
  */
 package uk.ac.ebi.io.xml;
 
-import uk.ac.ebi.chemet.resource.IdentifierSet;
-import uk.ac.ebi.chemet.resource.chemical.DrugBankIdentifier;
-import uk.ac.ebi.interfaces.identifiers.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
+import uk.ac.ebi.mdk.domain.identifier.DrugBankIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
  * @name    DrugBankEntry
