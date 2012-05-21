@@ -20,11 +20,11 @@ package uk.ac.ebi.mdk.tool;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.Entity;
+import uk.ac.ebi.mdk.tool.match.EntityAligner;
 import uk.ac.ebi.mdk.tool.match.EntityMatcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Stack;
 
 /**
@@ -33,7 +33,7 @@ import java.util.Stack;
  *
  * @author John May
  */
-public abstract class AbstractEntityAligner<E extends Entity> {
+public abstract class AbstractEntityAligner<E extends Entity> implements EntityAligner<E> {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractEntityAligner.class);
 
@@ -92,9 +92,6 @@ public abstract class AbstractEntityAligner<E extends Entity> {
     public EntityMatcher<E, ?> peek() {
         return matchers.peek();
     }
-
-    public abstract List<E> getMatches(E entity);
-
 
     /**
      * Clear the method stack
