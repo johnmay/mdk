@@ -70,16 +70,6 @@ public class AlignReconstructionBenchmark {
                     queries = queries.subList(0, querySize);
 
 
-                    long buildTime = 0l;
-                    {
-                        long start = System.currentTimeMillis();
-                        mappedEntityAligner.build();
-                        long end = System.currentTimeMillis();
-
-                        buildTime = end - start;
-                    }
-
-
                     long uncached = 0l;
                     long cached = 0l;
                     long mapped = 0l;
@@ -117,10 +107,10 @@ public class AlignReconstructionBenchmark {
                             System.out.println(m.getName() + ": " + mappedEntityAligner.getMatches(m));
                         }
                         long end = System.currentTimeMillis();
-                        mapped = buildTime + (end - start);
+                        mapped = (end - start);
                     }
                     double size = queries.size();
-                    System.out.println(Joiner.on("\t").join(referenceSize, uncached, uncached / size, cached, cached / size, mapped, mapped / size, buildTime));
+                    System.out.println(Joiner.on("\t").join(referenceSize, uncached, uncached / size, cached, cached / size, mapped, mapped / size));
 
 
                 }
