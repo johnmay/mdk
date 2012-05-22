@@ -18,8 +18,9 @@
 
 package uk.ac.ebi.mdk.domain.entity.collection;
 
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.Collection;
 
@@ -31,11 +32,17 @@ public interface Reactome extends Collection<MetabolicReaction> {
 
     /**
      * Access reactions that contain the given metabolite
+     *
      * @param m
+     *
      * @return
      */
     public Collection<MetabolicReaction> getReactions(Metabolite m);
 
+    public MetabolicReaction getReaction(Identifier identifier);
+
+    public Collection<MetabolicReaction> getReactions(Identifier identifier);
+
     // force rebuild of participant mapping
-    public void rebuildParticipantMap();
+    public void rebuildMaps();
 }
