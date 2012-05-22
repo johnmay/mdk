@@ -1,7 +1,6 @@
 package uk.ac.ebi.mdk.apps.io;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.Isotope;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -12,10 +11,7 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.*;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.mdk.domain.entity.EntityFactory;
-import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.reaction.*;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
@@ -141,7 +137,7 @@ public class BioCycConverter {
 
                 try {
                     reader.setReader(new FileReader(map.remove(accession)));
-                    IAtomContainer atomContainer = reader.read(new AtomContainer());
+                    IAtomContainer atomContainer = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
                     if (atomContainer.getAtomCount() > 0) {
                         metabolite.addAnnotation(new AtomContainerAnnotation(atomContainer));
                     }
@@ -174,6 +170,13 @@ public class BioCycConverter {
         while (reader.hasNext()) {
             MetabolicReaction reaction = dat2Reaction(reader.next());
             reconstruction.addReaction(reaction);
+        }
+
+        System.out.println("Duplicate reaction identifiers:");
+        for (Reaction reaction : reconstruction.getReactome()) {
+            if (reconstruction.getReactome().getReactions(reaction.getIdentifier()).size() != 1) {
+                System.out.println(reaction.getIdentifier());
+            }
         }
 
         reader.close();
