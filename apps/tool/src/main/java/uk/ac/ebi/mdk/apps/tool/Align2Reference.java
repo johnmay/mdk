@@ -17,6 +17,8 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.tool.MappedEntityAligner;
 import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
+import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil;
+import uk.ac.ebi.mdk.tool.domain.hash.*;
 import uk.ac.ebi.mdk.tool.match.DirectMatcher;
 import uk.ac.ebi.mdk.tool.match.EntityAligner;
 import uk.ac.ebi.mdk.tool.match.MetaboliteHashCodeMatcher;
@@ -76,20 +78,20 @@ public class Align2Reference extends CommandLineMain {
         final EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.getMetabolome(), true);
 
         aligner.push(new DirectMatcher<Metabolite>());
-//        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-//                                                                                      BondOrderSumSeed.class,
-//                                                                                      StereoSeed.class,
-//                                                                                      ConnectedAtomSeed.class,
-//                                                                                      ChargeSeed.class)));
-//        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-//                                                                                      BondOrderSumSeed.class,
-//                                                                                      ConnectedAtomSeed.class,
-//                                                                                      ChargeSeed.class)));
-//        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-//                                                                                      BondOrderSumSeed.class,
-//                                                                                      ConnectedAtomSeed.class)));
-//        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-//                                                                                      ConnectedAtomSeed.class)));
+        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                                      BondOrderSumSeed.class,
+                                                                                      StereoSeed.class,
+                                                                                      ConnectedAtomSeed.class,
+                                                                                      ChargeSeed.class)));
+        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                                      BondOrderSumSeed.class,
+                                                                                      ConnectedAtomSeed.class,
+                                                                                      ChargeSeed.class)));
+        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                                      BondOrderSumSeed.class,
+                                                                                      ConnectedAtomSeed.class)));
+        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                                      ConnectedAtomSeed.class)));
 
         aligner.push(new NameMatcher<Metabolite>());
         aligner.push(new NameMatcher<Metabolite>(true, true));
@@ -117,17 +119,6 @@ public class Align2Reference extends CommandLineMain {
 
                     if (matches.isEmpty()) {
                         unmatched.add(m);
-                    } else {
-                        boolean found = false;
-                        for (Metabolite r : matches) {
-                            found = hashMatcher.matches(m, r) || found;
-                        }
-                        if (!found && m.hasStructure()) {
-                            for (Metabolite r : matches) {
-                                mismatched.add(new HashMap.SimpleEntry<Metabolite, Metabolite>(m, r));
-                            }
-                        }
-
                     }
 
                 }
@@ -238,7 +229,7 @@ public class Align2Reference extends CommandLineMain {
         for (MetabolicReaction reaction : reactome) {
 
             // skip transport reactsions for now
-            //if (TransportReactionUtil.isTransport(reaction)) continue;
+            if (TransportReactionUtil.isTransport(reaction)) continue;
 
 
             System.out.println(reaction.getIdentifier() + ": " + reaction);
@@ -248,9 +239,9 @@ public class Align2Reference extends CommandLineMain {
                 System.out.println("\t" + rxnMatch);
             }
 
-            //count += matches.isEmpty() ? 1 : 0;
+            count += matches.isEmpty() ? 1 : 0;
 
-            //if (true) continue;
+            if (true) continue;
 
             Map<Identifier, MutableInt> reactionReferences = new HashMap<Identifier, MutableInt>();
 
