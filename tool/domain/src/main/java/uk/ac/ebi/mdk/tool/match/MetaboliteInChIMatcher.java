@@ -49,7 +49,7 @@ public class MetaboliteInChIMatcher
     }
 
     @Override
-    public Boolean matches(Set<String> queryMetric, Set<String> subjectMetric) {
+    public Boolean matchMetric(Set<String> queryMetric, Set<String> subjectMetric) {
         return matchAny(queryMetric, subjectMetric);
     }
 

@@ -6,10 +6,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.tool.match.EntityMatcher;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Entity aligner flattens all metrics (per matcher) into a single map which
@@ -21,33 +18,49 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
 
     private static final Logger LOGGER = Logger.getLogger(MappedEntityAligner.class);
 
-    private List<MetricMap> maps = new ArrayList<MetricMap>();
+    private List<MetricMap> metricMap = new ArrayList<MetricMap>();
+    private Map<E, List<E>> matched   = new HashMap<E, List<E>>();
+
+    private Boolean cacheMatches;
 
     public MappedEntityAligner() {
+        this(Boolean.FALSE);
+    }
+
+    public MappedEntityAligner(Boolean cacheMatches) {
         super();
+        this.cacheMatches = cacheMatches;
     }
 
     public MappedEntityAligner(Collection<E> references) {
         super(references);
+        this.cacheMatches = Boolean.FALSE;
     }
 
-    public void build() {
+    public MappedEntityAligner(Collection<E> references, Boolean cacheMatches) {
+        super(references);
+        this.cacheMatches = cacheMatches;
     }
+
 
     public MetricMap getMetricMap(int i) {
-        if (i >= maps.size() || maps.get(i) == null || maps.get(i).isEmpty()) {
+        if (i >= metricMap.size() || metricMap.get(i) == null || metricMap.get(i).isEmpty()) {
             // build metric map
             MetricMap map = new MetricMap(references.size());
             for (E entity : references) {
                 map.put(entity, matchers.get(i));
             }
-            maps.add(i, map);
+            metricMap.add(i, map);
         }
-        return maps.get(i);
+        return metricMap.get(i);
     }
 
     @Override
     public List<E> getMatches(E entity) {
+
+        if (matched.containsKey(entity)) {
+            return matched.get(entity);
+        }
 
         for (int i = 0; i < matchers.size(); i++) {
             // don't need to cache the query
@@ -58,14 +71,25 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
                 for (Object submetric : (Collection) metric) {
 
                     if (map.containsKey(submetric)) {
-                        return map.get(submetric);
+                        List<E> matches = map.get(submetric);
+                        matched.put(entity, matches);
+                        return matches;
                     }
+                }
+            } else {
+                if (map.containsKey(metric)) {
+                    List<E> matches = map.get(metric);
+                    matched.put(entity, matches);
+                    return matches;
                 }
             }
 
         }
 
-        return new ArrayList<E>();
+        List<E> matches = new ArrayList<E>(0);
+        matched.put(entity, matches);
+
+        return matches;
     }
 
     private class MetricMap {

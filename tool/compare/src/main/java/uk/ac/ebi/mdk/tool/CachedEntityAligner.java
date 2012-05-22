@@ -34,7 +34,7 @@ public class CachedEntityAligner<E extends Entity> extends AbstractEntityAligner
             EntityMatcher matcher = matchers.get(i);
 
             for (E reference : references) {
-                if (matcher.matches(getQueryMetric(i, entity), getReferenceMetric(i, reference))) {
+                if (matcher.matchMetric(getQueryMetric(i, entity), getReferenceMetric(i, reference))) {
                     matching.add(reference);
                 }
             }

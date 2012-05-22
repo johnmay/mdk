@@ -16,7 +16,7 @@ public class CrossReferenceMatcher<E extends AnnotatedEntity>
         implements EntityMatcher<E, Set<Identifier>> {
 
     @Override
-    public Boolean matches(Set<Identifier> queryMetric, Set<Identifier> subjectMetric) {
+    public Boolean matchMetric(Set<Identifier> queryMetric, Set<Identifier> subjectMetric) {
         return matchAny(queryMetric, subjectMetric);
     }
 

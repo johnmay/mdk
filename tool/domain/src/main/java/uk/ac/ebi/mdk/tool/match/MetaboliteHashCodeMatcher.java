@@ -68,7 +68,7 @@ public class MetaboliteHashCodeMatcher
     }
 
     @Override
-    public Boolean matches(Set<Integer> queryMetric, Set<Integer> subjectMetric) {
+    public Boolean matchMetric(Set<Integer> queryMetric, Set<Integer> subjectMetric) {
         return matchAny(queryMetric, subjectMetric);
     }
 

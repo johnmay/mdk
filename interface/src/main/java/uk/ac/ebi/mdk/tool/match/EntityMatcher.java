@@ -57,6 +57,6 @@ public interface EntityMatcher<E extends Entity, M> {
      *
      * @return
      */
-    public Boolean matches(M queryMetric, M subjectMetric);
+    public Boolean matchMetric(M queryMetric, M subjectMetric);
 
 }
