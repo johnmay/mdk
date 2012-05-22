@@ -72,11 +72,11 @@ public class TestMoleculeFactory {
     }
 
     public static IAtomContainer lAlanine() {
-        return loadMol("ChEBI_15570.mol", "L-alanine", Boolean.TRUE);
+        return loadMol("ChEBI_15570.mol", "L-alanine", Boolean.FALSE);
     }
 
     public static IAtomContainer dAlanine() {
-        return loadMol("ChEBI_16977.mol", "D-alanine", Boolean.TRUE);
+        return loadMol("ChEBI_16977.mol", "D-alanine", Boolean.FALSE);
     }
 
     public static IAtomContainer atp_minus_3() {
