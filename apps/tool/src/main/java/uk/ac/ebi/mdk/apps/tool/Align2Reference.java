@@ -2,15 +2,22 @@ package uk.ac.ebi.mdk.apps.tool;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import org.apache.commons.cli.Option;
+import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.apps.CommandLineMain;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.tool.MappedEntityAligner;
-import uk.ac.ebi.mdk.tool.domain.hash.*;
+import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
+import uk.ac.ebi.mdk.tool.match.DirectMatcher;
 import uk.ac.ebi.mdk.tool.match.EntityAligner;
 import uk.ac.ebi.mdk.tool.match.MetaboliteHashCodeMatcher;
 import uk.ac.ebi.mdk.tool.match.NameMatcher;
@@ -48,8 +55,8 @@ public class Align2Reference extends CommandLineMain {
         final Reconstruction reference = getReconstruction("reference");
         System.out.println("done");
 
-        System.out.println("Query metabolome (" + query.getAccession() + ") size: " + query.getMetabolome().size());
-        System.out.println("Reference metabolome (" + query.getAccession() + ") size: " + reference.getMetabolome().size());
+        System.out.println("Query metabolome (" + query.getAccession() + ") metabolome size: " + query.getMetabolome().size() + " reactome size: " + query.getReactome().size());
+        System.out.println("Reference metabolome (" + reference.getAccession() + ") metabolome size: " + reference.getMetabolome().size() + " reactome size: " + reference.getReactome().size());
 
 
         if (has("profile")) {
@@ -64,30 +71,34 @@ public class Align2Reference extends CommandLineMain {
             }
         }
 
+        MolecularHashFactory.getInstance().setDepth(1);
+
+        final EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.getMetabolome(), true);
+
+        aligner.push(new DirectMatcher<Metabolite>());
+//        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+//                                                                                      BondOrderSumSeed.class,
+//                                                                                      StereoSeed.class,
+//                                                                                      ConnectedAtomSeed.class,
+//                                                                                      ChargeSeed.class)));
+//        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+//                                                                                      BondOrderSumSeed.class,
+//                                                                                      ConnectedAtomSeed.class,
+//                                                                                      ChargeSeed.class)));
+//        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+//                                                                                      BondOrderSumSeed.class,
+//                                                                                      ConnectedAtomSeed.class)));
+//        aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+//                                                                                      ConnectedAtomSeed.class)));
+
+        aligner.push(new NameMatcher<Metabolite>());
+        aligner.push(new NameMatcher<Metabolite>(true, true));
+
 //        Metabolite m1 = query.getMetabolome().get("KDO-lipid IV(A)").iterator().next();
 //        Metabolite m2 = reference.getMetabolome().get("α-Kdo-(2&rarr;6)-lipid IVA").iterator().next();
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-
-                EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.getMetabolome());
-
-                aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-                                                                                              BondOrderSumSeed.class,
-                                                                                              StereoSeed.class,
-                                                                                              ConnectedAtomSeed.class,
-                                                                                              ChargeSeed.class)));
-                aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-                                                                                              BondOrderSumSeed.class,
-                                                                                              ConnectedAtomSeed.class,
-                                                                                              ChargeSeed.class)));
-                aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-                                                                                              BondOrderSumSeed.class,
-                                                                                              ConnectedAtomSeed.class)));
-                aligner.push(new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-                                                                                              ConnectedAtomSeed.class)));
-                aligner.push(new NameMatcher<Metabolite>());
-                aligner.push(new NameMatcher<Metabolite>(true, true));
 
 
                 Collection<Metabolite> unmatched = new ArrayList<Metabolite>();
@@ -173,7 +184,12 @@ public class Align2Reference extends CommandLineMain {
             }
         });
         t.setName("METABOLOME ALIGNMENT");
-        //t.start();
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
 
         final Map<Metabolite, Integer> countMap = new HashMap<Metabolite, java.lang.Integer>();
@@ -182,12 +198,183 @@ public class Align2Reference extends CommandLineMain {
             countMap.put(m, reactome.getReactions(m).size());
         }
 
+        System.out.println("Most common metabolites:");
         for (Map.Entry<Metabolite, Integer> e : entriesSortedByValues(countMap)) {
-            System.out.println(e.getKey() + ":" + e.getKey().hashCode() + ":" + e.getValue());
+            if (e.getValue() > 40) {
+                System.out.println(e.getKey() + ":" + e.getKey().hashCode() + ":" + e.getValue());
+            }
         }
 
+        Set<Metabolite> queryCurrencyMetabolites = new HashSet<Metabolite>();
+        Set<Metabolite> referenceCurrencyMetabolites = new HashSet<Metabolite>();
+        queryCurrencyMetabolites.addAll(query.getMetabolome().get("H+"));
+        queryCurrencyMetabolites.addAll(query.getMetabolome().get("H2O"));
+        queryCurrencyMetabolites.addAll(query.getMetabolome().get("CO2"));
+        queryCurrencyMetabolites.addAll(query.getMetabolome().get("ammonium"));
+        queryCurrencyMetabolites.addAll(query.getMetabolome().get("ammonia"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("H+"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("H2O"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("CO2"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("ammonium"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("ammonia"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("Phosphate"));
+
+        int count = 0;
+
+        System.out.println();
+        System.out.println("| REACTOME ALIGNMENT |");
+
+        EntityAligner<MetabolicReaction> reactionAligner = new MappedEntityAligner<MetabolicReaction>(reference.getReactome());
+
+
+        reactionAligner.push(new ReactionMatcher(aligner));
+        reactionAligner.push(new ReactionMatcher(aligner, false));
+        reactionAligner.push(new ReactionMatcher(aligner, true, Collections.singleton(reference.getMetabolome().get("H+").iterator().next())));
+        reactionAligner.push(new ReactionMatcher(aligner, false, Collections.singleton(reference.getMetabolome().get("H+").iterator().next())));
+        reactionAligner.push(new ReactionMatcher(aligner, false, new HashSet<Metabolite>(Arrays.asList(reference.getMetabolome().get("H+").iterator().next(),
+                                                                                                       reference.getMetabolome().get("H2O").iterator().next()))));
+        reactionAligner.push(new ReactionMatcher(aligner, false, referenceCurrencyMetabolites));
+
+        for (MetabolicReaction reaction : reactome) {
+
+            // skip transport reactsions for now
+            //if (TransportReactionUtil.isTransport(reaction)) continue;
+
+
+            System.out.println(reaction.getIdentifier() + ": " + reaction);
+
+            Collection<MetabolicReaction> matches = reactionAligner.getMatches(reaction);
+            for (MetabolicReaction rxnMatch : matches) {
+                System.out.println("\t" + rxnMatch);
+            }
+
+            //count += matches.isEmpty() ? 1 : 0;
+
+            //if (true) continue;
+
+            Map<Identifier, MutableInt> reactionReferences = new HashMap<Identifier, MutableInt>();
+
+            for (Participant<Metabolite, ?> p : reaction.getParticipants()) {
+
+                Metabolite m = p.getMolecule();
+
+                System.out.print("\t" + m.getName() + " == ");
+
+                for (Metabolite r : aligner.getMatches(m)) {
+
+                    System.out.print(r + " ");
+
+                    for (Reaction rxnRef : reference.getReactome().getReactions(r)) {
+
+                        Identifier identifier = rxnRef.getIdentifier();
+
+                        if (!reactionReferences.containsKey(identifier)) {
+                            reactionReferences.put(identifier, new MutableInt());
+                        }
+
+                        reactionReferences.get(identifier).increment();
+
+
+                    }
+                }
+
+                System.out.println();
+
+            }
+
+            System.out.println("Candidate matches for " + reaction);
+            for (Map.Entry<Identifier, MutableInt> e : reactionReferences.entrySet()) {
+
+                int nParticipants = e.getValue().toInteger();
+
+                if (nParticipants >= adjustedCount(reaction, queryCurrencyMetabolites)) {
+
+                    Collection<MetabolicParticipant> refps = adjustedParticipants(reference.getReactome().getReaction(e.getKey()), referenceCurrencyMetabolites);
+
+                    boolean show = true;
+
+                    MetabolicReaction referenceReaction = reference.getReactome().getReaction(e.getKey());
+
+                    System.out.println(referenceReaction);
+
+                    for (Participant<Metabolite, ?> p : adjustedParticipants(reaction, queryCurrencyMetabolites)) {
+
+                        List<Metabolite> referenceMetabolites = aligner.getMatches(p.getMolecule());
+
+                        if (referenceMetabolites.isEmpty()) {
+                            // missing reference
+                            show = false;
+                            break;
+                        }
+
+                        if (referenceMetabolites.size() > 1) {
+                            // complex case
+                            show = false;
+                            break;
+                        }
+
+                        Metabolite r = referenceMetabolites.get(0);
+                        boolean found = false;
+                        MetabolicParticipant remove = null;
+                        for (MetabolicParticipant rp : refps) {
+                            if (rp.getMolecule().equals(r)) {
+                                found = true;
+                                remove = rp;
+                                break;
+                            }
+                        }
+
+
+                        if (!found) {
+                            show = false;
+                        } else {
+                            refps.remove(remove);
+                        }
+
+
+                    }
+
+                    // matches
+                    if (show && refps.isEmpty()) {
+                        System.out.println("\t [match] " + referenceReaction);
+//                        MetabolicReaction rxn1 = m2.calculatedMetric(reaction).iterator().next();
+//                        MetabolicReaction rxn2 = m2.calculatedMetric(referenceReaction).iterator().next();
+//                        System.out.println(rxn1.hashCode());
+//                        System.out.println(rxn2.hashCode());
+//                        System.out.println(rxn1.equals(rxn2));
+
+                    }
+                }
+
+            }
+
+            if (++count == 10) break;
+
+        }
+
+        System.out.println(count + "/" + query.getReactome().size() + " were not matched (transport reactions skipped by default)");
 
     }
+
+
+    static <M> int adjustedCount(Reaction<? extends Participant<M, ?>> rxn, Set<M> currency) {
+        int count = 0;
+        for (Participant<M, ?> p : rxn.getParticipants()) {
+            count += currency.contains(p.getMolecule()) ? 0 : 1;
+        }
+        return count;
+    }
+
+    static <M, P extends Participant<M, ?>> Collection<P> adjustedParticipants(Reaction<P> rxn, Set<M> currency) {
+        Collection<P> participants = new ArrayList<P>();
+        for (P p : rxn.getParticipants()) {
+            if (!currency.contains(p.getMolecule())) {
+                participants.add(p);
+            }
+        }
+        return participants;
+    }
+
 
     static <K, V extends Comparable<? super V>> SortedSet<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
         SortedSet<Map.Entry<K, V>> sortedEntries = new TreeSet<Map.Entry<K, V>>(
