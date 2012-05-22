@@ -73,4 +73,12 @@ public abstract class AbstractMatcher<E extends Entity, M> implements EntityMatc
     public Boolean matchMetric(M queryMetric, M subjectMetric) {
         return queryMetric.equals(subjectMetric);
     }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Boolean partialMatch() {
+        return Boolean.FALSE;
+    }
 }

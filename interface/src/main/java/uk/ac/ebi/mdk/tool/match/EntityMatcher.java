@@ -59,4 +59,15 @@ public interface EntityMatcher<E extends Entity, M> {
      */
     public Boolean matchMetric(M queryMetric, M subjectMetric);
 
+    /**
+     * Indicates if the match is partial. Partial matches can not be
+     * optimised in a map.  In most case a matcher will look for exact
+     * matches and thus this method should return false. Partial matches
+     * are useful if we are looking to reference example at sub-structures/generic
+     * structures.
+     *
+     * @return
+     */
+    public Boolean partialMatch();
+
 }
