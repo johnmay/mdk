@@ -24,22 +24,23 @@ import com.google.common.base.Objects;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.Charge;
-import uk.ac.ebi.mdk.domain.annotation.InChI;
-import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.entity.collection.MetaboliteClassImplementation;
 import uk.ac.ebi.mdk.domain.entity.metabolite.MetaboliteClass;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 
 import java.util.Collection;
 
 
 /**
- *          Metabolite – 2011.09.05 <br>
- *          Class description
+ * Metabolite – 2011.09.05 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class MetaboliteImpl
         extends AbstractAnnotatedEntity
@@ -64,12 +65,10 @@ public class MetaboliteImpl
 
 
     /**
-     *
      * Convenience constructor wraps accession in a BasicChemicalIdentifier
      *
      * @param abbreviation
      * @param name
-     * 
      */
     public MetaboliteImpl(String abbreviation, String name) {
         // accession is ignored here
@@ -78,7 +77,6 @@ public class MetaboliteImpl
 
 
     /**
-     *
      * Accessor to whether the molecule is generic (contains one or more -R groups)
      *
      * @return
@@ -89,9 +87,7 @@ public class MetaboliteImpl
 
 
     /**
-     *
      * Sets whether the molecule is generic (has -R group)
-     *
      */
     public void setGeneric(boolean generic) {
         this.generic = generic;
@@ -111,9 +107,7 @@ public class MetaboliteImpl
 
 
     /**
-     *
      * Molecule charge mutator
-     *
      */
     public void setCharge(Double charge) {
         addAnnotation(new Charge(charge));
@@ -134,7 +128,7 @@ public class MetaboliteImpl
         }
         final MetaboliteImpl other = (MetaboliteImpl) obj;
 
-        if (super.equals(other) == false) {
+        if (!super.equals(other)) {
             return false;
         }
 
@@ -155,7 +149,7 @@ public class MetaboliteImpl
     @Override
     public int hashCode() {
         int hash = super.hashCode();
-        return Objects.hashCode(hash, generic, type);
+        return hash + Objects.hashCode(generic, type);
     }
 
 

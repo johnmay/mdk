@@ -275,7 +275,7 @@ public abstract class AbstractAnnotatedEntity
     @Override
     public boolean equals(Object obj) {
 
-        if (super.equals(obj) == false) {
+        if (!super.equals(obj)) {
             return false;
         }
 
