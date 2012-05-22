@@ -84,8 +84,6 @@ public class AbstractReaction<P extends Participant>
     /**
      * Constructor for a generic reaction. The constructor must provide a comparator for
      * class of molecule used in the generic reaction. Ideally this should be a singleton class.
-     *
-
      */
     public AbstractReaction() {
         reactants = new LinkedList<P>();
@@ -383,6 +381,29 @@ public class AbstractReaction<P extends Participant>
     private Map<Integer, MutableInt> map = new HashMap<Integer, MutableInt>();
 
 
+    public int getParticipantHashCode(Collection<P> participants) {
+        int hash = 57;
+        map.put(hash, new MutableInt());
+
+        for (Participant p : participants) {
+            int value = p.hashCode();
+            if (!map.containsKey(value)) {
+                map.put(value, new MutableInt());
+            } else {
+                map.get(value).increment();
+            }
+            hash ^= rotate(value, map);
+            if (!map.containsKey(hash)) {
+                map.put(hash, new MutableInt());
+            } else {
+                map.get(hash).increment();
+            }
+
+        }
+
+        return hash;
+    }
+
     /**
      * Calculates the hash code for the reaction in it's current state. As the molecules need to be sorted
      * this operation is more expensive and thus non-optimal. The hash is therefore cached in a the variable
@@ -396,54 +417,37 @@ public class AbstractReaction<P extends Participant>
     @Override
     public int hashCode() {
 
-        int hash = 257;
+        int hash = super.hashCode();
 
         map.clear();
         map.put(hash, new MutableInt());
 
-        for (Participant p : reactants) {
-            int value = p.hashCode();
-            if (!map.containsKey(value)) {
-                map.put(value, new MutableInt());
-            } else {
-                map.get(value).increment();
-            }
-            hash ^= rotate(value, map);
-            if (!map.containsKey(hash)) {
-                map.put(hash, new MutableInt());
-            } else {
-                map.get(hash).increment();
-            }
+        int reactantHash = getParticipantHashCode(reactants);
+        int productHash = getParticipantHashCode(products);
 
+        if (!map.containsKey(reactantHash)) {
+            map.put(reactantHash, new MutableInt());
+        } else {
+            map.get(reactantHash).increment();
         }
-        for (Participant p : products) {
-            int value = p.hashCode();
-            if (!map.containsKey(value)) {
-                map.put(value, new MutableInt());
-            } else {
-                map.get(value).increment();
-            }
-            hash ^= rotate(value, map);
-            if (!map.containsKey(hash)) {
-                map.put(hash, new MutableInt());
-            } else {
-                map.get(hash).increment();
-            }
+        hash ^= rotate(reactantHash, map);
+        if (!map.containsKey(hash)) {
+            map.put(hash, new MutableInt());
+        } else {
+            map.get(hash).increment();
         }
 
-        //        List reac = new ArrayList(this.reactants);
-        //        List prod = new ArrayList(this.products);
-        //
-        //        Collections.sort(reac);
-        //        Collections.sort(prod);
-        //
-        //        Integer[] hashes = new Integer[]{reac.hashCode(),
-        //                                         prod.hashCode()};
-        //
-        //        Arrays.sort(hashes);
-        //
-        //        hash = 59 * hash + hashes[0];
-        //        hash = 59 * hash + hashes[1];
+        if (!map.containsKey(productHash)) {
+            map.put(productHash, new MutableInt());
+        } else {
+            map.get(productHash).increment();
+        }
+        hash ^= rotate(productHash, map);
+        if (!map.containsKey(hash)) {
+            map.put(hash, new MutableInt());
+        } else {
+            map.get(hash).increment();
+        }
 
         return hash;
 
@@ -475,37 +479,43 @@ public class AbstractReaction<P extends Participant>
         if (getClass() != obj.getClass()) {
             return false;
         }
+
+        if (!super.equals(obj)) {
+            return false;
+        }
+
         final AbstractReaction<P> other = (AbstractReaction<P>) obj;
 
-        /* Make shallow copies of compounds, coeffcients and compartments and sort */
-        // query compounds
-        List<P> queryReactants = new ArrayList(this.reactants);
-        List<P> queryProducts = new ArrayList(this.products);
-        Collections.sort(queryReactants);
-        Collections.sort(queryProducts);
-
-        // other compounds
-        List<P> otherReactants = new ArrayList(other.reactants);
-        List<P> otherProducts = new ArrayList(other.products);
-        Collections.sort(otherReactants);
-        Collections.sort(otherProducts);
 
         if (this.generic == false && other.generic == false) {
 
+            map.clear();
+            int queryReactantHash = getParticipantHashCode(this.reactants);
+            int queryProductHash = getParticipantHashCode(this.products);
+            map.clear();
+            int otherReactantHash = getParticipantHashCode(other.reactants);
+            int otherProductHash = getParticipantHashCode(other.products);
+
             /* calculate the hashes for these all the reaction sides and flattern into a hashset to test the length */
-            Set hashes = new HashSet<Integer>(Arrays.asList(queryReactants.hashCode(),
-                                                            queryProducts.hashCode(),
-                                                            otherReactants.hashCode(),
-                                                            otherProducts.hashCode()));
+            Set hashes = new HashSet<Integer>(Arrays.asList(queryReactantHash,
+                                                            queryProductHash,
+                                                            otherReactantHash,
+                                                            otherProductHash));
+
+
+            Set<P> queryReactants = new HashSet<P>(this.reactants);
+            Set<P> queryProducts = new HashSet<P>(this.products);
+            Set<P> otherReactants = new HashSet<P>(other.reactants);
+            Set<P> otherProducts = new HashSet<P>(other.products);
 
 
             /* Check the correct number of side */
             if (hashes.size() != 2) {
                 // not handling cases where reactants and products are the same.. could just be same hashcode
                 if (hashes.size() == 1) {
-                    if (queryReactants.equals(otherReactants) && queryReactants.equals(
-                            otherReactants)
-                            && queryProducts.equals(otherProducts)) {
+                    if (queryReactants.containsAll(otherReactants)
+                            && queryReactants.containsAll(queryProducts)
+                            && queryProducts.containsAll(otherProducts)) {
                         return true;
                     }
                     throw new UnsupportedOperationException("Reaction.equals(): Unresolvable reaction comparision [1]\n\t"
@@ -514,11 +524,12 @@ public class AbstractReaction<P extends Participant>
                 return false;
             }
 
+
             // these are sorted so can do direct equals on the sets
-            if (queryReactants.hashCode() == otherReactants.hashCode()) {
-                return queryReactants.equals(otherReactants) && queryProducts.equals(otherProducts);
-            } else if (queryReactants.hashCode() == otherProducts.hashCode()) {
-                return queryReactants.equals(otherProducts) && queryProducts.equals(otherReactants);
+            if (queryReactantHash == otherReactantHash) {
+                return queryReactants.containsAll(otherReactants) && queryProducts.containsAll(otherProducts);
+            } else if (queryReactantHash == otherProductHash) {
+                return queryReactants.containsAll(otherProducts) && queryProducts.containsAll(otherReactants);
             } else {
                 return false; // this.reac == this.prod and other.reac == other.prod... and so must be false (2x hashe values)
             }
@@ -526,12 +537,12 @@ public class AbstractReaction<P extends Participant>
         } else {
             LOGGER.info("Using generic comparisson");
             // XXX May be a quicker way but for not this works
-            if (genericEquals(queryReactants, otherReactants) && genericEquals(queryProducts,
-                                                                               otherProducts)) {
+            if (genericEquals(this.reactants, other.reactants) && genericEquals(this.products,
+                                                                                other.products)) {
                 return true;
             }
-            if (genericEquals(queryReactants, otherProducts) && genericEquals(queryProducts,
-                                                                              otherReactants)) {
+            if (genericEquals(this.reactants, other.products) && genericEquals(this.products,
+                                                                               other.reactants)) {
                 return true;
             }
         }
@@ -570,12 +581,12 @@ public class AbstractReaction<P extends Participant>
 
 
     /**
-     *
      * Rotates the seed if the seed has already been seen in the provided
      * occurrences map
      *
      * @param seed
      * @param occurences
+     *
      * @return
      */
     public static int rotate(int seed, Map<Integer, MutableInt> occurences) {
@@ -589,12 +600,12 @@ public class AbstractReaction<P extends Participant>
     }
 
     /**
-     *
      * Rotates the seed using xor shift (pseudo random number generation) the
      * specified number of times.
      *
-     * @param seed the starting seed
+     * @param seed     the starting seed
      * @param rotation Number of xor rotations to perform
+     *
      * @return The starting seed rotated the specified number of times
      */
     public static int rotate(int seed, int rotation) {
