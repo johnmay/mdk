@@ -32,19 +32,18 @@ import uk.ac.ebi.mdk.domain.identifier.InChI;
 import java.io.InputStream;
 
 /**
- * @name    TestMoleculeFactory
- * @date    2011.08.12
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- * @brief   ...class description...
- *
+ * @name TestMoleculeFactory
+ * @date 2011.08.12
+ * @brief ...class description...
  */
 public class TestMoleculeFactory {
 
-    private static final Logger LOGGER = Logger.getLogger(TestMoleculeFactory.class);
-    private static final InChI but1ene = new InChI("InChI=1S/C4H8/c1-3-4-2/h3H,1,4H2,2H3");
-    private static final InChI butane = new InChI("InChI=1S/C4H10/c1-3-4-2/h3-4H2,1-2H3");
+    private static final Logger LOGGER  = Logger.getLogger(TestMoleculeFactory.class);
+    private static final InChI  but1ene = new InChI("InChI=1S/C4H8/c1-3-4-2/h3H,1,4H2,2H3");
+    private static final InChI  butane  = new InChI("InChI=1S/C4H10/c1-3-4-2/h3-4H2,1-2H3");
 
 
     public static IAtomContainer _123Triazole() {
@@ -88,10 +87,11 @@ public class TestMoleculeFactory {
     }
 
     public static IAtomContainer butan1ol() {
-       return loadMol("ChEBI_28885.mol", "Butan-1-ol", Boolean.FALSE);
+        return loadMol("ChEBI_28885.mol", "Butan-1-ol", Boolean.FALSE);
     }
+
     public static IAtomContainer butan2ol() {
-       return loadMol("ChEBI_35687.mol", "Butan-2-ol", Boolean.FALSE);
+        return loadMol("ChEBI_35687.mol", "Butan-2-ol", Boolean.FALSE);
     }
 
     public static IAtomContainer adenine() {
@@ -152,9 +152,11 @@ public class TestMoleculeFactory {
         return loadMol("ChEBI_16842.mol", "Formaldehyde", true);
     }
 
-    public static IAtomContainer loadMol(String resource, String name, Boolean addH) {
+    public static IAtomContainer loadMol(Class root, String resource, String name, Boolean convertHydrogens) {
+        return loadMol(root.getResourceAsStream(resource), name, convertHydrogens);
+    }
 
-        InputStream stream = TestMoleculeFactory.class.getResourceAsStream(resource);
+    public static IAtomContainer loadMol(InputStream stream, String name, Boolean convertHydrogens){
         MDLV2000Reader mol2Reader = new MDLV2000Reader(stream);
         IMolecule molecule = DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class);
         try {
@@ -163,7 +165,7 @@ public class TestMoleculeFactory {
             CDKHydrogenAdder adder = CDKHydrogenAdder.getInstance(DefaultChemObjectBuilder.getInstance());
             AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
 
-            if (addH) {
+            if (convertHydrogens) {
                 adder.addImplicitHydrogens(molecule);
                 AtomContainerManipulator.convertImplicitToExplicitHydrogens(molecule);
             }
@@ -173,6 +175,10 @@ public class TestMoleculeFactory {
             System.out.println(ex.getMessage());
         }
         return molecule;
+    }
+
+    public static IAtomContainer loadMol(String resource, String name, Boolean convertHydrogens) {
+        return loadMol(TestMoleculeFactory.class.getResourceAsStream(resource), name, convertHydrogens);
     }
 
     public static IAtomContainer but1ene() {
