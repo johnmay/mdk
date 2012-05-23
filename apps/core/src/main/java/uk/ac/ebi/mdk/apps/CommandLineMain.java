@@ -20,6 +20,8 @@ import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
 /**
@@ -119,6 +121,30 @@ public abstract class CommandLineMain
         // not reached
         return new File("");
 
+    }
+
+    /**
+     * Convenience method for accessing a file from the parsed options. Note the method does not check if
+     * the file exists
+     *
+     * @param option
+     *
+     * @return
+     *
+     * @throws IllegalArgumentException
+     */
+    public File getFile(String option, String defaultFilePrefix, String defaultExtension) throws IllegalArgumentException {
+
+        if (getCommandLine().hasOption(option)) {
+            return new File(getCommandLine().getOptionValue(option));
+        } else {
+            try {
+                return File.createTempFile(defaultFilePrefix, defaultExtension);
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+        throw new InvalidParameterException("Could not get file option");
     }
 
     public void showHelp() {
