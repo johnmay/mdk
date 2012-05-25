@@ -4,46 +4,45 @@
  * 2012.02.02
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.ui.component;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.Box;
-import javax.swing.JComponent;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.Element;
 import org.openscience.cdk.Isotope;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
-import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.caf.utility.TextUtility;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
+ * MetaboliteMatchIndication 2012.02.02
  *
- *          MetaboliteMatchIndication 2012.02.02
+ * @author johnmay
+ * @author $Author$ (this version)
+ *         <p/>
+ *         Class description
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Class description
- *
  */
 public class MetaboliteMatchIndication {
 
@@ -92,11 +91,11 @@ public class MetaboliteMatchIndication {
 
         name.setRight(subject.getName());
 
-        Integer nameDiff = StringUtils.getLevenshteinDistance(query.getName().toLowerCase(), subject.getName().toLowerCase());
+        Integer nameDiff = StringUtils.getLevenshteinDistance(name.getLeft().toLowerCase(), subject.getName().toLowerCase());
         name.setDifference(nameDiff.toString());
         name.setQuality(nameDiff <= 2 ? MatchIndication.Quality.Good
-                        : nameDiff <= 5 ? MatchIndication.Quality.Okay
-                          : MatchIndication.Quality.Bad);
+                                      : nameDiff <= 5 ? MatchIndication.Quality.Okay
+                                                      : MatchIndication.Quality.Bad);
 
 
         double queryCharge = query.getCharge();
@@ -107,8 +106,8 @@ public class MetaboliteMatchIndication {
         double chargeDiff = Math.abs(queryCharge - subjectCharge);
 
         charge.setQuality(chargeDiff < 1 ? MatchIndication.Quality.Good
-                          : chargeDiff < 2 ? MatchIndication.Quality.Okay
-                            : MatchIndication.Quality.Bad);
+                                         : chargeDiff < 2 ? MatchIndication.Quality.Okay
+                                                          : MatchIndication.Quality.Bad);
 
         setFormulaQuality();
 

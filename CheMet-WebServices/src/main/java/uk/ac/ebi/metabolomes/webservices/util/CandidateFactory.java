@@ -37,7 +37,7 @@ import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.service.query.name.NameService;
-import uk.ac.ebi.reconciliation.StringEncoder;
+import uk.ac.ebi.mdk.tool.resolve.StringEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;

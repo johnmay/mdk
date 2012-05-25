@@ -8,6 +8,8 @@ package uk.ac.ebi.reconciliation;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import uk.ac.ebi.mdk.tool.resolve.StringEncoder;
+
 import static org.junit.Assert.*;
 
 

@@ -30,7 +30,9 @@ import uk.ac.ebi.mdk.lang.annotation.Description;
  */
 @Brief("Match Candidate")
 @Description("Provides storage of a potential matched candidate entry")
-public class Candidate<I extends Identifier> extends AbstractObservation {
+public class Candidate<I extends Identifier>
+        extends AbstractObservation
+        implements Comparable<Candidate> {
 
     private static final Logger LOGGER = Logger.getLogger(Candidate.class);
 
@@ -38,10 +40,21 @@ public class Candidate<I extends Identifier> extends AbstractObservation {
     private Integer distance;
     private String  name;
 
+    public Candidate() {
+
+    }
+
+    public Candidate(I identifier, String name, Integer distance) {
+        this.identifier = identifier;
+        this.name = name;
+        this.distance = distance;
+    }
+
     /**
      * Access the candidate identifier. The identifier also encodes the
      * dataset and thus provides a resolvable way of getting more names/synonyms
      * for the candidate
+     *
      * @return identifier
      */
     public I getIdentifier() {
@@ -55,7 +68,9 @@ public class Candidate<I extends Identifier> extends AbstractObservation {
     /**
      * Access the distance (levenshtein distance) between this candidate
      * and the query (normally the entity holding this observation.
+     *
      * @return 0 = no difference in scoring measure
+     *
      * @link http://en.wikipedia.org/wiki/Levenshtein_distance
      */
     public Integer getDistance() {
@@ -68,6 +83,7 @@ public class Candidate<I extends Identifier> extends AbstractObservation {
 
     /**
      * Access the name of candidate that provided the score
+     *
      * @return
      */
     public String getName() {
@@ -79,8 +95,43 @@ public class Candidate<I extends Identifier> extends AbstractObservation {
     }
 
     @Override
+    public String toString() {
+        return identifier.getAccession() + " " + name + " d=" + distance;
+    }
+
+    @Override
     public Observation getInstance() {
         return new Candidate<I>();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Candidate candidate = (Candidate) o;
+
+        if (distance != null ? !distance.equals(candidate.distance) : candidate.distance != null) return false;
+        if (identifier != null ? !identifier.equals(candidate.identifier) : candidate.identifier != null) return false;
+        if (name != null ? !name.equals(candidate.name) : candidate.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = identifier != null ? identifier.hashCode() : 0;
+        result = 31 * result + (distance != null ? distance.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public int compareTo(Candidate other) {
+        int distValue = this.getDistance().compareTo(other.getDistance());
+        if (distValue != 0) {
+            return distValue;
+        }
+        return this.getIdentifier().getAccession().compareTo(other.getIdentifier().getAccession());
+    }
 }

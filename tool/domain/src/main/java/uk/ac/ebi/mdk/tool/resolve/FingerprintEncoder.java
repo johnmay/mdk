@@ -1,6 +1,6 @@
 
 /**
- * StringEncoder.java
+ * FingerprintEncoder.java
  *
  * 2011.09.22
  *
@@ -21,19 +21,36 @@
  */
 package uk.ac.ebi.mdk.tool.resolve;
 
+import org.apache.log4j.Logger;
+
+
 /**
- *          StringEncoder – 2011.09.22 <br>
- *          An algorithm to encode a string
+ *          FingerprintEncoder – 2011.09.22 <br>
+ *          A basic fingerprint
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface StringEncoder {
+public class FingerprintEncoder extends AbstractEncoder {
 
-    /**
-     * Encodes a string with the given method
-     */
-    public String encode(String string);
+    private static final Logger LOGGER = Logger.getLogger(FingerprintEncoder.class);
+
+
+    public String encode(String string) {
+
+        String clean = string.trim();
+        clean = string.toLowerCase();
+        String preClean = clean;
+        clean = removeChargeBrace(clean);
+        clean = addSpaceWhereDashesAre(clean);
+        clean = removeControlCharacters(clean);
+        clean = removeHTMLTags(clean);
+        clean = removeGenericBeginning(clean);
+        clean = reorderFragments(clean);
+
+        return asciify(clean);
+
+    }
 
 
 }

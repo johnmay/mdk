@@ -28,12 +28,24 @@ import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
+import uk.ac.ebi.caf.component.list.MutableJListController;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.Source;
 import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.observation.Candidate;
+import uk.ac.ebi.mdk.service.ServiceManager;
+import uk.ac.ebi.mdk.service.query.data.MolecularChargeService;
+import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
+import uk.ac.ebi.mdk.service.query.name.NameService;
+import uk.ac.ebi.mdk.tool.resolve.ChemicalFingerprintEncoder;
+import uk.ac.ebi.mdk.tool.resolve.NameCandidateFactory;
 import uk.ac.ebi.mdk.ui.component.MetaboliteMatchIndication;
+import uk.ac.ebi.mdk.ui.component.ResourceList;
 import uk.ac.ebi.mdk.ui.component.table.MoleculeTable;
 import uk.ac.ebi.mdk.ui.component.table.accessor.AccessionAccessor;
 import uk.ac.ebi.mdk.ui.component.table.accessor.AnnotationAccess;
@@ -47,7 +59,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -65,16 +80,13 @@ public class DatabaseSearch
     private static final Logger LOGGER = Logger.getLogger(DatabaseSearch.class);
 
     private JComponent component;
-
     private MetaboliteMatchIndication match = new MetaboliteMatchIndication();
-
-    private MoleculeTable table;
-
-    private JTextField field;
-
-    private JCheckBox approximate;
-
-    private Metabolite context;
+    private MoleculeTable  table;
+    private JTextField     field;
+    private JCheckBox      approximate;
+    private Metabolite     context;
+    private ServiceManager serviceManager;
+    private ResourceList resourceList = new ResourceList();
 
     private Timer timer = new Timer(500, new ActionListener() {
 
@@ -85,7 +97,9 @@ public class DatabaseSearch
     });
 
 
-    public DatabaseSearch() {
+    public DatabaseSearch(ServiceManager serviceManager) {
+
+        this.serviceManager = serviceManager;
 
         component = PanelFactory.createDialogPanel();
         component.setLayout(new FormLayout("p", "p, 4dlu, p"));
@@ -167,7 +181,8 @@ public class DatabaseSearch
     public final JComponent getSearchOptions() {
 
         JComponent options = Box.createHorizontalBox();
-        JComponent config = PanelFactory.createDialogPanel("p:grow, 4dlu, p:grow", "p, 4dlu, p, 4dlu, p");
+        JComponent config = PanelFactory.createDialogPanel("p:grow, 4dlu, p:grow",
+                                                           "p, 4dlu, p, 4dlu, p, 4dlu, p");
 
         options.add(config); // search box and database selection
 
@@ -183,12 +198,15 @@ public class DatabaseSearch
         config.add(LabelFactory.newFormLabel("Query"), cc.xy(1, 1));
         config.add(field, cc.xy(3, 1));
         config.add(approximate, cc.xyw(1, 3, 3));
+        config.add(new MutableJListController(resourceList).getListWithController(), cc.xyw(1, 5, 3));
         config.add(ButtonFactory.newButton(new AbstractAction("Assign") {
 
             public void actionPerformed(ActionEvent e) {
                 transferAnnotations();
             }
-        }), cc.xy(1, 5));
+        }), cc.xy(1, 7));
+
+
 
         return options;
     }
@@ -207,26 +225,49 @@ public class DatabaseSearch
             return;
         }
 
-        System.out.println(name);
+        match.setQueryName(name);
+
+        Identifier identifier = resourceList.getSelectedValue();
+
+        if (identifier == null) {
+            return;
+        }
+
+        NameService service = serviceManager.getService(identifier,
+                                                        NameService.class);
 
 
-//        CandidateFactory<ChEBIIdentifier> factory = new CandidateFactory(LuceneService,
-//                                                                         new ChemicalFingerprintEncoder());
-//
-//        Multimap<Integer, SynonymCandidateEntry> map = approximate.isSelected()
-//                                                       ? factory.getFuzzySynonymCandidates(name)
-//                                                       : factory.getSynonymCandidates(name);
-//
-//
-//        List<Metabolite> metabolites = factory.getMetaboliteList(factory.getSortedList(map),
-//                                                                 new ChEBIIdentifier(),
-//                                                                 ChEBIChemicalDataService.getInstance(),
-//                                                                 "ChEBI",
-//                                                                 DefaultEntityFactory.getInstance());
+        NameCandidateFactory factory = new NameCandidateFactory(new ChemicalFingerprintEncoder(),
+                                                                service);
 
-        throw new UnsupportedOperationException("Fix Me");
+        Set<Candidate> candidates = factory.getCandidates(name, approximate.isSelected());
 
-        //getCandidateTable().getModel().set(metabolites);
+        System.out.println(candidates);
+
+        List<Metabolite> metabolites = new ArrayList<Metabolite>();
+
+        for (Candidate candidate : candidates) {
+
+            Metabolite m = factory.convertToMetabolite(DefaultEntityFactory.getInstance(), candidate);
+            if (serviceManager.hasService(candidate.getIdentifier(),
+                                          MolecularChargeService.class)) {
+                m.setCharge(serviceManager.getService(candidate.getIdentifier(),
+                                                      MolecularChargeService.class).getCharge(m.getIdentifier()));
+
+            }
+            if (serviceManager.hasService(candidate.getIdentifier(),
+                                          MolecularFormulaService.class)) {
+                String mf = serviceManager.getService(candidate.getIdentifier(),
+                                                      MolecularFormulaService.class).getMolecularFormula(m.getIdentifier());
+                m.addAnnotation(new MolecularFormula(mf));
+
+            }
+            metabolites.add(m);
+
+        }
+
+
+        getCandidateTable().getModel().set(metabolites);
 
 
     }
@@ -240,6 +281,13 @@ public class DatabaseSearch
 
         this.context = metabolite;
 
+        DefaultListModel model = resourceList.getModel();
+        model.removeAllElements();
+        for (Identifier identifier : serviceManager.getIdentifiers(NameService.class)) {
+            resourceList.addElement(identifier);
+        }
+
+        component.revalidate();
 
     }
 
