@@ -4,17 +4,17 @@
  * 2011.10.16
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,8 +27,8 @@ import org.biojava3.core.sequence.Strand;
 import org.biojava3.core.sequence.template.Sequence;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
-import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.RNAProduct;
 
@@ -40,18 +40,19 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- *          ENAXMLReader - 2011.10.16 <br>
- *          A class to read ENA XML files into CheMet core objects
+ * ENAXMLReader - 2011.10.16 <br>
+ * A class to read ENA XML files into CheMet core objects
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class ENAXMLReader {
 
-    private static final Logger LOGGER = Logger.getLogger(ENAXMLReader.class);
-    private List<String> genomeSections = new ArrayList();
-    private Map<String, Gene> genes = new HashMap(); // mapped by locus
-    private List<GeneProduct> products = new ArrayList();
+    private static final Logger            LOGGER         = Logger.getLogger(ENAXMLReader.class);
+    private              List<String>      genomeSections = new ArrayList();
+    private              Map<String, Gene> genes          = new HashMap(); // mapped by locus
+    private              List<GeneProduct> products       = new ArrayList();
 
     public ENAXMLReader(EntityFactory factory, InputStream in) throws XMLStreamException {
 
@@ -116,11 +117,17 @@ public class ENAXMLReader {
             if (product instanceof RNAProduct) {
                 Collection<Gene> pGenes = product.getGenes();
                 for (Gene gene : pGenes) {
+
                     Sequence seq = genome.getSubSequence(gene.getStart(), gene.getEnd());
-                    if (gene.getStrand() == Strand.NEGATIVE) {
-                        seq = seq.getInverse();
+
+                    seq = gene.getStrand() == Strand.NEGATIVE ? seq.getInverse() : seq;
+
+                    System.out.println(gene.getStart() + ":" + gene.getEnd() + " size:" + seq.getLength());
+
+                    if (seq.getLength() > 0) {
+                        DNASequence dna = new DNASequence(seq.getSequenceAsString());
+                        product.addSequence(dna.getRNASequence());
                     }
-                    product.addSequence(new DNASequence(seq.getSequenceAsString()).getRNASequence());
                 }
             }
         }

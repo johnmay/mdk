@@ -25,16 +25,15 @@ import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.Strand;
 import org.biojava3.core.sequence.template.AbstractSequence;
 import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.Locus;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
-import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
+import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.identifier.DynamicIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicRNAIdentifier;
-import uk.ac.ebi.mdk.domain.entity.*;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.domain.entity.EntityFactory;
-import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
@@ -44,20 +43,21 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- *          ENAFeatureParser - 2011.10.17 <br>
- *          Class description
+ * ENAFeatureParser - 2011.10.17 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class ENAFeatureParser {
 
-    private static final Logger LOGGER = Logger.getLogger(ENAFeatureParser.class);
-    private static DefaultIdentifierFactory IDENTIFIER_FACTORY = DefaultIdentifierFactory.getInstance();
-    private int start;
-    private int end;
+    private static final Logger                   LOGGER             = Logger.getLogger(ENAFeatureParser.class);
+    private static       DefaultIdentifierFactory IDENTIFIER_FACTORY = DefaultIdentifierFactory.getInstance();
+    private int     start;
+    private int     end;
     private boolean complement;
-    private Type type;
+    private Type    type;
     private IdentifierSet identifiers = new IdentifierSet();
     private AbstractSequence sequence;
     private Map<String, String> qualifiers = new HashMap();
@@ -66,9 +66,11 @@ public class ENAFeatureParser {
     public enum Type {
 
         gene, CDS, source, tRNA, rRNA
-    };
-    private Pattern complementMatch = Pattern.compile("complement\\(");
-    private Map<String, Resolver> resolverMap = new HashMap();
+    }
+
+    ;
+    private Pattern               complementMatch = Pattern.compile("complement\\(");
+    private Map<String, Resolver> resolverMap     = new HashMap();
 
     {
         resolverMap.put("xref", new CrossReferenceResolver());
@@ -77,6 +79,7 @@ public class ENAFeatureParser {
 
     /**
      * Creates a new feature form xmlr
+     *
      * @param xmlr
      */
     public ENAFeatureParser(EntityFactory factory, XMLStreamReader2 xmlr) throws XMLStreamException {
@@ -134,7 +137,7 @@ public class ENAFeatureParser {
     }
 
     public boolean isRNA() {
-        return isRNA() || isTRNA();
+        return isRRNA() || isTRNA();
     }
 
     public boolean isSource() {
@@ -183,6 +186,7 @@ public class ENAFeatureParser {
 
     /**
      * Returns a Gene, ProteinProduct, TranscriptionRNA of RibsombalRNA
+     *
      * @return
      */
     public AnnotatedEntity getEntity() {
@@ -224,11 +228,11 @@ public class ENAFeatureParser {
     private Gene getGene() {
 
         Gene gene = factory.ofClass(Gene.class, new BasicRNAIdentifier(),
-                                           "",
-                                           getLocusTag());
+                                    "",
+                                    getLocusTag());
         gene.addAnnotation(new Locus(getLocusTag()));
         gene.setStart(start);
-        gene.setStart(end);
+        gene.setEnd(end);
         gene.setStrand(complement ? Strand.NEGATIVE : Strand.POSITIVE);
 
         // we presume there will always be a locus tag
@@ -245,14 +249,17 @@ public class ENAFeatureParser {
      * CDS only
      */
     public Identifier getProteinIdentifier() {
-        return qualifiers.containsKey("protein_id") ? new DynamicIdentifier("ENA Protein ID", qualifiers.get("protein_id")) : new BasicProteinIdentifier();
+        return qualifiers.containsKey("protein_id")
+               ? new DynamicIdentifier("ENA Protein ID", qualifiers.get("protein_id")) : new BasicProteinIdentifier();
     }
 
     public String getProduct() {
         return qualifiers.containsKey("product") ? qualifiers.get("product") : "";
     }
 
-    /** RESOLVERS **/
+    /**
+     * RESOLVERS *
+     */
     private interface Resolver {
 
         public void resolve(XMLStreamReader2 xmlr) throws XMLStreamException;
