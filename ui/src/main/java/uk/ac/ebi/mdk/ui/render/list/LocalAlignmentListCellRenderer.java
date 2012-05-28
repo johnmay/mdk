@@ -21,7 +21,6 @@
 package uk.ac.ebi.mdk.ui.render.list;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.caf.utility.TextUtility;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
@@ -43,40 +42,41 @@ import java.awt.*;
  * @version $Rev$ : Last Changed $Date$
  */
 public class LocalAlignmentListCellRenderer
-        extends JLabel // should be default list cell renderer
+        extends DefaultRenderer
         implements ListCellRenderer {
 
-    private static final Logger LOGGER = Logger.getLogger(LocalAlignmentListCellRenderer.class);
-    private static final BasicAlignmentColor color = new BasicAlignmentColor(ColorUtility.EMBL_PETROL,
-                                                                             ColorUtility.EMBL_PETROL,
-                                                                             Color.lightGray);
+    private static final Logger              LOGGER = Logger.getLogger(LocalAlignmentListCellRenderer.class);
+    private static final BasicAlignmentColor color  = new BasicAlignmentColor(ColorUtility.EMBL_PETROL,
+                                                                              ColorUtility.EMBL_PETROL,
+                                                                              Color.lightGray);
     private GeneProduct entity;
     private final static ConservationRenderer COMPLEX_RENDERER = new ConservationRenderer(new Rectangle(0, 0, 750, 10),
                                                                                           color,
                                                                                           new BlastConsensusScorer(),
                                                                                           1);
-    private final static AlignmentRenderer BASIC_RENDERER = new AlignmentRenderer(new Rectangle(0, 0, 750, 10),
-                                                                                  color,
-                                                                                  1);
+    private final static AlignmentRenderer    BASIC_RENDERER   = new AlignmentRenderer(new Rectangle(0, 0, 750, 10),
+                                                                                       color,
+                                                                                       1);
 
     public LocalAlignmentListCellRenderer() {
         COMPLEX_RENDERER.setGranularity(0.8f);
-        setFont(ThemeManager.getInstance().getTheme().getBodyFont());
     }
 
 
     @Override
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public JLabel getRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
         LocalAlignment alignment = (LocalAlignment) value;
         AlignmentRenderer renderer = alignment.hasSequences() ? COMPLEX_RENDERER : BASIC_RENDERER;
         Icon icon = new ImageIcon(renderer.render(alignment, (GeneProduct) alignment.getEntity()));
 
-        setIcon(icon);
-        setText(alignment.getSubject());
-        setToolTipText(TextUtility.html(alignment.getHTMLSummary()));
+        JLabel label = super.getRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-        return this;
+        label.setIcon(icon);
+        label.setText(alignment.getSubject());
+        label.setToolTipText(TextUtility.html(alignment.getHTMLSummary()));
 
+        return label;
     }
+
 }
