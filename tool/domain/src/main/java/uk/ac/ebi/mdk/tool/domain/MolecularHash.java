@@ -23,6 +23,7 @@ package uk.ac.ebi.mdk.tool.domain;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -153,6 +154,8 @@ public class MolecularHash {
         StringBuilder sb = new StringBuilder(20 * atomicHashes.length);
 
         sb.append(hash).append(": ");
+
+        Arrays.sort(atomicHashes);
 
         for (int i : atomicHashes) {
             sb.append(i).append(", ");
