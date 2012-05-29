@@ -41,10 +41,26 @@ public class StereoSeedTest {
     }
 
 
+    @Test public void testMoreComplexMolecules(){
+
+        IAtomContainer nadgl6p = TestMoleculeFactory.loadMol(getClass(), "ChEBI_15784.mol", "nadgl6p");
+        IAtomContainer nadgu6p = TestMoleculeFactory.loadMol(getClass(), "N-ACETYL-D-GALACTOSAMINE-6-PHOSPHATE.mol", "nadgu6p");
+
+        MolecularHashFactory hashFactory = MolecularHashFactory.getInstance();
+        hashFactory.addSeedMethod(SeedFactory.getInstance().getSeed(StereoSeed.class));
+
+        System.out.println(hashFactory.getHash(nadgl6p));
+        System.out.println(hashFactory.getHash(nadgu6p));
+
+    }
+
     @Test
     public void testSeed() {
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
+        factory.setSeedMethods(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                  BondOrderSumSeed.class,
+                                                                  ConnectedAtomSeed.class));
 
         IAtomContainer lalanine = TestMoleculeFactory.lAlanine();
         IAtomContainer dalanine = TestMoleculeFactory.dAlanine();

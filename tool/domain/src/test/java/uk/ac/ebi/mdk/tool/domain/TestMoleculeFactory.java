@@ -156,7 +156,11 @@ public class TestMoleculeFactory {
         return loadMol(root.getResourceAsStream(resource), name, convertHydrogens);
     }
 
-    public static IAtomContainer loadMol(InputStream stream, String name, Boolean convertHydrogens){
+    public static IAtomContainer loadMol(Class root, String resource, String name) {
+        return loadMol(root.getResourceAsStream(resource), name, false);
+    }
+
+    public static IAtomContainer loadMol(InputStream stream, String name, Boolean convertHydrogens) {
         MDLV2000Reader mol2Reader = new MDLV2000Reader(stream);
         IMolecule molecule = DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class);
         try {
