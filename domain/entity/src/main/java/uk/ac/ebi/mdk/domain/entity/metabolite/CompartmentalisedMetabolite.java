@@ -4,17 +4,17 @@
  * 2011.12.05
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,13 +26,14 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 
 
 /**
- *          CompartmentalisedMetabolite - 2011.12.05 <br>
- *          The class describes a metabolite associated with a specific compartment. This is
- *          need as in modeling terms a metabolite in a different compartment is a different
- *          entity.
+ * CompartmentalisedMetabolite - 2011.12.05 <br>
+ * The class describes a metabolite associated with a specific compartment. This is
+ * need as in modeling terms a metabolite in a different compartment is a different
+ * entity.
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class CompartmentalisedMetabolite {
 
@@ -80,7 +81,7 @@ public class CompartmentalisedMetabolite {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(metabolite.toString()).append(' ').append(compartment);
+        sb.append(metabolite.toString()).append(" [").append(compartment).append("]");
         return sb.toString();
     }
 }
