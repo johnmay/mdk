@@ -152,6 +152,7 @@ public class SummariseReferences extends CommandLineMain {
         CSVWriter chemicalTSV = new CSVWriter(new FileWriter(nonChEBIFile), '\t', '\0');
         chemicalTSV.writeNext(new String[]{
                 "query.accession",
+                "query.name",
                 "xref.accession",
                 "xref.resource",
                 "xref.mir"
@@ -159,6 +160,7 @@ public class SummariseReferences extends CommandLineMain {
         for (Map.Entry<Identifier, Identifier> e : nonChebi.entries()) {
             chemicalTSV.writeNext(new String[]{
                     e.getKey().getAccession(),
+                    reconstruction.getMetabolome().get(e.getKey()).getName(),
                     e.getValue().getAccession(),
                     e.getValue().getResource().getName(),
                     ((MIRIAMEntry) e.getValue().getResource()).getId()
