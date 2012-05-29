@@ -122,8 +122,6 @@ public class ENAXMLReader {
 
                     seq = gene.getStrand() == Strand.NEGATIVE ? seq.getInverse() : seq;
 
-                    System.out.println(gene.getStart() + ":" + gene.getEnd() + " size:" + seq.getLength());
-
                     if (seq.getLength() > 0) {
                         DNASequence dna = new DNASequence(seq.getSequenceAsString());
                         product.addSequence(dna.getRNASequence());
