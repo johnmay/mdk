@@ -17,9 +17,12 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -28,6 +31,8 @@ import java.util.Collection;
  */
 public class MetabolomeImpl
         extends EntitySet<Metabolite> implements Metabolome {
+
+    private Map<Identifier, Metabolite> identifierMap = new HashMap<Identifier, Metabolite>();
 
     /**
      * Retrieves the metabolites that match the specified name.
@@ -53,4 +58,50 @@ public class MetabolomeImpl
         return metabolites;
 
     }
+
+    @Override
+    public boolean add(Metabolite metabolite) {
+        if (!identifierMap.isEmpty()) {
+            identifierMap.put(metabolite.getIdentifier(), metabolite);
+        }
+        return super.add(metabolite);
+    }
+
+    @Override
+    public boolean remove(Object o) {
+
+        boolean removed = super.remove(o);
+
+        if (removed && !identifierMap.isEmpty()) {
+            Metabolite m = (Metabolite) o;
+            identifierMap.remove(m.getIdentifier());
+        }
+
+        return removed;
+
+    }
+
+    /**
+     * Rebuilds the identifier map
+     */
+    public void rebuildIdentifierMap() {
+        identifierMap.clear();
+        for (Metabolite m : this) {
+            identifierMap.put(m.getIdentifier(), m);
+        }
+    }
+
+    @Override
+    public Metabolite get(Identifier identifier) {
+
+        // trigger rebuild if empty or identifier is not contained
+        if (identifierMap.isEmpty() ||
+                !identifierMap.containsKey(identifier)) {
+            rebuildIdentifierMap();
+        }
+
+        return identifierMap.get(identifier);
+
+    }
+
 }

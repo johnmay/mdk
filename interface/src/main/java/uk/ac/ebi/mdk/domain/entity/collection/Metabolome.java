@@ -19,6 +19,7 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.Collection;
 
@@ -29,9 +30,12 @@ public interface Metabolome extends Collection<Metabolite> {
 
     /**
      * Access metabolites by name
+     *
      * @param name
+     *
      * @return
      */
     public Collection<Metabolite> get(String name);
 
+    public Metabolite get(Identifier identifier);
 }
