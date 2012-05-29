@@ -18,12 +18,15 @@ package uk.ac.ebi.mdk.io;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
+import org.apache.commons.lang.mutable.MutableInt;
 import uk.ac.ebi.mdk.domain.identifier.InChI;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -262,8 +265,8 @@ public class ReactionMatrixIO {
             for (int j = 0; j < m; j++) {
                 // if the value is null
                 copy[j + 1] = convertDoubles
-                        ? Integer.toString(s.get(i, j).intValue())
-                        : s.get(i, j).toString();
+                              ? Integer.toString(s.get(i, j).intValue())
+                              : s.get(i, j).toString();
             }
             csv.writeNext(copy);
         }
@@ -324,6 +327,53 @@ public class ReactionMatrixIO {
 
 
     /**
+     * Writes a sif file (openable with Cytoscape)
+     *
+     * @param s
+     * @param writer
+     * @param connectionThreshold
+     * @param <R>
+     * @param <M>
+     *
+     * @throws IOException
+     */
+    public static <R, M> void writeSIF(StoichiometricMatrix<M, R> s,
+                                       Writer writer,
+                                       Integer connectionThreshold) throws IOException {
+
+
+        Set<M> highlyConnected = s.getHighlyConnectedMolecules(connectionThreshold);
+        Map<M, MutableInt> suffixValue = new HashMap<M, MutableInt>();
+
+        for (M molecule : s.getMolecules()) {
+
+            Map<Integer, Double> reactionMap = s.getReactions(molecule);
+            for (Integer i : reactionMap.keySet()) {
+
+                String nodeName = molecule.toString();
+
+                if (highlyConnected.contains(molecule)) {
+
+                    if (!suffixValue.containsKey(molecule)) {
+                        suffixValue.put(molecule, new MutableInt(0));
+                    }
+
+                    suffixValue.get(molecule).increment();
+
+                    nodeName = nodeName + " " + suffixValue.get(molecule).toString();
+                }
+
+                nodeName = nodeName.replaceAll("\\s+", " ");
+                nodeName = nodeName.replaceAll("\\s", "_");
+                writer.write(s.getReaction(i) + "\t" + "r" + "\t" + nodeName + "\n");
+
+            }
+
+        }
+
+    }
+
+    /**
      * @param s      - A stoichiometric matrix
      * @param writer
      *
@@ -342,9 +392,9 @@ public class ReactionMatrixIO {
             if (obj instanceof InChI) {
                 InChI inchi = (InChI) obj;
                 csv.writeNext(new String[]{i.toString(),
-                        inchi.getInchi(),
-                        inchi.getInchiKey(),
-                        inchi.getAuxInfo()});
+                                           inchi.getInchi(),
+                                           inchi.getInchiKey(),
+                                           inchi.getAuxInfo()});
             } else {
                 logger.error("Object is not of type and does not inherit from InChI in matrix array");
             }

@@ -594,6 +594,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      *
      * @return
      */
+    @Override
     public M[] getMolecules() {
         return Arrays.copyOf(molecules, moleculeCount);
     }
@@ -604,6 +605,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      *
      * @return
      */
+    @Override
     public R[] getReactions() {
         return Arrays.copyOf(reactions, reactionCount);
     }
@@ -681,6 +683,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      * @param molecule
      * @return Map of the reaction to the value
      */
+    @Override
     public Map<Integer, T> getReactions(M molecule) {
         Integer i = moleculeMap.get(molecule);
         HashMap<Integer, T> subReactions = new HashMap<Integer, T>();
@@ -701,6 +704,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      * connected (0 returns an empty set)
      * @return Set of the high connected Molecules
      */
+    @Override
     public Set<M> getHighlyConnectedMolecules(int threshold) {
 
         Integer[] numberOfNulls = countColumnNulls();

@@ -18,6 +18,9 @@
 
 package uk.ac.ebi.mdk.domain.matrix;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * @author John May
  */
@@ -46,4 +49,12 @@ public interface ReactionMatrix<T, M, R> {
     public int addReaction(R rxn, M[] molecules, T[] values);
 
     public T[][] getFixedMatrix();
+
+    public Set<M> getHighlyConnectedMolecules(int threshold);
+
+    public M[] getMolecules();
+
+    public R[] getReactions();
+
+    public Map<Integer, T> getReactions(M molecule);
 }
