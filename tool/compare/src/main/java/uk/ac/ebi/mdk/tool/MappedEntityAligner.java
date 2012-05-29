@@ -18,79 +18,100 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
 
     private static final Logger LOGGER = Logger.getLogger(MappedEntityAligner.class);
 
-    private List<MetricMap> metricMap = new ArrayList<MetricMap>();
-    private Map<E, List<E>> matched   = new HashMap<E, List<E>>();
+    private Map<EntityMatcher, MetricMap> metricMaps = new HashMap<EntityMatcher, MetricMap>();
 
-    private Boolean cacheMatches;
-
-    public MappedEntityAligner() {
-        this(Boolean.FALSE);
-    }
-
-    public MappedEntityAligner(Boolean cacheMatches) {
-        super();
-        this.cacheMatches = cacheMatches;
-    }
 
     public MappedEntityAligner(Collection<E> references) {
-        super(references);
-        this.cacheMatches = Boolean.FALSE;
+        super(references, Boolean.TRUE, Boolean.FALSE);
     }
 
-    public MappedEntityAligner(Collection<E> references, Boolean cacheMatches) {
-        super(references);
-        this.cacheMatches = cacheMatches;
+    public MappedEntityAligner(Collection<E> references, Boolean cached, Boolean greedy) {
+        super(references, cached, greedy);
     }
 
+    /**
+     * Convenience constructor sets cached=true but allows setting of 'greedy'
+     *
+     * @param references
+     * @param greedy
+     */
+    public MappedEntityAligner(Collection<E> references, Boolean greedy) {
+        super(references, Boolean.TRUE, greedy);
+    }
 
-    public MetricMap getMetricMap(int i) {
-        if (i >= metricMap.size() || metricMap.get(i) == null || metricMap.get(i).isEmpty()) {
-            // build metric map
-            MetricMap map = new MetricMap(references.size());
-            for (E entity : references) {
-                map.put(entity, matchers.get(i));
-            }
-            metricMap.add(i, map);
+    /**
+     * Adds a reference and updates the metric map
+     *
+     * @param reference
+     */
+    @Override
+    public void addReference(E reference) {
+
+        super.addReference(reference);
+
+        for (Map.Entry<EntityMatcher, MetricMap> e : metricMaps.entrySet()) {
+            EntityMatcher matcher = e.getKey();
+            MetricMap map = e.getValue();
+            map.put(reference, matcher);
         }
-        return metricMap.get(i);
+
     }
 
     @Override
-    public List<E> getMatches(E entity) {
+    public void addReferences(Collection<? extends E> references) {
+        super.addReferences(references);
+        for (Map.Entry<EntityMatcher, MetricMap> e : metricMaps.entrySet()) {
+            EntityMatcher matcher = e.getKey();
+            MetricMap map = e.getValue();
+            for (E reference : references) {
+                map.put(reference, matcher);
+            }
+        }
+    }
 
-        if (matched.containsKey(entity)) {
-            return matched.get(entity);
+    public MetricMap getMetricMap(EntityMatcher matcher) {
+
+        // check if the metric map for this matcher exists (presumes
+        // it has been build)
+        if (metricMaps.containsKey(matcher)) {
+            return metricMaps.get(matcher);
         }
 
-        for (int i = 0; i < matchers.size(); i++) {
-            // don't need to cache the query
-            Object metric = matchers.get(i).calculatedMetric(entity);
-            MetricMap map = getMetricMap(i);
+        // build metric map
+        MetricMap map = new MetricMap(references.size());
+        for (E entity : references) {
+            map.put(entity, matcher);
+        }
 
-            if (metric instanceof Collection) {
-                for (Object submetric : (Collection) metric) {
+        // add to the map of metric maps (bit of a mouthful)
+        metricMaps.put(matcher, map);
 
-                    if (map.containsKey(submetric)) {
-                        List<E> matches = map.get(submetric);
-                        matched.put(entity, matches);
-                        return matches;
-                    }
-                }
-            } else {
-                if (map.containsKey(metric)) {
-                    List<E> matches = map.get(metric);
-                    matched.put(entity, matches);
-                    return matches;
+        return map;
+
+    }
+
+
+    @Override
+    public List<E> getMatching(E entity, EntityMatcher matcher) {
+
+        Object metric = matcher.calculatedMetric(entity);
+        MetricMap map = getMetricMap(matcher);
+
+
+        if (metric instanceof Collection) {
+            for (Object submetric : (Collection) metric) {
+                if (map.containsKey(submetric)) {
+                    return map.get(submetric);
                 }
             }
-
+        } else if (map.containsKey(metric)) {
+            return map.get(metric);
         }
 
-        List<E> matches = new ArrayList<E>(0);
-        matched.put(entity, matches);
+        return new ArrayList<E>();
 
-        return matches;
     }
+
 
     private class MetricMap {
 

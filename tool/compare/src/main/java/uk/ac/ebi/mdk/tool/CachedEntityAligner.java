@@ -12,73 +12,53 @@ import java.util.*;
  */
 public class CachedEntityAligner<E extends Entity> extends AbstractEntityAligner<E> {
 
-    private static final Logger LOGGER = Logger.getLogger(CachedEntityAligner.class);
-    private Map<Identifier, Object[]> queryMetrics     = new HashMap<Identifier, Object[]>();
-    private Map<Identifier, Object[]> referenceMetrics = new HashMap<Identifier, Object[]>();
+    private static final Logger                                      LOGGER           = Logger.getLogger(CachedEntityAligner.class);
+    private              Map<Identifier, Map<EntityMatcher, Object>> queryMetrics     = new HashMap<Identifier, Map<EntityMatcher, Object>>();
+    private              Map<Identifier, Map<EntityMatcher, Object>> referenceMetrics = new HashMap<Identifier, Map<EntityMatcher, Object>>();
 
-    public CachedEntityAligner() {
-        super();
-    }
 
     public CachedEntityAligner(Collection<E> references) {
-        super(references);
+        super(references, Boolean.TRUE, Boolean.FALSE);
     }
 
     @Override
-    public List<E> getMatches(E entity) {
-
+    public List<E> getMatching(E entity, EntityMatcher matcher) {
         List<E> matching = new ArrayList<E>();
-
-        for (int i = 0; i < matchers.size(); i++) {
-
-            EntityMatcher matcher = matchers.get(i);
-
-            for (E reference : references) {
-                if (matcher.matchMetric(getQueryMetric(i, entity), getReferenceMetric(i, reference))) {
-                    matching.add(reference);
-                }
+        for (E reference : references) {
+            if (matcher.matchMetric(getQueryMetric(matcher, entity),
+                                    getReferenceMetric(matcher, reference))) {
+                matching.add(reference);
             }
-
-            if (!matching.isEmpty()) {
-                return matching;
-            }
-
         }
-
         return matching;
     }
 
-    public Object getQueryMetric(int i, E entity) {
-        return getMetric(queryMetrics, i, entity);
+    public Object getQueryMetric(EntityMatcher matcher, E entity) {
+        return getMetric(queryMetrics, matcher, entity);
     }
 
-    public Object getReferenceMetric(int i, E entity) {
-        return getMetric(referenceMetrics, i, entity);
+    public Object getReferenceMetric(EntityMatcher matcher, E entity) {
+        return getMetric(referenceMetrics, matcher, entity);
     }
 
-    public Object getMetric(Map<Identifier, Object[]> cacheMap, int i, E entity) {
+    public Object getMetric(Map<Identifier, Map<EntityMatcher, Object>> cacheMap, EntityMatcher matcher, E entity) {
 
         Identifier identifier = entity.getIdentifier();
 
-        if (cacheMap.containsKey(identifier)) {
-            return cacheMap.get(identifier)[i];
+        if (cacheMap.containsKey(identifier)
+                && cacheMap.get(identifier).containsKey(matcher)) {
+            return cacheMap.get(identifier).get(matcher);
         } else {
-            cacheMap.put(identifier, calculateMetrics(entity));
+            if (!cacheMap.containsKey(identifier)) {
+                cacheMap.put(identifier, new HashMap<EntityMatcher, Object>());
+            }
+            cacheMap.get(identifier).put(matcher,
+                                         matcher.calculatedMetric(entity));
         }
 
-        return cacheMap.get(identifier)[i];
+        return cacheMap.get(identifier).get(matcher);
 
     }
 
-    public Object[] calculateMetrics(E entity) {
-
-        Object[] metrics = new Object[matchers.size()];
-        for (int i = 0; i < matchers.size(); i++) {
-            metrics[i] = matchers.get(i).calculatedMetric(entity);
-        }
-
-        return metrics;
-
-    }
 
 }

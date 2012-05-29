@@ -23,9 +23,7 @@ import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.tool.match.EntityAligner;
 import uk.ac.ebi.mdk.tool.match.EntityMatcher;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Entity resolver controls matching of query entities to a reference using a stack of matching
@@ -39,16 +37,28 @@ public abstract class AbstractEntityAligner<E extends Entity> implements EntityA
 
     protected Stack<EntityMatcher<E, ?>> matchers = new Stack<EntityMatcher<E, ?>>();
     protected Collection<E> references;
+    private Map<E, List<E>> matched = new HashMap<E, List<E>>();
 
-    private boolean cache = false;
+    /**
+     * Whether matches should be cached for future calls.
+     */
+    private Boolean cached = Boolean.TRUE;
 
-    public AbstractEntityAligner() {
-        this(new ArrayList<E>());
+    /**
+     * Whether the matching is greedy (will collect all matches)
+     */
+    private Boolean greedy = Boolean.FALSE;
+
+
+    public AbstractEntityAligner(Boolean cached, Boolean greedy) {
+        this(new ArrayList<E>(), cached, greedy);
     }
 
-    public AbstractEntityAligner(Collection<E> references) {
+    public AbstractEntityAligner(Collection<E> references, Boolean cached, Boolean greedy) {
         // take a shallow copy
         this.references = new ArrayList<E>(references);
+        this.setCached(cached);
+        this.setGreedy(greedy);
     }
 
     /**
@@ -58,6 +68,15 @@ public abstract class AbstractEntityAligner<E extends Entity> implements EntityA
      */
     public void addReference(E reference) {
         this.references.add(reference);
+    }
+
+    /**
+     * Add multiple references
+     *
+     * @param references
+     */
+    public void addReferences(Collection<? extends E> references) {
+        this.references.addAll(references);
     }
 
     /**
@@ -93,11 +112,74 @@ public abstract class AbstractEntityAligner<E extends Entity> implements EntityA
         return matchers.peek();
     }
 
+    @Override
+    public List<E> getMatches(E entity) {
+
+        if (cached && matched.containsKey(entity)) {
+            return matched.get(entity);
+        }
+
+        Set<E> seen = new HashSet<E>(); // keep track of those we have seen
+        List<E> matches = new ArrayList<E>(0);
+
+        for (int i = 0; i < matchers.size(); i++) {
+
+
+            for (E matchedEntity : getMatching(entity, matchers.get(i))) {
+                if (!seen.contains(matchedEntity)) {
+                    matches.add(matchedEntity);
+                    seen.add(matchedEntity);
+                }
+            }
+
+            // check for greedy match
+            if (!greedy && !matches.isEmpty()) {
+                break;
+            }
+
+        }
+
+        // store in the cache
+        if (cached) {
+            matched.put(entity, matches);
+        }
+
+        return matches;
+    }
+
+
+    public Boolean getCached() {
+        return cached;
+    }
+
+    public void setCached(Boolean cached) {
+        if (cached == null)
+            throw new NullPointerException("Cached value cannot be null");
+        this.cached = cached;
+    }
+
+    public Boolean getGreedy() {
+        return greedy;
+    }
+
+    /**
+     * Set whether the matching is greedy. When greedy all matches will be used
+     *
+     * @param greedy
+     */
+    public void setGreedy(Boolean greedy) {
+        if (cached == null)
+            throw new NullPointerException("Greedy value cannot be null");
+        this.greedy = greedy;
+    }
+
     /**
      * Clear the method stack
      */
     public void clear() {
         matchers.clear();
     }
+
+    public abstract List<E> getMatching(E entity, EntityMatcher matcher);
 
 }

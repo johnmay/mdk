@@ -15,35 +15,20 @@ public class UncachedEntityAligner<E extends Entity> extends AbstractEntityAlign
 
     private static final Logger LOGGER = Logger.getLogger(UncachedEntityAligner.class);
 
-    public UncachedEntityAligner() {
-        super();
-    }
 
     public UncachedEntityAligner(Collection<E> references) {
-        super(references);
+        super(references, Boolean.TRUE, Boolean.FALSE);
     }
 
     @Override
-    public List<E> getMatches(E entity) {
-
+    public List<E> getMatching(E query, EntityMatcher matcher) {
         List<E> matching = new ArrayList<E>();
-
-        for (int i = 0; i < matchers.size(); i++) {
-
-            EntityMatcher matcher = matchers.get(i);
-
-            for (E reference : references) {
-                if (matcher.matches(entity, reference)) {
-                    matching.add(reference);
-                }
+        for (E reference : references) {
+            if (matcher.matches(query, reference)) {
+                matching.add(query);
             }
-
-            if (!matching.isEmpty()) {
-                return matching;
-            }
-
         }
-
         return matching;
     }
+
 }
