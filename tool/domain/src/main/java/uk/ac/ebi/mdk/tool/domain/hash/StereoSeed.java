@@ -20,17 +20,14 @@
  */
 package uk.ac.ebi.mdk.tool.domain.hash;
 
-import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import org.openscience.reactionblast.stereo.IStereo;
-import org.openscience.reactionblast.stereo.tools.Chirality2DTool;
+import uk.ac.ebi.mdk.tool.domain.ChiralityCalculator;
 
-import java.util.HashMap;
-import java.util.Map;
+import static uk.ac.ebi.mdk.tool.domain.ChiralityCalculator.Chirality;
 
 
 /**
@@ -59,20 +56,14 @@ public class StereoSeed implements AtomSeed {
     private static final Logger LOGGER = Logger.getLogger(StereoSeed.class);
 
 
-    private Map<Integer, MutableInt> occurrences = new HashMap();
-
     private static final String STEREO_CALCULATED = "Stereo.Calculated";
     private static final String STEREO            = "IStereoValue";
-
-    private static final Chirality2DTool CHIRALITY_TOOL = new Chirality2DTool();
 
     protected StereoSeed() {
     }
 
 
     public int seed(IAtomContainer molecule, IAtom atom) {
-
-        occurrences.clear();
 
         // only calculate the stereo elements once
         if (molecule.getProperty(STEREO_CALCULATED) == null) {
@@ -99,10 +90,12 @@ public class StereoSeed implements AtomSeed {
         }
 
         try {
-            // we take a shallow copy
-            IAtomContainer shallow = structure.getBuilder().newInstance(IAtomContainer.class, structure);
-            for (Map.Entry<IAtom, IStereo> e : CHIRALITY_TOOL.getTetrahedralChiralities(shallow).entrySet()) {
-                e.getKey().setProperty(STEREO, e.getValue());
+            for (IAtom atom : structure.atoms()) {
+
+                Chirality chirality = ChiralityCalculator.getChirality(structure, atom);
+
+                if (chirality != Chirality.NONE)
+                    atom.setProperty(STEREO, chirality);
             }
         } catch (NullPointerException ex) {
             LOGGER.debug("Null pointer exception whilst calculating stereo centre", ex);
