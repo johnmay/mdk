@@ -142,7 +142,9 @@ public class StructuralValidity {
 
         StructuralValidity validity = unknown;
 
-        Charge charge = metabolite.hasAnnotation(Charge.class) ? metabolite.getAnnotations(Charge.class).iterator().next() : new Charge(0d);
+        Charge charge =
+                metabolite.hasAnnotation(Charge.class) ? metabolite.getAnnotations(Charge.class).iterator().next()
+                                                       : new Charge(0d);
 
         for (ChemicalStructure structure : metabolite.getStructures()) {
             if (structure.getStructure() != null && structure.getStructure().getAtomCount() < 85) {
@@ -232,8 +234,13 @@ public class StructuralValidity {
         AtomContainerManipulator.convertImplicitToExplicitHydrogens(molecule);
 
         // complete correctness
-        IMolecularFormula query = formula.getFormula();
+        IMolecularFormula query   = formula.getFormula();
         IMolecularFormula subject = getMolecularFormula(molecule);
+
+        if(query == null)
+            return error_both;
+        if(subject == null)
+            return error_both;
 
         if (compareFormula(query, subject, false)) {
             return chargeDifference == 0 ? match : error_charge;
@@ -270,7 +277,8 @@ public class StructuralValidity {
      */
     private static boolean compareFormula(IMolecularFormula formula1, IMolecularFormula formula2, boolean excludeProtons) {
 
-        if (formula1.getIsotopeCount() != formula2.getIsotopeCount() && !excludeProtons) {
+        if (formula1 == null || formula2 == null ||
+                formula1.getIsotopeCount() != formula2.getIsotopeCount() && !excludeProtons) {
             return false;
         }
 
