@@ -5,6 +5,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.tool.domain.MolecularHash;
 import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
@@ -57,6 +58,10 @@ public class MetaboliteHashCodeMatcher
         this(seeds, DEFAULT_ATOM_COUNT_THRESHOLD);
     }
 
+    public MetaboliteHashCodeMatcher(Class<? extends AtomSeed>... seeds) {
+        this(SeedFactory.getInstance().getSeeds(seeds), DEFAULT_ATOM_COUNT_THRESHOLD);
+    }
+
     /**
      * Main constructor
      *
@@ -80,19 +85,22 @@ public class MetaboliteHashCodeMatcher
         for (ChemicalStructure annotation : entity.getStructures()) {
             IAtomContainer structure = annotation.getStructure();
 
-            if (!(structure.getAtomCount() == 1
-                    && structure.getAtom(0).getSymbol().equals("H"))) {
-                structure = AtomContainerManipulator.removeHydrogens(structure);
-            }
-
-
-            if (structure.getAtomCount() < atomCountThreshold) {
-                hashes.add(factory.getHash(structure, seeds).hash);
+            if (structure.getAtomCount() < atomCountThreshold &&
+                    structure.getAtomCount() != 0) {
+                hashes.add(getHash(structure).hash);
             }
         }
 
         return hashes;
 
+    }
+
+    public MolecularHash getHash(IAtomContainer structure) {
+        if (!(structure.getAtomCount() == 1
+                && structure.getAtom(0).getSymbol().equals("H"))) {
+            structure = AtomContainerManipulator.removeHydrogens(structure);
+        }
+        return factory.getHash(structure, seeds);
     }
 
 
