@@ -49,25 +49,28 @@
             <artifactId>mdk-domain-identifier</artifactId>
             <version>1.4.0-SNAPSHOT</version>
         </dependency>
-
-
-
-
-        <!-- TEST ONLY -->
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>CheMet-Core</artifactId>
+            <artifactId>mdk-domain-entity</artifactId>
             <version>1.4.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
-            <artifactId>CheMet-IO</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
 
 
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+        <dependency>
+            <groupId>org.biojava</groupId>
+            <artifactId>biojava3-core</artifactId>
+            <version>3.0.3-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-utility</artifactId>
+            <version>${caf.version}</version>
+        </dependency>
 
     </dependencies>
 

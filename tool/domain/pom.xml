@@ -61,12 +61,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.openscience.reactionblast</groupId>
-            <artifactId>stereo-tool</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-interfaces</artifactId>
             <version>1.4.9</version>
@@ -89,6 +83,11 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-smsd</artifactId>
+            <version>1.4.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-cip</artifactId>
             <version>1.4.9</version>
         </dependency>
         <dependency>
