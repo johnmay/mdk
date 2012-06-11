@@ -57,8 +57,8 @@ public class Align2Reference extends CommandLineMain {
         final Reconstruction reference = getReconstruction("reference");
         System.out.println("done");
 
-        System.out.println("Query metabolome (" + query.getAccession() + ") metabolome size: " + query.getMetabolome().size() + " reactome size: " + query.getReactome().size());
-        System.out.println("Reference metabolome (" + reference.getAccession() + ") metabolome size: " + reference.getMetabolome().size() + " reactome size: " + reference.getReactome().size());
+        System.out.printf("    Query reconstruction %20s %6s,%6s", query.getAccession(), query.getMetabolome().size(), query.getReactome().size());
+        System.out.printf("Reference reconstruction %20s %6s,%6s", reference.getAccession(), reference.getMetabolome().size(), reference.getReactome().size());
 
 
         if (has("profile")) {
