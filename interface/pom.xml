@@ -48,7 +48,7 @@
             <artifactId>biojava3-core</artifactId>
             <groupId>org.biojava</groupId>
             <type>jar</type>
-            <version>3.0.3-SNAPSHOT</version>
+            <version>3.0.4</version>
         </dependency>
 
         <dependency>
