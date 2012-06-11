@@ -15,7 +15,7 @@ This product includes software (Log4j) developed by
     The Apache Software Foundation (http://www.apache.org/) and is licensed under The Apache Software License, Version 2.0
 
 This product includes software (Guava) developed by
-    The Google (http://www.apache.org/) and is licensed under The Apache Software License, Version 2.0
+    The Google (http://code.google.com/p/guava-libraries/) and is licensed under The Apache Software License, Version 2.0
 
 Below is a full list of artifacts (including those above) required by the project. Those which are not listed
 above are utilised indirectly and inherited from direct dependencies (above). Please see the respective direct dependency
