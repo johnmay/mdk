@@ -41,16 +41,25 @@ public class StereoSeedTest {
     }
 
 
-    @Test public void testMoreComplexMolecules(){
+    @Test
+    public void testMoreComplexMolecules() {
 
         IAtomContainer nadgl6p = TestMoleculeFactory.loadMol(getClass(), "ChEBI_15784.mol", "nadgl6p");
         IAtomContainer nadgu6p = TestMoleculeFactory.loadMol(getClass(), "N-ACETYL-D-GALACTOSAMINE-6-PHOSPHATE.mol", "nadgu6p");
 
-        MolecularHashFactory hashFactory = MolecularHashFactory.getInstance();
-        hashFactory.addSeedMethod(SeedFactory.getInstance().getSeed(StereoSeed.class));
+        MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
-        System.out.println(hashFactory.getHash(nadgl6p));
-        System.out.println(hashFactory.getHash(nadgu6p));
+        factory.setSeedMethods(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                  BondOrderSumSeed.class,
+                                                                  ConnectedAtomSeed.class));
+        Assert.assertThat(factory.getHash(nadgl6p), CoreMatchers.not(factory.getHash(nadgu6p)));
+
+
+        factory.addSeedMethod(SeedFactory.getInstance().getSeed(StereoSeed.class));
+
+
+        // was having trouble with the graphs being equal
+        Assert.assertThat(factory.getHash(nadgl6p), CoreMatchers.not(factory.getHash(nadgu6p)));
 
     }
 
