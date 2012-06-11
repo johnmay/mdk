@@ -20,7 +20,7 @@ public class AtomicNumberSeedTest {
         IAtomContainer palmiticAmide = TestMoleculeFactory.loadMol(getClass(), "CPD6666-3.mol", "palmitic mide");
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
-        factory.setDepth(2);
+        factory.setDepth(1);
         System.out.println(factory.getHash(heptaecanone));
         System.out.println(factory.getHash(palmiticAmide));
 
