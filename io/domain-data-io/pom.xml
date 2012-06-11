@@ -20,37 +20,37 @@
             <version>4.8.2</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mdk-interface</artifactId>
             <version>1.4.0-SNAPSHOT</version>
         </dependency>
 
         <!-- IO dependencies -->
         <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mdk-io-data-core</artifactId>
             <version>1.4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mdk-io-data-annotation</artifactId>
             <version>1.4.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mdk-io-data-observation</artifactId>
             <version>1.4.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mdk-domain-identifier</artifactId>
             <version>1.4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>uk.ac.ebi.mdk</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mdk-domain-entity</artifactId>
             <version>1.4.0-SNAPSHOT</version>
         </dependency>
