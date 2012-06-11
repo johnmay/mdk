@@ -13,9 +13,17 @@
         <module>io</module>
         <module>service</module>
         <module>tool</module>
+
+
         <module>interface</module>
         <module>apps</module>
+
+        <!-- old structure modules (to be converted) -->
+        <module>CheMet-Core</module>
+        <module>CheMet-IO</module>
         <module>ui</module>
+        <module>CheMet-WebServices</module>
+
     </modules>
 
     <url>http://www.ebi.ac.uk/steinbeck</url>
