@@ -7,9 +7,13 @@ and [Pablo Moreno](http://www.github.com/pcm32). The library was previously name
 became more defined. The name MDK is derived from The [Chemistry Development Kit](http://cdk.sourceforge.com) (CDK)
 which is one of the major constituent and used throughout to handle chemical structure.
 
-The easiest way to use the library is with the [Apache Maven](http://maven.apache.org/) build automation tool. Adding
-a module dependency in the the `pom.xml`, the example below shows adding the lucene service module. Any dependencies that
-this module needs will automatically be downloaded by maven
+### Getting the library
+
+#### Maven
+
+The easiest way to use the library is with the [Apache Maven](http://maven.apache.org/) build automation tool and adding
+a module dependency in the the `pom.xml`. The example below shows adding the lucene service module, any required
+dependencies that the defined module needs will automatically be downloaded by maven.
 
 ```
 <dependency>
@@ -30,6 +34,9 @@ The MDK modules are currently deployed to the EBI Maven Repository and the follo
 </repository>
 ```
 
+#### Jar
+
+Coming soon
 
 
 ### Key Features
