@@ -1,6 +1,8 @@
 # Model Development Kit (MDK)
 
-* The MDK is a library written by John May and Pablo Moreno whilst at [EMBL-EBI](http://www.ebi.ac.uk)
+The MDK is a modular [Java](http://www.java.com) library for simplifying procedures when handling metabolic modelling and metabolomes. The kit
+was written at [EMBL-EBI](http://www.ebi.ac.uk) by [John May](http://www.github.com/johnmay) and [Pablo Moreno]((http://www.github.com/pmoreno).
+
 * Formly named CheMet (Cheminformatics and Metabolism group)
 * Name derived from the largest component The Chemistry Development Kit (CDK)
 
