@@ -3,13 +3,37 @@
 The MDK is a modular [Java](http://www.java.com) library for simplifying procedures when handling metabolic models
 and metabolomes. The kit was written at [EMBL-EBI](http://www.ebi.ac.uk) by [John May](http://www.github.com/johnmay)
 and [Pablo Moreno](http://www.github.com/pcm32). The library was previously named CheMet after the
-[Cheminformatics and Metabolism group](http://www.ebi.ac.uk/steinbeck).
+[Cheminformatics and Metabolism group](http://www.ebi.ac.uk/steinbeck) but was renamed as it's function
+became more defined. The name MDK is derived from The [Chemistry Development Kit](http://cdk.sourceforge.com) (CDK)
+which is one of the major constituent and used throughout to handle chemical structure.
 
-* Name derived from the largest component The Chemistry Development Kit (CDK)
+The easiest way to use the library is with the [Apache Maven](http://maven.apache.org/) build automation tool. Adding
+a module dependency in the the `pom.xml`, the example below shows adding the lucene service module. Any dependencies that
+this module needs will automatically be downloaded by maven
 
-### Key Points
-*    intuitive object model for handling metabolic network/model data (expandable to other systems)
-*    simplified data/chemical annotation of entities
+```
+<dependency>
+    <groupId>uk.ac.ebi.mdk</groupId>
+    <artifactId>mdk-service-lucene</artifactId>
+    <version>1.4.0</version>
+</dependency>
+```
+
+The MDK modules are currently deployed to the EBI Maven Repository and the following should be defined in the
+`<repositories>` section:
+
+```
+<repository>
+    <id>ebi-repo</id>
+    <name>EBI maven repository</name>
+    <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+</repository>
+```
+
+
+
+### Key Features
+*    intuitive object model for handling metabolic network/model chemistry (CDK) and gene/proteins (BioJava)
 *    service framework using WebServices and NoSQL local storage
 *    semantic annotation of cross-references
 *    fast read/write of models
