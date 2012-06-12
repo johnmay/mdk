@@ -5,7 +5,17 @@ and metabolomes. The kit was written at [EMBL-EBI](http://www.ebi.ac.uk) by [Joh
 and [Pablo Moreno](http://www.github.com/pcm32). The library was previously named CheMet after the
 [Cheminformatics and Metabolism group](http://www.ebi.ac.uk/steinbeck) but was renamed as it's function
 became more defined. The name MDK is derived from The [Chemistry Development Kit](http://cdk.sourceforge.com) (CDK)
-which is one of the major constituent and used throughout to handle chemical structure.
+which is one of the major constituent and used throughout the library to handle chemical structure.
+
+### Key Features
+*    intuitive object model for handling metabolic network/model chemistry (CDK) and gene/proteins (BioJava)
+*    service framework using WebServices and NoSQL local storage
+*    semantic annotation of cross-references
+*    fast read/write of models
+*    import/resolution of multiple formats including SBML, KGML, Excel
+*    incubation/testing for tools prior to deployment in CDK
+*    core library used by [Metingear: The Metabolic Development Environment](http://www.ebi.ac.uk/steinbeck-srv/Metingear)
+     ([GitHub](http://www.github.com/johnmay/metingear) project)
 
 ### Getting the library
 
@@ -39,13 +49,6 @@ The MDK modules are currently deployed to the EBI Maven Repository and the follo
 Coming soon
 
 
-### Key Features
-*    intuitive object model for handling metabolic network/model chemistry (CDK) and gene/proteins (BioJava)
-*    service framework using WebServices and NoSQL local storage
-*    semantic annotation of cross-references
-*    fast read/write of models
-*    import/resolution of multiple formats
-*    incubation/testing for tools prior to deployment in CDK
-*    core library used by Metingear: The Metabolic Development Environment
+
 
 
