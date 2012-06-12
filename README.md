@@ -1,6 +1,6 @@
 # Model Development Kit (MDK)
 
-The MDK is a modular [Java](http://www.java.com) library for simplifying procedures when handling metabolic models
+The MDK is a modular [Java](http://www.java.com) open source library for simplifying procedures when handling metabolic models
 and metabolomes. The kit was written at [EMBL-EBI](http://www.ebi.ac.uk) by [John May](http://www.github.com/johnmay)
 and [Pablo Moreno](http://www.github.com/pcm32). The library was previously named CheMet after the
 [Cheminformatics and Metabolism group](http://www.ebi.ac.uk/steinbeck) but was renamed as it's function
@@ -14,8 +14,12 @@ which is one of the major constituent and used throughout the library to handle 
 *    fast read/write of models
 *    import/resolution of multiple formats including SBML, KGML, Excel
 *    incubation/testing for tools prior to deployment in CDK
-*    core library used by [Metingear: The Metabolic Development Environment](http://www.ebi.ac.uk/steinbeck-srv/Metingear)
+*    core library used by [Metingear: The Metabolic Development Environment](http://www.ebi.ac.uk/steinbeck-srv/metingear)
      ([GitHub](http://www.github.com/johnmay/metingear) project)
+
+### License
+
+The MDK is licensed under [Lesser General Public License 3.0](http://www.gnu.org/licenses/lgpl.html).
 
 ### Getting the library
 
