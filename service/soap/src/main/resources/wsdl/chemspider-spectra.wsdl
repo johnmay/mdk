@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.chemspider.com/" xmlns:s1="http://www.chemspider.com/AbstractTypes" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.chemspider.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.chemspider.com/">
+      <s:element name="GetCompoundSpectraInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="csid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCompoundSpectraInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCompoundSpectraInfoResult" type="tns:ArrayOfCSSpectrumInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfCSSpectrumInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="CSSpectrumInfo" nillable="true" type="tns:CSSpectrumInfo" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="CSSpectrumInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="spc_id" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="csid" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="spc_type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="file_name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="comments" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="original_url" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="submitted_date" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetAllSpectraInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllSpectraInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllSpectraInfoResult" type="tns:ArrayOfCSSpectrumInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSpectrumInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="spc_id" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSpectrumInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSpectrumInfoResult" type="tns:CSSpectrumInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSpectraInfoArray">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CSIDs" type="tns:ArrayOfInt" />
+            <s:element minOccurs="0" maxOccurs="1" name="token" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfInt">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="int" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetSpectraInfoArrayResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSpectraInfoArrayResult" type="tns:ArrayOfCSSpectrumInfo" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ArrayOfCSSpectrumInfo" nillable="true" type="tns:ArrayOfCSSpectrumInfo" />
+      <s:element name="CSSpectrumInfo" nillable="true" type="tns:CSSpectrumInfo" />
+    </s:schema>
+    <s:schema targetNamespace="http://www.chemspider.com/AbstractTypes">
+      <s:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <s:complexType name="StringArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="unbounded" name="String" type="s:string" />
+            </s:sequence>
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetCompoundSpectraInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCompoundSpectraInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetCompoundSpectraInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCompoundSpectraInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSpectraInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllSpectraInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSpectraInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllSpectraInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectrumInfoSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSpectrumInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectrumInfoSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSpectrumInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectraInfoArraySoapIn">
+    <wsdl:part name="parameters" element="tns:GetSpectraInfoArray" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectraInfoArraySoapOut">
+    <wsdl:part name="parameters" element="tns:GetSpectraInfoArrayResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCompoundSpectraInfoHttpGetIn">
+    <wsdl:part name="csid" type="s:string" />
+    <wsdl:part name="token" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCompoundSpectraInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfCSSpectrumInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSpectraInfoHttpGetIn">
+    <wsdl:part name="token" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSpectraInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfCSSpectrumInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectrumInfoHttpGetIn">
+    <wsdl:part name="spc_id" type="s:string" />
+    <wsdl:part name="token" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectrumInfoHttpGetOut">
+    <wsdl:part name="Body" element="tns:CSSpectrumInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectraInfoArrayHttpGetIn">
+    <wsdl:part name="CSIDs" type="s1:StringArray" />
+    <wsdl:part name="token" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectraInfoArrayHttpGetOut">
+    <wsdl:part name="Body" element="tns:ArrayOfCSSpectrumInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetCompoundSpectraInfoHttpPostIn">
+    <wsdl:part name="csid" type="s:string" />
+    <wsdl:part name="token" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetCompoundSpectraInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfCSSpectrumInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSpectraInfoHttpPostIn">
+    <wsdl:part name="token" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetAllSpectraInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfCSSpectrumInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectrumInfoHttpPostIn">
+    <wsdl:part name="spc_id" type="s:string" />
+    <wsdl:part name="token" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectrumInfoHttpPostOut">
+    <wsdl:part name="Body" element="tns:CSSpectrumInfo" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectraInfoArrayHttpPostIn">
+    <wsdl:part name="CSIDs" type="s1:StringArray" />
+    <wsdl:part name="token" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetSpectraInfoArrayHttpPostOut">
+    <wsdl:part name="Body" element="tns:ArrayOfCSSpectrumInfo" />
+  </wsdl:message>
+  <wsdl:portType name="SpectraSoap">
+    <wsdl:operation name="GetCompoundSpectraInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information about spectra associated particular compound identified by cmp_id parameter</wsdl:documentation>
+      <wsdl:input message="tns:GetCompoundSpectraInfoSoapIn" />
+      <wsdl:output message="tns:GetCompoundSpectraInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllSpectraInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information for all Open Access spectra in database</wsdl:documentation>
+      <wsdl:input message="tns:GetAllSpectraInfoSoapIn" />
+      <wsdl:output message="tns:GetAllSpectraInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectrumInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information about the particular spectrum identified by spc_id parameter</wsdl:documentation>
+      <wsdl:input message="tns:GetSpectrumInfoSoapIn" />
+      <wsdl:output message="tns:GetSpectrumInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectraInfoArray">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information about the particular spectrum identified by spc_id parameter</wsdl:documentation>
+      <wsdl:input message="tns:GetSpectraInfoArraySoapIn" />
+      <wsdl:output message="tns:GetSpectraInfoArraySoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SpectraHttpGet">
+    <wsdl:operation name="GetCompoundSpectraInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information about spectra associated particular compound identified by cmp_id parameter</wsdl:documentation>
+      <wsdl:input message="tns:GetCompoundSpectraInfoHttpGetIn" />
+      <wsdl:output message="tns:GetCompoundSpectraInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllSpectraInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information for all Open Access spectra in database</wsdl:documentation>
+      <wsdl:input message="tns:GetAllSpectraInfoHttpGetIn" />
+      <wsdl:output message="tns:GetAllSpectraInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectrumInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information about the particular spectrum identified by spc_id parameter</wsdl:documentation>
+      <wsdl:input message="tns:GetSpectrumInfoHttpGetIn" />
+      <wsdl:output message="tns:GetSpectrumInfoHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectraInfoArray">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information about the particular spectrum identified by spc_id parameter</wsdl:documentation>
+      <wsdl:input message="tns:GetSpectraInfoArrayHttpGetIn" />
+      <wsdl:output message="tns:GetSpectraInfoArrayHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="SpectraHttpPost">
+    <wsdl:operation name="GetCompoundSpectraInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information about spectra associated particular compound identified by cmp_id parameter</wsdl:documentation>
+      <wsdl:input message="tns:GetCompoundSpectraInfoHttpPostIn" />
+      <wsdl:output message="tns:GetCompoundSpectraInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllSpectraInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information for all Open Access spectra in database</wsdl:documentation>
+      <wsdl:input message="tns:GetAllSpectraInfoHttpPostIn" />
+      <wsdl:output message="tns:GetAllSpectraInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectrumInfo">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information about the particular spectrum identified by spc_id parameter</wsdl:documentation>
+      <wsdl:input message="tns:GetSpectrumInfoHttpPostIn" />
+      <wsdl:output message="tns:GetSpectrumInfoHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectraInfoArray">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Returns information about the particular spectrum identified by spc_id parameter</wsdl:documentation>
+      <wsdl:input message="tns:GetSpectraInfoArrayHttpPostIn" />
+      <wsdl:output message="tns:GetSpectraInfoArrayHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SpectraSoap" type="tns:SpectraSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCompoundSpectraInfo">
+      <soap:operation soapAction="http://www.chemspider.com/GetCompoundSpectraInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllSpectraInfo">
+      <soap:operation soapAction="http://www.chemspider.com/GetAllSpectraInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectrumInfo">
+      <soap:operation soapAction="http://www.chemspider.com/GetSpectrumInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectraInfoArray">
+      <soap:operation soapAction="http://www.chemspider.com/GetSpectraInfoArray" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SpectraSoap12" type="tns:SpectraSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetCompoundSpectraInfo">
+      <soap12:operation soapAction="http://www.chemspider.com/GetCompoundSpectraInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllSpectraInfo">
+      <soap12:operation soapAction="http://www.chemspider.com/GetAllSpectraInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectrumInfo">
+      <soap12:operation soapAction="http://www.chemspider.com/GetSpectrumInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectraInfoArray">
+      <soap12:operation soapAction="http://www.chemspider.com/GetSpectraInfoArray" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SpectraHttpGet" type="tns:SpectraHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetCompoundSpectraInfo">
+      <http:operation location="/GetCompoundSpectraInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllSpectraInfo">
+      <http:operation location="/GetAllSpectraInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectrumInfo">
+      <http:operation location="/GetSpectrumInfo" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectraInfoArray">
+      <http:operation location="/GetSpectraInfoArray" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SpectraHttpPost" type="tns:SpectraHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetCompoundSpectraInfo">
+      <http:operation location="/GetCompoundSpectraInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllSpectraInfo">
+      <http:operation location="/GetAllSpectraInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectrumInfo">
+      <http:operation location="/GetSpectrumInfo" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSpectraInfoArray">
+      <http:operation location="/GetSpectraInfoArray" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Spectra">
+    <wsdl:port name="SpectraSoap" binding="tns:SpectraSoap">
+      <soap:address location="http://www.chemspider.com/Spectra.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SpectraSoap12" binding="tns:SpectraSoap12">
+      <soap12:address location="http://www.chemspider.com/Spectra.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SpectraHttpGet" binding="tns:SpectraHttpGet">
+      <http:address location="http://www.chemspider.com/Spectra.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SpectraHttpPost" binding="tns:SpectraHttpPost">
+      <http:address location="http://www.chemspider.com/Spectra.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

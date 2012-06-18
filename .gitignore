@@ -2,3 +2,7 @@
 */*/target/*
 */src/main/autogen/*
 */src/main/generated-sources/*
+*/*/src/main/generated-sources/*
+*.versionsBackup
+out/
+*MANIFEST.MF

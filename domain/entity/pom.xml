@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>mdk-domain</artifactId>
+        <groupId>uk.ac.ebi.mdk</groupId>
+        <version>1.3.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mdk-domain-entity</artifactId>
+    <packaging>jar</packaging>
+
+    <name>mdk-domain-entity</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- mdk dependencies -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-domain-identifier</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-domain-annotation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-domain-observation</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- CDK Modules -->
+
+        <dependency>
+            <artifactId>cdk-interfaces</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>cdk-data</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <version>${cdk.version}</version>
+        </dependency>
+
+
+        <!-- BioJava  -->
+        <dependency>
+            <artifactId>biojava3-core</artifactId>
+            <groupId>org.biojava</groupId>
+            <version>3.0.4</version>
+        </dependency>
+
+        <!-- util libraries -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>12.0</version>
+        </dependency>
+
+
+        <!-- Core Application Framework -->
+        <dependency>
+            <groupId>uk.ac.ebi.caf</groupId>
+            <artifactId>caf-utility</artifactId>
+            <version>${caf.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

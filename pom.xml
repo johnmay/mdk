@@ -2,35 +2,43 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>uk.ac.ebi.chemet</groupId>
-    <artifactId>CheMet</artifactId>
-    <version>1.3</version>
+    <groupId>uk.ac.ebi.mdk</groupId>
+    <artifactId>mdk</artifactId>
+    <version>1.3.1</version>
     <packaging>pom</packaging>
-    <name>CheMet</name>
+    <name>mdk</name>
     <modules>
-        <module>interface</module>
-        <module>observation</module>
-        <module>annotation</module>
-        <module>apps</module>
-        <module>service</module>
-        <module>tools</module>
+
+        <module>domain</module>
         <module>io</module>
-
-        <!-- old structure modules (to be converted) -->
-        <module>CheMet-Core</module>
-        <module>CheMet-IO</module>
-        <module>CheMet-Visualisation</module>
-        <module>CheMet-WebServices</module>
-        <module>Resource</module>
-
+        <module>service</module>
+        <module>tool</module>
+        <module>interface</module>
+        <module>apps</module>
+        <module>ui</module>
     </modules>
 
     <url>http://www.ebi.ac.uk/steinbeck</url>
 
     <properties>
-        <cdk.version>1.3.8-SNAPSHOT</cdk.version>
+        <cdk.version>1.4.10</cdk.version>
         <caf.version>0.8.5-SNAPSHOT</caf.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ebi-repo-snapshots</id>
+            <name>EBI Snapshots Repoistory</name>
+            <url>${ebi.maven.repo.snapshots.deploy.url}</url>
+        </snapshotRepository>
+        <repository>
+            <id>ebi-repo</id>
+            <name>EBI Repoistory</name>
+            <url>${ebi.maven.repo.deploy.url}</url>
+        </repository>
+    </distributionManagement>
+
 
     <repositories>
 
@@ -191,7 +199,17 @@
         </pluginRepository>
     </pluginRepositories>
 
+
     <build>
+
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.2</version>
+            </extension>
+        </extensions>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -230,6 +248,15 @@
                 <configuration>
                     <aggregate>true</aggregate>
 
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,0 +1,10 @@
+This product includes software (Log4j, commons-cli) developed by
+    The Apache Software Foundation (http://www.apache.org/) and is licensed under The Apache Software License, Version 2.0
+
+Below is a full list of artifacts (including those above) required by the project. Those which are not listed
+above are utilised indirectly and inherited from direct dependencies (above). Please see the respective direct dependency
+for licensing details of the indirect dependencies.
+
+[INFO] uk.ac.ebi.mdk:mdk-apps-core:jar:1.4.0-SNAPSHOT
+[INFO] +- commons-cli:commons-cli:jar:1.2:compile
+[INFO] \- log4j:log4j:jar:1.2.16:compile
