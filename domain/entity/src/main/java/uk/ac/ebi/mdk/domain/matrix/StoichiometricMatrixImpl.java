@@ -107,7 +107,7 @@ public abstract class StoichiometricMatrixImpl<M, R>
      *
      * @return
      */
-    public BiMap<Integer, Integer> assign(StoichiometricMatrix<M, R> other) {
+    public BiMap<Integer, Integer> assign(StoichiometricMatrix<? extends M, ? extends R> other) {
 
         // ensure there is enough space
         this.ensure(getMoleculeCount() + other.getReactionCount(),

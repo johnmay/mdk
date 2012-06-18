@@ -26,7 +26,7 @@ public abstract class AbstractMatcher<E extends Entity, M> implements EntityMatc
      *
      * @return
      */
-    public final Boolean matchAll(Collection queryMetrics, Collection subjectMetrics) {
+    public final <T> Boolean matchAll(Collection<T> queryMetrics, Collection<T> subjectMetrics) {
         return queryMetrics.containsAll(subjectMetrics);
     }
 
@@ -41,11 +41,10 @@ public abstract class AbstractMatcher<E extends Entity, M> implements EntityMatc
      *
      * @return whether these is any match between the two sets
      */
-    public final Boolean matchAny(Collection queryMetrics, Collection subjectMetrics) {
+    public final <T>  Boolean matchAny(Collection<T> queryMetrics, Collection<T> subjectMetrics) {
 
-        Iterator it = queryMetrics.iterator();
-        while (it.hasNext()) {
-            if (subjectMetrics.contains(it.next())) {
+        for (T queryMetric : queryMetrics) {
+            if (subjectMetrics.contains(queryMetric)) {
                 return true;
             }
         }

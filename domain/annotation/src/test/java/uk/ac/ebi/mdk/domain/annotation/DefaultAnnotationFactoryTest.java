@@ -78,9 +78,9 @@ public class DefaultAnnotationFactoryTest {
     @Test
     public void testOfClass() {
 
-        DefaultAnnotationFactory factory = DefaultAnnotationFactory.getInstance();
+        AnnotationFactory factory = DefaultAnnotationFactory.getInstance();
         for (Annotation annotation : factory.ofContext(AnnotatedEntity.class)) {
-            Class c = annotation.getClass();
+            Class<? extends Annotation> c = annotation.getClass();
             Assert.assertEquals(c, factory.ofClass(c).getClass());
         }
 

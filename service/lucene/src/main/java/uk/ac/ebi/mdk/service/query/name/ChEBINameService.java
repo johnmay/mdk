@@ -2,12 +2,7 @@ package uk.ac.ebi.mdk.service.query.name;
 
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.service.index.name.ChEBINameIndex;
-import uk.ac.ebi.mdk.service.loader.location.SystemLocation;
-import uk.ac.ebi.mdk.service.loader.location.ZIPSystemLocation;
-import uk.ac.ebi.mdk.service.loader.name.ChEBINameLoader;
 import uk.ac.ebi.mdk.service.query.AbstractLuceneService;
-import uk.ac.ebi.mdk.service.query.LuceneServiceManager;
-import uk.ac.ebi.mdk.service.ResourceLoader;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -161,26 +156,4 @@ public class ChEBINameService
         return new ChEBIIdentifier();
     }
 
-    public static void main(String[] args) {
-
-        try {
-
-            ResourceLoader loader = new ChEBINameLoader();
-            loader.addLocation("ChEBI Compounds", new ZIPSystemLocation("/databases/chebi/flatfiles/compounds.zip"));
-            loader.addLocation("ChEBI Names", new SystemLocation("/databases/chebi/flatfiles/names.tsv"));
-          //  loader.backup(); loader.update();
-        } catch (Exception ex) {
-
-        }
-
-        LuceneServiceManager manager = LuceneServiceManager.getInstance();
-        if(manager.hasService(ChEBIIdentifier.class, IUPACNameService.class)){
-            IUPACNameService service = manager.getService(ChEBIIdentifier.class, IUPACNameService.class);
-        }
-
-
-
-
-
-    }
 }

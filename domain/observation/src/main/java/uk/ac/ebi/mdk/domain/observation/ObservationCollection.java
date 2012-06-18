@@ -28,7 +28,6 @@ import java.util.Collection;
 /**
  * ObservationCollection.java
  *
- *
  * @author johnmay
  * @date May 9, 2011
  */
@@ -74,11 +73,11 @@ public class ObservationCollection
 
 
     /**
-     * Get all observations of a particular type
-     * @param c
+     * @param c the type of observation to get
+     *
      * @return
      */
-    public Collection<Observation> get(Class c) {
+    public Collection<Observation> get(Class<? extends Observation> c) {
         return typeMap.get(c);
     }
 
@@ -102,9 +101,6 @@ public class ObservationCollection
             return false;
         }
         final ObservationCollection other = (ObservationCollection) obj;
-        if (this.typeMap != other.typeMap && (this.typeMap == null || !this.typeMap.equals(other.typeMap))) {
-            return false;
-        }
-        return true;
+        return !(this.typeMap != other.typeMap && (this.typeMap == null || !this.typeMap.equals(other.typeMap)));
     }
 }

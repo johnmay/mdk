@@ -12,11 +12,12 @@
  */
 package net.sf.furbelow;
 
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
+import sun.awt.image.GifImageDecoder;
+import sun.awt.image.ImageDecoder;
+import sun.awt.image.InputStreamImageSource;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
@@ -25,35 +26,30 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
-import javax.swing.CellRendererPane;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
-import sun.awt.image.GifImageDecoder;
-import sun.awt.image.ImageDecoder;
-import sun.awt.image.InputStreamImageSource;
+import java.util.*;
 
-/** Ensures animated icons are properly handled within objects that use
+/**
+ * Ensures animated icons are properly handled within objects that use
  * renderers within a {@link CellRendererPane} to render the icon.  Keeps
  * a list of repaint rectangles to be used to queue repaint requests when
  * the animated icon indicates an update.  The set of repaint rectangles
  * is cleared after the repaint requests are queued.
+ *
  * @author twall
  */
 public class AnimatedIcon implements Icon {
 
-    /** Cache results to reduce decoding overhead. */
+    /**
+     * Cache results to reduce decoding overhead.
+     */
     private static Map decoded = new WeakHashMap();
 
-    /** Returns whether the given icon is an animated GIF. */
+    /**
+     * Returns whether the given icon is an animated GIF.
+     */
     public static boolean isAnimated(Icon icon) {
         if (icon instanceof ImageIcon) {
-            Image image = ((ImageIcon)icon).getImage();
+            Image image = ((ImageIcon) icon).getImage();
             if (image != null) {
                 // Quick check for commonly-occurring animated GIF comment
                 Object comment = image.getProperty("comment", null);
@@ -69,8 +65,7 @@ public class AnimatedIcon implements Icon {
                 try {
                     URL url = new URL(icon.toString());
                     is = url.openConnection().getInputStream();
-                }
-                catch(Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 if (is == null) {
@@ -81,16 +76,15 @@ public class AnimatedIcon implements Icon {
                         if (p instanceof InputStreamImageSource) {
                             Method m = InputStreamImageSource.class.getDeclaredMethod("getDecoder", (Class<?>[]) null);
                             m.setAccessible(true);
-                            ImageDecoder d = (ImageDecoder)m.invoke(p, (Class<?>[]) null);
+                            ImageDecoder d = (ImageDecoder) m.invoke(p, (Object[]) null);
                             if (d instanceof GifImageDecoder) {
-                                GifImageDecoder gd = (GifImageDecoder)d;
+                                GifImageDecoder gd = (GifImageDecoder) d;
                                 Field input = ImageDecoder.class.getDeclaredField("input");
                                 input.setAccessible(true);
-                                is = (InputStream)input.get(gd);
+                                is = (InputStream) input.get(gd);
                             }
                         }
-                    }
-                    catch(Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -110,10 +104,14 @@ public class AnimatedIcon implements Icon {
     private ImageIcon original;
     private Set repaints = new HashSet();
 
-    /** For use by derived classes that don't have an original. */
-    protected AnimatedIcon() { }
+    /**
+     * For use by derived classes that don't have an original.
+     */
+    protected AnimatedIcon() {
+    }
 
-    /** Create an icon that takes care of animating itself on components
+    /**
+     * Create an icon that takes care of animating itself on components
      * which use a CellRendererPane.
      */
     public AnimatedIcon(ImageIcon original) {
@@ -121,47 +119,57 @@ public class AnimatedIcon implements Icon {
         new AnimationObserver(this, original);
     }
 
-    /** Trigger a repaint on all components on which we've previously been
+    /**
+     * Trigger a repaint on all components on which we've previously been
      * painted.
      */
     protected synchronized void repaint() {
-        for (Iterator i=repaints.iterator();i.hasNext();) {
-            ((RepaintArea)i.next()).repaint();
+        for (Iterator i = repaints.iterator(); i.hasNext(); ) {
+            ((RepaintArea) i.next()).repaint();
         }
         repaints.clear();
     }
+
     public int getIconHeight() {
         return original.getIconHeight();
     }
+
     public int getIconWidth() {
         return original.getIconWidth();
     }
+
     public synchronized void paintIcon(Component c, Graphics g, int x, int y) {
         paintFrame(c, g, x, y);
         if (c != null) {
             int w = getIconWidth();
             int h = getIconHeight();
-            AffineTransform tx = ((Graphics2D)g).getTransform();
-            w = (int)(w * tx.getScaleX());
-            h = (int)(h * tx.getScaleY());
+            AffineTransform tx = ((Graphics2D) g).getTransform();
+            w = (int) (w * tx.getScaleX());
+            h = (int) (h * tx.getScaleY());
             registerRepaintArea(c, x, y, w, h);
         }
     }
+
     protected void paintFrame(Component c, Graphics g, int x, int y) {
         original.paintIcon(c, g, x, y);
     }
-    /** Register repaint areas, which get get cleared once the repaint request
+
+    /**
+     * Register repaint areas, which get get cleared once the repaint request
      * has been queued.
      */
     protected void registerRepaintArea(Component c, int x, int y, int w, int h) {
         repaints.add(new RepaintArea(c, x, y, w, h));
     }
 
-    /** Object to encapsulate an area on a component to be repainted. */
+    /**
+     * Object to encapsulate an area on a component to be repainted.
+     */
     private class RepaintArea {
         public int x, y, w, h;
-        public Component component;
-        private int hashCode;
+        public  Component component;
+        private int       hashCode;
+
         public RepaintArea(Component c, int x, int y, int w, int h) {
             Component ancestor = findNonRendererAncestor(c);
             if (ancestor != c) {
@@ -178,7 +186,9 @@ public class AnimatedIcon implements Icon {
             String hash = String.valueOf(x) + "," + y + ":" + c.hashCode();
             this.hashCode = hash.hashCode();
         }
-        /** Find the first ancestor <em>not</em> descending from a
+
+        /**
+         * Find the first ancestor <em>not</em> descending from a
          * {@link CellRendererPane}.
          */
         private Component findNonRendererAncestor(Component c) {
@@ -188,52 +198,65 @@ public class AnimatedIcon implements Icon {
             }
             return c;
         }
-        /** Queue a repaint request for this area. */
+
+        /**
+         * Queue a repaint request for this area.
+         */
         public void repaint() {
             component.repaint(x, y, w, h);
         }
+
         public boolean equals(Object o) {
             if (o instanceof RepaintArea) {
-                RepaintArea area = (RepaintArea)o;
+                RepaintArea area = (RepaintArea) o;
                 return area.component == component
-                    && area.x == x && area.y == y
-                    && area.w == w && area.h == h;
+                        && area.x == x && area.y == y
+                        && area.w == w && area.h == h;
             }
             return false;
         }
-        /** Since we're using a HashSet. */
+
+        /**
+         * Since we're using a HashSet.
+         */
         public int hashCode() {
             return hashCode;
         }
+
         public String toString() {
             return "Repaint(" + component.getClass().getName() + "@" + x + "," + y + " " + w + "x" + h + ")";
         }
     }
 
-    /** Detect changes in the original animated image, and remove self
+    /**
+     * Detect changes in the original animated image, and remove self
      * if the target icon is GC'd.
+     *
      * @author twall
      */
     private static class AnimationObserver implements ImageObserver {
         private WeakReference ref;
-        private ImageIcon original;
+        private ImageIcon     original;
+
         public AnimationObserver(AnimatedIcon animIcon, ImageIcon original) {
             this.original = original;
             this.original.setImageObserver(this);
             ref = new WeakReference(animIcon);
         }
-        /** Queue repaint requests for all known painted areas. */
+
+        /**
+         * Queue repaint requests for all known painted areas.
+         */
         public boolean imageUpdate(Image img, int flags, int x, int y, int width, int height) {
-            if ((flags & (FRAMEBITS|ALLBITS)) != 0) {
-                AnimatedIcon animIcon = (AnimatedIcon)ref.get();
+            if ((flags & (FRAMEBITS | ALLBITS)) != 0) {
+                AnimatedIcon animIcon = (AnimatedIcon) ref.get();
                 if (animIcon != null) {
                     animIcon.repaint();
-                }
-                else
+                } else
                     original.setImageObserver(null);
             }
             // Return true if we want to keep painting
-            return (flags & (ALLBITS|ABORT)) == 0;
+            return (flags & (ALLBITS | ABORT)) == 0;
         }
     }
 }

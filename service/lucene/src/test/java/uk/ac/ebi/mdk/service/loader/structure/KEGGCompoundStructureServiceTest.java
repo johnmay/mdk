@@ -5,12 +5,12 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.Fingerprinter;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.similarity.Tanimoto;
-import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
-import uk.ac.ebi.mdk.service.loader.location.SystemDirectoryLocation;
-import uk.ac.ebi.mdk.service.query.structure.KEGGCompoundStructureService;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.service.ResourceLoader;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;
+import uk.ac.ebi.mdk.service.loader.location.SystemDirectoryLocation;
+import uk.ac.ebi.mdk.service.query.structure.KEGGCompoundStructureService;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 
 import java.io.File;
@@ -50,7 +50,7 @@ public class KEGGCompoundStructureServiceTest {
                 new KEGGCompoundIdentifier("C00042"),
                 new KEGGCompoundIdentifier("C00021"),
                 new KEGGCompoundIdentifier("C00020")
-        ));
+                                                                       ));
 
         Map<Identifier, IAtomContainer> identifiers = new HashMap<Identifier, IAtomContainer>();
         for (int i = 1; i < 50; i++) {
@@ -75,7 +75,7 @@ public class KEGGCompoundStructureServiceTest {
                 Identifier identifier = e.getKey();
                 IAtomContainer structure = e.getValue();
 
-                Collection<? extends Identifier> results = service.structureSearch(e.getValue(), true);
+                Collection<? extends KEGGCompoundIdentifier> results = service.structureSearch(e.getValue(), true);
 
                 BitSet query = new Fingerprinter().getFingerprint(structure);
                 Collection<Float> coefs = getCoefficients(query, results, service);
@@ -103,11 +103,13 @@ public class KEGGCompoundStructureServiceTest {
     }
 
 
-    public static Collection<Float> getCoefficients(BitSet query, Collection<? extends Identifier> ids, StructureService
-            service) throws CDKException {
+    public static Collection<Float> getCoefficients(BitSet query,
+                                                    Collection<? extends KEGGCompoundIdentifier> ids,
+                                                    StructureService<KEGGCompoundIdentifier>
+                                                            service) throws CDKException {
         List<Float> coefs = new ArrayList<Float>();
         Fingerprinter fp = new Fingerprinter();
-        for (Identifier id : ids) {
+        for (KEGGCompoundIdentifier id : ids) {
             coefs.add(Tanimoto.calculate(query, fp.getFingerprint(service.getStructure(id))));
         }
         return coefs;

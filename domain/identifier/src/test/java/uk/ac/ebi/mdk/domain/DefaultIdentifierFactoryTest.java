@@ -20,11 +20,10 @@ import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 public class DefaultIdentifierFactoryTest {
 
 
-
-
-    @Test public void testOfName(){
-        DefaultIdentifierFactory factory    = DefaultIdentifierFactory.getInstance();
-        Identifier        identifier = factory.ofName("ChEBI identifier", "ChEBI:12");
+    @Test
+    public void testOfName() {
+        DefaultIdentifierFactory factory = DefaultIdentifierFactory.getInstance();
+        Identifier identifier = factory.ofName("ChEBI identifier", "ChEBI:12");
         System.out.println(identifier.getSummary());
     }
 
@@ -38,7 +37,6 @@ public class DefaultIdentifierFactoryTest {
     }
 
 
-
     @Test
     public void testMapping() {
 
@@ -47,7 +45,7 @@ public class DefaultIdentifierFactoryTest {
 
         for (Identifier id : factory.getSupportedIdentifiers()) {
             long start = System.currentTimeMillis();
-            Class c = id.getClass();
+            Class<? extends Identifier> c = id.getClass();
 
             int mir = IdentifierLoader.getInstance().getMIR(c);
 
@@ -87,9 +85,6 @@ public class DefaultIdentifierFactoryTest {
         Assert.assertTrue(ids.contains(new ECNumber("1.1.1.1")));
 
     }
-
-
-
 
 
 }

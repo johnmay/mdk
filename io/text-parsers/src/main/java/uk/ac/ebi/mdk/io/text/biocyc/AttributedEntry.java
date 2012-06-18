@@ -60,7 +60,7 @@ public class AttributedEntry<K, V> {
      */
     public void put(K key, V value) {
 
-        Map.Entry entry = new HashMap.SimpleEntry<K, V>(key, value);
+        Map.Entry<K,V> entry = new HashMap.SimpleEntry<K, V>(key, value);
 
         int index = INDEX_TICKER;
         indexedEntries.put(INDEX_TICKER, entry); // incremented after addition

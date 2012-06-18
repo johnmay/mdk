@@ -25,6 +25,7 @@ import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
 import uk.ac.ebi.mdk.deprecated.MIRIAMLoader;
 import uk.ac.ebi.mdk.deprecated.Synonyms;
 import uk.ac.ebi.mdk.domain.identifier.AbstractIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.tool.MetaInfoLoader;
 
 import java.util.*;
@@ -68,7 +69,7 @@ public class IdentifierLoader
      *
      * @return
      */
-    public int getMIR(Class<? extends AbstractIdentifier> type) {
+    public int getMIR(Class<? extends Identifier> type) {
 
         MIR miriam = type.getAnnotation(MIR.class);
 

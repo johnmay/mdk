@@ -24,7 +24,7 @@ public interface StoichiometricMatrix<M, R> extends ReactionMatrix<Double, M, R>
 
     public Boolean isReversible(Integer j);
 
-    public BiMap<Integer, Integer> assign(StoichiometricMatrix<M, R> other);
+    public BiMap<Integer, Integer> assign(StoichiometricMatrix<? extends M, ? extends R> other);
 
     @Override
     public StoichiometricMatrix<M, R> newInstance();
