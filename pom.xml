@@ -21,7 +21,7 @@
     <url>http://www.ebi.ac.uk/steinbeck</url>
 
     <properties>
-        <cdk.version>1.4.10-high-performance-stream</cdk.version>
+        <cdk.version>1.4.10</cdk.version>
         <caf.version>0.8.5-SNAPSHOT</caf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
