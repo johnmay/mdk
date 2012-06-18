@@ -1,5 +1,6 @@
 package uk.ac.ebi.mdk.io.xml.uniprot.marshal;
 
+import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 
 import javax.xml.stream.XMLStreamException;
@@ -16,6 +17,6 @@ public interface UniProtXMLMarshal {
     
     public String getStartTag();
 
-    public void marshal(XMLStreamReader reader, ProteinProduct product) throws XMLStreamException;
+    public void marshal(XMLStreamReader2 reader, ProteinProduct product) throws XMLStreamException;
 
 }

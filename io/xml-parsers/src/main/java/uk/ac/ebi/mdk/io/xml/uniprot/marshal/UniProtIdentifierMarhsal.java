@@ -1,6 +1,7 @@
 package uk.ac.ebi.mdk.io.xml.uniprot.marshal;
 
 import org.apache.log4j.Logger;
+import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 
@@ -25,7 +26,7 @@ public class UniProtIdentifierMarhsal implements UniProtXMLMarshal {
     }
 
     @Override
-    public void marshal(XMLStreamReader reader, ProteinProduct product) throws XMLStreamException {
+    public void marshal(XMLStreamReader2 reader, ProteinProduct product) throws XMLStreamException {
         if( reader.next() == XMLEvent.CHARACTERS){
             product.setIdentifier(new SwissProtIdentifier(reader.getText()));
         }

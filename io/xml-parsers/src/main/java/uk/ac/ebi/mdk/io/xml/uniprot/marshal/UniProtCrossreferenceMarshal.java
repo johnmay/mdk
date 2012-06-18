@@ -1,6 +1,7 @@
 package uk.ac.ebi.mdk.io.xml.uniprot.marshal;
 
 import org.apache.log4j.Logger;
+import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -45,7 +46,7 @@ public class UniProtCrossreferenceMarshal implements UniProtXMLMarshal {
     }
 
     @Override
-    public void marshal(XMLStreamReader reader, ProteinProduct product) throws XMLStreamException {
+    public void marshal(XMLStreamReader2 reader, ProteinProduct product) throws XMLStreamException {
 
         attributes.clear(); // reuse
 

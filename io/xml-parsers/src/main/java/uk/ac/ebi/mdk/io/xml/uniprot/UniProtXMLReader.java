@@ -1,13 +1,13 @@
 package uk.ac.ebi.mdk.io.xml.uniprot;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtXMLMarshal;
+import org.codehaus.stax2.XMLInputFactory2;
+import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
+import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtXMLMarshal;
 
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -26,9 +26,9 @@ public class UniProtXMLReader {
 
     private static final Logger LOGGER = Logger.getLogger(UniProtXMLReader.class);
 
-    private InputStream in;
-    private EntityFactory entityFactory;
-    private XMLStreamReader reader;
+    private InputStream      in;
+    private EntityFactory    entityFactory;
+    private XMLStreamReader2 reader;
     private Map<String, UniProtXMLMarshal> marshals = new HashMap<String, UniProtXMLMarshal>();
 
     //
@@ -38,7 +38,7 @@ public class UniProtXMLReader {
                             EntityFactory entityFactory) throws XMLStreamException {
         this.in = in;
         this.entityFactory = entityFactory;
-        this.reader = XMLInputFactory.newInstance().createXMLStreamReader(in);
+        this.reader = (XMLStreamReader2) XMLInputFactory2.newInstance().createXMLStreamReader(in);
     }
 
     public void addMarshal(UniProtXMLMarshal marshal) {
