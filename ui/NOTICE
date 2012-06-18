@@ -1,5 +1,5 @@
 This product includes software (Guava) developed by
-    The Google (http://code.google.com/p/guava-libraries/) and is licensed under The Apache Software License, Version 2.0
+    Google (http://code.google.com/p/guava-libraries/) and is licensed under The Apache Software License, Version 2.0
 
 This product includes software (JUnit) developed by
      The JUnit project (http://cdk.sourceforge.net/) and is licensed under Common Public License 1.0
@@ -18,6 +18,9 @@ This product includes software (JGoodies Forms, JGoodies Animation) developed by
 
 This product includes software (MacWidgets) developed by
     a multiple users at (http://code.google.com/p/macwidgets/) and is licensed under General Lesser Public License 3.0
+
+This product includes code (net.sf.furbelow) developed by
+    a Timothy Wall (http://sourceforge.net/users/twall) and is licensed under General Lesser Public License 2.1
 
 This product includes software (JNI-INCHI) developed at
     SourceForge (http://jni-inchi.sourceforge.net/) and is licensed under General Lesser Public License 3.0
