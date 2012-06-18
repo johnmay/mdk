@@ -78,62 +78,62 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-interfaces</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-standard</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-smsd</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-cip</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-extra</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-silent</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-formula</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-core</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-annotation</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-data</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-inchi</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
