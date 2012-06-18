@@ -26,11 +26,10 @@ import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.templates.MoleculeFactory;
-import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
 import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -40,6 +39,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.*;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 
 import javax.swing.*;
@@ -86,7 +86,7 @@ public class ParticipantEditor extends JPanel {
         setOpaque(false);
         setLayout(new FormLayout("right:p, 1dlu, p", "min, 2dlu, min, 2dlu, min"));
 
-        compartment = ComboBoxFactory.newComboBox(getCompartments());
+        compartment = ComboBoxFactory.newComboBox((Object[]) getCompartments());
         compartment.setRenderer(new DefaultListCellRenderer() {
 
             @Override
@@ -115,7 +115,7 @@ public class ParticipantEditor extends JPanel {
 
         metabolite.setText(participant.getMolecule().getName());
         compartment.setSelectedItem(((Compartment) participant.getCompartment()));
-        if(!compartment.getSelectedItem().equals(((Compartment) participant.getCompartment()))){
+        if (!compartment.getSelectedItem().equals(((Compartment) participant.getCompartment()))) {
             compartment.setSelectedItem(Organelle.UNKNOWN); // fail safe
         }
         stoichiometry.setText(participant.getCoefficient().toString());
@@ -180,7 +180,7 @@ public class ParticipantEditor extends JPanel {
 
         participant.setCoefficient(coef);
 
-        participant.setCompartment((Compartment)compartment.getSelectedItem());
+        participant.setCompartment((Compartment) compartment.getSelectedItem());
 
 
         return participant;

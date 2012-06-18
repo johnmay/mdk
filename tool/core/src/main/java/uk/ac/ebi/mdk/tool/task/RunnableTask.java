@@ -7,8 +7,8 @@ package uk.ac.ebi.mdk.tool.task;
 import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
 import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.security.InvalidParameterException;
 import java.util.Collection;
@@ -19,19 +19,17 @@ import java.util.Set;
 /**
  * RunnableTask.java
  *
- *
  * @author johnmay
- * @date Apr 28, 2011
  */
 public abstract class RunnableTask
         extends AbstractAnnotatedEntity
         implements Runnable {
 
-    private TaskStatus status = TaskStatus.QUEUED;
-    public static final String BASE_TYPE = "Task";
-    private Date start = new Date();
+    private             TaskStatus status    = TaskStatus.QUEUED;
+    public static final String     BASE_TYPE = "Task";
+    private             Date       start     = new Date();
     private Date end;
-    public Set<AnnotatedEntity> entities = new HashSet();
+    public Set<AnnotatedEntity> entities = new HashSet<AnnotatedEntity>();
 
     public RunnableTask() {
     }
@@ -43,7 +41,6 @@ public abstract class RunnableTask
     /**
      * Returns the current elapsed time for task. If the task is completed
      * then the completion time is return
-     *
      */
     public Date getElapesedTime() {
         long elapased = System.currentTimeMillis() - start.getTime();
@@ -55,7 +52,9 @@ public abstract class RunnableTask
     /**
      * Adds an entity to the task. All added entities will be pushed for update (if required)
      * at task termination
+     *
      * @param entity
+     *
      * @return
      */
     public boolean add(AnnotatedEntity entity) {
@@ -65,7 +64,9 @@ public abstract class RunnableTask
     /**
      * Adds a collection  entities to the task. All added entities will be pushed for update (if required)
      * at task termination
+     *
      * @param entities
+     *
      * @return
      */
     public boolean addAll(Collection<? extends AnnotatedEntity> entities) {
@@ -126,13 +127,13 @@ public abstract class RunnableTask
 
     /**
      * Accessor for a runnable thread object
+     *
      * @return A thread of this runnable object
      */
     public Thread getRunnableThread() {
         return new Thread(this);
     }
 
-  
 
     /**
      * Returns the command that will be executed on the command line. If no command is provided then
@@ -152,7 +153,7 @@ public abstract class RunnableTask
         sb.append(exec.getValue()).append(" ");
 
         for (Parameter param : getAnnotationsExtending(Parameter.class)) {
-            if (param.equals(exec) == false) {
+            if (!param.equals(exec)) {
                 sb.append(param.getFlag()).append(" ").append(param.getValue()).append(" ");
             }
         }

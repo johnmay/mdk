@@ -34,9 +34,7 @@ import java.util.Map;
  */
 public abstract class StoichiometricMatrixImpl<M, R>
         extends AbstractReactionMatrix<Double, M, R>
-        implements StoichiometricMatrix<M,R> {
-
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(StoichiometricMatrixImpl.class);
+        implements StoichiometricMatrix<M, R> {
 
     private Map<Integer, Boolean> reversibilityMap = new HashMap<Integer, Boolean>();
 
@@ -106,9 +104,10 @@ public abstract class StoichiometricMatrixImpl<M, R>
      * in the 'other' matrix
      *
      * @param other
+     *
      * @return
      */
-    public BiMap<Integer, Integer> assign(StoichiometricMatrixImpl< M, R> other) {
+    public BiMap<Integer, Integer> assign(StoichiometricMatrix<M, R> other) {
 
         // ensure there is enough space
         this.ensure(getMoleculeCount() + other.getReactionCount(),
@@ -144,13 +143,14 @@ public abstract class StoichiometricMatrixImpl<M, R>
      * Assigns the values and sets all reactions to reversible
      *
      * @param other
+     *
      * @return
      */
     @Override
     public BiMap<Integer, Integer> assign(AbstractReactionMatrix<Double, M, R> other) {
 
         if (other instanceof StoichiometricMatrixImpl) {
-            return this.assign((StoichiometricMatrixImpl<M, R>) other);
+            return this.assign((StoichiometricMatrix<M, R>) other);
         }
 
         BiMap<Integer, Integer> map = super.assign(other);
@@ -170,10 +170,10 @@ public abstract class StoichiometricMatrixImpl<M, R>
     /**
      * Create a new composite of s1 and s2
      */
-    public StoichiometricMatrixImpl merge(StoichiometricMatrixImpl<M, R> s1,
-                                      StoichiometricMatrixImpl<M, R> s2) {
+    public StoichiometricMatrix merge(StoichiometricMatrix<M, R> s1,
+                                      StoichiometricMatrix<M, R> s2) {
 
-        StoichiometricMatrixImpl s = s1.newInstance(s1.getMoleculeCount() + s2.getMoleculeCount(),
+        StoichiometricMatrix s = s1.newInstance(s1.getMoleculeCount() + s2.getMoleculeCount(),
                                                 s1.getReactionCount() + s2.getReactionCount());
 
         for (int j = 0; j < s1.getReactionCount(); j++) {
@@ -190,8 +190,4 @@ public abstract class StoichiometricMatrixImpl<M, R>
     }
 
 
-    public abstract StoichiometricMatrixImpl<M, R> newInstance();
-
-
-    public abstract StoichiometricMatrixImpl<M, R> newInstance(int n, int m);
 }

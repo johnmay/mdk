@@ -215,7 +215,6 @@ public class SBMLReactionReader {
                                              species.getName(),
                                              species.getMetaId());
 
-            metabolite.setCharge(((Integer) species.getCharge()).doubleValue());
 
             for (CVTerm term : species.getCVTerms()) {
                 for (String resource : term.getResources()) {

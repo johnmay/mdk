@@ -4,17 +4,17 @@
  * 2011.10.10
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,15 +23,15 @@ package uk.ac.ebi.mdk.tool.task.homology;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.io.FastaWriterHelper;
+import uk.ac.ebi.caf.utility.preference.type.FilePreference;
+import uk.ac.ebi.mdk.db.HomologyDatabaseManager;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.FileParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
-import uk.ac.ebi.caf.utility.preference.type.FilePreference;
-import uk.ac.ebi.mdk.domain.identifier.basic.TaskIdentifier;
-import uk.ac.ebi.mdk.db.HomologyDatabaseManager;
-import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
-import uk.ac.ebi.mdk.domain.entity.ProteinProductImpl;
+import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
+import uk.ac.ebi.mdk.domain.identifier.basic.TaskIdentifier;
 import uk.ac.ebi.mdk.tool.task.RunnableTask;
 
 import java.io.File;
@@ -40,11 +40,11 @@ import java.security.InvalidParameterException;
 import java.util.*;
 
 /**
- * @name    HomologySearchFactory - 2011.10.10 <br>
- *          Class description
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name HomologySearchFactory - 2011.10.10 <br>
+ * Class description
  */
 public class HomologySearchFactory {
 
@@ -72,12 +72,15 @@ public class HomologySearchFactory {
 
     /**
      * Returns a blastp task with output format '8'
+     *
      * @param products
      * @param database
      * @param expected
      * @param cpu
      * @param results
+     *
      * @return
+     *
      * @throws IOException
      * @throws Exception
      */
@@ -91,11 +94,13 @@ public class HomologySearchFactory {
 
     /**
      * Builds a runnable task to perform a sequence homology search using Blast
+     *
      * @param database The database to search against
      * @param expected The expected value to filter for
-     * @param cpu The number of cpus to allow
-     * @param results the number of results to allow
-     * @param format the blast format 7=xml, 8=tabular....
+     * @param cpu      The number of cpus to allow
+     * @param results  the number of results to allow
+     * @param format   the blast format 7=xml, 8=tabular....
+     *
      * @return A runnable task to perform the blast search externally
      */
     public RunnableTask getBlastP(Collection<GeneProduct> products,
@@ -113,15 +118,13 @@ public class HomologySearchFactory {
         }
 
 
+        Map<String, GeneProduct> accessionMap = new HashMap<String, GeneProduct>(); // we need an id map incase some names change
 
-
-        Map accessionMap = new HashMap(); // we need an id map incase some names change
-
-        Collection<ProteinSequence> sequences = new ArrayList();
+        Collection<ProteinSequence> sequences = new ArrayList<ProteinSequence>();
 
         for (GeneProduct p : products) {
-            if (p instanceof ProteinProductImpl) {
-                ProteinProductImpl protein = (ProteinProductImpl) p;
+            if (p instanceof ProteinProduct) {
+                ProteinProduct protein = (ProteinProduct) p;
                 if (protein.getSequences().size() > 1) {
                     LOGGER.info("Protein with multiple sequences");
                 }

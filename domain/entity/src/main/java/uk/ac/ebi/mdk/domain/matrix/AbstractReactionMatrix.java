@@ -167,11 +167,6 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     public abstract Class<? extends T> getValueClass();
 
 
-    public abstract AbstractReactionMatrix<T, M, R> newInstance();
-
-
-    public abstract AbstractReactionMatrix<T, M, R> newInstance(int n, int m);
-
 
     public boolean setMolecule(int i, M m) {
         if (i < molecules.length) {

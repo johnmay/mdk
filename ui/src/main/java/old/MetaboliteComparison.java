@@ -68,7 +68,7 @@ public class MetaboliteComparison {
 
     /**
      * Generates a comparison table
-     * @param data
+     * @param type
      * @return
      */
     public JTable getComparisconTable(final TableData type) {
@@ -77,7 +77,7 @@ public class MetaboliteComparison {
 
         Reconstruction[] recons = comparison.getReconstructions();
 
-        Map<Integer, Multimap<Reconstruction, Metabolite>> map = new HashMap();
+        Map<Integer, Multimap<Reconstruction, Metabolite>> map = new HashMap<Integer, Multimap<Reconstruction, Metabolite>>();
 
         for (int i = 0; i < recons.length; i++) {
             Reconstruction reconstruction = recons[i];

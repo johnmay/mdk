@@ -31,10 +31,8 @@ import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
  */
 public interface EntityValueAccessor {
 
-    @Deprecated
-    public String getName();
-
-    /**
+     public String getName();
+        /**
      * Access the value
      */
     public Object getValue(AnnotatedEntity entity);
@@ -44,6 +42,6 @@ public interface EntityValueAccessor {
      */
     public Class getValueClass();
 
-    @Deprecated
+
     public Class getColumnClass();
 }

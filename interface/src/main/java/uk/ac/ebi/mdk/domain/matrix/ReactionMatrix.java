@@ -52,9 +52,20 @@ public interface ReactionMatrix<T, M, R> {
 
     public Set<M> getHighlyConnectedMolecules(int threshold);
 
+    public M[] getReactionMolecules(Integer j);
+
+    public T[] getReactionValues(Integer i);
+
     public M[] getMolecules();
 
     public R[] getReactions();
 
     public Map<Integer, T> getReactions(M molecule);
+
+    public Integer getIndex(M molecule);
+
+    public ReactionMatrix<T, M, R> newInstance();
+
+    public ReactionMatrix<T, M, R> newInstance(int moleculeCount, int reactionCount);
+
 }

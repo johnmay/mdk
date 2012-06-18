@@ -18,7 +18,18 @@
 
 package uk.ac.ebi.mdk.domain.matrix;
 
-public interface StoichiometricMatrix<M,R> extends ReactionMatrix<Double,M,R> {
+import com.google.common.collect.BiMap;
+
+public interface StoichiometricMatrix<M, R> extends ReactionMatrix<Double, M, R> {
 
     public Boolean isReversible(Integer j);
+
+    public BiMap<Integer, Integer> assign(StoichiometricMatrix<M, R> other);
+
+    @Override
+    public StoichiometricMatrix<M, R> newInstance();
+
+    @Override
+    public StoichiometricMatrix<M, R> newInstance(int moleculeCount, int reactionCount);
+
 }

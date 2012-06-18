@@ -79,9 +79,9 @@ public class AnimatedIcon implements Icon {
                         // Be sure to catch security exceptions
                         ImageProducer p = image.getSource();
                         if (p instanceof InputStreamImageSource) {
-                            Method m = InputStreamImageSource.class.getDeclaredMethod("getDecoder", null);
+                            Method m = InputStreamImageSource.class.getDeclaredMethod("getDecoder", (Class<?>[]) null);
                             m.setAccessible(true);
-                            ImageDecoder d = (ImageDecoder)m.invoke(p, null);
+                            ImageDecoder d = (ImageDecoder)m.invoke(p, (Class<?>[]) null);
                             if (d instanceof GifImageDecoder) {
                                 GifImageDecoder gd = (GifImageDecoder)d;
                                 Field input = ImageDecoder.class.getDeclaredField("input");
