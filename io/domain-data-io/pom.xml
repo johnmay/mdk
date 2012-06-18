@@ -5,13 +5,13 @@
     <parent>
         <artifactId>mdk-io</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.4.0-SNAPSHOT</version>
+        <version>1.3.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mdk-io-data-entity</artifactId>
     <groupId>uk.ac.ebi.mdk</groupId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.3.1</version>
 
     <dependencies>
         <dependency>
@@ -22,37 +22,37 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mdk-interface</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- IO dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mdk-io-data-core</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mdk-io-data-annotation</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mdk-io-data-observation</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mdk-domain-identifier</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mdk-domain-entity</artifactId>
-            <version>1.4.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
 
