@@ -72,23 +72,29 @@
         </resources>
 
         <plugins>
+
+            <!-- Plugin for building SOAP Web Service clients -->
             <plugin>
+
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>axistools-maven-plugin</artifactId>
                 <version>1.4</version>
+
                 <executions>
                     <execution>
                         <id>build-clients</id>
                         <goals>
                             <goal>wsdl2java</goal>
                         </goals>
-                        <configuration>                            
+                        <configuration>
                             <sourceDirectory>src/main/resources/wsdl</sourceDirectory>
-                            <outputDirectory>src/main/generated-sources</outputDirectory>
                             <useEmitter>true</useEmitter>
+
+                            <!-- We provide mappings for namespace to packages in order
+                                 to neaten up the package space -->
                             <mappings>
 
-                                <!-- EBI -->
+                                <!-- EMBL-EBI -->
                                 <mapping>
                                     <namespace>http://www.ebi.ac.uk/webservices/chebi</namespace>
                                     <targetPackage>uk.ac.ebi.ws.chebi</targetPackage>
