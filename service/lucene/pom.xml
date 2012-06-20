@@ -16,8 +16,15 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-entity</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-        <!-- chemet -->
+
+        <!-- MDK -->
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-service-core</artifactId>
