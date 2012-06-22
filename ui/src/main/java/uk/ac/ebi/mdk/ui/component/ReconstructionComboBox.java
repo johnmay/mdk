@@ -43,11 +43,10 @@ public class ReconstructionComboBox {
 
         box.setRenderer(new DefaultRenderer<Reconstruction>() {
             @Override
-            public JLabel getRendererComponent(JList list, Reconstruction value, int index, boolean isSelected, boolean cellHasFocus) {
-                JLabel label = super.getRendererComponent(list, value, index, isSelected, cellHasFocus);
-                label.setText(value.getAccession());
-                label.setToolTipText(value.getAbbreviation() + ": " + value.getName());
-                return label;
+            public JLabel getComponent(JList list, Reconstruction value, int index) {
+                setText(value.getAccession());
+                setToolTipText(value.getAbbreviation() + ": " + value.getName());
+                return this;
             }
         });
 
