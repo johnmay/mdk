@@ -23,19 +23,24 @@ public class DefaultRenderer<O>
         setOpaque(true); // needs to be opaque for background
     }
 
-    public JLabel getRendererComponent(JList list, O value, int index, boolean isSelected, boolean cellHasFocus) {
-
-        this.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
-        this.setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
-
-        this.setText(value.toString());
-
+    public JLabel getComponent(JList list, O value, int index) {
+        setText(value.toString());
         return this;
     }
 
     @Override
     public final JLabel getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        return getRendererComponent(list, (O) value, index, isSelected, cellHasFocus);
+
+        setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+        setForeground(isSelected ? list.getSelectionForeground() : list.getForeground());
+
+        if (value == null) {
+            setText("");
+            return this;
+        }
+
+        return getComponent(list, (O) value, index);
+
     }
 
 }

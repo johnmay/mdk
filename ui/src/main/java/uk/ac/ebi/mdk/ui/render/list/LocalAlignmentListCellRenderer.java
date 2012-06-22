@@ -62,21 +62,18 @@ public class LocalAlignmentListCellRenderer
         COMPLEX_RENDERER.setGranularity(0.8f);
     }
 
-
     @Override
-    public JLabel getRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public JLabel getComponent(JList list, Object value, int index) {
 
         LocalAlignment alignment = (LocalAlignment) value;
         AlignmentRenderer renderer = alignment.hasSequences() ? COMPLEX_RENDERER : BASIC_RENDERER;
         Icon icon = new ImageIcon(renderer.render(alignment, (GeneProduct) alignment.getEntity()));
 
-        JLabel label = super.getRendererComponent(list, value, index, isSelected, cellHasFocus);
+        setIcon(icon);
+        setText(alignment.getSubject());
+        setToolTipText(TextUtility.html(alignment.getHTMLSummary()));
 
-        label.setIcon(icon);
-        label.setText(alignment.getSubject());
-        label.setToolTipText(TextUtility.html(alignment.getHTMLSummary()));
-
-        return label;
+        return this;
     }
 
 }

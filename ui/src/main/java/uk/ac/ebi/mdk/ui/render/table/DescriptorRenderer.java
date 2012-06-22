@@ -21,7 +21,7 @@
 package uk.ac.ebi.mdk.ui.render.table;
 
 import java.awt.Component;
-import javax.swing.JTable;
+import javax.swing.*;
 
 import uk.ac.ebi.caf.utility.ColorUtility;
 import uk.ac.ebi.mdk.domain.Descriptor;
@@ -35,29 +35,17 @@ import uk.ac.ebi.mdk.domain.Descriptor;
  * @author  $Author$ (this version)
  */
 public class DescriptorRenderer
-        extends DefaultRenderer {
+        extends DefaultRenderer<Descriptor> {
 
     public DescriptorRenderer() {
         setHorizontalAlignment(RIGHT);
     }
 
-
     @Override
-    public Component getTableCellRendererComponent(JTable table,
-                                                   Object value,
-                                                   boolean isSelected,
-                                                   boolean hasFocus,
-                                                   int row,
-                                                   int column) {
-        Descriptor descriptor = (Descriptor) value;
-
-
+    public JLabel getComponent(JTable table, Descriptor descriptor, int row, int column) {
         setText(descriptor.getShortDescription());
         setToolTipText(descriptor.getLongDescription());
-        setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
-        setForeground(isSelected ? table.getSelectionForeground() : ColorUtility.shade(table.getForeground(), 0.4f));
-
         return this;
-
     }
+
 }
