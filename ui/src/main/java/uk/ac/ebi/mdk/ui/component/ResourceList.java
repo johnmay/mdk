@@ -20,8 +20,8 @@ public class ResourceList extends MutableJList<Identifier> {
         super(Identifier.class);
         setCellRenderer(new DefaultRenderer<Identifier>() {
             @Override
-            public JLabel getRendererComponent(JList list, Identifier value, int index, boolean isSelected, boolean cellHasFocus) {
-                JLabel label = super.getRendererComponent(list, value, index, isSelected, cellHasFocus);
+            public JLabel getComponent(JList list, Identifier value, int index) {
+                JLabel label = super.getComponent(list, value, index);
                 label.setText(value.getShortDescription());
                 label.setToolTipText(value.getLongDescription());
                 return label;

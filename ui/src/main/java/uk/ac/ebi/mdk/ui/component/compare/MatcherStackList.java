@@ -19,14 +19,12 @@ public class MatcherStackList extends MutableJList<MatcherDescription> {
         super(MatcherDescription.class);
         setCellRenderer(new DefaultRenderer<MatcherDescription>() {
             @Override
-            public JLabel getRendererComponent(JList list, MatcherDescription matcher, int index, boolean isSelected, boolean cellHasFocus) {
+            public JLabel getComponent(JList list, MatcherDescription matcher, int index) {
 
-                JLabel label = super.getRendererComponent(list, matcher, index, isSelected, cellHasFocus);
+                setText(matcher.getName());
+                setToolTipText(matcher.getDescription());
 
-                label.setText(matcher.getName());
-                label.setToolTipText(matcher.getDescription());
-
-                return label;
+                return this;
 
             }
         });
