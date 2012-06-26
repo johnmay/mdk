@@ -17,6 +17,7 @@
  */
 package uk.ac.ebi.mdk.domain.annotation;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
@@ -54,8 +55,8 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
     // reflective map
     private static Constructor[] constructors = new Constructor[Byte.MAX_VALUE];
 
-    private static Map<Class, Annotation> instances = new HashMap<Class, Annotation>();
-    private Multimap<Class<? extends Annotation>, Class<? extends Annotation>> subclasses = HashMultimap.create();
+    private static Map<Class, Annotation>                                             instances  = new HashMap<Class, Annotation>();
+    private        Multimap<Class<? extends Annotation>, Class<? extends Annotation>> subclasses = HashMultimap.create();
 
     private ListMultimap<Class, Annotation> contextMap = ArrayListMultimap.create();
 
@@ -336,6 +337,50 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
 
         return subclasses.get(c);
 
+    }
+
+    /**
+     * Stuff used to generate some wiki pages
+     *
+     * @return
+     */
+    private String getWikiHTML() {
+
+
+        StringBuilder sb = new StringBuilder();
+        Annotation[] annotations = instances.values().toArray(new Annotation[0]);
+        Arrays.sort(annotations, new Comparator<Annotation>() {
+            @Override
+            public int compare(Annotation o1, Annotation o2) {
+                return o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
+            }
+        });
+        for (Annotation annotation : annotations) {
+            sb.append("<tr>");
+            sb.append("<td>").append(annotation.getBrief()).append("</td>");
+            sb.append("<td>").append(annotation.getDescription()).append("</td>");
+            sb.append("<td>").append(Joiner.on(", ").join(filter(Arrays.asList(annotation.getClass().getAnnotation(Context.class).value())))).append("</td>");
+            sb.append("<td><code><a href=\"").append("http://www.github.com/johnmay/mdk/tree/develop/domain/annotation/src/main/java/").append(annotation.getClass().getName().replaceAll("\\.", "/")).append(".java\">");
+            sb.append(annotation.getClass().getSimpleName()).append("</a></code></td>");
+            sb.append("</tr>");
+        }
+
+        return sb.toString();
+
+    }
+
+    private List<String> filter(List<Class<? extends AnnotatedEntity>> classes) {
+        List<String> scopes = new ArrayList<String>();
+        for (Class c : classes) {
+            if (c != AnnotatedEntity.class)
+                scopes.add(c.getSimpleName());
+        }
+        return scopes;
+    }
+
+    public static void main(String[] args) {
+        DefaultAnnotationFactory FACTORY = DefaultAnnotationFactory.getInstance();
+        System.out.println(FACTORY.getWikiHTML());
     }
 
 
