@@ -1,4 +1,3 @@
-
 package uk.ac.ebi.mdk.domain;
 
 /**
@@ -21,19 +20,21 @@ package uk.ac.ebi.mdk.domain;
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.tool.MetaInfoLoader;
 
 
 /**
- *          AbstractDescriptor – 2011.09.14 <br>
- *          Class description
+ * AbstractDescriptor – 2011.09.14 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public abstract class AbstractDescriptor
-  implements Descriptor {
+        implements Descriptor {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractDescriptor.class);
     // short/long description and index are loaded from a properties file
@@ -52,11 +53,24 @@ public abstract class AbstractDescriptor
         return loader.getShortDescription(getClass());
     }
 
+    /**
+     * @inheritDoc
+     */
+    public final String getBrief() {
+        return loader.getShortDescription(getClass());
+    }
 
     /**
      * @inheritDoc
      */
     public String getLongDescription() {
+        return loader.getLongDescription(getClass());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public final String getDescription() {
         return loader.getLongDescription(getClass());
     }
 

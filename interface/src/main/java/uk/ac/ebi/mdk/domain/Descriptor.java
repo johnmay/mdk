@@ -1,4 +1,3 @@
-
 /**
  * ChemicalStructureAnnotation.java
  *
@@ -25,38 +24,48 @@ import java.io.Externalizable;
 
 
 /**
+ * ChemicalStructureAnnotation – 2011.09.05 <br>
+ * Defines an annotated property of short/long description and an index. Note the index is
+ * not unique to Descriptors but should be to it's sub-class (e.g. Annotation,
+ * Observation, Identifier)
  *
- *          ChemicalStructureAnnotation – 2011.09.05 <br>
- *          Defines an annotated property of short/long description and an index. Note the index is
- *          not unique to Descriptors but should be to it's sub-class (e.g. Annotation,
- *          Observation, Identifier)
- *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public interface Descriptor extends Externalizable {
 
     /**
-     *
      * Accessor to a short description of the annotation class. The short description should
      * be short and to the point
      *
      * @return Short description
-     *
      */
     public String getShortDescription();
 
 
     /**
+     * Defines a default method for the name of the annotation (non-override)
      *
+     * @return
+     */
+    public String getBrief();
+
+
+    /**
      * Accessor to a long description of the annotation class. The long description should provide
      * more info about what the contents is
      *
      * @return Long description
-     *
      */
     public String getLongDescription();
+
+    /**
+     * Defines a default method for the description of the annotation (non-override)
+     *
+     * @return
+     */
+    public String getDescription();
 
 }
 
