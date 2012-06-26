@@ -34,7 +34,7 @@ import uk.ac.ebi.mdk.lang.annotation.Context;
  * @version $Rev$ : Last Changed $Date$
  */
 @Context
-@Brief("Soruce")
+@Brief("Source")
 @Description("Non-semantic description of where the entity has come from")
 public class Source extends AbstractStringAnnotation {
 
