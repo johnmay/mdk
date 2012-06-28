@@ -27,8 +27,8 @@ public class DialogCompartmentResolver implements CompartmentResolver {
     private static final Logger LOGGER = Logger.getLogger(DialogCompartmentResolver.class);
 
     private CompartmentResolver resolver;
-    private Window window;
-    private boolean okayClicked;
+    private Window              window;
+    private boolean             okayClicked;
 
     public DialogCompartmentResolver(CompartmentResolver parent,
                                      Window window) {
@@ -76,9 +76,9 @@ public class DialogCompartmentResolver implements CompartmentResolver {
         panel.add(LabelFactory.newLabel("Please select the correct compartment for the given notation:"),
                   cc.xyw(1, 1, 5));
         panel.add(LabelFactory.newFormLabel(compartment),
-                   cc.xy(1, 3));
+                  cc.xy(1, 3));
         panel.add(comboBox,
-                   cc.xy(3, 3));
+                  cc.xy(3, 3));
         okayClicked = false;
         panel.add(ButtonFactory.newButton(new AbstractAction("Okay") {
             @Override
@@ -87,7 +87,7 @@ public class DialogCompartmentResolver implements CompartmentResolver {
                 okayClicked = true;
             }
         }),
-                   cc.xy(5, 3));
+                  cc.xy(5, 3));
         dialog.setContentPane(panel);
         dialog.pack();
 
@@ -95,6 +95,18 @@ public class DialogCompartmentResolver implements CompartmentResolver {
 
         return okayClicked ? (Compartment) comboBox.getSelectedItem() : null;
 
+    }
+
+    /**
+     * Delegates to the parent resolver
+     *
+     * @param compartment
+     *
+     * @return
+     */
+    @Override
+    public List<Compartment> getCompartments(String compartment) {
+        return resolver.getCompartments(compartment);
     }
 
     @Override

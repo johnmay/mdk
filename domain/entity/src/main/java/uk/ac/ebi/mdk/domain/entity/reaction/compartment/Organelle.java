@@ -37,8 +37,8 @@ import java.util.Set;
  */
 public enum Organelle implements Compartment {
 
-    // basic
-    UNKNOWN("x", "Unknown", (byte) 0),
+
+
 
     // Bacteria
     CYTOPLASM("c", "Cytoplasm", (byte) 1),
@@ -62,6 +62,9 @@ public enum Organelle implements Compartment {
     VACUOLE("v", "Vacuole", (byte) 17),
     // mixed
     FLAGELLUM("f", "Flagellum", (byte) 18),
+
+    // basic
+    UNKNOWN("x", "Unknown", (byte) 0),
     ;
 
     private final String abbreviation;

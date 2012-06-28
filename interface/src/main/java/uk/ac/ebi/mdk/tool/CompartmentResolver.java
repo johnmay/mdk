@@ -21,6 +21,7 @@ package uk.ac.ebi.mdk.tool;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Compartment resolver returns a compartment object (normally an enumeration).
@@ -31,7 +32,9 @@ public interface CompartmentResolver {
 
     /**
      * Whether the compartment is ambiguous
+     *
      * @param compartment string notation
+     *
      * @return whether the notation is ambiguous
      */
     public boolean isAmbiguous(String compartment);
@@ -44,6 +47,15 @@ public interface CompartmentResolver {
      * @return compartment instance that can be used in a metabolic reaction
      */
     public Compartment getCompartment(String compartment);
+
+    /**
+     * Provides a list of all matches for the given compartment.
+     *
+     * @param compartment
+     *
+     * @return
+     */
+    public List<Compartment> getCompartments(String compartment);
 
     /**
      * Access all the compartments currently stored in the resolver

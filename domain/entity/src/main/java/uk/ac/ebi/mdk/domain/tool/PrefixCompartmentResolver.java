@@ -28,8 +28,7 @@ import uk.ac.ebi.mdk.tool.CompartmentResolver;
 import java.util.*;
 
 /**
- * Provides automated resolution of compartments from a given string. This should be used
- * for low-level resolution where you can handle unresolvable cases appropriately.
+ * Provides suggestions for the provided compartment ranked by the levenshtein distance.
  * <p/>
  * Example usage:
  * <pre>{@code
@@ -45,9 +44,9 @@ import java.util.*;
  *
  * @author johnmay
  */
-public class AutomaticCompartmentResolver implements CompartmentResolver {
+public class PrefixCompartmentResolver implements CompartmentResolver {
 
-    private static final Logger LOGGER = Logger.getLogger(AutomaticCompartmentResolver.class);
+    private static final Logger LOGGER = Logger.getLogger(PrefixCompartmentResolver.class);
 
     private ListMultimap<String, Compartment> compartments = ArrayListMultimap.create();
     private Set<String>                       ambiguous    = new HashSet<String>();
@@ -55,13 +54,13 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
     /**
      * Default constructor uses several compartment enumerations for the resolver
      *
-     * @see Organelle
+     * @see uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle
      * @see uk.ac.ebi.mdk.domain.entity.reaction.compartment.Membrane
      * @see uk.ac.ebi.mdk.domain.entity.reaction.compartment.CellType
-     * @see Tissue
+     * @see uk.ac.ebi.mdk.domain.entity.reaction.compartment.Tissue
      * @see uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organ
      */
-    public AutomaticCompartmentResolver() {
+    public PrefixCompartmentResolver() {
 
         for (Compartment compartment : Organelle.values()) {
             addCompartment(compartment);
@@ -92,11 +91,7 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
      * @param compartment the compartment to add
      */
     public void addCompartment(Compartment compartment) {
-        put(compartment.getAbbreviation(),
-            compartment);
         put(compartment.getDescription(),
-            compartment);
-        put("[" + compartment.getAbbreviation() + "]",
             compartment);
     }
 
@@ -145,28 +140,11 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
     }
 
     /**
-     * Determine whether the string notation of the compartment is ambiguous. This
-     * will also check whether the compartment can be resolved.
-     * <p/>
-     * <pre>{@code
-     * AutomaticCompartmentResolver resolver = new AutomaticCompartmentResolver();
-     * for(String name : Arrays.asList("c", "g", "e", "a")){
-     *     if(!resolver.isAmbiguous(name)){
-     *         System.out.println(resolver.getCompartment(name).getDescription());
-     *     } else {
-     *         System.err.println("Could not resolve compartment: " + name);
-     *     }
-     * }
-     * }</pre>
      *
-     * @param compartment compartment to attempt resolution for
-     *
-     * @return whether the provided compartment name is ambiguous or not pressent
      */
     @Override
     public boolean isAmbiguous(String compartment) {
-        compartment = compartment.toLowerCase(Locale.ENGLISH);
-        return ambiguous.contains(compartment) || !compartments.containsKey(compartment);
+        return getCompartments(compartment).size() > 1;
     }
 
     /**
@@ -181,25 +159,30 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
     @Override
     public Compartment getCompartment(String compartment) {
 
-        // normalise
-        compartment = compartment.toLowerCase(Locale.ENGLISH);
+        List<Compartment> suggestions = getCompartments(compartment);
 
-        if (ambiguous.contains(compartment)) {
+        if (suggestions.size() > 1) {
             LOGGER.warn("Ambiguous compartment name provided to resolved: " + compartment);
         }
 
-        if (compartments.containsKey(compartment)) {
-            return compartments.get(compartment).iterator().next();
-        }
-
-        return Organelle.UNKNOWN;
+        return suggestions.isEmpty() ? Organelle.UNKNOWN : suggestions.get(0);
 
     }
 
     @Override
     public List<Compartment> getCompartments(String compartment) {
-        compartment = compartment.toLowerCase(Locale.ENGLISH);
-        return compartments.get(compartment);
+
+        String comparmentLC = compartment.toLowerCase(Locale.ENGLISH);
+
+        List<Compartment> suggestions = new ArrayList<Compartment>();
+
+        for (String key : compartments.keySet()) {
+            if (key.startsWith(comparmentLC)) {
+                suggestions.addAll(compartments.get(key));
+            }
+        }
+
+        return suggestions;
     }
 
     /**
