@@ -263,7 +263,7 @@ public class ReactionRenderer {
 
         Metabolite metabolite = p.getMolecule();
         String compartment = "[" + ((Compartment) p.getCompartment()).getAbbreviation() + "]";
-        g2.setColor(Color.LIGHT_GRAY);
+        g2.setColor(Color.GRAY);
         g2.setFont(new Font("Courier New", Font.PLAIN, 10));
         int compartmentWidth = g2.getFontMetrics().stringWidth(compartment);
         int compartmentHeight = g2.getFontMetrics().getHeight();
@@ -278,8 +278,9 @@ public class ReactionRenderer {
             g2.dispose();
         } else {
             g2.setColor(Color.LIGHT_GRAY);
-            g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(18f));
-            String na = "unavailable";
+            g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(14f));
+            g2.setFont(g2.getFont().deriveFont(Font.ITALIC));
+            String na = "no structure";
             int mW = g2.getFontMetrics().stringWidth(na);
             int mH = g2.getFontMetrics().getHeight();
 
@@ -299,7 +300,7 @@ public class ReactionRenderer {
         g2.setColor(Color.LIGHT_GRAY);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         String direction = "+";
-        g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(34f));
+        g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(32f));
         int width = g2.getFontMetrics().stringWidth(direction);
         int height = g2.getFontMetrics().getHeight();
         g2.drawString(direction, (int) bounds.getCenterX() - (width / 2), (int) bounds.getCenterY() + (height / 2));
@@ -328,6 +329,7 @@ public class ReactionRenderer {
 
         String symbol = direction.getSymbol();
         g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(34f * scale));
+
         Rectangle2D sBounds = g2.getFontMetrics().getStringBounds(symbol, g2);
         int width = (int) sBounds.getWidth();
         int height = (int) sBounds.getHeight();
