@@ -22,6 +22,7 @@ package uk.ac.ebi.mdk.ui.render.molecule;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
@@ -46,11 +47,12 @@ import java.util.List;
 
 
 /**
- *          MoleculeRenderer – 2011.09.08 <br>
- *          Class description
+ * MoleculeRenderer – 2011.09.08 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class MoleculeRenderer {
 
@@ -104,12 +106,14 @@ public class MoleculeRenderer {
 //        IMolecule moleculeWithXYZ = structureGenerator.getMolecule();
         g2.setColor(background);
         g2.fill(bounds);
-        try {
+
+        g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(9.0f));
+        g2.setFont(g2.getFont().deriveFont(Font.ITALIC));
+
+        if (GeometryTools.has2DCoordinates(molecule)) {
             renderer.paint(molecule, new AWTDrawVisitor(g2), bounds, true);
-        } catch (IllegalArgumentException ex) {
-            LOGGER.debug("Molecule did not have coordinates!");
-            String unrendered = "no-coordinates";
-            g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(9.0f));
+        } else {
+            String unrendered = "No 2D Coordinates";
             int width = g2.getFontMetrics().stringWidth(unrendered);
             g2.setColor(Color.RED);
             g2.drawString(unrendered, bounds.width / 2 - width / 2, bounds.height / 2);
