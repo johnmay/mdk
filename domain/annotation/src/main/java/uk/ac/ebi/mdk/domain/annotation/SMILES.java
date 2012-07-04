@@ -22,6 +22,7 @@ import org.openscience.cdk.AtomContainer;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractStringAnnotation;
@@ -49,8 +50,8 @@ public class SMILES
 
     private static final Logger LOGGER = Logger.getLogger(SMILES.class);
 
-    private static final SmilesParser    SMILES_PARSER   = new SmilesParser(DefaultChemObjectBuilder.getInstance());
-    private static final SmilesGenerator SMILES_GENERATOR = new SmilesGenerator();
+    private static SmilesParser    SMILES_PARSER;
+    private static SmilesGenerator SMILES_GENERATOR;
 
     
     private IAtomContainer atomContainer;
@@ -90,6 +91,9 @@ public class SMILES
     }
     
     private IAtomContainer parseSMILES(){
+        if(SMILES_PARSER == null){
+            SMILES_PARSER = new SmilesParser(SilentChemObjectBuilder.getInstance());
+        }
         try{
             atomContainer = new AtomContainer(SMILES_PARSER.parseSmiles(getValue()));
         } catch (CDKException ex){
@@ -102,6 +106,9 @@ public class SMILES
 
     public void setStructure(IAtomContainer structure) {
         this.atomContainer = structure;
+        if(SMILES_GENERATOR == null){
+            SMILES_GENERATOR = new SmilesGenerator();
+        }
         setValue(SMILES_GENERATOR.createSMILES(structure));
     }
 }

@@ -23,9 +23,12 @@ import com.google.common.collect.ListMultimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.*;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
 
 import java.util.*;
+
+import static uk.ac.ebi.mdk.domain.identifier.Taxonomy.Kingdom.EUKARYOTA;
 
 /**
  * Provides automated resolution of compartments from a given string. This should be used
@@ -77,6 +80,42 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
         }
         for (Compartment compartment : Organ.values()) {
             addCompartment(compartment);
+        }
+
+    }
+
+    /**
+     * Modest constraint that only include the cell type, tissue and organ compartments
+     * if the kingdom is a eukaryote. By default the organelle and membrance compartments
+     * are always added.
+     *
+     * @param kingdom kingdom to constrain the compartments
+     *
+     * @see CellType
+     * @see Organ
+     * @see Tissue
+     * @see Organelle
+     * @see Membrane
+     */
+    public AutomaticCompartmentResolver(Taxonomy.Kingdom kingdom){
+
+        for (Compartment compartment : Organelle.values()) {
+            addCompartment(compartment);
+        }
+        for (Compartment compartment : Membrane.values()) {
+            addCompartment(compartment);
+        }
+
+        if(EUKARYOTA.equals(kingdom)){
+            for (Compartment compartment : CellType.values()) {
+                addCompartment(compartment);
+            }
+            for (Compartment compartment : Tissue.values()) {
+                addCompartment(compartment);
+            }
+            for (Compartment compartment : Organ.values()) {
+                addCompartment(compartment);
+            }
         }
 
     }
