@@ -37,6 +37,8 @@ import org.openscience.cdk.tools.manipulator.ChemFileManipulator;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.PanelFactory;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.InChI;
+import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 
@@ -185,7 +187,7 @@ public class AssignStructure
         } else if (formatName.equals("InChI")) {
             transferInChi();
         } else if (formatName.equals("SMILES")) {
-            // todo
+            transferSMILES();
         } else if (formatName.equals("Mol (v3000)")) {
             transferMDLV3000();
         } else if (formatName.equals("CML")) {
@@ -193,6 +195,19 @@ public class AssignStructure
         }
     }
 
+    public void transferSMILES() {
+        String smiles = area.getText().replaceAll("\n", "").trim();
+        if (smiles.isEmpty()) {
+            return;
+        }
+        SMILES smilesAnnotation = new SMILES(smiles);
+
+        metabolite.addAnnotation(smilesAnnotation);
+
+        // add a structure annotation
+        if(smilesAnnotation.getStructure() != null)
+            metabolite.addAnnotation(new AtomContainerAnnotation(smilesAnnotation.getStructure()));
+    }
 
     public void transferCML() throws CDKException, UnsupportedEncodingException, IOException {
         String cmltext = area.getText();
@@ -231,5 +246,6 @@ public class AssignStructure
             throw new InvalidParameterException("Unable to parse InCHI for " + metabolite.getName() + ": " + structureGenerator.getMessage());
         }
         metabolite.addAnnotation(new AtomContainerAnnotation(structureGenerator.getAtomContainer()));
+        metabolite.addAnnotation(new InChI(inchi));
     }
 }
