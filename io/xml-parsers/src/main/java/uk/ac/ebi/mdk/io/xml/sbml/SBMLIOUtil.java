@@ -132,11 +132,12 @@ public class SBMLIOUtil {
 
         }
 
+
+        CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
         for (CrossReference xref : rxn.getAnnotationsExtending(CrossReference.class)) {
-            String resource = xref.getIdentifier().getURN();
-            CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS_DESCRIBED_BY, resource);
-            sbmlRxn.addCVTerm(term);
+            term.addResource(xref.getIdentifier().getURN());
         }
+        sbmlRxn.addCVTerm(term);
 
         //        sbmlRxn.setNotes("<cml xmlns=\"http://www.xml-cml.org/schema\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:conventions=\"http://www.xml-cml.org/convention/\" convention=\"conventions:molecular\"><dc:title>test file for http://www.xml-cml.org/conventions/molecular convention</dc:title><dc:description>should not fail because atoms in formula/atomArray do not need ids</dc:description><dc:date>2009-04-05</dc:date><molecule id=\"m1\"><formula><atomArray><atom elementType=\"H\" isotopeNumber=\"2\" /></atomArray></formula></molecule></cml>");
         //        XMLNode annotation = new XMLNode(new XMLTriple("title",
