@@ -47,9 +47,9 @@ public abstract class AbstractLuceneService<I extends Identifier>
         }
     };
 
-    private Directory directory;
-    private Analyzer analyzer;
-    private IndexReader reader;
+    private Directory     directory;
+    private Analyzer      analyzer;
+    private IndexReader   reader;
     private IndexSearcher searcher;
 
     private LuceneIndex index;
@@ -381,14 +381,55 @@ public abstract class AbstractLuceneService<I extends Identifier>
                 Term termToken = term.createTerm(termAttribute.toString());
 
                 Query subQuery = approximate
-                        ? new FuzzyQuery(termToken, getMinSimilarity())
-                        : new TermQuery(termToken);
+                                 ? new FuzzyQuery(termToken, getMinSimilarity())
+                                 : new TermQuery(termToken);
 
                 query.add(subQuery, BooleanClause.Occur.MUST);
 
             }
         } catch (IOException ex) {
             LOGGER.error("Could not constructing query ", ex);
+        }
+
+        return query;
+    }
+
+
+    public Query construct(String text, boolean approximate, Term... terms) {
+        return construct(text, terms, approximate);
+    }
+
+    public Query construct(String text, Term[] terms, boolean approximate) {
+
+        BooleanQuery query = new BooleanQuery(false);
+
+
+        for (Term term : terms) {
+            StringReader reader = new StringReader(text);
+            TokenStream stream = analyzer.tokenStream(term.field(), reader);
+
+            CharTermAttribute termAttribute = stream.getAttribute(CharTermAttribute.class);
+
+            BooleanQuery fieldQuery = new BooleanQuery(false);
+
+            try {
+                while (stream.incrementToken()) {
+
+                    Term termToken = term.createTerm(termAttribute.toString());
+
+                    Query subQuery = approximate
+                                     ? new FuzzyQuery(termToken, getMinSimilarity())
+                                     : new TermQuery(termToken);
+
+                    fieldQuery.add(subQuery, BooleanClause.Occur.MUST);
+
+                }
+            } catch (IOException ex) {
+                LOGGER.error("Could not constructing query ", ex);
+            }
+
+            query.add(fieldQuery, BooleanClause.Occur.SHOULD);
+
         }
 
         return query;
