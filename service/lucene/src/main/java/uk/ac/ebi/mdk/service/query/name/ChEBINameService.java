@@ -34,9 +34,6 @@ public class ChEBINameService
      */
     @Override
     public Collection<ChEBIIdentifier> searchName(String name, boolean approximate) {
-        // efficiency could be improved with multifield search
-        identifiers.addAll(searchIUPACName(name, approximate));
-
        return getIdentifiers(construct(name, approximate, PREFERRED_NAME, SYNONYM, IUPAC, BRAND_NAME, INN));
     }
 
