@@ -29,7 +29,7 @@
 
     <properties>
         <cdk.version>1.4.10</cdk.version>
-        <caf.version>0.8.5-SNAPSHOT</caf.version>
+        <caf.version>0.8.6-SNAPSHOT</caf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -229,20 +229,6 @@
             </plugin>
         </plugins>
 
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>com.google.code.maven-license-plugin</groupId>
-                    <artifactId>maven-license-plugin</artifactId>
-                    <version>1.9.0</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>jaxws-maven-plugin</artifactId>
-                    <version>1.10</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
 
