@@ -48,7 +48,7 @@ public class ChEBINameLoader extends AbstractChEBILoader {
         addRequiredResource("ChEBI Compounds",
                             "...",
                             ResourceFileLocation.class,
-                            new ZIPRemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv.zip"));
+                            new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv"));
         addRequiredResource("ChEBI Names",
                             "...",
                             ResourceFileLocation.class,

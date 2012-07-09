@@ -7,6 +7,7 @@ import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.service.index.data.ChEBIDataIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractChEBILoader;
+import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
 import uk.ac.ebi.mdk.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultDataIndexWriter;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
@@ -34,7 +35,7 @@ public class ChEBIDataLoader extends AbstractChEBILoader {
         addRequiredResource("ChEBI Chemical Data",
                             "",
                             ResourceFileLocation.class,
-                            new ZIPRemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/chemical_data.tsv.zip"));
+                            new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/chemical_data.tsv"));
     }
 
     public static void main(String[] args) throws Exception{
