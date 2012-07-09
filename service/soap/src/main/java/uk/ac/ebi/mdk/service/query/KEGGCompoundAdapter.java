@@ -14,7 +14,7 @@ public class KEGGCompoundAdapter extends KEGGAdapter<KEGGCompoundIdentifier>
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundAdapter.class);
 
-    public KEGGCompoundAdapter() throws ServiceException {
+    public KEGGCompoundAdapter()  {
         super();
     }
 
