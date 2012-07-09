@@ -34,18 +34,10 @@ public class ChEBINameService
      */
     @Override
     public Collection<ChEBIIdentifier> searchName(String name, boolean approximate) {
-        // use set as to avoid duplicates
-        Collection<ChEBIIdentifier> identifiers = new HashSet<ChEBIIdentifier>();
-
         // efficiency could be improved with multifield search
-        identifiers.addAll(searchPreferredName(name, approximate));
-        identifiers.addAll(searchSynonyms(name, approximate));
         identifiers.addAll(searchIUPACName(name, approximate));
-        identifiers.addAll(searchBrandName(name, approximate));
-        identifiers.addAll(searchINN(name, approximate));
 
-        return identifiers;
-
+       return getIdentifiers(construct(name, approximate, PREFERRED_NAME, SYNONYM, IUPAC, BRAND_NAME, INN));
     }
 
     /**
