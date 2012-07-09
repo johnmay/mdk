@@ -28,8 +28,8 @@ public class ChEBIAdapter
                    PreferredNameService<ChEBIIdentifier>,
                    StructureService<ChEBIIdentifier> {
 
-    private static final Logger LOGGER = Logger.getLogger(ChEBIAdapter.class);
-    private static int DEFAULT_CACHE_SIZE = 200;
+    private static final Logger LOGGER             = Logger.getLogger(ChEBIAdapter.class);
+    private static       int    DEFAULT_CACHE_SIZE = 200;
     private int cacheSize;
 
     private Map<ChEBIIdentifier, Entity> entites = new LinkedHashMap<ChEBIIdentifier, Entity>() {
@@ -156,8 +156,10 @@ public class ChEBIAdapter
 
         try {
             LiteEntityList ents = service.getLiteEntity(name, a, getMaxResults(), StarsCategory.value3);
-            for (LiteEntity entity : ents.getListElement()) {
-                identifiers.add(getIdentifier(entity.getChebiId()));
+            if (ents != null && ents.getListElement() != null) {
+                for (LiteEntity entity : ents.getListElement()) {
+                    identifiers.add(getIdentifier(entity.getChebiId()));
+                }
             }
 
         } catch (RemoteException ex) {
