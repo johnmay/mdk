@@ -4,17 +4,17 @@
  * 2011.11.09
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,18 +29,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *          MolecularHash - 2011.11.09 <br>
+ * MolecularHash - 2011.11.09 <br>
+ * <p/>
+ * The molecular hash class describes both the single integer hash code
+ * for a single molecule and the array of atomic hash codes for the
+ * molecules atoms. This allows fine tuning in that if two single
+ * integer hash codes are the same the <br>
+ * <p/>
+ * This class should be created with the MolecularHashFactory class.
  *
- *          The molecular hash class describes both the single integer hash code
- *          for a single molecule and the array of atomic hash codes for the
- *          molecules atoms. This allows fine tuning in that if two single
- *          integer hash codes are the same the <br>
- *
- *          This class should be created with the MolecularHashFactory class.
- *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class MolecularHash {
 
@@ -48,28 +48,31 @@ public class MolecularHash {
     /**
      * The combined value of all atomic hashes.
      */
-    public int hash;
+    public  int   hash;
     /**
      * Sorted array of individual atom hashes
      */
     private int[] atomicHashes;
+
 
     /**
      * Create a new molecule hash (should be done via the factory)
      *
      * @param hash
      * @param atomicHashes Sorted array of atom hashes
-     *
      */
     protected MolecularHash(int hash, int[] atomicHashes) {
         this.hash = hash;
         this.atomicHashes = atomicHashes;
+        Arrays.sort(atomicHashes);
     }
 
     /**
      * Calculates a simple similarity score between this MolecularHash and the
      * other. Score = n matches / total.
+     *
      * @param other
+     *
      * @return
      */
     public float getSimilarity(MolecularHash other) {
