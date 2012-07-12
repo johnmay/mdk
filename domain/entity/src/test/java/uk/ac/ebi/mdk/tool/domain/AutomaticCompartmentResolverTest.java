@@ -27,6 +27,7 @@ public class AutomaticCompartmentResolverTest {
     @Test(expected = InvalidParameterException.class)
     public void testGetCompartment_thrown() throws Exception {
         Assert.assertNull(resolver.getCompartment("no such compartment"));
+        Assert.assertEquals(Organelle.UNKNOWN, resolver.getCompartment("no such compartment"));
     }
 
     @Test public void testGetCompartment_abbreviation() throws Exception {
