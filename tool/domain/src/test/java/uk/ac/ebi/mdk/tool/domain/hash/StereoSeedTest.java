@@ -52,7 +52,7 @@ public class StereoSeedTest {
         factory.setSeedMethods(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
                                                                   BondOrderSumSeed.class,
                                                                   ConnectedAtomSeed.class));
-        Assert.assertThat(factory.getHash(nadgl6p), CoreMatchers.not(factory.getHash(nadgu6p)));
+        Assert.assertEquals(factory.getHash(nadgl6p), factory.getHash(nadgu6p));
 
 
         factory.addSeedMethod(SeedFactory.getInstance().getSeed(StereoSeed.class));
