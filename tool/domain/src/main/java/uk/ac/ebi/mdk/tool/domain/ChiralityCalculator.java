@@ -1,12 +1,11 @@
 package uk.ac.ebi.mdk.tool.domain;
 
+import Jama.Matrix;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.geometry.cip.CIPTool;
 import org.openscience.cdk.geometry.cip.ILigand;
 import org.openscience.cdk.geometry.cip.Ligand;
 import org.openscience.cdk.geometry.cip.VisitedAtoms;
-import org.openscience.cdk.geometry.cip.rules.CIPLigandRule;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -81,8 +80,7 @@ public class ChiralityCalculator {
             ligands.add(0, centralLigand);
         }
 
-        double[][] matrix = new double[4][4];
-
+        Matrix matrix = new Matrix(new double[4][4]);
 
         // fill in the matrix
         for (int j = 0; j < ligands.size(); j++) {
@@ -93,47 +91,21 @@ public class ChiralityCalculator {
 
             // fill in the matrix
             for (int i = 0; i < xyz.length; i++) {
-                matrix[i][j] = xyz[i];
+                matrix.set(i, j, xyz[i]);
             }
 
             // do z coordinate adjustment
-            // this is doing linear search (ek!)
+            // this is doing linear search for connected atoms, some improvement might be possible with a map
             for (IBond bond : container.getConnectedBondsList(query.getLigandAtom())) {
                 if (bond.getConnectedAtom(query.getLigandAtom()).equals(central)) {
-                    matrix[3][j] = getAdjustment(bond);
+                    matrix.set(3, j, getAdjustment(bond));
                 }
             }
 
         }
 
-        return determinant(matrix);
+        return matrix.det();
 
-    }
-
-    // could be done using Jama
-    private static double determinant(double[][] matrix) {
-        double determinant = 0;
-        int matrixSize = matrix.length;
-        double[][] minorMatrix = new double[matrixSize - 1][matrixSize - 1];
-        if (matrixSize == 2) {
-            return matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1];
-        } else {
-            for (int j1 = 0; j1 < matrixSize; j1++) {
-                for (int i = 1; i < matrixSize; i++) {
-                    int j2 = 0;
-                    for (int j = 0; j < matrixSize; j++) {
-                        if (j == j1)
-                            continue;
-                        minorMatrix[i - 1][j2] = matrix[i][j];
-                        j2++;
-                    }
-                }
-                // sum (+/-)cofactor * minor
-                determinant = determinant + Math.pow(-1.0, j1) * matrix[0][j1]
-                        * determinant(minorMatrix);
-            }
-        }
-        return determinant;
     }
 
     public static Chirality getChirality(IAtomContainer container, IAtom atom) {
