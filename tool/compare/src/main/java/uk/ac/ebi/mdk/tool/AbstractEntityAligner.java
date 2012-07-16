@@ -119,7 +119,7 @@ public abstract class AbstractEntityAligner<E extends Entity> implements EntityA
             return matched.get(entity);
         }
 
-        Set<E> seen = new HashSet<E>(); // keep track of those we have seen
+        Set<E> seen = new HashSet<E>(); // keep track of those we have seen (maintain list order in 'matches')
         List<E> matches = new ArrayList<E>(0);
 
         for (int i = 0; i < matchers.size(); i++) {
@@ -168,7 +168,7 @@ public abstract class AbstractEntityAligner<E extends Entity> implements EntityA
      * @param greedy
      */
     public void setGreedy(Boolean greedy) {
-        if (cached == null)
+        if (greedy == null)
             throw new NullPointerException("Greedy value cannot be null");
         this.greedy = greedy;
     }
