@@ -1,5 +1,6 @@
 package uk.ac.ebi.mdk.tool.match;
 
+import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -103,5 +104,30 @@ public class MetaboliteHashCodeMatcher
         return factory.getHash(structure, seeds);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        MetaboliteHashCodeMatcher matcher = (MetaboliteHashCodeMatcher) o;
+
+        if (atomCountThreshold != matcher.atomCountThreshold) return false;
+        if (factory != null ? !factory.equals(matcher.factory) : matcher.factory != null) return false;
+        if (seeds != null ? !seeds.equals(matcher.seeds) : matcher.seeds != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = factory != null ? factory.hashCode() : 0;
+        result = 31 * result + (seeds != null ? seeds.hashCode() : 0);
+        result = 31 * result + atomCountThreshold;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Isomorphism Matcher: " + Joiner.on(",").join(seeds);
+    }
 }
