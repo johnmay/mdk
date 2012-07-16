@@ -41,4 +41,10 @@ public class ChargeSeed implements AtomSeed {
     public int seed(IAtomContainer molecule, IAtom atom) {
         return atom.getFormalCharge();
     }
+
+    @Override
+    public String toString() {
+        return "Formal Charge";
+    }
+
 }

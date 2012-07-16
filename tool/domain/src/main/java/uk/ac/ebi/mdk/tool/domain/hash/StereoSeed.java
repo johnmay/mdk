@@ -106,4 +106,8 @@ public class StereoSeed implements AtomSeed {
 
     }
 
+    @Override
+    public String toString() {
+        return "Chirality";
+    }
 }

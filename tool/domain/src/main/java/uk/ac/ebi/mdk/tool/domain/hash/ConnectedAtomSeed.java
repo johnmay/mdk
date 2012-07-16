@@ -39,4 +39,10 @@ public class ConnectedAtomSeed implements AtomSeed {
     public int seed(IAtomContainer molecule, IAtom atom) {
         return molecule.getConnectedAtomsCount(atom);
     }
+
+    @Override
+    public String toString() {
+        return "Connected Atom Count";
+    }
+
 }

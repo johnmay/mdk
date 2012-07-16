@@ -48,4 +48,10 @@ public class BondOrderSumSeed implements AtomSeed {
         return value != null ? value.hashCode() : 257;
 
     }
+
+    @Override
+    public String toString() {
+        return "Bond Order Sum";
+    }
+
 }

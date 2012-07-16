@@ -39,4 +39,9 @@ public class AtomicNumberSeed implements AtomSeed {
     public int seed(IAtomContainer molecule, IAtom atom) {
         return atom.getAtomicNumber().hashCode();
     }
+
+    @Override
+    public String toString() {
+        return "Atomic Number";
+    }
 }
