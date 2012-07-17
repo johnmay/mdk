@@ -30,10 +30,7 @@ import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.tool.domain.hash.*;
 
 import java.security.InvalidParameterException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -53,7 +50,7 @@ public class ReconstructionComparison {
 
     private Multimap<Reconstruction, Integer> metaboliteMap = ArrayListMultimap.create();
 
-    private Set<AtomSeed> methods = SeedFactory.getInstance().getSeeds(BondOrderSumSeed.class,
+    private Collection<AtomSeed> methods = SeedFactory.getInstance().getSeeds(BondOrderSumSeed.class,
                                                                        AtomicNumberSeed.class,
                                                                        ConnectedAtomSeed.class);
 

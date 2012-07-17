@@ -19,6 +19,7 @@ import uk.ac.ebi.mdk.tool.domain.TestMoleculeFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Set;
 
 
@@ -94,7 +95,7 @@ public class StereoSeedTest {
         IAtomContainer lAlaDown = TestMoleculeFactory.loadMol("l-ala-down.mol", "L-Ala", Boolean.FALSE);
 
 
-        Set<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
                                                                  ConnectedAtomSeed.class,
                                                                  BondOrderSumSeed.class,
                                                                  StereoSeed.class);
@@ -134,7 +135,7 @@ public class StereoSeedTest {
 
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
-        Set<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
                                                                  ConnectedAtomSeed.class,
                                                                  BondOrderSumSeed.class);
 

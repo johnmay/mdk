@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mdk.tool.domain;
 
+import com.google.common.base.Joiner;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -45,7 +46,7 @@ import java.util.*;
 public class MolecularHashFactory {
 
     private static final Logger                   logger               = Logger.getLogger(MolecularHashFactory.class);
-    private              Set<AtomSeed>            seedMethods          = new HashSet();
+    private              Collection<AtomSeed>     seedMethods          = new LinkedHashSet<AtomSeed>();
     private              ConnectionMatrixFactory  matrixFactory        = ConnectionMatrixFactory.getInstance();
     private              Map<Integer, MutableInt> oldOccurrenceMap     = new HashMap(150);
     private              Map<Integer, MutableInt> postoccurences       = new HashMap(150);
@@ -76,8 +77,8 @@ public class MolecularHashFactory {
      *
      * @return The set of current seeds
      */
-    public Set<AtomSeed> getSeedMethods() {
-        return Collections.unmodifiableSet(seedMethods);
+    public Collection<AtomSeed> getSeedMethods() {
+        return Collections.unmodifiableCollection(seedMethods);
     }
 
     /**
@@ -108,8 +109,9 @@ public class MolecularHashFactory {
      *
      * @param seedMethods The new seed methods
      */
-    public void setSeedMethods(Set<AtomSeed> seedMethods) {
-        this.seedMethods = seedMethods;
+    public void setSeedMethods(Collection<AtomSeed> seedMethods) {
+        this.seedMethods.clear();
+        this.seedMethods.addAll(seedMethods);
     }
 
     /**
@@ -135,7 +137,7 @@ public class MolecularHashFactory {
      *
      * @return The hash for this molecule
      */
-    public MolecularHash getHash(IAtomContainer molecule, Set<AtomSeed> methods) {
+    public MolecularHash getHash(IAtomContainer molecule, Collection<AtomSeed> methods) {
 
 
         int hash = 49157;
@@ -228,10 +230,10 @@ public class MolecularHashFactory {
      * @return array of integers representing the seeds for each atom in the
      *         molecule
      */
-    public int[] getAtomSeeds(IAtomContainer molecule, Set<AtomSeed> methods) {
+    public int[] getAtomSeeds(IAtomContainer molecule, Collection<AtomSeed> methods) {
 
         int[] seeds = new int[molecule.getAtomCount()];
-        int seed = seedWithMoleculeSize ? seeds.length % 389 : 389;
+        int seed = seedWithMoleculeSize ? 389 % seeds.length : 389;
 
         for (int i = 0; i < seeds.length; i++) {
 

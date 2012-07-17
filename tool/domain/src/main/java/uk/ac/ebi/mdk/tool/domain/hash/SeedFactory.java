@@ -20,11 +20,7 @@
  */
 package uk.ac.ebi.mdk.tool.domain.hash;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  *          SeedFactory - 2011.11.11 <br>
@@ -64,8 +60,8 @@ public class SeedFactory {
      * @param classes
      * @return
      */
-    public Set<AtomSeed> getSeeds(Class<? extends AtomSeed>... classes) {
-        Set<AtomSeed> seeds = new HashSet();
+    public Collection<AtomSeed> getSeeds(Class<? extends AtomSeed>... classes) {
+        Set<AtomSeed> seeds = new LinkedHashSet<AtomSeed>();
         for (Class<? extends AtomSeed> clazz : classes) {
             seeds.add(getSeed(clazz));
         }

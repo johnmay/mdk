@@ -13,6 +13,7 @@ import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,7 +41,7 @@ public class MetaboliteHashCodeMatcher
 
     private final MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
-    private final Set<AtomSeed> seeds;
+    private final Collection<AtomSeed> seeds;
 
     private static final Integer DEFAULT_ATOM_COUNT_THRESHOLD = 150;
     private              int     atomCountThreshold           = DEFAULT_ATOM_COUNT_THRESHOLD;
@@ -55,7 +56,7 @@ public class MetaboliteHashCodeMatcher
              threshold);
     }
 
-    public MetaboliteHashCodeMatcher(Set<AtomSeed> seeds) {
+    public MetaboliteHashCodeMatcher(Collection<AtomSeed> seeds) {
         this(seeds, DEFAULT_ATOM_COUNT_THRESHOLD);
     }
 
@@ -69,7 +70,7 @@ public class MetaboliteHashCodeMatcher
      * @param seeds
      * @param threshold
      */
-    public MetaboliteHashCodeMatcher(Set<AtomSeed> seeds, Integer threshold) {
+    public MetaboliteHashCodeMatcher(Collection<AtomSeed> seeds, Integer threshold) {
         this.seeds = seeds;
     }
 
