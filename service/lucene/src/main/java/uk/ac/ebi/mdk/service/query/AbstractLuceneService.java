@@ -123,12 +123,13 @@ public abstract class AbstractLuceneService<I extends Identifier>
             setDirectory(index.getDirectory());
             searcher = new IndexSearcher(directory, true);
         } catch (IOException ex) {
-            LOGGER.info("startup() failed: " + ex.getMessage());
+            LOGGER.error("startup() failed: " + ex.getMessage());
         }
 
         return directory != null
                 && analyzer != null
-                && index != null;
+                && index != null
+                && searcher != null;
     }
 
     /**
