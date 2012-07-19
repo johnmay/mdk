@@ -51,7 +51,7 @@ public class MolecularHashFactory {
     private              Map<Integer, MutableInt> oldOccurrenceMap     = new HashMap(150);
     private              Map<Integer, MutableInt> postoccurences       = new HashMap(150);
     private              boolean                  seedWithMoleculeSize = true;
-    private              int                      maxDepth             = 2;
+    private              int                      maxDepth             = 1;
 
     private MolecularHashFactory() {
         seedMethods.add(SeedFactory.getInstance().getSeed(AtomicNumberSeed.class));
