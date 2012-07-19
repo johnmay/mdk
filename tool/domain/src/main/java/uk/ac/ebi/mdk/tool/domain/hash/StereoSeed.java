@@ -73,7 +73,7 @@ public class StereoSeed implements AtomSeed {
         Object value = atom.getProperty(STEREO);
 
         if (value != null) {
-            return value.hashCode();
+            return ((Enum) value).ordinal();
         }
 
         return 1543;
