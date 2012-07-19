@@ -59,7 +59,7 @@ public class ReconstructionComparison {
     private static MolecularHashFactory HASH_FACTORY = MolecularHashFactory.getInstance();
 
 
-    public ReconstructionComparison(Set<AtomSeed> methods,
+    public ReconstructionComparison(Collection<AtomSeed> methods,
                                     boolean hydrogen,
                                     Reconstruction... recons) {
         if (recons.length < 1) {
