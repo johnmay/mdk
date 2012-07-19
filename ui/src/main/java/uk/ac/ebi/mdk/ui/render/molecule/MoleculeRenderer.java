@@ -93,7 +93,7 @@ public class MoleculeRenderer {
     }
 
 
-    public BufferedImage getImage(IAtomContainer molecule,
+    public BufferedImage getImage(IAtomContainer container,
                                   Rectangle bounds,
                                   Color background) throws CDKException {
 
@@ -101,7 +101,7 @@ public class MoleculeRenderer {
         BufferedImage img = new BufferedImage(bounds.width, bounds.height,
                                               BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g2 = (Graphics2D) img.getGraphics();
-//        structureGenerator.setMolecule(new Molecule(molecule));
+//        structureGenerator.setMolecule(new Molecule(container));
 //        structureGenerator.generateCoordinates();
 //        IMolecule moleculeWithXYZ = structureGenerator.getMolecule();
         g2.setColor(background);
@@ -110,8 +110,8 @@ public class MoleculeRenderer {
         g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(9.0f));
         g2.setFont(g2.getFont().deriveFont(Font.ITALIC));
 
-        if (GeometryTools.has2DCoordinates(molecule)) {
-            renderer.paint(molecule, new AWTDrawVisitor(g2), bounds, true);
+        if (GeometryTools.has2DCoordinatesNew(container) == 2) {
+            renderer.paint(container, new AWTDrawVisitor(g2), bounds, true);
         } else {
             String unrendered = "No 2D Coordinates";
             int width = g2.getFontMetrics().stringWidth(unrendered);

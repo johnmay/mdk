@@ -54,15 +54,15 @@ public class CachedMoleculeRenderer extends MoleculeRenderer {
     };
 
     @Override
-    public BufferedImage getImage(IAtomContainer molecule, Rectangle bounds, Color background) throws CDKException {
+    public BufferedImage getImage(IAtomContainer container, Rectangle bounds, Color background) throws CDKException {
 
-        CachingKey key = new CachingKey(molecule, background, bounds);
+        CachingKey key = new CachingKey(container, background, bounds);
 
         if (cache.containsKey(key)) {
             return cache.get(key);
         }
 
-        BufferedImage img = super.getImage(molecule, bounds, background);
+        BufferedImage img = super.getImage(container, bounds, background);
         cache.put(key, img);
 
         return img;
