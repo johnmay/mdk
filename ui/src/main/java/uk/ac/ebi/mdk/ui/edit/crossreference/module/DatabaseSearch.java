@@ -230,11 +230,17 @@ public class DatabaseSearch
         Identifier identifier = resourceList.getSelectedValue();
 
         if (identifier == null) {
-            return;
+            if(!resourceList.getModel().isEmpty()){
+                identifier = resourceList.getElements().get(0);
+                if(identifier == null)
+                    return;
+            }
         }
 
         NameService service = serviceManager.getService(identifier,
                                                         NameService.class);
+
+        System.out.println(service);
 
 
         NameCandidateFactory factory = new NameCandidateFactory(new ChemicalFingerprintEncoder(),
