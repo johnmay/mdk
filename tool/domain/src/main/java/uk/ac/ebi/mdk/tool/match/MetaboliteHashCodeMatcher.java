@@ -87,9 +87,15 @@ public class MetaboliteHashCodeMatcher
         for (ChemicalStructure annotation : entity.getStructures()) {
             IAtomContainer structure = annotation.getStructure();
 
-            if (structure.getAtomCount() < atomCountThreshold &&
-                    structure.getAtomCount() != 0) {
-                hashes.add(getHash(structure).hash);
+
+            if (structure.getAtomCount() < atomCountThreshold) {
+
+                structure = AtomContainerManipulator.removeHydrogens(structure);
+
+                if (structure.getAtomCount() > 0) {
+                    hashes.add(getHash(structure).hash);
+                }
+
             }
         }
 
@@ -98,10 +104,7 @@ public class MetaboliteHashCodeMatcher
     }
 
     public MolecularHash getHash(IAtomContainer structure) {
-        if (!(structure.getAtomCount() == 1
-                && structure.getAtom(0).getSymbol().equals("H"))) {
-            structure = AtomContainerManipulator.removeHydrogens(structure);
-        }
+
         return factory.getHash(structure, seeds);
     }
 
