@@ -80,7 +80,7 @@ public class Lumped extends AbstractAnnotation
             MolecularFormula annotation = entity.getAnnotations(MolecularFormula.class).iterator().next();
             IMolecularFormula formula = annotation.getFormula();
 
-            if (MolecularFormulaManipulator.getAtomCount(formula) > LUMPED_THRESHOLD) {
+            if (formula != null && MolecularFormulaManipulator.getAtomCount(formula) > LUMPED_THRESHOLD) {
                 return true;
             }
 
