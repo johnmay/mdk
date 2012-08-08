@@ -31,6 +31,7 @@
         <cdk.version>1.4.10</cdk.version>
         <caf.version>0.8.6-SNAPSHOT</caf.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <github.global.server>github</github.global.server>
     </properties>
 
     <distributionManagement>
@@ -227,10 +228,19 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.6</version>
+                <configuration>
+                    <message>Creating site for ${project.version}</message>
+                    <repositoryName>mdk</repositoryName>
+                    <repositoryOwner>johnmay</repositoryOwner>
+                </configuration>
+            </plugin>
         </plugins>
 
     </build>
-
 
     <reporting>
         <plugins>
