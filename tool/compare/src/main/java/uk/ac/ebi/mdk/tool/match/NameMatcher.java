@@ -13,9 +13,10 @@ import java.util.regex.Pattern;
  * Class realises EntityMatcher using the names, abbreviations and synonyms of
  * the annotated entities.
  * <p/>
- * Compares the names, abbreviations and synonyms of two annotated entities. The names
- * are normalised to lower case (Locale.ENGLISH) and trimmed of excess space. If
- * any name/synonym matches then the metabolites are considered matches.
+ * Compares the names, abbreviations and synonyms of two annotated entities. The
+ * names are normalised to lower case (Locale.ENGLISH) and trimmed of excess
+ * space. If any name/synonym matches then the metabolites are considered
+ * matches.
  *
  * @author johnmay
  */
@@ -23,23 +24,27 @@ public class NameMatcher<E extends AnnotatedEntity>
         extends AbstractMatcher<E, Set<String>>
         implements EntityMatcher<E, Set<String>> {
 
-    private Pattern pattern = Pattern.compile("[^A-z0-9]");
-    private Boolean normalise = Boolean.FALSE;
+    private Pattern pattern         = Pattern.compile("[^A-z0-9]");
+    private Boolean normalise       = Boolean.FALSE;
     private Boolean includeSynonyms = Boolean.FALSE;
+
 
     public NameMatcher() {
         this(Boolean.FALSE, Boolean.FALSE);
     }
+
 
     public NameMatcher(Boolean normalise, Boolean includeSynonyms) {
         this.normalise = normalise;
         this.includeSynonyms = includeSynonyms;
     }
 
+
     public NameMatcher(Pattern pattern) {
         this(Boolean.TRUE, Boolean.TRUE);
         this.pattern = pattern;
     }
+
 
     @Override
     public Set<String> calculatedMetric(E entity) {
@@ -57,9 +62,14 @@ public class NameMatcher<E extends AnnotatedEntity>
             }
         }
 
+        // remove empty and null names
+        names.remove(null);
+        names.remove("");
+
         return names;
 
     }
+
 
     @Override
     public Boolean matchMetric(Set<String> queryMetric, Set<String> subjectMetric) {
@@ -72,4 +82,13 @@ public class NameMatcher<E extends AnnotatedEntity>
         return normalise ? pattern.matcher(name).replaceAll("") : name;
     }
 
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Name Match: [");
+        sb.append("Normalised=").append(normalise.toString());
+        sb.append(", Synonyms=").append(includeSynonyms.toString());
+        sb.append("]");
+        return sb.toString();
+    }
 }
