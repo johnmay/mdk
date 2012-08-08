@@ -130,8 +130,9 @@ public class MetaboliteHashCodeMatcher
         return result;
     }
 
+
     @Override
     public String toString() {
-        return "Isomorphism Matcher: " + Joiner.on(",").join(seeds);
+        return "Isomorphism Matcher: " + Joiner.on(", ").join(seeds);
     }
 }
