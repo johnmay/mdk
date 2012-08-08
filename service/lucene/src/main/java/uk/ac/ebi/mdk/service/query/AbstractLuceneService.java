@@ -35,7 +35,8 @@ public abstract class AbstractLuceneService<I extends Identifier>
         extends AbstractService<I>
         implements QueryService<I> {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractLuceneService.class);
+    private static final Logger   LOGGER         = Logger.getLogger(AbstractLuceneService.class);
+    private final        Document EMPTY_DOCUMENT = new Document();
 
     private static final int DEFAULT_CACHE_SIZE = 200;
     private int cacheSize;
@@ -271,6 +272,10 @@ public abstract class AbstractLuceneService<I extends Identifier>
      * @throws IOException thrown if no document was found
      */
     public Document getDocument(ScoreDoc document) throws IOException {
+
+        // return an empty document for null score docs
+        if (document == null)
+            return EMPTY_DOCUMENT;
 
         Integer index = document.doc;
 
