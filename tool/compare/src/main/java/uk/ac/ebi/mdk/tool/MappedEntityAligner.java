@@ -78,10 +78,14 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
         }
 
         // build metric map
+        LOGGER.debug("Building metric map for: " + matcher.toString());
+        long start = System.currentTimeMillis();
         MetricMap map = new MetricMap(references.size());
         for (E entity : references) {
             map.put(entity, matcher);
         }
+        long end = System.currentTimeMillis();
+        LOGGER.debug("Time to build: " + (end - start) + " ms");
 
         // add to the map of metric maps (bit of a mouthful)
         metricMaps.put(matcher, map);
