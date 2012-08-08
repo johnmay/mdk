@@ -19,9 +19,9 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
- *
  * @author johnmay
  */
 public class BondOrderSumSeedTest {
@@ -29,13 +29,29 @@ public class BondOrderSumSeedTest {
     public BondOrderSumSeedTest() {
     }
 
+
     @BeforeClass
     public static void setUpClass() throws Exception {
     }
 
+
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
+
+
+    @Test
+    public void testAromatic() throws Exception {
+
+        // this case isn't accounted for yet
+        fail("Requires attention!");
+//        HMDBIdentifier query = new HMDBIdentifier("HMDB00473");
+//        ChEBIIdentifier reference = new ChEBIIdentifier("CHEBI:60281");
+//
+//        System.out.println(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class, ConnectedAtomSeed.class, BondOrderSumSeed.class).matches(build(query), build(reference)));
+
+    }
+
 
     @Test
     public void testSeed() throws CDKException, IOException {
@@ -49,7 +65,7 @@ public class BondOrderSumSeedTest {
         AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(butane);
         AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(but1ene);
 
-        MolecularHashFactory factory = MolecularHashFactory.getInstance();       
+        MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
         assertEquals(factory.getHash(butane).hash, factory.getHash(but1ene).hash);
 
