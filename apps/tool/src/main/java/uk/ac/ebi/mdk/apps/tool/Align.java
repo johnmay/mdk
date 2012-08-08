@@ -61,7 +61,7 @@ public class Align extends CommandLineMain {
 
     public static void main(String[] args) {
         Logger.getLogger(MappedEntityAligner.class).setLevel(Level.DEBUG);
-        new Align().test();//.process(args);
+        new Align().process(args);
 
     }
 
