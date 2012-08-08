@@ -6,15 +6,21 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.tool.match.EntityMatcher;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Entity aligner flattens all metrics (per matcher) into a single map which
- * is then searched. This is ideal for a 'match any' comparison.
+ * Entity aligner flattens all metrics (per matcher) into a single map which is
+ * then searched. This is ideal for a 'match any' comparison.
  *
  * @author John May
  */
-public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner<E> {
+public class MappedEntityAligner<E extends Entity>
+        extends AbstractEntityAligner<E> {
 
     private static final Logger LOGGER = Logger.getLogger(MappedEntityAligner.class);
 
@@ -25,9 +31,11 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
         super(references, Boolean.TRUE, Boolean.FALSE);
     }
 
+
     public MappedEntityAligner(Collection<E> references, Boolean cached, Boolean greedy) {
         super(references, cached, greedy);
     }
+
 
     /**
      * Convenience constructor sets cached=true but allows setting of 'greedy'
@@ -38,6 +46,7 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
     public MappedEntityAligner(Collection<E> references, Boolean greedy) {
         super(references, Boolean.TRUE, greedy);
     }
+
 
     /**
      * Adds a reference and updates the metric map
@@ -57,6 +66,7 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
 
     }
 
+
     @Override
     public void addReferences(Collection<? extends E> references) {
         super.addReferences(references);
@@ -68,6 +78,7 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
             }
         }
     }
+
 
     public MetricMap getMetricMap(EntityMatcher matcher) {
 
@@ -121,9 +132,11 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
 
         private ListMultimap<Object, E> map;
 
+
         public MetricMap(int size) {
             map = ArrayListMultimap.create(size, 2);
         }
+
 
         public void put(E entity, EntityMatcher m) {
             Object metric = m.calculatedMetric(entity);
@@ -136,17 +149,21 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
             }
         }
 
+
         public boolean containsKey(Object o) {
             return map.containsKey(o);
         }
+
 
         public List<E> get(Object o) {
             return map.get(o);
         }
 
+
         public Set<Object> getKeys() {
             return map.keySet();
         }
+
 
         public boolean isEmpty() {
             return map.isEmpty();

@@ -9,7 +9,14 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FuzzyQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.Version;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -18,14 +25,19 @@ import uk.ac.ebi.mdk.service.index.LuceneIndex;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * AbstractLuceneService - 23.02.2012 <br/>
  * <p/>
  * Provides a base for which other lucene query services can build upon. This
- * class provides a lot of utility methods for building queries, accessing score docs
- * and field values.
+ * class provides a lot of utility methods for building queries, accessing score
+ * docs and field values.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -57,15 +69,18 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     private Map<String, QueryParser> parserMap = new HashMap<String, QueryParser>();
 
+
     public AbstractLuceneService(LuceneIndex index) {
 
         this(index, DEFAULT_CACHE_SIZE);
     }
 
+
     public AbstractLuceneService(LuceneIndex index, int cacheSize) {
         this.index = index;
         this.cacheSize = cacheSize;
     }
+
 
     /**
      * Access the search used by the service
@@ -76,14 +91,15 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return searcher;
     }
 
+
     @Override
     public ServiceType getServiceType() {
         return ServiceType.LUCENE_INDEX;
     }
 
+
     /**
-     * Set the directory for the index, this will also open the index
-     * reader
+     * Set the directory for the index, this will also open the index reader
      *
      * @param directory
      *
@@ -97,6 +113,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
         reader = IndexReader.open(directory, true);
     }
 
+
     /**
      * Set the anlayzer for the index
      *
@@ -105,6 +122,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
     public void setAnalyzer(Analyzer analyzer) {
         this.analyzer = analyzer;
     }
+
 
     /**
      * @inheritDoc
@@ -133,6 +151,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
                 && searcher != null;
     }
 
+
     /**
      * Access the analyzer for this service
      *
@@ -142,10 +161,10 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return analyzer;
     }
 
+
     /**
-     * Convenience method to access the first score document for
-     * a given query. If multiple documents are found then an warning
-     * is logged.
+     * Convenience method to access the first score document for a given query.
+     * If multiple documents are found then an warning is logged.
      *
      * @param query search-able query
      *
@@ -163,10 +182,10 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     }
 
+
     /**
-     * Search the index with the provided query. A new TopScoreDocCollector
-     * is created using and constrained using the value of
-     * {@see getMaxResults()}.
+     * Search the index with the provided query. A new TopScoreDocCollector is
+     * created using and constrained using the value of {@see getMaxResults()}.
      * If an exception occurs an empty array of ScoreDoc's is returned.
      *
      * @param query search-able query
@@ -177,9 +196,10 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return search(query, TopScoreDocCollector.create(getMaxResults(), true));
     }
 
+
     /**
-     * Search the index with the provided query and TopScoreDocCollector.
-     * If an exception occurs an empty array of ScoreDoc's is returned
+     * Search the index with the provided query and TopScoreDocCollector. If an
+     * exception occurs an empty array of ScoreDoc's is returned
      *
      * @param query     search-able query
      * @param collector the TopScoreDocCollector to use
@@ -199,9 +219,10 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     }
 
+
     /**
-     * Access the binary value of the field with the given name. If multiple value's exist
-     * this method will return the first value added.
+     * Access the binary value of the field with the given name. If multiple
+     * value's exist this method will return the first value added.
      *
      * @param scoreDoc scored document to access the value for
      * @param field    name of the field to retrieve the value from
@@ -214,9 +235,10 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return getDocument(scoreDoc).getBinaryValue(field);
     }
 
+
     /**
-     * Access the string values of the field with the given name. If multiple value's exist
-     * this method will return the first value added.
+     * Access the string values of the field with the given name. If multiple
+     * value's exist this method will return the first value added.
      *
      * @param scoreDoc scored document to access the value for
      * @param field    name of the field to retrieve the value from
@@ -231,8 +253,8 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
 
     /**
-     * Access the string value of the field with the given name. If multiple value's exist
-     * this method will return the first value added.
+     * Access the string value of the field with the given name. If multiple
+     * value's exist this method will return the first value added.
      *
      * @param scoreDoc scored document to access the value for
      * @param field    name of the field to retrieve the value from
@@ -286,6 +308,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return documents.get(index);
     }
 
+
     /**
      * Access the query parse for the specified term
      *
@@ -296,6 +319,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
     public QueryParser getParser(Term term) {
         return getParser(term.field());
     }
+
 
     /**
      * Access the query parse for the specified field
@@ -312,12 +336,12 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return parserMap.get(field);
     }
 
+
     /**
-     * Parse the query for the given term/field. This method
-     * will use the appropriate query parser to construct
-     * a query from the 'query' parameter. This allows
-     * flexibility when creating a query and parsing of more
-     * complex searches:
+     * Parse the query for the given term/field. This method will use the
+     * appropriate query parser to construct a query from the 'query' parameter.
+     * This allows flexibility when creating a query and parsing of more complex
+     * searches:
      * <p/>
      * <pre>{@code
      *      // variable length query
@@ -343,11 +367,12 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     }
 
+
     /**
-     * Construct a non-approximate query without using the QueryParser. This is useful
-     * when you want to search an field that is analyzed and maintain space's. The
-     * token stream is converted into a boolean 'Must Occur' query. For most simple
-     * queries this method can be used.
+     * Construct a non-approximate query without using the QueryParser. This is
+     * useful when you want to search an field that is analyzed and maintain
+     * space's. The token stream is converted into a boolean 'Must Occur' query.
+     * For most simple queries this method can be used.
      *
      * @param text text to construct the query for
      * @param term the field to search the text in
@@ -358,13 +383,15 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return construct(text, term, false);
     }
 
+
     /**
-     * Construct a query without using the QueryParser. This is useful when you want
-     * to search an field that is analyzed and maintain space's. The token stream is
-     * converted into a boolean 'Must Occur' query. For most simple queries this
-     * method can be used. The approximate flag allows construction of approximate
-     * {@see FuzzyMatch} queries for each token. The similarity for the fuzzy match
-     * can be set via the {@see setMinSimilarity(float)} method.
+     * Construct a query without using the QueryParser. This is useful when you
+     * want to search an field that is analyzed and maintain space's. The token
+     * stream is converted into a boolean 'Must Occur' query. For most simple
+     * queries this method can be used. The approximate flag allows construction
+     * of approximate {@see FuzzyMatch} queries for each token. The similarity
+     * for the fuzzy match can be set via the {@see setMinSimilarity(float)}
+     * method.
      *
      * @param text        text to construct the query for
      * @param term        the field to search the text in
@@ -405,6 +432,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return construct(text, terms, approximate);
     }
 
+
     public Query construct(String text, Term[] terms, boolean approximate) {
 
         BooleanQuery query = new BooleanQuery(false);
@@ -443,9 +471,9 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
 
     /**
-     * Convenience method that allows retrieval of the a value in the
-     * given term/field for the provided identifier. An example would be accessing
-     * the preferred name for an identifier.
+     * Convenience method that allows retrieval of the a value in the given
+     * term/field for the provided identifier. An example would be accessing the
+     * preferred name for an identifier.
      * <p/>
      * <pre>{@code
      *      return firstValue(identifier, PreferredNameService.PREFERRED_NAME);
@@ -454,18 +482,19 @@ public abstract class AbstractLuceneService<I extends Identifier>
      * @param identifier identifier to search for
      * @param term       the term/field to access
      *
-     * @return value stored in the field for the identifier (empty string it
-     *         not found)
+     * @return value stored in the field for the identifier (empty string it not
+     *         found)
      */
     public String firstValue(Identifier identifier, Term term) {
         return firstValue(construct(identifier.getAccession(), IDENTIFIER),
                           term.field());
     }
 
+
     /**
-     * Convenience method that allows retrieval of the all values in the
-     * given term for the provided identifier. An example would be accessing
-     * all synonyms for an identifier.
+     * Convenience method that allows retrieval of the all values in the given
+     * term for the provided identifier. An example would be accessing all
+     * synonyms for an identifier.
      * <p/>
      * <pre>{@code
      *      return firstValues(identifier, SynonymService.SYNONYM);
@@ -481,11 +510,11 @@ public abstract class AbstractLuceneService<I extends Identifier>
                            term.field());
     }
 
+
     /**
-     * Convenience method to access the value for the specified field in
-     * the first document returned by the query. If no values are found
-     * an empty array is returned. If multiple are found the first is
-     * returned.
+     * Convenience method to access the value for the specified field in the
+     * first document returned by the query. If no values are found an empty
+     * array is returned. If multiple are found the first is returned.
      *
      * @param query the search query
      * @param term  field to access
@@ -496,10 +525,11 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return firstBinaryValue(query, term.field());
     }
 
+
     /**
-     * Access the value for the specified field in the first document
-     * returned by the query. If no values are found an empty array is
-     * returned. If multiple are found the first is returned.
+     * Access the value for the specified field in the first document returned
+     * by the query. If no values are found an empty array is returned. If
+     * multiple are found the first is returned.
      *
      * @param query the search query
      * @param field field to access
@@ -525,10 +555,11 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     }
 
+
     /**
-     * Access the value for the specified field in the first document
-     * returned by the query. If no values are found an empty string is
-     * returned. If multiple are found the first is returned.
+     * Access the value for the specified field in the first document returned
+     * by the query. If no values are found an empty string is returned. If
+     * multiple are found the first is returned.
      *
      * @param query the search query
      * @param term  term to access
@@ -539,10 +570,11 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return firstValue(query, term.field());
     }
 
+
     /**
-     * Access the value for the specified field in the first document
-     * returned by the query. If no values are found an empty string is
-     * returned. If multiple are found the first is returned.
+     * Access the value for the specified field in the first document returned
+     * by the query. If no values are found an empty string is returned. If
+     * multiple are found the first is returned.
      *
      * @param query the search query
      * @param field field to access
@@ -568,6 +600,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     }
 
+
     /**
      * Convenience method to access the all-values for the specified field in
      * the first document returned by the query. If no values are found an empty
@@ -581,6 +614,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
     public Collection<String> firstValues(Query query, Term term) {
         return firstValues(query, term.field());
     }
+
 
     /**
      * Access the all-values for the specified field in the first document
@@ -613,12 +647,14 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     }
 
+
     /**
-     * Convenience method to access the values for the specified field for all score
-     * documents returned by the query. If multiple values exists for the term only the
-     * first value will be returned. To access multi-value fields for each document
-     * please use {@see allValues(Query, Term)}.Null values are suppressed and
-     * not returned, if no values match and empty collection is returned.
+     * Convenience method to access the values for the specified field for all
+     * score documents returned by the query. If multiple values exists for the
+     * term only the first value will be returned. To access multi-value fields
+     * for each document please use {@see allValues(Query, Term)}.Null values
+     * are suppressed and not returned, if no values match and empty collection
+     * is returned.
      *
      * @param query search query
      * @param term  the term to access the value for
@@ -630,12 +666,14 @@ public abstract class AbstractLuceneService<I extends Identifier>
         return values(query, term.field());
     }
 
+
     /**
      * Access the values for the specified field for all score documents
      * returned by the query. If multiple values exists for the field only the
-     * first value will be returned. To access multi value fields for each document
-     * please use {@see allValues(Query, Term)}. Null values are suppressed and
-     * not returned, if no values match and empty collection is returned.
+     * first value will be returned. To access multi value fields for each
+     * document please use {@see allValues(Query, Term)}. Null values are
+     * suppressed and not returned, if no values match and empty collection is
+     * returned.
      *
      * @param query search query
      * @param field the field to access the value for
@@ -660,32 +698,36 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     }
 
+
     /**
      * Convenience method to access using a given term. This method allows
      * access to the values for the specified term. If multiple values exists
-     * all values for that term will be added to the returned collection.
-     * Null values are suppressed and
-     * not returned, if no values match and empty collection is returned.
+     * all values for that term will be added to the returned collection. Null
+     * values are suppressed and not returned, if no values match and empty
+     * collection is returned.
      *
      * @param query search query
      * @param term  the field term to retrieve the values for
      *
-     * @return Aggregated collection of values from single or multi-value fields
+     * @return Aggregated collection of values from single or multi-value
+     *         fields
      */
     public Collection<String> allValues(Query query, Term term) {
         return allValues(query, term.field());
     }
 
+
     /**
-     * Access the values for the specified field. If multiple values exists
-     * all values for that field will be added to the returned collection.
-     * Null values are suppressed and
-     * not returned, if no values match and empty collection is returned.
+     * Access the values for the specified field. If multiple values exists all
+     * values for that field will be added to the returned collection. Null
+     * values are suppressed and not returned, if no values match and empty
+     * collection is returned.
      *
      * @param query search query
      * @param field the field to retrieve the values for
      *
-     * @return Aggregated collection of values from single or multi-value fields
+     * @return Aggregated collection of values from single or multi-value
+     *         fields
      */
     public Collection<String> allValues(Query query, String field) {
 
@@ -706,12 +748,13 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
     }
 
+
     /**
-     * Access a collection of identifiers for the given query. If you
-     * have duplicate identifier fields in your index this method's
-     * return may contain duplicate also. The identifier's are constructed
-     * from the {@see QueryService#IDENTIFIER} field an subsequently if
-     * that field is missing an empty set is returned.
+     * Access a collection of identifiers for the given query. If you have
+     * duplicate identifier fields in your index this method's return may
+     * contain duplicate also. The identifier's are constructed from the {@see
+     * QueryService#IDENTIFIER} field an subsequently if that field is missing
+     * an empty set is returned.
      *
      * @param query the query to search for
      *
@@ -734,10 +777,9 @@ public abstract class AbstractLuceneService<I extends Identifier>
 
 
     /**
-     * Simple utility class that will suppress null elements. An
-     * alternative would be the Constraints available in Guava
-     * but that implementation throws an NullPointerException
-     * if an null is attempted to be added
+     * Simple utility class that will suppress null elements. An alternative
+     * would be the Constraints available in Guava but that implementation
+     * throws an NullPointerException if an null is attempted to be added
      *
      * @param <O>
      */
@@ -747,15 +789,18 @@ public abstract class AbstractLuceneService<I extends Identifier>
             super();
         }
 
+
         public NonNullList(int capacity) {
             super(capacity);
         }
+
 
         @Override
         public boolean add(O o) {
             if (o != null) return super.add(o);
             return false;
         }
+
 
         @Override
         public boolean addAll(Collection<? extends O> c) {
@@ -765,6 +810,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
             return changed;
         }
     }
+
 
     /**
      * Emties document cached
