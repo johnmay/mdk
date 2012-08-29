@@ -154,6 +154,8 @@ public abstract class AbstractEntity implements Entity, Cloneable, Externalizabl
         if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
             return false;
         }
+
         return true;
+
     }
 }

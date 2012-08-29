@@ -34,9 +34,10 @@ public class MetabolomeImpl
 
     private Map<Identifier, Metabolite> identifierMap = new HashMap<Identifier, Metabolite>();
 
+
     /**
-     * Retrieves the metabolites that match the specified name.
-     * Note. this is not a search over the list (as the name can change)
+     * Retrieves the metabolites that match the specified name. Note. this is
+     * not a search over the list (as the name can change)
      *
      * @param name
      *
@@ -59,6 +60,7 @@ public class MetabolomeImpl
 
     }
 
+
     @Override
     public boolean add(Metabolite metabolite) {
         if (!identifierMap.isEmpty()) {
@@ -66,6 +68,7 @@ public class MetabolomeImpl
         }
         return super.add(metabolite);
     }
+
 
     @Override
     public boolean remove(Object o) {
@@ -81,15 +84,17 @@ public class MetabolomeImpl
 
     }
 
+
     /**
      * Rebuilds the identifier map
      */
-    public void rebuildIdentifierMap() {
+    public void rebuildMap() {
         identifierMap.clear();
         for (Metabolite m : this) {
             identifierMap.put(m.getIdentifier(), m);
         }
     }
+
 
     @Override
     public Metabolite get(Identifier identifier) {
@@ -97,7 +102,7 @@ public class MetabolomeImpl
         // trigger rebuild if empty or identifier is not contained
         if (identifierMap.isEmpty() ||
                 !identifierMap.containsKey(identifier)) {
-            rebuildIdentifierMap();
+            rebuildMap();
         }
 
         return identifierMap.get(identifier);

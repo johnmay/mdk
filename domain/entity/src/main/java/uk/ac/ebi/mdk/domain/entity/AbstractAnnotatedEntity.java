@@ -41,8 +41,8 @@ import java.util.Set;
 
 
 /**
- * AnnotatedEntity.java – MetabolicDevelopmentKit – Jun 23, 2011
- * AnnotatedEntity contains collections of annotations and observations on objects
+ * AnnotatedEntity.java – MetabolicDevelopmentKit – Jun 23, 2011 AnnotatedEntity
+ * contains collections of annotations and observations on objects
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
@@ -59,7 +59,8 @@ public abstract class AbstractAnnotatedEntity
 
     private Enum<? extends Rating> rating = StarRating.ONE_STAR;
 
-    private static AnnotationFactory                ANNOTATION_FACTORY = DefaultAnnotationFactory.getInstance();
+    private static AnnotationFactory ANNOTATION_FACTORY = DefaultAnnotationFactory.getInstance();
+
 
     public AbstractAnnotatedEntity() {
         AtomContainerSet set = new AtomContainerSet();
@@ -121,10 +122,12 @@ public abstract class AbstractAnnotatedEntity
         return annotations.containsKey(annotation.getClass()) && annotations.get(annotation.getClass()).contains(annotation);
     }
 
+
     @Override
     public Collection<Class> getAnnotationClasses() {
         return annotations.keySet();
     }
+
 
     /**
      * Accessor to all annotations of a given type
@@ -140,9 +143,10 @@ public abstract class AbstractAnnotatedEntity
 
 
     /**
-     * Accessor to all annotations extending a given type. For example if you provide a CrossReference
-     * class all Classification annotations will also be returned this is because Classification is
-     * a sub-class of CrossReference
+     * Accessor to all annotations extending a given type. For example if you
+     * provide a CrossReference class all Classification annotations will also
+     * be returned this is because Classification is a sub-class of
+     * CrossReference
      *
      * @param base
      *
@@ -184,9 +188,11 @@ public abstract class AbstractAnnotatedEntity
         return annotations.get(annotation.getClass()).remove(annotation);
     }
 
+
     public Collection<Class<? extends Observation>> getObservationClasses() {
         return observations.getClasses();
     }
+
 
     public Collection<Observation> getObservations(Class<? extends Observation> c) {
         return observations.get(c);
@@ -296,5 +302,6 @@ public abstract class AbstractAnnotatedEntity
         //            return false;
         //        }
         return true;
+
     }
 }

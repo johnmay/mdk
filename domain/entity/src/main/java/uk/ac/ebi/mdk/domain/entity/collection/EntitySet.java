@@ -17,42 +17,46 @@
 
 package uk.ac.ebi.mdk.domain.entity.collection;
 
+import com.google.common.collect.Sets;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 
 /**
  * EntityList.java
  *
- *
  * @author johnmay
  * @date May 9, 2011
  */
 public class EntitySet<E>
-  extends HashSet<E> {
+        extends HashSet<E> {
 
     private static final org.apache.log4j.Logger logger =
-                                                 org.apache.log4j.Logger.getLogger(
-      EntitySet.class);
+            org.apache.log4j.Logger.getLogger(
+                    EntitySet.class);
 
 
     /**
-     * Access all items in list of a certain class type <br>
-     * <h4>Example:</h4>
-     * {@code List<EnzymeAnnotation> enzAnnotations = collection.get(EnzymeAnnotation.class)] }
-     * @param <T> The class type (see. example)
+     * Access all items in list of a certain class type <br> <h4>Example:</h4>
+     * {@code List<EnzymeAnnotation> enzAnnotations = collection.get(EnzymeAnnotation.class)]
+     * }
+     *
+     * @param <T>   The class type (see. example)
      * @param clazz The class type (see. example)
+     *
      * @return List of only that class type
      */
     public <T> List<T> get(Class<T> clazz) {
         List<T> subset = new ArrayList<T>();
 
         // could store in hashmap Class -> Index/Object and provide acces this way
-        for( Iterator<E> it = iterator() ; it.hasNext() ; ) {
+        for (Iterator<E> it = iterator(); it.hasNext(); ) {
             Object object = it.next();
-            if( object.getClass() == clazz ) {
+            if (object.getClass() == clazz) {
                 subset.add((T) object);
             }
         }
@@ -60,12 +64,32 @@ public class EntitySet<E>
     }
 
 
+    @Override
+    public boolean remove(Object o) {
+        return super.remove(o) || _remove(o);
+    }
+
+
+    private boolean _remove(Object o) {
+        rehash();
+        return super.remove(o);
+    }
+
+
+    public void rehash() {
+        Set<E> tmp = Sets.newHashSet(this);
+        this.clear();
+        this.addAll(tmp);
+        tmp.clear(); // dont' actually need to clear
+    }
+
+
     public boolean has(Class clazz) {
 
         // could store in hashmap Class -> Index/Object and provide acces this way
-        for( Iterator<E> it = iterator() ; it.hasNext() ; ) {
+        for (Iterator<E> it = iterator(); it.hasNext(); ) {
             Object object = it.next();
-            if( object.getClass() == clazz ) {
+            if (object.getClass() == clazz) {
                 return true;
             }
         }
