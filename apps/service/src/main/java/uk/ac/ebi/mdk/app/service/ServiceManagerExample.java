@@ -2,7 +2,14 @@ package uk.ac.ebi.mdk.app.service;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import uk.ac.ebi.mdk.domain.identifier.*;
+import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChemSpiderIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.HMDBIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.LIPIDMapsIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
@@ -16,6 +23,7 @@ import java.util.List;
 public class ServiceManagerExample {
 
     private static final Logger LOGGER = Logger.getLogger(ServiceManagerExample.class);
+
 
     public static void main(String[] args) {
 
@@ -43,7 +51,8 @@ public class ServiceManagerExample {
         for (Identifier identifier : identifiers) {
             if (manager.hasService(identifier, StructureService.class)) {
                 long start = System.currentTimeMillis();
-                StructureService service = manager.getService(identifier, StructureService.class);
+                StructureService<Identifier> service = manager.getService(identifier,
+                                                                          StructureService.class);
                 long end = System.currentTimeMillis();
                 IAtomContainer structure = service.getStructure(identifier);
                 System.out.printf("%-30s %-15s %-20s %02d    %.3f\n",
