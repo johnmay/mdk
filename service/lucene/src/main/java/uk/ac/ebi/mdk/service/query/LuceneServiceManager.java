@@ -78,7 +78,8 @@ public class LuceneServiceManager
      * @inheritDoc
      */
     @Override
-    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifier, Class<S> c) {
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifier,
+                                                                                Class<? extends S> c) {
 
         for (QueryService service : services.get(identifier)) {
             if (c.isAssignableFrom(service.getClass()) && service.startup()) {
@@ -93,7 +94,7 @@ public class LuceneServiceManager
      * @inheritDoc
      */
     @Override
-    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifier, Class<S> c) {
+    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifier, Class<? extends S> c) {
 
         for (QueryService service : services.get(identifier)) {
             if (c.isAssignableFrom(service.getClass())) {
@@ -106,12 +107,12 @@ public class LuceneServiceManager
     }
 
     @Override
-    public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<S> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<? extends S> serviceClass) {
         return hasService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
 
     @Override
-    public <S extends QueryService<I>, I extends Identifier> S getService(I identifier, Class<S> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> S getService(I identifier, Class<? extends S> serviceClass) {
         return getService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
 
@@ -163,7 +164,7 @@ public class LuceneServiceManager
     }
 
     @Override
-    public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass, Class<S> service) {
+    public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass, Class<? extends S> service) {
         return null;
     }
 

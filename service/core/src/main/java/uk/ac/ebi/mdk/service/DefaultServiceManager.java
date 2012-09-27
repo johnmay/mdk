@@ -62,13 +62,14 @@ public class DefaultServiceManager implements ServiceManager {
 
 
     @Override
-    public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<? extends QueryService> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<? extends S> serviceClass) {
         return hasService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
 
 
     @Override
-    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifierClass, Class<? extends QueryService> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifierClass,
+                                                                                Class<? extends S> serviceClass) {
         ServiceKey key = new ServiceKey(identifierClass, serviceClass);
         if (!services.containsKey(key)) {
             return false;
@@ -87,7 +88,7 @@ public class DefaultServiceManager implements ServiceManager {
 
     @Override
     public <S extends QueryService<I>, I extends Identifier> S getService(I identifier,
-                                                                          Class<? extends QueryService> serviceClass) {
+                                                                          Class<? extends S> serviceClass) {
         return getService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
 
@@ -112,7 +113,8 @@ public class DefaultServiceManager implements ServiceManager {
      * @inheritDoc
      */
     @Override
-    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifierClass, Class<? extends QueryService> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifierClass,
+                                                                          Class<? extends S> serviceClass) {
 
         ServiceKey key = new ServiceKey(identifierClass, serviceClass);
 
@@ -135,7 +137,7 @@ public class DefaultServiceManager implements ServiceManager {
      * @inheritDOc
      */
     public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass,
-                                                                          Class<? extends QueryService> serviceClass) {
+                                                                          Class<? extends S> serviceClass) {
 
         Collection<Class<? extends QueryService>> interfaces = getImplementingInterfaces(serviceClass);
         interfaces.add(serviceClass);

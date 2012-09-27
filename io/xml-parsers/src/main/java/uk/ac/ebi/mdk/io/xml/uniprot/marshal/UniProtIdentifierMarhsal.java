@@ -26,7 +26,7 @@ public class UniProtIdentifierMarhsal implements UniProtXMLMarshal {
     }
 
     @Override
-    public void marshal(XMLStreamReader2 reader, ProteinProduct product) throws XMLStreamException {
+    public void marshal(XMLStreamReader reader, ProteinProduct product) throws XMLStreamException {
         if( reader.next() == XMLEvent.CHARACTERS){
             product.setIdentifier(new SwissProtIdentifier(reader.getText()));
         }

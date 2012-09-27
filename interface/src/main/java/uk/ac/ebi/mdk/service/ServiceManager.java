@@ -54,10 +54,10 @@ public interface ServiceManager {
      * @return
      */
     public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifierClass,
-                                                                                Class<? extends QueryService> serviceClass);
+                                                                                Class<? extends S> serviceClass);
 
     public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier,
-                                                                                Class<? extends QueryService> serviceClass);
+                                                                                Class<? extends S> serviceClass);
 
     /**
      * Access a service for a given identifier and service type. This method
@@ -93,10 +93,10 @@ public interface ServiceManager {
      *         matches and invalid parameter exception is thrown)
      */
     public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifierClass,
-                                                                          Class<? extends QueryService> serviceClass);
+                                                                          Class<? extends S> serviceClass);
 
     public <S extends QueryService<I>, I extends Identifier> S getService(I identifier,
-                                                                          Class<? extends QueryService> serviceClass);
+                                                                          Class<? extends S> serviceClass);
 
     /**
      * Provides creation of a proxy service where multiple services can be combined
@@ -180,7 +180,7 @@ public interface ServiceManager {
      * @return
      */
     public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass,
-                                                                          Class<? extends QueryService>           serviceClass);
+                                                                          Class<? extends S>           serviceClass);
 
     public Collection<Identifier> getIdentifiers(Class<? extends QueryService> c);
 }

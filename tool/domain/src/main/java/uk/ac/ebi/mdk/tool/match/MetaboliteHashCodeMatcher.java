@@ -10,6 +10,8 @@ import uk.ac.ebi.mdk.tool.domain.MolecularHash;
 import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
+import uk.ac.ebi.mdk.tool.domain.hash.BondOrderSumSeed;
+import uk.ac.ebi.mdk.tool.domain.hash.ChargeSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
 

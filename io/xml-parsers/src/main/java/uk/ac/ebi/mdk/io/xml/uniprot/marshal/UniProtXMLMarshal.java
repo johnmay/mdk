@@ -17,6 +17,6 @@ public interface UniProtXMLMarshal {
     
     public String getStartTag();
 
-    public void marshal(XMLStreamReader2 reader, ProteinProduct product) throws XMLStreamException;
+    public void marshal(XMLStreamReader reader, ProteinProduct product) throws XMLStreamException;
 
 }

@@ -46,7 +46,7 @@ public class UniProtCrossreferenceMarshal implements UniProtXMLMarshal {
     }
 
     @Override
-    public void marshal(XMLStreamReader2 reader, ProteinProduct product) throws XMLStreamException {
+    public void marshal(XMLStreamReader reader, ProteinProduct product) throws XMLStreamException {
 
         attributes.clear(); // reuse
 

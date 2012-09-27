@@ -11,7 +11,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static uk.ac.ebi.mdk.service.query.CrossReferenceService.*;
+import static uk.ac.ebi.mdk.service.query.CrossReferenceService.CLASS_ID;
+import static uk.ac.ebi.mdk.service.query.CrossReferenceService.CLASS_NAME;
+import static uk.ac.ebi.mdk.service.query.CrossReferenceService.DATABASE_ACCESSION;
+import static uk.ac.ebi.mdk.service.query.CrossReferenceService.DATABASE_IDENTIFIER_INDEX;
 
 /**
  * Unified writing of cross-references to a lucene-index
@@ -22,14 +25,19 @@ import static uk.ac.ebi.mdk.service.query.CrossReferenceService.*;
  */
 public class DefaultCrossReferenceIndexWriter extends AbstractIndexWriter {
 
-    private MutableByte ticker = new MutableByte(-128);
-    private Map<Class, Byte> map = new HashMap<Class, Byte>();
+    private MutableByte      ticker = new MutableByte(-128);
+    private Map<Class, Byte> map    = new HashMap<Class, Byte>();
+
 
     public DefaultCrossReferenceIndexWriter(LuceneIndex index) throws IOException {
         super(index);
     }
 
+
     public void write(String accession, Identifier xref) throws IOException {
+
+        if (xref == null)
+            return;
 
         Document document = new Document();
 
@@ -42,6 +50,7 @@ public class DefaultCrossReferenceIndexWriter extends AbstractIndexWriter {
         add(document);
 
     }
+
 
     public Byte getIndex(Identifier identifier) throws IOException {
 

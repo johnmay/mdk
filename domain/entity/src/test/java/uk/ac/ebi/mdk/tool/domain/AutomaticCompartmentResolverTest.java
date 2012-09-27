@@ -24,9 +24,8 @@ public class AutomaticCompartmentResolverTest {
         Assert.assertFalse(resolver.isAmbiguous("e"));
     }
 
-    @Test(expected = InvalidParameterException.class)
+    @Test
     public void testGetCompartment_thrown() throws Exception {
-        Assert.assertNull(resolver.getCompartment("no such compartment"));
         Assert.assertEquals(Organelle.UNKNOWN, resolver.getCompartment("no such compartment"));
     }
 
