@@ -1,6 +1,7 @@
 package uk.ac.ebi.mdk.service.loader.name;
 
 import au.com.bytecode.opencsv.CSVReader;
+import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
@@ -84,6 +85,11 @@ public class ChEBINameLoader extends AbstractChEBILoader {
 
         String[] row = null;
         while ((row = csv.readNext()) != null ) {
+
+            if(row.length < header.size()) {
+                LOGGER.error("Malformed entry: " + Joiner.on(", ").join(row));
+                continue;
+            }
 
             if(isCancelled())
                 break;
