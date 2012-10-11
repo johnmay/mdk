@@ -1,8 +1,6 @@
-*/target/*
-*/*/target/*
-*/src/main/autogen/*
-*/src/main/generated-sources/*
-*/*/src/main/generated-sources/*
+.gitignore
+target
+generated-sources
 *.versionsBackup
 out/
 *MANIFEST.MF
