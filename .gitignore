@@ -1,6 +1,0 @@
-.gitignore
-target
-generated-sources
-*.versionsBackup
-out/
-*MANIFEST.MF
