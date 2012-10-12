@@ -29,9 +29,13 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.Symbol;
+import org.sbml.jsbml.xml.XMLNode;
 import uk.ac.ebi.mdk.deprecated.MIRIAMLoader;
+import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
+import uk.ac.ebi.mdk.domain.annotation.Note;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
@@ -44,7 +48,10 @@ import uk.ac.ebi.mdk.tool.CompartmentResolver;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -272,7 +279,7 @@ public class SBMLReactionReader {
 
             for (CVTerm term : species.getCVTerms()) {
                 for (String resource : term.getResources()) {
-                    //XXX bit of a hack
+                    //XXX bit of a hack - need a handler class
                     if (resource.startsWith("urn:miriam")) {
                         Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(resource);
                         if (identifier != null)
@@ -285,7 +292,10 @@ public class SBMLReactionReader {
                 }
             }
 
-            System.out.println(species.getNotesString());
+            // could handle the nodes but he have no idea what nodes we have beneath
+            // most of the time is html so we strip out all the html markup and add this
+            // as a user comment
+            metabolite.addAnnotations(strip(species));
 
             speciesMap.put(species, metabolite);
             speciesNameMap.put(metabolite.getName(), metabolite);
@@ -299,6 +309,48 @@ public class SBMLReactionReader {
         return participant;
 
     }
+
+    /**
+     * Strip the notes from the provided SBML symbol and convert
+     * to something we can handle.
+     *
+     * @param symbol the symbol to access comments from
+     * @return the comment annotations
+     */
+    private List<Note> strip(Symbol symbol) {
+        return strip(symbol.getNotes(), new ArrayList<Note>(5));
+    }
+
+    /**
+     * Recursively strips comments out of the content in the given XML Node. We
+     * have no knowledge of what is in the note - other then it's related to a
+     * certain entity. This method does is a trade off but the notes are preserved
+     * on the imported model.
+     *
+     * @param node an XML Node with some comment-like data
+     * @return
+     */
+    private List<Note> strip(XMLNode node, List<Note> comments) {
+
+        if(node == null)
+            return comments;
+
+        // access the character data
+        String characters = node.getCharacters();
+        characters        = characters != null ? characters.trim() : "";
+
+        // if no character data don't add the information
+        if (!characters.isEmpty())
+            comments.add(new Note(characters));
+
+        // check the comments on each children
+        for (int i = 0; i < node.getChildCount(); i++)
+            strip(node.getChildAt(i), comments);
+
+        return comments;
+
+    }
+
 
     public boolean hasNext() {
         return reactionIndex + 1 < reactionCount;
