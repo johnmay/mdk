@@ -53,7 +53,8 @@ public abstract class AbstractAnnotation
      * @param visitor The visitor to accept
      *
      */
-    public Object accept(AnnotationVisitor visitor) {
+    @Override
+    public <T> T accept(AnnotationVisitor<T> visitor) {
         return visitor.visit(this);
     }
 

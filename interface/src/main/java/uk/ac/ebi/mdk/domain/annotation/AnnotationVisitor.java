@@ -25,9 +25,9 @@ package uk.ac.ebi.mdk.domain.annotation;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public interface AnnotationVisitor {
+public interface AnnotationVisitor<T> {
 
-    public Object visit(Annotation annotation);
+    public T visit(Annotation annotation);
 
 }
 

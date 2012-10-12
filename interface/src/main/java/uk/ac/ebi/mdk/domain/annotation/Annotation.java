@@ -41,7 +41,7 @@ public interface Annotation
      * @param visitor
      *
      */
-    public Object accept(AnnotationVisitor visitor);
+    public <T> T accept(AnnotationVisitor<T> visitor);
 
 
     /**

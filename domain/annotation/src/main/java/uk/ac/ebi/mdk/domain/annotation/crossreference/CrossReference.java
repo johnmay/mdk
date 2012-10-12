@@ -20,7 +20,6 @@ package uk.ac.ebi.mdk.domain.annotation.crossreference;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.DefaultLoader;
 import uk.ac.ebi.mdk.domain.MetaInfo;
-import uk.ac.ebi.mdk.domain.annotation.AnnotationVisitor;
 import uk.ac.ebi.mdk.domain.annotation.ObservationBasedAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractValueAnnotation;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -148,11 +147,6 @@ public class CrossReference<E extends Identifier, O extends Observation>
         throw new UnsupportedOperationException();
     }
 
-
-    @Override
-    public Object accept(AnnotationVisitor visitor) {
-        return visitor.visit(this);
-    }
 
 
 }
