@@ -54,7 +54,7 @@ public enum Organelle implements Compartment {
     CELL_WALL_PERIPLASM(        "cwbp", "cell wall-bounded periplasmic space", 20,
                                 "GO:0030287", "cell wall-enclosed periplasmic space"),
 
-    EXTRACELLULAR(              "e", "extracellular", 3,         "GO:0005576", "External", "Out"),
+    EXTRACELLULAR(              "e", "extracellular", 3,         "GO:0005576", "External", "Out", "Extra_Organism"),
     // Eukaryotes
     GOLGI(                      "g", "golgi", 4,                 "GO:0005794", "Golgi complex", "Golgi apparatus"),
     LYSOSOME(                   "l", "lysosome", 5,              "GO:0005764"),
