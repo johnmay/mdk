@@ -164,18 +164,47 @@ public class SBMLReactionReader {
 
     }
 
-    public uk.ac.ebi.mdk.domain.entity.reaction.Compartment getCompartment(Compartment compartment) {
+    private boolean normalisedCompartments = Boolean.FALSE;
+
+    /**
+     * Normalises all compartment names to be lower case
+     */
+    private void normaliseCompartments() {
+
+        if (!normalisedCompartments) {
+
+            for (Compartment compartment : model.getListOfCompartments()) {
+                compartment.setId(compartment.getId().toLowerCase());
+            }
+
+            normalisedCompartments = Boolean.TRUE;
+
+        }
+
+    }
+
+
+    public uk.ac.ebi.mdk.domain.entity.reaction.Compartment getCompartment(Species species) {
+
+        Compartment compartment = species.getCompartmentInstance();
+
+        if (compartment == null) {
+            LOGGER.error("unable to find instance of SBML compartment - please ensure names are exact");
+            // check for case conflicts periplasm != Periplasm
+            normaliseCompartments();
+            compartment = model.getCompartment(species.getCompartment().toLowerCase());
+        }
 
         if (compartments.containsKey(compartment)) {
             return compartments.get(compartment);
         }
 
-        String id = compartment.getId();
-        String name = compartment.getName();
+        String id = compartment != null ? compartment.getId() : species.getCompartment();
+        String name = compartment != null ? compartment.getName() : "";
 
         // if no compartment name is provided we use the ID or we use the name
         uk.ac.ebi.mdk.domain.entity.reaction.Compartment c = name.isEmpty() ? resolver.getCompartment(id)
-                                                                            : resolver.getCompartment(name);
+                : resolver.getCompartment(name);
 
 
         if (c != null) {
@@ -203,7 +232,7 @@ public class SBMLReactionReader {
 
         Species species = getSpecies(speciesReference);
 
-        uk.ac.ebi.mdk.domain.entity.reaction.Compartment compartment = getCompartment(species.getCompartmentInstance());
+        uk.ac.ebi.mdk.domain.entity.reaction.Compartment compartment = getCompartment(species);
 
         Double coefficient = speciesReference.getStoichiometry();
 
