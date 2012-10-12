@@ -133,7 +133,6 @@ public class SBMLIOUtil {
         }
         for (MetabolicParticipant p : rxn.getProducts()) {
             sbmlRxn.addProduct(getSpeciesReference(model, p, sbmlRxn));
-
         }
 
 
@@ -175,7 +174,7 @@ public class SBMLIOUtil {
 
         // need to set the stoichiometry on each species reference
         SpeciesReference reference = new SpeciesReference();
-        reference.setId(species.getId() + "_" + reaction.getId());
+        reference.setId(species.getId() + "_" + reaction.getId() + "_" + reaction.getChildCount());
         reference.setSpecies(species);
         reference.setStoichiometry(participant.getCoefficient());
 
