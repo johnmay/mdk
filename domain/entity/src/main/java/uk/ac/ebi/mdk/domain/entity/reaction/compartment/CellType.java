@@ -21,7 +21,12 @@
 package uk.ac.ebi.mdk.domain.entity.reaction.compartment;
 
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.GeneOntologyTerm;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -37,9 +42,10 @@ import java.util.Set;
  */
 public enum CellType implements Compartment {
 
-    ADIPOCYTE("a", "Adibopcyte", (byte) -150),
-    MYOCYTE("m", "Myocyte", (byte) -149),
-    HEPATOCYTE("h", "Hepatocyte", (byte) -148);
+
+    ADIPOCYTE("a", "Adibopcyte", (byte) -150, ""),
+    MYOCYTE("m", "Myocyte", (byte) -149 , ""),
+    HEPATOCYTE("h", "Hepatocyte", (byte) -148, "");
 
     private final String abbreviation;
 
@@ -47,14 +53,24 @@ public enum CellType implements Compartment {
 
     private byte index;
 
+    private Identifier identifier;
+
+    private Set<String> synonyms = new HashSet<String>(4);
+
 
     private CellType(String abbreviation,
                      String description,
-                     byte index) {
+                     byte index,
+                     String term,
+                     String ... synonyms) {
         this.abbreviation = abbreviation;
         this.description = description;
         this.index = index;
+        this.identifier = new GeneOntologyTerm(term);
+        this.synonyms.addAll(Arrays.asList(synonyms));
     }
+
+
 
 
     public String getAbbreviation() {
@@ -68,7 +84,12 @@ public enum CellType implements Compartment {
 
 
     public Set<String> getSynonyms() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Collections.unmodifiableSet(synonyms);
+    }
+
+    @Override
+    public Identifier getIdentifier() {
+        return identifier;
     }
 
 

@@ -258,6 +258,11 @@ public class SBMLIOUtil {
         sbmlCompartment.setId(compartment.getAbbreviation());
         sbmlCompartment.setName(compartment.getDescription());
 
+        Identifier identifier = compartment.getIdentifier();
+        if(!identifier.getAccession().isEmpty()){
+            sbmlCompartment.addCVTerm(new CVTerm(CVTerm.Qualifier.BQB_IS, identifier.getURN()));
+        }
+
         model.addCompartment(sbmlCompartment);
 
         compartmentMap.put(compartment, sbmlCompartment);
