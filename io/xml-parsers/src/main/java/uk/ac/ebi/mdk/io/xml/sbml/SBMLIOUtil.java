@@ -128,11 +128,13 @@ public class SBMLIOUtil {
 
         }
 
+        int index = 0;
+
         for (MetabolicParticipant p : rxn.getReactants()) {
-            sbmlRxn.addReactant(getSpeciesReference(model, p, sbmlRxn));
+            sbmlRxn.addReactant(getSpeciesReference(model, p, sbmlRxn, index++));
         }
         for (MetabolicParticipant p : rxn.getProducts()) {
-            sbmlRxn.addProduct(getSpeciesReference(model, p, sbmlRxn));
+            sbmlRxn.addProduct(getSpeciesReference(model, p, sbmlRxn, index++));
         }
 
 
@@ -155,7 +157,8 @@ public class SBMLIOUtil {
 
     public SpeciesReference getSpeciesReference(Model model,
                                                 CompartmentalisedParticipant<Metabolite, Double,  Compartment> participant,
-                                                Reaction reaction) {
+                                                Reaction reaction,
+                                                Integer index) {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
@@ -174,7 +177,7 @@ public class SBMLIOUtil {
 
         // need to set the stoichiometry on each species reference
         SpeciesReference reference = new SpeciesReference();
-        reference.setId(species.getId() + "_" + reaction.getId() + "_" + reaction.getChildCount());
+        reference.setId(species.getId() + "_" + reaction.getId() + "_" + index);
         reference.setSpecies(species);
         reference.setStoichiometry(participant.getCoefficient());
 
