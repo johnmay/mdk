@@ -55,16 +55,27 @@ public class DialogCompartmentResolver implements CompartmentResolver {
         });
         JComboBox comboBox = ComboBoxFactory.newComboBox(compartmentList);
 
+        final Box box = Box.createHorizontalBox();
         final JLabel label = LabelFactory.newLabel("");
+        final JLabel term  = LabelFactory.newFormLabel("");
+        box.add(label);
+        box.add(Box.createHorizontalGlue());
+        box.add(term);
         comboBox.setRenderer(new ListCellRenderer() {
 
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+
                 Compartment compartment = (Compartment) value;
+
                 label.setText(compartment.getAbbreviation() + ": " + compartment.getDescription());
                 label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
                 label.setForeground(list.getForeground());
-                return label;
+
+                String accession = compartment.getIdentifier().getAccession();
+                term.setText(accession.isEmpty() ? "" : "[" + accession + "]");
+
+                return box;
             }
 
         });
