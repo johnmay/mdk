@@ -22,6 +22,9 @@ package uk.ac.ebi.mdk.io.xml.sbml;
 
 import org.apache.log4j.Logger;
 import org.sbml.jsbml.*;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -52,7 +55,7 @@ public class SBMLIOUtil {
 
     private long metaIdticker = 0;
 
-    private Map<CompartmentalisedParticipant, SpeciesReference> speciesReferences = new HashMap();
+    private Map<CompartmentalisedParticipant, Species> speciesReferences = new HashMap<CompartmentalisedParticipant, Species>();
 
     private Map<Compartment, org.sbml.jsbml.Compartment> compartmentMap = new HashMap<Compartment, org.sbml.jsbml.Compartment>();
 
@@ -98,6 +101,7 @@ public class SBMLIOUtil {
         // set id and meta-id
         Identifier id = rxn.getIdentifier();
         sbmlRxn.setMetaId(nextMetaId());
+        sbmlRxn.setName(rxn.getName());
         if (id == null) {
             sbmlRxn.setId("rxn" + metaIdticker); // maybe need a try/catch to reset valid id
         } else {
@@ -111,7 +115,7 @@ public class SBMLIOUtil {
 
         Direction direction = rxn.getDirection();
 
-        if (direction instanceof Direction) {
+        if (direction != null) {
 
             Direction directionImplementation = (Direction) direction;
 
@@ -125,10 +129,10 @@ public class SBMLIOUtil {
         }
 
         for (MetabolicParticipant p : rxn.getReactants()) {
-            sbmlRxn.addReactant(getSpeciesReference(model, p));
+            sbmlRxn.addReactant(getSpeciesReference(model, p, sbmlRxn));
         }
         for (MetabolicParticipant p : rxn.getProducts()) {
-            sbmlRxn.addProduct(getSpeciesReference(model, p));
+            sbmlRxn.addProduct(getSpeciesReference(model, p, sbmlRxn));
 
         }
 
@@ -137,30 +141,13 @@ public class SBMLIOUtil {
         for (CrossReference xref : rxn.getAnnotationsExtending(CrossReference.class)) {
             term.addResource(xref.getIdentifier().getURN());
         }
-        sbmlRxn.addCVTerm(term);
 
-        //        sbmlRxn.setNotes("<cml xmlns=\"http://www.xml-cml.org/schema\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:conventions=\"http://www.xml-cml.org/convention/\" convention=\"conventions:molecular\"><dc:title>test file for http://www.xml-cml.org/conventions/molecular convention</dc:title><dc:description>should not fail because atoms in formula/atomArray do not need ids</dc:description><dc:date>2009-04-05</dc:date><molecule id=\"m1\"><formula><atomArray><atom elementType=\"H\" isotopeNumber=\"2\" /></atomArray></formula></molecule></cml>");
-        //        XMLNode annotation = new XMLNode(new XMLTriple("title",
-        //                                                       "http://purl.org/dc/elements/1.1/",
-        //                                                       "dc"));
-        //        annotation.addAttr("xmlns:dc", "http://purl.org/dc/elements/1.1/");
-        //        annotation.addChild(new XMLNode("John Doe"));
-        //        XMLNode notes = new XMLNode("notes");
-        //        notes.addChild(annotation);
-        //        sbmlRxn.setNotes(notes);
+        if(!term.getResources().isEmpty())
+            sbmlRxn.addCVTerm(term);
 
-        //        try {
-        //
-        //            DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-        //            DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-        //            Document doc = docBuilder.newDocument();
-        //            XMLAnnotationWriter writer = new XMLAnnotationWriter(doc);
-        //            sbmlRxn.setNotes(writer.getSBMLNotes(rxn));
-        //        } catch (Exception ex) {
-        //            LOGGER.error(ex);
-        //        }
-
-        model.addReaction(sbmlRxn);
+        if(!model.addReaction(sbmlRxn)){
+            // could inform user that the reaction couldn't be added
+        }
 
         return sbmlRxn;
 
@@ -168,7 +155,8 @@ public class SBMLIOUtil {
 
 
     public SpeciesReference getSpeciesReference(Model model,
-                                                CompartmentalisedParticipant<Metabolite, Double,  Compartment> participant) {
+                                                CompartmentalisedParticipant<Metabolite, Double,  Compartment> participant,
+                                                Reaction reaction) {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
@@ -179,17 +167,19 @@ public class SBMLIOUtil {
         key.setMolecule(participant.getMolecule());
 
         // create a new entry if one doesn't exists
-        if (speciesReferences.containsKey(key) == false) {
+        if (!speciesReferences.containsKey(key)) {
             speciesReferences.put(key, addSpecies(model, participant));
         }
 
-        SpeciesReference sref = speciesReferences.get(key);
+        Species species = speciesReferences.get(key);
 
         // need to set the stoichiometry on each species reference
-        SpeciesReference srefCopy = new SpeciesReference(sref.getSpecies());
-        srefCopy.setStoichiometry(participant.getCoefficient());
+        SpeciesReference reference = new SpeciesReference();
+        reference.setId(species.getId() + "_" + reaction.getId());
+        reference.setSpecies(species);
+        reference.setStoichiometry(participant.getCoefficient());
 
-        return srefCopy;
+        return reference;
 
     }
 
@@ -202,8 +192,8 @@ public class SBMLIOUtil {
      *
      * @return
      */
-    public SpeciesReference addSpecies(Model model,
-                                       CompartmentalisedParticipant<Metabolite, Double, Compartment> participant) {
+    public Species addSpecies(Model model,
+                              CompartmentalisedParticipant<Metabolite, Double, Compartment> participant) {
 
         Species species = new Species(level, version);
 
@@ -225,21 +215,33 @@ public class SBMLIOUtil {
         species.setName(m.getName());
         species.setCompartment(getCompartment(model, participant));
 
+        CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
+
         if (m.getAnnotationsExtending(CrossReference.class).iterator().hasNext()) {
-            CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
+
             for (CrossReference xref : m.getAnnotationsExtending(CrossReference.class)) {
                 String resource = xref.getIdentifier().getURN();
                 term.addResource(resource);
             }
-            species.addCVTerm(term);
+
         }
 
+        if(m.hasAnnotation(InChI.class) || m.hasAnnotation(AtomContainerAnnotation.class)){
+            for (ChemicalStructure structure : m.getAnnotationsExtending(ChemicalStructure.class)) {
+                // TODO: should abstract this mapping to an annotation handler
+                String inchi = structure.toInChI();
+                if(!inchi.isEmpty())
+                    term.addResource("http://rdf.openmolecules.net/?" + inchi);
+            }
+        }
+
+        // if we've added annotation
+        if(!term.getResources().isEmpty())
+            species.addCVTerm(term);
 
         model.addSpecies(species);
 
-        SpeciesReference sr = new SpeciesReference(species);
-
-        return sr;
+        return species;
     }
 
 

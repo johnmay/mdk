@@ -111,4 +111,9 @@ public class SMILES
         }
         setValue(SMILES_GENERATOR.createSMILES(structure));
     }
+
+    @Override
+    public String toInChI() {
+        return "";
+    }
 }

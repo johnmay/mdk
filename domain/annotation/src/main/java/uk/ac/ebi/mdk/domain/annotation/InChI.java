@@ -88,6 +88,13 @@ public class InChI
 
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String toInChI() {
+        return getValue();
+    }
 
     /**
      * Generate the structure from the stored InChI value

@@ -17,9 +17,12 @@
  */
 package uk.ac.ebi.mdk.domain.annotation;
 
+import net.sf.jniinchi.INCHI_RET;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.inchi.InChIGenerator;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
@@ -123,6 +126,21 @@ public class AtomContainerAnnotation
 
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public String toInChI() {
+        try {
+            InChIGenerator generator = InChIGeneratorFactory.getInstance().getInChIGenerator(molecule);
+            if(generator.getReturnStatus() == INCHI_RET.OKAY){
+                return generator.getInchi();
+            }
+        } catch (CDKException e) {
+            LOGGER.error("Could not convert container to InChI: " + e.getMessage());
+        }
+        return "";
+    }
 
     @Override
     public String toString() {

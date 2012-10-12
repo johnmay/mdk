@@ -48,4 +48,14 @@ public interface ChemicalStructure extends Annotation {
      * 
      */
     public void setStructure(IAtomContainer structure);
+
+
+    /**
+     * Provides the InChI representation of this chemical structure. Note: This
+     * is possibly temporary
+     * @return InChI string for this structure (or empty string if it
+     *         could not be converted)
+     */
+    public String toInChI();
+
 }

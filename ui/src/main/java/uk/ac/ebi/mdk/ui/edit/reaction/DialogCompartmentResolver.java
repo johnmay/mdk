@@ -44,6 +44,7 @@ public class DialogCompartmentResolver implements CompartmentResolver {
     public Compartment showDialog(String compartment) {
 
         final JDialog dialog = new JDialog(window, Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setLocationRelativeTo(window);
 
         List<Compartment> compartmentList = new ArrayList<Compartment>(getCompartments());
         Collections.sort(compartmentList, new Comparator<Compartment>() {

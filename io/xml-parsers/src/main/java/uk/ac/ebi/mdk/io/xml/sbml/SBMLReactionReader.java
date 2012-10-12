@@ -21,17 +21,25 @@
 package uk.ac.ebi.mdk.io.xml.sbml;
 
 import org.apache.log4j.Logger;
-import org.sbml.jsbml.*;
-import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
-import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
+import org.sbml.jsbml.CVTerm;
+import org.sbml.jsbml.Compartment;
+import org.sbml.jsbml.Model;
+import org.sbml.jsbml.Reaction;
+import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLReader;
+import org.sbml.jsbml.Species;
+import org.sbml.jsbml.SpeciesReference;
 import uk.ac.ebi.mdk.deprecated.MIRIAMLoader;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
 
 import javax.xml.stream.XMLStreamException;
@@ -96,7 +104,6 @@ public class SBMLReactionReader {
      * uses an empty {@see AcceptAllFilter} filter on reaction participants
      *
      * @param stream
-     *
      * @throws XMLStreamException
      */
     public SBMLReactionReader(InputStream stream, EntityFactory factory, CompartmentResolver resolver) throws XMLStreamException {
@@ -117,9 +124,9 @@ public class SBMLReactionReader {
     public MetabolicReaction getMetabolicReaction(Reaction sbmlReaction) {
 
         MetabolicReaction reaction = factory.ofClass(MetabolicReaction.class,
-                                                     new BasicReactionIdentifier(sbmlReaction.getId()),
-                                                     sbmlReaction.getName(),
-                                                     sbmlReaction.getMetaId());
+                new BasicReactionIdentifier(sbmlReaction.getId()),
+                sbmlReaction.getName(),
+                sbmlReaction.getMetaId());
         LOGGER.info("Reading SBML reaction " + reaction);
 
         for (int i = 0; i < sbmlReaction.getNumReactants(); i++) {
@@ -147,12 +154,8 @@ public class SBMLReactionReader {
         Species species = speciesReference.getSpeciesInstance();
 
         if (species != null) {
-            return species;
-        }
-
-        species = model.getSpecies(speciesReference.getSpecies());
-
-        if (species != null) {
+            // cache
+            speciesReferences.put(speciesReference, species);
             return species;
         }
 
@@ -170,7 +173,10 @@ public class SBMLReactionReader {
         String id = compartment.getId();
         String name = compartment.getName();
 
-        uk.ac.ebi.mdk.domain.entity.reaction.Compartment c = resolver.getCompartment(id);
+        // if no compartment name is provided we use the ID or we use the name
+        uk.ac.ebi.mdk.domain.entity.reaction.Compartment c = name.isEmpty() ? resolver.getCompartment(id)
+                                                                            : resolver.getCompartment(name);
+
 
         if (c != null) {
             compartments.put(compartment, c);
@@ -191,7 +197,6 @@ public class SBMLReactionReader {
      * Constructs a reaction participant from a species reference
      *
      * @param speciesReference An instance of SBML {@see SpeciesReference}
-     *
      * @return An MetaboliteParticipant
      */
     public MetabolicParticipant getMetaboliteParticipant(SpeciesReference speciesReference) {
@@ -211,16 +216,23 @@ public class SBMLReactionReader {
             metabolite = speciesNameMap.get(species.getName());
         } else {
             metabolite = factory.newInstance(Metabolite.class,
-                                             new BasicChemicalIdentifier(species.getId()),
-                                             species.getName(),
-                                             species.getMetaId());
+                    new BasicChemicalIdentifier(species.getId()),
+                    species.getName(),
+                    species.getMetaId());
 
 
             for (CVTerm term : species.getCVTerms()) {
                 for (String resource : term.getResources()) {
-                    Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(resource);
-                    if (identifier != null)
-                        metabolite.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(identifier));
+                    //XXX bit of a hack
+                    if (resource.startsWith("urn:miriam")) {
+                        Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(resource);
+                        if (identifier != null)
+                            metabolite.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(identifier));
+                    } else if (resource.startsWith("http://rdf.openmolecules.net")) {
+                        // 30 = the prefix
+                        metabolite.addAnnotation(new InChI(resource.substring(30)));
+                    }
+
                 }
             }
 

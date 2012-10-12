@@ -50,8 +50,8 @@
 
         <dependency>
             <groupId>org.sbml</groupId>
-            <artifactId>JSBML</artifactId>
-            <version>0.8-b2</version>
+            <artifactId>jsbml</artifactId>
+            <version>0.8-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>net.sf.opencsv</groupId>
@@ -75,8 +75,8 @@
         </dependency>
         <dependency>
             <groupId>org.codehaus.woodstox</groupId>
-            <artifactId>stax2-api</artifactId>
-            <version>3.1.1</version>
+            <artifactId>woodstox-core-lgpl</artifactId>
+            <version>4.0.9</version>
         </dependency>
     </dependencies>
 
