@@ -45,6 +45,7 @@ import uk.ac.ebi.mdk.tool.CompartmentResolver;
 import javax.xml.stream.XMLStreamException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -153,34 +154,53 @@ public class SBMLReactionReader {
 
         Species species = speciesReference.getSpeciesInstance();
 
-        if (species != null) {
-            // cache
-            speciesReferences.put(speciesReference, species);
-            return species;
+
+        if (species == null) {
+
+            String tag = "<speciesReference id=\"" + speciesReference.getId() + "\" species=\""
+                    + speciesReference.getSpecies() + "\"/>";
+
+            LOGGER.error("references species could not be found " + tag);
+
+            species = new Species();
+            species.setId(speciesReference.getSpecies());
+            species.setName(speciesReference.getSpecies() + " (not found in SBML)");
+            species.setCompartment("x");
+
         }
 
-        return new Species("error");
+        // cache
+        speciesReferences.put(speciesReference, species);
 
+
+        return species;
 
     }
 
-    private boolean normalisedCompartments = Boolean.FALSE;
+    private boolean normalised = Boolean.FALSE;
 
     /**
      * Normalises all compartment names to be lower case
      */
-    private void normaliseCompartments() {
+    private void normalise() {
 
-        if (!normalisedCompartments) {
+        if (!normalised) {
 
+            // normalise compartments
             for (Compartment compartment : model.getListOfCompartments()) {
                 compartment.setId(compartment.getId().toLowerCase());
             }
 
-            normalisedCompartments = Boolean.TRUE;
+            normalised = Boolean.TRUE;
 
         }
 
+    }
+
+    private static String normalise(String value) {
+        value = value.toLowerCase(Locale.ENGLISH).trim();
+        value = value.replaceAll("_{2,}", "_");
+        return value;
     }
 
 
@@ -189,9 +209,9 @@ public class SBMLReactionReader {
         Compartment compartment = species.getCompartmentInstance();
 
         if (compartment == null) {
-            LOGGER.error("unable to find instance of SBML compartment - please ensure names are exact");
+            LOGGER.error("unable to find instance of SBML compartment '" + species.getCompartment() + "' on species '" + species.getId() + "'- please ensure names are exact");
             // check for case conflicts periplasm != Periplasm
-            normaliseCompartments();
+            normalise();
             compartment = model.getCompartment(species.getCompartment().toLowerCase());
         }
 
@@ -264,6 +284,8 @@ public class SBMLReactionReader {
 
                 }
             }
+
+            System.out.println(species.getNotesString());
 
             speciesMap.put(species, metabolite);
             speciesNameMap.put(metabolite.getName(), metabolite);
