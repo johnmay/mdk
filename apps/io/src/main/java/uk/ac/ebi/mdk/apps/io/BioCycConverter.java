@@ -67,7 +67,7 @@ public class BioCycConverter {
 
         reconstruction = create();
 
-        resolver.put("cco-out", Organelle.EXTRACELLULA);
+        resolver.put("cco-out", Organelle.EXTRACELLULAR);
         resolver.put("cco-in", Organelle.CYTOPLASM);
         resolver.put("nill", Organelle.CYTOPLASM);
 

@@ -21,7 +21,12 @@
 package uk.ac.ebi.mdk.domain.entity.reaction.compartment;
 
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.GeneOntologyTerm;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -38,14 +43,13 @@ import java.util.Set;
 public enum Membrane implements Compartment {
 
     // Membranes
-    GOLGI_MEMBRANE(
-    "gm", "Golgi Membrane", (byte) 40),
-    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane", (byte) 41),
-    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane", (byte) 42),
-    PLASMA_MEMBRANE("pm", "Plasma Membrane", (byte) 43),
-    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", (byte) 44),
-    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane", (byte) 45),
-    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", (byte) 46);
+    GOLGI_MEMBRANE("gm", "Golgi Membrane",  40,                                     "GO:0000139"),
+    MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane", 41,                      "GO:0031966"),
+    NUCLEAR_MEMBRANE("nm", "Nuclear Membrane",  42,                                 "GO:0031965"),
+    PLASMA_MEMBRANE("pm", "Plasma Membrane", 43,                                    "GO:0005886"),
+    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", 44,      "GO:0005789"),
+    VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane", 45,                                "GO:0005774"),
+    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", 46,                          "GO:0005778");
 
     private final String abbreviation;
 
@@ -53,14 +57,25 @@ public enum Membrane implements Compartment {
 
     private byte index;
 
+    private Identifier identifier;
+
+    private Set<String> synonyms = new HashSet<String>(4);
+
 
     private Membrane(String abbreviation,
                      String description,
-                     byte index) {
+                     Integer index,
+                     String goterm,
+                     String ... synonyms ) {
         this.abbreviation = abbreviation;
         this.description = description;
-        this.index = index;
+        this.index = index.byteValue();
+
+        this.identifier = new GeneOntologyTerm(goterm);
+        this.synonyms.addAll(Arrays.asList(synonyms));
+
     }
+
 
 
     public String getAbbreviation() {
@@ -74,7 +89,12 @@ public enum Membrane implements Compartment {
 
 
     public Set<String> getSynonyms() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Collections.unmodifiableSet(synonyms);
+    }
+
+    @Override
+    public Identifier getIdentifier() {
+        return identifier;
     }
 
 

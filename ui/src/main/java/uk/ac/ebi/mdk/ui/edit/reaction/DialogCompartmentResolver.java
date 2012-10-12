@@ -44,7 +44,7 @@ public class DialogCompartmentResolver implements CompartmentResolver {
     public Compartment showDialog(String compartment) {
 
         final JDialog dialog = new JDialog(window, Dialog.ModalityType.APPLICATION_MODAL);
-        dialog.setLocationRelativeTo(window);
+
 
         List<Compartment> compartmentList = new ArrayList<Compartment>(getCompartments());
         Collections.sort(compartmentList, new Comparator<Compartment>() {
@@ -68,15 +68,16 @@ public class DialogCompartmentResolver implements CompartmentResolver {
             }
 
         });
+        dialog.setUndecorated(true);
 
         CellConstraints cc = new CellConstraints();
         JPanel panel = PanelFactory.create();
         panel.setLayout(new FormLayout("p, 4dlu, p, 4dlu, p",
                                        "p, 4dlu, p"));
         panel.setBorder(Borders.DLU4_BORDER);
-        panel.add(LabelFactory.newLabel("Please select the correct compartment for the given notation:"),
-                  cc.xyw(1, 1, 5));
-        panel.add(LabelFactory.newFormLabel(compartment),
+        panel.add(LabelFactory.newLabel("Please select the correct compartment for the given notation"),
+                                        cc.xyw(1, 1, 5));
+        panel.add(LabelFactory.newFormLabel("<html>" + compartment + " <i>is equivalent to</i></html>"),
                   cc.xy(1, 3));
         panel.add(comboBox,
                   cc.xy(3, 3));
@@ -91,7 +92,7 @@ public class DialogCompartmentResolver implements CompartmentResolver {
                   cc.xy(5, 3));
         dialog.setContentPane(panel);
         dialog.pack();
-
+        dialog.setLocationRelativeTo(window);
         dialog.setVisible(true);
 
         return okayClicked ? (Compartment) comboBox.getSelectedItem() : null;

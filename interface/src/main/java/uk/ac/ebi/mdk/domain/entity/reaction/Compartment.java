@@ -17,6 +17,8 @@
  */
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+
 import java.util.Set;
 
 
@@ -52,6 +54,13 @@ public interface Compartment {
      * @return 
      */
     public Set<String> getSynonyms();
+
+
+    /**
+     * Access a persistent identifier for this compartment (usually a GO Term).
+     * @return controlled identifier for this compartment
+     */
+    public Identifier getIdentifier();
 
 
     public byte getRanking();

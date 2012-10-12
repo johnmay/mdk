@@ -53,8 +53,8 @@ public class TransportReactionUtilTest {
         rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
         rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
 
-        rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.EXTRACELLULA));
-        rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULA));
+        rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.EXTRACELLULAR));
+        rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULAR));
 
         rxn.setDirection(Direction.BACKWARD.FORWARD);
 
@@ -77,9 +77,9 @@ public class TransportReactionUtilTest {
         MetabolicReactionImpl rxn = new MetabolicReactionImpl(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
         rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
-        rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULA));
+        rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULAR));
 
-        rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.EXTRACELLULA));
+        rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.EXTRACELLULAR));
         rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
 
         rxn.setDirection(Direction.FORWARD);
@@ -102,7 +102,7 @@ public class TransportReactionUtilTest {
         MetabolicReactionImpl rxn = new MetabolicReactionImpl(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
 
         rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
-        rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULA));
+        rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULAR));
 
         rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
         rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));

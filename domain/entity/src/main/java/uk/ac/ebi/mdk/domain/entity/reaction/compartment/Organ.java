@@ -21,7 +21,12 @@
 package uk.ac.ebi.mdk.domain.entity.reaction.compartment;
 
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.GeneOntologyTerm;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -37,7 +42,7 @@ import java.util.Set;
  */
 public enum Organ implements Compartment {
 
-    EYESPOT("i", "Eyespot", (byte) 60);
+    EYESPOT("i", "Eyespot", (byte) 60, "");
 
     private final String abbreviation;
 
@@ -45,14 +50,24 @@ public enum Organ implements Compartment {
 
     private byte index;
 
+    private Identifier identifier;
+
+    private Set<String> synonyms = new HashSet<String>(4);
+
 
     private Organ(String abbreviation,
                   String description,
-                  byte index) {
+                  byte index,
+                  String goterm,
+                  String ... synonyms) {
         this.abbreviation = abbreviation;
         this.description = description;
         this.index = index;
+
+        this.identifier = new GeneOntologyTerm(goterm);
+        this.synonyms.addAll(Arrays.asList(synonyms));
     }
+
 
 
     public String getAbbreviation() {
@@ -66,7 +81,12 @@ public enum Organ implements Compartment {
 
 
     public Set<String> getSynonyms() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return Collections.unmodifiableSet(synonyms);
+    }
+
+    @Override
+    public Identifier getIdentifier() {
+        return identifier;
     }
 
 

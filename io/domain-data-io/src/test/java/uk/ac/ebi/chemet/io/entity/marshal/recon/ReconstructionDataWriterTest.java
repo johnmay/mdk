@@ -108,7 +108,7 @@ public class ReconstructionDataWriterTest {
         r1.addReactant(new MetabolicParticipantImplementation(m2));
         r1.addProduct(new MetabolicParticipantImplementation(m3));
 
-        r2.addReactant(new MetabolicParticipantImplementation(m3, Organelle.EXTRACELLULA));
+        r2.addReactant(new MetabolicParticipantImplementation(m3, Organelle.EXTRACELLULAR));
         r2.addProduct(new MetabolicParticipantImplementation(m3));
 
         reconstruction.addReaction(r1);
