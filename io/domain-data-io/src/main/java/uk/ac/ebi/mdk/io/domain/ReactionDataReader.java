@@ -41,6 +41,10 @@ public class ReactionDataReader
         this.entityIn = entityIn;
         this.enumReader = new EnumReader(in);
         this.factory = factory;
+
+        // compartment name mappings (name has changed on enumeration)
+        enumReader.put("EXTRACELLULA", "EXTRACELLULAR");
+
     }
 
     public MetabolicReaction readEntity() throws IOException, ClassNotFoundException {
