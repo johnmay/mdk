@@ -43,7 +43,7 @@ public enum Organelle implements Compartment {
     // organelle's: http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0043226#lineage
 
     // Bacteria
-    CYTOPLASM(                  "c", "cytoplasm", 1,             "GO:0005737", "In", "Cytosol", "Cytoplasm Matrix"),
+    CYTOPLASM(                  "c", "cytoplasm", 1,             "GO:0005737", "In", "Cytosol", "Cytoplasm Matrix", "Internal_Species"),
 
 
     @Deprecated  // periplasm is a general term
@@ -54,7 +54,7 @@ public enum Organelle implements Compartment {
     CELL_WALL_PERIPLASM(        "cwbp", "cell wall-bounded periplasmic space", 20,
                                 "GO:0030287", "cell wall-enclosed periplasmic space"),
 
-    EXTRACELLULAR(              "e", "extracellular", 3,         "GO:0005576", "External", "Out", "Extra_Organism"),
+    EXTRACELLULAR(              "e", "extracellular", 3,         "GO:0005576", "External", "Out", "Extra_Organism", "External_Species"),
     // Eukaryotes
     GOLGI(                      "g", "golgi", 4,                 "GO:0005794", "Golgi complex", "Golgi apparatus"),
     LYSOSOME(                   "l", "lysosome", 5,              "GO:0005764"),
