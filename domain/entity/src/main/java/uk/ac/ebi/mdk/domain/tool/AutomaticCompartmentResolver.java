@@ -137,6 +137,8 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
             compartment);
         put("[" + compartment.getAbbreviation() + "]",
             compartment);
+        for(String synonym : compartment.getSynonyms())
+            put(synonym, compartment);
     }
 
     /**
