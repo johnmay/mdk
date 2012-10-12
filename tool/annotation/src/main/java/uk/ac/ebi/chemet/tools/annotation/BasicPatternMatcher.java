@@ -33,12 +33,12 @@ import java.util.regex.Pattern;
  * @see Pattern
  * @see Matcher#group(int)
  */
-public class BasicRegexMatcher<A extends StringAnnotation> extends VisitorAdapter<A, String> {
+public class BasicPatternMatcher<A extends StringAnnotation> extends VisitorAdapter<A, String> {
 
     private final Pattern pattern;
 
-    public BasicRegexMatcher(Class<? extends A> c,
-                             Pattern pattern) {
+    public BasicPatternMatcher(Class<? extends A> c,
+                               Pattern pattern) {
         super(c, "");
         this.pattern = pattern;
 

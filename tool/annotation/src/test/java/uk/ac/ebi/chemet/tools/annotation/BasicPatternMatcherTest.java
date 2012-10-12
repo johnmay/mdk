@@ -26,32 +26,32 @@ import java.util.regex.Pattern;
 /**
  * @author John May
  */
-public class BasicRegexMatcherTest {
+public class BasicPatternMatcherTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNullPattern() {
 
-        BasicRegexMatcher<Note> visitor = new BasicRegexMatcher<Note>(Note.class,
+        BasicPatternMatcher<Note> visitor = new BasicPatternMatcher<Note>(Note.class,
                                                                       null);
 
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidPattern_no_parentheses() {
-        BasicRegexMatcher<Note> visitor = new BasicRegexMatcher<Note>(Note.class,
+        BasicPatternMatcher<Note> visitor = new BasicPatternMatcher<Note>(Note.class,
                                                                       Pattern.compile(""));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInvalidPattern_two_parentheses() {
-        BasicRegexMatcher<Note> visitor = new BasicRegexMatcher<Note>(Note.class,
+        BasicPatternMatcher<Note> visitor = new BasicPatternMatcher<Note>(Note.class,
                                                                       Pattern.compile("(first) (second)"));
     }
 
     @Test
     public void testMatch_FullMatch() {
 
-        BasicRegexMatcher<Note> visitor = new BasicRegexMatcher<Note>(Note.class,
+        BasicPatternMatcher<Note> visitor = new BasicPatternMatcher<Note>(Note.class,
                                                                       Pattern.compile("(a test)"));
 
         Note note = new Note("a test");
@@ -62,7 +62,7 @@ public class BasicRegexMatcherTest {
     @Test
     public void testMatch_PartialMatch() {
 
-        BasicRegexMatcher<Note> visitor = new BasicRegexMatcher<Note>(Note.class,
+        BasicPatternMatcher<Note> visitor = new BasicPatternMatcher<Note>(Note.class,
                                                                       Pattern.compile("a (test)"));
 
         Note note = new Note("a test");
@@ -74,7 +74,7 @@ public class BasicRegexMatcherTest {
     public void testMatch_IncompleteMatch() {
 
         // this doesn't match the entire string so should not match
-        BasicRegexMatcher<Note> visitor = new BasicRegexMatcher<Note>(Note.class,
+        BasicPatternMatcher<Note> visitor = new BasicPatternMatcher<Note>(Note.class,
                                                                       Pattern.compile("a (test)"));
 
         Note note = new Note("a test that should fail");
@@ -93,7 +93,7 @@ public class BasicRegexMatcherTest {
                 return null;
             }
         };
-        BasicRegexMatcher<Note> visitor = new BasicRegexMatcher<Note>(node.getClass(),
+        BasicPatternMatcher<Note> visitor = new BasicPatternMatcher<Note>(node.getClass(),
                                                                       Pattern.compile("this (doesn't) matter"));
 
 
