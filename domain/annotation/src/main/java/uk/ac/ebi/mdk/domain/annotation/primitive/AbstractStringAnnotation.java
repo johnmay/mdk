@@ -36,6 +36,7 @@ public abstract class AbstractStringAnnotation
 
 
     public AbstractStringAnnotation() {
+        super("");
     }
 
 
