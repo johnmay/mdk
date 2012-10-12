@@ -52,7 +52,12 @@ public abstract class AbstractValueAnnotation<T>
      * Constructor provides a value to store
      */
     public AbstractValueAnnotation(T value) {
+
+        if(value == null)
+            throw new IllegalArgumentException("Cannot create null annotaton");
+
         this.value = value;
+
     }
 
     /**
@@ -61,6 +66,8 @@ public abstract class AbstractValueAnnotation<T>
      * @param value new state
      */
     public void setValue(T value) {
+        if(value == null)
+            throw new IllegalArgumentException("Value cannot be null");
         this.value = value;
     }
 
