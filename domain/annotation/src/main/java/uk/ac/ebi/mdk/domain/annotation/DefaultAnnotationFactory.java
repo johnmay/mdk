@@ -103,6 +103,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
                                                    new InChI(),
                                                    new Charge(),
                                                    new GibbsEnergy(),
+                                                   new Note(),
                                                    Lumped.getInstance(),
                                                    ACPAssociated.getInstance())) {
 
@@ -336,6 +337,25 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
         }
 
         return subclasses.get(c);
+
+    }
+
+
+    @Override
+    public <T extends Annotation> Collection<? extends T> getSubclassInstances(Class<T> c) {
+
+        Collection<T> instances = new TreeSet<T>(new Comparator<Annotation>() {
+            @Override
+            public int compare(Annotation o1, Annotation o2) {
+                return o1.getBrief().compareTo(o2.getBrief());
+            }
+        });
+
+        for(Class<? extends Annotation> subclass : getSubclasses(c)){
+            instances.add((T) ofClass(subclass));
+        }
+
+        return instances;
 
     }
 
