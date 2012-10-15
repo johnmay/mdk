@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -107,7 +108,7 @@ public abstract class AbstractAnnotatedEntity
      */
     @Override
     public Collection<Annotation> getAnnotations() {
-        return annotations.values();
+        return Collections.unmodifiableCollection(annotations.values());
     }
 
 
