@@ -4,6 +4,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.service.index.crossreference.ChEBICrossReferenceIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractChEBILoader;
 import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
@@ -76,15 +77,19 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
             String accession = row[map.get("ACCESSION_NUMBER")];
 
             // create an instance of the identifier and add it to the map
-            try {
-                Identifier id = DefaultIdentifierFactory.getInstance().ofSynonym(type);
-                id.setAccession(accession);
-                if(isActive(identifier)){
-                    crossreferences.put(getPrimaryIdentifier(identifier), id);
-                }
-            } catch (Exception e) {
-                LOGGER.warn(e.getMessage());
+
+            Identifier id = DefaultIdentifierFactory.getInstance().ofSynonym(type, accession);
+
+            // skip this empty identifier
+            if(id == IdentifierFactory.EMPTY_IDENTIFIER) {
+                LOGGER.warn("Skipping reference of type: " + type + " no identifier found");
+                continue;
             }
+
+            if(isActive(identifier)){
+                crossreferences.put(getPrimaryIdentifier(identifier), id);
+            }
+
         }
 
         // put references from the map into the index

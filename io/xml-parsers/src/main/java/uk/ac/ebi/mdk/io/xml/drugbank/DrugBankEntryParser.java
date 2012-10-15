@@ -22,6 +22,7 @@ package uk.ac.ebi.mdk.io.xml.drugbank;
 
 import org.apache.log4j.Logger;
 import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
@@ -131,6 +132,8 @@ public class DrugBankEntryParser {
                         resource = false;
                         try {
                             identifierToAdd = factory.ofSynonym(xmlr.getText());
+                            if(identifierToAdd == IdentifierFactory.EMPTY_IDENTIFIER)
+                                throw new InvalidParameterException("This is to mimick the old behaviour of ofSynonym");
                         } catch(InvalidParameterException e) {
                             LOGGER.warn("Could not handle "+xmlr.getText());
                             if(xmlr.getText().contains("UniProtKB")) {

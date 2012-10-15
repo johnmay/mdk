@@ -40,6 +40,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
 
     private static final String IDENTIFIER_MAPPING_FILE = "IdentifierResourceMapping.properties";
 
+
     private static final Map<Class, Identifier> identifiers = new HashMap<Class, Identifier>(60);
     private static final Map<String, Identifier> identifierNames = new HashMap<String, Identifier>(60);
 
@@ -231,11 +232,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
     }
 
     /**
-     * Construct an identifier of a given name
-     *
-     * @param name
-     *
-     * @return
+     * @inheritDoc
      */
     @Override
     public Identifier ofName(String name) {
@@ -260,10 +257,13 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
             return ofName(normalisedName.replaceAll("id", ""));
         }
 
-        throw new InvalidParameterException("No identifier of name: " + name);
+        return EMPTY_IDENTIFIER;
 
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public Identifier ofName(String name, String accession) {
         Identifier identifier = ofName(name);
@@ -288,11 +288,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
 
         String key = synonym.toLowerCase(Locale.ENGLISH);
 
-        if (synonyms.containsKey(key)) {
-            return true;
-        }
-
-        return false;
+        return synonyms.containsKey(key);
 
     }
 
@@ -313,7 +309,8 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
             return synonyms.get(key).newInstance();
         }
 
-        throw new InvalidParameterException("No matching identifier synonym found for: " + synonym + " please invoke hasSynonym() to avoid this error");
+        return EMPTY_IDENTIFIER;
+
     }
 
     @Override public Identifier ofSynonym(String synonym, String accession) {

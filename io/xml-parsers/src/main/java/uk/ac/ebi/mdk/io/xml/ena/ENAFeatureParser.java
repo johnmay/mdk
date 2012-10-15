@@ -31,6 +31,7 @@ import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.identifier.DynamicIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicRNAIdentifier;
@@ -269,13 +270,11 @@ public class ENAFeatureParser {
 
         public void resolve(XMLStreamReader2 xmlr) throws XMLStreamException {
             String db = xmlr.getAttributeValue(0);
-            try {
-                Identifier identifier = IDENTIFIER_FACTORY.ofSynonym(db);
-                identifier.setAccession(xmlr.getAttributeValue(1));
+            Identifier identifier = IDENTIFIER_FACTORY.ofSynonym(db, xmlr.getAttributeValue(1));
+            if(identifier != IdentifierFactory.EMPTY_IDENTIFIER)
                 identifiers.add(identifier);
-            } catch (InvalidParameterException ex) {
-                System.out.println(ex.getMessage());
-            }
+            else
+                System.out.println("Could not resolve identifier for name: " + db);
         }
     }
 

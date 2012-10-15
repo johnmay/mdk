@@ -173,8 +173,10 @@ public class SubliminalTSV2SDF extends CommandLineMain {
 
             Metabolite m = metaboliteMap.get(name);
 
-            m.addAnnotation(annotationFactory.getCrossReference(identifierFactory.ofName(row[headers.get("xref.resource")],
-                                                                                         row[headers.get("xref.accession")])));
+            Identifier identifier = identifierFactory.ofName(row[headers.get("xref.resource")],
+                                                             row[headers.get("xref.accession")]);
+            if(identifier != IdentifierFactory.EMPTY_IDENTIFIER)
+                m.addAnnotation(annotationFactory.getCrossReference(identifier));
 
 
         }

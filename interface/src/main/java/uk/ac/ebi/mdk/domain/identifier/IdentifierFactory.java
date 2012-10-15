@@ -20,19 +20,133 @@ package uk.ac.ebi.mdk.domain.identifier;
 
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * @author John May
  */
 public interface IdentifierFactory {
 
+    /**
+     * Constructs an identifier of the correct type of the given name. If the
+     * name is not found an {@link IdentifierFactory#EMPTY_IDENTIFIER} is returned.
+     *
+     * @param name the resource name e.g. ChEBI
+     * @return an instance of a typed identifier
+     */
     public Identifier ofName(String name);
 
+    /**
+     * Constructs an identifier of the correct type of the given name and
+     * sets the accession. If the name is not found an
+     * {@link IdentifierFactory#EMPTY_IDENTIFIER} is returned.
+     *
+     * @param name the resource name e.g. ChEBI
+     * @return an instance of a typed identifier
+     */
     public Identifier ofName(String name, String accession);
 
     public boolean hasSynonym(String synonym);
 
+    /**
+     * Constructs an identifier of the correct type of the given synonym. If the
+     * name is not found an {@link IdentifierFactory#EMPTY_IDENTIFIER} is returned.
+     * It is possible to avoid the EMPTY_IDENTIFIER if {@link #hasSynonym(String)}
+     * is invoked first.
+     *
+     * @param synonym the resource name e.g. ChEBI
+     * @return an instance of a typed identifier
+     */
     public Identifier ofSynonym(String synonym);
 
+    /**
+     * Constructs an identifier of the correct type of the given synonym and sets
+     * the accession. If the name is not found an {@link IdentifierFactory#EMPTY_IDENTIFIER}
+     * is returned. It is possible to avoid the EMPTY_IDENTIFIER if {@link #hasSynonym(String)}
+     * is invoked first.
+     *
+     *
+     * @param synonym the resource name e.g. ChEBI
+     * @return an instance of a typed identifier
+     */
     public Identifier ofSynonym(String synonym, String accession);
+
+
+    public static Identifier EMPTY_IDENTIFIER = new Identifier() {
+        @Override
+        public void setAccession(String accession) {
+
+        }
+
+        @Override
+        public String getAccession() {
+            return "";
+        }
+
+        @Override
+        public Identifier newInstance() {
+            return null;
+        }
+
+        @Override
+        public URL getURL() {
+            return null;
+        }
+
+        @Override
+        public String getURN() {
+            return "";
+        }
+
+        @Override
+        public Collection<String> getSynonyms() {
+            return Collections.EMPTY_SET;
+        }
+
+        @Override
+        public Resource getResource() {
+            return null;
+        }
+
+        @Override
+        public String getSummary() {
+            return "";
+        }
+
+        @Override
+        public String getShortDescription() {
+            return "";
+        }
+
+        @Override
+        public String getBrief() {
+            return "";
+        }
+
+        @Override
+        public String getLongDescription() {
+            return "";
+        }
+
+        @Override
+        public String getDescription() {
+            return "";
+        }
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+
+        }
+
+        @Override
+        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+
+        }
+    };
 
 }

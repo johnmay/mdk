@@ -277,7 +277,10 @@ public class Align extends CommandLineMain {
 
                 Metabolite metabolite = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
 
-                metabolite.setIdentifier(DefaultIdentifierFactory.getInstance().ofName(idSource, id));
+                Identifier identifier = DefaultIdentifierFactory.getInstance().ofName(idSource, id);
+                if(identifier == IdentifierFactory.EMPTY_IDENTIFIER)
+                    System.err.println("could not find identifier for name: " + idSource);
+                metabolite.setIdentifier(identifier);
 
                 metabolite.addAnnotation(new AtomContainerAnnotation(container));
 
@@ -322,7 +325,9 @@ public class Align extends CommandLineMain {
         try {
             String line = "";
             while ((line = reader.readLine()) != null) {
-                identifiers.add(idFactory.ofName(source, line.trim()));
+                Identifier identifier = idFactory.ofName(source, line.trim());
+                if(identifier != IdentifierFactory.EMPTY_IDENTIFIER)
+                    identifiers.add(identifier);
             }
 
         } catch (IOException e) {
