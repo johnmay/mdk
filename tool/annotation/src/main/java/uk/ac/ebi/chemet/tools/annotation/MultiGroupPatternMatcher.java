@@ -30,8 +30,10 @@ import java.util.regex.Pattern;
  * extract parts matching a given regular expression pattern. This implementation allows
  * the regular expression to contain a multiple pairs of capturing parenthesis. The pattern
  * should also match the string from start to end. If no match is found or the annotation
- * type does not match an immutable list the size of the expected group count it returned
- * which contains empty strings for the unmatched groups.
+ * type does not match an immutable list. The size of this default value can be set in
+ * the constructor via the {@link Mode} enumeration. In {@link Mode#FIXED} a list of fixed
+ * size (size of group count) with empty strings will be returned. Providing {@link Mode#EMPTY} (default) an empty
+ * list is returned.
  * Due to this the pattern should not contain an optional group count. A pattern such as
  * '(1)(2)|(3)' will return two groups for the string '12' and one group for the string '3'.
  * This problem requires the expected group count to be explicitly stated as a constructor
@@ -46,7 +48,7 @@ import java.util.regex.Pattern;
  * Note pass = new Note("a simple test");     // pattern will match
  * Note fail = new Note("not a simple test"); // pattern does not match from start to end
  * pass.accept(visitor);                      // fixed size list (length=2) with "a" and "test"
- * fail.accept(visitor);                      // fixed size list (length=2) with empty string values
+ * fail.accept(visitor);                      // empty list
  * }
  * </pre>
  *
@@ -61,8 +63,23 @@ public class MultiGroupPatternMatcher<A extends StringAnnotation> extends Visito
     private final Integer groupCount;
 
     /**
+     * The default value return type
+     */
+    public enum Mode {
+        /**
+         * An empty list is returned for no match
+         */
+        EMPTY,
+        /**
+         * A fixed size list will be returned
+         */
+        FIXED
+    }
+
+    /**
      * Construct a multi-group pattern matching visitor for an exact class
-     * type (i.e. subclasses are not accepted).
+     * type (i.e. subclasses are not accepted). This constructor will set
+     * the return type to {@link Mode#EMPTY}.
      *
      * @param c          class type to visit
      * @param pattern    pattern to match
@@ -71,7 +88,41 @@ public class MultiGroupPatternMatcher<A extends StringAnnotation> extends Visito
     public MultiGroupPatternMatcher(Class<? extends A> c,
                                     Pattern pattern,
                                     Integer groupCount) {
-        this(c, pattern, groupCount, Boolean.FALSE);
+        this(c, pattern, groupCount, Mode.EMPTY);
+    }
+
+    /**
+     * Construct a multi-group pattern matching visitor for an exact class
+     * type (i.e. subclasses are not accepted). This constructor allows the
+     * return type to be set.
+     *
+     * @param c          class type to visit
+     * @param pattern    pattern to match
+     * @param groupCount the expected number of groups to capture
+     * @param mode       the default value type - whether a empty
+     *                   list or fixed size list should be returned
+     */
+    public MultiGroupPatternMatcher(Class<? extends A> c,
+                                    Pattern pattern,
+                                    Integer groupCount,
+                                    Mode mode) {
+        this(c, pattern, groupCount, mode, Boolean.FALSE);
+    }
+
+    /**
+     * Construct a multi-group pattern matching visitor for an exact class
+     * type (i.e. subclasses are not accepted). This constructor will set
+     * the return type to {@link Mode#EMPTY}.
+     *
+     * @param c          class type to visit
+     * @param pattern    pattern to match
+     * @param groupCount the expected number of groups to capture
+     */
+    public MultiGroupPatternMatcher(Class<? extends A> c,
+                                    Pattern pattern,
+                                    Integer groupCount,
+                                    Boolean subclass) {
+        this(c, pattern, groupCount, Mode.EMPTY, subclass);
     }
 
     /**
@@ -81,13 +132,16 @@ public class MultiGroupPatternMatcher<A extends StringAnnotation> extends Visito
      * @param c          class type to visit
      * @param pattern    pattern to match
      * @param groupCount the expected number of groups to capture
+     * @param mode       the default value type - whether a empty
+     *                   list or fixed size list should be returned
      * @param subclass   whether the visitor accepts subclasses
      */
     public MultiGroupPatternMatcher(Class<? extends A> c,
                                     Pattern pattern,
                                     Integer groupCount,
+                                    Mode mode,
                                     Boolean subclass) {
-        super(c, makeList(groupCount), subclass);
+        super(c, getDefaultValue(mode, groupCount), subclass);
 
         this.pattern = pattern;
 
@@ -106,17 +160,19 @@ public class MultiGroupPatternMatcher<A extends StringAnnotation> extends Visito
 
     /**
      * Uses the pattern provided in the constructor to match the value on the
-     * string annotation. If the pattern is matched the first captured group
-     * is returned otherwise an empty string (no match).
+     * string annotation. If the pattern is matched the the captured groups
+     * are returned as an immutable list. If no match was found an empty or
+     * fixed size list is returned (depending on the {@link Mode} passed to the
+     * constructor).
      *
      * @param annotation the annotation to match
-     * @return matched parentheses place in a immutable list
+     * @return matched parentheses placed in a immutable list
      * @see java.util.regex.Matcher#group(int)
      */
     @Override
     public List<String> _visit(StringAnnotation annotation) {
 
-        String  value   = annotation.getValue();
+        String value = annotation.getValue();
         Matcher matcher = pattern.matcher(value);
 
         return matcher.matches() ? getCaptureList(matcher) : getValue();
@@ -143,15 +199,22 @@ public class MultiGroupPatternMatcher<A extends StringAnnotation> extends Visito
     }
 
     /**
-     * Constructs a fixed size list of empty strings and allows us to pass
-     * a fixed size list to the super-class for a default value.
+     * Constructs an empty or fixed size list of empty strings and allows
+     * us to pass a fixed size list to the super-class for a default value.
      *
-     * @param n the size of the list
+     * @param mode whether to return a fixed or empty list
+     * @param n    the size of the list
      * @return immutable list
      */
-    private static List<String> makeList(int n) {
+    private static List<String> getDefaultValue(Mode mode, int n) {
+
+        if (mode == null)
+            throw new IllegalArgumentException("Null mode provided");
 
         List<String> list = new ArrayList<String>(n);
+
+        if (Mode.EMPTY.equals(mode))
+            return list;
 
         for (int i = 0; i < n; i++)
             list.add("");

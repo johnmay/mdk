@@ -17,7 +17,6 @@
 
 package uk.ac.ebi.chemet.tools.annotation;
 
-import junit.framework.Assert;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.annotation.AnnotationVisitor;
 import uk.ac.ebi.mdk.domain.annotation.Note;
@@ -25,8 +24,11 @@ import uk.ac.ebi.mdk.domain.annotation.Note;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static uk.ac.ebi.chemet.tools.annotation.MultiGroupPatternMatcher.Mode.EMPTY;
+import static uk.ac.ebi.chemet.tools.annotation.MultiGroupPatternMatcher.Mode.FIXED;
 
 /**
  * @author John May
@@ -59,10 +61,11 @@ public class MultiGroupPatternMatcherTest {
     }
 
     @Test
-    public void testDefaultValue() {
+    public void testDefaultValue_Fixed() {
         List<String> value = new MultiGroupPatternMatcher<Note>(Note.class,
                                                                 Pattern.compile("(first)(second)"),
-                                                                2).getValue();
+                                                                2,
+                                                                FIXED).getValue();
 
         assertEquals(2, value.size());
         assertEquals("", value.get(0));
@@ -70,7 +73,35 @@ public class MultiGroupPatternMatcherTest {
     }
 
     @Test
-    public void testVisit_NoMatch() {
+    public void testDefaultValue_Empty() {
+        List<String> value = new MultiGroupPatternMatcher<Note>(Note.class,
+                                                                Pattern.compile("(first)(second)"),
+                                                                2,
+                                                                EMPTY).getValue();
+
+        assertTrue(value.isEmpty());
+    }
+
+    @Test
+    public void testVisit_NoMatch_Fixed() {
+
+        AnnotationVisitor<List<String>> visitor = new MultiGroupPatternMatcher<Note>(Note.class,
+                                                                                     Pattern.compile("(a) simple (test)"),
+                                                                                     2,
+                                                                                     FIXED);
+
+        Note note = new Note("not a simple test");
+        List<String> value = note.accept(visitor);
+
+        assertNotNull(value);
+        assertEquals(2, value.size());
+        assertEquals("", value.get(0));
+        assertEquals("", value.get(1));
+
+    }
+
+    @Test
+    public void testVisit_NoMatch_Empty() {
 
         AnnotationVisitor<List<String>> visitor = new MultiGroupPatternMatcher<Note>(Note.class,
                                                                                      Pattern.compile("(a) simple (test)"),
@@ -80,9 +111,8 @@ public class MultiGroupPatternMatcherTest {
         List<String> value = note.accept(visitor);
 
         assertNotNull(value);
-        assertEquals(2, value.size());
-        assertEquals("", value.get(0));
-        assertEquals("", value.get(1));
+        assertTrue(value.isEmpty());
+
 
     }
 
