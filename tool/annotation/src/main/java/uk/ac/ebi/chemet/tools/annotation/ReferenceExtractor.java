@@ -39,9 +39,9 @@ public class ReferenceExtractor<A extends StringAnnotation>
     private final MultiGroupPatternMatcher<A> visitor;
     private final IdentifierFactory factory = DefaultIdentifierFactory.getInstance();
 
-    public static final String DEFAULT_RESOURCE_PATTERN  = "[A-z0-9]+";
-    public static final String DEFAULT_SEPARATOR_PATTERN = "[-:=]\\s*";
-    public static final String DEFAULT_ACCESSION_PATTERN = "[A-z0-9]+";
+    public static final String DEFAULT_RESOURCE_PATTERN  = "(?:[A-z0-9]+(?:\\s[A-z0-9]+)*?)";
+    public static final String DEFAULT_SEPARATOR_PATTERN = "(?:\\s(?:id|identifier|accession))?[-:=]\\s*";
+    public static final String DEFAULT_ACCESSION_PATTERN = "[=A-z0-9]+";
 
     /**
      * Constructor a reference extractor for the given class. This method will use
@@ -92,7 +92,7 @@ public class ReferenceExtractor<A extends StringAnnotation>
      * @return the compiled pattern
      */
     private static Pattern getPattern(String resource, String separator, String accession) {
-        return Pattern.compile("(" + resource + ")" + separator + "(" + accession + ")");
+        return Pattern.compile("(" + resource + ")" + separator + "(" + accession + ")", Pattern.CASE_INSENSITIVE);
     }
 
 }

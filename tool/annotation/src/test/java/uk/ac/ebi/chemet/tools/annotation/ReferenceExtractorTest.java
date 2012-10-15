@@ -31,6 +31,7 @@ import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,22 @@ public class ReferenceExtractorTest {
 
         Note note = new Note("ChEBI: 12");
         Assert.assertEquals(ChEBIIdentifier.class, note.accept(extractor).getClass());
+
+    }
+
+    @Test
+    public void testVisit_suffix() throws Exception {
+
+        Note note = new Note("ChEBI ID: 12");
+        Assert.assertEquals(ChEBIIdentifier.class, note.accept(extractor).getClass());
+
+    }
+
+    @Test
+    public void testVisit_withSpace() throws Exception {
+
+        Note note = new Note("KEGG Compound: C00002");
+        Assert.assertEquals(KEGGCompoundIdentifier.class, note.accept(extractor).getClass());
 
     }
 
