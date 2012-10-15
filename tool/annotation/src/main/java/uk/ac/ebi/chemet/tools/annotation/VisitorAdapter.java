@@ -76,9 +76,13 @@ public abstract class VisitorAdapter<A extends Annotation, T>
     public VisitorAdapter(Class<? extends A> c,
                           T value,
                           Boolean subclass) {
-        this.c = c;
-        this.value = value;
-        this.subclass = subclass;
+        this.c        = c;
+        this.value    = value;
+        this.subclass = subclass != null ? subclass : Boolean.FALSE;
+
+        if(this.c == null)
+            throw new IllegalArgumentException("Null class type provided to constructor");
+
     }
 
     /**
@@ -122,4 +126,11 @@ public abstract class VisitorAdapter<A extends Annotation, T>
      */
     public abstract T _visit(A annotation);
 
+    /**
+     * Access the default value for the annotation visitor.
+     * @return the value provided to the constructor
+     */
+    public T getValue() {
+        return value;
+    }
 }
