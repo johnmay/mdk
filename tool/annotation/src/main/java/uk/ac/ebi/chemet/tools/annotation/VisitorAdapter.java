@@ -32,7 +32,6 @@ import java.util.Map;
 public abstract class VisitorAdapter<A extends Annotation, T>
         implements AnnotationVisitor<T> {
 
-    private final Map<Class<?>, Boolean> cache = new HashMap<Class<?>, Boolean>(10);
     private final Class<? extends A> c;
     private final T value;
     private final Boolean subclass;
@@ -86,25 +85,13 @@ public abstract class VisitorAdapter<A extends Annotation, T>
     }
 
     /**
-     * Tests whether the annotation is accepted by this visitor. This
-     * method uses {@link Class#isInstance(Object)} with a cache to avoid
-     * recalculation the search over large collections.
+     * Tests whether the annotation is accepted by this visitor.
      *
      * @param annotation the annotation to check
      * @return whether the annotation is accepted by this adapter
      */
     private Boolean accepts(Annotation annotation) {
-
-        Boolean accepted = cache.get(annotation.getClass());
-
-        if (accepted == null) {
-            // class objects are static
-            accepted = subclass ? c.isInstance(annotation) : c == annotation.getClass();
-            cache.put(annotation.getClass(), accepted);
-        }
-
-        return accepted;
-
+        return subclass ? c.isInstance(annotation) : c == annotation.getClass();
     }
 
     /**
