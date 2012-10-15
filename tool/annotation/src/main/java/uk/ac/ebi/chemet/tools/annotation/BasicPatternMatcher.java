@@ -37,9 +37,36 @@ public class BasicPatternMatcher<A extends StringAnnotation> extends VisitorAdap
 
     private final Pattern pattern;
 
+    /**
+     * Construct a basic pattern match - this annotation visitor will visit
+     * string annotations of exact type ('c') and return the first match.
+     *
+     * @param c       the class of annotation match
+     * @param pattern the pattern to match against the StringAnnotation
+     *                value
+     *
+     */
     public BasicPatternMatcher(Class<? extends A> c,
-                               Pattern pattern) {
-        super(c, "");
+                               Pattern pattern){
+        this(c, pattern, Boolean.FALSE);
+    }
+
+    /**
+     * Construct a basic pattern match - this annotation visitor will visit
+     * string annotations of type ('c') and return the first match. Subclasses
+     * can be accepted by passing the 'subclass' parameter as true.
+     *
+     * @param c        the class of annotation match
+     * @param pattern  the pattern to match against the StringAnnotation
+     *                 value
+     * @param subclass accept subclasses of the provided type 'c'
+     *
+     */
+    public BasicPatternMatcher(Class<? extends A> c,
+                               Pattern pattern,
+                               Boolean subclass) {
+        super(c, "", subclass);
+
         this.pattern = pattern;
 
         if(pattern == null)
