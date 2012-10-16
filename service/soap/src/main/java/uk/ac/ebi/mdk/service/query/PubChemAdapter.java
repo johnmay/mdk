@@ -38,9 +38,10 @@ public class PubChemAdapter
     @Override
     public IAtomContainer getStructure(PubChemCompoundIdentifier identifier) {
 
-        ArrayOfInt aoi = new ArrayOfInt(new int[]{Integer.parseInt(identifier.getAccession())});
-
         try {
+
+            ArrayOfInt aoi = new ArrayOfInt(new int[]{Integer.parseInt(identifier.getAccession())});
+
             String listKey = service.inputList(aoi, PCIDType.eID_CID);
             StringHolder sh = new StringHolder();
             DataBlobTypeHolder blob = new DataBlobTypeHolder();
@@ -49,6 +50,8 @@ public class PubChemAdapter
             return mol2Structure(new String(blob.value.getData()));
 
 
+        } catch (NumberFormatException ex) {
+            LOGGER.error("invalid PubChem-Compound identifier - accession must be a number");
         } catch (RemoteException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
