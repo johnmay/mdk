@@ -32,6 +32,10 @@ import static org.openscience.cdk.interfaces.IAtomType.Hybridization.SP3D5;
  * An atom seed that hashes the orbital hybridization. This is useful as using the bond
  * order sum can not catch all cases when bonds are de-localised.
  *
+ * Not that as the hash can provide false positives but NOT false negatives some molecules
+ * may calculate the same hash even though they are actually different. This can be rectified
+ * by increasing the depth of the hash.
+ *
  * @author John May
  * @see <a href="http://en.wikipedia.org/wiki/Orbital_hybridisation">Orbital Hybridisation</a>
  */
