@@ -20,7 +20,6 @@
  */
 package uk.ac.ebi.mdk.tool.domain;
 
-import com.google.common.base.Joiner;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -29,7 +28,11 @@ import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
 
 /**
  * MolecularHashFactory - 2011.11.09 <br>
@@ -45,13 +48,13 @@ import java.util.*;
  */
 public class MolecularHashFactory {
 
-    private static final Logger                   logger               = Logger.getLogger(MolecularHashFactory.class);
-    private              Collection<AtomSeed>     seedMethods          = new LinkedHashSet<AtomSeed>();
-    private              ConnectionMatrixFactory  matrixFactory        = ConnectionMatrixFactory.getInstance();
-    private              Map<Integer, MutableInt> oldOccurrenceMap     = new HashMap(150);
-    private              Map<Integer, MutableInt> postoccurences       = new HashMap(150);
-    private              boolean                  seedWithMoleculeSize = true;
-    private              int                      maxDepth             = 1;
+    private static final Logger logger = Logger.getLogger(MolecularHashFactory.class);
+    private Collection<AtomSeed> seedMethods = new LinkedHashSet<AtomSeed>();
+    private ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory.getInstance();
+    private Map<Integer, MutableInt> oldOccurrenceMap = new HashMap(150);
+    private Map<Integer, MutableInt> postoccurences = new HashMap(150);
+    private boolean seedWithMoleculeSize = true;
+    private int depth = 1;
 
     private MolecularHashFactory() {
         seedMethods.add(SeedFactory.getInstance().getSeed(AtomicNumberSeed.class));
@@ -95,7 +98,6 @@ public class MolecularHashFactory {
      * </pre>
      *
      * @param seed New AtomSeed to add
-     *
      * @return Whether the new seed was added (false if it is already present)
      */
     public boolean addSeedMethod(AtomSeed seed) {
@@ -121,7 +123,6 @@ public class MolecularHashFactory {
      * {@see addSeedMethod(AtomSeed)} methods.
      *
      * @param molecule the molecule to generate the hash for
-     *
      * @return The hash for this molecule
      */
     public MolecularHash getHash(IAtomContainer molecule) {
@@ -134,36 +135,48 @@ public class MolecularHashFactory {
      *
      * @param molecule The molecule to generate the hash for
      * @param methods  The methods that will be used to generate the hash
-     *
      * @return The hash for this molecule
      */
     public MolecularHash getHash(IAtomContainer molecule, Collection<AtomSeed> methods) {
 
+        if(molecule.getAtomCount() == 0)
+            return new MolecularHash(0, new int[0]);
 
         int hash = 49157;
 
         int[] precursorSeeds = getAtomSeeds(molecule, methods);
         byte[][] table = matrixFactory.getConnectionMatrix(molecule);
 
+        int[] previous = new int[precursorSeeds.length];
+        int[] current  = new int[precursorSeeds.length];
+
+        System.arraycopy(precursorSeeds, 0, previous, 0, precursorSeeds.length);
+
         postoccurences.clear();
 
         HashCounter globalCount = new HashCounter();
         HashCounter localCount = new HashCounter();
 
-        for (int i = 0; i < precursorSeeds.length; i++) {
+        for (int d = 0; d < depth; d++) {
 
-            // local count keeps track of the value of aggregated neighbours
-            // therefore we need to clear on each neighbour hash otherwise
-            // neighbours which are identical at a given depth would be different
-            // due to different occurrence counts
-            localCount.clear();
+            if(d != 0)
+                System.arraycopy(current, 0, previous, 0, precursorSeeds.length);
 
-            int atomHash = neighbourHash(i, precursorSeeds[i], 0, table, precursorSeeds, localCount);
+            for (int i = 0; i < precursorSeeds.length; i++) {
 
-            //globalCount.addAll(localCount);
+                // local count keeps track of the value of aggregated neighbours
+                // therefore we need to clear on each neighbour hash otherwise
+                // neighbours which are identical at a given depth would be different
+                // due to different occurrence counts
+                localCount.clear();
 
-            globalCount.register(hash);
-            hash ^= rotate(atomHash, globalCount.register(atomHash));
+                current[i] = neighbourHash(i, previous[i], 0, table, previous, localCount);
+
+                globalCount.register(hash);
+
+                hash ^= rotate(current[i], globalCount.register(current[i]));
+
+            }
 
         }
 
@@ -180,7 +193,6 @@ public class MolecularHashFactory {
      * @param index        Atom index to add the neighbour values too
      * @param value        The current value of the above atom
      * @param currentDepth The current depth
-     *
      * @return Computed value
      */
     private int neighbourHash(int index, int value, int currentDepth, byte[][] connectionTable, int[] precursorSeeds, HashCounter counter) {
@@ -191,8 +203,8 @@ public class MolecularHashFactory {
                 counter.register(value); // avoid self xor'ing
                 value ^= rotate(precursorSeeds[j], counter.register(precursorSeeds[j]));
 
-                value = currentDepth <= maxDepth
-                        ? neighbourHash(j, value, currentDepth + 1, connectionTable, precursorSeeds, counter) : value;
+                //  value = currentDepth <= depth
+                //          ? neighbourHash(j, value, currentDepth + 1, connectionTable, precursorSeeds, counter) : value;
             }
         }
 
@@ -206,7 +218,7 @@ public class MolecularHashFactory {
      * @param depth
      */
     public void setDepth(int depth) {
-        this.maxDepth = depth;
+        this.depth = depth;
     }
 
     /**
@@ -226,7 +238,6 @@ public class MolecularHashFactory {
      * These seeds are generated using the provided methods
      *
      * @param molecule the molecule to generate the seeds for
-     *
      * @return array of integers representing the seeds for each atom in the
      *         molecule
      */
@@ -257,7 +268,6 @@ public class MolecularHashFactory {
      * Performs pseudo random number generation on the provided seed
      *
      * @param seed
-     *
      * @return
      */
     public static int xorShift(int seed) {
@@ -273,7 +283,6 @@ public class MolecularHashFactory {
      *
      * @param seed     the starting seed
      * @param rotation Number of xor rotations to perform
-     *
      * @return The starting seed rotated the specified number of times
      */
     public static int rotate(int seed, int rotation) {
@@ -289,7 +298,6 @@ public class MolecularHashFactory {
      *
      * @param seed
      * @param occurences
-     *
      * @return
      */
     public static int rotate(int seed, Map<Integer, MutableInt> occurences) {
