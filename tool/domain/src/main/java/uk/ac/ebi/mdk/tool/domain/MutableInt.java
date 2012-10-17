@@ -32,5 +32,8 @@ public class MutableInt {
         return Integer.valueOf(value);
     }
 
-
+    @Override
+    public String toString() {
+        return getInteger().toString();
+    }
 }

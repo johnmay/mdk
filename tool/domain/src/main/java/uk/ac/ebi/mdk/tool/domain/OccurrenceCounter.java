@@ -54,6 +54,11 @@ public class OccurrenceCounter<O> {
         }
     }
 
+    @Override
+    public String toString() {
+        return map.toString();
+    }
+
     /**
      * Reset the counting map by clearing it's contents
      */
