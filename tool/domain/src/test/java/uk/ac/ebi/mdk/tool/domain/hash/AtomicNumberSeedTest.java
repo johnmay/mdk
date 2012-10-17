@@ -1,10 +1,14 @@
 package uk.ac.ebi.mdk.tool.domain.hash;
 
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
 import uk.ac.ebi.mdk.tool.domain.TestMoleculeFactory;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 /**
  * @author John May
@@ -21,8 +25,7 @@ public class AtomicNumberSeedTest {
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
         factory.setDepth(1);
-        System.out.println(factory.getHash(heptaecanone));
-        System.out.println(factory.getHash(palmiticAmide));
+        assertNotSame(factory.getHash(heptaecanone), factory.getHash(palmiticAmide));
 
 
     }
