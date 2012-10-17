@@ -41,19 +41,6 @@ public class BondOrderSumSeedTest {
 
 
     @Test
-    public void testAromatic() throws Exception {
-
-        // this case isn't accounted for yet
-        System.err.println("Atomatic/Delocalised fingerprints need fixing");
-//        HMDBIdentifier query = new HMDBIdentifier("HMDB00473");
-//        ChEBIIdentifier reference = new ChEBIIdentifier("CHEBI:60281");
-//
-//        System.out.println(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class, ConnectedAtomSeed.class, BondOrderSumSeed.class).matches(build(query), build(reference)));
-
-    }
-
-
-    @Test
     public void testSeed() throws CDKException, IOException {
 
         IAtomContainer but1ene = TestMoleculeFactory.but1ene();
