@@ -45,6 +45,7 @@ public class SeedFactory {
                                              new BondOrderSumSeed(),
                                              new ConnectedAtomSeed(),
                                              new StereoSeed(),
+                                             new HybridizationSeed(),
                                              new ChargeSeed())) {
             methods.put(method.getClass(), method);
         }
