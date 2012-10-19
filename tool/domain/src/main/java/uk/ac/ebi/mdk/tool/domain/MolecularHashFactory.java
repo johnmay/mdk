@@ -22,7 +22,9 @@ package uk.ac.ebi.mdk.tool.domain;
 
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
@@ -33,6 +35,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
+import static org.openscience.cdk.interfaces.IAtomType.Hybridization.SP3;
+import static org.openscience.cdk.interfaces.IBond.Stereo.DOWN;
+import static org.openscience.cdk.interfaces.IBond.Stereo.UP;
 
 /**
  * MolecularHashFactory - 2011.11.09 <br>
@@ -139,7 +147,7 @@ public class MolecularHashFactory {
      */
     public MolecularHash getHash(IAtomContainer molecule, Collection<AtomSeed> methods) {
 
-        if(molecule.getAtomCount() == 0)
+        if (molecule.getAtomCount() == 0)
             return new MolecularHash(0, new int[0]);
 
         int hash = 49157;
@@ -150,7 +158,7 @@ public class MolecularHashFactory {
         int length = precursorSeeds.length;
 
         int[] previous = new int[length];
-        int[] current  = new int[length];
+        int[] current = new int[length];
 
         copy(precursorSeeds, previous);
         //System.arraycopy(precursorSeeds, 0, previous, 0, precursorSeeds.length);
@@ -160,9 +168,11 @@ public class MolecularHashFactory {
         HashCounter globalCount = new HashCounter();
         HashCounter localCount = new HashCounter();
 
+        Set<Integer> centres = getTetrahedralCentres(molecule);
+
         for (int d = 0; d < depth; d++) {
 
-            if(d != 0)
+            if (d != 0)
                 copy(current, previous);
 
             for (int i = 0; i < precursorSeeds.length; i++) {
@@ -215,18 +225,33 @@ public class MolecularHashFactory {
 
     }
 
+
+    private int getParity(byte[][] table, int i, int[] hashes) {
+
+        byte[] row = table[i];
+
+        int labelParity = 0;
+        int hashParity  = 0;
+
+        for(int j = 0; j < row.length; j++) {
+            // count the number of swaps
+        }
+
+        // count number of swaps for atom numbers and the hashes
+        return 0;
+    }
+
     /**
      * Copies the source array to the destination.
      *
-     *
-     * @param src source array
+     * @param src  source array
      * @param dest destination array
      */
-    private void copy(int[] src, int[] dest){
+    private void copy(int[] src, int[] dest) {
         // not using System.arraycopy(src, 0, dest, 0, src.length); due to small overhead
         // note: we do not check they are the same size
         int length = src.length;
-        for(int i = 0; i < length; ++i)
+        for (int i = 0; i < length; ++i)
             dest[i] = src[i];
     }
 
@@ -279,6 +304,37 @@ public class MolecularHashFactory {
         }
 
         return seeds;
+
+    }
+
+    private Set<Integer> getTetrahedralCentres(IAtomContainer container) {
+
+        Set<Integer> centres = new TreeSet<Integer>();
+
+        for (int i = 0; i < container.getAtomCount(); i++) {
+            if(candidateTetrahedralCenter(container, container.getAtom(i))){
+                centres.add(i);
+            }
+        }
+
+        return centres;
+
+    }
+
+    private boolean candidateTetrahedralCenter(IAtomContainer container, IAtom atom) {
+
+        for (IBond bond : container.getConnectedBondsList(atom)) {
+
+            IBond.Stereo stereo = bond.getStereo();
+
+            if ((SP3.equals(atom.getHybridization())
+                    && atom.getFormalNeighbourCount() > 2
+                    && UP.equals(stereo)) || DOWN.equals(stereo)) {
+                return true;
+            }
+        }
+
+        return false;
 
     }
 
