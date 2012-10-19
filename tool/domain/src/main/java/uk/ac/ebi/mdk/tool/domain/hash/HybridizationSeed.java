@@ -63,12 +63,6 @@ public class HybridizationSeed implements AtomSeed {
         // normalise the values
         if(hybridization == PLANAR3)
             return Hybridization.SP2;
-        if(hybridization == SP3D1
-                || hybridization == SP3D2
-                || hybridization == SP3D3
-                || hybridization == SP3D4
-                || hybridization == SP3D5)
-            return Hybridization.SP3;
 
         return hybridization;
 
