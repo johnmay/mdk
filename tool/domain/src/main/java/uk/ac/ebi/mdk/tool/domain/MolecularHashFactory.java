@@ -59,8 +59,7 @@ public class MolecularHashFactory {
     private static final Logger logger = Logger.getLogger(MolecularHashFactory.class);
     private Collection<AtomSeed> seedMethods = new LinkedHashSet<AtomSeed>();
     private ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory.getInstance();
-    private Map<Integer, MutableInt> oldOccurrenceMap = new HashMap(150);
-    private Map<Integer, MutableInt> postoccurences = new HashMap(150);
+
     private boolean seedWithMoleculeSize = true;
     private int depth = 1;
 
@@ -163,7 +162,6 @@ public class MolecularHashFactory {
         copy(precursorSeeds, previous);
         //System.arraycopy(precursorSeeds, 0, previous, 0, precursorSeeds.length);
 
-        postoccurences.clear();
 
         HashCounter globalCount = new HashCounter();
         HashCounter localCount = new HashCounter();
