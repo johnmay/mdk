@@ -147,10 +147,13 @@ public class MolecularHashFactory {
         int[] precursorSeeds = getAtomSeeds(molecule, methods);
         byte[][] table = matrixFactory.getConnectionMatrix(molecule);
 
-        int[] previous = new int[precursorSeeds.length];
-        int[] current  = new int[precursorSeeds.length];
+        int length = precursorSeeds.length;
 
-        System.arraycopy(precursorSeeds, 0, previous, 0, precursorSeeds.length);
+        int[] previous = new int[length];
+        int[] current  = new int[length];
+
+        copy(precursorSeeds, previous);
+        //System.arraycopy(precursorSeeds, 0, previous, 0, precursorSeeds.length);
 
         postoccurences.clear();
 
@@ -160,7 +163,7 @@ public class MolecularHashFactory {
         for (int d = 0; d < depth; d++) {
 
             if(d != 0)
-                System.arraycopy(current, 0, previous, 0, precursorSeeds.length);
+                copy(current, previous);
 
             for (int i = 0; i < precursorSeeds.length; i++) {
 
@@ -210,6 +213,21 @@ public class MolecularHashFactory {
 
         return value;
 
+    }
+
+    /**
+     * Copies the source array to the destination.
+     *
+     *
+     * @param src source array
+     * @param dest destination array
+     */
+    private void copy(int[] src, int[] dest){
+        // not using System.arraycopy(src, 0, dest, 0, src.length); due to small overhead
+        // note: we do not check they are the same size
+        int length = src.length;
+        for(int i = 0; i < length; ++i)
+            dest[i] = src[i];
     }
 
     /**
