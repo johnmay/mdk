@@ -32,7 +32,6 @@ import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -170,6 +169,13 @@ public class MolecularHashFactory {
 
         for (int d = 0; d < depth; d++) {
 
+            for (Integer centre : centres) {
+                Integer parity = molecule.getAtom(centre).getStereoParity();
+                if(parity == 2)
+                    parity = -1;
+                hash ^= parity * getParity(table, centre, previous);
+            }
+
             if (d != 0)
                 copy(current, previous);
 
@@ -228,15 +234,35 @@ public class MolecularHashFactory {
 
         byte[] row = table[i];
 
-        int labelParity = 0;
-        int hashParity  = 0;
+        int count = 0;
+        int n = row.length;
 
-        for(int j = 0; j < row.length; j++) {
-            // count the number of swaps
+
+        for (int j = 0; j < n; j++) {
+
+            // if we have a connection
+            if (row[j] != 0) {
+
+                int h = hashes[j];
+
+                for (int k = j + 1; k < n; k++) {
+
+                    int cmp = hashes[k] - h;
+
+                    // if this value is larger then the last value
+                    if (cmp > 0) count++;
+                    else if (cmp == 0)
+                        return 0;
+
+                }
+
+            }
+
         }
 
-        // count number of swaps for atom numbers and the hashes
-        return 0;
+        // number of swaps for atom numbers and the hashes
+        return (count & 0x1) == 1 ? -1 : +1;
+
     }
 
     /**
@@ -310,7 +336,7 @@ public class MolecularHashFactory {
         Set<Integer> centres = new TreeSet<Integer>();
 
         for (int i = 0; i < container.getAtomCount(); i++) {
-            if(candidateTetrahedralCenter(container, container.getAtom(i))){
+            if (candidateTetrahedralCenter(container, container.getAtom(i))) {
                 centres.add(i);
             }
         }
@@ -321,14 +347,18 @@ public class MolecularHashFactory {
 
     private boolean candidateTetrahedralCenter(IAtomContainer container, IAtom atom) {
 
-        for (IBond bond : container.getConnectedBondsList(atom)) {
 
-            IBond.Stereo stereo = bond.getStereo();
+        if ((atom.getStereoParity() != null
+                && (atom.getStereoParity() == 1 || atom.getStereoParity() == 2)
+                && SP3.equals(atom.getHybridization())
+                && atom.getFormalNeighbourCount() > 2)) {
+            for (IBond bond : container.getConnectedBondsList(atom)) {
 
-            if ((SP3.equals(atom.getHybridization())
-                    && atom.getFormalNeighbourCount() > 2
-                    && UP.equals(stereo)) || DOWN.equals(stereo)) {
-                return true;
+                IBond.Stereo stereo = bond.getStereo();
+
+                if (UP.equals(stereo) || DOWN.equals(stereo)) {
+                    return true;
+                }
             }
         }
 
