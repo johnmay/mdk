@@ -148,11 +148,11 @@ public class MolecularHashFactory {
         if (molecule.getAtomCount() == 0)
             return new MolecularHash(0, new int[0]);
 
+        int[]    precursorSeeds = getAtomSeeds(molecule, methods);
+        byte[][] table           = matrixFactory.getConnectionMatrix(molecule);
+        Set<Integer> centres     = getTetrahedralCentres(molecule);
+
         int hash = 49157;
-
-        int[] precursorSeeds = getAtomSeeds(molecule, methods);
-        byte[][] table = matrixFactory.getConnectionMatrix(molecule);
-
         int length = precursorSeeds.length;
 
         int[] previous = new int[length];
@@ -165,16 +165,24 @@ public class MolecularHashFactory {
         HashCounter globalCount = new HashCounter();
         HashCounter localCount = new HashCounter();
 
-        Set<Integer> centres = getTetrahedralCentres(molecule);
+
+        Set<Integer> trash = new TreeSet<Integer>();
 
         for (int d = 0; d < depth; d++) {
 
             for (Integer centre : centres) {
-                Integer parity = molecule.getAtom(centre).getStereoParity();
-                if(parity == 2)
-                    parity = -1;
-                hash ^= parity * getParity(table, centre, previous);
+                Integer storageParity = molecule.getAtom(centre).getStereoParity();
+                if(storageParity == 2)
+                    storageParity = -1;
+                int parity = storageParity * getParity(table, centre, previous);
+                if(parity != 0) {
+                    hash ^= parity;
+                    trash.add(centre);
+                }
             }
+
+            centres.removeAll(trash);
+            trash.clear();
 
             if (d != 0)
                 copy(current, previous);

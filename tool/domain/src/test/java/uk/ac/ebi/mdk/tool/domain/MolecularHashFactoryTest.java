@@ -69,4 +69,14 @@ public class MolecularHashFactoryTest {
 
     }
 
+    @Test
+    public void testInositol() throws Exception {
+
+        IAtomContainer container = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268.mol", "myo-inositol");
+
+        System.out.println(Integer.toHexString(MolecularHashFactory.getInstance().getHash(container).hash));
+
+    }
+
+
 }
