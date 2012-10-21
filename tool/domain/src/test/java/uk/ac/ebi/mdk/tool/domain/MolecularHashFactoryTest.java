@@ -17,13 +17,12 @@
 
 package uk.ac.ebi.mdk.tool.domain;
 
-import org.junit.Assert;
 import org.junit.Test;
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
-import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
 import java.io.IOException;
 
@@ -41,7 +40,7 @@ public class MolecularHashFactoryTest {
         IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("r-structures.sdf"),
                                                            DefaultChemObjectBuilder.getInstance());
 
-        while (reader.hasNext()){
+        while (reader.hasNext()) {
             IAtomContainer container = reader.next();
             percieveAtomTypesAndConfigureAtoms(container);
             assertEquals(0xa56c6e31,
@@ -57,7 +56,7 @@ public class MolecularHashFactoryTest {
 
         IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("s-structures.sdf"),
                                                            DefaultChemObjectBuilder.getInstance());
-        while (reader.hasNext()){
+        while (reader.hasNext()) {
             IAtomContainer container = reader.next();
             percieveAtomTypesAndConfigureAtoms(container);
             assertEquals(0x5a9391cf,
@@ -74,7 +73,42 @@ public class MolecularHashFactoryTest {
 
         IAtomContainer container = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268.mol", "myo-inositol");
 
+        MolecularHashFactory.getInstance().setDepth(1);
+
         System.out.println(Integer.toHexString(MolecularHashFactory.getInstance().getHash(container).hash));
+
+    }
+
+    @Test
+    public void testInositol_Inv() throws Exception {
+
+        IAtomContainer container = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268_Inv.mol", "myo-inositol");
+
+
+        MolecularHashFactory.getInstance().setDepth(1);
+        System.out.println(Integer.toHexString(MolecularHashFactory.getInstance().getHash(container).hash));
+
+    }
+
+    @Test
+    public void testInositols() throws Exception {
+
+        IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("inositols.sdf"),
+                                                           DefaultChemObjectBuilder.getInstance());
+        MolecularHashFactory.getInstance().setDepth(4);
+        System.out.println("inositols");
+        int i = 0;
+        while (reader.hasNext()) {
+            IAtomContainer container = reader.next();
+            percieveAtomTypesAndConfigureAtoms(container);
+            System.out.printf("%20s: %s\n",
+                              container.getProperty(CDKConstants.TITLE),
+                              Integer.toHexString(
+                                      MolecularHashFactory.getInstance().getHash(container).hash));
+
+        }
+
+        reader.close();
 
     }
 

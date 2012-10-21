@@ -30,6 +30,7 @@ import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -149,14 +150,21 @@ public class MolecularHashFactory {
             return new MolecularHash(0, new int[0]);
 
         int[]    precursorSeeds = getAtomSeeds(molecule, methods);
-        byte[][] table           = matrixFactory.getConnectionMatrix(molecule);
-        Set<Integer> centres     = getTetrahedralCentres(molecule);
+        byte[][] table          = matrixFactory.getConnectionMatrix(molecule);
+        Set<Integer> centres    = getTetrahedralCentres(molecule);
+
+        return getHash(table, precursorSeeds, centres, molecule, true);
+
+    }
+
+    public MolecularHash getHash(byte[][] table, int[] precursorSeeds,
+                                 Set<Integer> centres, IAtomContainer molecule, boolean shallow) {
 
         int hash = 49157;
-        int length = precursorSeeds.length;
+        int n = precursorSeeds.length;
 
-        int[] previous = new int[length];
-        int[] current = new int[length];
+        int[] previous = new int[n];
+        int[] current = new int[n];
 
         copy(precursorSeeds, previous);
         //System.arraycopy(precursorSeeds, 0, previous, 0, precursorSeeds.length);
@@ -176,7 +184,7 @@ public class MolecularHashFactory {
                     storageParity = -1;
                 int parity = storageParity * getParity(table, centre, previous);
                 if(parity != 0) {
-                    hash ^= parity;
+                    hash ^= rotate(parity, globalCount.register(parity));
                     trash.add(centre);
                 }
             }
@@ -205,9 +213,24 @@ public class MolecularHashFactory {
 
         }
 
+        // un handled stereo centres need to do ensemble hash -
+        if(shallow && !centres.isEmpty()){
+
+            hash = 49157;
+            for(int i = 0; i < n; i++) {
+                int[] preturbed = Arrays.copyOf(precursorSeeds, n);
+                preturbed[i] = rotate(precursorSeeds[i], 1);
+                globalCount.register(preturbed[i]);
+                int value = getHash(table, preturbed, centres, molecule, false).hash;
+                hash ^= rotate(value, globalCount.register(value));
+            }
+        }
+
         return new MolecularHash(hash, precursorSeeds);
 
     }
+
+
 
     /**
      * Returns the hash value xor'd with that of the atom's neighbours. The method
