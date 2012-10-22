@@ -52,19 +52,18 @@ public class MolecularHash {
     /**
      * Sorted array of individual atom hashes
      */
-    private int[] atomicHashes;
+    private int[] individual;
 
 
     /**
      * Create a new molecule hash (should be done via the factory)
      *
      * @param hash
-     * @param atomicHashes Sorted array of atom hashes
+     * @param individual Sorted array of atom hashes
      */
-    protected MolecularHash(int hash, int[] atomicHashes) {
+    protected MolecularHash(int hash, int[] individual) {
         this.hash = hash;
-        this.atomicHashes = atomicHashes;
-        Arrays.sort(atomicHashes);
+        this.individual = individual;
     }
 
     /**
@@ -77,19 +76,19 @@ public class MolecularHash {
      */
     public float getSimilarity(MolecularHash other) {
 
-        float total = this.atomicHashes.length + other.atomicHashes.length;
+        float total = this.individual.length + other.individual.length;
 
         HashMap<Integer, MutableInt> thisMap = new HashMap();
         HashMap<Integer, MutableInt> otherMap = new HashMap();
 
-        for (int aHash : this.atomicHashes) {
+        for (int aHash : this.individual) {
             if (!thisMap.containsKey(aHash)) {
                 thisMap.put(aHash, new MutableInt());
             }
             thisMap.get(aHash).increment();
         }
 
-        for (int aHash : other.atomicHashes) {
+        for (int aHash : other.individual) {
             if (!otherMap.containsKey(aHash)) {
                 otherMap.put(aHash, new MutableInt());
             }
@@ -137,12 +136,12 @@ public class MolecularHash {
             return false;
         }
 
-        if (this.atomicHashes.length != other.atomicHashes.length) {
+        if (this.individual.length != other.individual.length) {
             return false;
         }
 
-        for (int i = 0; i < atomicHashes.length; i++) {
-            if (this.atomicHashes[i] != other.atomicHashes[i]) {
+        for (int i = 0; i < individual.length; i++) {
+            if (this.individual[i] != other.individual[i]) {
                 return false;
             }
         }
@@ -154,15 +153,17 @@ public class MolecularHash {
     @Override
     public String toString() {
 
-        StringBuilder sb = new StringBuilder(20 * atomicHashes.length);
+        StringBuilder sb = new StringBuilder(20 * individual.length);
 
-        sb.append(hash).append(": ");
+        sb.append(Integer.toHexString(hash)).append(": {");
 
-        Arrays.sort(atomicHashes);
-
-        for (int i : atomicHashes) {
-            sb.append(i).append(", ");
+        for(int i = 0; i <= individual.length - 1; i++) {
+            sb.append(Integer.toHexString(individual[i]));
+            if(i + 1 != individual.length)
+                sb.append(", ");
         }
+
+        sb.append("}");
 
         return sb.toString();
     }
