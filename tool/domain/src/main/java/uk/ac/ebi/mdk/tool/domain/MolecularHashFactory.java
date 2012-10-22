@@ -33,6 +33,7 @@ import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -149,16 +150,32 @@ public class MolecularHashFactory {
         if (molecule.getAtomCount() == 0)
             return new MolecularHash(0, new int[0]);
 
-        int[]    precursorSeeds = getAtomSeeds(molecule, methods);
-        byte[][] table          = matrixFactory.getConnectionMatrix(molecule);
-        Set<Integer> centres    = getTetrahedralCentres(molecule);
+        int[] precursorSeeds = getAtomSeeds(molecule, methods);
+        byte[][] table = matrixFactory.getConnectionMatrix(molecule);
+        Set<Integer> centres = getTetrahedralCentres(molecule);
 
         return getHash(table, precursorSeeds, centres, molecule, true);
 
     }
 
+    public String toString(int[] seeds) {
+        StringBuilder sb = new StringBuilder("[");
+        int n = seeds.length - 1;
+        for (int i = 0; i <= n; i++) {
+            sb.append("0x").append(Integer.toHexString(seeds[i]));
+            if (i == n) {
+                sb.append("]");
+                return sb.toString();
+            }
+            sb.append(", ");
+        }
+        throw new IllegalStateException("Unexpected state - could not convert int array");
+    }
+
     public MolecularHash getHash(byte[][] table, int[] precursorSeeds,
                                  Set<Integer> centres, IAtomContainer molecule, boolean shallow) {
+
+       // System.out.println("seeds: " + toString(precursorSeeds));
 
         int hash = 49157;
         int n = precursorSeeds.length;
@@ -167,35 +184,38 @@ public class MolecularHashFactory {
         int[] current = new int[n];
 
         copy(precursorSeeds, previous);
-        //System.arraycopy(precursorSeeds, 0, previous, 0, precursorSeeds.length);
+        copy(precursorSeeds, current);
 
+        Set<Integer> trash = new TreeSet<Integer>();
+
+        // set the parities
+        for (Integer centre : centres) {
+
+            Integer storageParity = molecule.getAtom(centre).getStereoParity();
+            if (storageParity == 2)
+                storageParity = -1;
+            int hParity = getParity(table, centre, previous);
+            int parity  = storageParity * hParity;
+            if (parity != 0) {
+                // can't set to previous... as this would alter other centres
+                current[centre] *= (parity == -1 ? 1300141 : 1300199);
+                trash.add(centre);
+            }
+
+        }
+        centres.removeAll(trash);
+        trash.clear();
+        copy(current, previous);  // set the adjusted current values (with parity) to the previous seeds
 
         HashCounter globalCount = new HashCounter();
         HashCounter localCount = new HashCounter();
 
 
-        Set<Integer> trash = new TreeSet<Integer>();
+
 
         for (int d = 0; d < depth; d++) {
 
-            for (Integer centre : centres) {
-                Integer storageParity = molecule.getAtom(centre).getStereoParity();
-                if(storageParity == 2)
-                    storageParity = -1;
-                int parity = storageParity * getParity(table, centre, previous);
-                if(parity != 0) {
-                    hash ^= rotate(parity, globalCount.register(parity));
-                    trash.add(centre);
-                }
-            }
-
-            centres.removeAll(trash);
-            trash.clear();
-
-            if (d != 0)
-                copy(current, previous);
-
-            for (int i = 0; i < precursorSeeds.length; i++) {
+            for (int i = 0; i < previous.length; i++) {
 
                 // local count keeps track of the value of aggregated neighbours
                 // therefore we need to clear on each neighbour hash otherwise
@@ -205,31 +225,58 @@ public class MolecularHashFactory {
 
                 current[i] = neighbourHash(i, previous[i], 0, table, previous, localCount);
 
-                globalCount.register(hash);
+            }
 
-                hash ^= rotate(current[i], globalCount.register(current[i]));
+            for (Integer centre : centres) {
+
+                Integer storageParity = molecule.getAtom(centre).getStereoParity();
+                if (storageParity == 2)
+                    storageParity = -1;
+                int hParity = getParity(table, centre, previous);
+                int parity  = storageParity * hParity;
+                if (parity != 0) {
+                    // can't set to previous... as this would alter other centres
+                    current[centre] *= (parity == -1 ? 1300141 : 1300199);
+                    trash.add(centre);
+                }
 
             }
+
+            centres.removeAll(trash);
+            trash.clear();
+
+            for(int i = 0; i < current.length; i++){
+                globalCount.register(hash);
+                hash ^= rotate(current[i], globalCount.register(current[i]));
+            }
+
+            copy(current, previous); // set the current values to the previous and repeat until depth
+
 
         }
 
         // un handled stereo centres need to do ensemble hash -
-        if(shallow && !centres.isEmpty()){
+        if (shallow && !centres.isEmpty()) {
+
+            int[] individual = new int[n];
 
             hash = 49157;
-            for(int i = 0; i < n; i++) {
+            for (int i = 0; i < n; i++) {
+                //System.out.println("preturbing: " + i);
                 int[] preturbed = Arrays.copyOf(precursorSeeds, n);
-                preturbed[i] = rotate(precursorSeeds[i], 1);
-                globalCount.register(preturbed[i]);
-                int value = getHash(table, preturbed, centres, molecule, false).hash;
-                hash ^= rotate(value, globalCount.register(value));
+                preturbed[i] = precursorSeeds[i] * 105341;
+                individual[i] = getHash(table, preturbed, new HashSet<Integer>(centres), molecule, false).hash;
+                globalCount.register(hash);
+                hash ^= rotate(individual[i], globalCount.register(individual[i]));
             }
+
+            return new MolecularHash(hash, individual);
         }
+
 
         return new MolecularHash(hash, precursorSeeds);
 
     }
-
 
 
     /**
@@ -249,7 +296,9 @@ public class MolecularHashFactory {
 
             if (connectionTable[index][j] != 0) {
                 counter.register(value); // avoid self xor'ing
-                value ^= rotate(precursorSeeds[j], counter.register(precursorSeeds[j]));
+                int from = rotate(precursorSeeds[j], counter.register(precursorSeeds[j]) - 1);
+                int result = value ^ from;
+                value = result;
 
                 //  value = currentDepth <= depth
                 //          ? neighbourHash(j, value, currentDepth + 1, connectionTable, precursorSeeds, counter) : value;
@@ -261,13 +310,19 @@ public class MolecularHashFactory {
     }
 
 
+    private static String toString(byte[][] table) {
+        StringBuilder sb = new StringBuilder();
+        for (byte[] aTable : table)
+            sb.append(Arrays.toString(aTable)).append("\n");
+        return sb.toString();
+    }
+
     private int getParity(byte[][] table, int i, int[] hashes) {
 
         byte[] row = table[i];
 
         int count = 0;
         int n = row.length;
-
 
         for (int j = 0; j < n; j++) {
 
@@ -278,12 +333,15 @@ public class MolecularHashFactory {
 
                 for (int k = j + 1; k < n; k++) {
 
-                    int cmp = hashes[k] - h;
+                    if (row[k] != 0) {
+                        int cmp = hashes[k] - h;
 
-                    // if this value is larger then the last value
-                    if (cmp > 0) count++;
-                    else if (cmp == 0)
-                        return 0;
+                        // if this value is larger then the last value
+                        if (cmp > 0) count++;
+                        else if (cmp == 0)
+                            return 0;
+
+                    }
 
                 }
 
@@ -439,7 +497,7 @@ public class MolecularHashFactory {
         } else {
             occurences.get(seed).increment();
         }
-        return rotate(seed, occurences.get(seed).intValue());
+        return rotate(seed, occurences.get(seed).intValue() - 1);
     }
 
 

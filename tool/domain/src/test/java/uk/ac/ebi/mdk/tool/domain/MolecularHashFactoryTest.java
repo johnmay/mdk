@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.tool.domain;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -34,7 +35,7 @@ import static org.openscience.cdk.tools.manipulator.AtomContainerManipulator.per
  */
 public class MolecularHashFactoryTest {
 
-    @Test
+    @Ignore
     public void testStereoHashing_ImplicitR() throws CDKException, IOException {
 
         IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("r-structures.sdf"),
@@ -51,7 +52,7 @@ public class MolecularHashFactoryTest {
 
     }
 
-    @Test
+    @Ignore
     public void testStereoHashing_ImplicitS() throws CDKException, IOException {
 
         IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("s-structures.sdf"),
@@ -71,22 +72,16 @@ public class MolecularHashFactoryTest {
     @Test
     public void testInositol() throws Exception {
 
-        IAtomContainer container = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268.mol", "myo-inositol");
+        IAtomContainer myoinositol1 = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268.mol", "myo-inositol");
+        IAtomContainer myoinositol2 = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268_Inv.mol", "myo-inositol");
 
-        MolecularHashFactory.getInstance().setDepth(1);
-
-        System.out.println(Integer.toHexString(MolecularHashFactory.getInstance().getHash(container).hash));
-
-    }
-
-    @Test
-    public void testInositol_Inv() throws Exception {
-
-        IAtomContainer container = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268_Inv.mol", "myo-inositol");
-
-
-        MolecularHashFactory.getInstance().setDepth(1);
-        System.out.println(Integer.toHexString(MolecularHashFactory.getInstance().getHash(container).hash));
+        // for all depths the values should be equal
+        for (int d = 0; d < 8; d++) {
+            MolecularHashFactory.getInstance().setDepth(d);
+            assertEquals("Inverse was not equal at depth= " + d,
+                         MolecularHashFactory.getInstance().getHash(myoinositol1).hash,
+                         MolecularHashFactory.getInstance().getHash(myoinositol2).hash);
+        }
 
     }
 
@@ -95,7 +90,7 @@ public class MolecularHashFactoryTest {
 
         IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("inositols.sdf"),
                                                            DefaultChemObjectBuilder.getInstance());
-        MolecularHashFactory.getInstance().setDepth(4);
+        MolecularHashFactory.getInstance().setDepth(3);
         System.out.println("inositols");
         int i = 0;
         while (reader.hasNext()) {
@@ -103,8 +98,7 @@ public class MolecularHashFactoryTest {
             percieveAtomTypesAndConfigureAtoms(container);
             System.out.printf("%20s: %s\n",
                               container.getProperty(CDKConstants.TITLE),
-                              Integer.toHexString(
-                                      MolecularHashFactory.getInstance().getHash(container).hash));
+                              Integer.toHexString(MolecularHashFactory.getInstance().getHash(container).hash));
 
         }
 
