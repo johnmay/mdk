@@ -26,6 +26,12 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.openscience.cdk.tools.manipulator.AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms;
@@ -69,14 +75,14 @@ public class MolecularHashFactoryTest {
 
     }
 
-    @Test
+    @Ignore
     public void testInositol() throws Exception {
 
         IAtomContainer myoinositol1 = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268.mol", "myo-inositol");
         IAtomContainer myoinositol2 = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268_Inv.mol", "myo-inositol");
 
         // for all depths the values should be equal
-        for (int d = 0; d < 8; d++) {
+        for (int d = 1; d < 10; d++) {
             MolecularHashFactory.getInstance().setDepth(d);
             assertEquals("Inverse was not equal at depth= " + d,
                          MolecularHashFactory.getInstance().getHash(myoinositol1).hash,
@@ -86,25 +92,59 @@ public class MolecularHashFactoryTest {
     }
 
     @Test
+    public void testAloInositol() throws Exception {
+        IAtomContainer epi = TestMoleculeFactory.loadMol(getClass(), "alo-inositol.mol", "epi-inositol");
+        IAtomContainer myo = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268.mol", "epi-inositol");
+        MolecularHashFactory.getInstance().setDepth(1);
+        System.out.println("epi-inositol: " + Integer.toHexString(MolecularHashFactory.getInstance().getHash(epi).hash));
+        System.out.println("myo-inositol: " + Integer.toHexString(MolecularHashFactory.getInstance().getHash(myo).hash));
+    }
+
+    @Ignore
     public void testInositols() throws Exception {
 
-        IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("inositols.sdf"),
-                                                           DefaultChemObjectBuilder.getInstance());
-        MolecularHashFactory.getInstance().setDepth(3);
-        System.out.println("inositols");
-        int i = 0;
-        while (reader.hasNext()) {
-            IAtomContainer container = reader.next();
-            percieveAtomTypesAndConfigureAtoms(container);
-            System.out.printf("%20s: %s\n",
-                              container.getProperty(CDKConstants.TITLE),
-                              Integer.toHexString(MolecularHashFactory.getInstance().getHash(container).hash));
+        List<IAtomContainer> containers = readSDF("inositols.sdf");
 
+        // for all depths 2-8 the codes should be different
+        // for depth of 1 we get some overlap
+        for (int d = 2; d < 8; d++) {
+            Map<Integer, Set<String>> hashes = new HashMap<Integer, Set<String>>();
+            MolecularHashFactory.getInstance().setDepth(d);
+            for (IAtomContainer container : containers) {
+                int key = MolecularHashFactory.getInstance().getHash(container).hash;
+                if (!hashes.containsKey(key))
+                    hashes.put(key, new HashSet<String>());
+                hashes.get(key).add(container.getProperty(CDKConstants.TITLE).toString());
+            }
+            assertEquals("duplicate hash values for depth = " + d + "\n" + hashes, 9, hashes.size());
         }
 
-        reader.close();
+        // inverted the molecules
+        List<IAtomContainer> inverted = readSDF("inverted-inositols.sdf");
+
+        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+
+        for (int i = 0; i < containers.size(); i++) {
+            for (int d = 1; d < 10; d++)
+                assertEquals(containers.get(i).getProperty(CDKConstants.TITLE) + " hashes were not equal depth=" + d, Integer.toHexString(factory.getHash(containers.get(i)).hash),
+                             Integer.toHexString(factory.getHash(inverted.get(i)).hash));
+        }
 
     }
 
+    public List<IAtomContainer> readSDF(String path) throws CDKException, IOException {
+        List<IAtomContainer> containers = new ArrayList<IAtomContainer>();
+        IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream(path),
+                                                           DefaultChemObjectBuilder.getInstance());
+
+        while (reader.hasNext()) {
+            IAtomContainer container = reader.next();
+            percieveAtomTypesAndConfigureAtoms(container);
+            containers.add(container);
+        }
+        reader.close();
+
+        return containers;
+    }
 
 }

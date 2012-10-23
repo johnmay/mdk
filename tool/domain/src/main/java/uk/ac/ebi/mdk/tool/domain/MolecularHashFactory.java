@@ -30,11 +30,14 @@ import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -175,10 +178,12 @@ public class MolecularHashFactory {
     public MolecularHash getHash(byte[][] table, int[] precursorSeeds,
                                  Set<Integer> centres, IAtomContainer molecule, boolean shallow) {
 
-       // System.out.println("seeds: " + toString(precursorSeeds));
+        // System.out.println("seeds: " + toString(precursorSeeds));
 
         int hash = 49157;
         int n = precursorSeeds.length;
+
+        int[] parities = new int[n];
 
         int[] previous = new int[n];
         int[] current = new int[n];
@@ -188,6 +193,9 @@ public class MolecularHashFactory {
 
         Set<Integer> trash = new TreeSet<Integer>();
 
+        HashCounter globalCount = new HashCounter();
+
+
         // set the parities
         for (Integer centre : centres) {
 
@@ -195,10 +203,16 @@ public class MolecularHashFactory {
             if (storageParity == 2)
                 storageParity = -1;
             int hParity = getParity(table, centre, previous);
-            int parity  = storageParity * hParity;
+            int parity = storageParity * hParity;
             if (parity != 0) {
                 // can't set to previous... as this would alter other centres
-                current[centre] *= (parity == -1 ? 1300141 : 1300199);
+                int x = (parity == -1 ? 1300141 : 105913);
+                current[centre] *= x;
+                //current[centre] *= rotate(x, globalCount.register(x));
+
+                //System.out.println(centre + ": " + "(" + 0 + ") " + +parity + " [" + storageParity + ", " + hParity + "]");
+
+                parities[centre] = parity;
                 trash.add(centre);
             }
 
@@ -207,11 +221,7 @@ public class MolecularHashFactory {
         trash.clear();
         copy(current, previous);  // set the adjusted current values (with parity) to the previous seeds
 
-        HashCounter globalCount = new HashCounter();
         HashCounter localCount = new HashCounter();
-
-
-
 
         for (int d = 0; d < depth; d++) {
 
@@ -233,11 +243,15 @@ public class MolecularHashFactory {
                 if (storageParity == 2)
                     storageParity = -1;
                 int hParity = getParity(table, centre, previous);
-                int parity  = storageParity * hParity;
+                int parity = storageParity * hParity;
                 if (parity != 0) {
                     // can't set to previous... as this would alter other centres
-                    current[centre] *= (parity == -1 ? 1300141 : 1300199);
+                    int x = (parity == -1 ? 1300141 : 105913);
+                    current[centre] *= x;
+                    //current[centre] *= rotate(x, globalCount.register(x));
+                    parities[centre] = parity;
                     trash.add(centre);
+                    //System.out.println(centre + ": " + "(" + d + ") " + +parity + " [" + storageParity + ", " + hParity + "]");
                 }
 
             }
@@ -245,37 +259,106 @@ public class MolecularHashFactory {
             centres.removeAll(trash);
             trash.clear();
 
-            for(int i = 0; i < current.length; i++){
-                globalCount.register(hash);
-                hash ^= rotate(current[i], globalCount.register(current[i]));
-            }
 
             copy(current, previous); // set the current values to the previous and repeat until depth
 
 
+            for (int i = 0; i < current.length; i++) {
+                globalCount.register(hash);
+                hash ^= rotate(current[i], globalCount.register(current[i]) - 1);
+            }
+
         }
 
+
+        //if(centres.size() < 6)
+        System.out.println(buildParitySets(table, parities));
+
+        globalCount.clear();
         // un handled stereo centres need to do ensemble hash -
         if (shallow && !centres.isEmpty()) {
 
             int[] individual = new int[n];
+
+            Map<List<Integer>, MutableInt> count = new HashMap<List<Integer>, MutableInt>();
+
 
             hash = 49157;
             for (int i = 0; i < n; i++) {
                 //System.out.println("preturbing: " + i);
                 int[] preturbed = Arrays.copyOf(precursorSeeds, n);
                 preturbed[i] = precursorSeeds[i] * 105341;
-                individual[i] = getHash(table, preturbed, new HashSet<Integer>(centres), molecule, false).hash;
+                MolecularHash subhash = getHash(table, preturbed, new HashSet<Integer>(centres), molecule, false);
+                individual[i] = subhash.hash;
+
+                for(List<Integer> set : subhash.parities){
+                    if(!count.containsKey(set))
+                        count.put(set, new MutableInt(0));
+                    count.get(set).increment();
+                }
+
+                // if(i < 6)
+                //System.out.println("[" + i + "] 0x" + Integer.toHexString(individual[i]));
                 globalCount.register(hash);
-                hash ^= rotate(individual[i], globalCount.register(individual[i]));
+                hash ^= rotate(individual[i], globalCount.register(individual[i]) - 1);
             }
 
-            return new MolecularHash(hash, individual);
+            System.out.println(count);
+
+            return new MolecularHash(hash, individual, buildParitySets(table, parities));
         }
 
 
-        return new MolecularHash(hash, precursorSeeds);
+        return new MolecularHash(hash, precursorSeeds, buildParitySets(table, parities));
 
+    }
+
+    private List<List<Integer>> buildParitySets(byte[][] table, int[] parities) {
+
+        List<List<Integer>> combined = new ArrayList<List<Integer>>();
+
+        int n = table.length;
+
+        for (int i = 0; i < n; i++) {
+
+            List<Integer> neighbours = new ArrayList<Integer>();
+
+            for (int j = 0; j < i; j++) {
+                if (table[i][j] != 0) {
+                    neighbours.add(parities[j]);
+                    if(neighbours.size() == 1)
+                        neighbours.add(parities[i]);
+                }
+            }
+
+            if (!neighbours.isEmpty())
+                combined.add(neighbours);
+
+        }
+
+        return combined;
+
+    }
+
+    private String printParities(int[] paraties) {
+        StringBuilder sb = new StringBuilder("p = [");
+        int n = paraties.length - 1;
+        int p = 0, m = 0;
+        for (int i = 0; i <= n; i++) {
+            if (paraties[i] == 0)
+                sb.append(" ");
+            if (paraties[i] == 1) {
+                sb.append("+");
+                p++;
+            }
+            if (paraties[i] == -1) {
+                sb.append("-");
+                m++;
+            }
+
+        }
+        sb.append("] ").append(p).append("/").append(m);
+        return sb.toString();
     }
 
 

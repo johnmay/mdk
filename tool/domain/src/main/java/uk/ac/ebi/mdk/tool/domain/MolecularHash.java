@@ -23,9 +23,11 @@ package uk.ac.ebi.mdk.tool.domain;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -54,6 +56,7 @@ public class MolecularHash {
      */
     private int[] individual;
 
+    public final List<List<Integer>> parities;
 
     /**
      * Create a new molecule hash (should be done via the factory)
@@ -64,6 +67,13 @@ public class MolecularHash {
     protected MolecularHash(int hash, int[] individual) {
         this.hash = hash;
         this.individual = individual;
+        this.parities = new ArrayList<List<Integer>>();
+    }
+
+    protected MolecularHash(int hash, int[] individual, List<List<Integer>> parities) {
+        this.hash = hash;
+        this.individual = individual;
+        this.parities = parities;
     }
 
     /**
