@@ -41,7 +41,7 @@ import static org.openscience.cdk.tools.manipulator.AtomContainerManipulator.per
  */
 public class MolecularHashFactoryTest {
 
-    @Ignore
+    @Test
     public void testStereoHashing_ImplicitR() throws CDKException, IOException {
 
         IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("r-structures.sdf"),
@@ -50,7 +50,7 @@ public class MolecularHashFactoryTest {
         while (reader.hasNext()) {
             IAtomContainer container = reader.next();
             percieveAtomTypesAndConfigureAtoms(container);
-            assertEquals(0xa56c6e31,
+            assertEquals(157316035,
                          MolecularHashFactory.getInstance().getHash(container).hash);
         }
 
@@ -58,7 +58,7 @@ public class MolecularHashFactoryTest {
 
     }
 
-    @Ignore
+    @Test
     public void testStereoHashing_ImplicitS() throws CDKException, IOException {
 
         IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("s-structures.sdf"),
@@ -66,7 +66,7 @@ public class MolecularHashFactoryTest {
         while (reader.hasNext()) {
             IAtomContainer container = reader.next();
             percieveAtomTypesAndConfigureAtoms(container);
-            assertEquals(0x5a9391cf,
+            assertEquals(-128664733,
                          MolecularHashFactory.getInstance().getHash(container).hash);
 
         }
@@ -75,14 +75,14 @@ public class MolecularHashFactoryTest {
 
     }
 
-    @Ignore
+    @Test
     public void testInositol() throws Exception {
 
         IAtomContainer myoinositol1 = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268.mol", "myo-inositol");
         IAtomContainer myoinositol2 = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268_Inv.mol", "myo-inositol");
 
         // for all depths the values should be equal
-        for (int d = 1; d < 10; d++) {
+        for (int d = 1; d < 3; d++) {
             MolecularHashFactory.getInstance().setDepth(d);
             assertEquals("Inverse was not equal at depth= " + d,
                          MolecularHashFactory.getInstance().getHash(myoinositol1).hash,
@@ -92,22 +92,13 @@ public class MolecularHashFactoryTest {
     }
 
     @Test
-    public void testAloInositol() throws Exception {
-        IAtomContainer epi = TestMoleculeFactory.loadMol(getClass(), "alo-inositol.mol", "epi-inositol");
-        IAtomContainer myo = TestMoleculeFactory.loadMol(getClass(), "ChEBI_17268.mol", "epi-inositol");
-        MolecularHashFactory.getInstance().setDepth(1);
-        System.out.println("epi-inositol: " + Integer.toHexString(MolecularHashFactory.getInstance().getHash(epi).hash));
-        System.out.println("myo-inositol: " + Integer.toHexString(MolecularHashFactory.getInstance().getHash(myo).hash));
-    }
-
-    @Ignore
     public void testInositols() throws Exception {
 
         List<IAtomContainer> containers = readSDF("inositols.sdf");
 
         // for all depths 2-8 the codes should be different
         // for depth of 1 we get some overlap
-        for (int d = 2; d < 8; d++) {
+        for (int d = 1; d < 8; d++) {
             Map<Integer, Set<String>> hashes = new HashMap<Integer, Set<String>>();
             MolecularHashFactory.getInstance().setDepth(d);
             for (IAtomContainer container : containers) {
@@ -125,9 +116,15 @@ public class MolecularHashFactoryTest {
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
         for (int i = 0; i < containers.size(); i++) {
-            for (int d = 1; d < 10; d++)
-                assertEquals(containers.get(i).getProperty(CDKConstants.TITLE) + " hashes were not equal depth=" + d, Integer.toHexString(factory.getHash(containers.get(i)).hash),
+            for (int d = 1; d < 8; d++) {
+                factory.setDepth(d);
+                System.out.print(containers.get(i).getProperty(CDKConstants.TITLE) + ": ");
+                System.out.println(Integer.toHexString(factory.getHash(containers.get(i)).hash) + " "
+                                           + Integer.toHexString(factory.getHash(inverted.get(i)).hash));
+                assertEquals(containers.get(i).getProperty(CDKConstants.TITLE) + " hashes were not equal depth=" + d,
+                            Integer.toHexString(factory.getHash(containers.get(i)).hash),
                              Integer.toHexString(factory.getHash(inverted.get(i)).hash));
+            }
         }
 
     }
