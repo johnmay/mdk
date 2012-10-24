@@ -62,7 +62,12 @@ public class SeedFactory {
      * @return
      */
     public Collection<AtomSeed> getSeeds(Class<? extends AtomSeed>... classes) {
-        Set<AtomSeed> seeds = new LinkedHashSet<AtomSeed>();
+        Set<AtomSeed> seeds = new TreeSet<AtomSeed>(new Comparator<AtomSeed>() {
+            @Override
+            public int compare(AtomSeed o1, AtomSeed o2) {
+                return o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
+            }
+        });
         for (Class<? extends AtomSeed> clazz : classes) {
             seeds.add(getSeed(clazz));
         }
