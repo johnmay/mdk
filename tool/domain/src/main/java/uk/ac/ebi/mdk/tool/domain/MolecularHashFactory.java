@@ -36,16 +36,15 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import static org.openscience.cdk.interfaces.IAtomType.Hybridization.SP3;
 import static org.openscience.cdk.interfaces.IBond.Stereo.DOWN;
+import static org.openscience.cdk.interfaces.IBond.Stereo.DOWN_INVERTED;
 import static org.openscience.cdk.interfaces.IBond.Stereo.UP;
+import static org.openscience.cdk.interfaces.IBond.Stereo.UP_INVERTED;
 
 /**
  * MolecularHashFactory - 2011.11.09 <br>
@@ -177,7 +176,7 @@ public class MolecularHashFactory {
     }
 
     public MolecularHash getHash(byte[][] table, int[] precursorSeeds,
-                                BitSet stereoatoms, IAtomContainer molecule, boolean shallow) {
+                                 BitSet stereoatoms, IAtomContainer molecule, boolean shallow) {
 
         // System.out.println("seeds: " + toString(precursorSeeds));
         int n = precursorSeeds.length;
@@ -215,14 +214,13 @@ public class MolecularHashFactory {
 
         }
 
-        for(HashCounter counter : counters)
+        for (HashCounter counter : counters)
             globalCount.addAll(counter);
 
         int hash = 49157;
         for (int i = 0; i < current.length; i++) {
             hash ^= rotate(current[i], globalCount.register(current[i]));
         }
-
 
 
         globalCount.clear();
@@ -346,8 +344,8 @@ public class MolecularHashFactory {
      * <p/>
      * The max depth is set with the {@see setDepth(int depth)} method.
      *
-     * @param index        Atom index to add the neighbour values too
-     * @param value        The current value of the above atom
+     * @param index Atom index to add the neighbour values too
+     * @param value The current value of the above atom
      * @return Computed value
      */
     private int neighbourHash(int index, int value, byte[][] connectionTable, int[] precursorSeeds, HashCounter counter) {
@@ -494,22 +492,36 @@ public class MolecularHashFactory {
     private boolean candidateTetrahedralCenter(IAtomContainer container, IAtom atom) {
 
 
-        if ((atom.getStereoParity() != null
-                && (atom.getStereoParity() == 1 || atom.getStereoParity() == 2)
-                && SP3.equals(atom.getHybridization())
-                && atom.getFormalNeighbourCount() > 2)) {
-            for (IBond bond : container.getConnectedBondsList(atom)) {
+        if (SP3.equals(atom.getHybridization())
+                && atom.getFormalNeighbourCount() > 2
+                && hasStereoBonds(container, atom)) {
 
-                IBond.Stereo stereo = bond.getStereo();
-
-                if (UP.equals(stereo) || DOWN.equals(stereo)) {
-                    return true;
-                }
+            // we don't use the MDL parity
+            int p = ParitiyCalculator.getTetrahedralParity(atom, container);
+            if (p != 0) {
+                if(p == -1)
+                    p = 2;
+                atom.setStereoParity(p);
+                return true;
             }
         }
 
         return false;
 
+    }
+
+    private boolean hasStereoBonds(IAtomContainer container, IAtom atom) {
+        for (IBond bond : container.getConnectedBondsList(atom)) {
+
+            IBond.Stereo stereo = bond.getStereo();
+
+            if (UP.equals(stereo) || DOWN.equals(stereo)
+                    || UP_INVERTED.equals(stereo) || DOWN_INVERTED.equals(stereo)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

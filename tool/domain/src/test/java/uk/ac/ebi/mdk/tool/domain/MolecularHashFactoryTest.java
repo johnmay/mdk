@@ -57,7 +57,7 @@ import static org.openscience.cdk.tools.manipulator.AtomContainerManipulator.per
  */
 public class MolecularHashFactoryTest {
 
-    @Ignore
+    @Test
     public void testStereoHashing_ImplicitR() throws CDKException, IOException {
 
         IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("r-structures.sdf"),
@@ -74,7 +74,7 @@ public class MolecularHashFactoryTest {
 
     }
 
-    @Ignore
+    @Test
     public void testStereoHashing_ImplicitS() throws CDKException, IOException {
 
         IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("s-structures.sdf"),
@@ -91,7 +91,41 @@ public class MolecularHashFactoryTest {
 
     }
 
-    @Ignore
+    @Test
+    public void testStereoHashing_ExplicitR() throws CDKException, IOException {
+
+        IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("r-structures-explicit.sdf"),
+                                                           DefaultChemObjectBuilder.getInstance());
+
+        while (reader.hasNext()) {
+            IAtomContainer container = reader.next();
+            percieveAtomTypesAndConfigureAtoms(container);
+            assertEquals(-1043146187,
+                         MolecularHashFactory.getInstance().getHash(container).hash);
+        }
+
+        reader.close();
+
+    }
+
+    @Test
+    public void testStereoHashing_ExplicitS() throws CDKException, IOException {
+
+        IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("s-structures-explicit.sdf"),
+                                                           DefaultChemObjectBuilder.getInstance());
+        while (reader.hasNext()) {
+            IAtomContainer container = reader.next();
+            percieveAtomTypesAndConfigureAtoms(container);
+            assertEquals(2109242676,
+                         MolecularHashFactory.getInstance().getHash(container).hash);
+
+        }
+
+        reader.close();
+
+    }
+
+    @Test
     public void testInositol_unique() throws IOException, CDKException {
 
         List<IAtomContainer> containers = readSDF("inositols.sdf");
@@ -111,7 +145,7 @@ public class MolecularHashFactoryTest {
         }
     }
 
-    @Ignore
+    @Test
     public void testInositolInversions() throws Exception {
 
         List<IAtomContainer> containers = readSDF("inositols.sdf");
@@ -149,7 +183,7 @@ public class MolecularHashFactoryTest {
      * Tests that aldehydo-D-lyxose, aldehydo-L-lyxose and L-arabinitol (not a
      * aldehyo-lyxoses) hash to different values
      */
-    @Ignore
+    @Test
     public void testAldehydolyxoses() throws IOException, CDKException {
 
         List<IAtomContainer> containers = readSDF("aldehydo-lyxoses.sdf");
@@ -243,7 +277,7 @@ public class MolecularHashFactoryTest {
                                                                                  SeedFactory.getInstance().getSeeds(classes)).hash);
     }
 
-    @Ignore
+    @Test
     public void testChEBI() throws IOException, CDKException {
         List<IAtomContainer> containers = readSDF("ChEBI_lite.sdf", 5000);
 
@@ -275,7 +309,7 @@ public class MolecularHashFactoryTest {
 
         System.out.println(map.size());
 
-        SDFWriter writer = new SDFWriter(new FileOutputStream("/Users/johnmay/Desktop/chebi-collapsed-2.sdf"));
+        SDFWriter writer = new SDFWriter(new FileOutputStream("/Users/johnmay/Desktop/chebi-collapsed-new.sdf"));
 
         for (Map.Entry<Integer, IAtomContainer> entry : map.entrySet()) {
             if (entry.getValue().getFlag(CDKConstants.VISITED))
