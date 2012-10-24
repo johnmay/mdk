@@ -42,7 +42,7 @@ public class ParitiyCalculatorTest {
 
             IAtom chiral = container.getAtom(0);
 
-            int p = new ParitiyCalculator().getTetrahedralParity(chiral, container);
+            int p = ParitiyCalculator.getMDLTetrahedralParity(chiral, container);
 
             if(p == -1)
                 p = 2;
@@ -65,7 +65,7 @@ public class ParitiyCalculatorTest {
 
             IAtom chiral = container.getAtom(0);
 
-            int p = new ParitiyCalculator().getTetrahedralParity(chiral, container);
+            int p = ParitiyCalculator.getMDLTetrahedralParity(chiral, container);
 
             if(p == -1)
                 p = 2;
@@ -88,7 +88,7 @@ public class ParitiyCalculatorTest {
 
             IAtom chiral = container.getAtom(0);
 
-            int p = new ParitiyCalculator().getTetrahedralParity(chiral, container);
+            int p = ParitiyCalculator.getMDLTetrahedralParity(chiral, container);
 
             if(p == -1)
                 p = 2;
@@ -112,7 +112,7 @@ public class ParitiyCalculatorTest {
 
             IAtom chiral = container.getAtom(0);
 
-            int p = new ParitiyCalculator().getTetrahedralParity(chiral, container);
+            int p = ParitiyCalculator.getMDLTetrahedralParity(chiral, container);
 
             if(p == -1)
                 p = 2;

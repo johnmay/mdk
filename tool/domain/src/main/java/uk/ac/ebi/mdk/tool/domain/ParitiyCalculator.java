@@ -34,6 +34,10 @@ public class ParitiyCalculator {
         return getTetrahedralParity(atom, container.getConnectedAtomsList(atom), container);
     }
 
+    public static int getMDLTetrahedralParity(IAtom atom, IAtomContainer container) {
+        return getMDLTetrahedralParity(atom, container.getConnectedAtomsList(atom), container);
+    }
+
     public static int getTetrahedralParity(IAtom atom, List<IAtom> neighbours, IAtomContainer container) {
 
         if (neighbours.size() == 3)
