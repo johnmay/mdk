@@ -30,12 +30,11 @@ import java.util.List;
  */
 public class ParitiyCalculator {
 
-    public int getTetrahedralParity(IAtom atom, IAtomContainer container) {
+    public static int getTetrahedralParity(IAtom atom, IAtomContainer container) {
         return getTetrahedralParity(atom, container.getConnectedAtomsList(atom), container);
     }
 
-
-    public int getTetrahedralParity(IAtom atom, List<IAtom> neighbours, IAtomContainer container) {
+    public static int getTetrahedralParity(IAtom atom, List<IAtom> neighbours, IAtomContainer container) {
 
         if (neighbours.size() == 3)
             neighbours.add(atom);
@@ -51,32 +50,49 @@ public class ParitiyCalculator {
 
     }
 
-    private Matrix getTetrahedralParityMatrix(IAtom chiral, List<IAtom> atoms, IAtomContainer container) {
+    public static int getMDLTetrahedralParity(IAtom atom, List<IAtom> neighbours, IAtomContainer container) {
+
+        int n = neighbours.size();
+
+        // shifts any hydrogens to be the last neighbour - if we have a hydrogen we
+        // must have 4 neighbours (otherwise we would have an equal)
+        if (n == 4) {
+
+            for (int i = 0; i < n - 1; i++) {
+
+                IAtom neighbour = neighbours.get(i);
+
+                if ("H".equals(neighbour.getSymbol()))
+                    neighbours.add(neighbours.remove(i));
+
+            }
+        }
+
+        return getTetrahedralParity(atom, neighbours, container);
+
+    }
+
+    private static Matrix getTetrahedralParityMatrix(IAtom chiral, List<IAtom> atoms, IAtomContainer container) {
 
         int n = atoms.size();
 
-        if (n != 4)
-            throw new IllegalArgumentException("4 atoms required to calculate parity");
-
-        for (int i = 0; i < n - 1; i++)
-            if ("H".equals(atoms.get(i).getSymbol()))
-                atoms.add(atoms.remove(i)); // shift hydrogen to the end
 
         Matrix m = new Matrix(4, 4);
 
         // using 2D coordinates for now
         for (int i = 0; i < n; i++) {
 
-            IAtom a = atoms.get(i);
-            Point2d p = a.getPoint2d();
+            IAtom   atom  = atoms.get(i);
+            Point2d point = atom.getPoint2d();
 
             // set the coordinates
-            m.set(i, 0, p.x);
-            m.set(i, 1, p.y);
+            m.set(i, 0, point.x);
+            m.set(i, 1, point.y);
             m.set(i, 2, 1);
 
-            if (a != chiral)
-                m.set(i, 3, getValue(container.getBond(chiral, a)));
+            // set the sign of the stereo bond
+            if (atom != chiral)
+                m.set(i, 3, getValue(container.getBond(chiral, atom)));
 
         }
 
@@ -84,7 +100,7 @@ public class ParitiyCalculator {
 
     }
 
-    private int getValue(IBond bond) {
+    private static int getValue(IBond bond) {
 
         IBond.Stereo stereo = bond.getStereo();
 
