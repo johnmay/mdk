@@ -30,6 +30,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.stereo.StereoTool;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ChargeSeed;
@@ -204,6 +205,32 @@ public class MolecularHashFactoryTest {
 
     }
 
+    @Test
+    public void testDeoxyhexoses() throws IOException, CDKException {
+
+        List<IAtomContainer> deoxyhexoses = readSDF("deoxyhexoses.sdf");
+
+        MolecularHashFactory.getInstance().setDepth(4);
+        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+
+        IAtomContainer dquinovose          = deoxyhexoses.get(0);
+        IAtomContainer aldehydo_l_rhamnose = deoxyhexoses.get(1);
+        IAtomContainer aldehydo_d_rhamnose = deoxyhexoses.get(1);
+
+
+        assertNotSame("D-quinovose and aldehydo-L-rhamnose hashed to the same value",
+                      factory.getHash(dquinovose).hash,
+                      factory.getHash(aldehydo_l_rhamnose).hash);
+        assertNotSame("D-quinovose and aldehydo-D-rhamnose hashed to the same value",
+                      factory.getHash(dquinovose).hash,
+                      factory.getHash(aldehydo_d_rhamnose).hash);
+        assertNotSame("aldehydo-L-rhamnose and aldehydo-D-rhamnose hashed to the same value",
+                      factory.getHash(aldehydo_l_rhamnose).hash,
+                      factory.getHash(aldehydo_d_rhamnose).hash);
+
+
+    }
+
     private String toString(IAtomContainer container) {
         return container.getProperty(CDKConstants.TITLE) + ": " + Integer.toHexString(MolecularHashFactory.getInstance().getHash(container).hash);
     }
@@ -274,12 +301,16 @@ public class MolecularHashFactoryTest {
 
 
     public List<IAtomContainer> readSDF(String path) throws CDKException, IOException {
-        return readSDF(path, -1);
+        return readSDF(getClass(), path, -1);
     }
 
     public List<IAtomContainer> readSDF(String path, int n) throws CDKException, IOException {
+        return readSDF(getClass(), path, n);
+    }
+
+    public static List<IAtomContainer> readSDF(Class c, String path, int n) throws CDKException, IOException {
         List<IAtomContainer> containers = new ArrayList<IAtomContainer>();
-        IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream(path),
+        IteratingMDLReader reader = new IteratingMDLReader(c.getResourceAsStream(path),
                                                            DefaultChemObjectBuilder.getInstance(),
                                                            true);
 
