@@ -32,6 +32,7 @@ import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -155,9 +156,9 @@ public class MolecularHashFactory {
 
         int[] precursorSeeds = getAtomSeeds(molecule, methods);
         byte[][] table = matrixFactory.getConnectionMatrix(molecule);
-        Set<Integer> centres = getTetrahedralCentres(molecule);
+        BitSet stereoatoms = getTetrahedralCentres(molecule);
 
-        return getHash(table, precursorSeeds, centres, molecule, true);
+        return getHash(table, precursorSeeds, stereoatoms, molecule, true);
 
     }
 
@@ -176,7 +177,7 @@ public class MolecularHashFactory {
     }
 
     public MolecularHash getHash(byte[][] table, int[] precursorSeeds,
-                                 Set<Integer> centres, IAtomContainer molecule, boolean shallow) {
+                                BitSet stereoatoms, IAtomContainer molecule, boolean shallow) {
 
         // System.out.println("seeds: " + toString(precursorSeeds));
         int n = precursorSeeds.length;
@@ -194,7 +195,7 @@ public class MolecularHashFactory {
 
         //current = setParity(centres, table, current, previous, molecule);
         //copy(current, previous);
-        current = setParity(centres, table, current, previous, molecule, globalCount, parities);
+        current = setParity(stereoatoms, table, current, previous, molecule);
         copy(current, previous); // set the current values to the previous and repeat until depth
 
         HashCounter[] counters = new HashCounter[n];
@@ -209,7 +210,7 @@ public class MolecularHashFactory {
                 current[i] = neighbourHash(i, previous[i], table, previous, counters[i]);
             }
 
-            current = setParity(centres, table, current, previous, molecule, globalCount, parities);
+            current = setParity(stereoatoms, table, current, previous, molecule);
             copy(current, previous); // set the current values to the previous and repeat until depth
 
         }
@@ -222,25 +223,20 @@ public class MolecularHashFactory {
             hash ^= rotate(current[i], globalCount.register(current[i]));
         }
 
-        if(centres.isEmpty())
-            return new MolecularHash(hash, current);
 
 
         globalCount.clear();
         // un handled stereo centres need to do ensemble hash -
-        if (shallow && !centres.isEmpty()) {
+        if (shallow && !stereoatoms.isEmpty()) {
 
             int[] individual = new int[n];
 
             Map<List<Integer>, MutableInt> count = new HashMap<List<Integer>, MutableInt>();
 
-
-            hash = 49157;
             for (int i = 0; i < n; i++) {
                 int[] preturbed = Arrays.copyOf(precursorSeeds, n);
                 preturbed[i] = precursorSeeds[i] * 105341;
-                MolecularHash subhash = getHash(table, preturbed, new HashSet<Integer>(centres), molecule, false);
-                individual[i] = subhash.hash;
+                individual[i] = getHash(table, preturbed, (BitSet) stereoatoms.clone(), molecule, false).hash;
                 globalCount.register(hash);
                 hash ^= rotate(individual[i], globalCount.register(individual[i]));
             }
@@ -253,20 +249,17 @@ public class MolecularHashFactory {
 
     }
 
-    public int[] setParity(Set<Integer> centres,
+    public int[] setParity(BitSet stereoatoms,
                            byte[][] table,
                            int[] current,
                            int[] previous,
-                           IAtomContainer molecule,
-                           HashCounter counter,
-                           int[] paraties) {
+                           IAtomContainer molecule) {
 
         boolean found = false;
 
-        Set<Integer> trash = new HashSet<Integer>();
-        for (Integer centre : centres) {
+        for (int i = stereoatoms.nextSetBit(0); i >= 0; i = stereoatoms.nextSetBit(i + 1)) {
 
-            Integer storage = molecule.getAtom(centre).getStereoParity();
+            Integer storage = molecule.getAtom(i).getStereoParity();
 
             if (storage == null)
                 throw new IllegalStateException("tried to set parities with null storage parity");
@@ -274,29 +267,23 @@ public class MolecularHashFactory {
             if (storage == 2)
                 storage = -1;
 
-            int order = getParity(table, centre, previous);
+            int order = getParity(table, i, previous);
 
             int parity = storage * order;
 
             // can't set to previous... as this would alter other centres
             if (parity != 0) {
-                int h = (parity == -1 ? 1300141 : 105913);
-                current[centre] *= h;
-                trash.add(centre);
+                current[i] *= (parity == -1 ? 1300141 : 105913);
                 found = true;
+                stereoatoms.clear(i);
             }
-
-            paraties[centre] = parity;
-
 
         }
 
-        centres.removeAll(trash);
-        trash.clear();
 
-        if (found && !centres.isEmpty()) {
+        if (found && !stereoatoms.isEmpty()) {
             copy(current, previous);
-            current = setParity(centres, table, current, previous, molecule, counter, paraties);
+            current = setParity(stereoatoms, table, current, previous, molecule);
             return current;
         }
 
@@ -361,7 +348,6 @@ public class MolecularHashFactory {
      *
      * @param index        Atom index to add the neighbour values too
      * @param value        The current value of the above atom
-     * @param currentDepth The current depth
      * @return Computed value
      */
     private int neighbourHash(int index, int value, byte[][] connectionTable, int[] precursorSeeds, HashCounter counter) {
@@ -491,17 +477,17 @@ public class MolecularHashFactory {
 
     }
 
-    private Set<Integer> getTetrahedralCentres(IAtomContainer container) {
+    private BitSet getTetrahedralCentres(IAtomContainer container) {
 
-        Set<Integer> centres = new TreeSet<Integer>();
+        BitSet chiralatoms = new BitSet(container.getAtomCount());
 
         for (int i = 0; i < container.getAtomCount(); i++) {
             if (candidateTetrahedralCenter(container, container.getAtom(i))) {
-                centres.add(i);
+                chiralatoms.set(i);
             }
         }
 
-        return centres;
+        return chiralatoms;
 
     }
 
