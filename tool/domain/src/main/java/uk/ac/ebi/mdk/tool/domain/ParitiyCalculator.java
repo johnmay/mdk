@@ -23,6 +23,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 import javax.vecmath.Point2d;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -30,15 +32,22 @@ import java.util.List;
  */
 public class ParitiyCalculator {
 
-    public static int getTetrahedralParity(IAtom atom, IAtomContainer container) {
-        return getTetrahedralParity(atom, container.getConnectedAtomsList(atom), container);
+    public static int getTetrahedralParity(IAtom atom, final IAtomContainer container) {
+        List<IAtom> neighbours = container.getConnectedAtomsList(atom);
+        Collections.sort(neighbours, new Comparator<IAtom>() {
+            @Override
+            public int compare(IAtom o1, IAtom o2) {
+                return container.getAtomNumber(o1) - container.getAtomNumber(o2);
+            }
+        });
+        return getTetrahedralParity(atom, neighbours, container);
     }
 
     public static int getMDLTetrahedralParity(IAtom atom, IAtomContainer container) {
         return getMDLTetrahedralParity(atom, container.getConnectedAtomsList(atom), container);
     }
 
-    public static int getTetrahedralParity(IAtom atom, List<IAtom> neighbours, IAtomContainer container) {
+    public static int getTetrahedralParity(IAtom atom, List<IAtom> neighbours, final IAtomContainer container) {
 
         if (neighbours.size() == 3)
             neighbours.add(atom);
@@ -54,7 +63,14 @@ public class ParitiyCalculator {
 
     }
 
-    public static int getMDLTetrahedralParity(IAtom atom, List<IAtom> neighbours, IAtomContainer container) {
+    public static int getMDLTetrahedralParity(IAtom atom, List<IAtom> neighbours, final IAtomContainer container) {
+
+        Collections.sort(neighbours, new Comparator<IAtom>() {
+            @Override
+            public int compare(IAtom o1, IAtom o2) {
+                return container.getAtomNumber(o1) - container.getAtomNumber(o2);
+            }
+        });
 
         int n = neighbours.size();
 
@@ -86,7 +102,7 @@ public class ParitiyCalculator {
         // using 2D coordinates for now
         for (int i = 0; i < n; i++) {
 
-            IAtom   atom  = atoms.get(i);
+            IAtom atom = atoms.get(i);
             Point2d point = atom.getPoint2d();
 
             // set the coordinates

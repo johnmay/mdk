@@ -19,9 +19,11 @@ package uk.ac.ebi.mdk.tool.domain;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -121,6 +123,26 @@ public class ParitiyCalculatorTest {
                          chiral.getStereoParity().intValue());
 
         }
+
+    }
+
+
+    @Test
+    public void testDithianediols() throws IOException, CDKException {
+
+        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+        factory.setDepth(4);
+
+        List<IAtomContainer> dithianediols = MolecularHashFactoryTest.readSDF(getClass(), "dithianediols.sdf", -1);
+
+        IAtomContainer cisdithianediol   = dithianediols.get(0);
+        IAtomContainer transdithianediol = dithianediols.get(1);
+
+        Assert.assertEquals(-1, ParitiyCalculator.getMDLTetrahedralParity(cisdithianediol.getAtom(1), cisdithianediol));
+        Assert.assertEquals(-1, ParitiyCalculator.getMDLTetrahedralParity(cisdithianediol.getAtom(5), cisdithianediol));
+
+        Assert.assertEquals(1, ParitiyCalculator.getMDLTetrahedralParity(transdithianediol.getAtom(3), transdithianediol));
+        Assert.assertEquals(-1,  ParitiyCalculator.getMDLTetrahedralParity(transdithianediol.getAtom(4), transdithianediol));
 
     }
 }

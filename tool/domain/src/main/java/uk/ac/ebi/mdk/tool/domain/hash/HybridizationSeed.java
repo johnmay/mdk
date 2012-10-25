@@ -53,7 +53,7 @@ public class HybridizationSeed implements AtomSeed {
      */
     public int seed(IAtomContainer molecule, IAtom atom) {
         return atom.getHybridization() != null
-                ? (1 + normalize(atom.getHybridization()).ordinal()) * 14144419 // arbitrary prime
+                ? (1 + normalize(atom.getHybridization()).ordinal()) * 646133386 // arbitrary prime
                 : 0;
     }
 

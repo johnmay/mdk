@@ -19,20 +19,20 @@ package uk.ac.ebi.mdk.tool.domain;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.NoSuchAtomTypeException;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
-import org.openscience.cdk.stereo.StereoTool;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
+import uk.ac.ebi.mdk.tool.domain.hash.BondOrderSumSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ChargeSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.HybridizationSeed;
@@ -48,8 +48,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertThat;
 import static org.openscience.cdk.tools.manipulator.AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms;
 
 /**
@@ -191,15 +193,15 @@ public class MolecularHashFactoryTest {
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
         factory.setDepth(4);
 
-        assertNotSame("aldehydo-D-lyxose and L-arabinitol should not be equal",
-                      factory.getHash(containers.get(0)).hash,
-                      factory.getHash(containers.get(1)).hash);
-        assertNotSame("aldehydo-D-lyxose and aldehydo-L-lyxose should not be equal",
-                      factory.getHash(containers.get(0)).hash,
-                      factory.getHash(containers.get(2)).hash);
-        assertEquals("aldehydo-L-lyxose and L-arabinitol should be equal (by this test)",
-                     factory.getHash(containers.get(1)).hash,
-                     factory.getHash(containers.get(2)).hash);
+        assertThat("aldehydo-D-lyxose and L-arabinitol should not be equal",
+                   factory.getHash(containers.get(0)).hash,
+                   is(not(factory.getHash(containers.get(1)).hash)));
+        assertThat("aldehydo-D-lyxose and aldehydo-L-lyxose should not be equal",
+                   factory.getHash(containers.get(0)).hash,
+                   is(not(factory.getHash(containers.get(2)).hash)));
+        assertThat("aldehydo-L-lyxose and L-arabinitol should be equal (by this test)",
+                   factory.getHash(containers.get(1)).hash,
+                   is(factory.getHash(containers.get(2)).hash));
 
     }
 
@@ -212,11 +214,11 @@ public class MolecularHashFactoryTest {
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
         IAtomContainer dornithine = ornithines.get(0);
-        IAtomContainer ornithine  = ornithines.get(1);
+        IAtomContainer ornithine = ornithines.get(1);
 
-        assertNotSame("D-ornithine and ornithine were equal",
-                      factory.getHash(dornithine).hash,
-                      factory.getHash(ornithine).hash);
+        assertThat("D-ornithine and ornithine were equal",
+                   factory.getHash(dornithine).hash,
+                   is(not(factory.getHash(ornithine).hash)));
 
 
     }
@@ -230,11 +232,11 @@ public class MolecularHashFactoryTest {
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
         IAtomContainer arabinono = lactones.get(0);
-        IAtomContainer xylono    = lactones.get(1);
+        IAtomContainer xylono = lactones.get(1);
 
-        assertNotSame("D-arabinono-1,4-lactone and D-xylono-1,4-lactone were equal",
-                      factory.getHash(arabinono).hash,
-                      factory.getHash(xylono).hash);
+        assertThat("D-arabinono-1,4-lactone and D-xylono-1,4-lactone were equal",
+                   factory.getHash(arabinono).hash,
+                   is(not(factory.getHash(xylono).hash)));
 
 
     }
@@ -247,21 +249,19 @@ public class MolecularHashFactoryTest {
         MolecularHashFactory.getInstance().setDepth(4);
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
-        IAtomContainer dquinovose          = deoxyhexoses.get(0);
+        IAtomContainer dquinovose = deoxyhexoses.get(0);
         IAtomContainer aldehydo_l_rhamnose = deoxyhexoses.get(1);
-        IAtomContainer aldehydo_d_rhamnose = deoxyhexoses.get(1);
+        IAtomContainer aldehydo_d_rhamnose = deoxyhexoses.get(2);
 
-
-        assertNotSame("D-quinovose and aldehydo-L-rhamnose hashed to the same value",
-                      factory.getHash(dquinovose).hash,
-                      factory.getHash(aldehydo_l_rhamnose).hash);
-        assertNotSame("D-quinovose and aldehydo-D-rhamnose hashed to the same value",
-                      factory.getHash(dquinovose).hash,
-                      factory.getHash(aldehydo_d_rhamnose).hash);
-        assertNotSame("aldehydo-L-rhamnose and aldehydo-D-rhamnose hashed to the same value",
-                      factory.getHash(aldehydo_l_rhamnose).hash,
-                      factory.getHash(aldehydo_d_rhamnose).hash);
-
+        assertThat("D-quinovose and aldehydo-L-rhamnose hashed to the same value",
+                   factory.getHash(dquinovose).hash,
+                   is(not(factory.getHash(aldehydo_l_rhamnose).hash)));
+        assertThat("D-quinovose and aldehydo-D-rhamnose hashed to the same value",
+                   factory.getHash(dquinovose).hash,
+                   is(not(factory.getHash(aldehydo_d_rhamnose).hash)));
+        assertThat("aldehydo-L-rhamnose and aldehydo-D-rhamnose hashed to the same value",
+                   factory.getHash(aldehydo_l_rhamnose).hash,
+                   is(not(factory.getHash(aldehydo_d_rhamnose).hash)));
 
     }
 
@@ -277,6 +277,93 @@ public class MolecularHashFactoryTest {
                                                                                  SeedFactory.getInstance().getSeeds(classes)).hash);
     }
 
+    /**
+     * This test two molecules where CDK provides the atoms in a different order then they appear in
+     * the input file. Subsequently the hash was failing as the wrong parities were being calculated
+     *
+     * @throws IOException
+     * @throws CDKException
+     */
+    @Test
+    public void testDithianediols() throws IOException, CDKException {
+
+        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+        factory.setDepth(4);
+
+        List<IAtomContainer> dithianediols = MolecularHashFactoryTest.readSDF(getClass(), "dithianediols.sdf", -1);
+
+        MolecularHash cis = factory.getHash(dithianediols.get(0));
+        MolecularHash trans = factory.getHash(dithianediols.get(1));
+
+        assertThat("(R,S)-dithianediol and (R,R)-dithianediol hashed to the same value",
+                   cis.hash,
+                   is(not(trans.hash)));
+
+    }
+
+    @Test
+    public void testDisaccharides() throws IOException, CDKException {
+
+
+        List<IAtomContainer> disaccharides = readSDF(getClass(), "disaccharides.sdf", -1);
+
+        IAtomContainer cellobiose = disaccharides.get(0);
+        IAtomContainer maltose = disaccharides.get(1);
+
+        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+
+        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                        ConnectedAtomSeed.class,
+                                                                        ChargeSeed.class,
+                                                                        BondOrderSumSeed.class,
+                                                                        HybridizationSeed.class);
+
+        factory.setDepth(4);
+
+        int cellobioseHash = factory.getHash(cellobiose, seeds).hash;
+        int maltoseHash = factory.getHash(maltose, seeds).hash;
+
+        assertThat("cellobiose and maltose hashed to the same value",
+                   cellobioseHash,
+                   is(not(maltoseHash)));
+
+    }
+
+    /**
+     * This test previously failed when all atom seeds were choosen - now the atom seeds include more randomness
+     * using prime factoring and the hashed molecules should be different.
+     *
+     * @throws IOException
+     * @throws CDKException
+     */
+    @Test
+    public void testUDPAminoSugars() throws IOException, CDKException {
+
+
+        List<IAtomContainer> udpaminosugars = readSDF(getClass(), "udp-amino-sugars.sdf", -1);
+
+        IAtomContainer betadmannosaminouronic = udpaminosugars.get(0);
+        IAtomContainer dmannosaminouronic = udpaminosugars.get(1);
+
+        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+
+        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                        ConnectedAtomSeed.class,
+                                                                        BondOrderSumSeed.class,
+                                                                        ChargeSeed.class,
+                                                                        HybridizationSeed.class);
+
+        factory.setDepth(4);
+
+        int betadmannosaminouronicHash = factory.getHash(betadmannosaminouronic, seeds).hash;
+        int dmannosaminouronicHash = factory.getHash(dmannosaminouronic, seeds).hash;
+
+        assertThat("beta-D-mannosaminouronic and D-mannosaminouronic hashed to the same value",
+                   betadmannosaminouronicHash,
+                   is(not(dmannosaminouronicHash)));
+
+    }
+
     @Test
     public void testChEBI() throws IOException, CDKException {
         List<IAtomContainer> containers = readSDF("ChEBI_lite.sdf", 5000);
@@ -286,26 +373,37 @@ public class MolecularHashFactoryTest {
         Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
                                                                         ChargeSeed.class,
                                                                         HybridizationSeed.class,
+                                                                        BondOrderSumSeed.class,
                                                                         ConnectedAtomSeed.class);
         factory.setDepth(4);
 
         Map<Integer, IAtomContainer> map = Maps.newHashMapWithExpectedSize(5000);
 
-        long start = System.currentTimeMillis();
-        for (IAtomContainer container : containers) {
+        long average = 0;
+        for (int i = 0; i < 100; i++) {
+            long start = System.currentTimeMillis();
+            for (IAtomContainer container : containers) {
 
-            int hash = factory.getHash(container, seeds).hash;
+                int hash = factory.getHash(container, seeds).hash;
 
-            if (map.containsKey(hash))
-                compose(map.get(hash), container);
+//            if (map.containsKey(hash))
+//                compose(map.get(hash), container);
+//            else
+//                map.put(hash, container);
+
+            }
+            long end = System.currentTimeMillis();
+
+            long delta = end - start;
+
+            if (average == 0)
+                average = delta;
             else
-                map.put(hash, container);
-
+                average = (average + delta) / 2;
 
         }
-        long end = System.currentTimeMillis();
 
-        System.out.println((end - start) + " ms");
+        System.out.println("average encoding time for " + containers.size() + " molecules: " + average + " ms");
 
         System.out.println(map.size());
 

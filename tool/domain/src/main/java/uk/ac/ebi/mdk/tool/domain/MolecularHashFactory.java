@@ -496,8 +496,10 @@ public class MolecularHashFactory {
                 && atom.getFormalNeighbourCount() > 2
                 && hasStereoBonds(container, atom)) {
 
-            // we don't use the MDL parity
-            int p = ParitiyCalculator.getTetrahedralParity(atom, container);
+            // we don't use the MDL parity and need to adjust if we have hydrogens pressent
+            int p = atom.getFormalNeighbourCount() == 4
+                    ? ParitiyCalculator.getTetrahedralParity(atom, container)
+                    : atom.getStereoParity();
             if (p != 0) {
                 if(p == -1)
                     p = 2;
