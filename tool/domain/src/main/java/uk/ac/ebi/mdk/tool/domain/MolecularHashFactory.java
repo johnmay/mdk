@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
 import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
@@ -64,6 +65,7 @@ public class MolecularHashFactory {
     private Collection<AtomSeed> seedMethods = new LinkedHashSet<AtomSeed>();
     private ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory.getInstance();
 
+    private boolean ignoreExplicitHydrogens = false;
     private boolean seedWithMoleculeSize = true;
     private int depth = 1;
 
@@ -153,12 +155,23 @@ public class MolecularHashFactory {
         if (molecule.getAtomCount() == 0)
             return new MolecularHash(0, new int[0]);
 
-        int[] precursorSeeds = getAtomSeeds(molecule, methods);
-        byte[][] table = matrixFactory.getConnectionMatrix(molecule);
-        BitSet stereoatoms = getTetrahedralCentres(molecule);
+        BitSet hydrogens     = ignoreExplicitHydrogens ? getHydrogenMask(molecule) : new BitSet(molecule.getAtomCount());
+        int[] precursorSeeds = getAtomSeeds(molecule, methods, hydrogens);
+        byte[][] table       = matrixFactory.getConnectionMatrix(molecule);
+        BitSet stereoatoms   = getTetrahedralCentres(molecule);
 
-        return getHash(table, precursorSeeds, stereoatoms, molecule, true);
+        return getHash(table, precursorSeeds, stereoatoms, hydrogens, molecule, true);
 
+    }
+
+    /**
+     * Sets that explicit hydrogen atoms should not be included. Note if this set
+     * you should avoid seeds that may include the value (e.g. ConnectedAtomSeed).
+     *
+     * @param ignore whether to ignore hydrogens
+     */
+    public void setIgnoreExplicitHydrogens(boolean ignore) {
+        this.ignoreExplicitHydrogens = ignore;
     }
 
     public String toString(int[] seeds) {
@@ -176,7 +189,7 @@ public class MolecularHashFactory {
     }
 
     public MolecularHash getHash(byte[][] table, int[] precursorSeeds,
-                                 BitSet stereoatoms, IAtomContainer molecule, boolean shallow) {
+                                 BitSet stereoatoms, BitSet hydrogens, IAtomContainer molecule, boolean shallow) {
 
         // System.out.println("seeds: " + toString(precursorSeeds));
         int n = precursorSeeds.length;
@@ -186,40 +199,49 @@ public class MolecularHashFactory {
         int[] previous = new int[n];
         int[] current = new int[n];
 
+        IAtom[] atoms = AtomContainerManipulator.getAtomArray(molecule);
+
         copy(precursorSeeds, previous);
         copy(precursorSeeds, current);
 
         HashCounter globalCount = new HashCounter();
         HashCounter localCount = new HashCounter();
 
-        //current = setParity(centres, table, current, previous, molecule);
-        //copy(current, previous);
-        current = setParity(stereoatoms, table, current, previous, molecule);
+//        for (int i = 0; i < n; i++) {
+//            System.out.println(atoms[i].getSymbol() + ": " + (i + 1) + " : " + Integer.toHexString(current[i]));
+//        }
+
+
+        current = setParity(stereoatoms, table, current, previous, molecule, hydrogens);
         copy(current, previous); // set the current values to the previous and repeat until depth
 
         HashCounter[] counters = new HashCounter[n];
+        for (int i = 0; i < n; i++)
+            counters[i] = new HashCounter();
+
+
         for (int d = 0; d < depth; d++) {
 
-            if (d == 0) {
-                for (int i = 0; i < n; i++)
-                    counters[i] = new HashCounter();
-            }
-
             for (int i = 0; i < previous.length; i++) {
-                current[i] = neighbourHash(i, previous[i], table, previous, counters[i]);
+                current[i] = neighbourHash(i, previous[i], table, previous, counters[i], hydrogens);
             }
 
-            current = setParity(stereoatoms, table, current, previous, molecule);
+            current = setParity(stereoatoms, table, current, previous, molecule, hydrogens);
             copy(current, previous); // set the current values to the previous and repeat until depth
 
         }
+
 
         for (HashCounter counter : counters)
             globalCount.addAll(counter);
 
         int hash = 49157;
         for (int i = 0; i < current.length; i++) {
-            hash ^= rotate(current[i], globalCount.register(current[i]));
+
+            // if ignore (explicit) hydrogens we check that this atom isn't a hydrogen
+            if (!hydrogens.get(i))
+                hash ^= rotate(current[i], globalCount.register(current[i]));
+
         }
 
 
@@ -234,7 +256,7 @@ public class MolecularHashFactory {
             for (int i = 0; i < n; i++) {
                 int[] preturbed = Arrays.copyOf(precursorSeeds, n);
                 preturbed[i] = precursorSeeds[i] * 105341;
-                individual[i] = getHash(table, preturbed, (BitSet) stereoatoms.clone(), molecule, false).hash;
+                individual[i] = getHash(table, preturbed, (BitSet) stereoatoms.clone(), hydrogens, molecule, false).hash;
                 globalCount.register(hash);
                 hash ^= rotate(individual[i], globalCount.register(individual[i]));
             }
@@ -247,11 +269,33 @@ public class MolecularHashFactory {
 
     }
 
+    private BitSet getHydrogenMask(IAtomContainer container) {
+
+        int n = container.getAtomCount();
+
+        BitSet mask = new BitSet(n);
+        for(int i = 0; i < n; i++){
+            mask.set(i, isHydrogen(container.getAtom(i)));
+        }
+
+        return mask;
+
+    }
+
+    private int getNonHydrogenAtomCount(IAtomContainer container, BitSet hydrogens) {
+        return container.getAtomCount() - hydrogens.cardinality();
+    }
+
+    private boolean isHydrogen(IAtom atom) {
+        return "H".equals(atom.getSymbol());
+    }
+
     public int[] setParity(BitSet stereoatoms,
                            byte[][] table,
                            int[] current,
                            int[] previous,
-                           IAtomContainer molecule) {
+                           IAtomContainer molecule,
+                           BitSet hydrogens) {
 
         boolean found = false;
 
@@ -265,7 +309,7 @@ public class MolecularHashFactory {
             if (storage == 2)
                 storage = -1;
 
-            int order = getParity(table, i, previous);
+            int order = getParity(table, i, previous, hydrogens);
 
             int parity = storage * order;
 
@@ -281,7 +325,7 @@ public class MolecularHashFactory {
 
         if (found && !stereoatoms.isEmpty()) {
             copy(current, previous);
-            current = setParity(stereoatoms, table, current, previous, molecule);
+            current = setParity(stereoatoms, table, current, previous, molecule, hydrogens);
             return current;
         }
 
@@ -348,11 +392,19 @@ public class MolecularHashFactory {
      * @param value The current value of the above atom
      * @return Computed value
      */
-    private int neighbourHash(int index, int value, byte[][] connectionTable, int[] precursorSeeds, HashCounter counter) {
+    private int neighbourHash(int index, int value,
+                              byte[][] connectionTable, int[] precursorSeeds,
+                              HashCounter counter, BitSet hydrogens) {
+
+        if (hydrogens.get(index))
+            return value;
 
         value = rotate(value, value & 0x7); // rotate using the low order bits
 
         for (int j = 0; j < connectionTable[index].length; j++) {
+
+            if (hydrogens.get(j))
+                continue;
 
             if (connectionTable[index][j] != 0) {
                 counter.register(value); // avoid self xor'ing
@@ -372,7 +424,7 @@ public class MolecularHashFactory {
         return sb.toString();
     }
 
-    private int getParity(byte[][] table, int i, int[] hashes) {
+    private int getParity(byte[][] table, int i, int[] hashes, BitSet hydrogens) {
 
         byte[] row = table[i];
 
@@ -392,7 +444,10 @@ public class MolecularHashFactory {
                         int cmp = hashes[k] - h;
 
                         // if this value is larger then the last value
-                        if (cmp > 0) count++;
+                        // and that the last value isn't a hydrogen... note we still
+                        // need to check for duplicate hydrogens
+                        if (cmp > 0 && !hydrogens.get(j))
+                            count++;
                         else if (cmp == 0)
                             return 0;
 
@@ -452,18 +507,28 @@ public class MolecularHashFactory {
      * @return array of integers representing the seeds for each atom in the
      *         molecule
      */
-    public int[] getAtomSeeds(IAtomContainer molecule, Collection<AtomSeed> methods) {
+    public int[] getAtomSeeds(IAtomContainer molecule, Collection<AtomSeed> methods, BitSet hydrogens) {
 
         int[] seeds = new int[molecule.getAtomCount()];
-        int seed = seedWithMoleculeSize ? 389 % seeds.length : 389;
+        int seed = seedWithMoleculeSize
+                ? 389 % getNonHydrogenAtomCount(molecule, hydrogens) // if ignore is not set this is an empty bitset
+                : 389;
 
         for (int i = 0; i < seeds.length; i++) {
+
+            IAtom atom = molecule.getAtom(i);
+
+            // set hydrogen value to be the minimum
+            if (hydrogens.get(i)) {
+                seeds[i] = Integer.MIN_VALUE;
+                continue;
+            }
 
             seeds[i] = seed;
 
             for (AtomSeed method : methods) {
                 seeds[i] = 257 * seeds[i] + method.seed(molecule,
-                                                        molecule.getAtom(i));
+                                                        atom);
             }
 
             // rotate the seed 1-5 times (using mask to get the lower bits)
@@ -501,7 +566,7 @@ public class MolecularHashFactory {
                     ? ParitiyCalculator.getTetrahedralParity(atom, container)
                     : atom.getStereoParity();
             if (p != 0) {
-                if(p == -1)
+                if (p == -1)
                     p = 2;
                 atom.setStereoParity(p);
                 return true;

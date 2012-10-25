@@ -19,6 +19,7 @@ package uk.ac.ebi.mdk.tool.domain;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -380,7 +381,7 @@ public class MolecularHashFactoryTest {
         Map<Integer, IAtomContainer> map = Maps.newHashMapWithExpectedSize(5000);
 
         long average = 0;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             long start = System.currentTimeMillis();
             for (IAtomContainer container : containers) {
 
@@ -392,6 +393,9 @@ public class MolecularHashFactoryTest {
 //                map.put(hash, container);
 
             }
+
+            HashMap
+
             long end = System.currentTimeMillis();
 
             long delta = end - start;
