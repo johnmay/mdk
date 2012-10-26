@@ -155,10 +155,10 @@ public class MolecularHashFactory {
         if (molecule.getAtomCount() == 0)
             return new MolecularHash(0, new int[0]);
 
-        BitSet hydrogens     = ignoreExplicitHydrogens ? getHydrogenMask(molecule) : new BitSet(molecule.getAtomCount());
+        BitSet hydrogens = ignoreExplicitHydrogens ? getHydrogenMask(molecule) : new BitSet(molecule.getAtomCount());
         int[] precursorSeeds = getAtomSeeds(molecule, methods, hydrogens);
-        byte[][] table       = matrixFactory.getConnectionMatrix(molecule);
-        BitSet stereoatoms   = getTetrahedralCentres(molecule);
+        byte[][] table = matrixFactory.getConnectionMatrix(molecule);
+        BitSet stereoatoms = getTetrahedralCentres(molecule);
 
         return getHash(table, precursorSeeds, stereoatoms, hydrogens, molecule, true);
 
@@ -207,13 +207,19 @@ public class MolecularHashFactory {
         HashCounter globalCount = new HashCounter();
         HashCounter localCount = new HashCounter();
 
+//        System.out.println("starting:");
 //        for (int i = 0; i < n; i++) {
-//            System.out.println(atoms[i].getSymbol() + ": " + (i + 1) + " : " + Integer.toHexString(current[i]));
+//            System.out.printf("%4s: %s\n", atoms[i].getSymbol() + (i + 1), Integer.toHexString(current[i]));
 //        }
 
 
         current = setParity(stereoatoms, table, current, previous, molecule, hydrogens);
         copy(current, previous); // set the current values to the previous and repeat until depth
+//        System.out.println("after parity");
+//        for (int i = 0; i < n; i++) {
+//            System.out.printf("%4s: %s\n", atoms[i].getSymbol() + (i + 1), Integer.toHexString(current[i]));
+//        }
+
 
         HashCounter[] counters = new HashCounter[n];
         for (int i = 0; i < n; i++)
@@ -226,6 +232,10 @@ public class MolecularHashFactory {
                 current[i] = neighbourHash(i, previous[i], table, previous, counters[i], hydrogens);
             }
 
+//            for (int i = 0; i < n; i++) {
+//                System.out.printf("%2s %4s: %s\n", d, atoms[i].getSymbol() + (i + 1), Integer.toHexString(current[i]));
+//            }
+
             current = setParity(stereoatoms, table, current, previous, molecule, hydrogens);
             copy(current, previous); // set the current values to the previous and repeat until depth
 
@@ -234,6 +244,7 @@ public class MolecularHashFactory {
 
         for (HashCounter counter : counters)
             globalCount.addAll(counter);
+
 
         int hash = 49157;
         for (int i = 0; i < current.length; i++) {
@@ -274,7 +285,7 @@ public class MolecularHashFactory {
         int n = container.getAtomCount();
 
         BitSet mask = new BitSet(n);
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             mask.set(i, isHydrogen(container.getAtom(i)));
         }
 
@@ -313,9 +324,11 @@ public class MolecularHashFactory {
 
             int parity = storage * order;
 
+            //System.out.println((i + 1) + ": " + storage + " -> " + order + " -> " + parity);
             // can't set to previous... as this would alter other centres
             if (parity != 0) {
                 current[i] *= (parity == -1 ? 1300141 : 105913);
+                //System.out.println((i + 1) + " set to " + Integer.toHexString(current[i]));
                 found = true;
                 stereoatoms.clear(i);
             }
@@ -399,7 +412,10 @@ public class MolecularHashFactory {
         if (hydrogens.get(index))
             return value;
 
+
+        //System.out.print(Integer.toHexString(value) + " -> ");
         value = rotate(value, value & 0x7); // rotate using the low order bits
+        //System.out.println(Integer.toHexString(value));
 
         for (int j = 0; j < connectionTable[index].length; j++) {
 
@@ -407,9 +423,17 @@ public class MolecularHashFactory {
                 continue;
 
             if (connectionTable[index][j] != 0) {
-                counter.register(value); // avoid self xor'ing
-                value ^= rotate(precursorSeeds[j], counter.register(precursorSeeds[j]));
+                //counter.register(value); // avoid self xor'ing - don't do this it can cause errors due to different order
+
+
+                int count = counter.register(precursorSeeds[j]);
+                int neighbour = rotate(precursorSeeds[j], count);
+                //System.out.print("\t" + "[" + j + "]0x" + Integer.toHexString(value) + "^0x" + Integer.toHexString(precursorSeeds[j]) + " ~ " + count + " => ");
+                //System.out.print(Integer.toHexString(neighbour) + " = ");
+                value ^= neighbour;
+                //System.out.println(Integer.toHexString(value));
             }
+
         }
 
         return value;
@@ -437,16 +461,19 @@ public class MolecularHashFactory {
             if (row[j] != 0) {
 
                 int h = hashes[j];
+                //System.out.println(Integer.toHexString(h) + ": ");
 
                 for (int k = j + 1; k < n; k++) {
 
                     if (row[k] != 0) {
-                        int cmp = hashes[k] - h;
+
+                        int cmp = hashes[k] > h ? 1 : hashes[k] < h ? -1 : 0;
+                        //System.out.println("\t" + "[" + j + "] " +Integer.toHexString(h) + " - "  + "[" + k + "] " + Integer.toHexString(hashes[k]) + ": " + cmp);
 
                         // if this value is larger then the last value
                         // and that the last value isn't a hydrogen... note we still
                         // need to check for duplicate hydrogens
-                        if (cmp > 0 && !hydrogens.get(j))
+                        if (cmp > 0)
                             count++;
                         else if (cmp == 0)
                             return 0;
@@ -458,6 +485,8 @@ public class MolecularHashFactory {
             }
 
         }
+
+        // System.out.println(count);
 
         // number of swaps for atom numbers and the hashes
         return (count & 0x1) == 1 ? -1 : +1;
@@ -510,8 +539,9 @@ public class MolecularHashFactory {
     public int[] getAtomSeeds(IAtomContainer molecule, Collection<AtomSeed> methods, BitSet hydrogens) {
 
         int[] seeds = new int[molecule.getAtomCount()];
-        int seed = seedWithMoleculeSize
-                ? 389 % getNonHydrogenAtomCount(molecule, hydrogens) // if ignore is not set this is an empty bitset
+        int n = getNonHydrogenAtomCount(molecule, hydrogens);
+        int seed = seedWithMoleculeSize & n != 0
+                ? 389 % n // if ignore is not set this is an empty bitset
                 : 389;
 
         for (int i = 0; i < seeds.length; i++) {
@@ -563,7 +593,7 @@ public class MolecularHashFactory {
 
             // we don't use the MDL parity and need to adjust if we have hydrogens pressent
             int p = atom.getFormalNeighbourCount() == 4
-                    ? ParitiyCalculator.getTetrahedralParity(atom, container)
+                    ? ParitiyCalculator.getSP3Parity(atom, container)
                     : atom.getStereoParity();
             if (p != 0) {
                 if (p == -1)

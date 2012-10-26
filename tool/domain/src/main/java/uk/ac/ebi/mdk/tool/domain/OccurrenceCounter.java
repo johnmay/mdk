@@ -27,7 +27,8 @@ public class OccurrenceCounter<O> {
     public int register(O obj) {
         MutableInt mutableInt = map.get(obj);
         if (mutableInt == null) {
-            map.put(obj, new MutableInt(0));
+            mutableInt = new MutableInt(0);
+            map.put(obj, mutableInt);
             return 0;
         }
         return mutableInt.increment();

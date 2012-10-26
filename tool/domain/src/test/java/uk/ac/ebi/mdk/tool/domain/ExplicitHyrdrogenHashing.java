@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.tool.domain;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -68,9 +69,12 @@ public class ExplicitHyrdrogenHashing {
 
         hasher.setIgnoreExplicitHydrogens(true);
 
+        System.out.println("testing ignore: ");
         assertThat("implicit and explicit hashes were not equal (ignore set)",
                    hasher.getHash(explicit, seeds).hash,
                    is(hasher.getHash(implicit, seeds).hash));
+
+
 
 
     }

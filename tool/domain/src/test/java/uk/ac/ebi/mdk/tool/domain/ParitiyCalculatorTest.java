@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static uk.ac.ebi.mdk.tool.domain.MolecularHashFactoryTest.readSDF;
 
 /**
  * @author John May
@@ -36,9 +37,9 @@ public class ParitiyCalculatorTest {
     @Test
     public void testGetTetrahedralParity_R() throws Exception {
 
-        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(),
-                                                                           "r-structures.sdf",
-                                                                           -1);
+        List<IAtomContainer> containers = readSDF(getClass(),
+                                                  "r-structures.sdf",
+                                                  -1);
 
         for(IAtomContainer container : containers){
 
@@ -59,9 +60,9 @@ public class ParitiyCalculatorTest {
     @Test
     public void testGetTetrahedralParity_R_explicit() throws Exception {
 
-        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(),
-                                                                           "r-structures-explicit.sdf",
-                                                                           -1);
+        List<IAtomContainer> containers = readSDF(getClass(),
+                                                  "r-structures-explicit.sdf",
+                                                  -1);
 
         for(IAtomContainer container : containers){
 
@@ -82,9 +83,9 @@ public class ParitiyCalculatorTest {
     @Test
     public void testGetTetrahedralParity_S() throws Exception {
 
-        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(),
-                                                                           "s-structures.sdf",
-                                                                           -1);
+        List<IAtomContainer> containers = readSDF(getClass(),
+                                                  "s-structures.sdf",
+                                                  -1);
 
         for(IAtomContainer container : containers){
 
@@ -106,9 +107,9 @@ public class ParitiyCalculatorTest {
     @Test
     public void testGetTetrahedralParity_S_explicit() throws Exception {
 
-        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(),
-                                                                           "s-structures-explicit.sdf",
-                                                                           -1);
+        List<IAtomContainer> containers = readSDF(getClass(),
+                                                  "s-structures-explicit.sdf",
+                                                  -1);
 
         for(IAtomContainer container : containers){
 
@@ -133,7 +134,7 @@ public class ParitiyCalculatorTest {
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
         factory.setDepth(4);
 
-        List<IAtomContainer> dithianediols = MolecularHashFactoryTest.readSDF(getClass(), "dithianediols.sdf", -1);
+        List<IAtomContainer> dithianediols = readSDF(getClass(), "dithianediols.sdf", -1);
 
         IAtomContainer cisdithianediol   = dithianediols.get(0);
         IAtomContainer transdithianediol = dithianediols.get(1);
@@ -143,6 +144,16 @@ public class ParitiyCalculatorTest {
 
         Assert.assertEquals(1, ParitiyCalculator.getMDLTetrahedralParity(transdithianediol.getAtom(3), transdithianediol));
         Assert.assertEquals(-1,  ParitiyCalculator.getMDLTetrahedralParity(transdithianediol.getAtom(4), transdithianediol));
+
+    }
+
+    @Test
+    public void testSP2() throws IOException, CDKException {
+
+        IAtomContainer container = readSDF(getClass(), "dutenediol.mol", 1).iterator().next();
+
+        System.out.println(ParitiyCalculator.getSP2Parity(container.getAtom(0), container));
+        System.out.println(ParitiyCalculator.getSP2Parity(container.getAtom(2), container));
 
     }
 }

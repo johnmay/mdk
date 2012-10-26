@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class ParitiyCalculator {
 
-    public static int getTetrahedralParity(IAtom atom, final IAtomContainer container) {
+    public static int getSP3Parity(IAtom atom, final IAtomContainer container) {
         List<IAtom> neighbours = container.getConnectedAtomsList(atom);
         Collections.sort(neighbours, new Comparator<IAtom>() {
             @Override
@@ -40,14 +40,28 @@ public class ParitiyCalculator {
                 return container.getAtomNumber(o1) - container.getAtomNumber(o2);
             }
         });
-        return getTetrahedralParity(atom, neighbours, container);
+        return getSP3Parity(atom, neighbours, container);
+    }
+
+    public static int getSP2Parity(IAtom atom, final IAtomContainer container) {
+
+        List<IAtom> neighbours = container.getConnectedAtomsList(atom);
+
+        Collections.sort(neighbours, new Comparator<IAtom>() {
+            @Override
+            public int compare(IAtom o1, IAtom o2) {
+                return container.getAtomNumber(o1) - container.getAtomNumber(o2);
+            }
+        });
+
+        return getSP2Parity(atom, neighbours, container);
     }
 
     public static int getMDLTetrahedralParity(IAtom atom, IAtomContainer container) {
         return getMDLTetrahedralParity(atom, container.getConnectedAtomsList(atom), container);
     }
 
-    public static int getTetrahedralParity(IAtom atom, List<IAtom> neighbours, final IAtomContainer container) {
+    public static int getSP3Parity(IAtom atom, List<IAtom> neighbours, final IAtomContainer container) {
 
         if (neighbours.size() == 3)
             neighbours.add(atom);
@@ -55,7 +69,23 @@ public class ParitiyCalculator {
         if (neighbours.size() != 4)
             return 0;
 
-        double d = Math.signum(getTetrahedralParityMatrix(atom, neighbours, container).det());
+        double d = Math.signum(getSP3ParityMatrix(atom, neighbours, container).det());
+
+        return d > 0 ? +1
+                : d < 0 ? -1
+                : 0;
+
+    }
+
+    public static int getSP2Parity(IAtom atom, List<IAtom> neighbours, final IAtomContainer container) {
+
+        if (neighbours.size() == 2)
+            neighbours.add(1, atom);
+
+        if (neighbours.size() != 3)
+            return 0;
+
+        double d = Math.signum(getSP2ParityMatrix(atom, neighbours, container).det());
 
         return d > 0 ? +1
                 : d < 0 ? -1
@@ -88,14 +118,36 @@ public class ParitiyCalculator {
             }
         }
 
-        return getTetrahedralParity(atom, neighbours, container);
+        return getSP3Parity(atom, neighbours, container);
 
     }
 
-    private static Matrix getTetrahedralParityMatrix(IAtom chiral, List<IAtom> atoms, IAtomContainer container) {
+    private static Matrix getSP2ParityMatrix(IAtom chiral, List<IAtom> atoms, IAtomContainer container) {
 
         int n = atoms.size();
 
+        Matrix m = new Matrix(3, 3);
+
+        // using 2D coordinates for now
+        for (int i = 0; i < n; i++) {
+
+            IAtom atom = atoms.get(i);
+            Point2d point = atom.getPoint2d();
+
+            // set the coordinates
+            m.set(i, 0, point.x);
+            m.set(i, 1, point.y);
+            m.set(i, 2, 1);
+
+        }
+
+        return m;
+
+    }
+
+    private static Matrix getSP3ParityMatrix(IAtom chiral, List<IAtom> atoms, IAtomContainer container) {
+
+        int n = atoms.size();
 
         Matrix m = new Matrix(4, 4);
 
