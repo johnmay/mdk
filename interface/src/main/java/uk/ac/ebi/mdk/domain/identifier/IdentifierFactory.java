@@ -99,6 +99,11 @@ public interface IdentifierFactory {
         }
 
         @Override
+        public String getResolvableURL() {
+            return null;
+        }
+
+        @Override
         public String getURN() {
             return "";
         }

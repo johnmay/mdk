@@ -48,6 +48,7 @@ public class MIRIAMLoader {
     private Map<String, MIRIAMEntry> nameEntryMap = new HashMap<String, MIRIAMEntry>(50);
 
     private Map<String, MIRIAMEntry> urnEntryMap = new HashMap<String, MIRIAMEntry>(400);
+
     private Map<String, MIRIAMEntry> namespaces = new HashMap<String, MIRIAMEntry>(400);
 
     private Map<Resource, Identifier> resources = new HashMap<Resource, Identifier>(50);
@@ -144,7 +145,7 @@ public class MIRIAMLoader {
                 // add to the map
                 MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn, url, synonyms, true, namespace);
                 mirMap.put(mir, entry);
-                namespaces.put(name, entry);
+                namespaces.put(namespace, entry);
                 nameEntryMap.put(name.toLowerCase(),
                                  entry);
                 urnEntryMap.put(entry.getBaseURN(), entry);
@@ -214,15 +215,22 @@ public class MIRIAMLoader {
         if(namespace == null)
             throw new IllegalArgumentException("null namespace provided");
 
-        if (nameEntryMap.containsKey(namespace)) {
-            Identifier id = getIdentifier(nameEntryMap.get(namespace));
+        // build the map if it's empty
+        if (resources.isEmpty()) {
+            for (Identifier id : DefaultIdentifierFactory.getInstance().getSupportedIdentifiers()) {
+                resources.put(id.getResource(), id);
+            }
+        }
+
+        if (namespaces.containsKey(namespace)) {
+            Identifier id = getIdentifier(namespaces.get(namespace));
             if(accession != null && !accession.isEmpty()){
-                id.setAccession(getAccession(accession));
+                id.setAccession(accession);
             }
             return id;
 
         } else {
-            logger.error("missing resource form" + namespace);
+            logger.error("missing namespace: " + namespace);
             return IdentifierFactory.EMPTY_IDENTIFIER;
         }
 

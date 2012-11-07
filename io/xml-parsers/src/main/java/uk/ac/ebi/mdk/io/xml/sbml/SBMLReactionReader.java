@@ -48,6 +48,7 @@ import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
 
 import javax.xml.stream.XMLStreamException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -108,10 +109,11 @@ public class SBMLReactionReader {
 
 
     private CompartmentResolver resolver;
+    private InputStream stream;
 
     // pattern for extracting ids
 
-    private static final Pattern IDENTIFIERS_DOT_ORG = Pattern.compile("http://www.identifiers.org/([^/]+)/[^/]+/");
+    private static final Pattern IDENTIFIERS_DOT_ORG = Pattern.compile("http://(?:www.)?identifiers.org/([^/]+)/([^/]+)/?");
 
 
     /**
@@ -125,6 +127,7 @@ public class SBMLReactionReader {
         this(reader.readSBMLFromStream(stream), factory, resolver);
         this.factory = factory;
         this.resolver = resolver;
+        this.stream = stream;
     }
 
     public SBMLReactionReader(SBMLDocument document, EntityFactory factory, CompartmentResolver resolver) {
@@ -283,9 +286,10 @@ public class SBMLReactionReader {
                     species.getName(),
                     species.getMetaId());
 
-
             for (CVTerm term : species.getCVTerms()) {
+                System.out.println("loading cv-term");
                 for (String resource : term.getResources()) {
+                    System.out.println("resource: " + resource);
                     //XXX bit of a hack - need a handler class
                     if (resource.startsWith("urn:miriam")) {
                         Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(resource);
@@ -371,6 +375,10 @@ public class SBMLReactionReader {
 
     }
 
+    public void close() throws IOException {
+        if(stream != null)
+            stream.close();
+    }
 
     public boolean hasNext() {
         return reactionIndex + 1 < reactionCount;

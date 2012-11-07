@@ -14,14 +14,15 @@
  */
 package uk.ac.ebi.mdk.domain.identifier;
 
+import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
+import uk.ac.ebi.mdk.domain.AbstractDescriptor;
+import uk.ac.ebi.mdk.domain.IdentifierLoader;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.net.URL;
 import java.util.Collection;
-
-import uk.ac.ebi.mdk.domain.AbstractDescriptor;
-import uk.ac.ebi.mdk.domain.IdentifierLoader;
 
 /**
  * Abstract class for that all identifiers should extend.
@@ -66,7 +67,7 @@ public abstract class AbstractIdentifier
      */
     @Override
     public void setAccession(String accession) {
-        if(accession == null)
+        if (accession == null)
             throw new NullPointerException("Provided accession was null");
         this.accession = accession;
     }
@@ -143,6 +144,14 @@ public abstract class AbstractIdentifier
     @Override
     public URL getURL() {
         return getResource().getURL(getAccession());
+    }
+
+
+    @Override
+    @Deprecated
+    public String getResolvableURL() {
+        // XXX very bad but need it in place until a better solution can be implemented
+        return "http://identifiers.org/" + ((MIRIAMEntry) getResource()).namespace + "/" + accession + "/";
     }
 
     /**

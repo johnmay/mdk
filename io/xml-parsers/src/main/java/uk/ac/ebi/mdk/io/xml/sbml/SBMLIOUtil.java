@@ -69,7 +69,7 @@ public class SBMLIOUtil {
 
 
     public SBMLIOUtil(EntityFactory factory) {
-        this(factory, 2, 2);
+        this(factory, 2, 4);
     }
 
 
