@@ -88,8 +88,8 @@ public class MolecularHash {
 
         float total = this.individual.length + other.individual.length;
 
-        HashMap<Integer, MutableInt> thisMap = new HashMap();
-        HashMap<Integer, MutableInt> otherMap = new HashMap();
+        HashMap<Integer, MutableInt> thisMap = new HashMap<Integer, MutableInt>();
+        HashMap<Integer, MutableInt> otherMap = new HashMap<Integer, MutableInt>();
 
         for (int aHash : this.individual) {
             if (!thisMap.containsKey(aHash)) {
@@ -106,7 +106,7 @@ public class MolecularHash {
         }
 
         // put all the keys together retaining those that match
-        Set<Integer> keys = new HashSet(thisMap.keySet());
+        Set<Integer> keys = new HashSet<Integer>(thisMap.keySet());
         keys.retainAll(otherMap.keySet());
 
         float score = keys.size() * 2;
@@ -178,8 +178,8 @@ public class MolecularHash {
     static public String encode32(final byte[] bytes) {
         int i = 0, index = 0, digit = 0;
         int currByte, nextByte;
-        StringBuffer base32
-                = new StringBuffer((bytes.length + 7) * 8 / 5);
+        StringBuilder base32
+                = new StringBuilder((bytes.length + 7) * 8 / 5);
 
         while (i < bytes.length) {
             currByte = (bytes[i] >= 0) ? bytes[i] : (bytes[i] + 256);
