@@ -160,6 +160,14 @@ public class MolecularHash {
 
     }
 
+    /**
+     * Access the hexdecimal value of the hash code
+     * @return base16 representation
+     */
+    public String toHex() {
+        return Integer.toHexString(hash);
+    }
+
     public String toBase64() {
         ByteBuffer buffer = ByteBuffer.allocate(4);
         BASE64Encoder encoder = new BASE64Encoder();
