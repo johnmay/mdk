@@ -75,6 +75,14 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- experimental modules -->
+        <dependency>
+            <groupId>uk.ac.ebi.mdk.experimental</groupId>
+            <artifactId>mdk-experimental-tool-hashcode</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-interfaces</artifactId>

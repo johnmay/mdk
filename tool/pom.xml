@@ -15,7 +15,7 @@
         <module>compare</module>
         <module>core</module>
         <module>homology</module>
-        <module>hashcode</module>
+        <module>prototype-hashcode</module>
     </modules>
     <artifactId>mdk-tool</artifactId>
 

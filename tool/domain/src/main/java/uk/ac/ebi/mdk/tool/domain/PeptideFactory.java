@@ -17,6 +17,8 @@
  */
 package uk.ac.ebi.mdk.tool.domain;
 
+import com.google.common.collect.MapMaker;
+import com.google.common.collect.Maps;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.Atom;
 import org.openscience.cdk.Bond;
@@ -63,6 +65,7 @@ public class PeptideFactory {
 
     public PeptideFactory(EntityFactory factory) {
         this.factory = factory;
+        new MapMaker().initialCapacity(5).makeMap();
     }
 
 

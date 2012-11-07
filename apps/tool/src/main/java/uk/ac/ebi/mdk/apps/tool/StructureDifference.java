@@ -19,15 +19,19 @@ package uk.ac.ebi.mdk.apps.tool;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.cip.CIPTool;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.mdk.tool.domain.ChiralityCalculator;
-import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
-import uk.ac.ebi.mdk.tool.domain.hash.*;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
+import uk.ac.ebi.mdk.prototype.hash.seed.StereoSeed;
+import uk.ac.ebi.mdk.prototype.hash.cip.ChiralityCalculator;
+import uk.ac.ebi.mdk.prototype.hash.MolecularHashFactory;
 
 import java.io.File;
 import java.io.FileInputStream;

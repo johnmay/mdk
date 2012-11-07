@@ -2,12 +2,12 @@ package uk.ac.ebi.mdk.ui.component.compare;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.tool.domain.hash.AtomicNumberSeed;
-import uk.ac.ebi.mdk.tool.domain.hash.BondOrderSumSeed;
-import uk.ac.ebi.mdk.tool.domain.hash.ChargeSeed;
-import uk.ac.ebi.mdk.tool.domain.hash.ConnectedAtomSeed;
-import uk.ac.ebi.mdk.tool.domain.hash.SeedFactory;
-import uk.ac.ebi.mdk.tool.domain.hash.StereoSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
+import uk.ac.ebi.mdk.prototype.hash.seed.StereoSeed;
 import uk.ac.ebi.mdk.tool.match.CrossReferenceMatcher;
 import uk.ac.ebi.mdk.tool.match.MetaboliteHashCodeMatcher;
 import uk.ac.ebi.mdk.tool.match.MetaboliteInChIMatcher;

@@ -11,8 +11,12 @@ import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
 import uk.ac.ebi.mdk.tool.domain.TestMoleculeFactory;
-import uk.ac.ebi.mdk.tool.domain.hash.*;
 
 
 /**
