@@ -31,9 +31,18 @@ import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * BlastReader – 2011.09.19 <br>
@@ -87,7 +96,6 @@ public class BlastReader {
      * @param products
      * @param reader
      * @param version
-     *
      * @throws java.io.IOException
      */
     public void loadFromTSV(Map<String, GeneProduct> products, Reader reader, String version, AnnotatedEntity task) throws IOException {
@@ -108,8 +116,8 @@ public class BlastReader {
             if (product != null) {
                 // add observation
                 product.addObservation(alignment);
-            } else {
-                LOGGER.error("unable to find matching product whilst loading");
+            } else if (!products.isEmpty()) {
+                LOGGER.warn("unable to find matching product whilst loading");
             }
 
         }
