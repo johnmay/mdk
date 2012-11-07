@@ -52,7 +52,7 @@ public class MIRIAMEntry
     private String urn;
     private String url;
     private Boolean mapped;
-    private String namespace;
+    public final String namespace;
     private Collection<String> synonyms;
 
     public MIRIAMEntry(String id, String regex, String resouceName, String definition, String urn,

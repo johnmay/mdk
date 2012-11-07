@@ -222,7 +222,7 @@ public class SBMLIOUtil {
         if (m.getAnnotationsExtending(CrossReference.class).iterator().hasNext()) {
 
             for (CrossReference xref : m.getAnnotationsExtending(CrossReference.class)) {
-                String resource = xref.getIdentifier().getURN();
+                String resource = xref.getIdentifier().getResolvableURL();
                 term.addResource(resource);
             }
 

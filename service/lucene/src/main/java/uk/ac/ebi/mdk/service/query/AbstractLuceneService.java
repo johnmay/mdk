@@ -130,7 +130,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
     @Override
     public boolean startup() {
 
-        if (!index.isAvailable()) {
+        if (index == null || !index.isAvailable()) {
             return false;
         }
 

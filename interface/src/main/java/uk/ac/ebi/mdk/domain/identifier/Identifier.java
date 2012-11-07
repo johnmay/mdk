@@ -71,6 +71,15 @@ public interface Identifier extends Descriptor {
     public String getURN();
 
     /**
+     * Access a resolvable URL for this identifier. The URL is one that can
+     * identify the given identifier - {@code http://www.identifiers.org/<namespace>/<accession>/}
+     * @return resolvable URL
+     * @deprecated MIRIAM resources needs patching
+     */
+    @Deprecated
+    public String getResolvableURL();
+
+    /**
      * Provides a list of synonyms commonly used to describe the database of this
      * identifier. For example Enzyme Nomenclature is more frequently referred to
      * as EC. The synonyms are specified in the IdentifierDescription.properites

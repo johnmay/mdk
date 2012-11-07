@@ -115,7 +115,7 @@ public class DefaultReconstructionManager implements ReconstructionManager {
         RECENT_FILES.put(recent);
 
         for (Reconstruction entry : projects) {
-            if (entry.getIdentifier().equals(reconstruction)) {
+            if (entry.getIdentifier().equals(reconstruction.getIdentifier())) {
                 setActiveReconstruction(entry.getIdentifier());
                 LOGGER.error("found matching project but clashing identifiers stored:"
                                      + entry.getIdentifier()
@@ -195,7 +195,7 @@ public class DefaultReconstructionManager implements ReconstructionManager {
         }
 
         for (Reconstruction entry : projects) {
-            if (entry.getIdentifier().equals(reconstruction)) {
+            if (entry.getIdentifier().equals(reconstruction.getIdentifier())) {
                 setActiveReconstruction(entry.getIdentifier());
                 LOGGER.error("found matching project but clashing identifiers stored:"
                                      + entry.getIdentifier()

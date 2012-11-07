@@ -22,7 +22,7 @@ import java.io.IOException;
  * @version $Rev$
  */
 public class IdentifierDataOutputStream
-        extends AbstractDataOutput<IdentifierWriter>
+        extends AbstractDataOutput<IdentifierWriter<? extends Identifier>>
         implements IdentifierOutput {
 
     private static final Logger LOGGER = Logger.getLogger(IdentifierDataOutputStream.class);
@@ -49,7 +49,6 @@ public class IdentifierDataOutputStream
 
     @Override
     public void write(Identifier identifier) throws IOException {
-        Class c = identifier.getClass();
         writeClass(identifier.getClass());
         writeData(identifier);
     }

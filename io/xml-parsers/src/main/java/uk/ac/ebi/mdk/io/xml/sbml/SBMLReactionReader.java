@@ -42,6 +42,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
@@ -54,6 +55,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -105,6 +108,10 @@ public class SBMLReactionReader {
 
 
     private CompartmentResolver resolver;
+
+    // pattern for extracting ids
+
+    private static final Pattern IDENTIFIERS_DOT_ORG = Pattern.compile("http://www.identifiers.org/([^/]+)/[^/]+/");
 
 
     /**
@@ -284,8 +291,21 @@ public class SBMLReactionReader {
                         Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(resource);
                         if (identifier != null)
                             metabolite.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(identifier));
+                    } else if (resource.contains("identifiers.org")) {
+                        Matcher matcher = IDENTIFIERS_DOT_ORG.matcher(resource);
+                        if(matcher.matches()){
+
+                            // access the namespace/accessions
+                            String namespace = matcher.group(1);
+                            String accession = matcher.group(2);
+
+                            Identifier identifier = MIRIAMLoader.getInstance().ofNamespace(namespace, accession);
+
+                            if (identifier != null && identifier != IdentifierFactory.EMPTY_IDENTIFIER)
+                                metabolite.addAnnotation(DefaultAnnotationFactory.getInstance().getCrossReference(identifier));
+                        }
                     } else if (resource.startsWith("http://rdf.openmolecules.net")) {
-                        // 30 = the prefix
+                        // length 30 = the prefix
                         metabolite.addAnnotation(new InChI(resource.substring(30)));
                     }
 

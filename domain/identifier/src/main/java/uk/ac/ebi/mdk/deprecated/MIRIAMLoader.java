@@ -19,6 +19,7 @@ package uk.ac.ebi.mdk.deprecated;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.Resource;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
@@ -46,7 +47,8 @@ public class MIRIAMLoader {
 
     private Map<String, MIRIAMEntry> nameEntryMap = new HashMap<String, MIRIAMEntry>(50);
 
-    private Map<String, MIRIAMEntry> urnEntryMap = new HashMap<String, MIRIAMEntry>(50);
+    private Map<String, MIRIAMEntry> urnEntryMap = new HashMap<String, MIRIAMEntry>(400);
+    private Map<String, MIRIAMEntry> namespaces = new HashMap<String, MIRIAMEntry>(400);
 
     private Map<Resource, Identifier> resources = new HashMap<Resource, Identifier>(50);
 
@@ -142,6 +144,7 @@ public class MIRIAMLoader {
                 // add to the map
                 MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn, url, synonyms, true, namespace);
                 mirMap.put(mir, entry);
+                namespaces.put(name, entry);
                 nameEntryMap.put(name.toLowerCase(),
                                  entry);
                 urnEntryMap.put(entry.getBaseURN(), entry);
@@ -204,6 +207,27 @@ public class MIRIAMLoader {
             logger.error("No entry found for resource: " + e.getId());
             return null;
         }
+    }
+
+    public Identifier ofNamespace(String namespace, String accession) {
+
+        if(namespace == null)
+            throw new IllegalArgumentException("null namespace provided");
+
+        if (nameEntryMap.containsKey(namespace)) {
+            Identifier id = getIdentifier(nameEntryMap.get(namespace));
+            if(accession != null && !accession.isEmpty()){
+                id.setAccession(getAccession(accession));
+            }
+            return id;
+
+        } else {
+            logger.error("missing resource form" + namespace);
+            return IdentifierFactory.EMPTY_IDENTIFIER;
+        }
+
+
+
     }
 
     public Identifier getIdentifier(String urn) {

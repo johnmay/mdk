@@ -17,6 +17,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.ServiceManager;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -159,7 +160,7 @@ public class LuceneServiceManager
         }
 
         // may want to do something better
-        throw new InvalidParameterException("No " + classes + "service available for " + identifier.getSimpleName());
+        throw new InvalidParameterException("No " + Arrays.toString(classes) + "service available for " + identifier.getSimpleName());
 
     }
 

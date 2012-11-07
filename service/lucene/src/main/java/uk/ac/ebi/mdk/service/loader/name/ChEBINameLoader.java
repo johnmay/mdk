@@ -135,7 +135,7 @@ public class ChEBINameLoader extends AbstractChEBILoader {
                 if (!iupac.containsKey(accession)) {
                     iupac.put(accession, name);
                 } else {
-                    if (!iupac.get(accession).equals(name))
+                    if (!iupac.get(accession).contains(name))
                         synonyms.put(accession, name);
                 }
 
@@ -145,7 +145,7 @@ public class ChEBINameLoader extends AbstractChEBILoader {
                 if (!brand.containsKey(accession)) {
                     brand.put(accession, name);
                 } else {
-                    if (!brand.get(accession).equals(name))
+                    if (!brand.get(accession).contains(name))
                         synonyms.put(accession, name);
                 }
             }
@@ -154,7 +154,7 @@ public class ChEBINameLoader extends AbstractChEBILoader {
                 if (!inn.containsKey(accession)) {
                     inn.put(accession, name);
                 } else {
-                    if (!inn.get(accession).equals(name))
+                    if (!inn.get(accession).contains(name))
                         synonyms.put(accession, name);
                 }
             }
