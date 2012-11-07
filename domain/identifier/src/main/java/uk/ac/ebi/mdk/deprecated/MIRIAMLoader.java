@@ -35,7 +35,9 @@ import java.util.Map;
  * MIRIAMLoader.java – MetabolicDevelopmentKit – Jun 25, 2011
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
+ * @deprecated needs a more flexible solution - no replacement at the moment
  */
+@Deprecated
 public class MIRIAMLoader {
 
     private static final org.apache.log4j.Logger logger =
@@ -94,7 +96,8 @@ public class MIRIAMLoader {
                                       "None MIRIAM Entry",
                                       "",
                                       "http://www.google.com/search?q=$id",
-                                      new ArrayList(), false));
+                                      new ArrayList<String>(), false,
+                                      "unknown"));
 
         Node datatypeNode = xmlDocument.getLastChild().getFirstChild();
 
@@ -105,11 +108,12 @@ public class MIRIAMLoader {
                 String name = null,
                         urn = null,
                         definition = null, url = null;
+                String namespace = "unknown";
 
                 String id = datatypeNode.getAttributes().getNamedItem("id").getNodeValue();
                 int mir = Integer.parseInt(id.substring(4));
                 String pattern = datatypeNode.getAttributes().getNamedItem("pattern").getNodeValue();
-                List<String> synonyms = new ArrayList();
+                List<String> synonyms = new ArrayList<String>();
 
                 while (datatypeChild != null) {
                     if (datatypeChild.getNodeName().equals("name")) {
@@ -118,6 +122,8 @@ public class MIRIAMLoader {
                         definition = datatypeChild.getTextContent();
                     } else if (datatypeChild.getNodeName().equals("uris")) {
                         urn = datatypeChild.getChildNodes().item(1).getTextContent();
+                    } else if (datatypeChild.getNodeName().equals("namespace")) {
+                        namespace = datatypeChild.getTextContent();
                     } else if (datatypeChild.getNodeName().equals("resources")) {
                         url = getURL(datatypeChild.getChildNodes().item(1));
                     } else if (datatypeChild.getNodeName().equals("synonyms")) {
@@ -132,8 +138,9 @@ public class MIRIAMLoader {
                     datatypeChild = datatypeChild.getNextSibling();
                 }
 
+
                 // add to the map
-                MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn, url, synonyms, true);
+                MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn, url, synonyms, true, namespace);
                 mirMap.put(mir, entry);
                 nameEntryMap.put(name.toLowerCase(),
                                  entry);

@@ -52,15 +52,16 @@ public class MIRIAMEntry
     private String urn;
     private String url;
     private Boolean mapped;
+    private String namespace;
     private Collection<String> synonyms;
 
     public MIRIAMEntry(String id, String regex, String resouceName, String definition, String urn,
-                       String url, Collection<String> synonyms, Boolean mapped) {
-        this(id, Pattern.compile(regex), resouceName, definition, urn, url, synonyms, mapped);
+                       String url, Collection<String> synonyms, Boolean mapped, String namespace) {
+        this(id, Pattern.compile(regex), resouceName, definition, urn, url, synonyms, mapped, namespace);
     }
 
     public MIRIAMEntry(String id, Pattern pattern, String resouceName, String definition, String urn,
-                       String url, Collection<String> synonyms,  Boolean mapped) {
+                       String url, Collection<String> synonyms,  Boolean mapped, String namespace) {
         this.id = id;
         this.pattern = pattern;
         this.name = resouceName;
@@ -69,6 +70,7 @@ public class MIRIAMEntry
         this.url = url;
         this.synonyms = synonyms;
         this.mapped = mapped;
+        this.namespace = namespace;
     }
 
     /**
@@ -126,6 +128,18 @@ public class MIRIAMEntry
     public String getURN(String accession) {
         StringBuilder sb = new StringBuilder(urn.length());
 
+        sb.append(urn).append(':').append(accession.replace(":", "%3A"));
+        return sb.toString();
+    }
+
+    /**
+     * XXX: Complete hack until we can fix the miriam library.
+     * @param accession an accession for this resource
+     * @return
+     */
+    @Deprecated
+    public String getIdentiers(String accession) {
+        StringBuilder sb = new StringBuilder(urn.length());
         sb.append(urn).append(':').append(accession.replace(":", "%3A"));
         return sb.toString();
     }
