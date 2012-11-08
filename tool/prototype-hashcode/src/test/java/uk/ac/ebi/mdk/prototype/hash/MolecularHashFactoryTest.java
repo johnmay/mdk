@@ -20,7 +20,6 @@ package uk.ac.ebi.mdk.prototype.hash;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -36,15 +35,23 @@ import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.BooleanRadicalSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.HybridizationSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.MassNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullAtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullChargeSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullHybridizationSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -577,18 +584,19 @@ public class MolecularHashFactoryTest {
     }
 
 
-    @Ignore
+    @Test
     public void testChEBI() throws IOException, CDKException {
-        List<IAtomContainer> containers = readSDF("ChEBI_lite.sdf", 10000);
+        List<IAtomContainer> containers = readSDF(new FileInputStream("/Users/johnmay/Databases/chebi/ChEBI_lite.sdf"), 10000);
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
-        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class,
-                                                                        NonNullChargeSeed.class,
-                                                                        NonNullHybridizationSeed.class,
-                                                                        BondOrderSumSeed.class,
-                                                                        ConnectedAtomSeed.class);
-        factory.setDepth(4);
+        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                        ChargeSeed.class,
+                                                                        HybridizationSeed.class,
+                                                                        ConnectedAtomSeed.class,
+                                                                        MassNumberSeed.class,
+                                                                        BooleanRadicalSeed.class);
+        factory.setDepth(8);
         //factory.setDeprotonate(true);
 
         Map<Integer, IAtomContainer> map = Maps.newHashMapWithExpectedSize(10000);
@@ -620,9 +628,9 @@ public class MolecularHashFactoryTest {
 
         System.out.println("average encoding time for " + containers.size() + " molecules: " + average + " ms");
 
-        System.out.println(map.size());
+        System.out.println("unique hash count: " + map.size());
 
-        SDFWriter writer = new SDFWriter(new FileOutputStream("/Users/johnmay/Desktop/chebi-collapsed-new.sdf"));
+        SDFWriter writer = new SDFWriter(new FileOutputStream("/Users/johnmay/Desktop/chebi-collapsed.sdf"));
 
         for (Map.Entry<Integer, IAtomContainer> entry : map.entrySet()) {
             if (entry.getValue().getFlag(CDKConstants.VISITED))
@@ -656,8 +664,18 @@ public class MolecularHashFactoryTest {
     }
 
     public static List<IAtomContainer> readSDF(Class c, String path, int n) throws CDKException, IOException {
+        InputStream in = path.startsWith(File.separator) ? ClassLoader.getSystemResourceAsStream(path) : c.getResourceAsStream(path);
+        List<IAtomContainer> containers = readSDF(in, n);
+        in.close();
+        return containers;
+    }
+
+    public static List<IAtomContainer> readSDF(InputStream in, int n) throws CDKException, IOException {
+
+
         List<IAtomContainer> containers = new ArrayList<IAtomContainer>(n > 0 ? n : 1000);
-        IteratingMDLReader reader = new IteratingMDLReader(c.getResourceAsStream(path),
+
+        IteratingMDLReader reader = new IteratingMDLReader(in,
                                                            SilentChemObjectBuilder.getInstance(),
                                                            true);
 
