@@ -60,7 +60,7 @@ import static org.openscience.cdk.interfaces.IBond.Stereo.UP_INVERTED;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public class MolecularHashFactory {
+public class MolecularHashFactory implements HashGenerator<Integer> {
 
     private static final Logger logger = Logger.getLogger(MolecularHashFactory.class);
     public static final Collection<AtomSeed> DEFAULT_SEEDS = SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class,
@@ -92,6 +92,14 @@ public class MolecularHashFactory {
 
     private static class MolecularHashFactoryHolder {
         private static final MolecularHashFactory INSTANCE = new MolecularHashFactory();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public Integer generate(IAtomContainer container) {
+        return getHash(container).hash;
     }
 
     /**
