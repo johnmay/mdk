@@ -19,15 +19,15 @@ import java.util.Set;
 
 
 /**
- * MetaboliteHashCodeMatcher 2012.02.16 <br/>
- * Class realises MetaboliteComparator using the hash codes of the
- * structures to compare metabolites
+ * MetaboliteHashCodeMatcher 2012.02.16 <br/> Class realises
+ * MetaboliteComparator using the hash codes of the structures to compare
+ * metabolites
  * <p/>
  * <p/>
- * Compares the {@see ChemicalStructure} annotations of the metabolites
- * using the {@see MolecularHashFactory} to generate molecular hash codes.
- * If any of the chemical structure hashes are matches they metabolites
- * are considered matches
+ * Compares the {@see ChemicalStructure} annotations of the metabolites using
+ * the {@see MolecularHashFactory} to generate molecular hash codes. If any of
+ * the chemical structure hashes are matches they metabolites are considered
+ * matches
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -39,12 +39,12 @@ public class MetaboliteHashCodeMatcher
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteHashCodeMatcher.class);
 
-    private final MolecularHashFactory factory = MolecularHashFactory.getInstance();
+    private final MolecularHashFactory hashingFunction = new MolecularHashFactory();
 
     private final Collection<AtomSeed> seeds;
 
     private static final Integer DEFAULT_ATOM_COUNT_THRESHOLD = 150;
-    private              int     atomCountThreshold           = DEFAULT_ATOM_COUNT_THRESHOLD;
+    private int atomCountThreshold = DEFAULT_ATOM_COUNT_THRESHOLD;
 
 
     public MetaboliteHashCodeMatcher() {
@@ -105,7 +105,7 @@ public class MetaboliteHashCodeMatcher
 
     public MolecularHash getHash(IAtomContainer structure) {
 
-        return factory.getHash(structure, seeds);
+        return hashingFunction.getHash(structure, seeds);
     }
 
     @Override
@@ -116,15 +116,17 @@ public class MetaboliteHashCodeMatcher
         MetaboliteHashCodeMatcher matcher = (MetaboliteHashCodeMatcher) o;
 
         if (atomCountThreshold != matcher.atomCountThreshold) return false;
-        if (factory != null ? !factory.equals(matcher.factory) : matcher.factory != null) return false;
-        if (seeds != null ? !seeds.equals(matcher.seeds) : matcher.seeds != null) return false;
+        if (hashingFunction != null ? !hashingFunction.equals(matcher.hashingFunction) : matcher.hashingFunction != null)
+            return false;
+        if (seeds != null ? !seeds.equals(matcher.seeds) : matcher.seeds != null)
+            return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = factory != null ? factory.hashCode() : 0;
+        int result = hashingFunction != null ? hashingFunction.hashCode() : 0;
         result = 31 * result + (seeds != null ? seeds.hashCode() : 0);
         result = 31 * result + atomCountThreshold;
         return result;

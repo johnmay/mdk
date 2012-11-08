@@ -17,7 +17,6 @@
 
 package uk.ac.ebi.mdk.prototype.hash;
 
-import com.google.common.collect.MapMaker;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -48,7 +47,7 @@ public class ExplicitHyrdrogenHashing {
 
         List<IAtomContainer> containers = readSDF(getClass(), "explicit-implicit-hashing.sdf", -1);
 
-        MolecularHashFactory hasher = MolecularHashFactory.getInstance();
+        MolecularHashFactory hasher = new MolecularHashFactory();
         SeedFactory seedFactory = SeedFactory.getInstance();
 
         Collection<AtomSeed> seeds = seedFactory.getSeeds(NonNullAtomicNumberSeed.class,
@@ -60,13 +59,13 @@ public class ExplicitHyrdrogenHashing {
         IAtomContainer explicit = containers.get(0);
         IAtomContainer implicit = containers.get(1);
 
-        hasher.setIgnoreExplicitHydrogens(false);
+        hasher.setDeprotonate(false);
 
         assertThat("implicit and explicit hashes were equal (ignore not set)",
                    hasher.getHash(explicit, seeds).hash,
                    is(not(hasher.getHash(implicit, seeds).hash)));
 
-        hasher.setIgnoreExplicitHydrogens(true);
+        hasher.setDeprotonate(true);
 
         System.out.println("testing ignore: ");
         assertThat("implicit and explicit hashes were not equal (ignore set)",
@@ -83,7 +82,7 @@ public class ExplicitHyrdrogenHashing {
 
         List<IAtomContainer> containers = readSDF(getClass(), "topological-explicit-implicit-hashing.sdf", -1);
 
-        MolecularHashFactory hasher = MolecularHashFactory.getInstance();
+        MolecularHashFactory hasher = new MolecularHashFactory();
         SeedFactory seedFactory = SeedFactory.getInstance();
 
         Collection<AtomSeed> seeds = seedFactory.getSeeds(NonNullAtomicNumberSeed.class);
@@ -93,13 +92,13 @@ public class ExplicitHyrdrogenHashing {
         IAtomContainer explicit = containers.get(0);
         IAtomContainer implicit = containers.get(1);
 
-        hasher.setIgnoreExplicitHydrogens(false);
+        hasher.setDeprotonate(false);
 
         assertThat("implicit and explicit hashes were equal (ignore not set)",
                    hasher.getHash(explicit, seeds).hash,
                    is(not(hasher.getHash(implicit, seeds).hash)));
 
-        hasher.setIgnoreExplicitHydrogens(true);
+        hasher.setDeprotonate(true);
 
         assertThat("implicit and explicit hashes were not equal (ignore set)",
                    hasher.getHash(explicit, seeds).hash,

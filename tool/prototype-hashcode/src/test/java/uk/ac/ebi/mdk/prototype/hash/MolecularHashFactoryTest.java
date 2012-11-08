@@ -36,10 +36,10 @@ import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.NonNullAtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.NonNullChargeSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.NonNullAtomicNumberSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.NonNullChargeSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullHybridizationSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
 
@@ -64,14 +64,14 @@ import static org.openscience.cdk.tools.manipulator.AtomContainerManipulator.per
  */
 public class MolecularHashFactoryTest {
 
+    private MolecularHashFactory hash;
+
     /**
      * Ensure default settings
      */
     @Before
     public void setup() {
-        MolecularHashFactory.getInstance().setDepth(1);
-        MolecularHashFactory.getInstance().setSeedMethods(MolecularHashFactory.DEFAULT_SEEDS);
-        MolecularHashFactory.getInstance().setIgnoreExplicitHydrogens(false);
+        hash = new MolecularHashFactory();
     }
 
 
@@ -84,8 +84,8 @@ public class MolecularHashFactoryTest {
         while (reader.hasNext()) {
             IAtomContainer container = reader.next();
             percieveAtomTypesAndConfigureAtoms(container);
-            assertEquals(157316035,
-                         MolecularHashFactory.getInstance().getHash(container).hash);
+            assertEquals(-350234038,
+                         hash.getHash(container).hash);
             System.out.println(MolecularHashFactory.getInstance().getHash(container).hash);
         }
 
@@ -101,8 +101,8 @@ public class MolecularHashFactoryTest {
         while (reader.hasNext()) {
             IAtomContainer container = reader.next();
             percieveAtomTypesAndConfigureAtoms(container);
-            assertEquals(-128664733,
-                         MolecularHashFactory.getInstance().getHash(container).hash);
+            assertEquals(-97587614,
+                         hash.getHash(container).hash);
 
         }
 
@@ -118,8 +118,8 @@ public class MolecularHashFactoryTest {
         while (reader.hasNext()) {
             IAtomContainer container = reader.next();
             percieveAtomTypesAndConfigureAtoms(container);
-            assertEquals(-1043146187,
-                         MolecularHashFactory.getInstance().getHash(container).hash);
+            assertEquals(327343299,
+                         hash.getHash(container).hash);
         }
 
         reader.close();
@@ -134,8 +134,8 @@ public class MolecularHashFactoryTest {
         while (reader.hasNext()) {
             IAtomContainer container = reader.next();
             percieveAtomTypesAndConfigureAtoms(container);
-            assertEquals(2109242676,
-                         MolecularHashFactory.getInstance().getHash(container).hash);
+            assertEquals(-65243778,
+                         hash.getHash(container).hash);
 
         }
 
@@ -207,7 +207,7 @@ public class MolecularHashFactoryTest {
         List<IAtomContainer> containers = readSDF("aldehydo-lyxoses.sdf");
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
-        factory.setIgnoreExplicitHydrogens(true);
+        factory.setDeprotonate(true);
         factory.setDepth(4);
 
         assertThat("aldehydo-D-lyxose and L-arabinitol should not be equal",
@@ -220,13 +220,13 @@ public class MolecularHashFactoryTest {
                    factory.getHash(containers.get(1)).hash,
                    is(factory.getHash(containers.get(2)).hash));
 
-        factory.setIgnoreExplicitHydrogens(false);
+        factory.setDeprotonate(false);
 
     }
 
     /**
-     * The selium atom wasn't being 'typed' this test indiciates the stereo detection
-     * is okay if the chiral atom is correctly typed
+     * The selium atom wasn't being 'typed' this test indiciates the stereo
+     * detection is okay if the chiral atom is correctly typed
      *
      * @throws IOException
      * @throws CDKException
@@ -325,8 +325,9 @@ public class MolecularHashFactoryTest {
     }
 
     /**
-     * This test two molecules where CDK provides the atoms in a different order then they appear in
-     * the input file. Subsequently the hash was failing as the wrong parities were being calculated
+     * This test two molecules where CDK provides the atoms in a different order
+     * then they appear in the input file. Subsequently the hash was failing as
+     * the wrong parities were being calculated
      *
      * @throws IOException
      * @throws CDKException
@@ -394,8 +395,9 @@ public class MolecularHashFactoryTest {
     }
 
     /**
-     * This test previously failed when all atom seeds were choosen - now the atom seeds include more randomness
-     * using prime factoring and the hashed molecules should be different.
+     * This test previously failed when all atom seeds were choosen - now the
+     * atom seeds include more randomness using prime factoring and the hashed
+     * molecules should be different.
      *
      * @throws IOException
      * @throws CDKException
@@ -450,7 +452,7 @@ public class MolecularHashFactoryTest {
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
         factory.setDepth(4);
-        factory.setIgnoreExplicitHydrogens(true);
+        factory.setDeprotonate(true);
 
         MolecularHash idose = factory.getHash(containers.get(0));
         MolecularHash altrose = factory.getHash(containers.get(1));
@@ -458,7 +460,7 @@ public class MolecularHashFactoryTest {
         assertThat("D-idose and D-altrose molecules hashed to the same value (including hydrogens)",
                    idose.hash, is(not(altrose.hash)));
 
-        factory.setIgnoreExplicitHydrogens(false);
+        factory.setDeprotonate(false);
 
     }
 
@@ -479,7 +481,7 @@ public class MolecularHashFactoryTest {
         assertThat("D-idose with implicit and explicit hydrogens hashed to the same value",
                    explicit.hash, is(not(implicit.hash)));
 
-        factory.setIgnoreExplicitHydrogens(true);
+        factory.setDeprotonate(true);
 
         MolecularHash explicitIgnore = factory.getHash(containers.get(0), seeds);
         MolecularHash implicitIgnore = factory.getHash(containers.get(2), seeds);
@@ -487,7 +489,7 @@ public class MolecularHashFactoryTest {
         assertThat("D-idose with implicit and explicit hydrogens did not hash to the same value",
                    explicitIgnore.hash, is(implicitIgnore.hash));
 
-        factory.setIgnoreExplicitHydrogens(false);
+        factory.setDeprotonate(false);
 
 
     }
@@ -505,7 +507,7 @@ public class MolecularHashFactoryTest {
                                                                         BondOrderSumSeed.class,
                                                                         ConnectedAtomSeed.class);
         factory.setDepth(4);
-        //factory.setIgnoreExplicitHydrogens(true);
+        //factory.setDeprotonate(true);
 
         Map<Integer, IAtomContainer> map = Maps.newHashMapWithExpectedSize(10000);
 
@@ -593,7 +595,8 @@ public class MolecularHashFactoryTest {
                 try {
                     if (!(atom instanceof IPseudoAtom)) {
                         IAtomType matched = matcher.findMatchingAtomType(container, atom);
-                        if (matched != null) AtomTypeManipulator.configure(atom, matched);
+                        if (matched != null)
+                            AtomTypeManipulator.configure(atom, matched);
                     }
                 } catch (NoSuchAtomTypeException ex) {
                     System.err.println("Unidentified AtomType: " + ex.getMessage());

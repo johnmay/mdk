@@ -75,11 +75,18 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- experimental modules -->
+        <!-- prototype modules -->
         <dependency>
-            <groupId>uk.ac.ebi.mdk.experimental</groupId>
-            <artifactId>mdk-experimental-tool-hashcode</artifactId>
+            <groupId>uk.ac.ebi.mdk.prototype</groupId>
+            <artifactId>mdk-prototype-tool-hashcode</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk.prototype</groupId>
+            <artifactId>mdk-prototype-tool-hashcode</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
 
 
@@ -176,5 +183,6 @@
         </dependency>
 
     </dependencies>
+
 
 </project>

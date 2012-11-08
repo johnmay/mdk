@@ -4,17 +4,17 @@
  * 2011.11.28
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,24 +27,29 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.prototype.hash.MolecularHash;
+import uk.ac.ebi.mdk.prototype.hash.MolecularHashFactory;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
-import uk.ac.ebi.mdk.prototype.hash.MolecularHash;
-import uk.ac.ebi.mdk.prototype.hash.MolecularHashFactory;
 import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
 
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
- *          ReconstructionComparisson - 2011.11.28 <br>
- *          Generates report(s) on the similarities and differences between two or more reconstructions
+ * ReconstructionComparisson - 2011.11.28 <br> Generates report(s) on the
+ * similarities and differences between two or more reconstructions
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  * @deprecated show be more generic and just accept comparisson methods
  */
 @Deprecated
@@ -57,12 +62,12 @@ public class ReconstructionComparison {
     private Multimap<Reconstruction, Integer> metaboliteMap = ArrayListMultimap.create();
 
     private Collection<AtomSeed> methods = SeedFactory.getInstance().getSeeds(BondOrderSumSeed.class,
-                                                                       AtomicNumberSeed.class,
-                                                                       ConnectedAtomSeed.class);
+                                                                              AtomicNumberSeed.class,
+                                                                              ConnectedAtomSeed.class);
 
     private boolean hydrogen; // remove hydrogen
 
-    private static MolecularHashFactory HASH_FACTORY = MolecularHashFactory.getInstance();
+    private static MolecularHashFactory HASH_FACTORY = new MolecularHashFactory();
 
 
     public ReconstructionComparison(Collection<AtomSeed> methods,

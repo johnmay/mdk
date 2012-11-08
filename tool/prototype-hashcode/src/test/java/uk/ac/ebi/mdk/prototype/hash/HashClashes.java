@@ -59,9 +59,9 @@ public class HashClashes {
                                                                         NonNullChargeSeed.class,
                                                                         NonNullHybridizationSeed.class);
 
-        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+        MolecularHashFactory factory = new MolecularHashFactory();
         factory.setDepth(4);
-        factory.setIgnoreExplicitHydrogens(false);
+        factory.setDeprotonate(false);
 
         MolecularHash anticlockwise = factory.getHash(containers.get(0), seeds);
         MolecularHash clockwise = factory.getHash(containers.get(1), seeds);

@@ -70,12 +70,18 @@ public class MolecularHashFactory {
     private Collection<AtomSeed> seedMethods = new LinkedHashSet<AtomSeed>();
     private ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory.getInstance();
 
-    private boolean ignoreExplicitHydrogens = false;
+    private boolean deprotonate = false;
     private boolean seedWithMoleculeSize = true;
     private int depth = 1;
 
-    private MolecularHashFactory() {
-        seedMethods.addAll(DEFAULT_SEEDS);
+    public MolecularHashFactory() {
+        this(DEFAULT_SEEDS, 1, false);
+    }
+
+    public MolecularHashFactory(Collection<AtomSeed> seeds, int depth, boolean deprotonate) {
+        this.seedMethods.addAll(seeds);
+        this.depth = depth;
+        this.deprotonate = deprotonate;
     }
 
     public static MolecularHashFactory getInstance() {
@@ -83,7 +89,6 @@ public class MolecularHashFactory {
     }
 
     private static class MolecularHashFactoryHolder {
-
         private static final MolecularHashFactory INSTANCE = new MolecularHashFactory();
     }
 
@@ -159,7 +164,7 @@ public class MolecularHashFactory {
         if (molecule.getAtomCount() == 0)
             return new MolecularHash(0, new int[0]);
 
-        BitSet hydrogens = ignoreExplicitHydrogens ? getHydrogenMask(molecule) : new BitSet(molecule.getAtomCount());
+        BitSet hydrogens = deprotonate ? getHydrogenMask(molecule) : new BitSet(molecule.getAtomCount());
         int[] precursorSeeds = getAtomSeeds(molecule, methods, hydrogens);
         byte[][] table = matrixFactory.getConnectionMatrix(molecule);
         BitSet stereoatoms = getTetrahedralCentres(molecule);
@@ -174,8 +179,8 @@ public class MolecularHashFactory {
      *
      * @param ignore whether to ignore hydrogens
      */
-    public void setIgnoreExplicitHydrogens(boolean ignore) {
-        this.ignoreExplicitHydrogens = ignore;
+    public void setDeprotonate(boolean ignore) {
+        this.deprotonate = ignore;
     }
 
     public String toString(int[] seeds) {
