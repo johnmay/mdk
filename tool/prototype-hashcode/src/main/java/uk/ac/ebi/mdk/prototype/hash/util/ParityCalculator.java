@@ -80,7 +80,8 @@ public class ParityCalculator {
     public static int getSP2Parity(IAtom atom, List<IAtom> neighbours, final IAtomContainer container) {
 
         if (neighbours.size() == 2) {
-            neighbours.add(1, atom);
+            neighbours.add(atom);
+
         } else {
             // move the double bond to the end
             for (int i = 0; i < neighbours.size(); i++) {
