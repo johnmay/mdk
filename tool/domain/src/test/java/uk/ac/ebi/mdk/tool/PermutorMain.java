@@ -17,7 +17,10 @@
 
 package uk.ac.ebi.mdk.tool;
 
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.graph.AtomContainerAtomPermutor;
+import org.openscience.cdk.graph.AtomContainerPermutor;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -37,11 +40,12 @@ import java.util.List;
 import static org.openscience.cdk.interfaces.IAtomType.Hybridization.SP3;
 
 /**
- * Simple class to generate test input by permutation atoms
- * around chiral centres.
+ * Simple class to generate test input by permutation atoms around chiral
+ * centres.
+ *
  * @author John May
  */
-public class Permutate {
+public class PermutorMain {
 
     public static void main(String[] args) throws IOException, CDKException {
 
@@ -55,54 +59,14 @@ public class Permutate {
 
         MDLV2000Reader reader = new MDLV2000Reader(new FileReader(f));
 
-        IAtomContainer container = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
+        IAtomContainer container = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
 
-        AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(container);
-
-        List<List<Integer>> permutations = new ArrayList<List<Integer>>();
-
-        for (int i = 0; i < container.getAtomCount(); i++) {
-
-            IAtom atom = container.getAtom(i);
-
-            if (SP3.equals(atom.getHybridization())
-                    && atom.getFormalNeighbourCount() > 2
-                    && hasStereoBonds(atom, container)) {
-                List<Integer> permutation = new ArrayList<Integer>();
-                permutation.add(i);
-                for (IAtom neighbour : container.getConnectedAtomsList(atom)) {
-                    permutation.add(container.getAtomNumber(neighbour));
-                }
-                permutations.add(permutation);
-
-            }
-
-
-        }
+        AtomContainerPermutor permutor = new AtomContainerAtomPermutor(container);
 
         SDFWriter writer = new SDFWriter(new FileOutputStream(args[0] + "-rotated.sdf"));
 
-        for(List<Integer> permutation : permutations) {
-
-            List<Integer> identity = new ArrayList<Integer>(permutation);
-
-            int n = permutation.size();
-            for(int i = 0; i < n; i++){
-
-                permutation.add(permutation.remove(0));
-
-                IAtomContainer copy = new AtomContainer(container);
-
-                int j = identity.get(i);
-                int k = permutation.get(i);
-
-                IAtom tmp = copy.getAtom(j);
-                copy.setAtom(j, copy.getAtom(k));
-                copy.setAtom(k, tmp);
-                writer.write(copy);
-
-            }
-
+        while (permutor.hasNext()) {
+            writer.write(permutor.next());
         }
 
         writer.close();
