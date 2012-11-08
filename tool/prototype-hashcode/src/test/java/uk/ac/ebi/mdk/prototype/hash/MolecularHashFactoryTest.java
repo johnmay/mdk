@@ -494,6 +494,88 @@ public class MolecularHashFactoryTest {
 
     }
 
+    /**
+     * Unit test ensures every possible permutation of atom order in
+     * (Z)-butenediol generates the same hash code.
+     *
+     * @throws IOException
+     * @throws CDKException
+     */
+    @Test
+    public void testZButenediols() throws IOException, CDKException {
+
+        List<IAtomContainer> permutations = MolecularHashFactoryTest.readSDF(getClass(), "(Z)-butenediol-permutations.sdf", 720);
+
+        HashGenerator<Integer> generator = new MolecularHashFactory();
+
+        Integer consensus = null;
+
+        for (int i = 0; i < permutations.size(); i++) {
+
+            Integer value = generator.generate(permutations.get(i));
+            if (consensus == null)
+                consensus = value;
+            else
+                assertThat("permutations[" + i + "] produced a different hash code",
+                           consensus, is(value));
+
+
+        }
+
+    }
+
+    /**
+     * Unit test ensures every possible permutation of atom order in
+     * (E)-butenediol generates the same hash code.
+     *
+     * @throws IOException
+     * @throws CDKException
+     */
+    @Test
+    public void testEButenediols() throws IOException, CDKException {
+
+        List<IAtomContainer> permutations = MolecularHashFactoryTest.readSDF(getClass(), "(E)-butenediol-permutations.sdf", 720);
+
+        HashGenerator<Integer> generator = new MolecularHashFactory();
+
+        Integer consensus = null;
+
+        for (int i = 0; i < permutations.size(); i++) {
+
+            Integer value = generator.generate(permutations.get(i));
+            if (consensus == null)
+                consensus = value;
+            else
+                assertThat("permutations[" + i + "] produced a different hash code",
+                           consensus, is(value));
+
+
+        }
+
+    }
+
+    /**
+     * Unit test ensures that (E)-butenediol and (Z)-butenediol generate
+     * different hash codes.
+     *
+     * @throws IOException
+     * @throws CDKException
+     */
+    @Test
+    public void testEZButenediol() throws IOException, CDKException {
+
+        IAtomContainer cis = MolecularHashFactoryTest.readSDF(getClass(), "(E)-butenediol-permutations.sdf", 1).get(0);
+        IAtomContainer trans = MolecularHashFactoryTest.readSDF(getClass(), "(Z)-butenediol-permutations.sdf", 1).get(0);
+
+        for (int depth = 0; depth < 10; depth++) {
+            HashGenerator<Integer> generator = new MolecularHashFactory(depth);
+
+            assertThat("molecules with different E/Z should not be equal at depth " + depth,
+                       generator.generate(cis), is(not(generator.generate(trans))));
+        }
+
+    }
+
 
     @Ignore
     public void testChEBI() throws IOException, CDKException {
