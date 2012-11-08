@@ -26,8 +26,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.NonNullAtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.NonNullAtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
 import uk.ac.ebi.mdk.prototype.hash.util.ConnectionMatrixFactory;
 import uk.ac.ebi.mdk.prototype.hash.util.MutableInt;
@@ -40,7 +40,6 @@ import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -51,12 +50,11 @@ import static org.openscience.cdk.interfaces.IBond.Stereo.UP;
 import static org.openscience.cdk.interfaces.IBond.Stereo.UP_INVERTED;
 
 /**
- * MolecularHashFactory - 2011.11.09 <br>
- * Factory of generating MolecularHash objects. The main method here is
- * {@see getHash(IAtomContainer)} that can be tuned with different
- * {@see AtomSeed}s. The default {@see AtomSeed}s can be altered using
- * {@see addSeedMethod(AtomSeed)} and {@see setSeedMethods(Set)}. Seeds
- * are generated in the {@see SeedFactory}.
+ * MolecularHashFactory - 2011.11.09 <br> Factory of generating MolecularHash
+ * objects. The main method here is {@see getHash(IAtomContainer)} that can be
+ * tuned with different {@see AtomSeed}s. The default {@see AtomSeed}s can be
+ * altered using {@see addSeedMethod(AtomSeed)} and {@see setSeedMethods(Set)}.
+ * Seeds are generated in the {@see SeedFactory}.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -67,8 +65,8 @@ public class MolecularHashFactory {
     private static final Logger logger = Logger.getLogger(MolecularHashFactory.class);
     public static final Collection<AtomSeed> DEFAULT_SEEDS = SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class,
                                                                                                 ConnectedAtomSeed.class);
-    private Collection<AtomSeed> seedMethods = new LinkedHashSet<AtomSeed>();
-    private ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory.getInstance();
+    private final Collection<AtomSeed> seedMethods;
+    private final ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory.getInstance();
 
     private boolean deprotonate = false;
     private boolean seedWithMoleculeSize = true;
@@ -78,8 +76,12 @@ public class MolecularHashFactory {
         this(DEFAULT_SEEDS, 1, false);
     }
 
+    public MolecularHashFactory(Class<? extends AtomSeed>... seeds) {
+        this(SeedFactory.getInstance().getSeeds(seeds), 1, false);
+    }
+
     public MolecularHashFactory(Collection<AtomSeed> seeds, int depth, boolean deprotonate) {
-        this.seedMethods.addAll(seeds);
+        this.seedMethods = Collections.unmodifiableCollection(seeds);
         this.depth = depth;
         this.deprotonate = deprotonate;
     }
@@ -93,56 +95,10 @@ public class MolecularHashFactory {
     }
 
     /**
-     * Access the list of seed methods. This Set is unmodifiable and new seeds
-     * should be added using {@see addSeedMethod(AtomSeed)} or setting the seeds
-     * with {@see setSeedMethods(Set)}. <br>
-     * <p/>
-     * The default seeds are currently {@see NonNullAtomicNumberSeed} and
-     * {@see ConnectedAtomSeed}
-     *
-     * @return The set of current seeds
-     */
-    public Collection<AtomSeed> getSeedMethods() {
-        return Collections.unmodifiableCollection(seedMethods);
-    }
-
-    /**
-     * Allows addition of new seeds to the hash factory. New seeds will alter
-     * the specificity of of the hash code to suite certain tasks. An example
-     * would be to generate a hash code that incorporates the stereo-chemical
-     * properties using the {@see uk.ac.ebi.core.tools.hash.seeds.StereoSeed}.
-     * <br>
-     * <p/>
-     * <b>Example</b>
-     * <pre>
-     * MolecularHashFactory factory = MolecularHashFactory.getInstance();
-     * factory.addSeedMethod(SeedFactory.getInstance().getSeed(StereoSeed.class));
-     * </pre>
-     *
-     * @param seed New AtomSeed to add
-     * @return Whether the new seed was added (false if it is already present)
-     */
-    public boolean addSeedMethod(AtomSeed seed) {
-        return this.seedMethods.add(seed);
-    }
-
-    /**
-     * Sets the seed method set for using the hashing algorithm. This will
-     * override all current seeds with the new seed and all subsequent calls
-     * to {@see getHash(IAtomContainer)} will be affected.
-     *
-     * @param seedMethods The new seed methods
-     */
-    public void setSeedMethods(Collection<AtomSeed> seedMethods) {
-        this.seedMethods.clear();
-        this.seedMethods.addAll(seedMethods);
-    }
-
-    /**
      * Generates a hash code for the molecule with default seeds. The default
-     * seeds are currently {@see NonNullAtomicNumberSeed} and {@see ConnectedAtomSeed}.
-     * These can be modified using the {@see setSeedMethods(Set)} and
-     * {@see addSeedMethod(AtomSeed)} methods.
+     * seeds are currently {@see NonNullAtomicNumberSeed} and {@see
+     * ConnectedAtomSeed}. These can be modified using the {@see
+     * setSeedMethods(Set)} and {@see addSeedMethod(AtomSeed)} methods.
      *
      * @param molecule the molecule to generate the hash for
      * @return The hash for this molecule
@@ -174,11 +130,15 @@ public class MolecularHashFactory {
     }
 
     /**
-     * Sets that explicit hydrogen atoms should not be included. Note if this set
-     * you should avoid seeds that may include the value (e.g. ConnectedAtomSeed).
+     * Sets that explicit hydrogen atoms should not be included. Note if this
+     * set you should avoid seeds that may include the value (e.g.
+     * ConnectedAtomSeed).
      *
      * @param ignore whether to ignore hydrogens
+     * @deprecated option will be immutable in future and must be set via the
+     *             constructor
      */
+    @Deprecated
     public void setDeprotonate(boolean ignore) {
         this.deprotonate = ignore;
     }
@@ -405,8 +365,9 @@ public class MolecularHashFactory {
 
 
     /**
-     * Returns the hash value xor'd with that of the atom's neighbours. The method
-     * is recursive thus the depth indicates the current depth of the method
+     * Returns the hash value xor'd with that of the atom's neighbours. The
+     * method is recursive thus the depth indicates the current depth of the
+     * method
      * <p/>
      * The max depth is set with the {@see setDepth(int depth)} method.
      *
@@ -527,9 +488,9 @@ public class MolecularHashFactory {
 
     /**
      * If set to true (default) the base seed will use the molecule size. This
-     * will not allow comparison of sub-graph hashes. To allow sub-graph
-     * pseudo sub-graph matching {@see MolecularHash#getSimilarity(MolecularHash)}
-     * this should be set to false
+     * will not allow comparison of sub-graph hashes. To allow sub-graph pseudo
+     * sub-graph matching {@see MolecularHash#getSimilarity(MolecularHash)} this
+     * should be set to false
      *
      * @param useMoleculeSize
      */

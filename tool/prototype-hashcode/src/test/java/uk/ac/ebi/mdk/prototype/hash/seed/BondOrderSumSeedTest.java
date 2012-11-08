@@ -13,8 +13,8 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
-import uk.ac.ebi.mdk.prototype.hash.TestMoleculeFactory;
 import uk.ac.ebi.mdk.prototype.hash.MolecularHashFactory;
+import uk.ac.ebi.mdk.prototype.hash.TestMoleculeFactory;
 
 import java.io.IOException;
 
@@ -49,13 +49,16 @@ public class BondOrderSumSeedTest {
         AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(butane);
         AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(but1ene);
 
-        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+        MolecularHashFactory original = new MolecularHashFactory();
+        MolecularHashFactory tweaked = new MolecularHashFactory(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                                                   BondOrderSumSeed.class,
+                                                                                                   ConnectedAtomSeed.class),
+                                                                                                   1,
+                                                                                                   false);
 
-        Assert.assertEquals(factory.getHash(butane).hash, factory.getHash(but1ene).hash);
+        Assert.assertEquals(original.getHash(butane).hash, original.getHash(but1ene).hash);
 
-        factory.addSeedMethod(SeedFactory.getInstance().getSeed(BondOrderSumSeed.class));
-
-        Assert.assertThat(factory.getHash(butane), CoreMatchers.not(factory.getHash(but1ene)));
+        Assert.assertThat(tweaked.getHash(butane), CoreMatchers.not(tweaked.getHash(but1ene)));
 
     }
 }
