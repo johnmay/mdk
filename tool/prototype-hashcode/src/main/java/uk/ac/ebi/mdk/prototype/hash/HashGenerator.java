@@ -23,6 +23,8 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * Describes an implementation that can generate a hash code for a given
  * molecule.
  *
+ * @param <T> type of hash to be generated - normally {@link Integer} or {@link
+ *            Long}
  * @author John May
  */
 public interface HashGenerator<T extends Number> {
