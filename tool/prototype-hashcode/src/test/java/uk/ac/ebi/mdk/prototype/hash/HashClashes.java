@@ -69,4 +69,18 @@ public class HashClashes {
 
     }
 
+    @Test public void testUnspecifedStereochemistry() throws IOException, CDKException {
+
+        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(), "unspecified-bond-stereochemistry.sdf", 2);
+
+        HashGenerator<Integer> generator = new MolecularHashFactory();
+
+        Integer specified   = generator.generate(containers.get(0));
+        Integer unspecified = generator.generate(containers.get(1));
+
+        assertThat("a double bond in (E) configuration hashcode should not match unspecified",
+                   unspecified, is(not(specified)));
+
+    }
+
 }

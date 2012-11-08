@@ -20,6 +20,7 @@ package uk.ac.ebi.mdk.prototype.hash;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
@@ -584,7 +585,7 @@ public class MolecularHashFactoryTest {
     }
 
 
-    @Test
+    @Ignore
     public void testChEBI() throws IOException, CDKException {
         List<IAtomContainer> containers = readSDF(new FileInputStream("/Users/johnmay/Databases/chebi/ChEBI_lite.sdf"), 10000);
 

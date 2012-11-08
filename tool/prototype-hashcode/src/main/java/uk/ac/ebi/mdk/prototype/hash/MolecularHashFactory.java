@@ -50,6 +50,8 @@ import static org.openscience.cdk.interfaces.IBond.Stereo.DOWN;
 import static org.openscience.cdk.interfaces.IBond.Stereo.DOWN_INVERTED;
 import static org.openscience.cdk.interfaces.IBond.Stereo.UP;
 import static org.openscience.cdk.interfaces.IBond.Stereo.UP_INVERTED;
+import static org.openscience.cdk.interfaces.IBond.Stereo.UP_OR_DOWN;
+import static org.openscience.cdk.interfaces.IBond.Stereo.UP_OR_DOWN_INVERTED;
 
 /**
  * MolecularHashFactory - 2011.11.09 <br> Factory of generating MolecularHash
@@ -403,8 +405,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
                     if (!cyclic.contains(first)
                             && !cyclic.contains(second)) {
 
-                        if (!doubleDoubleBonded(container, first)
-                                && !doubleDoubleBonded(container, second)) {
+                        if (validEZBond(container, first)
+                                && validEZBond(container, second)) {
 
 
                             int i = container.getAtomNumber(first);
@@ -431,24 +433,34 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
     }
 
     /**
-     * Checks whether an atom is connected to two double bonds
+     * Checks whether an atom is connected to two double bonds and where an UP
+     * and DOWN (wiggly) bond (indicating unspecified stereochemistry is
+     * present)
      *
      * @param container the container
      * @param atom      the atom to test
      * @return whether it is connect to two double bonds
      */
-    private boolean doubleDoubleBonded(IAtomContainer container, IAtom atom) {
+    private boolean validEZBond(IAtomContainer container, IAtom atom) {
 
         int n = 0; // number of double bonds
 
         for (IBond bond : container.getConnectedBondsList(atom)) {
+
             if (DOUBLE.equals(bond.getOrder())
                     || TRIPLE.equals(bond.getOrder())) {
                 n++;
             }
+
+
+            if (UP_OR_DOWN.equals(bond.getStereo()) ||
+                    UP_OR_DOWN_INVERTED.equals(bond.getStereo())) {
+                return false;
+            }
+
         }
 
-        return n > 1;
+        return n == 1;
 
     }
 
