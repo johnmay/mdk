@@ -73,6 +73,32 @@ public class ExplicitHyrdrogenHashing {
                    is(hasher.getHash(implicit, seeds).hash));
 
 
+    }
+
+
+    @Test
+    public void testEthendiol() throws IOException, CDKException {
+
+        List<IAtomContainer> permutations = MolecularHashFactoryTest.readSDF(getClass(), "ethenediol-permutations.sdf", -1);
+
+        // important make sure we don't use connected atom seed when detonated (this should be in a builder
+        MolecularHashFactory generator = new MolecularHashFactory(SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class),
+                                                                  1, true);
+
+
+        Integer consensus = null;
+
+        for (int i = 0; i < permutations.size(); i++) {
+
+            Integer value = generator.generate(permutations.get(i));
+            if (consensus == null)
+                consensus = value;
+            else
+                assertThat("permutations[" + i + "] produced a different hash code",
+                           consensus, is(value));
+
+
+        }
 
 
     }

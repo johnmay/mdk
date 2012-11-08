@@ -154,13 +154,13 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
      * set you should avoid seeds that may include the value (e.g.
      * ConnectedAtomSeed).
      *
-     * @param ignore whether to ignore hydrogens
+     * @param deprotonate whether to ignore hydrogens
      * @deprecated option will be immutable in future and must be set via the
      *             constructor
      */
     @Deprecated
-    public void setDeprotonate(boolean ignore) {
-        this.deprotonate = ignore;
+    public void setDeprotonate(boolean deprotonate) {
+        this.deprotonate = deprotonate;
     }
 
     public String toString(int[] seeds) {
@@ -308,12 +308,12 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
             int j = dbGroups[i];
 
             int parity = dbParities[i] * getParity(table, i, previous) *
-                    dbParities[j] *  getParity(table, j, previous);
+                    dbParities[j] * getParity(table, j, previous);
 
-            //System.out.println(toString(table));
-            //System.out.println(Arrays.toString(current));
-            //System.out.println(dbParities[i] + ", " + getParity(table, i, previous));
-            //System.out.println(dbParities[j] + ", " + getParity(table, j, previous));
+//            System.out.println(toString(table));
+//            System.out.println(Arrays.toString(current));
+//            System.out.println(dbParities[i] + ", " + getParity(table, i, previous));
+//            System.out.println(dbParities[j] + ", " + getParity(table, j, previous));
 
             // can't set to previous... as this would alter other centres
             if (parity != 0) {
@@ -369,7 +369,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         int[] parities = new int[container.getAtomCount()];
 
         for (int i = bonds.nextSetBit(0); i >= 0; i = bonds.nextSetBit(i + 1)) {
-            parities[i]         = ParityCalculator.getSP2Parity(container.getAtom(i), container);
+            parities[i] = ParityCalculator.getSP2Parity(container.getAtom(i), container);
             parities[groups[i]] = ParityCalculator.getSP2Parity(container.getAtom(groups[i]), container);
         }
 
@@ -400,13 +400,11 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
                         && second.getFormalNeighbourCount() >= 2) {
 
 
-
                     if (!cyclic.contains(first)
                             && !cyclic.contains(second)) {
 
                         if (!doubleDoubleBonded(container, first)
                                 && !doubleDoubleBonded(container, second)) {
-
 
 
                             int i = container.getAtomNumber(first);
