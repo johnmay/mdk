@@ -29,6 +29,8 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.openscience.cdk.interfaces.IBond.Order.SINGLE;
+
 /**
  *          ConnectionMatrixFactory - 2011.11.09 <br>
  *          A factory for connection matrices
@@ -55,7 +57,7 @@ public class ConnectionMatrixFactory {
 
     private ConnectionMatrixFactory() {
 
-        electronPairs.put(IBond.Order.SINGLE, new Byte("1"));
+        electronPairs.put(SINGLE, new Byte("1"));
         electronPairs.put(IBond.Order.DOUBLE, new Byte("2"));
         electronPairs.put(IBond.Order.TRIPLE, new Byte("3"));
         electronPairs.put(IBond.Order.QUADRUPLE, new Byte("4"));
@@ -102,7 +104,7 @@ public class ConnectionMatrixFactory {
                     IAtom kAtom = bond.getAtom(k);
                     int kIndex = getIndex(kAtom, atoms);
 
-                    connections[jIndex][kIndex] = connections[kIndex][jIndex] = 1;
+                    connections[jIndex][kIndex] = connections[kIndex][jIndex] = electronPairs.get(bond.getOrder());
 
                 }
             }
