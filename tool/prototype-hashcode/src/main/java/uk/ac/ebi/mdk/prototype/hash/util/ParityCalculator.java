@@ -79,18 +79,17 @@ public class ParityCalculator {
 
     public static int getSP2Parity(IAtom atom, List<IAtom> neighbours, final IAtomContainer container) {
 
-        if (neighbours.size() == 2) {
+        if (neighbours.size() == 2)
             neighbours.add(atom);
 
-        } else {
-            // move the double bond to the end
-            for (int i = 0; i < neighbours.size(); i++) {
-                if (IBond.Order.DOUBLE.equals(container.getBond(atom, neighbours.get(i)).getOrder())) {
-                    neighbours.add(neighbours.remove(i));
-                    break;
-                }
+        // move the double bond to the end
+        for (int i = 0; i < neighbours.size(); i++) {
+            if (IBond.Order.DOUBLE.equals(container.getBond(atom, neighbours.get(i)).getOrder())) {
+                neighbours.add(neighbours.remove(i));
+                break;
             }
         }
+
 
         if (neighbours.size() != 3)
             return 0;
