@@ -79,6 +79,20 @@ public class ParityCalculator {
 
     public static int getSP2Parity(IAtom atom, List<IAtom> neighbours, final IAtomContainer container) {
 
+
+        // if we only have two neighbours we insert the atom
+        // which connects them in the middle. this maintains the
+        // correct parity sign
+        //
+        //   1                         1
+        //    \        is the same as   \
+        //     2 = 3     where x is      x = 3
+        //                  unused      /
+        //                            2
+        //
+        // we ensure the 3 atom is always the 'other' atom connected to
+        // the double bond in the next step and therefore this atom
+        // will always be in the middle
         if (neighbours.size() == 2)
             neighbours.add(atom);
 
