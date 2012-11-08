@@ -574,7 +574,7 @@ public class MolecularHashFactoryTest {
     }
 
     public static List<IAtomContainer> readSDF(Class c, String path, int n) throws CDKException, IOException {
-        List<IAtomContainer> containers = new ArrayList<IAtomContainer>();
+        List<IAtomContainer> containers = new ArrayList<IAtomContainer>(n);
         IteratingMDLReader reader = new IteratingMDLReader(c.getResourceAsStream(path),
                                                            SilentChemObjectBuilder.getInstance(),
                                                            true);
