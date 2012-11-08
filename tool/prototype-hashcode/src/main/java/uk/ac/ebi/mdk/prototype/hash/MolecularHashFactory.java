@@ -21,6 +21,7 @@
 package uk.ac.ebi.mdk.prototype.hash;
 
 import org.apache.log4j.Logger;
+import org.openscience.cdk.graph.SpanningTree;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -32,9 +33,8 @@ import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
 import uk.ac.ebi.mdk.prototype.hash.util.ConnectionMatrixFactory;
 import uk.ac.ebi.mdk.prototype.hash.util.MutableInt;
 import uk.ac.ebi.mdk.prototype.hash.util.OccurrenceCounter;
-import uk.ac.ebi.mdk.prototype.hash.util.ParitiyCalculator;
+import uk.ac.ebi.mdk.prototype.hash.util.ParityCalculator;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
@@ -44,6 +44,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.openscience.cdk.interfaces.IAtomType.Hybridization.SP3;
+import static org.openscience.cdk.interfaces.IBond.Order.DOUBLE;
+import static org.openscience.cdk.interfaces.IBond.Order.TRIPLE;
 import static org.openscience.cdk.interfaces.IBond.Stereo.DOWN;
 import static org.openscience.cdk.interfaces.IBond.Stereo.DOWN_INVERTED;
 import static org.openscience.cdk.interfaces.IBond.Stereo.UP;
@@ -74,6 +76,10 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
     public MolecularHashFactory() {
         this(DEFAULT_SEEDS, 1, false);
+    }
+
+    public MolecularHashFactory(int depth) {
+        this(DEFAULT_SEEDS, depth, false);
     }
 
     public MolecularHashFactory(Class<? extends AtomSeed>... seeds) {
@@ -131,9 +137,15 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         BitSet hydrogens = deprotonate ? getHydrogenMask(molecule) : new BitSet(molecule.getAtomCount());
         int[] precursorSeeds = getAtomSeeds(molecule, methods, hydrogens);
         byte[][] table = matrixFactory.getConnectionMatrix(molecule);
-        BitSet stereoatoms = getTetrahedralCentres(molecule);
 
-        return getHash(table, precursorSeeds, stereoatoms, hydrogens, molecule, true);
+        BitSet stereoatoms = getTetrahedralCentres(molecule);
+        BitSet dbStereoatoms = new BitSet(molecule.getAtomCount());
+        int[] groups = getDoubleBondGroups(molecule, dbStereoatoms);
+        int[] parities = getDoubleBondParities(molecule, dbStereoatoms, groups);
+
+
+        return getHash(table, precursorSeeds, stereoatoms, hydrogens, molecule, true,
+                       dbStereoatoms, groups, parities);
 
     }
 
@@ -166,7 +178,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
     }
 
     public MolecularHash getHash(byte[][] table, int[] precursorSeeds,
-                                 BitSet stereoatoms, BitSet hydrogens, IAtomContainer molecule, boolean shallow) {
+                                 BitSet stereoatoms, BitSet hydrogens, IAtomContainer molecule, boolean shallow,
+                                 BitSet dbAtoms, int[] dbGroups, int[] dbParities) {
 
         // System.out.println("seeds: " + toString(precursorSeeds));
         int n = precursorSeeds.length;
@@ -190,7 +203,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 //        }
 
 
-        current = setParity(stereoatoms, table, current, previous, molecule, hydrogens);
+        current = setParity(stereoatoms, table, current, previous, molecule, dbAtoms, dbGroups, dbParities);
         copy(current, previous); // set the current values to the previous and repeat until depth
 //        System.out.println("after parity");
 //        for (int i = 0; i < n; i++) {
@@ -213,7 +226,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 //                System.out.printf("%2s %4s: %s\n", d, atoms[i].getSymbol() + (i + 1), Integer.toHexString(current[i]));
 //            }
 
-            current = setParity(stereoatoms, table, current, previous, molecule, hydrogens);
+            current = setParity(stereoatoms, table, current, previous, molecule, dbAtoms, dbGroups, dbParities);
             copy(current, previous); // set the current values to the previous and repeat until depth
 
         }
@@ -244,16 +257,16 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
             for (int i = 0; i < n; i++) {
                 int[] preturbed = Arrays.copyOf(precursorSeeds, n);
                 preturbed[i] = precursorSeeds[i] * 105341;
-                individual[i] = getHash(table, preturbed, (BitSet) stereoatoms.clone(), hydrogens, molecule, false).hash;
+                individual[i] = getHash(table, preturbed, (BitSet) stereoatoms.clone(), hydrogens, molecule, false, dbAtoms, dbGroups, dbParities).hash;
                 globalCount.register(hash);
                 hash ^= rotate(individual[i], globalCount.register(individual[i]));
             }
 
-            return new MolecularHash(hash, individual, buildParitySets(table, parities));
+            return new MolecularHash(hash, individual, null);
         }
 
 
-        return new MolecularHash(hash, precursorSeeds, buildParitySets(table, parities));
+        return new MolecularHash(hash, precursorSeeds, null);
 
     }
 
@@ -283,10 +296,38 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
                            int[] current,
                            int[] previous,
                            IAtomContainer molecule,
-                           BitSet hydrogens) {
+                           BitSet dbAtoms,
+                           int[] dbGroups,
+                           int[] dbParities) {
 
         boolean found = false;
 
+        // double bonds
+        for (int i = dbAtoms.nextSetBit(0); i >= 0; i = dbAtoms.nextSetBit(i + 1)) {
+
+            int j = dbGroups[i];
+
+            int parity = dbParities[i] * getParity(table, i, previous) *
+                    dbParities[j] *  getParity(table, j, previous);
+
+            //System.out.println(toString(table));
+            //System.out.println(Arrays.toString(current));
+            //System.out.println(dbParities[i] + ", " + getParity(table, i, previous));
+            //System.out.println(dbParities[j] + ", " + getParity(table, j, previous));
+
+            // can't set to previous... as this would alter other centres
+            if (parity != 0) {
+                current[i] *= (parity == -1 ? 1309093 : 1316717); // bigprimes.net
+                current[j] *= (parity == -1 ? 1309093 : 1316717);
+                //System.out.println((i + 1) + " set to " + Integer.toHexString(current[i]));
+                found = true;
+                dbAtoms.clear(i);
+                dbAtoms.clear(j);
+            }
+
+        }
+
+        // tetrahedral atoms
         for (int i = stereoatoms.nextSetBit(0); i >= 0; i = stereoatoms.nextSetBit(i + 1)) {
 
             Integer storage = molecule.getAtom(i).getStereoParity();
@@ -297,7 +338,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
             if (storage == 2)
                 storage = -1;
 
-            int order = getParity(table, i, previous, hydrogens);
+            int order = getParity(table, i, previous);
 
             int parity = storage * order;
 
@@ -315,7 +356,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
         if (found && !stereoatoms.isEmpty()) {
             copy(current, previous);
-            current = setParity(stereoatoms, table, current, previous, molecule, hydrogens);
+            current = setParity(stereoatoms, table, current, previous, molecule, dbAtoms, dbGroups, dbParities);
             return current;
         }
 
@@ -323,52 +364,94 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
     }
 
-    private List<List<Integer>> buildParitySets(byte[][] table, int[] parities) {
+    private int[] getDoubleBondParities(IAtomContainer container, BitSet bonds, int[] groups) {
 
-        List<List<Integer>> combined = new ArrayList<List<Integer>>();
+        int[] parities = new int[container.getAtomCount()];
 
-        int n = table.length;
-
-        for (int i = 0; i < n; i++) {
-
-            List<Integer> neighbours = new ArrayList<Integer>();
-
-            for (int j = 0; j < i; j++) {
-                if (table[i][j] != 0) {
-                    neighbours.add(parities[j]);
-                    if (neighbours.size() == 1)
-                        neighbours.add(parities[i]);
-                }
-            }
-
-            if (!neighbours.isEmpty())
-                combined.add(neighbours);
-
+        for (int i = bonds.nextSetBit(0); i >= 0; i = bonds.nextSetBit(i + 1)) {
+            parities[i]         = ParityCalculator.getSP2Parity(container.getAtom(i), container);
+            parities[groups[i]] = ParityCalculator.getSP2Parity(container.getAtom(groups[i]), container);
         }
 
-        return combined;
+        return parities;
 
     }
 
-    private String printParities(int[] paraties) {
-        StringBuilder sb = new StringBuilder("p = [");
-        int n = paraties.length - 1;
-        int p = 0, m = 0;
-        for (int i = 0; i <= n; i++) {
-            if (paraties[i] == 0)
-                sb.append(" ");
-            if (paraties[i] == 1) {
-                sb.append("+");
-                p++;
-            }
-            if (paraties[i] == -1) {
-                sb.append("-");
-                m++;
+    private int[] getDoubleBondGroups(IAtomContainer container, BitSet atoms) {
+
+        int n = container.getAtomCount();
+
+        int[] groups = new int[n];
+
+        SpanningTree tree = new SpanningTree(container);
+        IAtomContainer cyclic = tree.getCyclicFragmentsContainer();
+
+        for (IBond bond : container.bonds()) {
+
+            if (DOUBLE.equals(bond.getOrder())) {
+
+                IAtom first = bond.getAtom(0);
+                IAtom second = bond.getAtom(1);
+
+
+                if (first.getFormalNeighbourCount() != null
+                        && first.getFormalNeighbourCount() >= 2
+                        && second.getFormalNeighbourCount() != null
+                        && second.getFormalNeighbourCount() >= 2) {
+
+
+
+                    if (!cyclic.contains(first)
+                            && !cyclic.contains(second)) {
+
+                        if (!doubleDoubleBonded(container, first)
+                                && !doubleDoubleBonded(container, second)) {
+
+
+
+                            int i = container.getAtomNumber(first);
+                            int j = container.getAtomNumber(second);
+
+                            atoms.set(i);
+                            // atoms.set(j); // only set one we can get the other from the groups
+
+                            // point to each other
+                            groups[i] = j;
+                            groups[j] = i;
+
+                        }
+                    }
+                }
+
+
             }
 
         }
-        sb.append("] ").append(p).append("/").append(m);
-        return sb.toString();
+
+        return groups;
+
+    }
+
+    /**
+     * Checks whether an atom is connected to two double bonds
+     *
+     * @param container the container
+     * @param atom      the atom to test
+     * @return whether it is connect to two double bonds
+     */
+    private boolean doubleDoubleBonded(IAtomContainer container, IAtom atom) {
+
+        int n = 0; // number of double bonds
+
+        for (IBond bond : container.getConnectedBondsList(atom)) {
+            if (DOUBLE.equals(bond.getOrder())
+                    || TRIPLE.equals(bond.getOrder())) {
+                n++;
+            }
+        }
+
+        return n > 1;
+
     }
 
 
@@ -426,24 +509,25 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         return sb.toString();
     }
 
-    private int getParity(byte[][] table, int i, int[] hashes, BitSet hydrogens) {
+    private int getParity(byte[][] table, int i, int[] hashes) {
 
         byte[] row = table[i];
 
         int count = 0;
         int n = row.length;
 
+
         for (int j = 0; j < n; j++) {
 
-            // if we have a connection
-            if (row[j] != 0) {
+            // if we have a single connection
+            if (row[j] == 1) {
 
                 int h = hashes[j];
                 //System.out.println(Integer.toHexString(h) + ": ");
 
                 for (int k = j + 1; k < n; k++) {
 
-                    if (row[k] != 0) {
+                    if (row[k] == 1) {
 
                         int cmp = hashes[k] > h ? 1 : hashes[k] < h ? -1 : 0;
                         //System.out.println("\t" + "[" + j + "] " +Integer.toHexString(h) + " - "  + "[" + k + "] " + Integer.toHexString(hashes[k]) + ": " + cmp);
