@@ -9,7 +9,7 @@ import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.MetaboliteImpl;
-import uk.ac.ebi.mdk.tool.domain.TestMoleculeFactory;
+import uk.ac.ebi.mdk.prototype.hash.TestMoleculeFactory;
 
 /**
  * @author John May
