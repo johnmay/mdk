@@ -48,6 +48,7 @@ public class SeedFactory {
                                              new AtomicNumberSeed(),
                                              new HybridizationSeed(),
                                              new ChargeSeed(),
+                                             new BooleanRadicalSeed(),
                                              new MassNumberSeed(),
                                              new NonNullHybridizationSeed(),
                                              new NonNullChargeSeed(),
