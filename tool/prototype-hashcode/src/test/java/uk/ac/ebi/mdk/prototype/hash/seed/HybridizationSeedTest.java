@@ -34,11 +34,11 @@ import static org.openscience.cdk.interfaces.IAtomType.Hybridization;
  */
 public class HybridizationSeedTest {
 
-    private NonNullHybridizationSeed function = new NonNullHybridizationSeed();
+    private AtomSeed function = new HybridizationSeed();
 
     @Test
     public void testSeed_NullHybridization() throws Exception {
-        Assert.assertEquals(0, function.seed(null, new Atom("C")));
+        Assert.assertEquals(70979, function.seed(null, new Atom("C")));
     }
 
     @Test
@@ -48,7 +48,7 @@ public class HybridizationSeedTest {
 
         for (Hybridization h : Hybridization.values()) {
             a.setHybridization(h);
-            Assert.assertNotSame(0, function.seed(null, a));
+            Assert.assertNotSame(70979, function.seed(null, a));
         }
 
     }
