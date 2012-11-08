@@ -39,14 +39,13 @@ import static org.junit.Assert.assertThat;
  */
 public class HashClashes {
 
-    @Test
-    public void testNigeroses() {
 
-    }
 
     /**
-     * This test fails if we include NonNullAtomicNumberSeed.class, NonNullChargeSeed.class, NonNullHybridizationSeed.class and BondOrderSum
+     * This test fails if we include NonNullAtomicNumberSeed.class,
+     * NonNullChargeSeed.class, NonNullHybridizationSeed.class and BondOrderSum
      * but is okay otherwise... this shows we need more randomness in our seeds
+     *
      * @throws IOException
      * @throws CDKException
      */
@@ -59,15 +58,13 @@ public class HashClashes {
                                                                         NonNullChargeSeed.class,
                                                                         NonNullHybridizationSeed.class);
 
-        MolecularHashFactory factory = new MolecularHashFactory();
-        factory.setDepth(4);
-        factory.setDeprotonate(false);
+        HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 4, false);
 
-        MolecularHash anticlockwise = factory.getHash(containers.get(0), seeds);
-        MolecularHash clockwise = factory.getHash(containers.get(1), seeds);
+        Integer anticlockwise = generator.generate(containers.get(0));
+        Integer clockwise = generator.generate(containers.get(1));
 
         assertThat("(R)-citronellol and (S)-citronellol hashed to the same value (including hydrogens)",
-                   clockwise.hash, is(not(anticlockwise.hash)));
+                   clockwise, is(not(anticlockwise)));
 
 
     }
