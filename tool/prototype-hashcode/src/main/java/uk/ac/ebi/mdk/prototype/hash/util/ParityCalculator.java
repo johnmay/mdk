@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * @author John May
  */
-public class ParitiyCalculator {
+public class ParityCalculator {
 
     public static int getSP3Parity(IAtom atom, final IAtomContainer container) {
         List<IAtom> neighbours = container.getConnectedAtomsList(atom);
@@ -79,8 +79,17 @@ public class ParitiyCalculator {
 
     public static int getSP2Parity(IAtom atom, List<IAtom> neighbours, final IAtomContainer container) {
 
-        if (neighbours.size() == 2)
+        if (neighbours.size() == 2) {
             neighbours.add(1, atom);
+        } else {
+            // move the double bond to the end
+            for (int i = 0; i < neighbours.size(); i++) {
+                if (IBond.Order.DOUBLE.equals(container.getBond(atom, neighbours.get(i)).getOrder())) {
+                    neighbours.add(neighbours.remove(i));
+                    break;
+                }
+            }
+        }
 
         if (neighbours.size() != 3)
             return 0;

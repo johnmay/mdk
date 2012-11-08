@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * @author John May
  */
-public class ParitiyCalculatorTest {
+public class ParityCalculatorTest {
 
     @Test
     public void testGetTetrahedralParity_R() throws Exception {

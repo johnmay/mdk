@@ -571,7 +571,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
             // we don't use the MDL parity and need to adjust if we have hydrogens pressent
             int p = atom.getFormalNeighbourCount() == 4
-                    ? ParitiyCalculator.getSP3Parity(atom, container)
+                    ? ParityCalculator.getSP3Parity(atom, container)
                     : atom.getStereoParity();
             if (p != 0) {
                 if (p == -1)
