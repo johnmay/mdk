@@ -32,7 +32,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class NonNullMassNumberSeed implements AtomSeed {
 
-    protected NonNullMassNumberSeed() {
+    public NonNullMassNumberSeed() {
     }
 
     public int seed(IAtomContainer molecule, IAtom atom) {

@@ -29,7 +29,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class AtomicNumberSeed implements AtomSeed {
 
-    protected AtomicNumberSeed() {
+    public AtomicNumberSeed() {
     }
 
     public int seed(IAtomContainer molecule, IAtom atom) {

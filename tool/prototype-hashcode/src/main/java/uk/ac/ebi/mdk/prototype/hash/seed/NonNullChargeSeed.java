@@ -31,7 +31,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class NonNullChargeSeed implements AtomSeed {
 
-    protected NonNullChargeSeed() {
+    public NonNullChargeSeed() {
     }
 
     /**

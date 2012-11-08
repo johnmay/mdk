@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.prototype.hash;
 
+import com.google.common.collect.MapMaker;
 import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;

@@ -35,7 +35,7 @@ import static org.openscience.cdk.interfaces.IAtomType.Hybridization.PLANAR3;
  */
 public class NonNullHybridizationSeed implements AtomSeed {
 
-    protected NonNullHybridizationSeed() {
+    public NonNullHybridizationSeed() {
     }
 
     /**

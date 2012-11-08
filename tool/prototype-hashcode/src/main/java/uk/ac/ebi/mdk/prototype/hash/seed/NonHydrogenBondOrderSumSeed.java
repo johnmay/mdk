@@ -35,7 +35,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
  */
 public class NonHydrogenBondOrderSumSeed implements AtomSeed {
 
-    protected NonHydrogenBondOrderSumSeed() {
+    public NonHydrogenBondOrderSumSeed() {
     }
 
     public int seed(IAtomContainer molecule, IAtom atom) {

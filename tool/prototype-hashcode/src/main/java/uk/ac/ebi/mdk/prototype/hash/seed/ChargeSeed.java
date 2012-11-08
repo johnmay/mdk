@@ -32,7 +32,7 @@ public class ChargeSeed implements AtomSeed {
      */
     private static final int NULL_VALUE = 257;
 
-    protected ChargeSeed() {
+    public ChargeSeed() {
     }
 
     /**

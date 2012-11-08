@@ -37,7 +37,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
  */
 public class BondOrderSumSeed implements AtomSeed {
 
-    protected BondOrderSumSeed() {
+    public BondOrderSumSeed() {
     }
 
     public int seed(IAtomContainer molecule, IAtom atom) {

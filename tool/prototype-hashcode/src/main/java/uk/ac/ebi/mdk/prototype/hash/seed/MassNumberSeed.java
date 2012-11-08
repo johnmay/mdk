@@ -28,7 +28,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  */
 public class MassNumberSeed implements AtomSeed {
 
-    protected MassNumberSeed() {
+    public MassNumberSeed() {
     }
 
     public int seed(IAtomContainer molecule, IAtom atom) {

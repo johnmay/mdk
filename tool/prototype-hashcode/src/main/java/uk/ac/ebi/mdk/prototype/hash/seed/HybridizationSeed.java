@@ -24,19 +24,20 @@ import static org.openscience.cdk.interfaces.IAtomType.Hybridization;
 import static org.openscience.cdk.interfaces.IAtomType.Hybridization.PLANAR3;
 
 /**
- * An atom seed that hashes the orbital hybridization. This is useful as using the bond
- * order sum can not catch all cases when bonds are de-localised.
- *
- * Not that as the hash can provide false positives but NOT false negatives some molecules
- * may calculate the same hash even though they are actually different. This can be rectified
- * by increasing the depth of the hash.
+ * An atom seed that hashes the orbital hybridization. This is useful as using
+ * the bond order sum can not catch all cases when bonds are de-localised.
+ * <p/>
+ * Not that as the hash can provide false positives but NOT false negatives some
+ * molecules may calculate the same hash even though they are actually
+ * different. This can be rectified by increasing the depth of the hash.
  *
  * @author John May
- * @see <a href="http://en.wikipedia.org/wiki/Orbital_hybridisation">Orbital Hybridisation</a>
+ * @see <a href="http://en.wikipedia.org/wiki/Orbital_hybridisation">Orbital
+ *      Hybridisation</a>
  */
 public class HybridizationSeed implements AtomSeed {
 
-    protected HybridizationSeed() {
+    public HybridizationSeed() {
     }
 
     /**
@@ -52,11 +53,11 @@ public class HybridizationSeed implements AtomSeed {
                 : 0;
     }
 
-    private Hybridization normalize(Hybridization hybridization){
+    private Hybridization normalize(Hybridization hybridization) {
 
         // CDK Hybridization model is too specific for our needs and we need to
         // normalise the values
-        if(hybridization == PLANAR3)
+        if (hybridization == PLANAR3)
             return Hybridization.SP2;
 
         return hybridization;
