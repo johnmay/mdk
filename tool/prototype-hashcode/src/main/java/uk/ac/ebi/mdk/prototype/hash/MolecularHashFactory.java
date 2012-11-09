@@ -401,8 +401,9 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
                         && second.getFormalNeighbourCount() >= 2) {
 
 
-                    if (!cyclic.contains(first)
-                            && !cyclic.contains(second)) {
+                    // if one is not in a cycle we can calculate E/Z
+                    boolean isCyclic = cyclic.contains(first) && cyclic.contains(second);
+                    if (!isCyclic) {
 
                         if (validEZBond(container, first)
                                 && validEZBond(container, second)) {
