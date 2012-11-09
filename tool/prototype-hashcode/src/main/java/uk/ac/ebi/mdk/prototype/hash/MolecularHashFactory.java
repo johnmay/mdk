@@ -483,8 +483,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
             return value;
 
 
-        //System.out.print(Integer.toHexString(value) + " -> ");
-        value = rotate(value, value & 0x7); // rotate using the low order bits
+        //System.out.print(Integer.toHexString(value) + " -> " + (value & 0x7) + " = ");
+        value = rotate(value, (value & 0x7) + 1); // rotate using the low order bits 1..8 times
         //System.out.println(Integer.toHexString(value));
 
         for (int j = 0; j < connectionTable[index].length; j++) {
