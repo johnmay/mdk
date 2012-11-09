@@ -197,7 +197,6 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         copy(precursorSeeds, current);
 
         HashCounter globalCount = new HashCounter();
-        HashCounter localCount = new HashCounter();
 
 //        System.out.println("starting:");
 //        for (int i = 0; i < n; i++) {
