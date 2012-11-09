@@ -48,6 +48,7 @@ import static org.openscience.cdk.interfaces.IBond.Order.DOUBLE;
 import static org.openscience.cdk.interfaces.IBond.Order.TRIPLE;
 import static org.openscience.cdk.interfaces.IBond.Stereo.DOWN;
 import static org.openscience.cdk.interfaces.IBond.Stereo.DOWN_INVERTED;
+import static org.openscience.cdk.interfaces.IBond.Stereo.E_OR_Z;
 import static org.openscience.cdk.interfaces.IBond.Stereo.UP;
 import static org.openscience.cdk.interfaces.IBond.Stereo.UP_INVERTED;
 import static org.openscience.cdk.interfaces.IBond.Stereo.UP_OR_DOWN;
@@ -75,6 +76,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
     private boolean deprotonate = false;
     private boolean seedWithMoleculeSize = true;
     private int depth = 1;
+    private boolean debug;
 
     public MolecularHashFactory() {
         this(DEFAULT_SEEDS, 1, false);
@@ -92,6 +94,14 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         this.seedMethods = Collections.unmodifiableCollection(seeds);
         this.depth = depth;
         this.deprotonate = deprotonate;
+    }
+
+    public MolecularHashFactory(Collection<AtomSeed> seeds, int depth, boolean deprotonate,
+                                boolean debug) {
+        this.seedMethods = Collections.unmodifiableCollection(seeds);
+        this.depth = depth;
+        this.deprotonate = deprotonate;
+        this.debug = debug;
     }
 
     public static MolecularHashFactory getInstance() {
@@ -183,7 +193,9 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
                                  BitSet stereoatoms, BitSet hydrogens, IAtomContainer molecule, boolean shallow,
                                  BitSet dbAtoms, int[] dbGroups, int[] dbParities) {
 
-        // System.out.println("seeds: " + toString(precursorSeeds));
+        if (debug)
+            System.out.println("seeds: " + toString(precursorSeeds));
+
         int n = precursorSeeds.length;
 
         int[] parities = new int[n];
@@ -229,6 +241,9 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
             current = setParity(stereoatoms, table, current, previous, molecule, dbAtoms, dbGroups, dbParities);
             copy(current, previous); // set the current values to the previous and repeat until depth
+
+            if(debug)
+                System.out.println("[" + d + "]: " + toString(current));
 
         }
 
@@ -311,10 +326,11 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
             int parity = dbParities[i] * getParity(table, i, previous) *
                     dbParities[j] * getParity(table, j, previous);
 
-//            System.out.println(toString(table));
-//            System.out.println(Arrays.toString(current));
-//            System.out.println(dbParities[i] + ", " + getParity(table, i, previous));
-//            System.out.println(dbParities[j] + ", " + getParity(table, j, previous));
+            if (debug) {
+                System.out.println(Arrays.toString(current));
+                System.out.println(dbParities[i] + ", " + getParity(table, i, previous));
+                System.out.println(dbParities[j] + ", " + getParity(table, j, previous));
+            }
 
             // can't set to previous... as this would alter other centres
             if (parity != 0) {
@@ -378,6 +394,20 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
     }
 
+    private String toString(IAtomContainer container, IBond bond) {
+        return toString(container, bond.getAtom(0))
+                + toString(bond.getOrder())
+                + toString(container, bond.getAtom(1));
+    }
+
+    private String toString(IBond.Order order) {
+        return order == IBond.Order.DOUBLE ? "=" : "-";
+    }
+
+    private String toString(IAtomContainer container, IAtom atom) {
+        return atom.getSymbol() + (container.getAtomNumber(atom) + 1);
+    }
+
     private int[] getDoubleBondGroups(IAtomContainer container, BitSet atoms) {
 
         int n = container.getAtomCount();
@@ -389,11 +419,24 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
         for (IBond bond : container.bonds()) {
 
-            if (DOUBLE.equals(bond.getOrder())) {
+            if (debug) {
+                System.out.println(toString(container, bond));
+                System.out.println(DOUBLE.equals(bond.getOrder())
+                                           && !E_OR_Z.equals(bond.getStereo()));
+            }
+
+            if (DOUBLE.equals(bond.getOrder())
+                    && !E_OR_Z.equals(bond.getStereo())) {
 
                 IAtom first = bond.getAtom(0);
                 IAtom second = bond.getAtom(1);
 
+                if (debug)
+                    System.out.println((first.getFormalNeighbourCount() != null
+                            && first.getFormalNeighbourCount() >= 2)
+                                               + " "
+                                               + (second.getFormalNeighbourCount() != null
+                            && second.getFormalNeighbourCount() >= 2));
 
                 if (first.getFormalNeighbourCount() != null
                         && first.getFormalNeighbourCount() >= 2
@@ -403,7 +446,17 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
                     // if one is not in a cycle we can calculate E/Z
                     boolean isCyclic = cyclic.contains(first) && cyclic.contains(second);
+
+                    if (debug)
+                        System.out.println("cyclic: "
+                                           + cyclic.contains(first)
+                                           + cyclic.contains(second));
+
                     if (!isCyclic) {
+
+                        if (debug)
+                            System.out.println("validEZBond()");
+
 
                         if (validEZBond(container, first)
                                 && validEZBond(container, second)) {
@@ -428,6 +481,9 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
         }
 
+
+        if(debug) System.out.println("groups: " + Arrays.toString(groups));
+
         return groups;
 
     }
@@ -443,6 +499,9 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
      */
     private boolean validEZBond(IAtomContainer container, IAtom atom) {
 
+        if(debug)
+            System.out.println("testing whether the double bond is valid");
+
         int n = 0; // number of double bonds
 
         for (IBond bond : container.getConnectedBondsList(atom)) {
@@ -455,10 +514,15 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
             if (UP_OR_DOWN.equals(bond.getStereo()) ||
                     UP_OR_DOWN_INVERTED.equals(bond.getStereo())) {
+                if(debug)
+                    System.out.println("UP/DOWN query found on " + toString(container, bond));
                 return false;
             }
 
         }
+
+        if (debug)
+            System.out.println(n + " double bonds connected");
 
         return n == 1;
 
