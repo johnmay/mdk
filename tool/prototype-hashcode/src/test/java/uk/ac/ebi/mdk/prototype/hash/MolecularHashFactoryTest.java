@@ -23,7 +23,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.NoSuchAtomTypeException;
@@ -41,7 +40,6 @@ import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.BooleanRadicalSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.HybridizationSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.MassNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullAtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullChargeSeed;
@@ -65,7 +63,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.openscience.cdk.tools.manipulator.AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms;
 
 /**
  * @author John May
@@ -86,68 +83,88 @@ public class MolecularHashFactoryTest {
     @Test
     public void testStereoHashing_ImplicitR() throws CDKException, IOException {
 
-        IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("r-structures.sdf"),
-                                                           DefaultChemObjectBuilder.getInstance());
+        List<IAtomContainer> containers = readSDF("r-structures.sdf");
+        HashGenerator<Integer> generator = new MolecularHashFactory();
 
-        while (reader.hasNext()) {
-            IAtomContainer container = reader.next();
-            percieveAtomTypesAndConfigureAtoms(container);
-            assertEquals(-350234038,
-                         hash.getHash(container).hash);
-            System.out.println(MolecularHashFactory.getInstance().getHash(container).hash);
+        Integer consensus = null;
+
+        for (int i = 0; i < containers.size(); i++) {
+
+            Integer value = generator.generate(containers.get(i));
+
+            if (consensus == null)
+                consensus = value;
+            else
+                assertEquals("containers[" + i + "] did not match consensus",
+                             consensus, value);
+
         }
-
-        reader.close();
 
     }
 
     @Test
     public void testStereoHashing_ImplicitS() throws CDKException, IOException {
 
-        IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("s-structures.sdf"),
-                                                           DefaultChemObjectBuilder.getInstance());
-        while (reader.hasNext()) {
-            IAtomContainer container = reader.next();
-            percieveAtomTypesAndConfigureAtoms(container);
-            assertEquals(-97587614,
-                         hash.getHash(container).hash);
+        List<IAtomContainer> containers = readSDF("s-structures.sdf");
+        HashGenerator<Integer> generator = new MolecularHashFactory();
+
+        Integer consensus = null;
+
+        for (int i = 0; i < containers.size(); i++) {
+
+            Integer value = generator.generate(containers.get(i));
+
+            if (consensus == null)
+                consensus = value;
+            else
+                assertEquals("containers[" + i + "] did not match consensus",
+                             consensus, value);
 
         }
-
-        reader.close();
 
     }
 
     @Test
     public void testStereoHashing_ExplicitR() throws CDKException, IOException {
 
-        IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("r-structures-explicit.sdf"),
-                                                           DefaultChemObjectBuilder.getInstance());
-        while (reader.hasNext()) {
-            IAtomContainer container = reader.next();
-            percieveAtomTypesAndConfigureAtoms(container);
-            assertEquals(327343299,
-                         hash.getHash(container).hash);
-        }
+        List<IAtomContainer> containers = readSDF("r-structures-explicit.sdf");
+        HashGenerator<Integer> generator = new MolecularHashFactory();
 
-        reader.close();
+        Integer consensus = null;
+
+        for (int i = 0; i < containers.size(); i++) {
+
+            Integer value = generator.generate(containers.get(i));
+
+            if (consensus == null)
+                consensus = value;
+            else
+                assertEquals("containers[" + i + "] did not match consensus",
+                             consensus, value);
+
+        }
 
     }
 
     @Test
     public void testStereoHashing_ExplicitS() throws CDKException, IOException {
 
-        IteratingMDLReader reader = new IteratingMDLReader(getClass().getResourceAsStream("s-structures-explicit.sdf"),
-                                                           DefaultChemObjectBuilder.getInstance());
-        while (reader.hasNext()) {
-            IAtomContainer container = reader.next();
-            percieveAtomTypesAndConfigureAtoms(container);
-            assertEquals(-65243778,
-                         hash.getHash(container).hash);
+        List<IAtomContainer> containers = readSDF("s-structures-explicit.sdf");
+        HashGenerator<Integer> generator = new MolecularHashFactory();
+
+        Integer consensus = null;
+
+        for (int i = 0; i < containers.size(); i++) {
+
+            Integer value = generator.generate(containers.get(i));
+
+            if (consensus == null)
+                consensus = value;
+            else
+                assertEquals("containers[" + i + "] did not match consensus",
+                             consensus, value);
 
         }
-
-        reader.close();
 
     }
 
@@ -587,18 +604,15 @@ public class MolecularHashFactoryTest {
 
     @Ignore
     public void testChEBI() throws IOException, CDKException {
-        List<IAtomContainer> containers = readSDF(new FileInputStream("/Users/johnmay/Databases/chebi/ChEBI_lite.sdf"), 10000);
-
-        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+        List<IAtomContainer> containers = readSDF(new FileInputStream("/Users/johnmay/Databases/chebi/ChEBI_lite.sdf"), 20000);
 
         Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
                                                                         ChargeSeed.class,
-                                                                        HybridizationSeed.class,
+                                                                        BondOrderSumSeed.class,
                                                                         ConnectedAtomSeed.class,
                                                                         MassNumberSeed.class,
                                                                         BooleanRadicalSeed.class);
-        factory.setDepth(8);
-        //factory.setDeprotonate(true);
+        HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 8, false);
 
         Map<Integer, IAtomContainer> map = Maps.newHashMapWithExpectedSize(10000);
 
@@ -607,7 +621,9 @@ public class MolecularHashFactoryTest {
             long start = System.currentTimeMillis();
             for (IAtomContainer container : containers) {
 
-                int hash = factory.getHash(container, seeds).hash;
+                Integer hash = generator.generate(container);
+
+                container.setProperty("hashcode", "0x" + Integer.toHexString(hash));
 
                 if (map.containsKey(hash))
                     compose(map.get(hash), container);
