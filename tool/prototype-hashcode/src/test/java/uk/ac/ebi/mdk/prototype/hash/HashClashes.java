@@ -21,6 +21,12 @@ import org.junit.Test;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.BooleanRadicalSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.HybridizationSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.MassNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullAtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullChargeSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullHybridizationSeed;
@@ -80,6 +86,83 @@ public class HashClashes {
 
         assertThat("a double bond in (E) configuration hashcode should not match unspecified",
                    unspecified, is(not(specified)));
+
+    }
+
+    /**
+     * Unspecified by double bond
+     * @throws IOException
+     * @throws CDKException
+     */
+    @Test public void testUnspecifiedDoubleBond() throws IOException, CDKException {
+
+        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(), "farnesyl-diphosphates.sdf", 2);
+
+        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                        ChargeSeed.class,
+                                                                        HybridizationSeed.class,
+                                                                        ConnectedAtomSeed.class,
+                                                                        MassNumberSeed.class,
+                                                                        BooleanRadicalSeed.class);
+        HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 8, false);
+
+        Integer specified   = generator.generate(containers.get(0));
+        Integer unspecified = generator.generate(containers.get(1));
+
+        assertThat(unspecified, is(not(specified)));
+
+    }
+
+    /**
+     * Ensures that double bonds connected to rings are still included i.e
+     *         c – c
+     *  \     /     \
+     *   c = c       c
+     *        \     /
+     *         c – c
+     * @throws IOException
+     * @throws CDKException
+     */
+    @Test public void testEZMismatch() throws IOException, CDKException {
+
+        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(), "ring-based-doublebonds.sdf", 2);
+
+        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                        ChargeSeed.class,
+                                                                        HybridizationSeed.class,
+                                                                        ConnectedAtomSeed.class,
+                                                                        MassNumberSeed.class,
+                                                                        BooleanRadicalSeed.class);
+        HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 8, false, true);
+
+        Integer cis   = generator.generate(containers.get(0));
+        Integer trans = generator.generate(containers.get(1));
+
+        assertThat(cis, is(not(trans)));
+
+    }
+
+    /**
+     * Tests that di-atoms
+     * @throws IOException
+     * @throws CDKException
+     */
+    @Test public void testDiatomic() throws IOException, CDKException {
+
+        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(), "diatomic.sdf", 2);
+
+        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
+                                                                        ChargeSeed.class,
+                                                                        HybridizationSeed.class,
+                                                                        ConnectedAtomSeed.class,
+                                                                        MassNumberSeed.class,
+                                                                        BooleanRadicalSeed.class);
+        HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 8, false, true);
+
+        Integer cis   = generator.generate(containers.get(0));
+        Integer trans = generator.generate(containers.get(1));
+
+        assertThat(cis, is(not(trans)));
 
     }
 
