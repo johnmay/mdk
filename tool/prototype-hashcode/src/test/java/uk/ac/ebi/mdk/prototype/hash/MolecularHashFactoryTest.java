@@ -177,12 +177,16 @@ public class MolecularHashFactoryTest {
         // for depth of 1 we get some overlap
         for (int d = 1; d < 8; d++) {
             Map<Integer, Set<String>> hashes = new HashMap<Integer, Set<String>>();
-            MolecularHashFactory.getInstance().setDepth(d);
+            MolecularHashFactory.getInstance()
+                                .setDepth(d);
             for (IAtomContainer container : containers) {
-                int key = MolecularHashFactory.getInstance().getHash(container).hash;
+                int key = MolecularHashFactory.getInstance()
+                                              .getHash(container).hash;
                 if (!hashes.containsKey(key))
                     hashes.put(key, new HashSet<String>());
-                hashes.get(key).add(container.getProperty(CDKConstants.TITLE).toString());
+                hashes.get(key)
+                      .add(container.getProperty(CDKConstants.TITLE)
+                                    .toString());
             }
             assertEquals("duplicate hash values for depth = " + d + "\n" + hashes, 9, hashes.size());
         }
@@ -201,9 +205,12 @@ public class MolecularHashFactoryTest {
 
         for (int i = 0; i < containers.size(); i++) {
 
-            String name = containers.get(i).getProperty(CDKConstants.TITLE).toString();
+            String name = containers.get(i)
+                                    .getProperty(CDKConstants.TITLE)
+                                    .toString();
 
-            System.out.printf("%20s:\n", name);
+            System.out
+                  .printf("%20s:\n", name);
 
             for (int d = 1; d < 8; d++) {
 
@@ -212,9 +219,11 @@ public class MolecularHashFactoryTest {
                 MolecularHash orginal = factory.getHash(containers.get(i));
                 MolecularHash inverted = factory.getHash(invertedContainers.get(i));
 
-                System.out.printf("%20s %s %s\n", "", orginal.toBase64(), inverted.toBase64());
+                System.out
+                      .printf("%20s %s %s\n", "", orginal.toBase64(), inverted.toBase64());
 
-                assertEquals(containers.get(i).getProperty(CDKConstants.TITLE) + " hashes were not equal depth=" + d,
+                assertEquals(containers.get(i)
+                                       .getProperty(CDKConstants.TITLE) + " hashes were not equal depth=" + d,
                              orginal.hash,
                              inverted.hash);
             }
@@ -282,7 +291,8 @@ public class MolecularHashFactoryTest {
 
         List<IAtomContainer> ornithines = readSDF("ornithines.sdf");
 
-        MolecularHashFactory.getInstance().setDepth(4);
+        MolecularHashFactory.getInstance()
+                            .setDepth(4);
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
         IAtomContainer dornithine = ornithines.get(0);
@@ -300,7 +310,8 @@ public class MolecularHashFactoryTest {
 
         List<IAtomContainer> lactones = readSDF("lactones.sdf");
 
-        MolecularHashFactory.getInstance().setDepth(4);
+        MolecularHashFactory.getInstance()
+                            .setDepth(4);
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
         IAtomContainer arabinono = lactones.get(0);
@@ -318,7 +329,8 @@ public class MolecularHashFactoryTest {
 
         List<IAtomContainer> deoxyhexoses = readSDF("deoxyhexoses.sdf");
 
-        MolecularHashFactory.getInstance().setDepth(4);
+        MolecularHashFactory.getInstance()
+                            .setDepth(4);
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
         IAtomContainer dquinovose = deoxyhexoses.get(0);
@@ -338,15 +350,18 @@ public class MolecularHashFactoryTest {
     }
 
     private String toString(IAtomContainer container) {
-        return container.getProperty(CDKConstants.TITLE) + ": " + Integer.toHexString(MolecularHashFactory.getInstance().getHash(container).hash);
+        return container.getProperty(CDKConstants.TITLE) + ": " + Integer.toHexString(MolecularHashFactory.getInstance()
+                                                                                                          .getHash(container).hash);
     }
 
     private String toString(IAtomContainer container, Class<? extends AtomSeed>... classes) {
 
         return container.getProperty(CDKConstants.TITLE)
                 + ": "
-                + Integer.toHexString(MolecularHashFactory.getInstance().getHash(container,
-                                                                                 SeedFactory.getInstance().getSeeds(classes)).hash);
+                + Integer.toHexString(MolecularHashFactory.getInstance()
+                                                          .getHash(container,
+                                                                   SeedFactory.getInstance()
+                                                                              .getSeeds(classes)).hash);
     }
 
     /**
@@ -388,8 +403,9 @@ public class MolecularHashFactoryTest {
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
         // need to generate better seeds
-        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class,
-                                                                        ConnectedAtomSeed.class);
+        Collection<AtomSeed> seeds = SeedFactory.getInstance()
+                                                .getSeeds(NonNullAtomicNumberSeed.class,
+                                                          ConnectedAtomSeed.class);
 
         factory.setDepth(4);
 
@@ -438,9 +454,10 @@ public class MolecularHashFactoryTest {
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
-        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class,
-                                                                        ConnectedAtomSeed.class,
-                                                                        NonNullChargeSeed.class);
+        Collection<AtomSeed> seeds = SeedFactory.getInstance()
+                                                .getSeeds(NonNullAtomicNumberSeed.class,
+                                                          ConnectedAtomSeed.class,
+                                                          NonNullChargeSeed.class);
 
         factory.setDepth(4);
 
@@ -494,8 +511,9 @@ public class MolecularHashFactoryTest {
 
         List<IAtomContainer> containers = readSDF(getClass(), "aldohexoses.sdf", 3);
 
-        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class,
-                                                                        NonNullHybridizationSeed.class);
+        Collection<AtomSeed> seeds = SeedFactory.getInstance()
+                                                .getSeeds(NonNullAtomicNumberSeed.class,
+                                                          NonNullHybridizationSeed.class);
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
         factory.setDepth(4);
@@ -589,14 +607,23 @@ public class MolecularHashFactoryTest {
     @Test
     public void testEZButenediol() throws IOException, CDKException {
 
-        IAtomContainer cis = MolecularHashFactoryTest.readSDF(getClass(), "(E)-butenediol-permutations.sdf", 1).get(0);
-        IAtomContainer trans = MolecularHashFactoryTest.readSDF(getClass(), "(Z)-butenediol-permutations.sdf", 1).get(0);
+        IAtomContainer cis = MolecularHashFactoryTest.readSDF(getClass(), "(E)-butenediol-permutations.sdf", 1)
+                                                     .get(0);
+        IAtomContainer trans = MolecularHashFactoryTest.readSDF(getClass(), "(Z)-butenediol-permutations.sdf", 1)
+                                                       .get(0);
+
 
         for (int depth = 0; depth < 10; depth++) {
-            HashGenerator<Integer> generator = new MolecularHashFactory(depth);
+            HashGenerator<Integer> off = new HashGeneratorMaker().withDepth(depth)
+                                                                 .build();
+            HashGenerator<Integer> on = new HashGeneratorMaker().withDepth(depth)
+                                                                .withEZIsomerism()
+                                                                .build();
 
+            assertThat("molecules with different E/Z and E/Z off should be equal at depth " + depth,
+                       off.generate(cis), is(off.generate(trans)));
             assertThat("molecules with different E/Z should not be equal at depth " + depth,
-                       generator.generate(cis), is(not(generator.generate(trans))));
+                       on.generate(cis), is(not(on.generate(trans))));
         }
 
     }
@@ -606,12 +633,13 @@ public class MolecularHashFactoryTest {
     public void testChEBI() throws IOException, CDKException {
         List<IAtomContainer> containers = readSDF(new FileInputStream("/Users/johnmay/Databases/chebi/ChEBI_lite.sdf"), 20000);
 
-        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-                                                                        ChargeSeed.class,
-                                                                        BondOrderSumSeed.class,
-                                                                        ConnectedAtomSeed.class,
-                                                                        MassNumberSeed.class,
-                                                                        BooleanRadicalSeed.class);
+        Collection<AtomSeed> seeds = SeedFactory.getInstance()
+                                                .getSeeds(AtomicNumberSeed.class,
+                                                          ChargeSeed.class,
+                                                          BondOrderSumSeed.class,
+                                                          ConnectedAtomSeed.class,
+                                                          MassNumberSeed.class,
+                                                          BooleanRadicalSeed.class);
         HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 8, false);
 
         Map<Integer, IAtomContainer> map = Maps.newHashMapWithExpectedSize(10000);
@@ -643,14 +671,17 @@ public class MolecularHashFactoryTest {
 
         }
 
-        System.out.println("average encoding time for " + containers.size() + " molecules: " + average + " ms");
+        System.out
+              .println("average encoding time for " + containers.size() + " molecules: " + average + " ms");
 
-        System.out.println("unique hash count: " + map.size());
+        System.out
+              .println("unique hash count: " + map.size());
 
         SDFWriter writer = new SDFWriter(new FileOutputStream("/Users/johnmay/Desktop/chebi-collapsed.sdf"));
 
         for (Map.Entry<Integer, IAtomContainer> entry : map.entrySet()) {
-            if (entry.getValue().getFlag(CDKConstants.VISITED))
+            if (entry.getValue()
+                     .getFlag(CDKConstants.VISITED))
                 writer.write(entry.getValue());
         }
 
@@ -665,8 +696,9 @@ public class MolecularHashFactoryTest {
         parent.add(child);
 
         parent.setProperty(CHEBI_ID,
-                           Joiner.on(", ").join(parent.getProperty(CHEBI_ID),
-                                                child.getProperty(CHEBI_ID)));
+                           Joiner.on(", ")
+                                 .join(parent.getProperty(CHEBI_ID),
+                                       child.getProperty(CHEBI_ID)));
 
         parent.setFlag(CDKConstants.VISITED, true);
     }
@@ -716,7 +748,8 @@ public class MolecularHashFactoryTest {
                             AtomTypeManipulator.configure(atom, matched);
                     }
                 } catch (NoSuchAtomTypeException ex) {
-                    System.err.println("Unidentified AtomType: " + ex.getMessage());
+                    System.err
+                          .println("Unidentified AtomType: " + ex.getMessage());
                 }
             }
 
