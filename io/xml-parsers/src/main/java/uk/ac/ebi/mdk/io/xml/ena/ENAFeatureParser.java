@@ -28,24 +28,30 @@ import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.Locus;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
-import uk.ac.ebi.mdk.domain.entity.*;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
+import uk.ac.ebi.mdk.domain.entity.RNAProduct;
+import uk.ac.ebi.mdk.domain.entity.RibosomalRNA;
+import uk.ac.ebi.mdk.domain.entity.TransferRNA;
 import uk.ac.ebi.mdk.domain.identifier.DynamicIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicGeneIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicRNAIdentifier;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * ENAFeatureParser - 2011.10.17 <br>
- * Class description
+ * ENAFeatureParser - 2011.10.17 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -53,30 +59,69 @@ import java.util.regex.Pattern;
  */
 public class ENAFeatureParser {
 
-    private static final Logger                   LOGGER             = Logger.getLogger(ENAFeatureParser.class);
-    private static       DefaultIdentifierFactory IDENTIFIER_FACTORY = DefaultIdentifierFactory.getInstance();
-    private int     start;
-    private int     end;
+    private static final Logger LOGGER = Logger.getLogger(ENAFeatureParser.class);
+    private static DefaultIdentifierFactory IDENTIFIER_FACTORY = DefaultIdentifierFactory
+            .getInstance();
+    private int start;
+    private int end;
     private boolean complement;
-    private Type    type;
+    private Type type;
     private IdentifierSet identifiers = new IdentifierSet();
     private AbstractSequence sequence;
-    private Map<String, String> qualifiers = new HashMap();
+    private Map<String, String> qualifiers = new HashMap<String, String>();
     private EntityFactory factory;
 
     public enum Type {
 
-        gene, CDS, source, tRNA, rRNA
+        GENE("gene"),
+        CDS("CDS"),
+        SOURCE("source"),
+        TRNA("tRNA"),
+        RRNA("rRNA"),
+        UNKNOWN("");
+
+        private final String label;
+
+        private Type(String label) {
+            this.label = label;
+        }
+
+        private static final Map<String, Type> map = new HashMap<String, Type>(12);
+
+        static {
+            for (Type type : values()) {
+                map.put(type.label, type);
+            }
+        }
+
+        /**
+         * Access an enum of the given label - if no match is found UNKNOWN is
+         * returned.
+         *
+         * @param label a label to match
+         * @return a type matching the label or unknown
+         */
+        public static Type of(String label) {
+            if (map.containsKey(label))
+                return map.get(label);
+            System.err.println("unknown label type: " + label);
+            return UNKNOWN;
+        }
+
+
     }
 
     ;
-    private Pattern               complementMatch = Pattern.compile("complement\\(");
-    private Map<String, Resolver> resolverMap     = new HashMap();
+    private Pattern IDENTITY_MATCH = Pattern.compile("(\\d+)\\.\\.(\\d+)");
+    private Pattern COMPLEMENT_MATCH = Pattern.compile("complement\\((\\d+)\\.\\.(\\d+)\\)");
+    private Pattern COMPLEMENT_AND_JOIN_MATCH = Pattern.compile("complement\\(join\\((\\d+)\\.\\.(\\d+),(\\d+)\\.\\.(\\d+)\\)\\)");
+    private Map<String, Resolver> resolverMap = new HashMap<String, Resolver>();
 
     {
         resolverMap.put("xref", new CrossReferenceResolver());
         resolverMap.put("qualifier", new QualifierResolver());
     }
+
 
     /**
      * Creates a new feature form xmlr
@@ -92,20 +137,35 @@ public class ENAFeatureParser {
         for (int i = 0; i < xmlr.getAttributeCount(); i++) {
             attrName = xmlr.getAttributeLocalName(i);
             if (attrName.equals("name")) {
-                type = Type.valueOf(xmlr.getAttributeValue(i));
+                type = Type.of(xmlr.getAttributeValue(i));
             } else if (attrName.equals("location")) {
-                String locationText = xmlr.getAttributeValue(i);
+                String location = xmlr.getAttributeValue(i);
 
                 // remove scaffold
-                if (locationText.contains(":")) {
-                    locationText = locationText.substring(locationText.indexOf(":") + 1);
+                if (location.contains(":")) {
+                    location = location.substring(location.indexOf(":") + 1);
                 }
 
-                complement = complementMatch.matcher(locationText).find();
-                String location = complement ? locationText.substring(11, locationText.length() - 1) : locationText;
-                String[] values = location.split("\\.\\.");
-                start = Integer.parseInt(values[0]);
-                end = Integer.parseInt(values[1]);
+                Matcher matcher = IDENTITY_MATCH.matcher(location);
+                if (matcher.matches()) {
+                    start = Integer.parseInt(matcher.group(1));
+                    end = Integer.parseInt(matcher.group(2));
+                }
+
+                matcher = COMPLEMENT_MATCH.matcher(location);
+                if (matcher.matches()) {
+                    complement = true;
+                    start = Integer.parseInt(matcher.group(1));
+                    end = Integer.parseInt(matcher.group(2));
+                }
+
+                matcher = COMPLEMENT_AND_JOIN_MATCH.matcher(location);
+                if (matcher.matches()) {
+                    System.err.println("complement(join(..not yet handled..))");
+                    return;
+                }
+
+
             }
         }
 
@@ -134,7 +194,7 @@ public class ENAFeatureParser {
     }
 
     public boolean isGene() {
-        return type == Type.gene;
+        return type == Type.GENE;
     }
 
     public boolean isRNA() {
@@ -142,15 +202,15 @@ public class ENAFeatureParser {
     }
 
     public boolean isSource() {
-        return type == Type.source;
+        return type == Type.SOURCE;
     }
 
     public boolean isRRNA() {
-        return type == Type.rRNA;
+        return type == Type.RRNA;
     }
 
     public boolean isTRNA() {
-        return type == Type.tRNA;
+        return type == Type.TRNA;
     }
 
     public boolean isProduct() {
@@ -174,7 +234,8 @@ public class ENAFeatureParser {
     }
 
     public int getTranslationTable() {
-        return Integer.parseInt(qualifiers.containsKey("transl_table") ? qualifiers.get("transl_table") : "-1");
+        return Integer.parseInt(qualifiers.containsKey("transl_table") ? qualifiers
+                .get("transl_table") : "-1");
     }
 
     public String getTranslation() {
@@ -182,7 +243,8 @@ public class ENAFeatureParser {
     }
 
     public Integer getCodonStart() {
-        return Integer.parseInt(qualifiers.containsKey("codon_start") ? qualifiers.get("codon_start") : "-1");
+        return Integer.parseInt(qualifiers.containsKey("codon_start") ? qualifiers
+                .get("codon_start") : "-1");
     }
 
     /**
@@ -219,16 +281,17 @@ public class ENAFeatureParser {
 
     private RNAProduct getRNA() {
         if (isRRNA()) {
-            return factory.ofClass(RibosomalRNA.class, new BasicRNAIdentifier(), getLocusTag(), getProduct());
+            return factory.ofClass(RibosomalRNA.class, BasicRNAIdentifier.nextIdentifier(), getLocusTag(), getProduct());
         } else if (isTRNA()) {
-            return factory.ofClass(TransferRNA.class, new BasicRNAIdentifier(), getLocusTag(), getProduct());
+            return factory.ofClass(TransferRNA.class, BasicRNAIdentifier.nextIdentifier(), getLocusTag(), getProduct());
         }
         return null;
     }
 
     private Gene getGene() {
 
-        Gene gene = factory.ofClass(Gene.class, new BasicRNAIdentifier(),
+        Gene gene = factory.ofClass(Gene.class,
+                                    BasicGeneIdentifier.nextIdentifier(),
                                     "",
                                     getLocusTag());
         gene.addAnnotation(new Locus(getLocusTag()));
@@ -238,7 +301,7 @@ public class ENAFeatureParser {
 
         // we presume there will always be a locus tag
         gene.addAnnotation(new Locus(getLocusTag()));
-        if (getOldLocusTag().isEmpty() == false) {
+        if (!getOldLocusTag().isEmpty()) {
             gene.addAnnotation(new Locus(getOldLocusTag()));
         }
 
@@ -251,7 +314,7 @@ public class ENAFeatureParser {
      */
     public Identifier getProteinIdentifier() {
         return qualifiers.containsKey("protein_id")
-               ? new DynamicIdentifier("ENA Protein ID", qualifiers.get("protein_id")) : new BasicProteinIdentifier();
+                ? new DynamicIdentifier("ENA Protein ID", qualifiers.get("protein_id")) : new BasicProteinIdentifier();
     }
 
     public String getProduct() {
@@ -271,10 +334,11 @@ public class ENAFeatureParser {
         public void resolve(XMLStreamReader2 xmlr) throws XMLStreamException {
             String db = xmlr.getAttributeValue(0);
             Identifier identifier = IDENTIFIER_FACTORY.ofSynonym(db, xmlr.getAttributeValue(1));
-            if(identifier != IdentifierFactory.EMPTY_IDENTIFIER)
+            if (identifier != IdentifierFactory.EMPTY_IDENTIFIER)
                 identifiers.add(identifier);
             else
-                System.out.println("Could not resolve identifier for name: " + db);
+                System.out
+                      .println("Could not resolve identifier for name: " + db);
         }
     }
 

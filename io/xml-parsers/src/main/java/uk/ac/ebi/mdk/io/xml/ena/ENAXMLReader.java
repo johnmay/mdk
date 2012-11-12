@@ -36,12 +36,16 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * ENAXMLReader - 2011.10.16 <br>
- * A class to read ENA XML files into CheMet core objects
+ * ENAXMLReader - 2011.10.16 <br> A class to read ENA XML files into CheMet core
+ * objects
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -49,10 +53,11 @@ import java.util.regex.Pattern;
  */
 public class ENAXMLReader {
 
-    private static final Logger            LOGGER         = Logger.getLogger(ENAXMLReader.class);
-    private              List<String>      genomeSections = new ArrayList();
-    private              Map<String, Gene> genes          = new HashMap(); // mapped by locus
-    private              List<GeneProduct> products       = new ArrayList();
+    private static final Logger LOGGER = Logger.getLogger(ENAXMLReader.class);
+    private List<String> genomeSections = new ArrayList<String>();
+    private List<Gene> genes = new ArrayList<Gene>(200);
+    private Map<String, Gene> geneMap = new HashMap<String, Gene>(); // mapped by locus
+    private List<GeneProduct> products = new ArrayList();
 
     public ENAXMLReader(EntityFactory factory, InputStream in) throws XMLStreamException {
 
@@ -82,23 +87,29 @@ public class ENAXMLReader {
                         ENAFeatureParser feature = new ENAFeatureParser(factory, xmlr);
 
                         if (feature.isGene()) {
-                            genes.put(feature.getLocusTag(), (Gene) feature.getEntity());
+                            Gene gene = (Gene) feature.getEntity();
+                            geneMap.put(feature.getLocusTag(), gene);
+                            genes.add(gene);
                         } else if (feature.isProduct()) {
                             GeneProduct product = (GeneProduct) feature.getEntity();
-                            Gene gene = genes.get(feature.getLocusTag());
+                            Gene gene = geneMap.get(feature.getLocusTag());
                             if (gene != null) {
                                 product.addGene(gene);
                             } else {
-                                LOGGER.error("No gene found for locus tag: " + feature.getLocusTag());
+                                LOGGER.error("No gene found for locus tag: " + feature
+                                        .getLocusTag());
                             }
                             products.add(product);
                         }
 
-                    } else if (sequenceMatcher.matcher(xmlr.getLocalName()).matches()) {
+                    } else if (sequenceMatcher.matcher(xmlr.getLocalName())
+                                              .matches()) {
                         LOGGER.info("parsing genome sequence..");
                         event = xmlr.next();
                         while (event != XMLEvent.END_ELEMENT) {
-                            genomeSections.add(xmlr.getText().replaceAll("\n", "").trim());
+                            genomeSections.add(xmlr.getText()
+                                                   .replaceAll("\n", "")
+                                                   .trim());
                             event = xmlr.next();
                         }
                     } else {
@@ -133,8 +144,8 @@ public class ENAXMLReader {
 
     }
 
-    public List<Gene> getGenes() {
-        return new ArrayList(genes.values());
+    public List<Gene> getGeneMap() {
+        return new ArrayList<Gene>(genes);
     }
 
     public List<GeneProduct> getProducts() {
