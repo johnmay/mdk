@@ -70,11 +70,34 @@ public interface Reconstruction extends AnnotatedEntity {
     public void addReaction(MetabolicReaction reaction);
 
     /**
-     * Removed metabolite 'm' from the metabolome and all reactions.
+     * Remove metabolite 'm' from the metabolome and all reactions.
      *
      * @param m metabolite to remove
      */
     public void remove(Metabolite m);
+
+    /**
+     * Remove reaction r from the reconstruction.
+     *
+     * @param r a reaction to remove
+     */
+    public void remove(MetabolicReaction r);
+
+
+    /**
+     * Remove a gene and all references
+     *
+     * @param gene the gene to remove
+     */
+    public void remove(Gene gene);
+
+    /**
+     * Remove a gene product from the reconstruction
+     *
+     * @param product the product to be removed
+     */
+    public void remove(GeneProduct product);
+
 
     public boolean addSubset(EntityCollection subset);
 

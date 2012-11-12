@@ -4,17 +4,17 @@
  * 2011.10.18
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,14 +29,18 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- *          GenomeImplementation - 2011.10.18 <br>
- *          Implementation of genome interface
+ * GenomeImplementation - 2011.10.18 <br> Implementation of genome interface
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class GenomeImplementation implements Genome {
 
@@ -78,8 +82,8 @@ public class GenomeImplementation implements Genome {
         }
 
         throw new InvalidParameterException("Chromosome number "
-                                            + number
-                                            + " not pressent in genome");
+                                                    + number
+                                                    + " not pressent in genome");
 
     }
 
@@ -105,6 +109,15 @@ public class GenomeImplementation implements Genome {
     }
 
     /**
+     * @inhetiDoc
+     */
+    @Override
+    public boolean remove(Gene gene) {
+        return gene.getChromosome() != null && gene.getChromosome()
+                                                   .remove(gene);
+    }
+
+    /**
      * @inheritDoc
      */
     public void read(ObjectInput in) throws IOException, ClassNotFoundException {
@@ -126,8 +139,7 @@ public class GenomeImplementation implements Genome {
         }
 
     }
-    
-    
+
 
     /**
      * Access a gene for the given index on the given chromosome
@@ -142,7 +154,7 @@ public class GenomeImplementation implements Genome {
     public int[] getIndex(Gene gene) {
         for (Chromosome c : getChromosomes()) {
             int index = c.getGenes().indexOf(gene);
-            if (index != -1);
+            if (index != -1) ;
             return new int[]{c.getChromosomeNumber(), index};
         }
         return new int[]{-1, -1};
@@ -155,7 +167,8 @@ public class GenomeImplementation implements Genome {
 
         GenomeImplementation that = (GenomeImplementation) o;
 
-        if (chromosomes != null ? !chromosomes.equals(that.chromosomes) : that.chromosomes != null) return false;
+        if (chromosomes != null ? !chromosomes.equals(that.chromosomes) : that.chromosomes != null)
+            return false;
 
         return true;
     }

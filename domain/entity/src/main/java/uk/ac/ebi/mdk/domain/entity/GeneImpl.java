@@ -4,17 +4,17 @@
  * 2011.10.17
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,14 +29,18 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
- *          GeneImpl - 2011.10.17 <br>
- *          An implementation of the Gene interface
+ * GeneImpl - 2011.10.17 <br> An implementation of the Gene interface
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
 
@@ -51,6 +55,8 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
     private Sequence sequence;
 
     private Chromosome chromosome;
+
+    private Set<GeneProduct> products = new HashSet<GeneProduct>(1);
 
 
     public GeneImpl() {
@@ -124,11 +130,29 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
         this.sequence = sequence;
     }
 
+    @Override
+    public boolean removeProduct(GeneProduct product) {
+        return this.products.remove(product);
+    }
+
+    @Override
+    public boolean addProduct(GeneProduct product) {
+        return this.products.add(product);
+    }
+
+    @Override
+    public Collection<GeneProduct> getProducts() {
+        return Collections.unmodifiableSet(products);
+    }
 
     public Gene newInstance() {
         return new GeneImpl();
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + start + ".." + end;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -138,10 +162,13 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
 
         GeneImpl that = (GeneImpl) o;
 
-        if (end      != that.end)    return false;
-        if (start    != that.start)  return false;
-        if (sequence != null ? !sequence.getSequenceAsString().equals(that.sequence != null ? that.sequence.getSequenceAsString() : "" ) : that.sequence != null) return false;
-        if (strand   != that.strand) return false;
+        if (end != that.end) return false;
+        if (start != that.start) return false;
+        if (sequence != null ? !sequence.getSequenceAsString()
+                                        .equals(that.sequence != null ? that.sequence
+                                                                            .getSequenceAsString() : "") : that.sequence != null)
+            return false;
+        if (strand != that.strand) return false;
 
         return true;
     }
@@ -152,7 +179,8 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
         result = 31 * result + start;
         result = 31 * result + end;
         result = 31 * result + (strand != null ? strand.hashCode() : 0);
-        result = 31 * result + (sequence != null ? sequence.getSequenceAsString().hashCode() : 0);
+        result = 31 * result + (sequence != null ? sequence.getSequenceAsString()
+                                                           .hashCode() : 0);
         return result;
     }
 

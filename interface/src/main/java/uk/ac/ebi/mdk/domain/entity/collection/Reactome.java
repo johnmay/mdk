@@ -40,6 +40,13 @@ public interface Reactome extends Collection<MetabolicReaction> {
     public Collection<MetabolicReaction> getReactions(Metabolite m);
 
     /**
+     * Remove the reaction 'r' from the reactome.
+     *
+     * @param r a reaction to remove
+     */
+    public boolean remove(MetabolicReaction r);
+
+    /**
      * Used to remove a key from the reaction lookup
      *
      * @param m the metabolite which is being removed

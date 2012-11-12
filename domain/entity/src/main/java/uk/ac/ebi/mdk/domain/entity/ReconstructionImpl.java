@@ -292,6 +292,10 @@ public class ReconstructionImpl
     @Override
     public void remove(Metabolite m) {
 
+        // ignore attempts to remove null metabolites
+        if (m == null)
+            return;
+
         getMetabolome().remove(m);
 
         List<MetabolicReaction> rs = new ArrayList<MetabolicReaction>(getReactome()
@@ -304,6 +308,37 @@ public class ReconstructionImpl
         }
 
 
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void remove(MetabolicReaction r) {
+        getReactome().remove(r);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void remove(Gene gene) {
+        this.genome.remove(gene);
+        for (GeneProduct p : new ArrayList<GeneProduct>(gene.getProducts())) {
+            p.remove(gene);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void remove(GeneProduct product) {
+        for (Gene gene : new ArrayList<Gene>(product.getGenes())) {
+            gene.removeProduct(product);
+        }
+        product.clearGenes();
+        products.remove(product);
     }
 
     /**

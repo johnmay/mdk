@@ -30,7 +30,9 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author johnmay
@@ -45,7 +47,7 @@ public class ProteinProductImpl
 
     private static final Logger LOGGER = Logger.getLogger(ProteinProductImpl.class);
 
-    private List<ProteinSequence> sequences = new ArrayList<ProteinSequence>(1);
+    private Set<ProteinSequence> sequences = new HashSet<ProteinSequence>(1);
 
     public ProteinProductImpl() {
     }
@@ -55,7 +57,7 @@ public class ProteinProductImpl
     }
 
     public List<ProteinSequence> getSequences() {
-        return sequences;
+        return new ArrayList<ProteinSequence>(sequences);
     }
 
     public boolean addSequence(Sequence sequence) {

@@ -64,6 +64,12 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     @Override
     public boolean add(MetabolicReaction rxn) {
 
+        if (rxn == null)
+            return false;
+
+        if (reactionMap.containsKey(rxn.getIdentifier()))
+            return false;
+
         for (MetabolicParticipant m : rxn.getParticipants()) {
             participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
         }
@@ -89,8 +95,12 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     }
 
 
-    public boolean remove(MetabolicReactionImpl rxn) {
-        for (Metabolite m : rxn.getAllReactionMolecules()) {
+    @Override
+    public boolean remove(MetabolicReaction rxn) {
+
+        // remove links to metabolites
+        for (MetabolicParticipant p : rxn.getParticipants()) {
+            Metabolite m = p.getMolecule();
             participantMap.get(m.getIdentifier()).remove(rxn);
             if (participantMap.get(m.getIdentifier()).isEmpty()) {
                 participantMap.removeAll(m.getIdentifier());
@@ -135,9 +145,20 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
         Identifier identifier = reaction.getIdentifier();
 
         if (reactionMap.containsKey(identifier)) {
+
+            PARTICIPANTS:
             for (MetabolicParticipant p : reaction.getParticipants()) {
-                participantMap.put(p.getMolecule().getIdentifier(),
-                                   reaction);
+
+                Identifier id = p.getMolecule().getIdentifier();
+
+                boolean found = false;
+                for (MetabolicReaction rxn : participantMap.get(id)) {
+                    if (rxn == reaction)
+                        continue PARTICIPANTS; // continue to next participant
+                }
+
+                participantMap.put(id, reaction);
+
             }
             return true;
         }

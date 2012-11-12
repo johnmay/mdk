@@ -33,6 +33,80 @@ import static org.junit.Assert.assertEquals;
 public class ReactionListTest {
 
     @Test
+    public void testRemove_Reaction() {
+
+        MetaboliteImpl a = new MetaboliteImpl("a", "a");
+        MetaboliteImpl b = new MetaboliteImpl("b", "b");
+        MetaboliteImpl c = new MetaboliteImpl("c", "c");
+        MetaboliteImpl d = new MetaboliteImpl("d", "d");
+
+        MetabolicReaction r1 = new MetabolicReactionImpl();
+        MetabolicReaction r2 = new MetabolicReactionImpl();
+
+        r1.addReactant(new MetabolicParticipantImplementation(a));
+        r1.addReactant(new MetabolicParticipantImplementation(b));
+        r1.addProduct(new MetabolicParticipantImplementation(c));
+
+        r2.addReactant(new MetabolicParticipantImplementation(a));
+        r2.addReactant(new MetabolicParticipantImplementation(c));
+        r2.addReactant(new MetabolicParticipantImplementation(d));
+
+        Reactome reactome = new ReactionList();
+        reactome.add(r1);
+        reactome.add(r2);
+
+        assertEquals(2, reactome.size());
+        assertEquals(2, reactome.getReactions(a).size());
+        assertEquals(1, reactome.getReactions(b).size());
+        assertEquals(2, reactome.getReactions(c).size());
+
+        reactome.remove(r1);
+
+        assertEquals(1, reactome.size());
+        assertEquals(1, reactome.getReactions(a).size());
+        assertEquals(0, reactome.getReactions(b).size());
+        assertEquals(1, reactome.getReactions(c).size());
+
+
+    }
+
+    @Test
+    public void testAdd_Null(){
+        new ReactionList().add(null); // should not fail
+    }
+
+    @Test
+    public void testAdd() {
+        MetaboliteImpl a = new MetaboliteImpl("a", "a");
+        MetaboliteImpl b = new MetaboliteImpl("b", "b");
+        MetaboliteImpl c = new MetaboliteImpl("c", "c");
+
+        MetabolicReaction r1 = new MetabolicReactionImpl();
+
+        r1.addReactant(new MetabolicParticipantImplementation(a));
+        r1.addReactant(new MetabolicParticipantImplementation(b));
+        r1.addProduct(new MetabolicParticipantImplementation(c));
+
+        Reactome reactome = new ReactionList();
+
+        assertEquals(0, reactome.size());
+        reactome.add(r1);
+        assertEquals(1, reactome.size());
+        assertEquals(1, reactome.getReactions(a).size());
+        assertEquals(1, reactome.getReactions(b).size());
+        assertEquals(1, reactome.getReactions(c).size());
+
+        // do not add again
+        reactome.add(r1);
+        assertEquals(1, reactome.size());
+        assertEquals(1, reactome.getReactions(a).size());
+        assertEquals(1, reactome.getReactions(b).size());
+        assertEquals(1, reactome.getReactions(c).size());
+
+
+    }
+
+    @Test
     public void testRemoveKey() {
 
         MetaboliteImpl a = new MetaboliteImpl("a", "a");

@@ -4,17 +4,17 @@
  * 2011.10.07
  *
  * This file is part of the CheMet library
- * 
+ *
  * The CheMet library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CheMet is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,22 +28,21 @@ import java.io.IOException;
 import java.io.NotSerializableException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * @name    GeneProduct - 2011.10.07 <br>
- *          Class description
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name GeneProduct - 2011.10.07 <br> Class description
  */
 public abstract class AbstractGeneProduct
         extends AbstractAnnotatedEntity implements GeneProduct {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractGeneProduct.class);
-    private List<Gene> genes = new ArrayList();
+    private Set<Gene> genes = new HashSet<Gene>(1); // 1 to 1 but can be more
 
     public AbstractGeneProduct() {
     }
@@ -53,11 +52,49 @@ public abstract class AbstractGeneProduct
     }
 
     public boolean addGene(Gene gene) {
+        gene.addProduct(this);
         return this.genes.add(gene);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void clearGenes() {
+        this.genes.clear();
     }
 
     public Collection<Gene> getGenes() {
         return this.genes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        AbstractGeneProduct that = (AbstractGeneProduct) o;
+
+        if (!genes.equals(that.genes)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + genes.hashCode();
+        return result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean remove(Gene gene) {
+        gene.removeProduct(this);
+        return this.genes.remove(gene);
     }
 
     @Override
@@ -82,7 +119,7 @@ public abstract class AbstractGeneProduct
     }
 
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
-        
+
         super.writeExternal(out);
 
         out.writeInt(genes.size());

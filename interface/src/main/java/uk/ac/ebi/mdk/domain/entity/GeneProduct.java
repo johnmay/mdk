@@ -17,54 +17,69 @@
  */
 package uk.ac.ebi.mdk.domain.entity;
 
+import org.biojava3.core.sequence.template.AbstractCompound;
+import org.biojava3.core.sequence.template.Sequence;
+import uk.ac.ebi.mdk.domain.entity.collection.Genome;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.List;
-import org.biojava3.core.sequence.template.AbstractCompound;
-import org.biojava3.core.sequence.template.Sequence;
-import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 
 
 /**
- *          GeneProduct – 2011.09.12 <br>
- *          Class description
+ * GeneProduct – 2011.09.12 <br> Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public interface GeneProduct extends AnnotatedEntity {
 
     /**
      * Access all genes encoding this protein
+     *
      * @return
      */
     public Collection<Gene> getGenes();
 
 
+    /**
+     * Removes all gene references within this product.
+     */
+    public void clearGenes();
+
+
     public boolean addGene(Gene gene);
 
+    /**
+     * Remove the gene reference for the gene product.
+     *
+     * @param gene the gene link to remove.
+     */
+    public boolean remove(Gene gene);
 
     /**
-     *
      * Access the name of the gene product
      *
      * @return
-     *
      */
     public String getName();
 
 
     /**
      * Returns the sequence of the gene product
-     * @return a Sequence composed of either AminoAcidCompoundSet or RNACompoundSet
+     *
+     * @return a Sequence composed of either AminoAcidCompoundSet or
+     *         RNACompoundSet
      */
     public List<? extends Sequence> getSequences();
 
 
     /**
      * Add a sequence for the product
+     *
      * @param sequence
      */
     public boolean addSequence(Sequence<? extends AbstractCompound> sequence);
@@ -84,7 +99,8 @@ public interface GeneProduct extends AnnotatedEntity {
 
     /**
      * Returns a new instance of the current gene-product type
-     * @return 
+     *
+     * @return
      */
     @Override
     public GeneProduct newInstance();

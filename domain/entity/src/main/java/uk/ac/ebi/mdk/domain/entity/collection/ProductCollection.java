@@ -18,26 +18,36 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 
-import java.io.*;
-import java.util.*;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.NotSerializableException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 
 /**
- * @name    ProductCollection - 2011.10.07 <br>
- *          Class description
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name ProductCollection - 2011.10.07 <br> Class description
  */
 public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct>, Externalizable, Proteome {
 
@@ -45,9 +55,11 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
     private List<GeneProduct> productList = new ArrayList();
 
-    private ArrayListMultimap<Class<? extends Entity>, GeneProduct> products = ArrayListMultimap.create();
+    private ArrayListMultimap<Class<? extends Entity>, GeneProduct> products = ArrayListMultimap
+            .create();
 
-    private ArrayListMultimap<String, GeneProduct> accessionMap = ArrayListMultimap.create();
+    private ArrayListMultimap<String, GeneProduct> accessionMap = ArrayListMultimap
+            .create();
     // could use identifier but accession should be unique
 
     private EntityFactory factory;
@@ -65,6 +77,7 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
     /**
      * Add a single gene product
+     *
      * @param product
      * @return
      */
@@ -82,6 +95,7 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
     /**
      * Adds a collection of gene products
+     *
      * @param products
      * @return
      */
@@ -120,15 +134,13 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
 
     /**
-     *
-     * Adds an observation to product(s) matching the specified accession. If 
+     * Adds an observation to product(s) matching the specified accession. If
      * there are multiple products with the same accession the observation is
      * added to all
      *
      * @param accession
      * @param observation
      * @return
-     * 
      */
     public boolean addObservation(String accession, Observation observation) {
 
@@ -150,8 +162,10 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
 
     /**
-     * Adds an observation to product(s) matching the specified accession. If there are multiple products with the
-     * same accession the observation is added to all
+     * Adds an observation to product(s) matching the specified accession. If
+     * there are multiple products with the same accession the observation is
+     * added to all
+     *
      * @param accession
      * @param observation
      * @return
@@ -176,6 +190,7 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
     /**
      * Returns an iterator for all products
+     *
      * @return
      */
     public Iterator<GeneProduct> iterator() {
