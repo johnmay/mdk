@@ -78,6 +78,24 @@ public class MetabolicReactionImpl
         return type;
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean remove(Metabolite m) {
+
+        if (m == null)
+            return false;
+
+        boolean changed = false;
+        for (MetabolicParticipant p : getParticipants()) {
+            if (p.getMolecule() == m) { // reference equality
+                changed = removeReactant(p) || removeProduct(p) || changed;
+            }
+        }
+        return changed;
+
+    }
 
     @Override
     public MetabolicReactionImpl newInstance() {

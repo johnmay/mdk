@@ -18,25 +18,34 @@
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
 
 import java.util.Collection;
 
 
 /**
+ * MetabolicReaction 2012.02.07
  *
- *          MetabolicReaction 2012.02.07
+ * @author johnmay
+ * @author $Author$ (this version)
+ *         <p/>
+ *         Class description
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Class description
- *
  */
 public interface MetabolicReaction extends Reaction<MetabolicParticipant> {
 
     public void addModifier(GeneProduct product);
 
-
     public Collection<GeneProduct> getModifiers();
+
+    /**
+     * Remove the metabolite 'm' from this reaction. If the metabolite is null
+     * no removal is attempted.
+     *
+     * @param m the metabolite to remove
+     * @return whether any participants were removed
+     */
+    public boolean remove(Metabolite m);
+
 }
