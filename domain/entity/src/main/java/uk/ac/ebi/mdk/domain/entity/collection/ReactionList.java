@@ -24,6 +24,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
@@ -39,15 +40,17 @@ import java.util.NoSuchElementException;
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @name ReactionSet - 2011.10.04 <br>
- * Provides access to a set of reactions and alogrithms that work on them
+ * @name ReactionSet - 2011.10.04 <br> Provides access to a set of reactions and
+ * alogrithms that work on them
  */
 public final class ReactionList extends ArrayList<MetabolicReaction> implements Collection<MetabolicReaction>, Reactome {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionList.class);
 
-    private Multimap<Identifier, MetabolicReaction> participantMap = ArrayListMultimap.create();
-    private Multimap<Identifier, MetabolicReaction> reactionMap    = ArrayListMultimap.create();
+    private Multimap<Identifier, MetabolicReaction> participantMap = ArrayListMultimap
+            .create();
+    private Multimap<Identifier, MetabolicReaction> reactionMap = ArrayListMultimap
+            .create();
 
     public ReactionList() {
     }
@@ -97,6 +100,51 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
         return super.remove(rxn);
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean removeKey(Metabolite m, Reaction reaction) {
+        return participantMap.remove(m.getIdentifier(), reaction);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean update(Collection<MetabolicReaction> reactions) {
+
+        boolean changed = false;
+
+        for (MetabolicReaction reaction : reactions) {
+            if (reactionMap.containsEntry(reaction.getIdentifier(), reaction)) {
+                changed = update(reaction) || changed;
+            }
+        }
+
+        return changed;
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean update(MetabolicReaction reaction) {
+
+        Identifier identifier = reaction.getIdentifier();
+
+        if (reactionMap.containsKey(identifier)) {
+            for (MetabolicParticipant p : reaction.getParticipants()) {
+                participantMap.put(p.getMolecule().getIdentifier(),
+                                   reaction);
+            }
+            return true;
+        }
+
+        return false;
+
+    }
 
     @Override
     public boolean removeAll(Collection<?> rxns) {
@@ -113,8 +161,8 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
 
 
     /**
-     * Returns a list of reactions that contain Metabolite m
-     * If not mapping is found an empty collection is returned
+     * Returns a list of reactions that contain Metabolite m If not mapping is
+     * found an empty collection is returned
      */
     public Collection<MetabolicReaction> getReactions(Metabolite m) {
         return participantMap.get(m.getIdentifier());
