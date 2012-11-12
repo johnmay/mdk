@@ -17,21 +17,20 @@
  */
 package uk.ac.ebi.mdk.domain.entity;
 
-import java.util.List;
-
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 
+import java.util.List;
+
 
 /**
+ * Reaction 2012.02.07
  *
- *          Reaction 2012.02.07
+ * @author johnmay
+ * @author $Author$ (this version)
+ *         <p/>
+ *         Interface describes a reaction
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Interface describes a reaction
- *
  */
 public interface Reaction<P extends Participant>
         extends AnnotatedEntity {
@@ -49,6 +48,22 @@ public interface Reaction<P extends Participant>
 
 
     public boolean addProduct(P participant);
+
+    /**
+     * Remove a reactant participant from this reaction.
+     *
+     * @param participant the participant to remove
+     * @return whether the participant was removed
+     */
+    public boolean removeReactant(P participant);
+
+    /**
+     * Remove a product participant from this reaction.
+     *
+     * @param participant the participant to remove
+     * @return whether the participant was removed
+     */
+    public boolean removeProduct(P participant);
 
 
     // public boolean removeReactant(P participant);
@@ -72,8 +87,8 @@ public interface Reaction<P extends Participant>
 
 
     /**
-     * Empty reaction of participants and metabolites (preserve annotations
-     * and name, abbrev, direction etc.)
+     * Empty reaction of participants and metabolites (preserve annotations and
+     * name, abbrev, direction etc.)
      */
     public void clear();
 }

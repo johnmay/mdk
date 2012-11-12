@@ -35,8 +35,7 @@ import java.util.Collection;
 
 
 /**
- * Metabolite – 2011.09.05 <br>
- * Class description
+ * Metabolite – 2011.09.05 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -72,12 +71,18 @@ public class MetaboliteImpl
      */
     public MetaboliteImpl(String abbreviation, String name) {
         // accession is ignored here
-        super(new BasicChemicalIdentifier(), abbreviation, name);
+        super(BasicChemicalIdentifier.nextIdentifier(), abbreviation, name);
+    }
+
+    public MetaboliteImpl(String name) {
+        // accession is ignored here
+        this("", name);
     }
 
 
     /**
-     * Accessor to whether the molecule is generic (contains one or more -R groups)
+     * Accessor to whether the molecule is generic (contains one or more -R
+     * groups)
      *
      * @return
      */
@@ -101,8 +106,8 @@ public class MetaboliteImpl
      */
     public Double getCharge() {
         return hasAnnotation(Charge.class)
-               ? getAnnotations(Charge.class).iterator().next().getValue()
-               : 0d;
+                ? getAnnotations(Charge.class).iterator().next().getValue()
+                : 0d;
     }
 
 
