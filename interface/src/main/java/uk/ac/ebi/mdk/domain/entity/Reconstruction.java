@@ -18,7 +18,11 @@
 
 package uk.ac.ebi.mdk.domain.entity;
 
-import uk.ac.ebi.mdk.domain.entity.collection.*;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.Genome;
+import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
+import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
+import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
@@ -65,6 +69,12 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public void addReaction(MetabolicReaction reaction);
 
+    /**
+     * Removed metabolite 'm' from the metabolome and all reactions.
+     *
+     * @param m metabolite to remove
+     */
+    public void remove(Metabolite m);
 
     public boolean addSubset(EntityCollection subset);
 

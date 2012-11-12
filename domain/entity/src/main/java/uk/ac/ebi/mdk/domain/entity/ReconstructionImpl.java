@@ -23,7 +23,15 @@ package uk.ac.ebi.mdk.domain.entity;
  * and open the template in the editor.
  */
 
-import uk.ac.ebi.mdk.domain.entity.collection.*;
+import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.Genome;
+import uk.ac.ebi.mdk.domain.entity.collection.GenomeImplementation;
+import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
+import uk.ac.ebi.mdk.domain.entity.collection.MetabolomeImpl;
+import uk.ac.ebi.mdk.domain.entity.collection.ProductCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
+import uk.ac.ebi.mdk.domain.entity.collection.ReactionList;
+import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -31,15 +39,20 @@ import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 
-import java.io.*;
+import java.io.Externalizable;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 /**
- * ReconstructionImpl.java
- * Object to represent a complete reconstruction with genes, reactions and metabolites
+ * ReconstructionImpl.java Object to represent a complete reconstruction with
+ * genes, reactions and metabolites
  *
  * @author johnmay
  * @date Apr 13, 2011
@@ -48,8 +61,11 @@ public class ReconstructionImpl
         extends AbstractAnnotatedEntity
         implements Externalizable, Reconstruction {
 
-    private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(
-            ReconstructionImpl.class);
+    private static final org.apache.log4j.Logger logger = org.apache
+            .log4j
+            .Logger
+            .getLogger(
+                    ReconstructionImpl.class);
 
 
     private static final String DATA_FOLDER_NAME = "data";
@@ -149,8 +165,8 @@ public class ReconstructionImpl
 
 
     /**
-     * Access the genome of the reconstruction. The genome
-     * provides methods for adding chromosomes and genes.
+     * Access the genome of the reconstruction. The genome provides methods for
+     * adding chromosomes and genes.
      *
      * @return The genome associated with the reconstruction
      */
@@ -164,11 +180,9 @@ public class ReconstructionImpl
     }
 
     /**
-     * Access a collection of all the genes in the
-     * reconstruction. Adding genes to this collection
-     * will not add them to the reconstruction. See
-     * {@see Chromosome} and {@se Genome} for how
-     * to add genes.
+     * Access a collection of all the genes in the reconstruction. Adding genes
+     * to this collection will not add them to the reconstruction. See {@see
+     * Chromosome} and {@se Genome} for how to add genes.
      *
      * @return All genes currently in the reconstruction
      */
@@ -178,10 +192,9 @@ public class ReconstructionImpl
 
 
     /**
-     * Access to the gene products associated with the
-     * reconstruction as {@see ProductCollection}. The
-     * gene product collection contains a mix of Protein,
-     * Ribosomal RNA and Transfer RNA products
+     * Access to the gene products associated with the reconstruction as {@see
+     * ProductCollection}. The gene product collection contains a mix of
+     * Protein, Ribosomal RNA and Transfer RNA products
      *
      * @return
      */
@@ -200,9 +213,8 @@ public class ReconstructionImpl
 
 
     /**
-     * Access to the reactions associated with the
-     * reconstruction as {@see ReactionList}. The
-     * reaction order is maintained in List to ease
+     * Access to the reactions associated with the reconstruction as {@see
+     * ReactionList}. The reaction order is maintained in List to ease
      * read/write operations
      *
      * @return
@@ -221,8 +233,7 @@ public class ReconstructionImpl
     }
 
     /**
-     * Access the collection of metabolites for this
-     * reconstruction
+     * Access the collection of metabolites for this reconstruction
      *
      * @return
      */
@@ -232,9 +243,8 @@ public class ReconstructionImpl
 
 
     /**
-     * Add a new metabolic reaction to the
-     * reconstruction. Note this method does not
-     * check for duplications.
+     * Add a new metabolic reaction to the reconstruction. Note this method does
+     * not check for duplications.
      *
      * @param reaction a new reaction
      */
@@ -253,8 +263,8 @@ public class ReconstructionImpl
 
 
     /**
-     * Add a new metabolite to the reconstruction.
-     * Note this method does not check for duplicates
+     * Add a new metabolite to the reconstruction. Note this method does not
+     * check for duplicates
      *
      * @param metabolite a new metabolite
      */
@@ -264,8 +274,8 @@ public class ReconstructionImpl
 
 
     /**
-     * Add a new subset to the reconstruction. The subset should
-     * define entities already in the reconstruction.
+     * Add a new subset to the reconstruction. The subset should define entities
+     * already in the reconstruction.
      */
     public boolean addSubset(EntityCollection subset) {
         return subsets.add(subset);
@@ -276,11 +286,30 @@ public class ReconstructionImpl
         return subsets;
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void remove(Metabolite m) {
+
+        getMetabolome().remove(m);
+
+        List<MetabolicReaction> rs = new ArrayList<MetabolicReaction>(getReactome()
+                                                                              .getReactions(m));
+        for (MetabolicReaction r : rs) {
+            // remove reactome reference
+            getReactome().removeKey(m, r);
+            // remove metabolite participants from reaction
+            r.remove(m);
+        }
+
+
+    }
 
     /**
-     * Removes a subset from the reconstruction. The subset should
-     * define entities already in the reconstruction. Note removing
-     * the subset will not remove the entities
+     * Removes a subset from the reconstruction. The subset should define
+     * entities already in the reconstruction. Note removing the subset will not
+     * remove the entities
      */
     public boolean removeSubset(EntityCollection subset) {
         return subsets.remove(subset);
