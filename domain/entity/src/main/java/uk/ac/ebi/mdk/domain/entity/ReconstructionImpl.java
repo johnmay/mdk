@@ -323,10 +323,10 @@ public class ReconstructionImpl
      */
     @Override
     public void remove(Gene gene) {
-        this.genome.remove(gene);
         for (GeneProduct p : new ArrayList<GeneProduct>(gene.getProducts())) {
             p.remove(gene);
         }
+        this.genome.remove(gene);
     }
 
     /**

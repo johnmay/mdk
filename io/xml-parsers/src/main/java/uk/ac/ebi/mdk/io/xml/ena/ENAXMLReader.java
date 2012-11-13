@@ -39,8 +39,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -58,6 +60,7 @@ public class ENAXMLReader {
     private List<Gene> genes = new ArrayList<Gene>(200);
     private Map<String, Gene> geneMap = new HashMap<String, Gene>(); // mapped by locus
     private List<GeneProduct> products = new ArrayList();
+    private Set<String> warnings = new HashSet<String>();
 
     public ENAXMLReader(EntityFactory factory, InputStream in) throws XMLStreamException {
 
@@ -102,6 +105,8 @@ public class ENAXMLReader {
                             products.add(product);
                         }
 
+                        warnings.addAll(feature.getWarnings());
+
                     } else if (sequenceMatcher.matcher(xmlr.getLocalName())
                                               .matches()) {
                         LOGGER.info("parsing genome sequence..");
@@ -142,6 +147,10 @@ public class ENAXMLReader {
         }
 
 
+    }
+
+    public Set<String> getWarnings() {
+        return warnings;
     }
 
     public List<Gene> getGeneMap() {

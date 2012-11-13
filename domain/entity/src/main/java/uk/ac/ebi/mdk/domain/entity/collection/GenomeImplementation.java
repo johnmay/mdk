@@ -62,7 +62,7 @@ public class GenomeImplementation implements Genome {
      */
     public Collection<Gene> getGenes() {
 
-        List<Gene> genes = new ArrayList();
+        List<Gene> genes = new ArrayList<Gene>();
 
         for (Chromosome c : getChromosomes()) {
             genes.addAll(c.getGenes());

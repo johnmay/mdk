@@ -155,36 +155,6 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        GeneImpl that = (GeneImpl) o;
-
-        if (end != that.end) return false;
-        if (start != that.start) return false;
-        if (sequence != null ? !sequence.getSequenceAsString()
-                                        .equals(that.sequence != null ? that.sequence
-                                                                            .getSequenceAsString() : "") : that.sequence != null)
-            return false;
-        if (strand != that.strand) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + start;
-        result = 31 * result + end;
-        result = 31 * result + (strand != null ? strand.hashCode() : 0);
-        result = 31 * result + (sequence != null ? sequence.getSequenceAsString()
-                                                           .hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
         start = in.readInt();

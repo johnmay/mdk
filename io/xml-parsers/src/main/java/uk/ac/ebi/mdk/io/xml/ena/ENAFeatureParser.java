@@ -46,7 +46,9 @@ import uk.ac.ebi.mdk.domain.identifier.basic.BasicRNAIdentifier;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,6 +62,7 @@ import java.util.regex.Pattern;
 public class ENAFeatureParser {
 
     private static final Logger LOGGER = Logger.getLogger(ENAFeatureParser.class);
+    private Set<String> warnings = new HashSet<String>();
     private static DefaultIdentifierFactory IDENTIFIER_FACTORY = DefaultIdentifierFactory
             .getInstance();
     private int start;
@@ -104,7 +107,6 @@ public class ENAFeatureParser {
         public static Type of(String label) {
             if (map.containsKey(label))
                 return map.get(label);
-            System.err.println("unknown label type: " + label);
             return UNKNOWN;
         }
 
@@ -138,6 +140,8 @@ public class ENAFeatureParser {
             attrName = xmlr.getAttributeLocalName(i);
             if (attrName.equals("name")) {
                 type = Type.of(xmlr.getAttributeValue(i));
+                if (type == Type.UNKNOWN)
+                    warnings.add("unknown attribute type: " + xmlr.getAttributeValue(i));
             } else if (attrName.equals("location")) {
                 String location = xmlr.getAttributeValue(i);
 
@@ -337,9 +341,12 @@ public class ENAFeatureParser {
             if (identifier != IdentifierFactory.EMPTY_IDENTIFIER)
                 identifiers.add(identifier);
             else
-                System.out
-                      .println("Could not resolve identifier for name: " + db);
+                warnings.add("Could not resolve identifier for name: " + db);
         }
+    }
+
+    public Set<String> getWarnings() {
+        return warnings;
     }
 
     private class QualifierResolver implements Resolver {

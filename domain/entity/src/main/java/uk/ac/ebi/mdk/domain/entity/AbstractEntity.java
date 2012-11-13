@@ -129,33 +129,4 @@ public abstract class AbstractEntity implements Entity, Cloneable, Externalizabl
         return name;
     }
 
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(identifier, name, abbreviation);
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final AbstractEntity other = (AbstractEntity) obj;
-        if (this.identifier != other.identifier && (this.identifier == null || !this.identifier.equals(other.identifier))) {
-            return false;
-        }
-        if ((this.abbreviation == null) ? (other.abbreviation != null) : !this.abbreviation.equals(other.abbreviation)) {
-            return false;
-        }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
-            return false;
-        }
-
-        return true;
-
-    }
 }

@@ -272,37 +272,5 @@ public abstract class AbstractAnnotatedEntity
     }
 
 
-    @Override
-    public int hashCode() {
-        int hash = super.hashCode();
-        return Objects.hashCode(hash, annotations, observations);
-    }
 
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if (!super.equals(obj)) {
-            return false;
-        }
-
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        //        final AnnotatedEntity other = (AnnotatedEntity) obj;
-        //        if( this.annotations != other.annotations &&
-        //            (this.annotations == null || !this.annotations.equals(other.annotations)) ) {
-        //            return false;
-        //        }
-        //        if( this.observations != other.observations &&
-        //            (this.observations == null || !this.observations.equals(other.observations)) ) {
-        //            return false;
-        //        }
-        return true;
-
-    }
 }

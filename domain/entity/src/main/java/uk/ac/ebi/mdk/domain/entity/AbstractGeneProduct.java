@@ -53,7 +53,8 @@ public abstract class AbstractGeneProduct
 
     public boolean addGene(Gene gene) {
         gene.addProduct(this);
-        return this.genes.add(gene);
+        this.genes.add(gene);
+        return true;
     }
 
     /**
@@ -68,33 +69,14 @@ public abstract class AbstractGeneProduct
         return this.genes;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        AbstractGeneProduct that = (AbstractGeneProduct) o;
-
-        if (!genes.equals(that.genes)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + genes.hashCode();
-        return result;
-    }
-
     /**
      * @inheritDoc
      */
     @Override
     public boolean remove(Gene gene) {
+        this.genes.remove(gene);
         gene.removeProduct(this);
-        return this.genes.remove(gene);
+        return true;
     }
 
     @Override

@@ -18,15 +18,12 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
-import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
@@ -53,7 +50,7 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
     private static final Logger LOGGER = Logger.getLogger(ProductCollection.class);
 
-    private List<GeneProduct> productList = new ArrayList();
+    private List<GeneProduct> productList = new ArrayList<GeneProduct>();
 
     private ArrayListMultimap<Class<? extends Entity>, GeneProduct> products = ArrayListMultimap
             .create();
@@ -229,7 +226,15 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
 
     public boolean remove(Object o) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return o instanceof GeneProduct ? remove((GeneProduct) o) : false;
+    }
+
+    public boolean remove(GeneProduct product) {
+        boolean changed = false;
+        changed = products.get(factory.getEntityClass(product.getClass())).remove(product) || changed;
+        changed = productList.remove(product) || changed;
+        accessionMap.remove(product.getIdentifier(), product);
+        return changed;
     }
 
 
@@ -239,7 +244,11 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
 
     public boolean removeAll(Collection<?> c) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        boolean removed = false;
+        for (Object obj : c) {
+            removed = remove(c) || removed;
+        }
+        return removed;
     }
 
 
