@@ -21,7 +21,12 @@
 package uk.ac.ebi.mdk.io.xml.sbml;
 
 import org.apache.log4j.Logger;
-import org.sbml.jsbml.*;
+import org.sbml.jsbml.CVTerm;
+import org.sbml.jsbml.Model;
+import org.sbml.jsbml.Reaction;
+import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.Species;
+import org.sbml.jsbml.SpeciesReference;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
@@ -30,7 +35,10 @@ import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
-import uk.ac.ebi.mdk.domain.entity.reaction.*;
+import uk.ac.ebi.mdk.domain.entity.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.HashMap;
@@ -38,8 +46,7 @@ import java.util.Map;
 
 
 /**
- * SBMLIOUtil – 2011.09.27 <br>
- * Class description
+ * SBMLIOUtil – 2011.09.27 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -75,7 +82,7 @@ public class SBMLIOUtil {
 
     private String nextMetaId() {
         metaIdticker++;
-        return Long.toString(metaIdticker);
+        return String.format("_%09d", metaIdticker);
     }
 
 
@@ -143,10 +150,10 @@ public class SBMLIOUtil {
             term.addResource(xref.getIdentifier().getURN());
         }
 
-        if(!term.getResources().isEmpty())
+        if (!term.getResources().isEmpty())
             sbmlRxn.addCVTerm(term);
 
-        if(!model.addReaction(sbmlRxn)){
+        if (!model.addReaction(sbmlRxn)) {
             // could inform user that the reaction couldn't be added
         }
 
@@ -156,7 +163,7 @@ public class SBMLIOUtil {
 
 
     public SpeciesReference getSpeciesReference(Model model,
-                                                CompartmentalisedParticipant<Metabolite, Double,  Compartment> participant,
+                                                CompartmentalisedParticipant<Metabolite, Double, Compartment> participant,
                                                 Reaction reaction,
                                                 Integer index) {
 
@@ -191,7 +198,6 @@ public class SBMLIOUtil {
      *
      * @param model
      * @param participant
-     *
      * @return
      */
     public Species addSpecies(Model model,
@@ -211,7 +217,8 @@ public class SBMLIOUtil {
             accession = accession.trim();
             accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
             accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
-            species.setId(accession + "_" + ((Compartment) participant.getCompartment()).getAbbreviation());
+            species.setId(accession + "_" + ((Compartment) participant.getCompartment())
+                    .getAbbreviation());
         }
 
         species.setName(m.getName());
@@ -219,7 +226,9 @@ public class SBMLIOUtil {
 
         CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
 
-        if (m.getAnnotationsExtending(CrossReference.class).iterator().hasNext()) {
+        if (m.getAnnotationsExtending(CrossReference.class)
+             .iterator()
+             .hasNext()) {
 
             for (CrossReference xref : m.getAnnotationsExtending(CrossReference.class)) {
                 String resource = xref.getIdentifier().getResolvableURL();
@@ -228,17 +237,17 @@ public class SBMLIOUtil {
 
         }
 
-        if(m.hasAnnotation(InChI.class) || m.hasAnnotation(AtomContainerAnnotation.class)){
+        if (m.hasAnnotation(InChI.class) || m.hasAnnotation(AtomContainerAnnotation.class)) {
             for (ChemicalStructure structure : m.getAnnotationsExtending(ChemicalStructure.class)) {
                 // TODO: should abstract this mapping to an annotation handler
                 String inchi = structure.toInChI();
-                if(!inchi.isEmpty())
+                if (!inchi.isEmpty())
                     term.addResource("http://rdf.openmolecules.net/?" + inchi);
             }
         }
 
         // if we've added annotation
-        if(!term.getResources().isEmpty())
+        if (!term.getResources().isEmpty())
             species.addCVTerm(term);
 
         model.addSpecies(species);
@@ -247,7 +256,7 @@ public class SBMLIOUtil {
     }
 
 
-    public org.sbml.jsbml.Compartment getCompartment(Model model, CompartmentalisedParticipant<?, ?,Compartment> participant) {
+    public org.sbml.jsbml.Compartment getCompartment(Model model, CompartmentalisedParticipant<?, ?, Compartment> participant) {
 
         if (compartmentMap.containsKey(participant.getCompartment())) {
             return compartmentMap.get(participant.getCompartment());
@@ -261,8 +270,9 @@ public class SBMLIOUtil {
         sbmlCompartment.setName(compartment.getDescription());
 
         Identifier identifier = compartment.getIdentifier();
-        if(!identifier.getAccession().isEmpty()){
-            sbmlCompartment.addCVTerm(new CVTerm(CVTerm.Qualifier.BQB_IS, identifier.getURN()));
+        if (!identifier.getAccession().isEmpty()) {
+            sbmlCompartment.addCVTerm(new CVTerm(CVTerm.Qualifier.BQB_IS, identifier
+                    .getURN()));
         }
 
         model.addCompartment(sbmlCompartment);
