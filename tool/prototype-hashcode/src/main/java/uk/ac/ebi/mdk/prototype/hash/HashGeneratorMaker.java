@@ -39,10 +39,7 @@ import java.util.TreeSet;
 
 /**
  * A class to help with the complex construction and configuration of {@link
- * HashGenerator}s.
- * <p/>
- * Example usage:
- * <p/>
+ * HashGenerator}s. <p/> Example usage: <p/>
  * <pre>{@code
  * HashGenerator<Integer> generator =
  *     new HashGeneratorMaker().withDepth(8)     // explore 8 atoms away
@@ -113,10 +110,7 @@ public class HashGeneratorMaker {
 
     /**
      * Default constructor build a maker which can be configured and used to
-     * build {@link HashGenerator}'s.
-     * <p/>
-     * Example usage:
-     * <p/>
+     * build {@link HashGenerator}'s. <p/> Example usage: <p/>
      * <pre>{@code
      * HashGenerator<Integer> generator =
      *     new HashGeneratorMaker().withDepth(8)     // explore 8 atoms away
@@ -178,11 +172,9 @@ public class HashGeneratorMaker {
     }
 
     /**
-     * Build the configured {@link HashGenerator<Integer>}.
-     * <p/>
-     * This method is the last method invoked in the chain is the method that
-     * provides the usable instance.
-     * <p/>
+     * Build the configured {@link HashGenerator<Integer>}. <p/> This method is
+     * the last method invoked in the chain is the method that provides the
+     * usable instance. <p/>
      * <pre>{@code
      * HashGenerator<Integer> generator =
      *     new HashGeneratorMaker().withDepth(8)     // explore 8 atoms away
@@ -204,8 +196,8 @@ public class HashGeneratorMaker {
         withSeeds(nullable ? NULLABLE_SEEDS : NONNULL_SEEDS);
 
         return new MolecularHashFactory(new ArrayList<AtomSeed>(seeds), depth,
-                                        deprotonate, enantiomers, ezisomerism,
-                                        debug);
+                                                    deprotonate, enantiomers, ezisomerism,
+                                                    debug);
     }
 
     /**
@@ -250,9 +242,7 @@ public class HashGeneratorMaker {
     /**
      * Indicates the hashing function should omit explicit hydrogens from the
      * function. The hydrogens will not be modified but instead ignore by
-     * generator.
-     * <p/>
-     * Verbose form: {@link #omitExplicitHydrogens()}
+     * generator. <p/> Verbose form: {@link #omitExplicitHydrogens()}
      *
      * @return self reference for chaining methods
      * @see #omitExplicitHydrogens()
@@ -269,9 +259,8 @@ public class HashGeneratorMaker {
     /**
      * Indicates the hashing function should include explicit hydrogens from the
      * function. Note this will not actual add hydrogens that are missing it
-     * will simply include them in the hashing function.
-     * <p/>
-     * Verbose form: {@link #withExplicitHydrogens()}
+     * will simply include them in the hashing function. <p/> Verbose form:
+     * {@link #withExplicitHydrogens()}
      *
      * @return self reference for chaining methods
      * @see #withExplicitHydrogens()
@@ -289,9 +278,7 @@ public class HashGeneratorMaker {
     /**
      * Indicates the hashing function should omit explicit hydrogens from the
      * function. The hydrogens will not be modified but instead ignore by
-     * generator.
-     * <p/>
-     * Consice form: {@link #deprotonated()}
+     * generator. <p/> Consice form: {@link #deprotonated()}
      *
      * @return self reference for chaining methods
      * @see #deprotonated()
@@ -307,9 +294,8 @@ public class HashGeneratorMaker {
     /**
      * Indicates the hashing function should include explicit hydrogens from the
      * function. Note this will not actual add hydrogens that are missing it
-     * will simply include them in the hashing function.
-     * <p/>
-     * Concise form: {@link #protonated()}
+     * will simply include them in the hashing function. <p/> Concise form:
+     * {@link #protonated()}
      *
      * @return self reference for chaining methods
      * @see #protonated()
@@ -347,10 +333,9 @@ public class HashGeneratorMaker {
 
     /**
      * Include atomic orbital hybrid information in the hashing function. This
-     * method is concise form of {@link #withHybridization()}.
-     * <p/>
-     * <b>Note:</b> this option should not be used in conjunction with bond
-     * order sum. It is a known issue that they act to cancel each other out.
+     * method is concise form of {@link #withHybridization()}. <p/> <b>Note:</b>
+     * this option should not be used in conjunction with bond order sum. It is
+     * a known issue that they act to cancel each other out.
      *
      * @return self reference for chaining methods
      * @see #withHybridization()
@@ -362,10 +347,9 @@ public class HashGeneratorMaker {
 
     /**
      * Include atomic orbital hybrid information in the hashing function. This
-     * method is verbose form of {@link #orbitalHybrids()}.
-     * <p/>
-     * <b>Note:</b> this option should not be used in conjunction with bond
-     * order sum. It is a known issue that they act to cancel each other out.
+     * method is verbose form of {@link #orbitalHybrids()}. <p/> <b>Note:</b>
+     * this option should not be used in conjunction with bond order sum. It is
+     * a known issue that they act to cancel each other out.
      *
      * @return self reference for chaining methods
      * @see #orbitalHybrids()
@@ -378,8 +362,7 @@ public class HashGeneratorMaker {
 
     /**
      * Include the explicit bond order sum of an atom in the hashing function.
-     * <p/>
-     * <b>Note:</b> this option should not be used in conjunction with
+     * <p/> <b>Note:</b> this option should not be used in conjunction with
      * hybridization. It is a known issue that they act to cancel each other
      * out.
      *
@@ -443,14 +426,10 @@ public class HashGeneratorMaker {
     /**
      * Include encoding of double bond (E/Z) and tetrahedral (R/S) isomerism in
      * the hashing calculation. If you want to turn only one on/off the
-     * individual options {@link #enantiomeric()}
-     * <p/>
-     * <b>note:</b> currently all double bonds in rings are ignored - even if
-     * the ring is flexible
-     * <p/>
+     * individual options {@link #enantiomeric()} <p/> <b>note:</b> currently
+     * all double bonds in rings are ignored - even if the ring is flexible <p/>
      * <b>note:</b> axial stereo chemistry, like allene, is not currently
-     * supported
-     * <p/>
+     * supported <p/>
      *
      * @return self reference for chaining methods
      * @see #withEZIsomerism()
@@ -515,9 +494,8 @@ public class HashGeneratorMaker {
      * be added once. Seeds for which there are explicit, such as - {@link
      * #withCharge()}, {@link #withBondOrderSum()} options for should not be
      * included as extra processing is done to ensure they comply with the
-     * correct nullable/non-null and explicit hydrogen configurations.
-     * <p/>
-     * An example of using this method to add hashing of exact mass.
+     * correct nullable/non-null and explicit hydrogen configurations. <p/> An
+     * example of using this method to add hashing of exact mass.
      * <pre>{@code
      * HashGenerator<Integer> generator = new HashGeneratorMaker()
      *              .withSeed(new AtomSeed() {
