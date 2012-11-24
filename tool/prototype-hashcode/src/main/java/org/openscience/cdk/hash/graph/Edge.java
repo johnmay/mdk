@@ -15,26 +15,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
-
-import org.openscience.cdk.interfaces.IAtomContainer;
+package org.openscience.cdk.hash.graph;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
- *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
+ * Edge/Bond
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
+public interface Edge {
 
     /**
-     * Generate a hash code of the given type.
-     *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
+     * order of this edge, 1,2,3,4
+     * @return
      */
-    public T generate(IAtomContainer container);
+    public int order();
+
+    /*
+     * whether the edge is a query edge
+     */
+    public boolean isQuery();
+
+    /**
+     * Indicates the blane of the edge tip (+1: above plane, -1: below plane)
+     *
+     * @return
+     */
+    public int plane();
+
+    /**
+     * Flip this bond i.e c1 -> c2 to be c2 -> c3 this is mainly used for stereo
+     * wedge/hatch bonds.
+     * @return
+     */
+    public Edge flip();
 
 }

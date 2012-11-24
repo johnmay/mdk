@@ -15,26 +15,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
-
-import org.openscience.cdk.interfaces.IAtomContainer;
+package org.openscience.cdk.number;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
+ * A counter which also registers occurrences with a parent counter which is
+ * provided to the constructor.
  *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
+public class DoubleCounter<T> implements Counter<T> {
+
+    private final Counter<T> main;
+    private final Counter<T> parent;
+
+    public DoubleCounter(Counter<T> main, Counter<T> parent) {
+        this.main = main;
+        this.parent = parent;
+    }
 
     /**
-     * Generate a hash code of the given type.
-     *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
+     * @inheritDoc
      */
-    public T generate(IAtomContainer container);
+    @Override
+    public int register(T obj) {
+        parent.register(obj);
+        return main.register(obj);
+    }
 
+    @Override
+    public int count(T obj) {
+        return main.count(obj);
+    }
 }

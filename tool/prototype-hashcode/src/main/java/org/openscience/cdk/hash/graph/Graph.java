@@ -15,26 +15,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
+package org.openscience.cdk.hash.graph;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtom;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
+ * Fast molecule is a restructure immutable molecule that allows quicker queries
+ * and graph traversal.
  *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
-
+public interface Graph {
     /**
-     * Generate a hash code of the given type.
+     * Provides the indices of vertices which are adjacent to the given index.
      *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
+     * @param i an atom index
+     * @return adjacent indices
      */
-    public T generate(IAtomContainer container);
+    public int[] neighbors(int i);
+
+    public boolean adjacent(int i, int j);
+
+    public int n();
+
+    public IAtom getVertexValue(int i);
+
+    public int getBondOrderSum(int i);
+
+    public Edge getEdgeValue(int i, int j);
+
+    public Edge getEdgeAtIndex(int i, int j);
 
 }

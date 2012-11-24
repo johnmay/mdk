@@ -18,6 +18,7 @@
 package uk.ac.ebi.mdk.prototype.hash;
 
 import org.junit.Test;
+import org.openscience.cdk.IntGenerator;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
@@ -33,6 +34,7 @@ import uk.ac.ebi.mdk.prototype.hash.seed.NonNullHybridizationSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -45,7 +47,21 @@ import static org.junit.Assert.assertThat;
  */
 public class HashClashes {
 
+    @Test
+    public void testPertubtion() throws Exception {
+        List<IAtomContainer> containers = MolecularHashFactoryTest
+                .readSDF(getClass(), "collisions.sdf", 2);
 
+        List<org.openscience.cdk.seed.AtomSeed> seeds = new ArrayList<org.openscience.cdk.seed.AtomSeed>();
+        seeds.add(new org.openscience.cdk.seed.AtomicNumberSeed());
+        seeds.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
+
+        HashGenerator<Integer> generator = new IntGenerator(seeds, 8);
+
+        System.out.println(generator.generate(containers.get(0)));
+        System.out.println(generator.generate(containers.get(1)));
+
+    }
 
     /**
      * This test fails if we include NonNullAtomicNumberSeed.class,
@@ -58,11 +74,13 @@ public class HashClashes {
     @Test
     public void testCitronellols() throws IOException, CDKException {
 
-        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(), "citronellols.sdf", 2);
+        List<IAtomContainer> containers = MolecularHashFactoryTest
+                .readSDF(getClass(), "citronellols.sdf", 2);
 
-        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class,
-                                                                        NonNullChargeSeed.class,
-                                                                        NonNullHybridizationSeed.class);
+        Collection<AtomSeed> seeds = SeedFactory.getInstance()
+                                                .getSeeds(NonNullAtomicNumberSeed.class,
+                                                          NonNullChargeSeed.class,
+                                                          NonNullHybridizationSeed.class);
 
         HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 4, false);
 
@@ -75,13 +93,16 @@ public class HashClashes {
 
     }
 
-    @Test public void testUnspecifedStereochemistry() throws IOException, CDKException {
+    @Test
+    public void testUnspecifedStereochemistry() throws IOException,
+                                                       CDKException {
 
-        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(), "unspecified-bond-stereochemistry.sdf", 2);
+        List<IAtomContainer> containers = MolecularHashFactoryTest
+                .readSDF(getClass(), "unspecified-bond-stereochemistry.sdf", 2);
 
         HashGenerator<Integer> generator = new MolecularHashFactory();
 
-        Integer specified   = generator.generate(containers.get(0));
+        Integer specified = generator.generate(containers.get(0));
         Integer unspecified = generator.generate(containers.get(1));
 
         assertThat("a double bond in (E) configuration hashcode should not match unspecified",
@@ -91,22 +112,26 @@ public class HashClashes {
 
     /**
      * Unspecified by double bond
+     *
      * @throws IOException
      * @throws CDKException
      */
-    @Test public void testUnspecifiedDoubleBond() throws IOException, CDKException {
+    @Test
+    public void testUnspecifiedDoubleBond() throws IOException, CDKException {
 
-        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(), "farnesyl-diphosphates.sdf", 2);
+        List<IAtomContainer> containers = MolecularHashFactoryTest
+                .readSDF(getClass(), "farnesyl-diphosphates.sdf", 2);
 
-        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-                                                                        ChargeSeed.class,
-                                                                        HybridizationSeed.class,
-                                                                        ConnectedAtomSeed.class,
-                                                                        MassNumberSeed.class,
-                                                                        BooleanRadicalSeed.class);
+        Collection<AtomSeed> seeds = SeedFactory.getInstance()
+                                                .getSeeds(AtomicNumberSeed.class,
+                                                          ChargeSeed.class,
+                                                          HybridizationSeed.class,
+                                                          ConnectedAtomSeed.class,
+                                                          MassNumberSeed.class,
+                                                          BooleanRadicalSeed.class);
         HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 8, false);
 
-        Integer specified   = generator.generate(containers.get(0));
+        Integer specified = generator.generate(containers.get(0));
         Integer unspecified = generator.generate(containers.get(1));
 
         assertThat(unspecified, is(not(specified)));
@@ -114,28 +139,28 @@ public class HashClashes {
     }
 
     /**
-     * Ensures that double bonds connected to rings are still included i.e
-     *         c – c
-     *  \     /     \
-     *   c = c       c
-     *        \     /
-     *         c – c
+     * Ensures that double bonds connected to rings are still included i.e c – c
+     * \     /     \ c = c       c \     / c – c
+     *
      * @throws IOException
      * @throws CDKException
      */
-    @Test public void testEZMismatch() throws IOException, CDKException {
+    @Test
+    public void testEZMismatch() throws IOException, CDKException {
 
-        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(), "ring-based-doublebonds.sdf", 2);
+        List<IAtomContainer> containers = MolecularHashFactoryTest
+                .readSDF(getClass(), "ring-based-doublebonds.sdf", 2);
 
-        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-                                                                        ChargeSeed.class,
-                                                                        HybridizationSeed.class,
-                                                                        ConnectedAtomSeed.class,
-                                                                        MassNumberSeed.class,
-                                                                        BooleanRadicalSeed.class);
+        Collection<AtomSeed> seeds = SeedFactory.getInstance()
+                                                .getSeeds(AtomicNumberSeed.class,
+                                                          ChargeSeed.class,
+                                                          HybridizationSeed.class,
+                                                          ConnectedAtomSeed.class,
+                                                          MassNumberSeed.class,
+                                                          BooleanRadicalSeed.class);
         HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 8, false, true);
 
-        Integer cis   = generator.generate(containers.get(0));
+        Integer cis = generator.generate(containers.get(0));
         Integer trans = generator.generate(containers.get(1));
 
         assertThat(cis, is(not(trans)));
@@ -144,22 +169,26 @@ public class HashClashes {
 
     /**
      * Tests that di-atoms
+     *
      * @throws IOException
      * @throws CDKException
      */
-    @Test public void testDiatomic() throws IOException, CDKException {
+    @Test
+    public void testDiatomic() throws IOException, CDKException {
 
-        List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(), "diatomic.sdf", 2);
+        List<IAtomContainer> containers = MolecularHashFactoryTest
+                .readSDF(getClass(), "diatomic.sdf", 2);
 
-        Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
-                                                                        ChargeSeed.class,
-                                                                        HybridizationSeed.class,
-                                                                        ConnectedAtomSeed.class,
-                                                                        MassNumberSeed.class,
-                                                                        BooleanRadicalSeed.class);
-        HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 8, false, true);
+        Collection<AtomSeed> seeds = SeedFactory.getInstance()
+                                                .getSeeds(AtomicNumberSeed.class,
+                                                          ChargeSeed.class,
+                                                          HybridizationSeed.class,
+                                                          ConnectedAtomSeed.class,
+                                                          MassNumberSeed.class,
+                                                          BooleanRadicalSeed.class);
+        HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 8, false, false);
 
-        Integer cis   = generator.generate(containers.get(0));
+        Integer cis = generator.generate(containers.get(0));
         Integer trans = generator.generate(containers.get(1));
 
         assertThat(cis, is(not(trans)));

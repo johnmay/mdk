@@ -15,26 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
-
-import org.openscience.cdk.interfaces.IAtomContainer;
+package org.openscience.cdk.parity.component;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
+ * Describes a hash component which given a current configuration will modify
+ * the current configuration to indicate it's given conformation.
  *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
+public interface StereoComponent<T> {
 
     /**
-     * Generate a hash code of the given type.
+     * Modify the current atomic hashes to indicate the configuration of this
+     * stereo component.
      *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
+     * @param current    the current state of the hashing values
+     * @param configured the state to be configured
+     * @return whether the values were modified
      */
-    public T generate(IAtomContainer container);
+    public boolean configure(T[] current, T[] configured);
+
+    /**
+     * Reset the component
+     */
+    public void reset();
 
 }

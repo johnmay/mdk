@@ -15,26 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
+package org.openscience.cdk.parity;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtom;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
- *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
+public interface ParityCalculator {
 
-    /**
-     * Generate a hash code of the given type.
-     *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
-     */
-    public T generate(IAtomContainer container);
+    public int parity(IAtom[] atoms, int[] planes);
 
 }

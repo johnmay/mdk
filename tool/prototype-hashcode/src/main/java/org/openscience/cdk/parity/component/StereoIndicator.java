@@ -15,26 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
-
-import org.openscience.cdk.interfaces.IAtomContainer;
+package org.openscience.cdk.parity.component;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
- *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
+ * A stereo-indicator can modify a given value to indicate clockwise/anticlockwise
+ * configuration.
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
+public interface StereoIndicator<T> {
 
-    /**
-     * Generate a hash code of the given type.
-     *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
-     */
-    public T generate(IAtomContainer container);
+    public T clockwise(T value);
+
+    public T anticlockwise(T value);
 
 }

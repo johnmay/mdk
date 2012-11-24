@@ -15,26 +15,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
-
-import org.openscience.cdk.interfaces.IAtomContainer;
+package org.openscience.cdk.parity.component;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
+ * A stereo-indicator can modify a given value to indicate
+ * clockwise/anticlockwise configuration. This implementaiton simply multiplies
+ * a given value by a provided factor.
  *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
+public class IntStereoIndicator implements StereoIndicator<Integer> {
 
-    /**
-     * Generate a hash code of the given type.
-     *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
-     */
-    public T generate(IAtomContainer container);
+    private final int clockwise;
+    private final int anticlockwise;
 
+    public IntStereoIndicator(int clockwise, int anticlockwise) {
+        this.clockwise = clockwise;
+        this.anticlockwise = anticlockwise;
+    }
+
+    @Override
+    public Integer clockwise(Integer value) {
+        return value * clockwise;
+    }
+
+    @Override
+    public Integer anticlockwise(Integer value) {
+        return value * anticlockwise;
+    }
 }

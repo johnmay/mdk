@@ -72,7 +72,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
                                                                         .getSeeds(NonNullAtomicNumberSeed.class,
                                                                                   ConnectedAtomSeed.class);
     private final Collection<AtomSeed> seedMethods;
-    private final ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory.getInstance();
+    private final static ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory.getInstance();
 
     private boolean deprotonate = false;
     private boolean seedWithMoleculeSize = true;
@@ -137,7 +137,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
      * ConnectedAtomSeed}. These can be modified using the {@see
      * setSeedMethods(Set)} and {@see addSeedMethod(AtomSeed)} methods.
      *
-     * @param molecule the molecule to generate the hash for
+     * @param molecule the molecule to seed the hash for
      * @return The hash for this molecule
      */
     public MolecularHash getHash(IAtomContainer molecule) {
@@ -148,8 +148,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
      * Generate a hash code with specified seeds. This method allows overriding
      * of the default seeds for selected entries.
      *
-     * @param molecule The molecule to generate the hash for
-     * @param methods  The methods that will be used to generate the hash
+     * @param molecule The molecule to seed the hash for
+     * @param methods  The methods that will be used to seed the hash
      * @return The hash for this molecule
      */
     public MolecularHash getHash(IAtomContainer molecule, Collection<AtomSeed> methods) {
@@ -158,7 +158,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
             return new MolecularHash(0, new int[0]);
 
         BitSet hydrogens = deprotonate ? getHydrogenMask(molecule) : new BitSet(molecule.getAtomCount());
-        int[] precursorSeeds = getAtomSeeds(molecule, methods, hydrogens);
+        int[] precursorSeeds = getAtomSeeds(molecule,methods, hydrogens);
         byte[][] table = matrixFactory.getConnectionMatrix(molecule);
 
         BitSet stereoatoms = getTetrahedralCentres(molecule);
@@ -221,7 +221,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         copy(precursorSeeds, previous);
         copy(precursorSeeds, current);
 
-        HashCounter globalCount = new HashCounter();
+        // 5 = expected neighbour count
+        HashCounter globalCount = new HashCounter(depth * n * 5);
 
 //        System.out.println("starting:");
 //        for (int i = 0; i < n; i++) {
@@ -236,10 +237,9 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 //            System.out.printf("%4s: %s\n", atoms[i].getSymbol() + (i + 1), Integer.toHexString(current[i]));
 //        }
 
-
         HashCounter[] counters = new HashCounter[n];
         for (int i = 0; i < n; i++)
-            counters[i] = new HashCounter();
+            counters[i] = new HashCounter(depth * 5);
 
 
         for (int d = 0; d < depth; d++) {
@@ -268,7 +268,6 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
         int hash = 49157;
         for (int i = 0; i < current.length; i++) {
-
             // if ignore (explicit) hydrogens we check that this atom isn't a hydrogen
             if (!hydrogens.get(i))
                 hash ^= rotate(current[i], globalCount.register(current[i]));
@@ -279,7 +278,6 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         globalCount.clear();
         // un handled stereo centres need to do ensemble hash -
         if (shallow && !stereoatoms.isEmpty()) {
-
             int[] individual = new int[n];
 
             Map<List<Integer>, MutableInt> count = new HashMap<List<Integer>, MutableInt>();
@@ -699,7 +697,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
      * Generates an array of atomic seed values for each atom in the molecule.
      * These seeds are generated using the provided methods
      *
-     * @param molecule the molecule to generate the seeds for
+     * @param molecule the molecule to seed the seeds for
      * @return array of integers representing the seeds for each atom in the
      *         molecule
      */
@@ -840,6 +838,9 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
 
     private class HashCounter extends OccurrenceCounter<Integer> {
+        public HashCounter(int size){
+            super(size);
+        }
     }
 
 }

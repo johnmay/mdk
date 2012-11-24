@@ -15,26 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
+package org.openscience.cdk.number;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.junit.Test;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
- *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
+public class XORShiftTest {
 
-    /**
-     * Generate a hash code of the given type.
-     *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
-     */
-    public T generate(IAtomContainer container);
-
+    @Test
+    public void testGenerate() throws Exception {
+        PseudoRandomNumber<Integer> generator = new XORShift();
+        System.out.println(generator.generate(5));
+        System.out.println(generator.generate(10));
+        System.out.println(generator.generate(15));
+        System.out.println(generator.generate(20));
+    }
 }

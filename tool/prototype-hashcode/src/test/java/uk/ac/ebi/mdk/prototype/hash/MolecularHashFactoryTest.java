@@ -23,6 +23,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
+import org.openscience.cdk.DefaultChemObjectBuilder;
+import org.openscience.cdk.IntGenerator;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.NoSuchAtomTypeException;
@@ -32,6 +34,12 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.parity.BasicPermutationCounter;
+import org.openscience.cdk.parity.component.IntStereoIndicator;
+import org.openscience.cdk.parity.integer.IntDoubleBondLocator;
+import org.openscience.cdk.parity.locator.CumuleneProvider;
+import org.openscience.cdk.parity.locator.StereoComponentProvider;
+import org.openscience.cdk.parity.locator.TetrahedralCenterProvider;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
@@ -177,18 +185,23 @@ public class MolecularHashFactoryTest {
         // for depth of 1 we get some overlap
         for (int d = 1; d < 8; d++) {
             Map<Integer, Set<String>> hashes = new HashMap<Integer, Set<String>>();
-            MolecularHashFactory.getInstance()
-                                .setDepth(d);
+            List<org.openscience.cdk.seed.AtomSeed> seeds = new ArrayList<org.openscience.cdk.seed.AtomSeed>();
+            seeds.add(new org.openscience.cdk.seed.AtomicNumberSeed());
+            seeds.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
+            StereoComponentProvider<Integer> provider = new TetrahedralCenterProvider<Integer>(new IntStereoIndicator(1300141, 105913),
+                                                                                               new BasicPermutationCounter<Integer>());
+
+            HashGenerator<Integer> generator = new IntGenerator(seeds, provider, d);
             for (IAtomContainer container : containers) {
-                int key = MolecularHashFactory.getInstance()
-                                              .getHash(container).hash;
+                int key = generator.generate(container);
                 if (!hashes.containsKey(key))
                     hashes.put(key, new HashSet<String>());
                 hashes.get(key)
                       .add(container.getProperty(CDKConstants.TITLE)
                                     .toString());
             }
-            assertEquals("duplicate hash values for depth = " + d + "\n" + hashes, 9, hashes.size());
+            assertEquals("duplicate hash values for depth = " + d + "\n" + hashes, 9, hashes
+                    .size());
         }
     }
 
@@ -201,7 +214,9 @@ public class MolecularHashFactoryTest {
         // inverted the molecules
         List<IAtomContainer> invertedContainers = readSDF("inverted-inositols.sdf");
 
-        MolecularHashFactory factory = MolecularHashFactory.getInstance();
+        List<org.openscience.cdk.seed.AtomSeed> seeds = new ArrayList<org.openscience.cdk.seed.AtomSeed>();
+        seeds.add(new org.openscience.cdk.seed.AtomicNumberSeed());
+        seeds.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
 
         for (int i = 0; i < containers.size(); i++) {
 
@@ -214,18 +229,19 @@ public class MolecularHashFactoryTest {
 
             for (int d = 1; d < 8; d++) {
 
-                factory.setDepth(d);
+                HashGenerator<Integer> generator = new IntGenerator(seeds, d);
 
-                MolecularHash orginal = factory.getHash(containers.get(i));
-                MolecularHash inverted = factory.getHash(invertedContainers.get(i));
+                Integer orginal = generator.generate(containers.get(i));
+                Integer inverted = generator.generate(invertedContainers
+                                                              .get(i));
 
                 System.out
-                      .printf("%20s %s %s\n", "", orginal.toBase64(), inverted.toBase64());
+                      .printf("%20s 0x%x 0x%x\n", "", orginal, inverted);
 
                 assertEquals(containers.get(i)
                                        .getProperty(CDKConstants.TITLE) + " hashes were not equal depth=" + d,
-                             orginal.hash,
-                             inverted.hash);
+                             orginal,
+                             inverted);
             }
         }
 
@@ -350,8 +366,9 @@ public class MolecularHashFactoryTest {
     }
 
     private String toString(IAtomContainer container) {
-        return container.getProperty(CDKConstants.TITLE) + ": " + Integer.toHexString(MolecularHashFactory.getInstance()
-                                                                                                          .getHash(container).hash);
+        return container.getProperty(CDKConstants.TITLE) + ": " + Integer
+                .toHexString(MolecularHashFactory.getInstance()
+                                                 .getHash(container).hash);
     }
 
     private String toString(IAtomContainer container, Class<? extends AtomSeed>... classes) {
@@ -360,8 +377,9 @@ public class MolecularHashFactoryTest {
                 + ": "
                 + Integer.toHexString(MolecularHashFactory.getInstance()
                                                           .getHash(container,
-                                                                   SeedFactory.getInstance()
-                                                                              .getSeeds(classes)).hash);
+                                                                   SeedFactory
+                                                                           .getInstance()
+                                                                           .getSeeds(classes)).hash);
     }
 
     /**
@@ -378,7 +396,8 @@ public class MolecularHashFactoryTest {
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
         factory.setDepth(4);
 
-        List<IAtomContainer> dithianediols = MolecularHashFactoryTest.readSDF(getClass(), "dithianediols.sdf", -1);
+        List<IAtomContainer> dithianediols = MolecularHashFactoryTest
+                .readSDF(getClass(), "dithianediols.sdf", -1);
 
         MolecularHash cis = factory.getHash(dithianediols.get(0));
         MolecularHash trans = factory.getHash(dithianediols.get(1));
@@ -402,7 +421,7 @@ public class MolecularHashFactoryTest {
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
-        // need to generate better seeds
+        // need to seed better seeds
         Collection<AtomSeed> seeds = SeedFactory.getInstance()
                                                 .getSeeds(NonNullAtomicNumberSeed.class,
                                                           ConnectedAtomSeed.class);
@@ -461,8 +480,10 @@ public class MolecularHashFactoryTest {
 
         factory.setDepth(4);
 
-        int betadmannosaminouronicHash = factory.getHash(betadmannosaminouronic, seeds).hash;
-        int dmannosaminouronicHash = factory.getHash(dmannosaminouronic, seeds).hash;
+        int betadmannosaminouronicHash = factory
+                .getHash(betadmannosaminouronic, seeds).hash;
+        int dmannosaminouronicHash = factory
+                .getHash(dmannosaminouronic, seeds).hash;
 
         assertThat("beta-D-mannosaminouronic and D-mannosaminouronic hashed to the same value",
                    betadmannosaminouronicHash,
@@ -488,7 +509,8 @@ public class MolecularHashFactoryTest {
     }
 
     @Test
-    public void testAldohexoses_ignoreProtons() throws IOException, CDKException {
+    public void testAldohexoses_ignoreProtons() throws IOException,
+                                                       CDKException {
 
         List<IAtomContainer> containers = readSDF(getClass(), "aldohexoses.sdf", 2);
 
@@ -526,8 +548,10 @@ public class MolecularHashFactoryTest {
 
         factory.setDeprotonate(true);
 
-        MolecularHash explicitIgnore = factory.getHash(containers.get(0), seeds);
-        MolecularHash implicitIgnore = factory.getHash(containers.get(2), seeds);
+        MolecularHash explicitIgnore = factory.getHash(containers
+                                                               .get(0), seeds);
+        MolecularHash implicitIgnore = factory.getHash(containers
+                                                               .get(2), seeds);
 
         assertThat("D-idose with implicit and explicit hydrogens did not hash to the same value",
                    explicitIgnore.hash, is(implicitIgnore.hash));
@@ -547,7 +571,8 @@ public class MolecularHashFactoryTest {
     @Test
     public void testZButenediols() throws IOException, CDKException {
 
-        List<IAtomContainer> permutations = MolecularHashFactoryTest.readSDF(getClass(), "(Z)-butenediol-permutations.sdf", 720);
+        List<IAtomContainer> permutations = MolecularHashFactoryTest
+                .readSDF(getClass(), "(Z)-butenediol-permutations.sdf", 720);
 
         HashGenerator<Integer> generator = new MolecularHashFactory();
 
@@ -577,7 +602,8 @@ public class MolecularHashFactoryTest {
     @Test
     public void testEButenediols() throws IOException, CDKException {
 
-        List<IAtomContainer> permutations = MolecularHashFactoryTest.readSDF(getClass(), "(E)-butenediol-permutations.sdf", 720);
+        List<IAtomContainer> permutations = MolecularHashFactoryTest
+                .readSDF(getClass(), "(E)-butenediol-permutations.sdf", 720);
 
         HashGenerator<Integer> generator = new MolecularHashFactory();
 
@@ -598,8 +624,8 @@ public class MolecularHashFactoryTest {
     }
 
     /**
-     * Unit test ensures that (E)-butenediol and (Z)-butenediol generate
-     * different hash codes.
+     * Unit test ensures that (E)-butenediol and (Z)-butenediol seed different
+     * hash codes.
      *
      * @throws IOException
      * @throws CDKException
@@ -607,18 +633,22 @@ public class MolecularHashFactoryTest {
     @Test
     public void testEZButenediol() throws IOException, CDKException {
 
-        IAtomContainer cis = MolecularHashFactoryTest.readSDF(getClass(), "(E)-butenediol-permutations.sdf", 1)
-                                                     .get(0);
-        IAtomContainer trans = MolecularHashFactoryTest.readSDF(getClass(), "(Z)-butenediol-permutations.sdf", 1)
-                                                       .get(0);
+        IAtomContainer cis = MolecularHashFactoryTest
+                .readSDF(getClass(), "(E)-butenediol-permutations.sdf", 1)
+                .get(0);
+        IAtomContainer trans = MolecularHashFactoryTest
+                .readSDF(getClass(), "(Z)-butenediol-permutations.sdf", 1)
+                .get(0);
 
+        List<org.openscience.cdk.seed.AtomSeed> methods = new ArrayList<org.openscience.cdk.seed.AtomSeed>();
+        methods.add(new org.openscience.cdk.seed.AtomicNumberSeed());
+        methods.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
 
-        for (int depth = 0; depth < 10; depth++) {
-            HashGenerator<Integer> off = new HashGeneratorMaker().withDepth(depth)
-                                                                 .build();
-            HashGenerator<Integer> on = new HashGeneratorMaker().withDepth(depth)
-                                                                .withEZIsomerism()
-                                                                .build();
+        StereoComponentProvider<Integer> provider = new IntDoubleBondLocator(new BasicPermutationCounter<Integer>());
+
+        for (int depth = 0; depth < 4; depth++) {
+            HashGenerator<Integer> off = new IntGenerator(methods, depth);
+            HashGenerator<Integer> on = new IntGenerator(methods, provider, depth);
 
             assertThat("molecules with different E/Z and E/Z off should be equal at depth " + depth,
                        off.generate(cis), is(off.generate(trans)));
@@ -628,6 +658,25 @@ public class MolecularHashFactoryTest {
 
     }
 
+
+    @Test
+    public void testAllenes() throws Exception {
+        List<IAtomContainer> containers = readSDF("allenes.sdf", 6);
+        List<org.openscience.cdk.seed.AtomSeed> methods = new ArrayList<org.openscience.cdk.seed.AtomSeed>();
+        methods.add(new org.openscience.cdk.seed.AtomicNumberSeed());
+        methods.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
+        StereoComponentProvider<Integer> provider = new CumuleneProvider<Integer>(new IntStereoIndicator(1300141, 105913));
+        HashGenerator<Integer> generator = new IntGenerator(methods, provider, 8);
+
+        Set<Integer> hashes = new HashSet<Integer>();
+
+        for (IAtomContainer container : containers) {
+            hashes.add(generator.generate(container));
+        }
+
+        assertThat(hashes.size(), is(1));
+
+    }
 
     @Ignore
     public void testChEBI() throws IOException, CDKException {
@@ -642,7 +691,8 @@ public class MolecularHashFactoryTest {
                                                           BooleanRadicalSeed.class);
         HashGenerator<Integer> generator = new MolecularHashFactory(seeds, 8, false);
 
-        Map<Integer, IAtomContainer> map = Maps.newHashMapWithExpectedSize(10000);
+        Map<Integer, IAtomContainer> map = Maps
+                .newHashMapWithExpectedSize(10000);
 
         long average = 0;
         for (int i = 0; i < 1; i++) {
@@ -651,7 +701,8 @@ public class MolecularHashFactoryTest {
 
                 Integer hash = generator.generate(container);
 
-                container.setProperty("hashcode", "0x" + Integer.toHexString(hash));
+                container.setProperty("hashcode", "0x" + Integer
+                        .toHexString(hash));
 
                 if (map.containsKey(hash))
                     compose(map.get(hash), container);
@@ -672,7 +723,8 @@ public class MolecularHashFactoryTest {
         }
 
         System.out
-              .println("average encoding time for " + containers.size() + " molecules: " + average + " ms");
+              .println("average encoding time for " + containers
+                      .size() + " molecules: " + average + " ms");
 
         System.out
               .println("unique hash count: " + map.size());
@@ -704,31 +756,40 @@ public class MolecularHashFactoryTest {
     }
 
 
-    public List<IAtomContainer> readSDF(String path) throws CDKException, IOException {
+    public List<IAtomContainer> readSDF(String path) throws CDKException,
+                                                            IOException {
         return readSDF(getClass(), path, -1);
     }
 
-    public List<IAtomContainer> readSDF(String path, int n) throws CDKException, IOException {
+    public List<IAtomContainer> readSDF(String path, int n) throws CDKException,
+                                                                   IOException {
         return readSDF(getClass(), path, n);
     }
 
-    public static List<IAtomContainer> readSDF(Class c, String path, int n) throws CDKException, IOException {
-        InputStream in = path.startsWith(File.separator) ? ClassLoader.getSystemResourceAsStream(path) : c.getResourceAsStream(path);
+    public static List<IAtomContainer> readSDF(Class c, String path, int n) throws
+                                                                            CDKException,
+                                                                            IOException {
+        InputStream in = path.startsWith(File.separator) ? ClassLoader
+                .getSystemResourceAsStream(path) : c.getResourceAsStream(path);
         List<IAtomContainer> containers = readSDF(in, n);
         in.close();
         return containers;
     }
 
-    public static List<IAtomContainer> readSDF(InputStream in, int n) throws CDKException, IOException {
+    public static List<IAtomContainer> readSDF(InputStream in, int n) throws
+                                                                      CDKException,
+                                                                      IOException {
 
 
         List<IAtomContainer> containers = new ArrayList<IAtomContainer>(n > 0 ? n : 100);
 
         IteratingMDLReader reader = new IteratingMDLReader(in,
-                                                           SilentChemObjectBuilder.getInstance(),
+                                                           DefaultChemObjectBuilder
+                                                                   .getInstance(),
                                                            true);
 
-        CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher.getInstance(SilentChemObjectBuilder.getInstance());
+        CDKAtomTypeMatcher matcher = CDKAtomTypeMatcher
+                .getInstance(SilentChemObjectBuilder.getInstance());
 
         SDF:
         while (reader.hasNext()) {
@@ -743,7 +804,8 @@ public class MolecularHashFactoryTest {
             for (IAtom atom : container.atoms()) {
                 try {
                     if (!(atom instanceof IPseudoAtom)) {
-                        IAtomType matched = matcher.findMatchingAtomType(container, atom);
+                        IAtomType matched = matcher
+                                .findMatchingAtomType(container, atom);
                         if (matched != null)
                             AtomTypeManipulator.configure(atom, matched);
                     }

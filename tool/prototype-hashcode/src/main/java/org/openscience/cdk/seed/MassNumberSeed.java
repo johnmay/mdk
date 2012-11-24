@@ -15,26 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
+package org.openscience.cdk.seed;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.hash.graph.Graph;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
- *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
-
-    /**
-     * Generate a hash code of the given type.
-     *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
-     */
-    public T generate(IAtomContainer container);
-
+public class MassNumberSeed implements AtomSeed {
+    @Override
+    public int seed(Graph g, int i) {
+        Integer massNumber = g.getVertexValue(i).getMassNumber();
+        return massNumber != null ? massNumber : 257; // <-- this should be a prime
+    }
 }

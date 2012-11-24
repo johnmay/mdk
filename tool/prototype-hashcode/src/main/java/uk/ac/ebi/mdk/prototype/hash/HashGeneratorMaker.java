@@ -48,8 +48,8 @@ import java.util.TreeSet;
  *                             .orbitalHybrids() // inc. hybrid configurations
  *                             .radicals()       // inc. free radicals
  *                             .build();         // create with above options
- * // generate the hash code for an IAtomContainer
- * Integer code = generator.generate(container);
+ * // seed the hash code for an IAtomContainer
+ * Integer code = generator.seed(container);
  * }</pre>
  *
  * @author John May
@@ -120,8 +120,8 @@ public class HashGeneratorMaker {
      *                             .radicals()       // inc. free radicals
      *                             .build();         // create with above
      * options
-     * // generate the hash code for an IAtomContainer
-     * Integer code = generator.generate(container);
+     * // seed the hash code for an IAtomContainer
+     * Integer code = generator.seed(container);
      * }</pre>
      *
      * @see #build()
@@ -184,8 +184,8 @@ public class HashGeneratorMaker {
      *                             .radicals()       // inc. free radicals
      *                             .build();         // create with above
      * options
-     * // generate the hash code for an IAtomContainer
-     * Integer code = generator.generate(container);
+     * // seed the hash code for an IAtomContainer
+     * Integer code = generator.seed(container);
      * }</pre>
      *
      * @return a configured generator
@@ -229,7 +229,7 @@ public class HashGeneratorMaker {
      * Indicate the depth of the hashing function. The depth can be thought of
      * as how far away will each atom 'feel' it's neighbours. This means that if
      * two atoms had the same neighbourhood up to 4 atoms away a depth of 4
-     * would generate identical hashes whilst a depth of > 4 would distinguish
+     * would seed identical hashes whilst a depth of > 4 would distinguish
      * them Larger depths take longer but are more comprehensive.
      *
      * @return self reference for chaining methods

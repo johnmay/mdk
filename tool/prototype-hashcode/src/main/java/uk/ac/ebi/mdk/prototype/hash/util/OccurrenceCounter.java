@@ -4,24 +4,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class used for counting occurrences of an object type. Implementation
- * uses a HashMap and MutableInt's to increment the values when an object
- * occurrence is registered (see. {@see #register(O)})
+ * Class used for counting occurrences of an object type. Implementation uses a
+ * HashMap and MutableInt's to increment the values when an object occurrence is
+ * registered (see. {@see #register(O)})
  *
  * @param <O> object type
- *
  * @author John May
  */
 public class OccurrenceCounter<O> {
 
-    private Map<O, MutableInt> map = new HashMap<O, MutableInt>();
+    private Map<O, MutableInt> map;
+
+    public OccurrenceCounter(int size) {
+        // make sure there is plenty of room
+        this.map = new HashMap<O, MutableInt>(size > 3 ? 1 + size + size / 3 : size);
+    }
 
     /**
-     * Registers the occurrence of an object. If this is the first occurrence
-     * a new 'MutableInt is created'
+     * Registers the occurrence of an object. If this is the first occurrence a
+     * new 'MutableInt is created'
      *
      * @param obj
-     *
      * @return the current count
      */
     public int register(O obj) {
@@ -38,7 +41,6 @@ public class OccurrenceCounter<O> {
      * Access the number of times each occurrence has been seen
      *
      * @param obj
-     *
      * @return number of times the object has been seen. 0 if never seen.
      */
     public int getOccurrences(O obj) {
@@ -58,6 +60,10 @@ public class OccurrenceCounter<O> {
     @Override
     public String toString() {
         return map.toString();
+    }
+
+    public int size() {
+        return map.size();
     }
 
     /**

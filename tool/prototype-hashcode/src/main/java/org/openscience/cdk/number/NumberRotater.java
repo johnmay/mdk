@@ -15,26 +15,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
-
-import org.openscience.cdk.interfaces.IAtomContainer;
+package org.openscience.cdk.number;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
- *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
+public class NumberRotater<T> {
 
-    /**
-     * Generate a hash code of the given type.
-     *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
-     */
-    public T generate(IAtomContainer container);
+    private final PseudoRandomNumber<T> generator;
+
+    public NumberRotater(PseudoRandomNumber<T> generator) {
+        this.generator = generator;
+    }
+
+    public T rotate(T value, int times) {
+        for (int i = 0; i < times; i++)
+            value = generator.generate(value);
+        return value;
+    }
 
 }

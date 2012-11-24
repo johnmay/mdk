@@ -15,26 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.prototype.hash;
+package org.openscience.cdk.parity.locator;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.hash.graph.Graph;
+import org.openscience.cdk.parity.component.StereoComponent;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * Describes an implementation that can seed a hash code for a given
- * molecule.
- *
- * @param <T> type of hash to be generated - normally {@link Integer} or {@link
- *            Long}
  * @author John May
  */
-public interface HashGenerator<T extends Number> {
-
-    /**
-     * Generate a hash code of the given type.
-     *
-     * @param container the molecule to seed the hash code for
-     * @return generated hash code
-     */
-    public T generate(IAtomContainer container);
-
+public class EmptyStereoProvider<T extends Comparable<T>> implements StereoComponentProvider<T> {
+    @Override
+    public List<StereoComponent<T>> getComponents(Graph graph) {
+        return Collections.unmodifiableList(new ArrayList<StereoComponent<T>>(0));
+    }
 }

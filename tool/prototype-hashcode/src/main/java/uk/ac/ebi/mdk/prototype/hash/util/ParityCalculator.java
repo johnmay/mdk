@@ -23,6 +23,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 import javax.vecmath.Point2d;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -37,7 +38,8 @@ public class ParityCalculator {
         Collections.sort(neighbours, new Comparator<IAtom>() {
             @Override
             public int compare(IAtom o1, IAtom o2) {
-                return container.getAtomNumber(o1) - container.getAtomNumber(o2);
+                return container.getAtomNumber(o1) - container
+                        .getAtomNumber(o2);
             }
         });
         return getSP3Parity(atom, neighbours, container);
@@ -50,7 +52,8 @@ public class ParityCalculator {
         Collections.sort(neighbours, new Comparator<IAtom>() {
             @Override
             public int compare(IAtom o1, IAtom o2) {
-                return container.getAtomNumber(o1) - container.getAtomNumber(o2);
+                return container.getAtomNumber(o1) - container
+                        .getAtomNumber(o2);
             }
         });
 
@@ -58,7 +61,8 @@ public class ParityCalculator {
     }
 
     public static int getMDLTetrahedralParity(IAtom atom, IAtomContainer container) {
-        return getMDLTetrahedralParity(atom, container.getConnectedAtomsList(atom), container);
+        return getMDLTetrahedralParity(atom, container
+                .getConnectedAtomsList(atom), container);
     }
 
     public static int getSP3Parity(IAtom atom, List<IAtom> neighbours, final IAtomContainer container) {
@@ -69,7 +73,8 @@ public class ParityCalculator {
         if (neighbours.size() != 4)
             return 0;
 
-        double d = Math.signum(getSP3ParityMatrix(atom, neighbours, container).det());
+        double d = Math.signum(getSP3ParityMatrix(atom, neighbours, container)
+                                       .det());
 
         return d > 0 ? +1
                 : d < 0 ? -1
@@ -98,7 +103,8 @@ public class ParityCalculator {
 
         // move the double bond to the end
         for (int i = 0; i < neighbours.size(); i++) {
-            if (IBond.Order.DOUBLE.equals(container.getBond(atom, neighbours.get(i)).getOrder())) {
+            if (IBond.Order.DOUBLE.equals(container.getBond(atom, neighbours
+                    .get(i)).getOrder())) {
                 neighbours.add(neighbours.remove(i));
                 break;
             }
@@ -108,7 +114,8 @@ public class ParityCalculator {
         if (neighbours.size() != 3)
             return 0;
 
-        double d = Math.signum(getSP2ParityMatrix(atom, neighbours, container).det());
+        double d = Math.signum(getSP2ParityMatrix(atom, neighbours, container)
+                                       .det());
 
         return d > 0 ? +1
                 : d < 0 ? -1
@@ -121,7 +128,8 @@ public class ParityCalculator {
         Collections.sort(neighbours, new Comparator<IAtom>() {
             @Override
             public int compare(IAtom o1, IAtom o2) {
-                return container.getAtomNumber(o1) - container.getAtomNumber(o2);
+                return container.getAtomNumber(o1) - container
+                        .getAtomNumber(o2);
             }
         });
 

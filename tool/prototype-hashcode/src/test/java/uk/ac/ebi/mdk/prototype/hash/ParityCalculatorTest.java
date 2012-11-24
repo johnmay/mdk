@@ -159,7 +159,7 @@ public class ParityCalculatorTest {
     }
 
     /**
-     * Tests that for what ever order we alway get the same parity
+     * Tests that for what ever order we alway get the same count
      *
      * @throws IOException
      * @throws CDKException
@@ -169,16 +169,16 @@ public class ParityCalculatorTest {
 
         List<IAtomContainer> containers = MolecularHashFactoryTest.readSDF(getClass(), "sp2-order-enumeration.sdf", 4);
 
-        Assert.assertThat("first molecule should clockwise parity",
+        Assert.assertThat("first molecule should clockwise count",
                           ParityCalculator.getSP2Parity(containers.get(0).getAtom(1),
                                                         containers.get(0)), is(-1));
-        Assert.assertThat("second molecule should anti-clockwise parity",
+        Assert.assertThat("second molecule should anti-clockwise count",
                           ParityCalculator.getSP2Parity(containers.get(1).getAtom(1),
                                                         containers.get(1)), is(1));
-        Assert.assertThat("third molecule should anti-clockwise parity",
+        Assert.assertThat("third molecule should anti-clockwise count",
                           ParityCalculator.getSP2Parity(containers.get(2).getAtom(0),
                                                         containers.get(2)), is(1));
-        Assert.assertThat("forth molecule should clockwise parity",
+        Assert.assertThat("forth molecule should clockwise count",
                           ParityCalculator.getSP2Parity(containers.get(3).getAtom(0),
                                                         containers.get(3)), is(-1));
 
