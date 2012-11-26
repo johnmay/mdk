@@ -24,16 +24,19 @@ import org.openscience.cdk.number.Counter;
 import org.openscience.cdk.number.DoubleCounter;
 import org.openscience.cdk.number.MapCounter;
 import org.openscience.cdk.number.NumberRotater;
-import org.openscience.cdk.number.XORShift;
+import org.openscience.cdk.number.PseudoRandomNumber;
 import org.openscience.cdk.parity.component.StereoComponent;
 import org.openscience.cdk.parity.component.StereoComponentAggregator;
 import org.openscience.cdk.parity.locator.EmptyStereoProvider;
 import org.openscience.cdk.parity.locator.StereoComponentProvider;
-import org.openscience.cdk.seed.AtomSeed;
 import uk.ac.ebi.mdk.prototype.hash.HashGenerator;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,26 +44,27 @@ import java.util.Map;
 /**
  * @author John May
  */
-public class IntGenerator implements HashGenerator<Integer> {
+public abstract class AbstractHashGenerator<T extends Number & Comparable<T>>
+        implements HashGenerator<T> {
 
-    private final List<AtomSeed> methods;
+    protected final Collection<AtomSeed> methods;
     private final int depth;
-    private final NumberRotater<Integer> rotater;
-    private final StereoComponentProvider<Integer> stereoProvider;
+    protected final NumberRotater<T> rotater;
+    private final StereoComponentProvider<T> stereoProvider;
 
-    public IntGenerator(List<AtomSeed> methods, StereoComponentProvider<Integer> stereoProvider, int depth) {
+    public AbstractHashGenerator(Collection<AtomSeed> methods, StereoComponentProvider<T> stereoProvider, PseudoRandomNumber<T> generator, int depth) {
         this.methods = methods;
         this.depth = depth;
-        this.rotater = new NumberRotater<Integer>(new XORShift());
+        this.rotater = new NumberRotater<T>(generator);
         this.stereoProvider = stereoProvider;
     }
 
-    public IntGenerator(List<AtomSeed> methods, int depth) {
-        this(methods, new EmptyStereoProvider<Integer>(), depth);
+    public AbstractHashGenerator(Collection<AtomSeed> methods, PseudoRandomNumber<T> generator, int depth) {
+        this(methods, new EmptyStereoProvider<T>(), generator, depth);
     }
 
     @Override
-    public Integer generate(IAtomContainer container) {
+    public T generate(IAtomContainer container) {
         return generate(new AdjacencyList(container));
     }
 
@@ -76,27 +80,28 @@ public class IntGenerator implements HashGenerator<Integer> {
         return sb.toString();
     }
 
-    public Integer generate(Graph graph) {
+    public T generate(Graph graph) {
         return generate(graph,
                         initialise(graph),
-                        new StereoComponentAggregator<Integer>(stereoProvider.getComponents(graph)),
+                        new StereoComponentAggregator<T>(stereoProvider
+                                                                 .getComponents(graph)),
                         false);
     }
 
-    public Integer generate(Graph graph, Integer[] previous, StereoComponent<Integer> stereo, boolean modified) {
+    public T generate(Graph graph, T[] previous, StereoComponent<T> stereo, boolean modified) {
 
         int n = graph.n();
 
-        Integer[] current = Arrays.copyOf(previous, n);
+        T[] current = Arrays.copyOf(previous, n);
 
         // initialise counters
         // - global counter keeps track of all values
         // - we add it as a parent to the child counts (1 per atom) - these will
         //   also register all the counts with the parent counter
-        IntCounter[] counters = new IntCounter[n];
-        Counter<Integer> global = new MapCounter<Integer>(depth * 5 * n);
+        List<CounterImpl> counters = new ArrayList<CounterImpl>(n);
+        Counter<T> global = new MapCounter<T>(depth * 5 * n);
         for (int i = 0; i < n; i++) {
-            counters[i] = new IntCounter(depth * 5, global);
+            counters.add(new CounterImpl(depth * 5, global));
         }
 
         while (stereo.configure(previous, current)) {
@@ -107,7 +112,8 @@ public class IntGenerator implements HashGenerator<Integer> {
 
             // seeds for this depth
             for (int i = 0; i < n; i++) {
-                current[i] = includeNeighbours(previous, graph, i, counters[i]);
+                current[i] = includeNeighbours(previous, graph, i, counters
+                        .get(i));
             }
 
             while (stereo.configure(previous, current)) {
@@ -119,33 +125,40 @@ public class IntGenerator implements HashGenerator<Integer> {
         }
 
         // combined the final values (checking for duplicates)
-        int hash = 49157;
-        //Map<Integer, Integer> equivalence = new HashMap<Integer, Integer>((n + 4) % 3);
+        T hash = initialValue();
+        Map<T, Integer> equivalence = new HashMap<T, Integer>((n + 4) % 3);
         for (int i = 0; i < n; i++) {
-           // if (equivalence.get(current[i]) == null)
-           //     equivalence.put(current[i], i);
-            int value = rotater.rotate(current[i], global.register(current[i]));
-            hash ^= value;
+
+            if (equivalence.get(current[i]) == null)
+                equivalence.put(current[i], i);
+
+            hash = xor(hash,
+                       rotater.rotate(current[i], global.register(current[i])));
         }
 
-        return hash ; //equivalence.size() != n && !modified
-                //? perturb(equivalence, graph, stereo, hash, current)
-                //: hash;
+        return equivalence.size() != n && !modified
+                ? perturb(equivalence, graph, stereo, hash, current)
+                : hash;
 
     }
 
-    private Integer[] modify(Integer[] values, int index) {
-        Integer[] copy = Arrays.copyOf(values, values.length);
+    public abstract T initialValue();
+
+    public abstract T xor(T left, T right);
+
+    public abstract int lowOrderBits(T left);
+
+    private T[] modify(T[] values, int index) {
+        T[] copy = Arrays.copyOf(values, values.length);
         copy[index] = rotater.rotate(copy[index], 1);
         return copy;
     }
 
 
-    private int perturb(Map<Integer, Integer> equivalence, Graph graph, StereoComponent<Integer> stereo, int hash, Integer[] values) {
+    private T perturb(Map<T, Integer> equivalence, Graph graph, StereoComponent<T> stereo, T hash, T[] values) {
         int n = graph.n();
         BitSet perturbed = new BitSet(n);
-        Counter<Integer> counter = new MapCounter<Integer>(n);
-
+        Counter<T> counter = new MapCounter<T>(n);
         for (int i = 0; i < n; i++) {
             int index = equivalence.get(values[i]);
 
@@ -156,14 +169,16 @@ public class IntGenerator implements HashGenerator<Integer> {
                 // check if we've modified primary index
                 if (!perturbed.get(index)) {
                     stereo.reset();
-                    int value = generate(graph, modify(values, index), stereo, true);
-                    hash ^= rotater.rotate(value, counter.register(value));
+                    T value = generate(graph, modify(values, index), stereo, true);
+                    hash = xor(hash, rotater.rotate(value, counter.register(value)));
                 }
 
                 // include modification for i
                 stereo.reset();
-                int value = generate(graph, modify(values, i), stereo, true);
-                hash ^= rotater.rotate(value, counter.register(value));
+                T value = generate(graph, modify(values, i), stereo, true);
+                hash = xor(hash, rotater.rotate(value, counter
+                        .register(value)));
+
 
                 perturbed.set(i);
                 perturbed.set(index);
@@ -175,48 +190,51 @@ public class IntGenerator implements HashGenerator<Integer> {
     }
 
 
-    private int includeNeighbours(Integer[] current, Graph g, int i, Counter<Integer> counter) {
+    private T includeNeighbours(T[] current, Graph g, int i, Counter<T> counter) {
 
         // keep this un-boxed
-        int value = rotater.rotate(current[i], (current[i] & 0x7) + 1);
+        T value = rotater.rotate(current[i], lowOrderBits(current[i]));
 
         for (int j : g.neighbors(i)) {
-            value ^= rotater.rotate(current[j], counter.register(current[j]));
+            value = xor(value, rotater.rotate(current[j], counter
+                    .register(current[j])));
         }
 
         return value;
 
     }
 
-    public Integer[] initialise(Graph g) {
+    public abstract T[] initialise(Graph g);
 
-        int seed = g.n() != 0 ? 389 % g.n() : 389;
-
-        Integer[] seeds = new Integer[g.n()];
-
-        for (int i = 0; i < g.n(); i++) {
-
-            seeds[i] = seed;
-
-            // add the optional methods
-            for (AtomSeed method : this.methods) {
-                seeds[i] = 257 * seeds[i] + method.seed(g, i);
-            }
-
-            // rotate the seed 1-5 times (using mask to get the lower bits)
-            seeds[i] = rotater.rotate(seeds[i], seeds[i] & 0x5);
-
-
-        }
-
-        return seeds;
-
-    }
+//    public Integer[] initialise(Graph g) {
+//
+//        int seed = g.n() != 0 ? 389 % g.n() : 389;
+//
+//        Integer[] seeds = new Integer[g.n()];
+//
+//        for (int i = 0; i < g.n(); i++) {
+//
+//            seeds[i] = seed;
+//
+//            // add the optional methods
+//            for (AtomSeed method : this.methods) {
+//                seeds[i] = 257 * seeds[i] + method.seed(g, i);
+//            }
+//
+//            // rotate the seed 1-5 times (using mask to get the lower bits)
+//            seeds[i] = rotater.rotate(seeds[i], seeds[i] & 0x5);
+//
+//
+//        }
+//
+//        return seeds;
+//
+//    }
 
     // need this so we can have an array
-    private static class IntCounter extends DoubleCounter<Integer> {
-        private IntCounter(int size, Counter<Integer> parent) {
-            super(new MapCounter<Integer>(size), parent);
+    private class CounterImpl extends DoubleCounter<T> {
+        private CounterImpl(int size, Counter<T> parent) {
+            super(new MapCounter<T>(size), parent);
         }
     }
 

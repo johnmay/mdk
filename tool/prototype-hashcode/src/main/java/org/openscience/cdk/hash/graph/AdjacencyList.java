@@ -33,6 +33,7 @@ public class AdjacencyList implements Graph {
     private final int[][] vertexes;
     private final Edge[][] edges;
     private final IAtom[] atoms;
+    protected final IAtomContainer container;
 
     private final int n;
 
@@ -42,6 +43,7 @@ public class AdjacencyList implements Graph {
         this.vertexes = new int[n][16];
         this.edges = new Edge[n][16];
         this.atoms = new IAtom[n];
+        this.container = container;
 
         // keep the neighbour count to trim at the end
         int[] neighbours = new int[n];
@@ -78,6 +80,11 @@ public class AdjacencyList implements Graph {
             edges[i] = Arrays.copyOf(edges[i], neighbours[i]);
         }
 
+    }
+
+    @Override
+    public IAtomContainer container() {
+        return container;
     }
 
     private Edge getEdgeType(IBond bond) {

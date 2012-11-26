@@ -19,7 +19,6 @@ package org.openscience.cdk.parity.locator;
 
 import org.openscience.cdk.hash.graph.Edge;
 import org.openscience.cdk.hash.graph.Graph;
-import org.openscience.cdk.parity.BasicPermutationCounter;
 import org.openscience.cdk.parity.component.AxialCumuleneComponent;
 import org.openscience.cdk.parity.component.DoubleBondComponent;
 import org.openscience.cdk.parity.component.StereoComponent;
@@ -97,10 +96,11 @@ public class CumuleneProvider<T extends Comparable<T>>
 
                 if (isOdd(size)) {
                     // E/Z -> we can actually just use the double bond component
-                    components.add(new DoubleBondComponent<T>(graph,
-                                                              new BasicPermutationCounter<T>(), indicator,
-                                                              start, end,
-                                                              null, null));
+                    System.err.println("cumulated E/Z isomerism is not yet encoded");
+//                    components.add(new DoubleBondComponent<T>(graph,
+//                                                               indicator,
+//                                                              start, end,
+//                                                              null, null));
                 } else {
 
                     // axial -> check we have bond off the plane for either end

@@ -24,7 +24,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.IntGenerator;
+import org.openscience.cdk.IntHashGenerator;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.NoSuchAtomTypeException;
@@ -34,7 +34,7 @@ import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
-import org.openscience.cdk.parity.BasicPermutationCounter;
+import org.openscience.cdk.number.XORShift;
 import org.openscience.cdk.parity.SP2Parity2DCalculator;
 import org.openscience.cdk.parity.component.IntStereoIndicator;
 import org.openscience.cdk.parity.integer.IntDoubleBondLocator;
@@ -60,6 +60,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -186,13 +187,12 @@ public class MolecularHashFactoryTest {
         // for depth of 1 we get some overlap
         for (int d = 1; d < 8; d++) {
             Map<Integer, Set<String>> hashes = new HashMap<Integer, Set<String>>();
-            List<org.openscience.cdk.seed.AtomSeed> seeds = new ArrayList<org.openscience.cdk.seed.AtomSeed>();
-            seeds.add(new org.openscience.cdk.seed.AtomicNumberSeed());
-            seeds.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
-            StereoComponentProvider<Integer> provider = new TetrahedralCenterProvider<Integer>(new IntStereoIndicator(1300141, 105913),
-                                                                                               new BasicPermutationCounter<Integer>());
+            List<AtomSeed> seeds = new ArrayList<AtomSeed>();
+            seeds.add(new AtomicNumberSeed());
+            seeds.add(new ConnectedAtomSeed());
+            StereoComponentProvider<Integer> provider = new TetrahedralCenterProvider<Integer>(new IntStereoIndicator(1300141, 105913));
 
-            HashGenerator<Integer> generator = new IntGenerator(seeds, provider, d);
+            HashGenerator<Integer> generator = new IntHashGenerator(seeds, provider, new XORShift(), d);
             for (IAtomContainer container : containers) {
                 int key = generator.generate(container);
                 if (!hashes.containsKey(key))
@@ -215,9 +215,9 @@ public class MolecularHashFactoryTest {
         // inverted the molecules
         List<IAtomContainer> invertedContainers = readSDF("inverted-inositols.sdf");
 
-        List<org.openscience.cdk.seed.AtomSeed> seeds = new ArrayList<org.openscience.cdk.seed.AtomSeed>();
-        seeds.add(new org.openscience.cdk.seed.AtomicNumberSeed());
-        seeds.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
+        List<AtomSeed> seeds = new ArrayList<AtomSeed>();
+        seeds.add(new AtomicNumberSeed());
+        seeds.add(new ConnectedAtomSeed());
 
         for (int i = 0; i < containers.size(); i++) {
 
@@ -225,16 +225,15 @@ public class MolecularHashFactoryTest {
                                     .getProperty(CDKConstants.TITLE)
                                     .toString();
 
-            System.out
-                  .printf("%20s:\n", name);
+            System.out.printf("%20s:\n", name);
+
 
             for (int d = 1; d < 8; d++) {
 
-                HashGenerator<Integer> generator = new IntGenerator(seeds, d);
+                HashGenerator<Integer> generator = new IntHashGenerator(seeds, new TetrahedralCenterProvider<Integer>(new IntStereoIndicator(1300141, 105913)), d);
 
-                Integer orginal = generator.generate(containers.get(i));
-                Integer inverted = generator.generate(invertedContainers
-                                                              .get(i));
+                Integer orginal  = generator.generate(containers.get(i));
+                Integer inverted = generator.generate(invertedContainers.get(i));
 
                 System.out
                       .printf("%20s 0x%x 0x%x\n", "", orginal, inverted);
@@ -641,15 +640,15 @@ public class MolecularHashFactoryTest {
                 .readSDF(getClass(), "(Z)-butenediol-permutations.sdf", 1)
                 .get(0);
 
-        List<org.openscience.cdk.seed.AtomSeed> methods = new ArrayList<org.openscience.cdk.seed.AtomSeed>();
-        methods.add(new org.openscience.cdk.seed.AtomicNumberSeed());
-        methods.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
+        List<AtomSeed> methods = new ArrayList<AtomSeed>();
+        methods.add(new AtomicNumberSeed());
+        methods.add(new ConnectedAtomSeed());
 
-        StereoComponentProvider<Integer> provider = new IntDoubleBondLocator(new BasicPermutationCounter<Integer>(), new SP2Parity2DCalculator());
+        StereoComponentProvider<Integer> provider = new IntDoubleBondLocator(new SP2Parity2DCalculator());
 
         for (int depth = 0; depth < 4; depth++) {
-            HashGenerator<Integer> off = new IntGenerator(methods, depth);
-            HashGenerator<Integer> on = new IntGenerator(methods, provider, depth);
+            HashGenerator<Integer> off = new IntHashGenerator(methods, depth);
+            HashGenerator<Integer> on = new IntHashGenerator(methods, provider, depth);
 
             assertThat("molecules with different E/Z and E/Z off should be equal at depth " + depth,
                        off.generate(cis), is(off.generate(trans)));
@@ -663,11 +662,11 @@ public class MolecularHashFactoryTest {
     @Test
     public void testAllenes() throws Exception {
         List<IAtomContainer> containers = readSDF("allenes.sdf", 6);
-        List<org.openscience.cdk.seed.AtomSeed> methods = new ArrayList<org.openscience.cdk.seed.AtomSeed>();
-        methods.add(new org.openscience.cdk.seed.AtomicNumberSeed());
-        methods.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
+        List<AtomSeed> methods = new ArrayList<AtomSeed>();
+        methods.add(new AtomicNumberSeed());
+        methods.add(new ConnectedAtomSeed());
         StereoComponentProvider<Integer> provider = new CumuleneProvider<Integer>(new IntStereoIndicator(1300141, 105913));
-        HashGenerator<Integer> generator = new IntGenerator(methods, provider, 8);
+        HashGenerator<Integer> generator = new IntHashGenerator(methods, provider, 8);
 
         Set<Integer> hashes = new HashSet<Integer>();
 

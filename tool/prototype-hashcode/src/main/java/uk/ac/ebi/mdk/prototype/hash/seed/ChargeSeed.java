@@ -30,7 +30,7 @@ public class ChargeSeed implements AtomSeed {
     /*
      * default value when a null charge is accessed
      */
-    private static final int NULL_VALUE = 257;
+    private static final int NULL_VALUE = 4427107;
 
     public ChargeSeed() {
     }

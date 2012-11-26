@@ -32,7 +32,7 @@ public class MassNumberSeed implements AtomSeed {
     }
 
     public int seed(IAtomContainer molecule, IAtom atom) {
-        return atom.getMassNumber() != null ? atom.getMassNumber().hashCode() : 257;
+        return atom.getMassNumber() != null ? atom.getMassNumber().hashCode() : 1387913;
     }
 
     @Override

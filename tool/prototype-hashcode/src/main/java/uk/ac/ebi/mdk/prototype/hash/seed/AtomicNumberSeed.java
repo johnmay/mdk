@@ -34,7 +34,7 @@ public class AtomicNumberSeed implements AtomSeed {
 
     public int seed(IAtomContainer molecule, IAtom atom) {
         return atom.getAtomicNumber() != null ? atom.getAtomicNumber().hashCode() :
-                257;
+                197003; // prime choosen random from class name and BigPrimes.net
     }
 
     @Override

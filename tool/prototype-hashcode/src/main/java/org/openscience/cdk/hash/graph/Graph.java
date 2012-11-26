@@ -18,6 +18,7 @@
 package org.openscience.cdk.hash.graph;
 
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
  * Fast molecule is a restructure immutable molecule that allows quicker queries
@@ -26,6 +27,9 @@ import org.openscience.cdk.interfaces.IAtom;
  * @author John May
  */
 public interface Graph {
+
+    public IAtomContainer container();
+
     /**
      * Provides the indices of vertices which are adjacent to the given index.
      *

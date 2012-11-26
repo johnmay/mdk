@@ -18,7 +18,8 @@
 package uk.ac.ebi.mdk.prototype.hash;
 
 import org.junit.Test;
-import org.openscience.cdk.IntGenerator;
+import org.openscience.cdk.AbstractHashGenerator;
+import org.openscience.cdk.IntHashGenerator;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
@@ -52,11 +53,11 @@ public class HashClashes {
         List<IAtomContainer> containers = MolecularHashFactoryTest
                 .readSDF(getClass(), "collisions.sdf", 2);
 
-        List<org.openscience.cdk.seed.AtomSeed> seeds = new ArrayList<org.openscience.cdk.seed.AtomSeed>();
-        seeds.add(new org.openscience.cdk.seed.AtomicNumberSeed());
-        seeds.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
+        List<AtomSeed> seeds = new ArrayList<AtomSeed>();
+        seeds.add(new AtomicNumberSeed());
+        seeds.add(new ConnectedAtomSeed());
 
-        HashGenerator<Integer> generator = new IntGenerator(seeds, 8);
+        HashGenerator<Integer> generator = new IntHashGenerator(seeds, 8);
 
         System.out.println(generator.generate(containers.get(0)));
         System.out.println(generator.generate(containers.get(1)));

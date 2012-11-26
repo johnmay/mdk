@@ -17,6 +17,14 @@
 
 package uk.ac.ebi.mdk.prototype.hash;
 
+import org.openscience.cdk.IntHashGenerator;
+import org.openscience.cdk.parity.SP2Parity2DUnspecifiedCalculator;
+import org.openscience.cdk.parity.component.IntStereoIndicator;
+import org.openscience.cdk.parity.component.StereoIndicator;
+import org.openscience.cdk.parity.integer.IntDoubleBondLocator;
+import org.openscience.cdk.parity.locator.CumuleneProvider;
+import org.openscience.cdk.parity.locator.StereoComponentProvider;
+import org.openscience.cdk.parity.locator.TetrahedralCenterProvider;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
@@ -30,12 +38,13 @@ import uk.ac.ebi.mdk.prototype.hash.seed.NonNullChargeSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullHybridizationSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullMassNumberSeed;
 
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import static org.openscience.cdk.parity.locator.StereoProviderConjunction.and;
 
 /**
  * A class to help with the complex construction and configuration of {@link
@@ -96,11 +105,9 @@ public class HashGeneratorMaker {
     /* print debug statements whilst hashing */
     private boolean debug = false;
 
-    /* include E/Z hashing */
-    private boolean ezisomerism = false;
+    /* include chiral hashing */
+    private boolean chiral = false;
 
-    /* include R/S hashing */
-    private boolean enantiomers = false;
 
     /* bitset to indicate with default seeds to include*/
     private final BitSet basic = new BitSet(NULLABLE_SEEDS.length);
@@ -156,7 +163,8 @@ public class HashGeneratorMaker {
                 return i;
             }
         }
-        throw new NoSuchElementException("could not find: " + c.getSimpleName());
+        throw new NoSuchElementException("could not find: " + c
+                .getSimpleName());
     }
 
     /**
@@ -166,8 +174,7 @@ public class HashGeneratorMaker {
      */
     private void withSeeds(AtomSeed[] seeds) {
         for (int i = basic.nextSetBit(0); i >= 0; i = basic.nextSetBit(i + 1)) {
-            this.seeds
-                    .add(seeds[i]);
+            this.seeds.add(seeds[i]);
         }
     }
 
@@ -195,9 +202,17 @@ public class HashGeneratorMaker {
         // include the default seeds
         withSeeds(nullable ? NULLABLE_SEEDS : NONNULL_SEEDS);
 
-        return new MolecularHashFactory(new ArrayList<AtomSeed>(seeds), depth,
-                                                    deprotonate, enantiomers, ezisomerism,
-                                                    debug);
+        StereoIndicator<Integer> indicator = new IntStereoIndicator(1300141, 105913);
+
+        if (chiral) {
+            // include all provides using a conjunction
+            StereoComponentProvider<Integer> stereo = and(new IntDoubleBondLocator(new SP2Parity2DUnspecifiedCalculator()),
+                                                          and(new TetrahedralCenterProvider<Integer>(indicator),
+                                                              new CumuleneProvider<Integer>(indicator)));
+            return new IntHashGenerator(seeds, stereo, depth);
+        }
+
+        return new IntHashGenerator(seeds, depth);
     }
 
     /**
@@ -229,8 +244,8 @@ public class HashGeneratorMaker {
      * Indicate the depth of the hashing function. The depth can be thought of
      * as how far away will each atom 'feel' it's neighbours. This means that if
      * two atoms had the same neighbourhood up to 4 atoms away a depth of 4
-     * would seed identical hashes whilst a depth of > 4 would distinguish
-     * them Larger depths take longer but are more comprehensive.
+     * would seed identical hashes whilst a depth of > 4 would distinguish them
+     * Larger depths take longer but are more comprehensive.
      *
      * @return self reference for chaining methods
      */
@@ -425,69 +440,15 @@ public class HashGeneratorMaker {
 
     /**
      * Include encoding of double bond (E/Z) and tetrahedral (R/S) isomerism in
-     * the hashing calculation. If you want to turn only one on/off the
-     * individual options {@link #enantiomeric()} <p/> <b>note:</b> currently
-     * all double bonds in rings are ignored - even if the ring is flexible <p/>
-     * <b>note:</b> axial stereo chemistry, like allene, is not currently
-     * supported <p/>
+     * the hashing calculation.
      *
      * @return self reference for chaining methods
-     * @see #withEZIsomerism()
-     * @see #withEnantiomers()
-     * @see #enantiomeric()
      */
     public HashGeneratorMaker chiral() {
-        withEZIsomerism();
-        withEnantiomers();
+        this.chiral = true;
         return this;
     }
 
-    /**
-     * Include encoding of double bond (E/Z) isomerism in the hashing function.
-     * If both double bond and tetrahedral stereo chemistry is desired they can
-     * both be turned on using the {@see #chiral()}.
-     *
-     * @return self reference for chaining methods
-     * @see #chiral()
-     * @see #withEnantiomers()
-     * @see #enantiomeric()
-     */
-    public HashGeneratorMaker withEZIsomerism() {
-        this.ezisomerism = true;
-        return this;
-    }
-
-
-    /**
-     * Include encoding of tetrahedral (R/S) isomerism in the hashing function.
-     * If both double bond and tetrahedral stereo chemistry is desired they can
-     * both be turned on using the {@see #chiral()}. This method is the concise
-     * form of {@link #withEnantiomers()}
-     *
-     * @return self reference for chaining methods
-     * @see #chiral()
-     * @see #withEZIsomerism()
-     * @see #withEnantiomers()
-     */
-    public HashGeneratorMaker enantiomeric() {
-        return withEnantiomers();
-    }
-
-    /**
-     * Include encoding of tetrahedral (R/S) isomerism in the hashing function.
-     * If both double bond and tetrahedral stereo chemistry is desired they can
-     * both be turned on using the {@see #chiral()}. This method is the verbose
-     * form of {@link #enantiomeric()}
-     *
-     * @return self reference for chaining methods
-     * @see #chiral()
-     * @see #withEZIsomerism()
-     * @see #enantiomeric()
-     */
-    public HashGeneratorMaker withEnantiomers() {
-        this.enantiomers = true;
-        return this;
-    }
 
     /**
      * Include a custom seed in the hashing function. Duplicated seeds will only
