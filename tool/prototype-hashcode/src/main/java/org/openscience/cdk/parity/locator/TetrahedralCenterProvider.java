@@ -20,7 +20,6 @@ package org.openscience.cdk.parity.locator;
 import org.openscience.cdk.hash.graph.Graph;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.parity.ParityCalculator;
-import org.openscience.cdk.parity.PermutationCounter;
 import org.openscience.cdk.parity.SP3Parity2DCalculator;
 import org.openscience.cdk.parity.component.StereoComponent;
 import org.openscience.cdk.parity.component.StereoIndicator;
@@ -43,15 +42,13 @@ public class TetrahedralCenterProvider<T extends Comparable<T>>
         implements StereoComponentProvider<T> {
 
     private final StereoIndicator<T> indicator;
-    private final PermutationCounter<T> permutationCalculator;
 
     // inject.. when we add 3D support
     private final ParityCalculator parityCalculator = new SP3Parity2DCalculator();
 
-    public TetrahedralCenterProvider(StereoIndicator<T> indicator,
-                                     PermutationCounter<T> calc) {
+    public TetrahedralCenterProvider(StereoIndicator<T> indicator
+                                    ) {
         this.indicator = indicator;
-        this.permutationCalculator = calc;
     }
 
     @Override
@@ -64,7 +61,7 @@ public class TetrahedralCenterProvider<T extends Comparable<T>>
                 components.add(new TetrahedralComponent<T>(i,
                                                            graph.neighbors(i),
                                                            parity(i, graph),
-                                                           permutationCalculator, indicator));
+                                                           indicator));
             }
         }
 

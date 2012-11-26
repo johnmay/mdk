@@ -79,8 +79,7 @@ public class IntGenerator implements HashGenerator<Integer> {
     public Integer generate(Graph graph) {
         return generate(graph,
                         initialise(graph),
-                        new StereoComponentAggregator<Integer>(stereoProvider
-                                                                       .getComponents(graph)),
+                        new StereoComponentAggregator<Integer>(stereoProvider.getComponents(graph)),
                         false);
     }
 
@@ -119,18 +118,19 @@ public class IntGenerator implements HashGenerator<Integer> {
 
         }
 
-        // combined the final values
+        // combined the final values (checking for duplicates)
         int hash = 49157;
-        Map<Integer, Integer> equivalence = new HashMap<Integer, Integer>((n + 4) % 3);
+        //Map<Integer, Integer> equivalence = new HashMap<Integer, Integer>((n + 4) % 3);
         for (int i = 0; i < n; i++) {
-            if (equivalence.get(current[i]) == null)
-                equivalence.put(current[i], i);
+           // if (equivalence.get(current[i]) == null)
+           //     equivalence.put(current[i], i);
             int value = rotater.rotate(current[i], global.register(current[i]));
             hash ^= value;
         }
 
-        return equivalence
-                .size() != n && !modified ? perturb(equivalence, graph, stereo, hash, current) : hash;
+        return hash ; //equivalence.size() != n && !modified
+                //? perturb(equivalence, graph, stereo, hash, current)
+                //: hash;
 
     }
 
@@ -139,6 +139,7 @@ public class IntGenerator implements HashGenerator<Integer> {
         copy[index] = rotater.rotate(copy[index], 1);
         return copy;
     }
+
 
     private int perturb(Map<Integer, Integer> equivalence, Graph graph, StereoComponent<Integer> stereo, int hash, Integer[] values) {
         int n = graph.n();

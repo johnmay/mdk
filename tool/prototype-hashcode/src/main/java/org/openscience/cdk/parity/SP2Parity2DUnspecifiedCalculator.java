@@ -17,17 +17,14 @@
 
 package org.openscience.cdk.parity;
 
-import Jama.Matrix;
 import org.openscience.cdk.interfaces.IAtom;
-
-import javax.vecmath.Matrix3d;
-import javax.vecmath.Point2d;
 
 /**
  * @author John May
  */
-public class SP2Parity2DCalculator implements ParityCalculator {
+public class SP2Parity2DUnspecifiedCalculator implements ParityCalculator {
 
+    private static final double THRESHOLD = 0.1D;
 
     @Override
     public int parity(IAtom[] atoms, int[] planes) {
@@ -60,8 +57,10 @@ public class SP2Parity2DCalculator implements ParityCalculator {
                     - (b * d)  // bdi  (bd)
                     - (a * h); // afh  (ah)
 
-        // check out SP2Parity2DUnspecifiedCalculator for unspecified
-        // bond detection
+        // if our value is less then the threshold
+        if(Math.abs(det) < THRESHOLD){
+            return 0;
+        }
 
         return det > 0 ? +1 : det < 0 ? -1 : 0;
 

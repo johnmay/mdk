@@ -39,7 +39,15 @@ public abstract class DoubleBondProvider<T extends Comparable>
         implements StereoComponentProvider<T> {
 
 
-    private ParityCalculator calc = new SP2Parity2DCalculator(); // inject this
+    private ParityCalculator calculator;
+
+    public DoubleBondProvider(ParityCalculator calculator) {
+        this.calculator = calculator;
+    }
+
+    public DoubleBondProvider() {
+        this(new SP2Parity2DCalculator());
+    }
 
     /**
      * @inheritDoc
@@ -93,21 +101,27 @@ public abstract class DoubleBondProvider<T extends Comparable>
         int y = -1;
         for (int j = 0; j < neighbours.length; j++) {
             Edge edge = graph.getEdgeAtIndex(x, j);
-            if (edge.order() == 2) {
+            if (edge.isQuery()) {
+                return -1;
+            } else if (edge.order() == 2) {
 
                 if (y != -1)
                     return -1; // found that x has two connections to double bonds
 
                 // check y neighbours
                 int[] yNeighbours = graph.neighbors(neighbours[j]);
+                boolean queryBonds = false;
                 for (int k = 0; k < yNeighbours.length; k++) {
                     Edge yEdge = graph.getEdgeAtIndex(neighbours[j], k);
                     // found another double bond that wasn't to x
                     if (yEdge.order() == 2 && yNeighbours[k] != x)
                         return -1;
+                    if (yEdge.isQuery())
+                        queryBonds = true;
                 }
 
-                y = neighbours[j];
+                if (!queryBonds)
+                    y = neighbours[j];
 
             }
         }
@@ -180,7 +194,7 @@ public abstract class DoubleBondProvider<T extends Comparable>
             }
         }
 
-        return calc.parity(tmp, EMPTY_INT_ARRAY);
+        return calculator.parity(tmp, EMPTY_INT_ARRAY);
 
     }
 

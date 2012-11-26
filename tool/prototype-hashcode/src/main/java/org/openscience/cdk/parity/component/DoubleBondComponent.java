@@ -18,18 +18,18 @@
 package org.openscience.cdk.parity.component;
 
 import org.openscience.cdk.hash.graph.Graph;
-import org.openscience.cdk.parity.PermutationCounter;
 
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 
 /**
  * @author John May
  */
 public class DoubleBondComponent<T extends Comparable<T>>
+        extends AbstractStereoComponent<T>
         implements StereoComponent<T> {
 
     private final Graph graph;
-    private final PermutationCounter<T> parityCalc;
 
     private final int x;
     private final int y;
@@ -42,22 +42,22 @@ public class DoubleBondComponent<T extends Comparable<T>>
     private final int[] xneighbours;
     private final int[] yneighbours;
 
+    private boolean autoconfigure;
+
 
     public DoubleBondComponent(Graph graph,
-                               PermutationCounter<T> parityCalc,
                                StereoIndicator<T> indicator,
                                int x, int y,
                                Callable<Integer> xParity, Callable<Integer> yParity) {
         this.graph = graph;
-        this.parityCalc = parityCalc;
         this.x = x;
         this.y = y;
 
         this.xParity = xParity;
         this.yParity = yParity;
 
-        this.xneighbours = new int[graph.neighbors(x).length];
-        this.yneighbours = new int[graph.neighbors(y).length];
+        int[] xneighbours = new int[graph.neighbors(x).length];
+        int[] yneighbours = new int[graph.neighbors(y).length];
 
         // remove the double bonds
         int xNeighbourCount = 0;
@@ -73,15 +73,23 @@ public class DoubleBondComponent<T extends Comparable<T>>
             }
         }
 
+        this.xneighbours = Arrays.copyOf(xneighbours, xNeighbourCount);
+        this.yneighbours = Arrays.copyOf(yneighbours, yNeighbourCount);
+
         this.indicator = indicator;
+
+        this.autoconfigure = xNeighbourCount == 1 && yNeighbourCount == 1;
 
     }
 
     @Override
     public boolean configure(T[] current, T[] configured) {
 
-        int parity = parityCalc.count(current, graph.neighbors(x)) *
-                parityCalc.count(current, graph.neighbors(y));
+        // if there is only one neighbour on each we can skip this step
+        int parity = autoconfigure ? 1
+                : permutationParity(current, xneighbours)
+                * permutationParity(current, yneighbours);
+
 
         if (parity != 0) {
 
@@ -94,7 +102,13 @@ public class DoubleBondComponent<T extends Comparable<T>>
             }
 
             if (parity == 0) {
-                return true; // no configuration
+                // no configuration (despite invariance in the graph) - this
+                // can occur with unspecified arrangement.
+                //  \                            \
+                //   c = c   configured, whilst   c = c –  is not.
+                //        \
+                //
+                return true;
             } else if (parity > 0) {
                 configured[x] = indicator.anticlockwise(configured[x]);
                 configured[y] = indicator.anticlockwise(configured[y]);

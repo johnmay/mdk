@@ -19,15 +19,14 @@ package org.openscience.cdk.parity.component;
 
 import org.openscience.cdk.hash.graph.Graph;
 import org.openscience.cdk.interfaces.IAtom;
-import org.openscience.cdk.parity.BasicPermutationCounter;
 import org.openscience.cdk.parity.ParityCalculator;
-import org.openscience.cdk.parity.PermutationCounter;
 import org.openscience.cdk.parity.SP3Parity2DCalculator;
 
 /**
  * @author John May
  */
 public class AxialCumuleneComponent<T extends Comparable<T>>
+        extends AbstractStereoComponent<T>
         implements StereoComponent<T> {
 
     private final int start;
@@ -40,7 +39,6 @@ public class AxialCumuleneComponent<T extends Comparable<T>>
     private final boolean autoconfigure;
     private final ParityCalculator calculator = new SP3Parity2DCalculator();
 
-    private PermutationCounter<T> counter = new BasicPermutationCounter<T>();
     private StereoIndicator<T> indicator;
 
     /**
@@ -126,10 +124,10 @@ public class AxialCumuleneComponent<T extends Comparable<T>>
             // check for invariance on start and end
             int xorder = startNeighbours.sigmas[1] == start
                     ? 1
-                    : counter.count(current, startNeighbours.sigmas);
+                    : permutationParity(current, startNeighbours.sigmas);
             int yorder = endNeighbours.sigmas[1] == end
                     ? 1
-                    : counter.count(current, endNeighbours.sigmas);
+                    : permutationParity(current, endNeighbours.sigmas);
 
 
             // if we have no invariance (counter returns 0 for duplicates)

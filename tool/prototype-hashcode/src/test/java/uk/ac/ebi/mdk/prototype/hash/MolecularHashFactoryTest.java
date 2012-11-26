@@ -35,6 +35,7 @@ import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.SDFWriter;
 import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.parity.BasicPermutationCounter;
+import org.openscience.cdk.parity.SP2Parity2DCalculator;
 import org.openscience.cdk.parity.component.IntStereoIndicator;
 import org.openscience.cdk.parity.integer.IntDoubleBondLocator;
 import org.openscience.cdk.parity.locator.CumuleneProvider;
@@ -644,7 +645,7 @@ public class MolecularHashFactoryTest {
         methods.add(new org.openscience.cdk.seed.AtomicNumberSeed());
         methods.add(new org.openscience.cdk.seed.ConnectedAtomSeed());
 
-        StereoComponentProvider<Integer> provider = new IntDoubleBondLocator(new BasicPermutationCounter<Integer>());
+        StereoComponentProvider<Integer> provider = new IntDoubleBondLocator(new BasicPermutationCounter<Integer>(), new SP2Parity2DCalculator());
 
         for (int depth = 0; depth < 4; depth++) {
             HashGenerator<Integer> off = new IntGenerator(methods, depth);

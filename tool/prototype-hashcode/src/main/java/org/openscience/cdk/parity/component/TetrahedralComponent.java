@@ -17,15 +17,14 @@
 
 package org.openscience.cdk.parity.component;
 
-import org.openscience.cdk.parity.PermutationCounter;
 
 /**
  * @author John May
  */
 public class TetrahedralComponent<T extends Comparable<T>>
+        extends AbstractStereoComponent<T>
         implements StereoComponent<T> {
 
-    private final PermutationCounter<T> calc;
     private final StereoIndicator<T> indicator;
 
     private final int index;
@@ -33,31 +32,28 @@ public class TetrahedralComponent<T extends Comparable<T>>
     private final int parity;
 
     /**
-     *
-     * @param index index of central atom
+     * @param index      index of central atom
      * @param neighbours index of neighbour
-     * @param parity storage parity
-     * @param calc permutation calc - min no of swaps
-     * @param indicator permutation calc - min no of swaps
+     * @param parity     storage parity
+     * @param indicator  permutation calc - min no of swaps
      */
-    public TetrahedralComponent(int index, int[] neighbours, int parity, PermutationCounter<T> calc,
+    public TetrahedralComponent(int index, int[] neighbours, int parity,
                                 StereoIndicator<T> indicator) {
         this.index = index;
         this.neighbours = neighbours;
         this.parity = parity;
-        this.calc = calc;
         this.indicator = indicator;
     }
 
     @Override
     public boolean configure(final T[] previous, T[] current) {
 
-        int parity = this.parity * calc.count(previous, neighbours);
+        int parity = this.parity * permutationParity(previous, neighbours);
 
-        if(parity != 0) {
+        if (parity != 0) {
 
             // configure using the indicator
-            if(parity > 0){
+            if (parity > 0) {
                 current[index] = indicator.anticlockwise(current[index]);
             } else {
                 current[index] = indicator.clockwise(current[index]);

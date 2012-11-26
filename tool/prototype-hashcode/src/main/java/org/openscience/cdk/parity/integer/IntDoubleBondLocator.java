@@ -18,11 +18,11 @@
 package org.openscience.cdk.parity.integer;
 
 import org.openscience.cdk.hash.graph.Graph;
-import org.openscience.cdk.parity.PermutationCounter;
+import org.openscience.cdk.parity.ParityCalculator;
 import org.openscience.cdk.parity.component.DoubleBondComponent;
+import org.openscience.cdk.parity.component.StereoComponent;
 import org.openscience.cdk.parity.component.StereoIndicator;
 import org.openscience.cdk.parity.locator.DoubleBondProvider;
-import org.openscience.cdk.parity.component.StereoComponent;
 
 import java.util.concurrent.Callable;
 
@@ -32,7 +32,6 @@ import java.util.concurrent.Callable;
 public class IntDoubleBondLocator
         extends DoubleBondProvider<Integer> {
 
-    private final PermutationCounter<Integer> calc;
     private final StereoIndicator<Integer> indicator = new StereoIndicator<Integer>() {
         @Override
         public Integer clockwise(Integer value) {
@@ -45,12 +44,12 @@ public class IntDoubleBondLocator
         }
     };
 
-    public IntDoubleBondLocator(PermutationCounter<Integer> calc) {
-        this.calc = calc;
+    public IntDoubleBondLocator(ParityCalculator calculator) {
+        super(calculator);
     }
 
     @Override
     public StereoComponent<Integer> create(Graph g, int x, int y, Callable<Integer> xParity, Callable<Integer> yParity) {
-        return new DoubleBondComponent<Integer>(g, calc, indicator, x, y, xParity, yParity);
+        return new DoubleBondComponent<Integer>(g, indicator, x, y, xParity, yParity);
     }
 }

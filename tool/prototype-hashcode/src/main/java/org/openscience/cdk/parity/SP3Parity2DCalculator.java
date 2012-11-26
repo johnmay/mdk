@@ -45,9 +45,6 @@ public class SP3Parity2DCalculator implements ParityCalculator {
 
         double det = new Matrix(m).det();
 
-        // could also add check for unspecified double bonds - that should
-        // be in a separate class though so it can be plug-able
-
         return det > 0 ? +1 : det < 0 ? -1 : 0;
 
     }

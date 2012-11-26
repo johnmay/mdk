@@ -37,6 +37,11 @@ public class StereoProviderConjunction<T extends Comparable<T>>
         this.right = right;
     }
 
+    public static <T extends Comparable<T>> StereoComponentProvider<T> and(StereoComponentProvider<T> left,
+                                                                           StereoComponentProvider<T> right) {
+        return new StereoProviderConjunction<T>(left, right);
+    }
+
     @Override
     public List<StereoComponent<T>> getComponents(Graph graph) {
         List<StereoComponent<T>> components = new ArrayList<StereoComponent<T>>(left.getComponents(graph));

@@ -15,16 +15,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openscience.cdk.parity;
+package org.openscience.cdk.parity.component;
+
+import org.openscience.cdk.parity.locator.StereoProviderConjunction;
 
 /**
  * @author John May
  */
-public class BasicPermutationCounter<T extends Comparable<T>>
-        implements PermutationCounter<T> {
+public abstract class AbstractStereoComponent<T extends Comparable<T>>
+        implements StereoComponent<T> {
 
     @Override
-    public int count(T[] values, int[] indices) {
+    public void reset() {
+        // ignore
+    }
+
+    /**
+     * Determines the permutation parity of the values at the provided indices.
+     * The permutation parity provides the number of swaps required to get the
+     * values in ascending order. If there is an odd number of swaps needed a
+     * negative parity is returned. If there as an even number of swaps then +1
+     * is returned. If the a duplicate value is found then 0 is returned.
+     *
+     * @param values  array of values
+     * @param indices indices of the values
+     * @return odd (-1), even (+1) or duplicate (0)
+     */
+    protected final int permutationParity(T[] values, int[] indices) {
 
         int n = indices.length;
         int count = 0;
@@ -46,6 +63,7 @@ public class BasicPermutationCounter<T extends Comparable<T>>
 
         // parity of the swaps
         return (count & 0x1) == 1 ? -1 : +1;
+
     }
 
 }
