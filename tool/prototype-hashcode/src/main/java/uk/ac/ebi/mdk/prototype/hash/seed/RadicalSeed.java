@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.prototype.hash.seed;
 
 import org.openscience.cdk.interfaces.IAtom;
@@ -21,48 +22,31 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.ISingleElectron;
 
 /**
- * A atomic hash seed that indicates whether the atom is a free radical.
- * Currently there is no distinction between monovalent, divalent and trivalent
- * radicals. Due to this the seed is boolean and will return a true/false
- * indication as to whether there exists an unpaired electron on the provided
- * atom.
+ * A atomic hash seed that encode mono-, di- and tri- valent free radicals.
  *
  * @author johnmay
- * @see IAtomContainer#getSingleElectron(int)
+ * @see org.openscience.cdk.interfaces.IAtomContainer#getSingleElectron(int)
  */
-@Deprecated
-public class BooleanRadicalSeed implements AtomSeed {
+public final class RadicalSeed implements AtomSeed {
 
     /*
      * default value when a null charge is accessed
      */
     private static final int NULL_VALUE = 13367;
 
-    /*
-     * value to use when the atom is a radical
-     */
-    private static final int RADICAL = 413158511;
+    public RadicalSeed() {}
 
-    public BooleanRadicalSeed() {
-    }
+    public final int seed(IAtomContainer container, IAtom atom) {
 
-    /**
-     * Utilise the formal charge of an atom as a seed for a hashing function.
-     *
-     * @param container a container that holds the provided atom
-     * @param atom      an atom to seed
-     * @return the seed value
-     */
-    public int seed(IAtomContainer container, IAtom atom) {
+        int sum = 0;
 
         for (ISingleElectron unpaired : container.singleElectrons()) {
-
             if (unpaired.getAtom().equals(atom)) {
-                return RADICAL;
+                sum++;
             }
         }
 
-        return NULL_VALUE;
+        return sum > 0 ? sum : NULL_VALUE;
     }
 
     /**
@@ -70,7 +54,7 @@ public class BooleanRadicalSeed implements AtomSeed {
      */
     @Override
     public String toString() {
-        return "Radical (boolean)";
+        return "Radicals";
     }
 
 }

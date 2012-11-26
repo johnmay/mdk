@@ -28,7 +28,6 @@ import org.openscience.cdk.parity.locator.TetrahedralCenterProvider;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.BooleanRadicalSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.HybridizationSeed;
@@ -37,6 +36,7 @@ import uk.ac.ebi.mdk.prototype.hash.seed.NonNullAtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullChargeSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullHybridizationSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullMassNumberSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.RadicalSeed;
 
 import java.util.BitSet;
 import java.util.Comparator;
@@ -73,7 +73,7 @@ public class HashGeneratorMaker {
             new HybridizationSeed(),
             new MassNumberSeed(),
             new BondOrderSumSeed(),
-            new BooleanRadicalSeed()
+            new RadicalSeed()
     };
 
     /*
@@ -87,7 +87,7 @@ public class HashGeneratorMaker {
             new NonNullHybridizationSeed(),
             new NonNullMassNumberSeed(),
             new BondOrderSumSeed(),
-            new BooleanRadicalSeed()
+            new RadicalSeed()
     };
 
     /* comparator used to sort atom seeds */
@@ -415,7 +415,6 @@ public class HashGeneratorMaker {
 
     /**
      * Includes information about the presence of free radicals on atoms. This
-     * option will not distinguish between mono, di and trivalent radicals. This
      * method is the more concise form of {@link #withFreeRadicals()}.
      *
      * @return self reference for chaining methods
@@ -427,14 +426,13 @@ public class HashGeneratorMaker {
 
     /**
      * Includes information about the presence of free radicals on atoms. This
-     * option will not distinguish between mono, di and trivalent radicals. This
      * method is the more verbose form of {@link #withFreeRadicals()}.
      *
      * @return self reference for chaining methods
      * @see #radicals()
      */
     public HashGeneratorMaker withFreeRadicals() {
-        return withSeed(BooleanRadicalSeed.class);
+        return withSeed(RadicalSeed.class);
     }
 
 
