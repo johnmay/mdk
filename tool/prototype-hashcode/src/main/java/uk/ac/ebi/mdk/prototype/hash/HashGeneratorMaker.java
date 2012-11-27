@@ -90,9 +90,6 @@ public class HashGeneratorMaker {
             new RadicalSeed()
     };
 
-    /* comparator used to sort atom seeds */
-    private static final Comparator<AtomSeed> COMPARATOR = new AtomSeedComparator();
-
     /* use nullable atom seeds */
     private boolean nullable = false;
 
@@ -113,7 +110,7 @@ public class HashGeneratorMaker {
     private final BitSet basic = new BitSet(NULLABLE_SEEDS.length);
 
     /* sorted set of atom seeds */
-    private final SortedSet<AtomSeed> seeds = new TreeSet<AtomSeed>(COMPARATOR);
+    private final SortedSet<AtomSeed> seeds = new TreeSet<AtomSeed>(SEED_NAME_ORDER);
 
     /**
      * Default constructor build a maker which can be configured and used to
@@ -485,11 +482,9 @@ public class HashGeneratorMaker {
         return this;
     }
 
-    /**
-     * A basic comparator so we can keep the seeds in the same order every time.
-     * AtomSeeds are compared by their class name
-     */
-    private static class AtomSeedComparator implements Comparator<AtomSeed> {
+
+
+    public final static Comparator<AtomSeed> SEED_NAME_ORDER = new Comparator<AtomSeed>() {
         @Override
         public int compare(AtomSeed o1, AtomSeed o2) {
             return o1.getClass()
@@ -497,7 +492,7 @@ public class HashGeneratorMaker {
                      .compareTo(o2.getClass()
                                   .getSimpleName());
         }
-    }
+    };
 
 
 }

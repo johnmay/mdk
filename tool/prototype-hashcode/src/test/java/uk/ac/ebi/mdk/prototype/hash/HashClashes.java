@@ -18,7 +18,6 @@
 package uk.ac.ebi.mdk.prototype.hash;
 
 import org.junit.Test;
-import org.openscience.cdk.AbstractHashGenerator;
 import org.openscience.cdk.IntHashGenerator;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;

@@ -46,7 +46,8 @@ public final class RadicalSeed implements AtomSeed {
             }
         }
 
-        return sum > 0 ? sum : NULL_VALUE;
+        return sum > 0 ? sum * 413158511 : NULL_VALUE;
+
     }
 
     /**
