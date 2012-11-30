@@ -22,26 +22,56 @@ package uk.ac.ebi.mdk.prototype.hash.seed;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
+import java.util.BitSet;
+
 /**
- * Uses the bond order sum to provide a seed
- * for the an atom. The bond order sum is calculated using
- * {@see AtomContainerManipulator#getBondOrderSum(IAtomContainer, IAtom)}).
- * The seed is used in the MolecularHashFactory when creating a hash for a
- * molecule.
+ * Uses the bond order sum to provide a seed for the an atom. The bond order sum
+ * is calculated using {@see AtomContainerManipulator#getBondOrderSum(IAtomContainer,
+ *IAtom)}). The seed is used in the MolecularHashFactory when creating a hash
+ * for a molecule.
  *
  * @author johnmay
  * @see AtomContainerManipulator#getBondOrderSum(IAtomContainer, IAtom)
  * @see uk.ac.ebi.mdk.prototype.hash.MolecularHashFactory
  */
-public class BondOrderSumSeed implements AtomSeed {
+public class BondOrderSumSeed implements AtomSeed, MaskedSeed {
 
     public BondOrderSumSeed() {
     }
 
     public int seed(IAtomContainer molecule, IAtom atom) {
-        return Double.valueOf(AtomContainerManipulator.getBondOrderSum(molecule, atom)).hashCode();
+        return Double.valueOf(AtomContainerManipulator
+                                      .getBondOrderSum(molecule, atom))
+                     .hashCode();
+    }
+
+    @Override
+    public int seed(IAtomContainer molecule, IAtom atom, BitSet mask) {
+        double sum = 0;
+        for (IBond bond : molecule.getConnectedBondsList(atom)) {
+            if (mask.get(molecule.getAtomNumber(bond.getConnectedAtom(atom))))
+                sum += order(bond.getOrder());
+        }
+        return ((Double) sum).hashCode();
+    }
+
+    // can be replaced with the new Order.numeric() field once it is released
+    private static int order(IBond.Order order) {
+        switch (order) {
+            case SINGLE:
+                return 1;
+            case DOUBLE:
+                return 2;
+            case TRIPLE:
+                return 3;
+            case QUADRUPLE:
+                return 4;
+            default:
+                return 1;
+        }
     }
 
     @Override

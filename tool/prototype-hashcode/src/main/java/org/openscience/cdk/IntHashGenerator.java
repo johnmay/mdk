@@ -24,6 +24,7 @@ import org.openscience.cdk.number.XORShift;
 import org.openscience.cdk.parity.locator.StereoComponentProvider;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -62,6 +63,11 @@ public class IntHashGenerator extends AbstractHashGenerator<Integer> {
         return 1 + (value & 0x05);
     }
 
+    @Override
+    protected String toString(Integer value) {
+        return "0x" + Integer.toHexString(value);
+    }
+
     public Integer[] initialise(Graph graph) {
 
         int seed = graph.n() != 0 ? 389 % graph.n() : 389;
@@ -76,7 +82,7 @@ public class IntHashGenerator extends AbstractHashGenerator<Integer> {
 
             // add the optional methods
             for (AtomSeed method : this.methods) {
-                seeds[i] = 257 * seeds[i] + method.seed(container, container
+                seeds[i] = 31 * seeds[i] + method.seed(container, container
                         .getAtom(i));
             }
 
@@ -89,4 +95,6 @@ public class IntHashGenerator extends AbstractHashGenerator<Integer> {
         return seeds;
 
     }
+
+
 }

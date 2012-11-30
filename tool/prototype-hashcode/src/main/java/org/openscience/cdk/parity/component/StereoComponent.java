@@ -25,6 +25,16 @@ package org.openscience.cdk.parity.component;
  */
 public interface StereoComponent<T> {
 
+    public static final StereoComponent NONE = new StereoComponent() {
+        @Override
+        public boolean configure(Object[] current, Object[] configured) {
+            return false;
+        }
+
+        @Override
+        public void reset(){}
+    };
+
     /**
      * Modify the current atomic hashes to indicate the configuration of this
      * stereo component.

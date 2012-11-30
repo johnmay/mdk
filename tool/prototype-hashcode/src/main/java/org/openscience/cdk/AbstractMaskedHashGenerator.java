@@ -19,6 +19,7 @@ package org.openscience.cdk;
 
 import org.openscience.cdk.hash.graph.AdjacencyList;
 import org.openscience.cdk.hash.graph.Graph;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.number.Counter;
 import org.openscience.cdk.number.DoubleCounter;
@@ -31,6 +32,7 @@ import org.openscience.cdk.parity.locator.EmptyStereoProvider;
 import org.openscience.cdk.parity.locator.StereoComponentProvider;
 import uk.ac.ebi.mdk.prototype.hash.HashGenerator;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.MaskedSeed;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,23 +45,25 @@ import java.util.Map;
 /**
  * @author John May
  */
-public abstract class AbstractHashGenerator<T extends Number & Comparable<T>>
+public abstract class AbstractMaskedHashGenerator<T extends Number & Comparable<T>>
         implements HashGenerator<T> {
 
-    protected final Collection<AtomSeed> methods;
+    protected final Collection<MaskedSeed> methods;
     private final int depth;
     protected final NumberRotater<T> rotater;
     private final StereoComponentProvider<T> stereoProvider;
+    private final AtomMask function;
 
-    public AbstractHashGenerator(Collection<AtomSeed> methods, StereoComponentProvider<T> stereoProvider, PseudoRandomNumber<T> generator, int depth) {
+    public AbstractMaskedHashGenerator(Collection<MaskedSeed> methods, StereoComponentProvider<T> stereoProvider, PseudoRandomNumber<T> generator, int depth, AtomMask function) {
         this.methods = methods;
         this.depth = depth;
         this.rotater = new NumberRotater<T>(generator);
         this.stereoProvider = stereoProvider;
+        this.function = function;
     }
 
-    public AbstractHashGenerator(Collection<AtomSeed> methods, PseudoRandomNumber<T> generator, int depth) {
-        this(methods, new EmptyStereoProvider<T>(), generator, depth);
+    public AbstractMaskedHashGenerator(Collection<MaskedSeed> methods, PseudoRandomNumber<T> generator, int depth, AtomMask mask) {
+        this(methods, new EmptyStereoProvider<T>(), generator, depth, mask);
     }
 
     @Override
@@ -80,19 +84,19 @@ public abstract class AbstractHashGenerator<T extends Number & Comparable<T>>
     }
 
     public T generate(Graph graph) {
+        BitSet mask = generateMask(graph);
         return generate(graph,
-                        initialise(graph),
+                        initialise(graph, mask),
                         new StereoComponentAggregator<T>(stereoProvider
                                                                  .getComponents(graph)),
+                        mask,
                         false);
     }
 
-    public T generate(Graph graph, T[] previous, StereoComponent<T> stereo, boolean modified) {
+    public T generate(Graph graph, T[] previous, StereoComponent<T> stereo, BitSet mask, boolean modified) {
 
         int n = graph.n();
 
-        BitSet terminals = new BitSet(n);
-        BitSet terminalBuffer = new BitSet(n);
         T[] current = Arrays.copyOf(previous, n);
 
         // initialise counters
@@ -109,17 +113,13 @@ public abstract class AbstractHashGenerator<T extends Number & Comparable<T>>
             System.arraycopy(current, 0, previous, 0, n);
         }
 
-        //int depth = 1 + n / 2;
         for (int d = 0; d < depth; d++) {
 
             // seeds for this depth
-            for (int i = 0; i < n; i++) {
-                current[i] = includeNeighbours(previous,
-                                               graph,
-                                               i,
-                                               counters.get(i),
-                                               terminals,
-                                               terminalBuffer);
+            for (int i = mask.nextSetBit(0); i >= 0; i = mask
+                    .nextSetBit(i + 1)) {
+                current[i] = includeNeighbours(previous, graph, i, counters
+                        .get(i), mask);
             }
 
             while (stereo.configure(previous, current)) {
@@ -127,26 +127,37 @@ public abstract class AbstractHashGenerator<T extends Number & Comparable<T>>
             }
 
             System.arraycopy(current, 0, previous, 0, n);
-            terminals.or(terminalBuffer);
-        }
 
+        }
 
         // combined the final values (checking for duplicates)
         T hash = initialValue();
-        Map<T, Integer> unique = new HashMap<T, Integer>((n + 4) % 3);
-        for (int i = 0; i < n; i++) {
+        Map<T, Integer> equivalence = new HashMap<T, Integer>((n + 4) % 3);
+        for (int i = mask.nextSetBit(0); i >= 0; i = mask.nextSetBit(i + 1)) {
 
-            if (unique.get(current[i]) == null)
-                unique.put(current[i], i);
+            if (equivalence.get(current[i]) == null)
+                equivalence.put(current[i], i);
 
             hash = xor(hash,
-                       rotater.rotate(current[i], global.register(current[i])));
+                       rotater.rotate(current[i], global
+                               .register(current[i])));
+
         }
-        return unique.size() != n && terminals.cardinality() != n && !modified
-                ? perturb(unique, graph, stereo, hash, current, terminals)
+
+        return equivalence.size() != n && !modified
+                ? perturb(equivalence, graph, stereo, mask, hash, current)
                 : hash;
 
     }
+
+    private BitSet generateMask(Graph g) {
+        BitSet bs = new BitSet(g.n());
+        for (int i = 0; i < g.n(); i++) {
+            bs.set(i, function.apply(g.getVertexValue(i)));
+        }
+        return bs;
+    }
+
 
     public abstract T initialValue();
 
@@ -161,28 +172,27 @@ public abstract class AbstractHashGenerator<T extends Number & Comparable<T>>
     }
 
 
-    private T perturb(Map<T, Integer> equivalence, Graph graph, StereoComponent<T> stereo, T hash, T[] values, BitSet terminals) {
+    private T perturb(Map<T, Integer> equivalence, Graph graph, StereoComponent<T> stereo, BitSet mask, T hash, T[] values) {
         int n = graph.n();
         BitSet perturbed = new BitSet(n);
         Counter<T> counter = new MapCounter<T>(n);
-        for (int i = 0; i < n; i++) {
+        for (int i = mask.nextSetBit(0); i >= 0; i = mask.nextSetBit(i + 1)) {
             int index = equivalence.get(values[i]);
 
-            // don't do terminal atoms
-            if (index != i && !terminals.get(i)) {
+            // don't do terminal atoms (mask doesn't need to be checked)
+            if (index != i && graph.neighbors(i).length > 1) {
 
 
                 // check if we've modified primary index
                 if (!perturbed.get(index)) {
                     stereo.reset();
-                    T value = generate(graph, modify(values, index), stereo, true);
-                    hash = xor(hash, rotater.rotate(value, counter
-                            .register(value)));
+                    T value = generate(graph, modify(values, index), stereo, mask, true);
+                    hash = xor(hash, rotater.rotate(value, counter.register(value)));
                 }
 
                 // include modification for i
                 stereo.reset();
-                T value = generate(graph, modify(values, i), stereo, true);
+                T value = generate(graph, modify(values, i), stereo, mask, true);
                 hash = xor(hash, rotater.rotate(value, counter
                         .register(value)));
 
@@ -196,70 +206,23 @@ public abstract class AbstractHashGenerator<T extends Number & Comparable<T>>
         return hash;
     }
 
-    protected String toString(T value) {
-        return value.toString();
-    }
 
-    protected String toString(T[] values) {
-        StringBuilder sb = new StringBuilder(values.length * 10);
-        sb.append("{");
-        for (int i = 0; i < values.length; i++) {
-            sb.append(toString(values[i]));
-            if (i + 1 < values.length)
-                sb.append(", ");
-        }
-        sb.append("}");
-        return sb.toString();
-    }
-
-    private T includeNeighbours(T[] current, Graph g, int i, Counter<T> counter, BitSet orgTerminals, BitSet newTerminals) {
+    private T includeNeighbours(T[] current, Graph g, int i, Counter<T> counter, BitSet mask) {
 
         // keep this un-boxed
         T value = rotater.rotate(current[i], lowOrderBits(current[i]));
 
-        int[] neighbours = g.neighbors(i);
-        int nonterminalCount = 0;
-        for (int j : neighbours) {
-            value = xor(value, rotater.rotate(current[j], counter
-                    .register(current[j])));
-
-            if (!orgTerminals.get(j))
-                nonterminalCount++;
+        for (int j : g.neighbors(i)) {
+            if (mask.get(j))
+                value = xor(value, rotater.rotate(current[j], counter
+                        .register(current[j])));
         }
-
-        if (nonterminalCount < 2)
-            newTerminals.set(i);
 
         return value;
 
     }
 
-    public abstract T[] initialise(Graph g);
-
-//    public Integer[] initialise(Graph g) {
-//
-//        int seed = g.n() != 0 ? 389 % g.n() : 389;
-//
-//        Integer[] seeds = new Integer[g.n()];
-//
-//        for (int i = 0; i < g.n(); i++) {
-//
-//            seeds[i] = seed;
-//
-//            // add the optional methods
-//            for (AtomSeed method : this.methods) {
-//                seeds[i] = 257 * seeds[i] + method.seed(g, i);
-//            }
-//
-//            // rotate the seed 1-5 times (using mask to get the lower bits)
-//            seeds[i] = rotater.rotate(seeds[i], seeds[i] & 0x5);
-//
-//
-//        }
-//
-//        return seeds;
-//
-//    }
+    public abstract T[] initialise(Graph g, BitSet mask);
 
     // need this so we can have an array
     private class CounterImpl extends DoubleCounter<T> {

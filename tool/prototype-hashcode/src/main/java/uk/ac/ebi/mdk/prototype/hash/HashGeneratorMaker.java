@@ -17,7 +17,10 @@
 
 package uk.ac.ebi.mdk.prototype.hash;
 
+import org.openscience.cdk.AtomMask;
 import org.openscience.cdk.IntHashGenerator;
+import org.openscience.cdk.IntMaskedHashGenerator;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.parity.SP2Parity2DUnspecifiedCalculator;
 import org.openscience.cdk.parity.component.IntStereoIndicator;
 import org.openscience.cdk.parity.component.StereoIndicator;
@@ -31,6 +34,8 @@ import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.HybridizationSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.MaskedSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.MaskedSeedAdapter;
 import uk.ac.ebi.mdk.prototype.hash.seed.MassNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullAtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullChargeSeed;
@@ -38,8 +43,10 @@ import uk.ac.ebi.mdk.prototype.hash.seed.NonNullHybridizationSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullMassNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.RadicalSeed;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Comparator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -66,6 +73,13 @@ import static org.openscience.cdk.parity.locator.StereoProviderConjunction.and;
  */
 public class HashGeneratorMaker {
 
+    public static AtomMask EXPLICT_HYDROGEN_MASK = new AtomMask() {
+        @Override
+        public boolean apply(IAtom atom) {
+            return !"H".equals(atom.getSymbol());
+        }
+    };
+
     private static final AtomSeed[] NULLABLE_SEEDS = new AtomSeed[]{
             new AtomicNumberSeed(),
             new ConnectedAtomSeed(),
@@ -80,6 +94,7 @@ public class HashGeneratorMaker {
      * IMPORTANT the non-null seeds must be in equivalent indexes
      * TODO: put in a single 2D array
      */
+    @Deprecated
     private static final AtomSeed[] NONNULL_SEEDS = new AtomSeed[]{
             new NonNullAtomicNumberSeed(),
             new ConnectedAtomSeed(),
@@ -199,6 +214,8 @@ public class HashGeneratorMaker {
         // include the default seeds
         withSeeds(nullable ? NULLABLE_SEEDS : NONNULL_SEEDS);
 
+        List<AtomSeed> seeds = new ArrayList<AtomSeed>(this.seeds);
+
         StereoIndicator<Integer> indicator = new IntStereoIndicator(1300141, 105913);
 
         if (chiral) {
@@ -210,6 +227,32 @@ public class HashGeneratorMaker {
         }
 
         return new IntHashGenerator(seeds, depth);
+    }
+
+    public HashGenerator<Integer> buildWithMask(AtomMask mask) {
+        // include the default seeds
+        withSeeds(nullable ? NULLABLE_SEEDS : NONNULL_SEEDS);
+
+        List<MaskedSeed> seeds = new ArrayList<MaskedSeed>();
+        for (AtomSeed seed : this.seeds) {
+            if (seed instanceof MaskedSeed) {
+                seeds.add((MaskedSeed) seed);
+            } else {
+                seeds.add(new MaskedSeedAdapter(seed));
+            }
+        }
+
+        StereoIndicator<Integer> indicator = new IntStereoIndicator(1300141, 105913);
+
+        if (chiral) {
+            // include all provides using a conjunction
+            StereoComponentProvider<Integer> stereo = and(new IntDoubleBondLocator(new SP2Parity2DUnspecifiedCalculator()),
+                                                          and(new TetrahedralCenterProvider<Integer>(indicator),
+                                                              new CumuleneProvider<Integer>(indicator)));
+            return new IntMaskedHashGenerator(seeds, stereo, depth, mask);
+        }
+
+        return new IntMaskedHashGenerator(seeds, depth, mask);
     }
 
     /**
@@ -481,7 +524,6 @@ public class HashGeneratorMaker {
         this.debug = true;
         return this;
     }
-
 
 
     public final static Comparator<AtomSeed> SEED_NAME_ORDER = new Comparator<AtomSeed>() {

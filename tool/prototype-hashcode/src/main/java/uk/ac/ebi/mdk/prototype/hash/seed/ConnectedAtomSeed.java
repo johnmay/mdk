@@ -23,6 +23,8 @@ package uk.ac.ebi.mdk.prototype.hash.seed;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
+import java.util.BitSet;
+
 /**
  * AtomNeighbourSeed - 2011.11.09 <br> ConnectedAtomSeed uses the number of
  * neighbours this atom has to seed a value
@@ -31,13 +33,23 @@ import org.openscience.cdk.interfaces.IAtomContainer;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public class ConnectedAtomSeed implements AtomSeed {
+public class ConnectedAtomSeed implements AtomSeed, MaskedSeed {
 
     public ConnectedAtomSeed() {
     }
 
     public int seed(IAtomContainer molecule, IAtom atom) {
         return molecule.getConnectedAtomsCount(atom);
+    }
+
+    @Override
+    public int seed(IAtomContainer molecule, IAtom atom, BitSet mask) {
+        int count = 0;
+        for (IAtom neighbour : molecule.getConnectedAtomsList(atom)) {
+            if (mask.get(molecule.getAtomNumber(neighbour)))
+                count++;
+        }
+        return count;
     }
 
     @Override

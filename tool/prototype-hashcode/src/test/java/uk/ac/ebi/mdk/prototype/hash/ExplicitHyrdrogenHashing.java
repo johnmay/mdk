@@ -18,12 +18,12 @@
 package uk.ac.ebi.mdk.prototype.hash;
 
 import org.junit.Test;
+import org.openscience.cdk.AtomMask;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.NonNullAtomicNumberSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.NonNullChargeSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.NonNullHybridizationSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
 
 import java.io.IOException;
@@ -47,31 +47,66 @@ public class ExplicitHyrdrogenHashing {
 
         List<IAtomContainer> containers = readSDF(getClass(), "explicit-implicit-hashing.sdf", -1);
 
-        MolecularHashFactory hasher = new MolecularHashFactory();
-        SeedFactory seedFactory = SeedFactory.getInstance();
+        HashGenerator<Integer> specific = new HashGeneratorMaker().chiral()
+                                                                  .build();
+        HashGenerator<Integer> nonspecific = new HashGeneratorMaker().chiral()
+                                                                     .buildWithMask(HashGeneratorMaker.EXPLICT_HYDROGEN_MASK);
 
-        Collection<AtomSeed> seeds = seedFactory.getSeeds(NonNullAtomicNumberSeed.class,
-                                                          NonNullHybridizationSeed.class,
-                                                          NonNullChargeSeed.class);
-
-        hasher.setDepth(4);
 
         IAtomContainer explicit = containers.get(0);
         IAtomContainer implicit = containers.get(1);
 
-        hasher.setDeprotonate(false);
 
         assertThat("implicit and explicit hashes were equal (ignore not set)",
-                   hasher.getHash(explicit, seeds).hash,
-                   is(not(hasher.getHash(implicit, seeds).hash)));
+                   specific.generate(explicit),
+                   is(not(specific.generate(implicit))));
 
-        hasher.setDeprotonate(true);
 
         System.out.println("testing ignore: ");
         assertThat("implicit and explicit hashes were not equal (ignore set)",
-                   hasher.getHash(explicit, seeds).hash,
-                   is(hasher.getHash(implicit, seeds).hash));
+                   nonspecific.generate(explicit),
+                   is(nonspecific.generate(implicit)));
 
+
+    }
+
+    @Test
+    public void testExpImpInositols() throws Exception {
+        List<IAtomContainer> inositols = readSDF(getClass(), "inositol-variants.sdf", -1);
+
+        HashGenerator<Integer> nonspecific = new HashGeneratorMaker().chiral()
+                                                                     .buildWithMask(new AtomMask() {
+                                                                         @Override
+                                                                         public boolean apply(IAtom atom) {
+                                                                             return !"H"
+                                                                                     .equals(atom.getSymbol());
+                                                                         }
+                                                                     });
+
+        for (IAtomContainer inositol : inositols) {
+            System.out.println("0x" + Integer.toHexString(nonspecific
+                                                                  .generate(inositol)));
+        }
+
+    }
+
+    @Test
+    public void testExpImpAllenes() throws Exception {
+        List<IAtomContainer> allenes = readSDF(getClass(), "allene-variants.sdf", -1);
+
+        HashGenerator<Integer> nonspecific = new HashGeneratorMaker().chiral()
+                                                                     .buildWithMask(new AtomMask() {
+                                                                         @Override
+                                                                         public boolean apply(IAtom atom) {
+                                                                             return !"H"
+                                                                                     .equals(atom.getSymbol());
+                                                                         }
+                                                                     });
+
+        for (IAtomContainer inositol : allenes) {
+            System.out.println("0x" + Integer.toHexString(nonspecific
+                                                                  .generate(inositol)));
+        }
 
     }
 
@@ -79,10 +114,13 @@ public class ExplicitHyrdrogenHashing {
     @Test
     public void testEthendiol() throws IOException, CDKException {
 
-        List<IAtomContainer> permutations = MolecularHashFactoryTest.readSDF(getClass(), "ethenediol-permutations.sdf", -1);
+        List<IAtomContainer> permutations = MolecularHashFactoryTest
+                .readSDF(getClass(), "ethenediol-permutations.sdf", -1);
 
         // important make sure we don't use connected atom seed when detonated (this should be in a builder
-        MolecularHashFactory generator = new MolecularHashFactory(SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class),
+        MolecularHashFactory generator = new MolecularHashFactory(SeedFactory
+                                                                          .getInstance()
+                                                                          .getSeeds(NonNullAtomicNumberSeed.class),
                                                                   1, true);
 
 
@@ -104,14 +142,16 @@ public class ExplicitHyrdrogenHashing {
     }
 
     @Test
-    public void testTopologicalImplicitExplicitHashing() throws IOException, CDKException {
+    public void testTopologicalImplicitExplicitHashing() throws IOException,
+                                                                CDKException {
 
         List<IAtomContainer> containers = readSDF(getClass(), "topological-explicit-implicit-hashing.sdf", -1);
 
         MolecularHashFactory hasher = new MolecularHashFactory();
         SeedFactory seedFactory = SeedFactory.getInstance();
 
-        Collection<AtomSeed> seeds = seedFactory.getSeeds(NonNullAtomicNumberSeed.class);
+        Collection<AtomSeed> seeds = seedFactory
+                .getSeeds(NonNullAtomicNumberSeed.class);
 
         hasher.setDepth(4);
 
