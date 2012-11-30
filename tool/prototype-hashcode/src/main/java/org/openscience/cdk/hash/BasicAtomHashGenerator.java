@@ -49,10 +49,10 @@ public final class BasicAtomHashGenerator
                         StereoComponent.NONE);
     }
 
-    protected Long[] generate(int[][] connections, Long[] prev, StereoComponent stereo) {
+    protected Long[] generate(int[][] connections, Long[] prev, StereoComponent<Long> stereo) {
 
-        int n = connections.length;
-        Long[] next = new Long[n];
+        int    n    = connections.length;
+        Long[] next = Arrays.copyOf(prev, n);
 
         // initialise value counters
         Counter[] counters = new Counter[n];
@@ -60,21 +60,29 @@ public final class BasicAtomHashGenerator
             counters[i] = new Counter(depth * 5);
         }
 
+        // configure stereo
+        stereo.configure(prev, next);
+
         for (int d = 0; d < this.depth; d++) {
+
             for (int i = 0; i < connections.length; i++) {
                 next[i] = connected(i, connections, prev, counters[i]);
             }
-            System.arraycopy(next, 0, prev, 0, next.length);
+
+            stereo.configure(prev, next);
+
+            copy(prev, next);
+
         }
 
         return next;
     }
 
 
-    protected final long connected(int i, int[][] table, Long[] prev, Counter counter) {
-        long hash = rotater.rotate(prev[i], lsb(prev[i]));
+    private long connected(int i, int[][] table, Long[] prev, Counter counter) {
+        long hash = distribute(prev[i]);
         for (int j : table[i]) {
-            hash ^= rotater.rotate(prev[j], counter.register(prev[j]));
+            hash ^= rotate(prev[j], counter.register(prev[j]));
         }
         return hash;
     }

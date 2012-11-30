@@ -54,8 +54,20 @@ public abstract class AbstractHashGenerator {
         System.arraycopy(src, 0, dest, 0, src.length);
     }
 
-    public long rotate(Long value, int n) {
+    protected long rotate(Long value, int n) {
         return rotater.rotate(value, n);
+    }
+
+    protected long rotate(long value, int n) {
+        return rotater.rotate(value, n);
+    }
+
+    protected long distribute(Long value) {
+        return rotate(value, leastSignificantBits(value));
+    }
+
+    protected long distribute(long value) {
+        return rotate(value, leastSignificantBits(value));
     }
 
     protected final int[][] create(IAtomContainer container) {
@@ -92,7 +104,7 @@ public abstract class AbstractHashGenerator {
      * @param value
      * @return
      */
-    protected static int lsb(long value) {
+    protected static int leastSignificantBits(long value) {
         return 1 + ((int) value & LSB_MASK);
     }
 

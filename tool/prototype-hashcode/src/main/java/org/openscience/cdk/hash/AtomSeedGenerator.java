@@ -34,12 +34,11 @@ public final class AtomSeedGenerator
         extends AbstractHashGenerator
         implements AtomHashGenerator {
 
-    private final List<AtomSeed> methods = new ArrayList<AtomSeed>(10);
+    private final AtomSeed[] methods;
 
     public AtomSeedGenerator(List<AtomSeed> methods) {
-        this.methods.addAll(methods);
+        this.methods = methods.toArray(new AtomSeed[methods.size()]);
     }
-
 
     @Override
     public Long[] generate(IAtomContainer container) {
@@ -50,15 +49,7 @@ public final class AtomSeedGenerator
         long initial = n > 1 ? 389 % n : 1;
 
         for (int i = 0; i < n; i++) {
-
-            long hash = initial;
-
-            // including seeding parameters from the various methods
-            for (AtomSeed method : methods) {
-                hash = 31 * hash + method.seed(container, container.getAtom(i));
-            }
-
-            seeds[i] = rotater.rotate(hash, lsb(hash));
+            seeds[i] = seed(container, container.getAtom(i), initial);
         }
 
         return seeds;
@@ -68,13 +59,13 @@ public final class AtomSeedGenerator
 
     private long seed(IAtomContainer container, IAtom atom, long hash) {
 
-        // including seeding parameters from the various methods
+        // including seeding parameters from all the methods
         for (AtomSeed method : methods) {
             hash = 31 * hash + method.seed(container, atom);
         }
 
         // distribute the bits
-        return rotater.rotate(hash, lsb(hash));
+        return distribute(hash);
 
     }
 
