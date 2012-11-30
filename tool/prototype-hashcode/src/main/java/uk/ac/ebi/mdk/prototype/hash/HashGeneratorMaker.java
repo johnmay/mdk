@@ -20,11 +20,14 @@ package uk.ac.ebi.mdk.prototype.hash;
 import org.openscience.cdk.AtomMask;
 import org.openscience.cdk.IntHashGenerator;
 import org.openscience.cdk.IntMaskedHashGenerator;
+import org.openscience.cdk.LongHashGenerator;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.parity.SP2Parity2DUnspecifiedCalculator;
 import org.openscience.cdk.parity.component.IntStereoIndicator;
+import org.openscience.cdk.parity.component.LongStereoIndicator;
 import org.openscience.cdk.parity.component.StereoIndicator;
 import org.openscience.cdk.parity.integer.IntDoubleBondLocator;
+import org.openscience.cdk.parity.integer.LongDoubleBondLocator;
 import org.openscience.cdk.parity.locator.CumuleneProvider;
 import org.openscience.cdk.parity.locator.StereoComponentProvider;
 import org.openscience.cdk.parity.locator.TetrahedralCenterProvider;
@@ -209,24 +212,24 @@ public class HashGeneratorMaker {
      *
      * @return a configured generator
      */
-    public HashGenerator<Integer> build() {
+    public HashGenerator<Long> build() {
 
         // include the default seeds
         withSeeds(nullable ? NULLABLE_SEEDS : NONNULL_SEEDS);
 
         List<AtomSeed> seeds = new ArrayList<AtomSeed>(this.seeds);
 
-        StereoIndicator<Integer> indicator = new IntStereoIndicator(1300141, 105913);
+        StereoIndicator<Long> indicator = new LongStereoIndicator(1300141, 105913);
 
         if (chiral) {
             // include all provides using a conjunction
-            StereoComponentProvider<Integer> stereo = and(new IntDoubleBondLocator(new SP2Parity2DUnspecifiedCalculator()),
-                                                          and(new TetrahedralCenterProvider<Integer>(indicator),
-                                                              new CumuleneProvider<Integer>(indicator)));
-            return new IntHashGenerator(seeds, stereo, depth);
+            StereoComponentProvider<Long> stereo = and(new LongDoubleBondLocator(new SP2Parity2DUnspecifiedCalculator()),
+                                                          and(new TetrahedralCenterProvider<Long>(indicator),
+                                                              new CumuleneProvider<Long>(indicator)));
+            return new LongHashGenerator(seeds, stereo, depth);
         }
 
-        return new IntHashGenerator(seeds, depth);
+        return new LongHashGenerator(seeds, depth);
     }
 
     public HashGenerator<Integer> buildWithMask(AtomMask mask) {
