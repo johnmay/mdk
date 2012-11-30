@@ -47,7 +47,7 @@ public class ExplicitHyrdrogenHashing {
 
         List<IAtomContainer> containers = readSDF(getClass(), "explicit-implicit-hashing.sdf", -1);
 
-        HashGenerator<Integer> specific = new HashGeneratorMaker().chiral()
+        HashGenerator<Long> specific = new HashGeneratorMaker().chiral()
                                                                   .build();
         HashGenerator<Integer> nonspecific = new HashGeneratorMaker().chiral()
                                                                      .buildWithMask(HashGeneratorMaker.EXPLICT_HYDROGEN_MASK);

@@ -17,26 +17,42 @@
 
 package org.openscience.cdk.hash;
 
-import gnu.trove.map.TLongIntMap;
-import gnu.trove.map.hash.TLongIntHashMap;
+import uk.ac.ebi.mdk.prototype.hash.util.MutableInt;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author John May
  */
 public class Counter {
 
-    private final TLongIntMap map;
+    private final Map<Long, MutableInt> map;
 
     public Counter(int n) {
-        this.map = new TLongIntHashMap(n + ((4 + n) / 3));
+        this.map = new HashMap<Long, MutableInt>(n > 3 ? 1 + n + n / 3 : n);
     }
 
-    public final int register(long value) {
-        return map.put(value, map.get(value) + 1);
+    public int register(Long value) {
+
+        MutableInt mutableInt = map.get(value);
+        int count = 0;
+
+        if (mutableInt != null) {
+            count = mutableInt.get();
+            mutableInt.increment();
+        } else {
+            map.put(value, new MutableInt(1));
+        }
+
+        return count;
+
     }
 
-    public final int get(long value) {
-        return map.get(value);
+    public int count(Long value) {
+        MutableInt mutableInt = map.get(value);
+        return mutableInt != null ? mutableInt.get() : 0;
     }
+
 
 }

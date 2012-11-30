@@ -33,6 +33,6 @@ public interface MoleculeHashGenerator {
      * @param container the container hash
      * @return atom hash codes
      */
-    public long generate(IAtomContainer container);
+    public Long generate(IAtomContainer container);
 
 }

@@ -82,8 +82,7 @@ public class LongHashGenerator extends AbstractHashGenerator<Long> {
 
             // add the optional methods
             for (AtomSeed method : this.methods) {
-                seeds[i] = 31 * seeds[i] + method.seed(container, container
-                        .getAtom(i));
+                seeds[i] = 31 * seeds[i] + method.seed(container, container.getAtom(i));
             }
 
             // rotate the seed 1-5 times (using mask to get the lower bits)

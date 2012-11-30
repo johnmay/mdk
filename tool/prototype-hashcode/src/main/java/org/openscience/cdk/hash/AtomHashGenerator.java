@@ -33,6 +33,6 @@ public interface AtomHashGenerator {
      * @param container the container to produce
      * @return atom hash codes
      */
-    public long[] generate(IAtomContainer container);
+    public Long[] generate(IAtomContainer container);
 
 }

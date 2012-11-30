@@ -133,7 +133,8 @@ public abstract class AbstractHashGenerator<T extends Number & Comparable<T>>
 
         // combined the final values (checking for duplicates)
         T hash = initialValue();
-        Map<T, Integer> unique = new HashMap<T, Integer>((n + 4) % 3);
+        global = new MapCounter<T>(n);
+        Map<T, Integer> unique = new HashMap<T, Integer>(n + ((n + 4) / 3));
         for (int i = 0; i < n; i++) {
 
             if (unique.get(current[i]) == null)
@@ -142,9 +143,10 @@ public abstract class AbstractHashGenerator<T extends Number & Comparable<T>>
             hash = xor(hash,
                        rotater.rotate(current[i], global.register(current[i])));
         }
-        return unique.size() != n && terminals.cardinality() != n && !modified
-                ? perturb(unique, graph, stereo, hash, current, terminals)
-                : hash;
+        return hash;
+//        unique.size() != n && terminals.cardinality() != n && !modified
+//                ? perturb(unique, graph, stereo, hash, current, terminals)
+//                : hash;
 
     }
 

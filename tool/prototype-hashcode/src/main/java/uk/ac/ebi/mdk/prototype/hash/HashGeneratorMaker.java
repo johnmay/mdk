@@ -21,7 +21,13 @@ import org.openscience.cdk.AtomMask;
 import org.openscience.cdk.IntHashGenerator;
 import org.openscience.cdk.IntMaskedHashGenerator;
 import org.openscience.cdk.LongHashGenerator;
+import org.openscience.cdk.hash.AtomHashGenerator;
+import org.openscience.cdk.hash.AtomSeedGenerator;
+import org.openscience.cdk.hash.BasicAtomHashGenerator;
+import org.openscience.cdk.hash.BasicMoleculeHash;
+import org.openscience.cdk.hash.MoleculeHashGenerator;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.parity.SP2Parity2DUnspecifiedCalculator;
 import org.openscience.cdk.parity.component.IntStereoIndicator;
 import org.openscience.cdk.parity.component.LongStereoIndicator;
@@ -226,10 +232,21 @@ public class HashGeneratorMaker {
             StereoComponentProvider<Long> stereo = and(new LongDoubleBondLocator(new SP2Parity2DUnspecifiedCalculator()),
                                                           and(new TetrahedralCenterProvider<Long>(indicator),
                                                               new CumuleneProvider<Long>(indicator)));
-            return new LongHashGenerator(seeds, stereo, depth);
+            //return new LongHashGenerator(seeds, stereo, depth);
+            throw new IllegalArgumentException("not yet implemented");
         }
 
         return new LongHashGenerator(seeds, depth);
+    }
+
+    public MoleculeHashGenerator buildNew() {
+
+        // include the default seeds
+        withSeeds(nullable ? NULLABLE_SEEDS : NONNULL_SEEDS);
+
+        List<AtomSeed> seeds = new ArrayList<AtomSeed>(this.seeds);
+        AtomHashGenerator atomGenerator = new BasicAtomHashGenerator(new AtomSeedGenerator(seeds), depth);
+        return new BasicMoleculeHash(atomGenerator);
     }
 
     public HashGenerator<Integer> buildWithMask(AtomMask mask) {

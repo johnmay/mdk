@@ -24,12 +24,14 @@ import org.openscience.cdk.number.RandomNumberGenerator;
 import org.openscience.cdk.number.RandomNumberRotater;
 import org.openscience.cdk.number.XORShift_64;
 
+import java.util.Arrays;
+
 /**
  * @author John May
  */
 public abstract class AbstractHashGenerator {
 
-    private final RandomNumberRotater rotater;
+    protected final RandomNumberRotater rotater;
 
     protected static final int LSB_MASK = 0x5;
 
@@ -48,11 +50,11 @@ public abstract class AbstractHashGenerator {
      * @param src  copy from here
      * @param dest copy to here
      */
-    protected static void copy(long[] src, long[] dest) {
+    protected static void copy(Long[] src, Long[] dest) {
         System.arraycopy(src, 0, dest, 0, src.length);
     }
 
-    public long rotate(long value, int n) {
+    public long rotate(Long value, int n) {
         return rotater.rotate(value, n);
     }
 
@@ -76,6 +78,10 @@ public abstract class AbstractHashGenerator {
 
         }
 
+        for(int i = 0; i < n; i++){
+            vertexes[i] = Arrays.copyOf(vertexes[i], neighbours[i]);
+        }
+
         return vertexes;
 
     }
@@ -88,6 +94,18 @@ public abstract class AbstractHashGenerator {
      */
     protected static int lsb(long value) {
         return 1 + ((int) value & LSB_MASK);
+    }
+
+    protected String toString(long[] values) {
+        StringBuilder sb = new StringBuilder(values.length * 20);
+        sb.append("{");
+        for (int i = 0; i < values.length; i++) {
+            sb.append("0x").append(Long.toHexString(values[i]));
+            if(i < values.length - 1)
+                sb.append(", ");
+        }
+        sb.append("}");
+        return sb.toString();
     }
 
 }

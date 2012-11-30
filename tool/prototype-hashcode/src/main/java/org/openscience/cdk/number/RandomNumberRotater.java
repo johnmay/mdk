@@ -42,13 +42,6 @@ public class RandomNumberRotater {
         return value;
     }
 
-    public final long rotate(long value, long n) {
-        for (int i = 0; i < n; i++) {
-            value = generator.next(value);
-        }
-        return value;
-    }
-
     public static void main(String[] args) {
         RandomNumberRotater rotater = new RandomNumberRotater(new XORShift_64());
         for (int r = 0; r < 50; r++) {

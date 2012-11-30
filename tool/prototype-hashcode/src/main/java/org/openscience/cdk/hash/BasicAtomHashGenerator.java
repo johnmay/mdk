@@ -18,104 +18,60 @@
 package org.openscience.cdk.hash;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.number.RandomNumberRotater;
-import org.openscience.cdk.number.XORShift_64;
 import org.openscience.cdk.parity.component.StereoComponent;
 
 import java.util.Arrays;
 
 /**
+ * Generate basic atom hash values
+ *
  * @author John May
  */
-public final class BasicAtomHashGenerator implements AtomHashGenerator {
+public final class BasicAtomHashGenerator
+        extends AbstractHashGenerator
+        implements AtomHashGenerator {
 
-    /**
-     * Depth to hash
-     */
+    /* depth to hash */
     private final int depth;
-    private final AtomHashGenerator seedGenerator;
-    private final RandomNumberRotater rotater;
 
-    /* low order bit mask */
-    protected static final int LSB_MASK = 0x5;
+    /* initial hash value generator */
+    private final AtomHashGenerator seedGenerator;
 
     public BasicAtomHashGenerator(AtomHashGenerator seedGenerator, int depth) {
         this.depth = depth;
         this.seedGenerator = seedGenerator;
-        this.rotater = new RandomNumberRotater(new XORShift_64());
     }
-
 
     @Override
-    public long[] generate(IAtomContainer container) {
-        long[] values = this.seedGenerator.generate(container);
-        return generate(null, values, StereoComponent.NONE);
+    public Long[] generate(IAtomContainer container) {
+        return generate(create(container),
+                        seedGenerator.generate(container),
+                        StereoComponent.NONE);
     }
 
-    protected long[] generate(int[][] connections, long[] prev, StereoComponent stereo) {
+    protected Long[] generate(int[][] connections, Long[] prev, StereoComponent stereo) {
 
         int n = connections.length;
-        long[] next = Arrays.copyOf(prev, prev.length);
-
-//        while(stereo.configure(prev, next)){
-//            copy(next, prev);
-//        }
+        Long[] next = new Long[n];
 
         // initialise value counters
         Counter[] counters = new Counter[n];
         for (int i = 0; i < n; i++) {
-            counters[i] = new Counter(n * depth * 4);
+            counters[i] = new Counter(depth * 5);
         }
 
-
         for (int d = 0; d < this.depth; d++) {
-
             for (int i = 0; i < connections.length; i++) {
                 next[i] = connected(i, connections, prev, counters[i]);
             }
-            copy(next, prev);
-
-            // attempt to configure stereo-elements
-//            while (stereo.configure(prev, next)) {
-//                copy(next, prev);
-//            }
-
+            System.arraycopy(next, 0, prev, 0, next.length);
         }
 
         return next;
     }
 
-    /**
-     * Copy the source array to the destination. This method simply wraps the
-     * {@link System#arraycopy(Object, int, Object, int, int)}.
-     *
-     * @param src  copy from here
-     * @param dest copy to here
-     */
-    protected static void copy(long[] src, long[] dest) {
-        System.arraycopy(src, 0, dest, 0, src.length);
-    }
 
-    /**
-     * Access the value of least significant bits in the value.
-     *
-     * @param value
-     * @return
-     */
-    protected static int lsb(long value) {
-        return 1 + ((int) value & LSB_MASK);
-    }
-
-    /**
-     * include the connect atom hashes
-     *
-     * @param i
-     * @param table
-     * @param prev
-     * @param counter
-     * @return
-     */
-    protected final long connected(int i, int[][] table, long[] prev, Counter counter) {
+    protected final long connected(int i, int[][] table, Long[] prev, Counter counter) {
         long hash = rotater.rotate(prev[i], lsb(prev[i]));
         for (int j : table[i]) {
             hash ^= rotater.rotate(prev[j], counter.register(prev[j]));
