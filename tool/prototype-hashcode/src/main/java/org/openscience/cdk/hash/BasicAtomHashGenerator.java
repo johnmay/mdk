@@ -19,6 +19,8 @@ package org.openscience.cdk.hash;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.parity.component.StereoComponent;
+import org.openscience.cdk.parity.component.StereoComponentAggregator;
+import org.openscience.cdk.parity.locator.StereoComponentProvider;
 
 import java.util.Arrays;
 
@@ -37,16 +39,19 @@ public final class BasicAtomHashGenerator
     /* initial hash value generator */
     private final AtomHashGenerator seedGenerator;
 
-    public BasicAtomHashGenerator(AtomHashGenerator seedGenerator, int depth) {
+    private final StereoComponentProvider<Long> stereoProvider;
+
+    public BasicAtomHashGenerator(AtomHashGenerator seedGenerator, StereoComponentProvider<Long> stereoProvider, int depth) {
         this.depth = depth;
         this.seedGenerator = seedGenerator;
+        this.stereoProvider = stereoProvider;
     }
 
     @Override
     public Long[] generate(IAtomContainer container) {
         return generate(create(container),
                         seedGenerator.generate(container),
-                        StereoComponent.NONE);
+                        new StereoComponentAggregator<Long>(stereoProvider.getComponents(container)));
     }
 
     protected Long[] generate(int[][] connections, Long[] prev, StereoComponent<Long> stereo) {
@@ -61,7 +66,9 @@ public final class BasicAtomHashGenerator
         }
 
         // configure stereo
-        stereo.configure(prev, next);
+        while(stereo.configure(prev, next)){
+            copy(next, prev);
+        }
 
         for (int d = 0; d < this.depth; d++) {
 
@@ -69,9 +76,11 @@ public final class BasicAtomHashGenerator
                 next[i] = connected(i, connections, prev, counters[i]);
             }
 
-            stereo.configure(prev, next);
+            while(stereo.configure(prev, next)){
+                copy(next, prev);
+            }
 
-            copy(prev, next);
+            copy(next, prev);
 
         }
 

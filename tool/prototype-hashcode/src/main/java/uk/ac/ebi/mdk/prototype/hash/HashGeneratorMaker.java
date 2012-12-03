@@ -18,7 +18,6 @@
 package uk.ac.ebi.mdk.prototype.hash;
 
 import org.openscience.cdk.AtomMask;
-import org.openscience.cdk.IntHashGenerator;
 import org.openscience.cdk.IntMaskedHashGenerator;
 import org.openscience.cdk.LongHashGenerator;
 import org.openscience.cdk.hash.AtomHashGenerator;
@@ -26,14 +25,15 @@ import org.openscience.cdk.hash.AtomSeedGenerator;
 import org.openscience.cdk.hash.BasicAtomHashGenerator;
 import org.openscience.cdk.hash.BasicMoleculeHash;
 import org.openscience.cdk.hash.MoleculeHashGenerator;
+import org.openscience.cdk.hash.graph.Graph;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.parity.SP2Parity2DUnspecifiedCalculator;
 import org.openscience.cdk.parity.component.IntStereoIndicator;
 import org.openscience.cdk.parity.component.LongStereoIndicator;
+import org.openscience.cdk.parity.component.StereoComponent;
 import org.openscience.cdk.parity.component.StereoIndicator;
 import org.openscience.cdk.parity.integer.IntDoubleBondLocator;
-import org.openscience.cdk.parity.integer.LongDoubleBondLocator;
 import org.openscience.cdk.parity.locator.CumuleneProvider;
 import org.openscience.cdk.parity.locator.StereoComponentProvider;
 import org.openscience.cdk.parity.locator.TetrahedralCenterProvider;
@@ -229,11 +229,12 @@ public class HashGeneratorMaker {
 
         if (chiral) {
             // include all provides using a conjunction
-            StereoComponentProvider<Long> stereo = and(new LongDoubleBondLocator(new SP2Parity2DUnspecifiedCalculator()),
-                                                          and(new TetrahedralCenterProvider<Long>(indicator),
-                                                              new CumuleneProvider<Long>(indicator)));
-            //return new LongHashGenerator(seeds, stereo, depth);
-            throw new IllegalArgumentException("not yet implemented");
+            StereoComponentProvider<Long> stereo = new TetrahedralCenterProvider<Long>(indicator);
+            //and(new LongDoubleBondLocator(new SP2Parity2DUnspecifiedCalculator()),
+//                                                          and(new TetrahedralCenterProvider<Long>(indicator),
+            //                                                            new CumuleneProvider<Long>(indicator)));
+            return new LongHashGenerator(seeds, stereo, depth);
+            //throw new IllegalArgumentException("not yet implemented");
         }
 
         return new LongHashGenerator(seeds, depth);
@@ -244,8 +245,12 @@ public class HashGeneratorMaker {
         // include the default seeds
         withSeeds(nullable ? NULLABLE_SEEDS : NONNULL_SEEDS);
 
+        StereoComponentProvider<Long> provider = chiral ? new TetrahedralCenterProvider<Long>(null) : StereoComponentProvider.EMPTY_LONG_PROVIDER;
+
         List<AtomSeed> seeds = new ArrayList<AtomSeed>(this.seeds);
-        AtomHashGenerator atomGenerator = new BasicAtomHashGenerator(new AtomSeedGenerator(seeds), depth);
+        AtomHashGenerator atomGenerator = new BasicAtomHashGenerator(new AtomSeedGenerator(seeds),
+                                                                     provider,
+                                                                     depth);
         return new BasicMoleculeHash(atomGenerator);
     }
 

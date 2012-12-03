@@ -22,6 +22,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.parity.component.StereoComponent;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -43,4 +44,15 @@ public interface StereoComponentProvider<T extends Comparable> {
 
     public List<StereoComponent<T>> getComponents(IAtomContainer container);
 
+    public static StereoComponentProvider<Long> EMPTY_LONG_PROVIDER = new StereoComponentProvider<Long>() {
+        @Override
+        public List<StereoComponent<Long>> getComponents(Graph graph) {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public List<StereoComponent<Long>> getComponents(IAtomContainer container) {
+            return Collections.emptyList();
+        }
+    };
 }

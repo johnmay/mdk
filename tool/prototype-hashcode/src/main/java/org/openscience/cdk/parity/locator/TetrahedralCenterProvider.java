@@ -26,6 +26,7 @@ import org.openscience.cdk.parity.SP3Parity2DCalculator;
 import org.openscience.cdk.parity.component.StereoComponent;
 import org.openscience.cdk.parity.component.StereoIndicator;
 import org.openscience.cdk.parity.component.TetrahedralComponent;
+import org.openscience.cdk.parity.ncomponent.Tetrahedral2DComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,38 +41,39 @@ import java.util.List;
  *
  * @author John May
  */
-public class TetrahedralCenterProvider<T extends Comparable<T>>
-        implements StereoComponentProvider<T> {
+public class TetrahedralCenterProvider
+        implements StereoComponentProvider<Long> {
 
-    private final StereoIndicator<T> indicator;
+    private final StereoIndicator<Long> indicator;
 
     // inject.. when we add 3D support
     private final ParityCalculator parityCalculator = new SP3Parity2DCalculator();
 
-    public TetrahedralCenterProvider(StereoIndicator<T> indicator
+    public TetrahedralCenterProvider(StereoIndicator<Long> indicator
                                     ) {
         this.indicator = indicator;
     }
 
     @Override
-    public List<StereoComponent<T>> getComponents(IAtomContainer container) {
-        List<StereoComponent<T>> components = new ArrayList<StereoComponent<T>>();
+    public List<StereoComponent<Long>> getComponents(IAtomContainer container) {
+        List<StereoComponent<Long>> components = new ArrayList<StereoComponent<Long>>();
         for (IAtom atom : container.atoms()) {
             if (isCandidateTetrahedralAtom(atom, container)) {
-                // create component
+                StereoComponent<Long> component = new Tetrahedral2DComponent(atom, container.getConnectedBondsList(atom), container);
+                components.add(component);
             }
         }
         return components;
     }
 
     @Override
-    public List<StereoComponent<T>> getComponents(Graph graph) {
+    public List<StereoComponent<Long>> getComponents(Graph graph) {
 
-        List<StereoComponent<T>> components = new ArrayList<StereoComponent<T>>();
+        List<StereoComponent<Long>> components = new ArrayList<StereoComponent<Long>>();
 
         for (int i = 0; i < graph.n(); i++) {
             if (isCandidateTetrahedralAtom(i, graph)) {
-                components.add(new TetrahedralComponent<T>(i,
+                components.add(new TetrahedralComponent<Long>(i,
                                                            graph.neighbors(i),
                                                            parity(i, graph),
                                                            indicator));
