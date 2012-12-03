@@ -19,13 +19,14 @@ package org.openscience.cdk.parity.locator;
 
 import org.openscience.cdk.hash.graph.Edge;
 import org.openscience.cdk.hash.graph.Graph;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.parity.component.AxialCumuleneComponent;
-import org.openscience.cdk.parity.component.DoubleBondComponent;
 import org.openscience.cdk.parity.component.StereoComponent;
 import org.openscience.cdk.parity.component.StereoIndicator;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,6 +41,11 @@ public class CumuleneProvider<T extends Comparable<T>>
 
     public CumuleneProvider(StereoIndicator<T> indicator) {
         this.indicator = indicator;
+    }
+
+    @Override
+    public List<StereoComponent<T>> getComponents(IAtomContainer container) {
+        return Collections.emptyList();
     }
 
     @Override

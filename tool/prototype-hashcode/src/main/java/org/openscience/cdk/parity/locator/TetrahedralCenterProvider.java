@@ -19,6 +19,8 @@ package org.openscience.cdk.parity.locator;
 
 import org.openscience.cdk.hash.graph.Graph;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.parity.ParityCalculator;
 import org.openscience.cdk.parity.SP3Parity2DCalculator;
 import org.openscience.cdk.parity.component.StereoComponent;
@@ -49,6 +51,17 @@ public class TetrahedralCenterProvider<T extends Comparable<T>>
     public TetrahedralCenterProvider(StereoIndicator<T> indicator
                                     ) {
         this.indicator = indicator;
+    }
+
+    @Override
+    public List<StereoComponent<T>> getComponents(IAtomContainer container) {
+        List<StereoComponent<T>> components = new ArrayList<StereoComponent<T>>();
+        for (IAtom atom : container.atoms()) {
+            if (isCandidateTetrahedralAtom(atom, container)) {
+                // create component
+            }
+        }
+        return components;
     }
 
     @Override
@@ -122,6 +135,50 @@ public class TetrahedralCenterProvider<T extends Comparable<T>>
 
         return false;
 
+    }
+
+    private boolean isCandidateTetrahedralAtom(IAtom atom, IAtomContainer container) {
+
+        List<IBond> neighbours = container.getConnectedBondsList(atom);
+
+        // tests that atom has SP3 hybridization and has at least two
+        // neighbours
+        if (IAtom.Hybridization.SP3.equals(atom.getHybridization())
+                && neighbours.size() > 2) {
+
+            // count the number of bonds that are not on the plane
+            int nBondsOffPlane = 0;
+
+            for (IBond bond : neighbours) {
+
+                // query bond means we can't have a tetrahedral centre
+                if (isQuery(bond))
+                    return false;
+                else if (isUpOrDown(bond))
+                    nBondsOffPlane++;
+
+            }
+
+            // as we're in 2D we need at least one bond which is not on the plane
+            return nBondsOffPlane > 0;
+
+        }
+
+        return false;
+
+    }
+
+    private boolean isQuery(IBond bond) {
+        return IBond.Stereo.UP_OR_DOWN.equals(bond.getStereo())
+                || IBond.Stereo.UP_OR_DOWN_INVERTED.equals(bond.getStereo())
+                || IBond.Stereo.E_OR_Z.equals(bond.getStereo());
+    }
+
+    private boolean isUpOrDown(IBond bond) {
+        return IBond.Stereo.UP.equals(bond.getStereo())
+                || IBond.Stereo.DOWN.equals(bond.getStereo())
+                || IBond.Stereo.UP_INVERTED.equals(bond.getStereo())
+                || IBond.Stereo.DOWN_INVERTED.equals(bond.getStereo());
     }
 
 

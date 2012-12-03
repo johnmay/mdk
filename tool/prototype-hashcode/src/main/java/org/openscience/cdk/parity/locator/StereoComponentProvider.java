@@ -18,8 +18,10 @@
 package org.openscience.cdk.parity.locator;
 
 import org.openscience.cdk.hash.graph.Graph;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.parity.component.StereoComponent;
 
+import java.awt.*;
 import java.util.List;
 
 /**
@@ -38,5 +40,7 @@ public interface StereoComponentProvider<T extends Comparable> {
      * @return a collection of stereo components which need to be precieved
      */
     public List<StereoComponent<T>> getComponents(Graph graph);
+
+    public List<StereoComponent<T>> getComponents(IAtomContainer container);
 
 }

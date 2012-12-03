@@ -20,12 +20,14 @@ package org.openscience.cdk.parity.locator;
 import org.openscience.cdk.hash.graph.Edge;
 import org.openscience.cdk.hash.graph.Graph;
 import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.parity.ParityCalculator;
 import org.openscience.cdk.parity.SP2Parity2DCalculator;
 import org.openscience.cdk.parity.component.StereoComponent;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -47,6 +49,11 @@ public abstract class DoubleBondProvider<T extends Comparable>
 
     public DoubleBondProvider() {
         this(new SP2Parity2DCalculator());
+    }
+
+    @Override
+    public List<StereoComponent<T>> getComponents(IAtomContainer container) {
+        return Collections.emptyList();
     }
 
     /**
