@@ -18,6 +18,7 @@
 package org.openscience.cdk.hash;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.parity.component.StereoComponent;
 
 /**
  * Describes a hash generator which produces individual hash codes for each

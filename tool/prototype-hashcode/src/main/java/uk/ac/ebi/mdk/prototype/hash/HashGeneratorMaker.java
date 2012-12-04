@@ -25,6 +25,7 @@ import org.openscience.cdk.hash.AtomSeedGenerator;
 import org.openscience.cdk.hash.BasicAtomHashGenerator;
 import org.openscience.cdk.hash.BasicMoleculeHash;
 import org.openscience.cdk.hash.MoleculeHashGenerator;
+import org.openscience.cdk.hash.PerturbedAtomHashGenerator;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.parity.SP2Parity2DUnspecifiedCalculator;
 import org.openscience.cdk.parity.component.IntStereoIndicator;
@@ -224,7 +225,7 @@ public class HashGeneratorMaker {
 
         if (chiral) {
             // include all provides using a conjunction
-            StereoComponentProvider<Long> stereo = new StereoProviderConjunction<Long>(new TetrahedralCenterProvider(null),
+            StereoComponentProvider<Long> stereo = new StereoProviderConjunction<Long>(new TetrahedralCenterProvider(indicator),
                                                                                        new DoubleBondProvider(new SP2Parity2DUnspecifiedCalculator()));
 
             //and(new LongDoubleBondLocator(new SP2Parity2DUnspecifiedCalculator()),
@@ -248,10 +249,26 @@ public class HashGeneratorMaker {
                 : StereoComponentProvider.EMPTY_LONG_PROVIDER;
 
         List<AtomSeed> seeds = new ArrayList<AtomSeed>(this.seeds);
-        AtomHashGenerator atomGenerator = new BasicAtomHashGenerator(new AtomSeedGenerator(seeds),
-                                                                     provider,
-                                                                     depth);
+        AtomHashGenerator atomGenerator = new PerturbedAtomHashGenerator(new AtomSeedGenerator(seeds),
+                                                                         provider,
+                                                                         depth);
         return new BasicMoleculeHash(atomGenerator);
+    }
+
+    public AtomHashGenerator buildNewAtomHash() {
+
+        // include the default seeds
+        withSeeds(nullable ? NULLABLE_SEEDS : NONNULL_SEEDS);
+
+        StereoComponentProvider<Long> provider = chiral
+                ? new StereoProviderConjunction<Long>(new TetrahedralCenterProvider(null),
+                                                      new DoubleBondProvider(new SP2Parity2DUnspecifiedCalculator()))
+                : StereoComponentProvider.EMPTY_LONG_PROVIDER;
+
+        List<AtomSeed> seeds = new ArrayList<AtomSeed>(this.seeds);
+        return new BasicAtomHashGenerator(new AtomSeedGenerator(seeds),
+                                              provider,
+                                              depth);
     }
 
     public HashGenerator<Integer> buildWithMask(AtomMask mask) {

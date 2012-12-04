@@ -143,10 +143,9 @@ public abstract class AbstractHashGenerator<T extends Number & Comparable<T>>
             hash = xor(hash,
                        rotater.rotate(current[i], global.register(current[i])));
         }
-        return hash;
-//        unique.size() != n && terminals.cardinality() != n && !modified
-//                ? perturb(unique, graph, stereo, hash, current, terminals)
-//                : hash;
+        return unique.size() != n && terminals.cardinality() != n && !modified
+                ? perturb(unique, graph, stereo, hash, current, terminals)
+                : hash;
 
     }
 

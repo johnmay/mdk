@@ -56,7 +56,7 @@ public final class BasicAtomHashGenerator
 
     protected Long[] generate(int[][] connections, Long[] prev, StereoComponent<Long> stereo) {
 
-        int    n    = connections.length;
+        int n = connections.length;
         Long[] next = Arrays.copyOf(prev, n);
 
         // initialise value counters
@@ -66,7 +66,7 @@ public final class BasicAtomHashGenerator
         }
 
         // configure stereo
-        while(stereo.configure(prev, next)){
+        while (stereo.configure(prev, next)) {
             copy(next, prev);
         }
 
@@ -76,7 +76,7 @@ public final class BasicAtomHashGenerator
                 next[i] = connected(i, connections, prev, counters[i]);
             }
 
-            while(stereo.configure(prev, next)){
+            while (stereo.configure(prev, next)) {
                 copy(next, prev);
             }
 
