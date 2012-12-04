@@ -21,13 +21,17 @@ import org.openscience.cdk.hash.graph.Edge;
 import org.openscience.cdk.hash.graph.Graph;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomType;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.parity.ParityCalculator;
 import org.openscience.cdk.parity.SP2Parity2DCalculator;
+import org.openscience.cdk.parity.component.DoubleBond2DComponent;
+import org.openscience.cdk.parity.component.DoubleBondComponent;
+import org.openscience.cdk.parity.component.LongStereoIndicator;
 import org.openscience.cdk.parity.component.StereoComponent;
 
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -37,8 +41,8 @@ import java.util.concurrent.Callable;
  *
  * @author John May
  */
-public abstract class DoubleBondProvider<T extends Comparable>
-        implements StereoComponentProvider<T> {
+public class DoubleBondProvider
+        implements StereoComponentProvider<Long> {
 
 
     private ParityCalculator calculator;
@@ -52,17 +56,74 @@ public abstract class DoubleBondProvider<T extends Comparable>
     }
 
     @Override
-    public List<StereoComponent<T>> getComponents(IAtomContainer container) {
-        return Collections.emptyList();
+    public List<StereoComponent<Long>> getComponents(IAtomContainer container) {
+
+        List<StereoComponent<Long>> components = new ArrayList<StereoComponent<Long>>(6);
+
+        for (IBond bond : container.bonds()) {
+            if (IBond.Order.DOUBLE.equals(bond.getOrder())
+                    && !IBond.Stereo.E_OR_Z.equals(bond.getStereo())) {
+
+                IAtom left = bond.getAtom(0);
+                IAtom right = bond.getAtom(1);
+
+                List<IBond> leftBonds = container.getConnectedBondsList(left);
+                List<IBond> rightBonds = container.getConnectedBondsList(right);
+
+                // check bond is isolated e.g. not allene or cumulene
+                if (accept(left, leftBonds) && accept(right, rightBonds)) {
+
+                    // move the bond that we will perceive
+                    leftBonds.remove(bond);
+                    leftBonds.add(bond);
+                    rightBonds.remove(bond);
+                    rightBonds.add(bond);
+
+                    components.add(new DoubleBond2DComponent(left, right, leftBonds, rightBonds, container));
+
+                }
+
+            }
+        }
+
+        return components;
+    }
+
+    private boolean accept(IAtom atom, List<IBond> connected) {
+
+        int dbCount = 0;
+
+        // not SP2
+        if (!IAtomType.Hybridization.SP2.equals(atom.getHybridization()))
+            return false;
+
+        // only have one neighbour (which is the other atom) -> this is no configurable
+        if (connected.size() == 1)
+            return false;
+
+        for (IBond bond : connected) {
+
+            if (IBond.Order.DOUBLE.equals(bond.getOrder()))
+                dbCount++;
+
+            // wiggly bond
+            IBond.Stereo stereo = bond.getStereo();
+            if (stereo == IBond.Stereo.UP_OR_DOWN || stereo == IBond.Stereo.UP_OR_DOWN_INVERTED)
+                return false;
+
+        }
+
+        return dbCount == 1;
+
     }
 
     /**
      * @inheritDoc
      */
     @Override
-    public List<StereoComponent<T>> getComponents(Graph graph) {
+    public List<StereoComponent<Long>> getComponents(Graph graph) {
 
-        List<StereoComponent<T>> components = new ArrayList<StereoComponent<T>>(graph.n() / 2);
+        List<StereoComponent<Long>> components = new ArrayList<StereoComponent<Long>>(graph.n() / 2);
 
         BitSet done = new BitSet(graph.n());
 
@@ -90,7 +151,7 @@ public abstract class DoubleBondProvider<T extends Comparable>
                     continue;
                 }
 
-                StereoComponent<T> component = create(graph, x, y);
+                StereoComponent<Long> component = create(graph, x, y);
 
                 if (component != null)
                     components.add(component);
@@ -137,7 +198,7 @@ public abstract class DoubleBondProvider<T extends Comparable>
         return y;
     }
 
-    private StereoComponent<T> create(final Graph graph, final int x, final int y) {
+    private StereoComponent<Long> create(final Graph graph, final int x, final int y) {
 
         // object creation < determinant calculation... put of parity calculations
         // until they are definantely needed
@@ -156,11 +217,11 @@ public abstract class DoubleBondProvider<T extends Comparable>
             }
         };
 
-        return create(graph, x, y, xParity, yParity);
+
+        return new DoubleBondComponent<Long>(graph, new LongStereoIndicator(1300141, 105913),
+                                             x, y, xParity, yParity);
 
     }
-
-    public abstract StereoComponent<T> create(Graph g, int x, int y, Callable<Integer> xParity, Callable<Integer> yParity);
 
     private int parity(Graph g, int x, int y) {
 
