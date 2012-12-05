@@ -24,6 +24,7 @@ import org.openscience.cdk.hash.AtomHashGenerator;
 import org.openscience.cdk.hash.AtomSeedGenerator;
 import org.openscience.cdk.hash.BasicAtomHashGenerator;
 import org.openscience.cdk.hash.BasicMoleculeHash;
+import org.openscience.cdk.hash.CoordListAtomHashGenerator;
 import org.openscience.cdk.hash.MoleculeHashGenerator;
 import org.openscience.cdk.hash.PerturbedAtomHashGenerator;
 import org.openscience.cdk.interfaces.IAtom;
@@ -120,6 +121,7 @@ public class HashGeneratorMaker {
     private int depth = 4;
 
     private boolean perturbed = false;
+    private boolean coordList = false;
 
     /* print debug statements whilst hashing */
     private boolean debug = false;
@@ -251,9 +253,11 @@ public class HashGeneratorMaker {
                 : StereoComponentProvider.EMPTY_LONG_PROVIDER;
 
         List<AtomSeed> seeds = new ArrayList<AtomSeed>(this.seeds);
+        AtomSeedGenerator seedGenerator = new AtomSeedGenerator(seeds);
         AtomHashGenerator atomGenerator = perturbed
-                ? new PerturbedAtomHashGenerator(new AtomSeedGenerator(seeds), provider, depth)
-                : new BasicAtomHashGenerator(new AtomSeedGenerator(seeds), provider, depth);
+                ? new PerturbedAtomHashGenerator(seedGenerator, provider, depth)
+                : (coordList ? new CoordListAtomHashGenerator(seedGenerator, provider, depth)
+                : new BasicAtomHashGenerator(new AtomSeedGenerator(seeds), provider, depth));
         return new BasicMoleculeHash(atomGenerator);
     }
 
@@ -311,6 +315,11 @@ public class HashGeneratorMaker {
 
     public HashGeneratorMaker perturbed() {
         perturbed = true;
+        return this;
+    }
+
+    public HashGeneratorMaker coordinateList() {
+        coordList = true;
         return this;
     }
 
