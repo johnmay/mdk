@@ -61,8 +61,8 @@ public abstract class AbstractStereoComponent<T extends Comparable<T>>
             }
         }
 
-        // parity of the swaps
-        return (count & 0x1) == 1 ? -1 : +1;
+        // parity of the swaps, odd=-1, even=+1
+        return Integer.lowestOneBit(count) == 1 ? -1 : +1;
 
     }
 

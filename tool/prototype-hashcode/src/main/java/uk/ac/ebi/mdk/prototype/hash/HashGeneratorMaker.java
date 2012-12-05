@@ -119,6 +119,8 @@ public class HashGeneratorMaker {
     /* explore a depth of eight vertices */
     private int depth = 4;
 
+    private boolean perturbed = false;
+
     /* print debug statements whilst hashing */
     private boolean debug = false;
 
@@ -249,9 +251,9 @@ public class HashGeneratorMaker {
                 : StereoComponentProvider.EMPTY_LONG_PROVIDER;
 
         List<AtomSeed> seeds = new ArrayList<AtomSeed>(this.seeds);
-        AtomHashGenerator atomGenerator = new PerturbedAtomHashGenerator(new AtomSeedGenerator(seeds),
-                                                                         provider,
-                                                                         depth);
+        AtomHashGenerator atomGenerator = perturbed
+                ? new PerturbedAtomHashGenerator(new AtomSeedGenerator(seeds), provider, depth)
+                : new BasicAtomHashGenerator(new AtomSeedGenerator(seeds), provider, depth);
         return new BasicMoleculeHash(atomGenerator);
     }
 
@@ -267,8 +269,8 @@ public class HashGeneratorMaker {
 
         List<AtomSeed> seeds = new ArrayList<AtomSeed>(this.seeds);
         return new BasicAtomHashGenerator(new AtomSeedGenerator(seeds),
-                                              provider,
-                                              depth);
+                                          provider,
+                                          depth);
     }
 
     public HashGenerator<Integer> buildWithMask(AtomMask mask) {
@@ -304,6 +306,11 @@ public class HashGeneratorMaker {
      */
     public HashGeneratorMaker nullable() {
         nullable = true;
+        return this;
+    }
+
+    public HashGeneratorMaker perturbed() {
+        perturbed = true;
         return this;
     }
 

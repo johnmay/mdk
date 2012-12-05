@@ -90,11 +90,33 @@ public abstract class AbstractHashGenerator {
 
         }
 
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             vertexes[i] = Arrays.copyOf(vertexes[i], neighbours[i]);
         }
 
         return vertexes;
+
+    }
+
+    protected final int[][] createCoordinateList(IAtomContainer container) {
+
+        int[][] coordinates = new int[container.getBondCount()][2];
+        // keep the neighbour count to trim at the end
+
+        for (int i = 0; i < coordinates.length; i++) {
+
+            IBond bond = container.getBond(i);
+
+            IAtom a1 = bond.getAtom(0);
+            IAtom a2 = bond.getAtom(1);
+
+            coordinates[i] = new int[]{
+                    container.getAtomNumber(a1),
+                    container.getAtomNumber(a2)};
+
+        }
+
+        return coordinates;
 
     }
 
@@ -113,7 +135,7 @@ public abstract class AbstractHashGenerator {
         sb.append("{");
         for (int i = 0; i < values.length; i++) {
             sb.append("0x").append(Long.toHexString(values[i]));
-            if(i < values.length - 1)
+            if (i < values.length - 1)
                 sb.append(", ");
         }
         sb.append("}");

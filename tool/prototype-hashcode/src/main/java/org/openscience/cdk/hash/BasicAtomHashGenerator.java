@@ -23,6 +23,8 @@ import org.openscience.cdk.parity.component.StereoComponentAggregator;
 import org.openscience.cdk.parity.locator.StereoComponentProvider;
 
 import java.util.Arrays;
+import java.util.BitSet;
+
 
 /**
  * Generate basic atom hash values
@@ -51,10 +53,11 @@ public final class BasicAtomHashGenerator
     public Long[] generate(IAtomContainer container) {
         return generate(create(container),
                         seedGenerator.generate(container),
-                        new StereoComponentAggregator<Long>(stereoProvider.getComponents(container)));
+                        new StereoComponentAggregator<Long>(stereoProvider.getComponents(container)),
+                        new BitSet(container.getAtomCount()));
     }
 
-    protected Long[] generate(int[][] connections, Long[] prev, StereoComponent<Long> stereo) {
+    protected Long[] generate(int[][] connections, Long[] prev, StereoComponent<Long> stereo, BitSet reducible) {
 
         int n = connections.length;
         Long[] next = Arrays.copyOf(prev, n);
@@ -70,11 +73,15 @@ public final class BasicAtomHashGenerator
             copy(next, prev);
         }
 
+        BitSet reducibleScratch = new BitSet(n);
+
         for (int d = 0; d < this.depth; d++) {
 
             for (int i = 0; i < connections.length; i++) {
-                next[i] = connected(i, connections, prev, counters[i]);
+                next[i] = connected(i, connections, prev, counters[i], reducible, reducibleScratch);
             }
+
+            reducible.or(reducibleScratch);
 
             while (stereo.configure(prev, next)) {
                 copy(next, prev);
@@ -88,11 +95,20 @@ public final class BasicAtomHashGenerator
     }
 
 
-    private long connected(int i, int[][] table, Long[] prev, Counter counter) {
+    private long connected(int i, int[][] table, Long[] prev, Counter counter, BitSet reducible, BitSet reducibleScratch) {
         long hash = distribute(prev[i]);
+        int nonterminalcount = 0;
         for (int j : table[i]) {
             hash ^= rotate(prev[j], counter.register(prev[j]));
+            if(!reducible.get(j))
+                nonterminalcount++;
         }
+
+        // we have one or less neighburs which we 'might' be in rings
+        // therefore we can't be in a ring and are reducible
+        if(nonterminalcount <= 1)
+            reducibleScratch.set(i);
+
         return hash;
     }
 

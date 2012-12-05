@@ -36,6 +36,7 @@ public class PerturbedAtomHashGenerator extends AbstractHashGenerator
     private final BasicAtomHashGenerator basic;
     protected final AtomHashGenerator seedGenerator;
     private final StereoComponentProvider<Long> stereoComponentProvider;
+    public static int perturbedCount = 0;
 
     public PerturbedAtomHashGenerator(AtomHashGenerator seedGenerator, StereoComponentProvider<Long> stereo, int depth) {
 
@@ -52,8 +53,10 @@ public class PerturbedAtomHashGenerator extends AbstractHashGenerator
         int[][] graph = basic.create(container);
         StereoComponent<Long> stereo = new StereoComponentAggregator<Long>(stereoComponentProvider.getComponents(container));
 
+        BitSet reducible = new BitSet(container.getAtomCount());
+
         Long[] seeds = seedGenerator.generate(container);
-        Long[] initial = basic.generate(graph, seeds, stereo);
+        Long[] initial = basic.generate(graph, seeds, stereo, reducible);
 
         Map<Long, Integer> equivalent = new HashMap<Long, Integer>(graph.length + ((4 + graph.length) / 3));
 
@@ -68,11 +71,11 @@ public class PerturbedAtomHashGenerator extends AbstractHashGenerator
             return initial;
 
         // we have some duplicates - sequential perturb equivalent atoms
-        return perturbed(seeds, container, graph, stereo, equivalent);
+        return perturbed(seeds, container, graph, stereo, equivalent, reducible);
 
     }
 
-    private Long[] perturbed(Long[] initial, IAtomContainer container, int[][] graph, StereoComponent<Long> stereo, Map<Long, Integer> equivalent) {
+    private Long[] perturbed(Long[] initial, IAtomContainer container, int[][] graph, StereoComponent<Long> stereo, Map<Long, Integer> equivalent, BitSet reducible) {
 
         int n = container.getAtomCount();
         BitSet done = new BitSet(n);
@@ -89,19 +92,22 @@ public class PerturbedAtomHashGenerator extends AbstractHashGenerator
         for (int i = 0; i < n; i++) {
 
             Long value = initial[i];
+
             int j = equivalent.get(value);
             if (j != i && graph[i].length > 1) {
 
                 // if we haven't done the first equivalent 'j' -> we only need to do this once
                 if (!done.get(j)) {
                     stereo.reset();
-                    include(values, basic.generate(graph, modify(initial, j), stereo), counters);
+                    include(values, basic.generate(graph, modify(initial, j), stereo, reducible), counters);
                     done.set(j);
+                    perturbedCount++;
                 }
 
                 stereo.reset();
-                include(values, basic.generate(graph, modify(initial, i), stereo), counters);
+                include(values, basic.generate(graph, modify(initial, i), stereo, reducible), counters);
                 done.set(i);
+                perturbedCount++;
 
             }
 
