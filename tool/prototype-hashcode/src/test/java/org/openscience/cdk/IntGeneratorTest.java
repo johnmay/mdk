@@ -39,10 +39,10 @@ public class IntGeneratorTest {
 //
 //        System.out.println("New: 0x"
 //                                   + Integer.toHexString(generator
-//                                                                 .generate(container)));
+//                                                                 .combined(container)));
 //        System.out.println("Old: 0x"
 //                                   + Integer
-//                .toHexString(old.generate(container)));
+//                .toHexString(old.combined(container)));
 //
 //    }
 //
@@ -65,9 +65,9 @@ public class IntGeneratorTest {
 //
 //        for (IAtomContainer container : containers) {
 //            System.out.println("new:");
-//            String newHash = Integer.toHexString(generator.generate(container));
+//            String newHash = Integer.toHexString(generator.combined(container));
 //            System.out.println("old:");
-//            String oldHash = Integer.toHexString(old.generate(container));
+//            String oldHash = Integer.toHexString(old.combined(container));
 //            System.out.println("0x" + newHash + " - 0x" + oldHash);
 //            break;
 //        }

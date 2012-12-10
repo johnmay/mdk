@@ -59,8 +59,8 @@ public final class CoordListAtomHashGenerator
 
     protected Long[] generate(int[][] bonds, Long[] prev, StereoComponent<Long> stereo, BitSet reducible) {
 
-        int n = bonds.length;
-        Long[] next = Arrays.copyOf(prev, n);
+        int n = prev.length;
+        Long[] next = distributingCopy(prev);
 
         // initialise value counters
         Counter[] counters = new Counter[n];
@@ -75,6 +75,7 @@ public final class CoordListAtomHashGenerator
 
         for (int d = 0; d < this.depth; d++) {
 
+
             for (int i = 0; i < bonds.length; i++) {
                 int j = bonds[i][0];
                 int k = bonds[i][1];
@@ -82,17 +83,15 @@ public final class CoordListAtomHashGenerator
                 next[k] ^= rotate(prev[j], counters[k].register(prev[j]));
             }
 
+            distributingCopy(next, prev);
+
             while (stereo.configure(prev, next)) {
                 copy(next, prev);
             }
-
-            copy(next, prev);
 
         }
 
         return next;
     }
-
-
 
 }

@@ -36,15 +36,15 @@ public final class BasicAtomHashGenerator
         implements AtomHashGenerator {
 
     /* depth to hash */
-    private final int depth;
+    private final int cycles;
 
     /* initial hash value generator */
     private final AtomHashGenerator seedGenerator;
 
     private final StereoComponentProvider<Long> stereoProvider;
 
-    public BasicAtomHashGenerator(AtomHashGenerator seedGenerator, StereoComponentProvider<Long> stereoProvider, int depth) {
-        this.depth = depth;
+    public BasicAtomHashGenerator(AtomHashGenerator seedGenerator, StereoComponentProvider<Long> stereoProvider, int cycles) {
+        this.cycles = cycles;
         this.seedGenerator = seedGenerator;
         this.stereoProvider = stereoProvider;
     }
@@ -57,7 +57,7 @@ public final class BasicAtomHashGenerator
                         new BitSet(container.getAtomCount()));
     }
 
-    protected Long[] generate(int[][] connections, Long[] prev, StereoComponent<Long> stereo, BitSet reducible) {
+    protected Long[] generate(int[][] connections, Long[] prev, StereoComponent<Long> stereo, BitSet terminallyRemovable) {
 
         int n = connections.length;
         Long[] next = Arrays.copyOf(prev, n);
@@ -65,7 +65,7 @@ public final class BasicAtomHashGenerator
         // initialise value counters
         Counter[] counters = new Counter[n];
         for (int i = 0; i < n; i++) {
-            counters[i] = new Counter(depth * 5);
+            counters[i] = new Counter(cycles * 5);
         }
 
         // configure stereo
@@ -75,19 +75,19 @@ public final class BasicAtomHashGenerator
 
         BitSet reducibleScratch = new BitSet(n);
 
-        for (int d = 0; d < this.depth; d++) {
+        for (int c = 0; c < this.cycles; c++) {
 
             for (int i = 0; i < connections.length; i++) {
-                next[i] = connected(i, connections, prev, counters[i], reducible, reducibleScratch);
+                next[i] = connected(i, connections, prev, counters[i], terminallyRemovable, reducibleScratch);
             }
 
-            reducible.or(reducibleScratch);
+            terminallyRemovable.or(reducibleScratch);
+
+            copy(next, prev);
 
             while (stereo.configure(prev, next)) {
                 copy(next, prev);
             }
-
-            copy(next, prev);
 
         }
 

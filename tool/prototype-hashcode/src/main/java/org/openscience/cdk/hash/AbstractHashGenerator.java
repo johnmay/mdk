@@ -54,6 +54,19 @@ public abstract class AbstractHashGenerator {
         System.arraycopy(src, 0, dest, 0, src.length);
     }
 
+    protected void distributingCopy(Long[] src, Long[] dest) {
+        for(int i = 0; i < src.length; i++){
+            dest[i] = src[i];
+            src[i]  = distribute(src[i]);
+        }
+    }
+
+    protected Long[] distributingCopy(Long[] src) {
+        Long[] dest = new Long[src.length];
+        distributingCopy(src, dest);
+        return dest;
+    }
+
     protected long rotate(Long value, int n) {
         return rotater.rotate(value, n);
     }
@@ -101,19 +114,11 @@ public abstract class AbstractHashGenerator {
     protected final int[][] createCoordinateList(IAtomContainer container) {
 
         int[][] coordinates = new int[container.getBondCount()][2];
-        // keep the neighbour count to trim at the end
 
         for (int i = 0; i < coordinates.length; i++) {
-
             IBond bond = container.getBond(i);
-
-            IAtom a1 = bond.getAtom(0);
-            IAtom a2 = bond.getAtom(1);
-
-            coordinates[i] = new int[]{
-                    container.getAtomNumber(a1),
-                    container.getAtomNumber(a2)};
-
+            coordinates[i][0] = container.getAtomNumber(bond.getAtom(0));
+            coordinates[i][1] = container.getAtomNumber(bond.getAtom(1));
         }
 
         return coordinates;
