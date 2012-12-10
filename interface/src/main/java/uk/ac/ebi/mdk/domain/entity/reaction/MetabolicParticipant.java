@@ -21,14 +21,18 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 
 /**
+ * MetabolicParticipant 2012.02.07
  *
- *          MetabolicParticipant 2012.02.07
+ * @author johnmay
+ * @author $Author$ (this version)
+ *
+ *         Class description
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- *
- *          Class description
- *
  */
-public interface MetabolicParticipant extends CompartmentalisedParticipant<Metabolite, Double, Compartment> {
+public interface MetabolicParticipant
+        extends CompartmentalisedParticipant<Metabolite, Double, Compartment> {
+
+    @Override
+    public MetabolicParticipant newInstance();
+
 }

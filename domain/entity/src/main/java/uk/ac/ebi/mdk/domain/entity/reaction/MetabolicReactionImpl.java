@@ -44,7 +44,7 @@ public class MetabolicReactionImpl
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicReactionImpl.class);
 
-    private List<GeneProduct> modifiers = new ArrayList();
+    private List<GeneProduct> modifiers = new ArrayList<GeneProduct>();
 
     private ReactionType type = ReactionTypeImpl.ENZYMATIC;
 
