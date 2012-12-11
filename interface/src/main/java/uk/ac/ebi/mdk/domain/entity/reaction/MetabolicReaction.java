@@ -28,9 +28,7 @@ import java.util.Collection;
  * MetabolicReaction 2012.02.07
  *
  * @author johnmay
- * @author $Author$ (this version)
- *         <p/>
- *         Class description
+ * @author $Author$ (this version) <p/> Class description
  * @version $Rev$ : Last Changed $Date$
  */
 public interface MetabolicReaction extends Reaction<MetabolicParticipant> {
@@ -47,5 +45,25 @@ public interface MetabolicReaction extends Reaction<MetabolicParticipant> {
      * @return whether any participants were removed
      */
     public boolean remove(Metabolite m);
+
+    /**
+     * Adds a metabolite as a reactant to the reaction. The metabolite will be
+     * added with stoichiometric coefficient of 1.0 and the <i>Cytoplasm</i>
+     * compartment.
+     *
+     * @param reactant metabolite to add to the left
+     * @return whether the reactant was added
+     */
+    public boolean addReactant(Metabolite reactant);
+
+    /**
+     * Adds a metabolite as a product to the reaction. The metabolite will be
+     * added with stoichiometric coefficient of 1.0 and the <i>Cytoplasm</i>
+     * compartment.
+     *
+     * @param product metabolite to add to the left
+     * @return whether the reactant was added
+     */
+    public boolean addProduct(Metabolite product);
 
 }

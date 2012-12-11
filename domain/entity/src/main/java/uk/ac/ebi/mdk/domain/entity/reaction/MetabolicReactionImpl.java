@@ -113,7 +113,18 @@ public class MetabolicReactionImpl
         }
         return molecules;
     }
-//    public void readExternal(ObjectInput in, MetaboliteCollection metabolites, ProductCollection products) throws IOException, ClassNotFoundException {
+
+    @Override
+    public boolean addReactant(Metabolite reactant) {
+        return addReactant(new MetabolicParticipantImplementation(reactant));
+    }
+
+    @Override
+    public boolean addProduct(Metabolite product) {
+        return addProduct(new MetabolicParticipantImplementation(product));
+    }
+
+    //    public void readExternal(ObjectInput in, MetaboliteCollection metabolites, ProductCollection products) throws IOException, ClassNotFoundException {
 //        super.readExternal(in, metabolites);
 //        if (in.readBoolean()) {
 //            int n = in.readInt();
