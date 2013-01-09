@@ -1,5 +1,5 @@
 /**
- * GoogleSearch.java
+ * WebSearch.java
  *
  * 2012.01.13
  *
@@ -37,7 +37,7 @@ import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 
 /**
  *
- * GoogleSearch 2012.01.13
+ * WebSearch 2012.01.13
  *
  * @version $Rev$ : Last Changed $Date$
  * @author johnmay
@@ -46,10 +46,10 @@ import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
  * Class description
  *
  */
-public class GoogleSearch
+public class WebSearch
         implements CrossreferenceModule {
 
-    private static final Logger LOGGER = Logger.getLogger(GoogleSearch.class);
+    private static final Logger LOGGER = Logger.getLogger(WebSearch.class);
 
     private final JPanel component;
 
@@ -72,7 +72,7 @@ public class GoogleSearch
     };
 
 
-    public GoogleSearch() {
+    public WebSearch() {
 
         component = PanelFactory.createDialogPanel("left:p:grow, 4dlu, min", "p, 4dlu, p");
         field = FieldFactory.newField(30);
@@ -104,7 +104,7 @@ public class GoogleSearch
 
 
     public String getDescription() {
-        return "Google search";
+        return "Web Search";
     }
 
 
