@@ -41,7 +41,7 @@ public class ReferenceExtractor<A extends StringAnnotation>
 
     public static final String DEFAULT_RESOURCE_PATTERN  = "(?:[A-z0-9]+(?:\\s[A-z0-9]+)*?)";
     public static final String DEFAULT_SEPARATOR_PATTERN = "(?:\\s(?:id|identifier|accession))?[-:=]\\s*";
-    public static final String DEFAULT_ACCESSION_PATTERN = "[=A-z0-9]+";
+    public static final String DEFAULT_ACCESSION_PATTERN = "[^ ]+";
 
     /**
      * Constructor a reference extractor for the given class. This method will use
