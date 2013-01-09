@@ -34,7 +34,7 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
                             "Folder containing multiple '.tsv' entries (can be compressed with Zip). The" +
                                     " file ending '...All.tsv' will be used to load the index ",
                             ResourceDirectoryLocation.class,
-                            new ZIPRemoteLocation("http://www.lipidmaps.org/downloads/LMSD_20120125_tsv.zip"));
+                            new ZIPRemoteLocation("http://www.lipidmaps.org/downloads/LMSD_20120412_tsv.zip"));
 
     }
 
@@ -63,7 +63,8 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
         DefaultNameIndexWriter writer = new DefaultNameIndexWriter(getIndex("lipid.maps.names"));
 
-        String[] row = reader.readNext();
+        String[] row;
+        reader.readNext(); // skip headers
         while ((row = reader.readNext()) != null && !isCancelled()) {
 
             // name data
@@ -94,7 +95,7 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
             InputStream in = location.next();
             String name = location.getEntryName();
 
-            if (name.endsWith("All.tsv"))
+                if (name.endsWith("All.tsv"))
                 update(in);
 
         }
@@ -110,6 +111,6 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
     @Override
     public String getName() {
-        return "Lipid Maps";
+        return "Lipid Maps Name";
     }
 }

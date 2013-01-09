@@ -29,7 +29,7 @@ public class LipidMapsSDFLoader extends AbstractSingleIndexResourceLoader {
         addRequiredResource("Lipid Maps SDF",
                             "A lipid maps SDF folder/directory (can be zipped)",
                             ResourceDirectoryLocation.class,
-                            new ZIPRemoteLocation("http://www.lipidmaps.org/downloads/LMSDFDownload25Jan12.zip"));
+                            new ZIPRemoteLocation("http://www.lipidmaps.org/downloads/LMSDFDownload23Apr12.zip"));
     }
 
     public LipidMapsSDFLoader() throws IOException {
