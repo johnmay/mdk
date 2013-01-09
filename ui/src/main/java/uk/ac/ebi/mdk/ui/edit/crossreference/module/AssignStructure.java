@@ -1,8 +1,4 @@
 /**
- * GoogleSearch.java
- *
- * 2012.01.13
- *
  * This file is part of the CheMet library
  *
  * The CheMet library is free software: you can redistribute it and/or modify it
@@ -54,17 +50,9 @@ import java.security.InvalidParameterException;
 
 
 /**
- *
- * GoogleSearch 2012.01.13
- *
- * @version $Rev$ : Last Changed $Date$
- * @author johnmay
- * @author $Author$ (this version)
- *
- * Class description
- *
+ * Assign chemical structure by pasting the file in a text box
  */
-public class AssignStructure
+public final class AssignStructure
         implements CrossreferenceModule {
 
     private static final Logger LOGGER = Logger.getLogger(AssignStructure.class);
