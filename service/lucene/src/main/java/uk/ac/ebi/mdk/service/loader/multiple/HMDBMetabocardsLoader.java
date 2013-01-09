@@ -52,7 +52,7 @@ public class HMDBMetabocardsLoader extends AbstractMultiIndexResourceLoader {
     }
 
     public String getName() {
-        return "HMDB Metabocards";
+        return "HMDB Metabocards (legacy)";
     }
 
     @Override

@@ -13,6 +13,6 @@ import uk.ac.ebi.mdk.service.index.KeywordNIOIndex;
  */
 public class HMDBStructureIndex extends KeywordNIOIndex {
     public HMDBStructureIndex() {
-        super("HMDB (Structures)", "structure/hmdb");
+        super("HMDB Structure", "structure/hmdb");
     }
 }
