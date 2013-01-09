@@ -19,19 +19,18 @@
 package uk.ac.ebi.mdk.domain.annotation.task;
 
 import uk.ac.ebi.mdk.lang.annotation.Brief;
-import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 
 import java.io.File;
-import java.security.InvalidParameterException;
 
 
 /**
- * @name    ExecutableParameter - 2011.10.13 <br>
- *          A special type of file parameter the describes an executable
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name ExecutableParameter - 2011.10.13 <br> A special type of file parameter
+ * the describes an executable
  */
 @Context
 @Brief("Executable")
@@ -45,9 +44,8 @@ public class ExecutableParameter
 
     public ExecutableParameter(String name, String description, File file) {
         super(name, description, "", file);
-        if (file.canExecute() == false) {
-            throw new InvalidParameterException("Attempt to create an executable file"
-                                                + " parameter with an non-executable file");
+        if (!file.canExecute()) {
+            throw new IllegalArgumentException("'" + file + "' is not executable");
         }
     }
 
