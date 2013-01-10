@@ -1,5 +1,6 @@
 package uk.ac.ebi.mdk.service.loader.location;
 
+import com.google.common.io.CountingInputStream;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.File;
@@ -8,10 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * SystemLocation.java - 20.02.2012 <br/>
- * <p/>
- * Defines a resource which is file location on the system. The {@see open()} method
- * will return FileInputStream for the specified location
+ * SystemLocation.java - 20.02.2012 <br/> <p/> Defines a resource which is file
+ * location on the system. The {@see open()} method will return FileInputStream
+ * for the specified location
  *
  * @author johnmay
  * @author $Author: johnmay $ (this version)
@@ -22,6 +22,10 @@ public class SystemLocation
 
     private File location;
 
+    /**
+     * count the number of bytes read
+     */
+    private CountingInputStream counter;
     private InputStream stream;
 
     public SystemLocation(File location) {
@@ -51,14 +55,14 @@ public class SystemLocation
     }
 
     /**
-     * Open the file stream, if the stream has not been opened. If the stream is not null then the current stream is
-     * returned
+     * Open the file stream, if the stream has not been opened. If the stream is
+     * not null then the current stream is returned
      *
      * @inheritDoc
      */
     public InputStream open() throws IOException {
         if (stream == null) {
-            this.stream = new FileInputStream(location);
+            this.stream = counter = new CountingInputStream(new FileInputStream(location));
         }
         return stream;
     }
@@ -73,6 +77,13 @@ public class SystemLocation
             this.stream.close();
             this.stream = null; // ensure re-open is a success
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public double progress() {
+        return counter.getCount() / (double) location.length();
     }
 
     /**

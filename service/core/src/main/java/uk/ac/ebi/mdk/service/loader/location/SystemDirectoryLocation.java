@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -28,9 +29,17 @@ public class SystemDirectoryLocation
     private File activeFile;
     private InputStream activeStream;
 
+    private int counter = 0;
+    private int size = 0;
+
     public SystemDirectoryLocation(File directory) {
         this.directory = directory;
-        this.fileIterator = Arrays.asList(directory.listFiles()).iterator();
+
+        List<File> files = Arrays.asList(directory.listFiles());
+
+        this.size         = files.size();
+        this.fileIterator = files.iterator();
+
     }
 
     /**
@@ -71,6 +80,7 @@ public class SystemDirectoryLocation
                 activeStream.close();
             }
 
+            counter++;
             activeStream = new FileInputStream(activeFile);
 
             return activeStream;
@@ -81,6 +91,9 @@ public class SystemDirectoryLocation
 
     }
 
+    @Override public double progress() {
+        return counter / (double) size;
+    }
 
     @Override
     public void close() throws IOException {

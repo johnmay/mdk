@@ -1,5 +1,6 @@
 package uk.ac.ebi.mdk.service.loader.location;
 
+import com.google.common.io.CountingInputStream;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.IOException;
@@ -9,10 +10,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * RemoteLocation.java - 20.02.12 <br/>
- * <p/>
- * Remote location defines a remote resource location, i.e. on an FTP server or
- * HTML page
+ * RemoteLocation.java - 20.02.12 <br/> <p/> Remote location defines a remote
+ * resource location, i.e. on an FTP server or HTML page
  *
  * @author johnmay
  * @author $Author: johnmay $ (this version)
@@ -24,6 +23,7 @@ public class RemoteLocation
     private URL location;
 
     private URLConnection connection;
+    private CountingInputStream counter;
     private InputStream stream;
 
     public RemoteLocation(URL location) {
@@ -39,7 +39,7 @@ public class RemoteLocation
     }
 
     public URLConnection getConnection() throws IOException {
-        if(connection == null)
+        if (connection == null)
             connection = getLocation().openConnection();
         return connection;
     }
@@ -56,16 +56,21 @@ public class RemoteLocation
     }
 
     /**
-     * Open a stream to the remote resource. This first opens the URLConnection and then the stream
+     * Open a stream to the remote resource. This first opens the URLConnection
+     * and then the stream
      *
      * @inheritDoc
      */
     public InputStream open() throws IOException {
         if (stream == null) {
             connection = getConnection();
-            stream = connection.getInputStream();
+            stream = counter = new CountingInputStream(connection.getInputStream());
         }
         return stream;
+    }
+
+    @Override public double progress() {
+        return counter.getCount() / (double) connection.getContentLength();
     }
 
     /**
