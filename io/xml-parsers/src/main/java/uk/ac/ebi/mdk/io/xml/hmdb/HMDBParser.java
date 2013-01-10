@@ -41,7 +41,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * A parser for Human Metabolise Database (HMDB) XML files. The parser can be
+ * A parser for Human Metabolome Database (HMDB) XML files. The parser can be
  * configured with one or more {@link HMDBXMLMarshal}s. These marshals take the
  * XML stream and marshal the contents into an {@link HMDBMetabolite}
  * container.
