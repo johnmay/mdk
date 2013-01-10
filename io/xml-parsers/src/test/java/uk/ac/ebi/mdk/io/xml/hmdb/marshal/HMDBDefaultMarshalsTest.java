@@ -25,6 +25,7 @@ import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGDrugIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KeggGlycanIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
 import uk.ac.ebi.mdk.io.xml.hmdb.HMDBMetabolite;
 
@@ -399,7 +400,7 @@ public class HMDBDefaultMarshalsTest {
         HMDBDefaultMarshals.KEGG_GLYCAN.marshal(xmlr, metabolite);
 
         assertThat(metabolite.getCrossReferences().iterator().next(),
-                   is((Identifier) new KEGGDrugIdentifier("G00009")));
+                   is((Identifier) new KeggGlycanIdentifier("G00009")));
 
     }
 

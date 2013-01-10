@@ -146,9 +146,9 @@ public final class HMDBParser implements Closeable {
         }
 
         // check if ACCESSION is being used without the SECONDARY_ACCESSION(s)
-        if (this.marshals.containsKey("accession")
-                && !(this.marshals.containsKey("secondary_accessions")
-                && this.marshals.containsKey("secoundary_accessions")))
+        if (this.marshals.containsKey(HMDBDefaultMarshals.ACCESSION.tag())
+                && !(this.marshals.containsKey(HMDBDefaultMarshals.SECONDARY_ACCESSION.tag())
+                && this.marshals.containsKey(HMDBDefaultMarshals.SECOUNDARY_ACCESSION.tag())))
             throw new IllegalArgumentException("When parsing ACCESSION the SECONDARY_ACCESSION(s) must be included, refer to javadoc");
 
         parse();
