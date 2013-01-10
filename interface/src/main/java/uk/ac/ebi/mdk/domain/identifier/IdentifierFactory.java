@@ -108,6 +108,11 @@ public interface IdentifierFactory {
             return "";
         }
 
+        @Override public boolean isValid() {
+            // convenient for if conditions
+            return false;
+        }
+
         @Override
         public Collection<String> getSynonyms() {
             return Collections.EMPTY_SET;

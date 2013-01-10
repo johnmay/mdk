@@ -17,14 +17,13 @@
  */
 package uk.ac.ebi.mdk.domain.identifier;
 
+import uk.ac.ebi.mdk.domain.Descriptor;
+
 import java.net.URL;
 import java.util.Collection;
 
-import uk.ac.ebi.mdk.domain.Descriptor;
-
 /**
- * Identifier – 2011.09.15 <br>
- * Interface for an identifier object
+ * Identifier – 2011.09.15 <br> Interface for an identifier object
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -47,8 +46,8 @@ public interface Identifier extends Descriptor {
     public String getAccession();
 
     /**
-     * Returns a new empty instance of the identifier object. This is primarily used
-     * in factories for object creation without reflection.
+     * Returns a new empty instance of the identifier object. This is primarily
+     * used in factories for object creation without reflection.
      *
      * @return new instance of the identifier
      */
@@ -62,17 +61,18 @@ public interface Identifier extends Descriptor {
     public URL getURL();
 
     /**
-     * Access the URN for use in RDF annotations, in particular the
-     * Systems Biology Markup Language (SBML).
+     * Access the URN for use in RDF annotations, in particular the Systems
+     * Biology Markup Language (SBML).
      *
-     * @return String urn for the identifier (note some accessions
-     *         may have special characters substituted)
+     * @return String urn for the identifier (note some accessions may have
+     *         special characters substituted)
      */
     public String getURN();
 
     /**
      * Access a resolvable URL for this identifier. The URL is one that can
      * identify the given identifier - {@code http://www.identifiers.org/<namespace>/<accession>/}
+     *
      * @return resolvable URL
      * @deprecated MIRIAM resources needs patching
      */
@@ -80,20 +80,31 @@ public interface Identifier extends Descriptor {
     public String getResolvableURL();
 
     /**
-     * Provides a list of synonyms commonly used to describe the database of this
-     * identifier. For example Enzyme Nomenclature is more frequently referred to
-     * as EC. The synonyms are specified in the IdentifierDescription.properites
-     * file. If no synonyms are present an empty collection is returned
+     * Provides a list of synonyms commonly used to describe the database of
+     * this identifier. For example Enzyme Nomenclature is more frequently
+     * referred to as EC. The synonyms are specified in the
+     * IdentifierDescription.properites file. If no synonyms are present an
+     * empty collection is returned
      *
      * @return
      */
     public Collection<String> getSynonyms();
 
+    /**
+     * Determine whether the identifier is valid for the resource. This method
+     * used {@link uk.ac.ebi.mdk.domain.identifier.Resource#getCompiledPattern()}
+     * to match the identifier, if no pattern is available then the identifier
+     * is considered true.
+     *
+     * @return whether the the identifier is valid
+     */
+    public boolean isValid();
+
     public Resource getResource();
 
     /**
-     * Access a summary of the identifier. The summary provides the
-     * name of the identifier concatenated to the accession.
+     * Access a summary of the identifier. The summary provides the name of the
+     * identifier concatenated to the accession.
      *
      * @return summary
      */

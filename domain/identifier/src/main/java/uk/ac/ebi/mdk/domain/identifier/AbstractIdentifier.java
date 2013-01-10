@@ -28,14 +28,11 @@ import java.net.URL;
 import java.util.Collection;
 
 /**
- * Abstract class for that all identifiers should extend.
- * If the sub-class has more then one component (e.g. InChI)
- * the developer should decide which is or what should the
- * 'main' identifier be.
- * <p/>
- * In some case you may want a concatenated identifier where
- * the multiple sub-class variables are concatenated together
- * to form a string which identifies that object
+ * Abstract class for that all identifiers should extend. If the sub-class has
+ * more then one component (e.g. InChI) the developer should decide which is or
+ * what should the 'main' identifier be. <p/> In some case you may want a
+ * concatenated identifier where the multiple sub-class variables are
+ * concatenated together to form a string which identifies that object
  *
  * @author johnmay
  * @date 6 Apr 2011
@@ -86,15 +83,27 @@ public abstract class AbstractIdentifier
     /**
      * @inheritDoc
      */
+    @Override public boolean isValid() {
+        Resource resource = getResource();
+        if (resource != null) {
+            return resource.getCompiledPattern().matcher(accession).matches();
+        }
+        // no resource, we cannot check if the accession is valid
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
     @Override
     public String toString() {
         return accession;
     }
 
     /**
-     * Returns a string summary of the Identifier, consisting of the short description of the database and the
-     * accession.
-     * Added to avoid changing the behaviour of toString().
+     * Returns a string summary of the Identifier, consisting of the short
+     * description of the database and the accession. Added to avoid changing
+     * the behaviour of toString().
      *
      * @return dbName + accession.
      */
@@ -110,7 +119,8 @@ public abstract class AbstractIdentifier
     public int hashCode() {
         int hash = 257;
         hash = 37 * hash + getClass().hashCode();
-        hash = 37 * hash + (this.accession != null ? this.accession.hashCode() : 0);
+        hash = 37 * hash + (this.accession != null ? this.accession.hashCode()
+                                                   : 0);
         return hash;
     }
 
@@ -126,8 +136,9 @@ public abstract class AbstractIdentifier
             return false;
         }
         final AbstractIdentifier other = (AbstractIdentifier) obj;
-        if ((this.accession == null) ? (other.accession != null) : !this.accession.equals(
-                other.accession)) {
+        if ((this.accession == null) ? (other.accession != null)
+                                     : !this.accession.equals(
+                                             other.accession)) {
             return false;
         }
         return true;
@@ -169,7 +180,8 @@ public abstract class AbstractIdentifier
         out.writeUTF(accession);
     }
 
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException,
+                                                    ClassNotFoundException {
         this.accession = in.readUTF();
     }
 }
