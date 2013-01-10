@@ -68,6 +68,7 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
 
         String[] row = tsv.readNext();
         Map<String, Integer> map = getHeaderMap(row);
+        int count = 0;
         while ((row = tsv.readNext()) != null) {
 
             if (isCancelled()) break;
@@ -89,6 +90,9 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
             if(isActive(identifier)){
                 crossreferences.put(getPrimaryIdentifier(identifier), id);
             }
+
+            if(++count % 200 == 0)
+                fireProgressUpdate(location.progress());
 
         }
 

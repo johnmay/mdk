@@ -70,6 +70,7 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
         DefaultNameIndexWriter nameWriter = new DefaultNameIndexWriter(getIndex("biocyc.names"));
         DefaultDataIndexWriter dataWriter = new DefaultDataIndexWriter(getIndex("biocyc.data"));
 
+        int count = 0;
         while (reader.hasNext()) {
 
             AttributedEntry<Attribute, String> entry = reader.next();
@@ -85,6 +86,11 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
             dataWriter.write(identifier,
                              entry.has(ATOM_CHARGES) ? getCharge(entry.get(ATOM_CHARGES)) : "",
                              entry.has(CHEMICAL_FORMULA) ? getFormula(entry.get(CHEMICAL_FORMULA)) : "");
+
+            if(++count % 200 == 0)
+                fireProgressUpdate(location.progress());
+
+
         }
 
         nameWriter.close();

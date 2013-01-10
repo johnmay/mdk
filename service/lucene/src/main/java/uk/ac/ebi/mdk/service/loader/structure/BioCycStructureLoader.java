@@ -39,6 +39,7 @@ public class BioCycStructureLoader extends AbstractSingleIndexResourceLoader {
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
         MDLV2000Reader mdlReader = new MDLV2000Reader();
 
+        int count = 0;
         while (location.hasNext() && !isCancelled()) {
 
             InputStream in = location.next();
@@ -56,6 +57,10 @@ public class BioCycStructureLoader extends AbstractSingleIndexResourceLoader {
             } catch (Exception ex) {
                 LOGGER.warn("Could not read entry: " + name + " reason: " + ex.getMessage());
             }
+
+            if(++count % 150 == 0)
+                fireProgressUpdate(location.progress());
+
         }
 
         writer.close();

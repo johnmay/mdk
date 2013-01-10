@@ -1,6 +1,10 @@
 package uk.ac.ebi.mdk.ui.component.service;
 
-import com.jgoodies.animation.*;
+import com.jgoodies.animation.AbstractAnimation;
+import com.jgoodies.animation.Animation;
+import com.jgoodies.animation.AnimationEvent;
+import com.jgoodies.animation.AnimationListener;
+import com.jgoodies.animation.Animator;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
@@ -10,9 +14,14 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.mdk.service.ProgressListener;
 import uk.ac.ebi.mdk.service.ResourceLoader;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;
-import uk.ac.ebi.mdk.service.location.*;
+import uk.ac.ebi.mdk.service.location.LocationDescription;
+import uk.ac.ebi.mdk.service.location.LocationFactory;
+import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
+import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
+import uk.ac.ebi.mdk.service.location.ResourceLocation;
 import uk.ac.ebi.mdk.ui.component.service.location.DirectoryLocationEditor;
 import uk.ac.ebi.mdk.ui.component.service.location.FileLocationEditor;
 import uk.ac.ebi.mdk.ui.component.service.location.LocationEditor;
@@ -98,13 +107,24 @@ public class LoaderRow extends JComponent {
             }
         });
         configure.setToolTipText("Configure loader");
+
         name = LabelFactory.newLabel(loader.getName());
+
+        // name will indicate the progress
+        loader.addProgressListener(new ProgressListener() {
+            @Override public void progressed(String message) {
+                // already on EDT
+                name.setText(message);
+            }
+        });
+
 
         update = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/update_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                name.setIcon(new SpinningDial(16, 16));
+                SpinningDial dial = new SpinningDial(16, 16);
+                name.setIcon(dial);
                 update.setEnabled(false);
                 delete.setEnabled(false);
                 configure.setEnabled(false);
@@ -123,6 +143,7 @@ public class LoaderRow extends JComponent {
                             loader.update();
                             cancel.setEnabled(false);
                             cancel.setVisible(false);
+                            name.setText(loader.getName());
                         } catch (MissingLocationException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         } catch (IOException e) {
@@ -138,7 +159,7 @@ public class LoaderRow extends JComponent {
             }
         }
 
-        );
+                                             );
 
         cancel = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/cancel_16x16.png"), new AbstractAction() {
             @Override
@@ -160,7 +181,7 @@ public class LoaderRow extends JComponent {
             }
         }
 
-        );
+                                             );
         update.setToolTipText("Update the index");
 
         update.setEnabled(false);
@@ -225,6 +246,7 @@ public class LoaderRow extends JComponent {
                 revert.setEnabled(loader.canRevert());
                 configure.setEnabled(true);
                 name.setIcon(null);
+                name.setText(loader.getName());
             }
         });
     }

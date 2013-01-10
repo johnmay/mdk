@@ -11,17 +11,20 @@ import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * HMDBMetabocardsLoader - 26.02.2012 <br/>
- * <p/>
- * Loader parses the information from the Metabocards providing
- * data from the Human Metabolome Database (HMDB). This loader will
- * load a index for Name and Chemical Data (Charge/Formula). Future
- * plans could easily expand this to load Mass and InChI/SMILES indexes.
+ * HMDBMetabocardsLoader - 26.02.2012 <br/> <p/> Loader parses the information
+ * from the Metabocards providing data from the Human Metabolome Database
+ * (HMDB). This loader will load a index for Name and Chemical Data
+ * (Charge/Formula). Future plans could easily expand this to load Mass and
+ * InChI/SMILES indexes.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -41,9 +44,9 @@ public class HMDBMetabocardsLoader extends AbstractMultiIndexResourceLoader {
 
     public HMDBMetabocardsLoader() {
 
-        addIndex("hmdb.names",    new HMDBNameIndex());
+        addIndex("hmdb.names", new HMDBNameIndex());
         addIndex("hmdb.chemdata", new HMDBDataIndex()); // charge, formula, etc.
-    //    addIndex("hmdb.inchi", null); // not yet supported
+        //    addIndex("hmdb.inchi", null); // not yet supported
 
         addRequiredResource("Metabocards",
                             "HMDB Metabocards file",
@@ -89,9 +92,7 @@ public class HMDBMetabocardsLoader extends AbstractMultiIndexResourceLoader {
                 if (matcher.matches()) {
                     write(id, map);
                     id = matcher.group(1);
-                    if ((++count % 50) == 0) {
-                        System.out.println(count);
-                    }
+
                 } else {
                     tag = getTag(line);
                 }
@@ -110,8 +111,16 @@ public class HMDBMetabocardsLoader extends AbstractMultiIndexResourceLoader {
 
             map.get(tag).append(line);
 
+            // update progress every 150 entries
+            if ((++count % 150) == 0) {
+                fireProgressUpdate(location.progress());
+            }
+
+
         }
 
+
+        fireProgressUpdate(1.0d);
         location.close();
         nameWriter.close();
         chemDataWriter.close();
@@ -123,10 +132,10 @@ public class HMDBMetabocardsLoader extends AbstractMultiIndexResourceLoader {
      *
      * @param identifer
      * @param data
-     *
      * @throws IOException
      */
-    public void write(String identifer, Map<String, StringBuffer> data) throws IOException {
+    public void write(String identifer, Map<String, StringBuffer> data) throws
+                                                                        IOException {
 
         if (identifer.isEmpty())
             return;

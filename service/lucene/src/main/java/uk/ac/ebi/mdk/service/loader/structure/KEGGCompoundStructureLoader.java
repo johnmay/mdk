@@ -52,6 +52,8 @@ public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoad
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
         MDLV2000Reader mdlReader = new MDLV2000Reader();
 
+        int count = 0;
+
         while (location.hasNext() && !isCancelled()) {
 
             InputStream in   = location.next();
@@ -69,6 +71,12 @@ public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoad
             } catch (Exception ex) {
                 LOGGER.warn("Could not read entry: " + name);
             }
+
+
+            // update progress every 25 entries
+            if(++count % 25 == 0)
+                fireProgressUpdate(location.progress());
+
         }
 
         writer.close();

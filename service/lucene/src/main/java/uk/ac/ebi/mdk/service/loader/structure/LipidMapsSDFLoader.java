@@ -43,6 +43,7 @@ public class LipidMapsSDFLoader extends AbstractSingleIndexResourceLoader {
 
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
 
+
         while (location.hasNext() && !isCancelled()){
 
             InputStream in   = location.next();
@@ -55,11 +56,15 @@ public class LipidMapsSDFLoader extends AbstractSingleIndexResourceLoader {
             IteratingMDLReader reader = new IteratingMDLReader(in,
                                                                SilentChemObjectBuilder.getInstance(),
                                                                true);
-
+            int count = 0;
             while (reader.hasNext() && !isCancelled()){
                 IAtomContainer molecule = reader.next();
                 String identifier = molecule.getProperty(CDKConstants.TITLE).toString();
                 writer.write(identifier, molecule);
+
+                // update progress every 150 entries
+                if(++count % 150 == 0)
+                    fireProgressUpdate(location.progress());
             }
 
             writer.close();

@@ -38,7 +38,7 @@ public class AbstractIndexWriter {
 
         IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_34,
                                                          index.getAnalyzer());
-        config.setRAMBufferSizeMB(50.0d);
+        config.setRAMBufferSizeMB(25.0d);
         writer = new IndexWriter(index.getDirectory(),
                                  config);
 

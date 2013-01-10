@@ -73,7 +73,8 @@ public class KEGGCompoundLoader
 
         long start = System.currentTimeMillis();
         Map<KEGGField, StringBuilder> map;
-        while ((map = parser.readNext()) != null) {
+        int count = 0;
+        while (!isCancelled() && (map = parser.readNext()) != null) {
 
             String entry = map.get(KEGGField.ENTRY).toString();
             String[] names = map.get(KEGGField.NAME).toString().split(";");
@@ -103,7 +104,6 @@ public class KEGGCompoundLoader
                 if (remarkMatcher.matches()) {
                     for (String accession : remarkMatcher.group(1).trim().split(" ")) {
                         char c = accession.charAt(0);
-                        System.out.println(accession);
                         xref.write(entry, c == 'G'
                                           ? new KeggGlycanIdentifier(accession)
                                           : c == 'D'
@@ -125,11 +125,13 @@ public class KEGGCompoundLoader
 
             }
 
+            if(++count % 200 == 0)
+                fireProgressUpdate(location.progress());
 
         }
         long end = System.currentTimeMillis();
 
-        System.out.println("Load time: " + (end - start) + " ms");
+        System.out.println("Loaded KEGG Compound: " + (end - start) + " ms");
 
         location.close();
 

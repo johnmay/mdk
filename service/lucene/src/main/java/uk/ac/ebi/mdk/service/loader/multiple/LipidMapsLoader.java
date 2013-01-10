@@ -69,13 +69,13 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
             // name data
             String identifier = row[0];
-            String preferred  = row[11];
+            String preferred = row[11];
             String systematic = row[1];
-            String synonyms   = row[2];
+            String synonyms = row[2];
 
             // chemical data
-            String formula    = row[6];
-            String exactmass  = row[5];
+            String formula = row[6];
+            String exactmass = row[5];
 
 
             writer.write(identifier, preferred, systematic, "", "", Arrays.asList(synonyms.split(";")));
@@ -90,13 +90,17 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
         ResourceDirectoryLocation location = getLocation("lipid.maps.folder");
 
+        int count = 0;
         while (location.hasNext()) {
 
             InputStream in = location.next();
             String name = location.getEntryName();
 
-                if (name.endsWith("All.tsv"))
+            if (name.endsWith("All.tsv"))
                 update(in);
+
+            // could give better indicator
+            fireProgressUpdate(location.progress());
 
         }
         location.close();

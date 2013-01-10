@@ -26,11 +26,9 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * ResourceLoader - 20.02.2012 <br/>
- * <p/>
- * Interface describes a resource that can load data from a
- * ResourceLocation into a local file via the {@see update()}
- * method.
+ * ResourceLoader - 20.02.2012 <br/> <p/> Interface describes a resource that
+ * can load data from a ResourceLocation into a local file via the {@see
+ * update()} method.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -41,25 +39,25 @@ public interface ResourceLoader {
 
     /**
      * Determines whether required locations {@see LocationDescription} are
-     * accounted for via various {@see ResourceLocation}s. Each location
-     * is checked with {@see ResourceLocation#isAvailable()} but this may
-     * not guarantee a error free {@see update()}
+     * accounted for via various {@see ResourceLocation}s. Each location is
+     * checked with {@see ResourceLocation#isAvailable()} but this may not
+     * guarantee a error free {@see update()}
      *
      * @return can update resource
      */
     public boolean canUpdate();
 
     /**
-     * Determine whether the loader has files available to back-up (i.e.
-     * {@see update()} has run successfully at least once.
+     * Determine whether the loader has files available to back-up (i.e. {@see
+     * update()} has run successfully at least once.
      *
      * @return can backup loader output
      */
     public boolean canBackup();
 
     /**
-     * Determine whether the loader has files available to revert (i.e.
-     * {@see backup()} has been called).
+     * Determine whether the loader has files available to revert (i.e. {@see
+     * backup()} has been called).
      *
      * @return can revert loader output
      */
@@ -74,45 +72,45 @@ public interface ResourceLoader {
      * loader should be able to 'update'. This method is allowed to throw an
      * {@see IOException} but should be reserved for major failures. There may
      * well be cases where an IOException will be thrown on a single record of
-     * thousands. This should be logged and not thrown (note: logging access
-     * has not currently been implemented).
+     * thousands. This should be logged and not thrown (note: logging access has
+     * not currently been implemented).
      *
-     * @throws IOException              could not load resources
+     * @throws IOException could not load resources
      */
     public void update() throws IOException;
 
     /**
-     * Cancel the update process. This method should inform the update
-     * process to terminate the update as soon as possible. The process
-     * should NOT automatically invoke {@see backup()}, this should be
-     * handled by an update manager.
+     * Cancel the update process. This method should inform the update process
+     * to terminate the update as soon as possible. The process should NOT
+     * automatically invoke {@see backup()}, this should be handled by an update
+     * manager.
      */
     public void cancel();
 
     /**
-     * Reset the cancelled state of the loader. This should be called
-     * by an update manager before invoking the update() method.
+     * Reset the cancelled state of the loader. This should be called by an
+     * update manager before invoking the update() method.
      */
     public void uncancel();
 
     /**
      * Create a backup of this loaders output, this method should be called
-     * before any calls to {@see update()} to ensure that {@see revert()}
-     * can be called should a problem occur. The call to this method before
-     * {@see update()} is not enforced but automatically calling it may be
-     * beneficial in a user-centric update manager.
+     * before any calls to {@see update()} to ensure that {@see revert()} can be
+     * called should a problem occur. The call to this method before {@see
+     * update()} is not enforced but automatically calling it may be beneficial
+     * in a user-centric update manager.
      */
     public void backup();
 
     /**
-     * Revert changes made by the last call to {@see update()}. This method
-     * will replace the current loader output with the backup (if available)
+     * Revert changes made by the last call to {@see update()}. This method will
+     * replace the current loader output with the backup (if available)
      */
     public void revert();
 
     /**
-     * Remove all files and directories produced by this loader including
-     * the backups. This method will render dependant query services useless,
+     * Remove all files and directories produced by this loader including the
+     * backups. This method will render dependant query services useless,
      * therefore if this method is used in a user-interface the application
      * should be prompted whether they really want to 'clean' the loader.
      */
@@ -120,8 +118,8 @@ public interface ResourceLoader {
 
 
     /**
-     * Access a description for this loader. In single index loaders
-     * this method can just return the name of the {@see LuceneIndex}.
+     * Access a description for this loader. In single index loaders this method
+     * can just return the name of the {@see LuceneIndex}.
      *
      * @return name of the loader
      */
@@ -130,11 +128,11 @@ public interface ResourceLoader {
 
     /**
      * Access the {@see LocationDescription}s of the {@see ResourceLocation}s
-     * that are required for the {@see update()} method. The key's in map
-     * should be used when adding {@see ResourceLocation}s in the method
-     * {@see addLocation(String, ResourceLocation)}; This method is primarily
-     * useful for user-interface update managers where the user can change
-     * the location's of the resources
+     * that are required for the {@see update()} method. The key's in map should
+     * be used when adding {@see ResourceLocation}s in the method {@see
+     * addLocation(String, ResourceLocation)}; This method is primarily useful
+     * for user-interface update managers where the user can change the
+     * location's of the resources
      *
      * @return map of location key's to their descriptions
      */
@@ -152,28 +150,34 @@ public interface ResourceLoader {
 
     /**
      * Remove a specified location (note this will not removed the requirement)
+     *
      * @param key
      */
     public void removeLocation(String key);
 
     /**
-     * Access the stored location for the specified key. If the location
-     * does not exist for the specified key the an exception is thrown.
-     * Note: this is a generic method allow multiple return types providing
-     * they extend {@see ResourceLocation}. What this means is that if a
-     * {@see LocationDescription} requires a {@see ResourceFileLocation}
-     * you can call this method assigning to a variable of that type.
-     * {@code ResourceFileLocation location = getLocation("chebi.sdf")}
-     * <p/>
-     * This is not type save so if the returned type does not extend the
-     * generic-type a ClassCastException will be thrown
+     * Access the stored location for the specified key. If the location does
+     * not exist for the specified key the an exception is thrown. Note: this is
+     * a generic method allow multiple return types providing they extend {@see
+     * ResourceLocation}. What this means is that if a {@see
+     * LocationDescription} requires a {@see ResourceFileLocation} you can call
+     * this method assigning to a variable of that type. {@code
+     * ResourceFileLocation location = getLocation("chebi.sdf")} <p/> This is
+     * not type save so if the returned type does not extend the generic-type a
+     * ClassCastException will be thrown
      *
      * @param key key to fetch a location
-     *
      * @return instance extending ResourceLocation
-     *
-     * @throws MissingLocationException thrown if the location has not been added
+     * @throws MissingLocationException thrown if the location has not been
+     *                                  added
      */
-    public <T extends ResourceLocation> T getLocation(String key) throws MissingLocationException;
+    public <T extends ResourceLocation> T getLocation(String key) throws
+                                                                  MissingLocationException;
+
+    /**
+     * Add a listener for progress reports whilst loading. The progress listener
+     * will relieve a message of the current loader state.
+     */
+    public void addProgressListener(ProgressListener listener);
 
 }

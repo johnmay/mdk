@@ -57,9 +57,12 @@ public class ChEBIStructureLoader
         sdfReader.setSkip(true);
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
 
-        while (sdfReader.hasNext()) {
+        fireProgressUpdate("loading primary accessions...");
+        createMap();
+        fireProgressUpdate("done");
 
-            if(isCancelled()) break;
+        int count = 0;
+        while (!isCancelled() && sdfReader.hasNext()) {
 
             IMolecule molecule = (IMolecule) sdfReader.next();
             Map properties = molecule.getProperties();
@@ -72,6 +75,11 @@ public class ChEBIStructureLoader
                     writer.write(getPrimaryIdentifier(identifier), molecule);
                 }
             }
+
+            // update progress
+            if(++count % 150 == 0)
+                fireProgressUpdate(location.progress());
+
 
         }
 

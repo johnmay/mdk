@@ -74,8 +74,9 @@ public class HMDBXMLLoader extends AbstractMultiIndexResourceLoader {
         nameWriter = new DefaultNameIndexWriter(getIndex("hmdb.names"));
         chemDataWriter = new DefaultDataIndexWriter(getIndex("hmdb.chemdata"));
 
+        int count = 0;
 
-        while (location.hasNext()) {
+        while (!isCancelled() && location.hasNext()) {
             InputStream in = null;
             try {
                 in = location.next();
@@ -104,12 +105,19 @@ public class HMDBXMLLoader extends AbstractMultiIndexResourceLoader {
                                          entry.getMolecularFormula());
                 }
 
+                // only update every 150 entries
+                if(++count % 150 == 0)
+                    fireProgressUpdate(location.progress());
+
+
             } catch (XMLStreamException e) {
                 LOGGER.error("unable to read " + location.getEntryName() + ": " + e);
             } finally {
                 in.close();
             }
         }
+
+        fireProgressUpdate(1.0d);
 
         location.close();
         nameWriter.close();

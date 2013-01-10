@@ -1,19 +1,21 @@
 package uk.ac.ebi.mdk.service.loader;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.service.loader.location.DefaultLocationDescription;
+import uk.ac.ebi.mdk.service.ProgressListener;
 import uk.ac.ebi.mdk.service.ResourceLoader;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;
+import uk.ac.ebi.mdk.service.loader.location.DefaultLocationDescription;
 import uk.ac.ebi.mdk.service.location.LocationDescription;
 import uk.ac.ebi.mdk.service.location.ResourceLocation;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * AbstractResourceLoader - 23.02.2012 <br/>
- * <p/>
- * Class descriptions.
+ * AbstractResourceLoader - 23.02.2012 <br/> <p/> Class descriptions.
  *
  * @author johnmay
  * @author $Author: johnmay $ (this version)
@@ -24,6 +26,7 @@ public abstract class AbstractResourceLoader
 
     private static final Logger LOGGER = Logger.getLogger(AbstractResourceLoader.class);
     private Map<String, ResourceLocation> locationMap = new HashMap<String, ResourceLocation>(6);
+    private List<ProgressListener> progressListeners = new ArrayList<ProgressListener>(2);
     private boolean cancelled = false;
 
     private Map<String, LocationDescription> requiredResources = new HashMap<String, LocationDescription>();
@@ -78,7 +81,7 @@ public abstract class AbstractResourceLoader
         locationMap.remove(key);
     }
 
-    public boolean hasLocation(String key){
+    public boolean hasLocation(String key) {
         return locationMap.containsKey(key) && locationMap.get(key).isAvailable();
     }
 
@@ -86,7 +89,8 @@ public abstract class AbstractResourceLoader
      * @inheritDoc
      */
     @Override
-    public <T extends ResourceLocation> T getLocation(String key) throws MissingLocationException {
+    public <T extends ResourceLocation> T getLocation(String key) throws
+                                                                  MissingLocationException {
         if (locationMap.containsKey(key)) {
             return (T) locationMap.get(key);
         }
@@ -112,6 +116,37 @@ public abstract class AbstractResourceLoader
         return true;
     }
 
+    @Override public void addProgressListener(ProgressListener listener) {
+        if (listener == null)
+            throw new IllegalArgumentException("null progress listener");
+        progressListeners.add(listener);
+    }
+
+    /**
+     * Sends the progress message, note the message is sent on the Event
+     * Dispatch Thread (EDT).
+     *
+     * @param message a message for the progress listeners
+     */
+    protected final void fireProgressUpdate(final String message) {
+        for (final ProgressListener listener : progressListeners) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override public void run() {
+                    listener.progressed(message);
+                }
+            });
+        }
+    }
+
+    /**
+     * Updates the progress with the current percentage progress. Note - this
+     * method sends the message on the Event Dispatch Thread (EDT)
+     *
+     * @param progress progress value between 0.0 and 1.0.
+     */
+    protected final void fireProgressUpdate(double progress) {
+        fireProgressUpdate(String.format("%.2f%%", progress * 100));
+    }
 
     /**
      * @inheritDoc
@@ -131,9 +166,10 @@ public abstract class AbstractResourceLoader
 
     /**
      * Determine whether the update has been cancelled
+     *
      * @return
      */
-    public synchronized boolean isCancelled(){
+    public synchronized boolean isCancelled() {
         return cancelled;
     }
 
@@ -141,7 +177,7 @@ public abstract class AbstractResourceLoader
      * Reset the cancelled state (should be called before update)
      */
     @Override
-    public void uncancel(){
+    public void uncancel() {
         cancelled = false;
     }
 

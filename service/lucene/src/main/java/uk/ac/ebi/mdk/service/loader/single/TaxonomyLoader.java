@@ -9,9 +9,9 @@ import org.apache.lucene.util.Version;
 import uk.ac.ebi.mdk.service.index.other.TaxonomyIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
-import uk.ac.ebi.mdk.service.query.taxonomy.TaxonomyQueryService;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 import uk.ac.ebi.mdk.service.query.name.NameService;
+import uk.ac.ebi.mdk.service.query.taxonomy.TaxonomyQueryService;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -19,9 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * TaxonomyLoader - 23.02.2012 <br/>
- * <p/>
- * Class descriptions.
+ * TaxonomyLoader - 23.02.2012 <br/> <p/> Class descriptions.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -52,11 +50,11 @@ public class TaxonomyLoader
         IndexWriter writer = new IndexWriter(getIndex().getDirectory(),
                                              new IndexWriterConfig(Version.LUCENE_34, getIndex().getAnalyzer()));
 
-        while (scanner.hasNext()) {
+        int count = 0;
+
+        while (!isCancelled() && scanner.hasNext()) {
             String entry = scanner.nextLine();
             Matcher matcher = ENTRY.matcher(entry);
-
-            if(isCancelled()) break;
 
             if (matcher.matches()) {
 
@@ -79,23 +77,27 @@ public class TaxonomyLoader
                 writer.addDocument(document);
 
             }
+
+            if (++count % 25 == 0)
+                fireProgressUpdate(species.progress());
+
         }
 
-
+        fireProgressUpdate(1.0d);
         species.close();
         writer.close();
 
 
     }
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         long start = System.currentTimeMillis();
         TaxonomyLoader loader = new TaxonomyLoader();
         System.out.println(loader.canUpdate());
         System.out.println(loader.canBackup() || loader.canRevert());
         System.out.println(loader.canRevert());
         long end = System.currentTimeMillis();
-        System.out.println(end-start);
+        System.out.println(end - start);
     }
 
 }

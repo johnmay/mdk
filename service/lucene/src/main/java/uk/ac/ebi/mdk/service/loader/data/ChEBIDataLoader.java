@@ -59,6 +59,7 @@ public class ChEBIDataLoader extends AbstractChEBILoader {
         Multimap<String, DataValue> values = HashMultimap.create();
 
         String[] row = null;
+        int count = 0;
         while((row = csv.readNext()) != null){
 
             // user cancelled
@@ -70,6 +71,9 @@ public class ChEBIDataLoader extends AbstractChEBILoader {
             String source = row[sourceindex];
 
             values.put(id, new DataValue(type, data, source));
+
+            if(++count % 200 == 0)
+                fireProgressUpdate(location.progress());
 
         }
 
