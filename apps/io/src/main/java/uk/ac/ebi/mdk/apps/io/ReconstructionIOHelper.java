@@ -7,10 +7,32 @@ import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.mdk.io.*;
+import uk.ac.ebi.mdk.io.AnnotationDataInputStream;
+import uk.ac.ebi.mdk.io.AnnotationDataOutputStream;
+import uk.ac.ebi.mdk.io.AnnotationInput;
+import uk.ac.ebi.mdk.io.AnnotationOutput;
+import uk.ac.ebi.mdk.io.EntityDataInputStream;
+import uk.ac.ebi.mdk.io.EntityDataOutputStream;
+import uk.ac.ebi.mdk.io.EntityInput;
+import uk.ac.ebi.mdk.io.EntityOutput;
+import uk.ac.ebi.mdk.io.IOConstants;
+import uk.ac.ebi.mdk.io.ObservationDataInputStream;
+import uk.ac.ebi.mdk.io.ObservationDataOutputStream;
+import uk.ac.ebi.mdk.io.ObservationInput;
+import uk.ac.ebi.mdk.io.ObservationOutput;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Properties;
+import java.util.UUID;
 
 /**
  * @author John May
@@ -19,10 +41,39 @@ public class ReconstructionIOHelper {
 
     private static final Logger LOGGER = Logger.getLogger(ReconstructionIOHelper.class);
 
-    public static void write(Reconstruction reconstruction, File file) throws IOException {
+
+    public static boolean matchingUUID(Reconstruction reconstruction, File file) throws
+                                                                                 IOException {
+        if (!file.getName().endsWith(".mr"))
+            throw new IllegalArgumentException("Expected '.mr' folder");
+
+        File info = new File(file, "info.properties");
+        if (!info.exists())
+            return true;
+
+        Properties properties = new Properties();
+        properties.load(new FileReader(info));
+        String uuidString = properties.getProperty("uuid");
+
+        // info exists but no UUID -> say we match just incases
+        if (uuidString == null)
+            return false;
+
+        UUID uuid = UUID.fromString(uuidString);
+
+        // check whether the UUIDs are equal
+        return uuid.equals(reconstruction.uuid());
+
+    }
+
+    public static void write(Reconstruction reconstruction, File file) throws
+                                                                       IOException {
+
+        if (!matchingUUID(reconstruction, file))
+            throw new IOException("cannot overwrite another reconstruction, please delete existing reconstruction first");
 
         reconstruction.setContainer(file);
-        file.mkdir();
+        file.mkdirs();
 
         IntegerPreference bufferPref = DomainPreferences.getInstance().getPreference("BUFFER_SIZE");
 
@@ -45,7 +96,9 @@ public class ReconstructionIOHelper {
             version = value == null ? version : new Version(value);
         }
 
+        // XXX: update SaveAs also..
         properties.put("chemet.version", version.toString());
+        properties.put("uuid", reconstruction.uuid().toString());
         FileWriter writer = new FileWriter(info);
         properties.store(writer, "Project info");
         writer.close();
@@ -77,7 +130,8 @@ public class ReconstructionIOHelper {
 
     }
 
-    public static Reconstruction read(File file) throws IOException, ClassNotFoundException {
+    public static Reconstruction read(File file) throws IOException,
+                                                        ClassNotFoundException {
 
         File entities = new File(file, "entities");
         File annotations = new File(file, "entity-annotations");
@@ -90,7 +144,8 @@ public class ReconstructionIOHelper {
         String stringVersion = properties.getProperty("chemet.version");
         in.close();
 
-        Version version = stringVersion == null ? IOConstants.VERSION : new Version(stringVersion);
+        Version version = stringVersion == null ? IOConstants.VERSION
+                                                : new Version(stringVersion);
 
         // open data input stream
         DataInputStream annotationStream = new DataInputStream(new BufferedInputStream(new FileInputStream(annotations), 2048));

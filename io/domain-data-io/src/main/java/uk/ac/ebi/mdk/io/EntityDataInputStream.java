@@ -4,8 +4,9 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.mdk.io.domain.MetaboliteDataReader;
 import uk.ac.ebi.mdk.io.domain.ReactionDataReader;
-import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_0_9;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataReader;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_1_3_3;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataReader;
 import uk.ac.ebi.mdk.io.domain.TransferRNADataReader;
 import uk.ac.ebi.mdk.io.domain.ChromosomeDataReader;
@@ -79,7 +80,8 @@ public class EntityDataInputStream
         add(Chromosome.class, new ChromosomeDataReader(in, factory, this));
         add(Genome.class, new GenomeDataReader(in, factory, this));
 
-        add(Reconstruction.class, new ReconstructionDataReader(in, factory, identifierInput, this));
+        add(Reconstruction.class, new ReconstructionDataReader_0_9(in, factory, identifierInput, this));
+        add(Reconstruction.class, new ReconstructionDataReader_1_3_3(in, factory, identifierInput, this));
 
     }
 

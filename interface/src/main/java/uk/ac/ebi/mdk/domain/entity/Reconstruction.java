@@ -29,11 +29,10 @@ import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.UUID;
 
 /**
- * Reconstruction - 12.03.2012 <br/>
- * <p/>
- * Class descriptions.
+ * Reconstruction - 12.03.2012 <br/> <p/> Class descriptions.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -42,6 +41,13 @@ import java.util.Collection;
 public interface Reconstruction extends AnnotatedEntity {
 
     public static final String RECONSTRUCTION_FILE_EXTENSION = ".mr";
+
+    /**
+     * Access the universal unique identifier for the reconstruction.
+     *
+     * @return the reconstructions UUID
+     */
+    public UUID uuid();
 
     public Genome getGenome();
 

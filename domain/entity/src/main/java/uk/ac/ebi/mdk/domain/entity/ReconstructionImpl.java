@@ -47,6 +47,7 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -94,6 +95,9 @@ public class ReconstructionImpl
     // s matrix
     private StoichiometricMatrix matrix;
 
+    /* universal unique identifier -> non modifiable */
+    private final UUID uuid;
+
 
     /**
      * Constructor mainly used for creating a new ReconstructionImpl
@@ -101,9 +105,11 @@ public class ReconstructionImpl
      * @param id  The identifier of the project
      * @param org The organism identifier
      */
-    public ReconstructionImpl(ReconstructionIdentifier id,
+    public ReconstructionImpl(UUID uuid,
+                              ReconstructionIdentifier id,
                               Taxonomy org) {
         super(id, org.getCode(), org.getCommonName());
+        this.uuid = uuid;
         taxonomy = org;
         reactions = new ReactionList();
         metabolome = new MetabolomeImpl();
@@ -115,6 +121,7 @@ public class ReconstructionImpl
 
     public ReconstructionImpl(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
+        this.uuid = UUID.randomUUID();
         reactions = new ReactionList();
         metabolome = new MetabolomeImpl();
         products = new ProductCollection();
@@ -127,6 +134,7 @@ public class ReconstructionImpl
     * Default constructor
     */
     public ReconstructionImpl() {
+        this.uuid = UUID.randomUUID();
         metabolome = new MetabolomeImpl();
         reactions = new ReactionList();
         genome = new GenomeImplementation();
@@ -139,6 +147,10 @@ public class ReconstructionImpl
         return new ReconstructionImpl();
     }
 
+
+    @Override public UUID uuid() {
+        return uuid;
+    }
 
     /**
      * Access the taxonmy of this reconstruction

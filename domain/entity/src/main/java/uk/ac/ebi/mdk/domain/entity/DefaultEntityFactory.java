@@ -22,10 +22,13 @@ import uk.ac.ebi.mdk.domain.entity.collection.ChromosomeImplementation;
 import uk.ac.ebi.mdk.domain.entity.collection.GenomeImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.*;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -78,6 +81,14 @@ public class DefaultEntityFactory
         return DefaultEntityFactoryHolder.INSTANCE;
     }
 
+
+    @Override public Reconstruction newReconstruction() {
+        return new ReconstructionImpl();
+    }
+
+    @Override public Reconstruction newReconstruction(UUID uuid) {
+        return new ReconstructionImpl(uuid, new ReconstructionIdentifier(), new Taxonomy());
+    }
 
     /**
      * @inheritDoc

@@ -3,11 +3,12 @@ package uk.ac.ebi.mdk.io;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataWriter;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataWriter_1_3_3;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataWriter;
 import uk.ac.ebi.mdk.io.domain.TransferRNADataWriter;
 import uk.ac.ebi.mdk.io.domain.MetaboliteDataWriter;
 import uk.ac.ebi.mdk.io.domain.ReactionDataWriter;
-import uk.ac.ebi.mdk.io.domain.ReconstructionDataWriter;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataWriter_0_9;
 import uk.ac.ebi.mdk.io.domain.ChromosomeDataWriter;
 import uk.ac.ebi.mdk.io.domain.GeneDataWriter;
 import uk.ac.ebi.mdk.io.domain.GenomeDataWriter;
@@ -80,7 +81,8 @@ public class EntityDataOutputStream
         add(Chromosome.class, new ChromosomeDataWriter(out, this));
         add(Genome.class, new GenomeDataWriter(out, this));
 
-        add(Reconstruction.class, new ReconstructionDataWriter(out, identifierOutput,  this));
+        add(Reconstruction.class, new ReconstructionDataWriter_0_9(out, identifierOutput,  this));
+        add(Reconstruction.class, new ReconstructionDataWriter_1_3_3(out, identifierOutput,  this));
 
     }
 

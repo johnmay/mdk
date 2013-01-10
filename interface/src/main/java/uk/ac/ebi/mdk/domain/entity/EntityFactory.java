@@ -20,6 +20,8 @@ package uk.ac.ebi.mdk.domain.entity;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 
+import java.util.UUID;
+
 
 /**
  * Interface for a factory that can build annotated entities.
@@ -27,6 +29,19 @@ import uk.ac.ebi.mdk.domain.entity.Entity;
  * @author johnmay
  */
 public interface EntityFactory {
+
+    /**
+     * Create a new reconstruction with a random UUID
+     * @return reconstruction instance
+     */
+    public Reconstruction newReconstruction();
+
+    /**
+     * Create a new reconstruction with the specified UUID
+     * @param uuid the UUID to use for the reconstruction
+     * @return reconstruction instance
+     */
+    public Reconstruction newReconstruction(UUID uuid);
 
     /**
      * Build an entity of defined class type
