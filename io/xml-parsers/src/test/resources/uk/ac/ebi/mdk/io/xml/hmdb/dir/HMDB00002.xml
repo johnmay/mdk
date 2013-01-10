@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metabolite>
+  <version>3.0</version>
+  <creation_date>2005-11-16 08:48:42 -0700</creation_date>
+  <update_date>2009-08-06 05:58:08 -0600</update_date>
+  <accession>HMDB00002</accession>
+  <secoundary_accessions>
+  </secoundary_accessions>
+  <common_name>1,3-Diaminopropane</common_name>
+  <description>1,3-Diaminopropane is a stable, flammable and highly hydroscopic fluid.  It is a polyamine that is normally quite toxic if swallowed, inhaled or absorbed through the skin.  It is a catabolic byproduct of spermidine.  It is also a precursor in the enzymatic synthesis of beta-alanine.  1, 3-Diaminopropane is involved in the arginine/proline metabolic pathways and the beta-alanine metabolic pathway.</description>
+  <synonyms>
+    <synonym>1,3-Diamino-n-propane</synonym>
+    <synonym>1,3-Propylenediamine</synonym>
+    <synonym>1,3-Trimethylenediamine</synonym>
+    <synonym>1,3-propanediamine</synonym>
+    <synonym>3-Aminopropylamine</synonym>
+    <synonym>Propane-1,3-diamine</synonym>
+    <synonym>Trimethylenediamine</synonym>
+    <synonym>a,w-Propanediamine</synonym>
+  </synonyms>
+  <chemical_formula>C3H10N2</chemical_formula>
+  <average_molecular_weight>74.1249</average_molecular_weight>
+  <monisotopic_moleculate_weight>74.08439833</monisotopic_moleculate_weight>
+  <iupac_name>propane-1,3-diamine</iupac_name>
+  <traditional_iupac>1,3-diaminopropane</traditional_iupac>
+  <cas_registry_number>109-76-2</cas_registry_number>
+  <smiles>NCCCN</smiles>
+  <inchi>InChI=1S/C3H10N2/c4-2-1-3-5/h1-5H2</inchi>
+  <inchkey>InChIKey=XFNJVJPLKCPIBV-UHFFFAOYSA-N</inchkey>
+  <taxonomy>
+    <kingdom>Organic Compounds</kingdom>
+    <super_class>Aliphatic Acyclic Compounds</super_class>
+    <class>Alkylamines</class>
+    <other_descriptors>
+      <descriptor>Alkylamines</descriptor>
+      <descriptor>alkane-alpha,omega-diamine(ChEBI)</descriptor>
+    </other_descriptors>
+    <substituents>
+      <substitient>N/A</substitient>
+    </substituents>
+    <direct_parent>Polyamines</direct_parent>
+  </taxonomy>
+  <ontology>
+    <status>detected and quantified</status>
+    <origins>
+      <origin>Endogenous</origin>
+    </origins>
+    <biofunctions>
+    </biofunctions>
+    <applications>
+    </applications>
+    <cellular_locations>
+    </cellular_locations>
+  </ontology>
+  <melting_point>-12 C</melting_point>
+  <formal_charge>0</formal_charge>
+  <physiological_charge>2</physiological_charge>
+  <state>Liquid</state>
+  <experimental_water_solubility/>
+  <experimental_logp>-1.43 [HANSCH,C ET AL. (1995)]</experimental_logp>
+  <predicted_properties>
+    <water_solubility/>
+    <logp>
+      <chemaxon>-1.36</chemaxon>
+      <alopgs>0.77</alopgs>
+    </logp>
+    <logs>0.77</logs>
+    <pka/>
+    <hydrogen_acceptor_count>2</hydrogen_acceptor_count>
+    <hydrogen_donar_count>2</hydrogen_donar_count>
+    <polar_surface_area>52.04</polar_surface_area>
+    <rotatable_bond_count>2</rotatable_bond_count>
+    <refractivity>22.7</refractivity>
+    <polarizability>9.1</polarizability>
+  </predicted_properties>
+  <spectra>
+    <spectrum_id>156</spectrum_id>
+    <spectrum_id>66</spectrum_id>
+    <spectrum_id>4</spectrum_id>
+    <spectrum_id>5</spectrum_id>
+    <spectrum_id>6</spectrum_id>
+    <spectrum_id>2508</spectrum_id>
+    <spectrum_id>2509</spectrum_id>
+    <spectrum_id>2510</spectrum_id>
+    <spectrum_id>2511</spectrum_id>
+    <spectrum_id>2512</spectrum_id>
+    <spectrum_id>2513</spectrum_id>
+    <spectrum_id>2514</spectrum_id>
+    <spectrum_id>2515</spectrum_id>
+    <spectrum_id>2516</spectrum_id>
+    <spectrum_id>2517</spectrum_id>
+    <spectrum_id>2518</spectrum_id>
+    <spectrum_id>2519</spectrum_id>
+    <spectrum_id>15</spectrum_id>
+  </spectra>
+  <biofluid_locations>
+    <biofluid>Blood</biofluid>
+    <biofluid>Urine</biofluid>
+  </biofluid_locations>
+  <tissue_locations>
+  </tissue_locations>
+  <pathways>
+    <pathway>
+      <name>Beta-Alanine Metabolism</name>
+      <smpdb_id>SMP00007</smpdb_id>
+      <kegg_map_id>map00410</kegg_map_id>
+    </pathway>
+  </pathways>
+  <normal_concentrations>
+    <concentration>
+      <biofluid>Blood</biofluid>
+      <concentration_value>0.04 +/- 0.03</concentration_value>
+      <concentration_units>uM</concentration_units>
+      <subject_age>Adult:&gt;18 yrs old</subject_age>
+      <subject_sex>Female</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+        <pubmed_id>17668437</pubmed_id>
+        <reference>17668437</reference>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Urine</biofluid>
+      <concentration_value>0.16 (0.02-0.69)</concentration_value>
+      <concentration_units>umol/mmol creatinine</concentration_units>
+      <subject_age>Adult:&gt;18 yrs old</subject_age>
+      <subject_sex>Both</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+        <pubmed_id>3757213</pubmed_id>
+        <reference>3757213</reference>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Urine</biofluid>
+      <concentration_value>2.55 (0.18-5.85)</concentration_value>
+      <concentration_units>umol/mmol creatinine</concentration_units>
+      <subject_age>Adult:&gt;18 yrs old</subject_age>
+      <subject_sex>Both</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+        <pubmed_id>9464484</pubmed_id>
+        <reference>9464484</reference>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Urine</biofluid>
+      <concentration_value>0.015</concentration_value>
+      <concentration_units>umol/mmol creatinine</concentration_units>
+      <subject_age>Adult:&gt;18 yrs old</subject_age>
+      <subject_sex>Both</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+      </references>
+    </concentration>
+  </normal_concentrations>
+  <abnormal_concentrations>
+    <concentration>
+      <biofluid>Blood</biofluid>
+      <concentration_value>0.13 +/- 0.13</concentration_value>
+      <concentration_units>uM</concentration_units>
+      <patient_age>Adult:&gt;18 yrs old</patient_age>
+      <patient_sex>Female</patient_sex>
+      <patient_information>Breast cancer </patient_information>
+      <references>
+        <pubmed_id>17668437</pubmed_id>
+        <reference>17668437</reference>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Urine</biofluid>
+      <concentration_value>0.96 (0.12-2.11)</concentration_value>
+      <concentration_units>umol/mmol creatinine</concentration_units>
+      <patient_age>Adult:&gt;18 yrs old</patient_age>
+      <patient_sex>Both</patient_sex>
+      <patient_information>Leukemia</patient_information>
+      <comment>Initial stage of leukemia
+</comment>
+      <references>
+        <pubmed_id>9464484</pubmed_id>
+        <reference>9464484</reference>
+      </references>
+    </concentration>
+  </abnormal_concentrations>
+  <diseases>
+    <disease>
+      <name>Perillyl alcohol administration for cancer treatment</name>
+      <omim_id/>
+      <references>
+        <pumed_id>17668437</pumed_id>
+        <pumed_id>14569192</pumed_id>
+        <pumed_id>10379660</pumed_id>
+        <pumed_id>15607313</pumed_id>
+        <pumed_id>17403619</pumed_id>
+      </references>
+    </disease>
+    <disease>
+      <name>Leukemia</name>
+      <omim_id/>
+      <references>
+        <pumed_id>11129502</pumed_id>
+        <pumed_id>7482520</pumed_id>
+        <pumed_id>1184685</pumed_id>
+        <pumed_id>15911239</pumed_id>
+        <pumed_id>9464484</pumed_id>
+      </references>
+    </disease>
+  </diseases>
+  <drugbank_id/>
+  <phenol_explorer_compound_id/>
+  <phenol_explorer_metabolite_id/>
+  <foodb_id>FDB005274</foodb_id>
+  <knapsack_id>C00007404</knapsack_id>
+  <chemspider_id>415</chemspider_id>
+  <kegg_id>C00986</kegg_id>
+  <biocyc_id>CPD-313</biocyc_id>
+  <bigg_id>36543</bigg_id>
+  <wikipidia/>
+  <nugowiki>HMDB00002</nugowiki>
+  <metagene/>
+  <metlin_id>5081</metlin_id>
+  <pubchem_compound_id>428</pubchem_compound_id>
+  <het_id>13D</het_id>
+  <chebi_id>15725</chebi_id>
+  <synthesis_reference>Takayanagi, Yasuyuki; Oohinata, Takahiro.  Preparation of 1,3-diaminopropane from acrylonitrile and ammonia.    Jpn. Kokai Tokkyo Koho  (1994),     5 pp.</synthesis_reference>
+  <general_references>
+    <pubmed_id>293750</pubmed_id>
+    <pubmed_id>1150841</pubmed_id>
+    <pubmed_id>3308180</pubmed_id>
+    <pubmed_id>3757213</pubmed_id>
+    <pubmed_id>5096953</pubmed_id>
+    <pubmed_id>6324613</pubmed_id>
+    <pubmed_id>6713628</pubmed_id>
+    <pubmed_id>8624793</pubmed_id>
+    <pubmed_id>9226558</pubmed_id>
+    <pubmed_id>9464484</pubmed_id>
+  </general_references>
+  <protein_associations>
+    <protein>
+      <protein_id>5627</protein_id>
+      <name>Amiloride-sensitive amine oxidase [copper-containing]</name>
+      <uniprot_id>P19801</uniprot_id>
+      <gene_name>ABP1</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>6322</protein_id>
+      <name>Ornithine decarboxylase</name>
+      <uniprot_id>P11926</uniprot_id>
+      <gene_name>ODC1</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5657</protein_id>
+      <name>S-adenosylmethionine decarboxylase proenzyme</name>
+      <uniprot_id>P17707</uniprot_id>
+      <gene_name>AMD1</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5449</protein_id>
+      <name>Spermine synthase</name>
+      <uniprot_id>P52788</uniprot_id>
+      <gene_name>SMS</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5451</protein_id>
+      <name>Deoxyhypusine synthase</name>
+      <uniprot_id>P49366</uniprot_id>
+      <gene_name>DHPS</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5631</protein_id>
+      <name>Retina-specific copper amine oxidase</name>
+      <uniprot_id>O75106</uniprot_id>
+      <gene_name>AOC2</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5630</protein_id>
+      <name>Membrane primary amine oxidase</name>
+      <uniprot_id>Q16853</uniprot_id>
+      <gene_name>AOC3</gene_name>
+      <type>enzyme</type>
+    </protein>
+  </protein_associations>
+</metabolite>

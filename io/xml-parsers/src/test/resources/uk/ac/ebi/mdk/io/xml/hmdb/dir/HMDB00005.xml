@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metabolite>
+  <version>3.0</version>
+  <creation_date>2005-11-16 08:48:42 -0700</creation_date>
+  <update_date>2012-05-15 05:06:47 -0600</update_date>
+  <accession>HMDB00005</accession>
+  <secoundary_accessions>
+    <accession>HMDB06544</accession>
+  </secoundary_accessions>
+  <common_name>2-Ketobutyric acid</common_name>
+  <description>2-Ketobutyric acid is a substance that is involved in the metabolism of many amino acids (glycine, methionine, valine, leucine, serine, threonine, isoleucine) as well as propanoate metabolism and C-5 branched dibasic acid metabolism.  More specifically, alpha-ketobutyric acid is a product of the lysis of cystathionine. It is also one of the degradation products of threonine. It can be converted to propionyl-CoA (and subsequently methylmalonyl CoA, which can be converted to succinyl CoA, a citric acid cycle intermediate), and thus enter the citric acid cycle. </description>
+  <synonyms>
+    <synonym>2-Ketobutanoate</synonym>
+    <synonym>2-Ketobutanoic acid</synonym>
+    <synonym>2-Ketobutyrate</synonym>
+    <synonym>2-Oxo-Butanoate</synonym>
+    <synonym>2-Oxo-Butanoic acid</synonym>
+    <synonym>2-Oxo-n-butyrate</synonym>
+    <synonym>2-Oxo-n-butyric acid</synonym>
+    <synonym>2-Oxobutanoate</synonym>
+    <synonym>2-Oxobutanoic acid</synonym>
+    <synonym>2-Oxobutyrate</synonym>
+    <synonym>2-Oxobutyric acid</synonym>
+    <synonym>2-oxo-Butyrate</synonym>
+    <synonym>2-oxo-Butyric acid</synonym>
+    <synonym>3-Methylpyruvate</synonym>
+    <synonym>3-Methylpyruvic acid</synonym>
+    <synonym>a-Ketobutyrate</synonym>
+    <synonym>a-Ketobutyric acid</synonym>
+    <synonym>a-Oxo-n-butyrate</synonym>
+    <synonym>a-Oxo-n-butyric acid</synonym>
+    <synonym>a-Oxobutyrate</synonym>
+    <synonym>a-Oxobutyric acid</synonym>
+    <synonym>a-keto-n-Butyrate</synonym>
+    <synonym>a-keto-n-Butyric acid</synonym>
+    <synonym>alpha-Keto-n-butyrate</synonym>
+    <synonym>alpha-Keto-n-butyric acid</synonym>
+    <synonym>alpha-Ketobutric acid</synonym>
+    <synonym>alpha-Ketobutyrate</synonym>
+    <synonym>alpha-Ketobutyric acid</synonym>
+    <synonym>alpha-Oxo-n-butyrate</synonym>
+    <synonym>alpha-Oxo-n-butyric acid</synonym>
+    <synonym>alpha-Oxobutyrate</synonym>
+    <synonym>alpha-Oxobutyric acid</synonym>
+    <synonym>methyl-Pyruvate</synonym>
+    <synonym>methyl-Pyruvic acid</synonym>
+    <synonym>propionyl-formate</synonym>
+    <synonym>propionyl-formic acid</synonym>
+  </synonyms>
+  <chemical_formula>C4H6O3</chemical_formula>
+  <average_molecular_weight>102.0886</average_molecular_weight>
+  <monisotopic_moleculate_weight>102.031694058</monisotopic_moleculate_weight>
+  <iupac_name>2-oxobutanoic acid</iupac_name>
+  <traditional_iupac>2-oxobutanoic acid</traditional_iupac>
+  <cas_registry_number>600-18-0</cas_registry_number>
+  <smiles>CCC(=O)C(O)=O</smiles>
+  <inchi>InChI=1S/C4H6O3/c1-2-3(5)4(6)7/h2H2,1H3,(H,6,7)</inchi>
+  <inchkey>InChIKey=TYEYBOSBBBHJIV-UHFFFAOYSA-N</inchkey>
+  <taxonomy>
+    <kingdom>Organic Compounds</kingdom>
+    <super_class>Organic Acids and Derivatives</super_class>
+    <class>Keto-Acids and Derivatives</class>
+    <other_descriptors>
+      <descriptor>2-oxo monocarboxylic acid(ChEBI)</descriptor>
+      <descriptor>Aliphatic Acyclic Compounds</descriptor>
+      <descriptor>Alpha Keto-Acids and Derivatives</descriptor>
+      <descriptor>Organic Compounds</descriptor>
+      <descriptor>Oxo fatty acids(KEGG)</descriptor>
+      <descriptor>Oxo fatty acids(Lipidmaps)</descriptor>
+      <descriptor>Straight Chain Fatty Acids</descriptor>
+      <descriptor>short-chain fatty acid(ChEBI)</descriptor>
+      <descriptor>straight-chain saturated fatty acid(ChEBI)</descriptor>
+    </other_descriptors>
+    <substituents>
+      <substitient>carboxylic acid</substitient>
+      <substitient>ketone</substitient>
+    </substituents>
+    <direct_parent>Short-chain Keto Acids and Derivatives</direct_parent>
+  </taxonomy>
+  <ontology>
+    <status>detected and quantified</status>
+    <origins>
+      <origin>Endogenous</origin>
+    </origins>
+    <biofunctions>
+      <biofunction>Component of Cysteine metabolism</biofunction>
+      <biofunction>Component of Glycine, serine and threonine metabolism</biofunction>
+      <biofunction>Component of Methionine metabolism</biofunction>
+      <biofunction>Component of Nitrogen metabolism</biofunction>
+      <biofunction>Component of Selenoamino acid metabolism</biofunction>
+    </biofunctions>
+    <applications>
+    </applications>
+    <cellular_locations>
+    </cellular_locations>
+  </ontology>
+  <melting_point>33 C</melting_point>
+  <formal_charge>0</formal_charge>
+  <physiological_charge>-1</physiological_charge>
+  <state>Solid</state>
+  <experimental_water_solubility>119 mg/mL [HMP experimental]</experimental_water_solubility>
+  <experimental_logp/>
+  <predicted_properties>
+    <water_solubility>119 mg/mL [HMP experimental]</water_solubility>
+    <logp>
+      <chemaxon>0.77</chemaxon>
+      <alopgs>-0.11</alopgs>
+    </logp>
+    <logs>-0.11</logs>
+    <pka/>
+    <hydrogen_acceptor_count>3</hydrogen_acceptor_count>
+    <hydrogen_donar_count>1</hydrogen_donar_count>
+    <polar_surface_area>54.37</polar_surface_area>
+    <rotatable_bond_count>2</rotatable_bond_count>
+    <refractivity>22.6</refractivity>
+    <polarizability>9.2</polarizability>
+  </predicted_properties>
+  <spectra>
+    <spectrum_id>67</spectrum_id>
+    <spectrum_id>7</spectrum_id>
+    <spectrum_id>8</spectrum_id>
+    <spectrum_id>9</spectrum_id>
+    <spectrum_id>2520</spectrum_id>
+    <spectrum_id>2521</spectrum_id>
+    <spectrum_id>2522</spectrum_id>
+    <spectrum_id>6550</spectrum_id>
+    <spectrum_id>6551</spectrum_id>
+    <spectrum_id>6557</spectrum_id>
+    <spectrum_id>16</spectrum_id>
+  </spectra>
+  <biofluid_locations>
+    <biofluid>Blood</biofluid>
+    <biofluid>Cerebrospinal Fluid</biofluid>
+    <biofluid>Urine</biofluid>
+  </biofluid_locations>
+  <tissue_locations>
+  </tissue_locations>
+  <pathways>
+    <pathway>
+      <name>Glycine and Serine Metabolism</name>
+      <smpdb_id>SMP00004</smpdb_id>
+      <kegg_map_id>map00260</kegg_map_id>
+    </pathway>
+    <pathway>
+      <name>Homocysteine Degradation</name>
+      <smpdb_id>SMP00455</smpdb_id>
+      <kegg_map_id/>
+    </pathway>
+    <pathway>
+      <name>Methionine Metabolism</name>
+      <smpdb_id>SMP00033</smpdb_id>
+      <kegg_map_id>map00270</kegg_map_id>
+    </pathway>
+    <pathway>
+      <name>Threonine and 2-Oxobutanoate Degradation</name>
+      <smpdb_id>SMP00452</smpdb_id>
+      <kegg_map_id/>
+    </pathway>
+  </pathways>
+  <normal_concentrations>
+    <concentration>
+      <biofluid>Blood</biofluid>
+      <concentration_value>3.33 +/- 5.00</concentration_value>
+      <concentration_units>uM</concentration_units>
+      <subject_age>Adult:&gt;18 yrs old</subject_age>
+      <subject_sex>Both</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+        <pubmed_id>3918815</pubmed_id>
+        <reference>3918815</reference>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Blood</biofluid>
+      <concentration_value>9.4 (3.4-15.4)</concentration_value>
+      <concentration_units>uM</concentration_units>
+      <subject_age>Adult:&gt;18 yrs old</subject_age>
+      <subject_sex>Both</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+        <pubmed_id>9869358</pubmed_id>
+        <reference>9869358</reference>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Blood</biofluid>
+      <concentration_value>8.6 (6.0-11.2)</concentration_value>
+      <concentration_units>uM</concentration_units>
+      <subject_age>Children:1-13 yrs old</subject_age>
+      <subject_sex>Both</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+        <pubmed_id>6704500</pubmed_id>
+        <reference>6704500</reference>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Cerebrospinal Fluid</biofluid>
+      <concentration_value>4.8 (3.4-6.2)</concentration_value>
+      <concentration_units>uM</concentration_units>
+      <subject_age>Children:1-13 yrs old</subject_age>
+      <subject_sex>Both</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+        <pubmed_id>6704500</pubmed_id>
+        <reference>6704500</reference>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Urine</biofluid>
+      <concentration_value>0.39 (0.05-2.2)</concentration_value>
+      <concentration_units>umol/mmol creatinine</concentration_units>
+      <subject_age>Adult:&gt;18 yrs old</subject_age>
+      <subject_sex>Male</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+        <pubmed_id>9869358</pubmed_id>
+        <reference>9869358</reference>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Urine</biofluid>
+      <concentration_value>0.13 (0.04-0.51)</concentration_value>
+      <concentration_units>umol/mmol creatinine</concentration_units>
+      <subject_age>Adult:&gt;18 yrs old</subject_age>
+      <subject_sex>Female</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+        <pubmed_id>9869358</pubmed_id>
+        <reference>9869358</reference>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Urine</biofluid>
+      <concentration_value>2.9 (0.7-5.4)</concentration_value>
+      <concentration_units>umol/mmol creatinine</concentration_units>
+      <subject_age>Adult:&gt;18 yrs old</subject_age>
+      <subject_sex>Both</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <references>
+      </references>
+    </concentration>
+    <concentration>
+      <biofluid>Urine</biofluid>
+      <concentration_value>1.90</concentration_value>
+      <concentration_units>umol/mmol creatinine</concentration_units>
+      <subject_age>Adult:&gt;18 yrs old</subject_age>
+      <subject_sex>Male</subject_sex>
+      <subject_condition>Normal</subject_condition>
+      <comment>Based on one measurement</comment>
+      <references>
+      </references>
+    </concentration>
+  </normal_concentrations>
+  <abnormal_concentrations>
+  </abnormal_concentrations>
+  <diseases>
+  </diseases>
+  <drugbank_id>DB04553</drugbank_id>
+  <phenol_explorer_compound_id/>
+  <phenol_explorer_metabolite_id/>
+  <foodb_id>FDB003359</foodb_id>
+  <knapsack_id>C00019675</knapsack_id>
+  <chemspider_id>57</chemspider_id>
+  <kegg_id>C00109</kegg_id>
+  <biocyc_id>2-OXOBUTANOATE</biocyc_id>
+  <bigg_id>33889</bigg_id>
+  <wikipidia>Alpha-ketobutyric_acid</wikipidia>
+  <nugowiki>HMDB00005</nugowiki>
+  <metagene/>
+  <metlin_id/>
+  <pubchem_compound_id>58</pubchem_compound_id>
+  <het_id>2KT</het_id>
+  <chebi_id>30831</chebi_id>
+  <synthesis_reference>Figge, Rainer; Lux, Fabien; Raynaud, Celine; Soucaille, Philippe. Production of a-ketobutyrate by engineered Escherichia coli.PCT Int. Appl.  (2006), 31pp.  </synthesis_reference>
+  <general_references>
+    <pubmed_id>1474480</pubmed_id>
+    <pubmed_id>1499240</pubmed_id>
+    <pubmed_id>3918815</pubmed_id>
+    <pubmed_id>12867486</pubmed_id>
+  </general_references>
+  <protein_associations>
+    <protein>
+      <protein_id>5789</protein_id>
+      <name>Cystathionine gamma-lyase</name>
+      <uniprot_id>P32929</uniprot_id>
+      <gene_name>CTH</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>6175</protein_id>
+      <name>L-lactate dehydrogenase A-like 6A</name>
+      <uniprot_id>Q6ZMR3</uniprot_id>
+      <gene_name>LDHAL6A</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5279</protein_id>
+      <name>Pyruvate dehydrogenase E1 component subunit alpha, testis-specific form, mitochondrial</name>
+      <uniprot_id>P29803</uniprot_id>
+      <gene_name>PDHA2</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5241</protein_id>
+      <name>Pyruvate dehydrogenase E1 component subunit beta, mitochondrial</name>
+      <uniprot_id>P11177</uniprot_id>
+      <gene_name>PDHB</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5275</protein_id>
+      <name>Pyruvate dehydrogenase E1 component subunit alpha, somatic form, mitochondrial</name>
+      <uniprot_id>P08559</uniprot_id>
+      <gene_name>PDHA1</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5535</protein_id>
+      <name>2-oxoisovalerate dehydrogenase subunit alpha, mitochondrial</name>
+      <uniprot_id>P12694</uniprot_id>
+      <gene_name>BCKDHA</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5534</protein_id>
+      <name>2-oxoisovalerate dehydrogenase subunit beta, mitochondrial</name>
+      <uniprot_id>P21953</uniprot_id>
+      <gene_name>BCKDHB</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>6789</protein_id>
+      <name>[3-methyl-2-oxobutanoate dehydrogenase [lipoamide]] kinase, mitochondrial</name>
+      <uniprot_id>O14874</uniprot_id>
+      <gene_name>BCKDK</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>14387</protein_id>
+      <name>Alpha-ketoglutarate-dependent dioxygenase alkB homolog 2</name>
+      <uniprot_id>Q6NS38</uniprot_id>
+      <gene_name>ALKBH2</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>14388</protein_id>
+      <name>Alpha-ketoglutarate-dependent dioxygenase alkB homolog 3</name>
+      <uniprot_id>Q96Q83</uniprot_id>
+      <gene_name>ALKBH3</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>5677</protein_id>
+      <name>2-oxoglutarate dehydrogenase, mitochondrial</name>
+      <uniprot_id>Q02218</uniprot_id>
+      <gene_name>OGDH</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>14844</protein_id>
+      <name>2-oxoglutarate dehydrogenase-like, mitochondrial</name>
+      <uniprot_id>Q9ULD0</uniprot_id>
+      <gene_name>OGDHL</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>14845</protein_id>
+      <name>2-oxoglutarate receptor 1</name>
+      <uniprot_id>Q96P68</uniprot_id>
+      <gene_name>OXGR1</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>9242</protein_id>
+      <name>Trimethyllysine dioxygenase, mitochondrial</name>
+      <uniprot_id>Q9NVH6</uniprot_id>
+      <gene_name>TMLHE</gene_name>
+      <type>enzyme</type>
+    </protein>
+    <protein>
+      <protein_id>6202</protein_id>
+      <name>Urocanate hydratase</name>
+      <uniprot_id>Q96N76</uniprot_id>
+      <gene_name>UROC1</gene_name>
+      <type>enzyme</type>
+    </protein>
+  </protein_associations>
+</metabolite>
