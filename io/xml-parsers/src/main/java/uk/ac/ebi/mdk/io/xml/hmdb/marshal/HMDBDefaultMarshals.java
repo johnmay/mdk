@@ -44,26 +44,26 @@ import java.lang.reflect.Method;
  *     File   file = new File(path);
  *
  *     // only load the common name
- *     HMDBMetabolite metabolite = HMDBParser.loadAll(file,
- *                                                    HMDBDefaultMarshals.COMMON_NAME);
+ *     HMDBMetabolite metabolite = HMDBParser.load(file,
+ *                                                 HMDBDefaultMarshals.COMMON_NAME);
  *     // only load the common name, iupac and synonyms
- *     HMDBMetabolite metabolite = HMDBParser.loadAll(file,
- *                                                    HMDBDefaultMarshals.COMMON_NAME,
- *                                                    HMDBDefaultMarshals.IUPAC_NAME,
- *                                                    HMDBDefaultMarshals.SYNONYMS);
+ *     HMDBMetabolite metabolite = HMDBParser.load(file,
+ *                                                  HMDBDefaultMarshals.COMMON_NAME,
+ *                                                  HMDBDefaultMarshals.IUPAC_NAME,
+ *                                                  HMDBDefaultMarshals.SYNONYMS);
  *
  *     // if you load the accession make sure to include the secondary
  *     // accession also. these have the same start tag and so leads to
  *     // incorrect parsing if omitted
- *     HMDBMetabolite metabolite = HMDBParser.loadAll(file,
- *                                                    HMDBDefaultMarshals.ACCESSION,
- *                                                    HMDBDefaultMarshals.SECOUNDARY_ACCESSION,
- *                                                    HMDBDefaultMarshals.SECONDARY_ACCESSION);
+ *     HMDBMetabolite metabolite = HMDBParser.load(file,
+ *                                                 HMDBDefaultMarshals.ACCESSION,
+ *                                                 HMDBDefaultMarshals.SECOUNDARY_ACCESSION,
+ *                                                 HMDBDefaultMarshals.SECONDARY_ACCESSION);
  *
  *
  *     // load all default attributes
- *     HMDBMetabolite metabolite = HMDBParser.loadAll(file,
- *                                                    HMDBDefaultMarshals.values());
+ *     HMDBMetabolite metabolite = HMDBParser.load(file,
+ *                                                 HMDBDefaultMarshals.values());
  *
  *
  * </pre></blockquote>
