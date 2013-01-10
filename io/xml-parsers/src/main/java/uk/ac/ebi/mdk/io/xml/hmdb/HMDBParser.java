@@ -258,8 +258,7 @@ public final class HMDBParser implements Closeable {
      * <blockquote><pre>{@code
      * // load the common name from an xml file with 10 entries
      * Collection<HMDBMetabolite> entries = HMDBParser.loadAll("HMDB00001-HMDB00010.xml",
-     *
-     * HMDBDefaultMarshals.COMMON_NAME);
+     *                                                         HMDBDefaultMarshals.COMMON_NAME);
      * }</pre></blockquote>
      *
      * @param file     an xml file
@@ -301,8 +300,7 @@ public final class HMDBParser implements Closeable {
      * <blockquote><pre>{@code
      * // load the common name from an xml file with 10 entries
      * Iterator<HMDBMetabolite> entries = HMDBParser.loadDirectory("/db/hmdb/xml",
-     *
-     * HMDBDefaultMarshals.COMMON_NAME);
+     *                                                             HMDBDefaultMarshals.COMMON_NAME);
      * while(entries.hasNext()){
      *    HMDBMetabolite entry = entries.next();
      * }

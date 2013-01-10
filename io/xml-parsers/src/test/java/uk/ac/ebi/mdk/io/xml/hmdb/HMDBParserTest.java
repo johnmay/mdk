@@ -186,9 +186,9 @@ public class HMDBParserTest {
                        HMDBDefaultMarshals.SECOUNDARY_ACCESSION);
     }
 
-    public void testConstructor_AccessionOnly_Valid() throws
-                                                      IOException,
-                                                      XMLStreamException {
+    @Test public void testConstructor_AccessionOnly_Valid() throws
+                                                            IOException,
+                                                            XMLStreamException {
         File file = new File(getClass().getResource("HMDB00000.xml").getFile());
         new HMDBParser(new FileReader(file), HMDBDefaultMarshals.ACCESSION,
                        HMDBDefaultMarshals.SECONDARY_ACCESSION,
