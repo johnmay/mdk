@@ -22,12 +22,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * ResourceDirectoryLocation.java - 22.02.2012 <br/>
- * <p/>
- * Interface describes a directory that contains multiple files. Currently
- * this is only implemented by the {@see SystemDirectoryLocation} but
- * may be extended to include remote directories in future. Due to the nature
- * of remote directories the API for directory access is likely to change.
+ * ResourceDirectoryLocation.java - 22.02.2012 <br/> <p/> Interface describes a
+ * directory that contains multiple files. Currently this is only implemented by
+ * the {@see SystemDirectoryLocation} but may be extended to include remote
+ * directories in future. Due to the nature of remote directories the API for
+ * directory access is likely to change.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -36,12 +35,32 @@ import java.io.InputStream;
 public interface ResourceDirectoryLocation
         extends ResourceLocation {
 
+    /**
+     * Determine whether this directory location has more entries to read.
+     */
     public boolean hasNext();
 
-    public String getEntryName();
-
+    /**
+     * Get the next entry as an input stream
+     *
+     * @return a stream to the next entry
+     * @throws IOException low level io-error
+     */
     public InputStream next() throws IOException;
 
+    /**
+     * Name of the current entry (requires that next is called first).
+     *
+     * @return the name of the entry/file
+     */
+    public String getEntryName();
+
+
+    /**
+     * Close the location
+     *
+     * @throws IOException low level io-error
+     */
     public void close() throws IOException;
 
 }
