@@ -18,8 +18,6 @@
 
 package uk.ac.ebi.mdk.domain.identifier;
 
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
-
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -34,7 +32,8 @@ public interface IdentifierFactory {
 
     /**
      * Constructs an identifier of the correct type of the given name. If the
-     * name is not found an {@link IdentifierFactory#EMPTY_IDENTIFIER} is returned.
+     * name is not found an {@link IdentifierFactory#EMPTY_IDENTIFIER} is
+     * returned.
      *
      * @param name the resource name e.g. ChEBI
      * @return an instance of a typed identifier
@@ -42,9 +41,9 @@ public interface IdentifierFactory {
     public Identifier ofName(String name);
 
     /**
-     * Constructs an identifier of the correct type of the given name and
-     * sets the accession. If the name is not found an
-     * {@link IdentifierFactory#EMPTY_IDENTIFIER} is returned.
+     * Constructs an identifier of the correct type of the given name and sets
+     * the accession. If the name is not found an {@link
+     * IdentifierFactory#EMPTY_IDENTIFIER} is returned.
      *
      * @param name the resource name e.g. ChEBI
      * @return an instance of a typed identifier
@@ -55,9 +54,9 @@ public interface IdentifierFactory {
 
     /**
      * Constructs an identifier of the correct type of the given synonym. If the
-     * name is not found an {@link IdentifierFactory#EMPTY_IDENTIFIER} is returned.
-     * It is possible to avoid the EMPTY_IDENTIFIER if {@link #hasSynonym(String)}
-     * is invoked first.
+     * name is not found an {@link IdentifierFactory#EMPTY_IDENTIFIER} is
+     * returned. It is possible to avoid the EMPTY_IDENTIFIER if {@link
+     * #hasSynonym(String)} is invoked first.
      *
      * @param synonym the resource name e.g. ChEBI
      * @return an instance of a typed identifier
@@ -65,11 +64,10 @@ public interface IdentifierFactory {
     public Identifier ofSynonym(String synonym);
 
     /**
-     * Constructs an identifier of the correct type of the given synonym and sets
-     * the accession. If the name is not found an {@link IdentifierFactory#EMPTY_IDENTIFIER}
-     * is returned. It is possible to avoid the EMPTY_IDENTIFIER if {@link #hasSynonym(String)}
-     * is invoked first.
-     *
+     * Constructs an identifier of the correct type of the given synonym and
+     * sets the accession. If the name is not found an {@link
+     * IdentifierFactory#EMPTY_IDENTIFIER} is returned. It is possible to avoid
+     * the EMPTY_IDENTIFIER if {@link #hasSynonym(String)} is invoked first.
      *
      * @param synonym the resource name e.g. ChEBI
      * @return an instance of a typed identifier
@@ -154,8 +152,13 @@ public interface IdentifierFactory {
         }
 
         @Override
-        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        public void readExternal(ObjectInput in) throws IOException,
+                                                        ClassNotFoundException {
 
+        }
+
+        @Override public int compareTo(Identifier o) {
+            return -1;
         }
     };
 

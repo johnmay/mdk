@@ -176,6 +176,13 @@ public abstract class AbstractIdentifier
         return IDENTIFIER_LOADER.getDatabaseSynonyms(getClass());
     }
 
+    @Override public int compareTo(Identifier o) {
+        int cmp = getResource().getName().compareTo(o.getResource().getName());
+        if (cmp != 0)
+            return cmp;
+        return accession.compareTo(o.getAccession());
+    }
+
     public void writeExternal(ObjectOutput out) throws IOException {
         out.writeUTF(accession);
     }

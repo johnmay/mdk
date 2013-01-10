@@ -29,7 +29,7 @@ import java.util.Collection;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public interface Identifier extends Descriptor {
+public interface Identifier extends Descriptor, Comparable<Identifier> {
 
     /**
      * Mutator for the identifier accession.

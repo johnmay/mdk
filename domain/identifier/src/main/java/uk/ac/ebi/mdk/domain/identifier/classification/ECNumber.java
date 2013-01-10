@@ -17,19 +17,18 @@
 
 package uk.ac.ebi.mdk.domain.identifier.classification;
 
+import uk.ac.ebi.mdk.deprecated.MIR;
+import uk.ac.ebi.mdk.deprecated.Synonyms;
+
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.PrintStream;
 
-import uk.ac.ebi.mdk.deprecated.MIR;
-import uk.ac.ebi.mdk.deprecated.Synonyms;
-
 
 /**
- * ECNumber.java
- * <p/>
- * Object to unify, store and compare the Enzyme Commission (EC) classification system
+ * ECNumber.java <p/> Object to unify, store and compare the Enzyme Commission
+ * (EC) classification system
  *
  * @author johnmay
  * @date Mar 11, 2011
@@ -37,7 +36,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @MIR(4)
 @Synonyms("IUBMB Enzyme Nomenclature")
 public class ECNumber
-        extends ClassificationIdentifier implements Comparable<ECNumber> {
+        extends ClassificationIdentifier {
 
     private int enzymeClass;
 
@@ -50,8 +49,8 @@ public class ECNumber
     private boolean preliminary = false;
 
     /**
-     * Value to indicate compared values have no match (see. {@link #compare(ECNumber ec1)}) <br/>
-     * <p/>
+     * Value to indicate compared values have no match (see. {@link
+     * #compare(ECNumber ec1)}) <br/> <p/>
      * <b>Example Code:</b> <pre>
      * {@code
      * if(ec1.compare(ec2) == ECNumber.MATCHING_NONE ) {
@@ -62,8 +61,8 @@ public class ECNumber
     public static final int MATCHING_NONE = 0;
 
     /**
-     * Value to indicate compared values are matching at the class level (see. {@link #compare(ECNumber ec1)}) <br/>
-     * <p/>
+     * Value to indicate compared values are matching at the class level (see.
+     * {@link #compare(ECNumber ec1)}) <br/> <p/>
      * <b>Example Code:</b> <pre>
      * {@code
      * ECNumber ec1 = new ECNumber("1.2.4.-");
@@ -76,8 +75,8 @@ public class ECNumber
     public static final int MATCHING_CLASS = 1;
 
     /**
-     * Value to indicate compared values are matching at the class level (see. {@link #compare(ECNumber ec1)}) <br/>
-     * <p/>
+     * Value to indicate compared values are matching at the class level (see.
+     * {@link #compare(ECNumber ec1)}) <br/> <p/>
      * <b>Example Code:</b> <pre>
      * {@code
      * ECNumber ec1 = new ECNumber("1.2.2.5");
@@ -90,8 +89,8 @@ public class ECNumber
     public static final int MATCHING_SUBCLASS = 2;
 
     /**
-     * Value to indicate compared values are matching at the class level (see. {@link #compare(ECNumber ec1)}) <br/>
-     * <p/>
+     * Value to indicate compared values are matching at the class level (see.
+     * {@link #compare(ECNumber ec1)}) <br/> <p/>
      * <b>Example Code:</b> <pre>
      * {@code
      * ECNumber ec1 = new ECNumber("1.2.4.5");
@@ -104,8 +103,8 @@ public class ECNumber
     public static final int MATCHING_SUB_SUBCLASS = 3;
 
     /**
-     * Value to indicate compared values are matching at the entry level (see. {@link #compare(ECNumber ec1)}) <br/>
-     * <p/>
+     * Value to indicate compared values are matching at the entry level (see.
+     * {@link #compare(ECNumber ec1)}) <br/> <p/>
      * <b>Example Code:</b> <pre>
      * {@code
      * ECNumber ec1 = new ECNumber("1.2.4.1");
@@ -199,15 +198,17 @@ public class ECNumber
             return "-.-.-.-";
         }
         // walk along string until a number is found
-        return value.substring(start).matches("[0-9]+.*") ? value.substring(start) : removePrefix(
+        return value.substring(start).matches("[0-9]+.*")
+               ? value.substring(start) : removePrefix(
                 value, start + 1);
     }
 
 
     private String removePostfix(String value, int end) {
         // walkbackwards until we find ending in .- or .1 .n1 etc..
-        return value.substring(0, end).matches(".*?[-0-9]") ? value.substring(0, end)
-                : removePostfix(value, end - 1);
+        return value.substring(0, end).matches(".*?[-0-9]")
+               ? value.substring(0, end)
+               : removePostfix(value, end - 1);
     }
 
 
@@ -228,7 +229,6 @@ public class ECNumber
 
     /**
      * @param ec
-     *
      * @return
      */
     public int compare(ECNumber ec) {
@@ -239,7 +239,6 @@ public class ECNumber
     /**
      * @param ec1
      * @param ec2
-     *
      * @return
      */
     public static int compare(ECNumber ec1, ECNumber ec2) {
@@ -256,7 +255,6 @@ public class ECNumber
      * @param ec2ValueArray
      * @param index
      * @param matchLevel
-     *
      * @return
      */
     private static int compareValues(int ec1ValueArray[], int ec2ValueArray[], int index,
@@ -264,10 +262,11 @@ public class ECNumber
         if (index == ec1ValueArray.length || index == ec2ValueArray.length) {
             return matchLevel;
         }
-        return ec1ValueArray[index] == ec2ValueArray[index] ? compareValues(ec1ValueArray,
-                                                                            ec2ValueArray, index + 1,
-                                                                            matchLevel + 1)
-                : matchLevel;
+        return ec1ValueArray[index] == ec2ValueArray[index]
+               ? compareValues(ec1ValueArray,
+                               ec2ValueArray, index + 1,
+                               matchLevel + 1)
+               : matchLevel;
     }
 
 
@@ -315,10 +314,10 @@ public class ECNumber
 
 
     /**
-     * Creates an array of multiple EC Numbers found in the string (splitting on ';')
+     * Creates an array of multiple EC Numbers found in the string (splitting on
+     * ';')
      *
      * @param ecContaingString
-     *
      * @return
      */
     public static ECNumber[] getMultipleECs(String ecContaingString) {
@@ -385,7 +384,8 @@ public class ECNumber
 
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException,
+                                                    ClassNotFoundException {
         enzymeClass = in.readInt();
         enzymeSubClass = in.readInt();
         enzymeSubSubClass = in.readInt();
@@ -402,25 +402,6 @@ public class ECNumber
         out.writeInt(enzymeSubSubClass);
         out.writeInt(enzymeEntry);
         out.writeBoolean(preliminary);
-    }
-
-
-    public int compareTo(ECNumber o) {
-
-        if (this.enzymeClass != o.enzymeClass) {
-            return this.enzymeClass > o.enzymeClass ? +1 : -1;
-        }
-        if (this.enzymeSubClass != o.enzymeSubClass) {
-            return this.enzymeSubClass > o.enzymeSubClass ? +1 : -1;
-        }
-        if (this.enzymeSubSubClass != o.enzymeSubSubClass) {
-            return this.enzymeSubSubClass > o.enzymeSubSubClass ? +1 : -1;
-        }
-        if (this.enzymeEntry != o.enzymeEntry) {
-            return this.enzymeEntry > o.enzymeEntry ? +1 : -1;
-        }
-
-        return 0;
     }
 
 

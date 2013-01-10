@@ -35,20 +35,26 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 public interface QueryService<I extends Identifier> {
 
     public enum ServiceType {
-        LUCENE_INDEX(1),
-        RELATIONAL_DATABASE(2),
-        REST_WEB_SERVICE(3),
-        SOAP_WEB_SERVICE(4),
-        AGGREGATED(5);
+        LUCENE_INDEX(1, false),
+        RELATIONAL_DATABASE(2, false),
+        REST_WEB_SERVICE(3, true),
+        SOAP_WEB_SERVICE(4, true),
+        AGGREGATED(5, true);
 
         private Integer priority;
+        private boolean remote;
 
-        private ServiceType(int priority) {
+        private ServiceType(int priority, boolean remote) {
             this.priority = priority;
+            this.remote = remote;
         }
 
         public Integer getPriority() {
             return priority;
+        }
+
+        public boolean remote(){
+            return remote;
         }
 
     }
