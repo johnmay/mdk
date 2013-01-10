@@ -23,6 +23,7 @@ import uk.ac.ebi.mdk.io.xml.hmdb.marshal.HMDBXMLMarshal;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -105,7 +106,7 @@ public class HMDBParserTest {
 
     @Test public void testLoadAll_Empty() throws IOException {
         File file = new File(getClass().getResource("HMDB00000.xml").getFile());
-        Collection<HMDBMetabolite> entries = HMDBParser.loadAll(file, HMDBDefaultMarshals.ACCESSION);
+        Collection<HMDBMetabolite> entries = HMDBParser.loadAll(file, HMDBDefaultMarshals.values());
         assertThat(entries.size(), is(0));
     }
 
@@ -157,6 +158,41 @@ public class HMDBParserTest {
     public void testConstructorNulLMarshal() throws IOException,
                                                     XMLStreamException {
         new HMDBParser(null, new HMDBXMLMarshal[]{null});
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructor_AccessionOnly() throws IOException,
+                                                       XMLStreamException {
+        File file = new File(getClass().getResource("HMDB00000.xml").getFile());
+        new HMDBParser(new FileReader(file), HMDBDefaultMarshals.ACCESSION);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructor_AccessionOnly_WithSecondary() throws
+                                                              IOException,
+                                                              XMLStreamException {
+        File file = new File(getClass().getResource("HMDB00000.xml").getFile());
+        new HMDBParser(new FileReader(file), HMDBDefaultMarshals.ACCESSION,
+                       HMDBDefaultMarshals.SECONDARY_ACCESSION);
+    }
+
+    // intended typo (it is in the xml)
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructor_AccessionOnly_WithSecoundary() throws
+                                                               IOException,
+                                                               XMLStreamException {
+        File file = new File(getClass().getResource("HMDB00000.xml").getFile());
+        new HMDBParser(new FileReader(file), HMDBDefaultMarshals.ACCESSION,
+                       HMDBDefaultMarshals.SECOUNDARY_ACCESSION);
+    }
+
+    public void testConstructor_AccessionOnly_Valid() throws
+                                                      IOException,
+                                                      XMLStreamException {
+        File file = new File(getClass().getResource("HMDB00000.xml").getFile());
+        new HMDBParser(new FileReader(file), HMDBDefaultMarshals.ACCESSION,
+                       HMDBDefaultMarshals.SECONDARY_ACCESSION,
+                       HMDBDefaultMarshals.SECOUNDARY_ACCESSION);
     }
 
 }

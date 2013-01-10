@@ -43,13 +43,18 @@ import java.util.TreeMap;
 /**
  * A parser for Human Metabolome Database (HMDB) XML files. The parser can be
  * configured with one or more {@link HMDBXMLMarshal}s. These marshals take the
- * XML stream and marshal the contents into an {@link HMDBMetabolite}
- * container.
+ * XML stream and marshal the contents into an {@link HMDBMetabolite} container.
  * <p/>
+ *
  * Custom marshals can be defined but currently all entries in the {@link
  * HMDBMetabolite} can be loaded with {@link HMDBDefaultMarshals}. For
  * convenience there are several methods to load entices directly from a {@link
- * File}.
+ * File}. <p/>
+ *
+ * <b>IMPORTANT: to use the {@link HMDBDefaultMarshals#ACCESSION} marshal you
+ * must also include the {@link HMDBDefaultMarshals#SECONDARY_ACCESSION} /
+ * {@link HMDBDefaultMarshals#SECOUNDARY_ACCESSION} (typo in xml tag) marshals
+ * as they all use the same start tag ({@code <accession>...</accession>}).</b>
  *
  * <blockquote><pre>{@code
  *
@@ -60,7 +65,7 @@ import java.util.TreeMap;
  * Iterator<HMDBMetabolite> entries = HMDBParser.loadDirectory("/db/hmdb/xml");
  * while(entries.hasNext()){
  *    HMDBMetabolite entry = entries.next();
- * }                                     *
+ * }
  *
  * }</pre></blockquote>
  *
@@ -139,6 +144,12 @@ public final class HMDBParser implements Closeable {
                 throw new IllegalArgumentException("one of the provided marshals was null");
             this.marshals.put(marshal.tag(), marshal);
         }
+
+        // check if ACCESSION is being used without the SECONDARY_ACCESSION(s)
+        if (this.marshals.containsKey("accession")
+                && !(this.marshals.containsKey("secondary_accessions")
+                && this.marshals.containsKey("secoundary_accessions")))
+            throw new IllegalArgumentException("When parsing ACCESSION the SECONDARY_ACCESSION(s) must be included, refer to javadoc");
 
         parse();
     }
@@ -247,7 +258,8 @@ public final class HMDBParser implements Closeable {
      * <blockquote><pre>{@code
      * // load the common name from an xml file with 10 entries
      * Collection<HMDBMetabolite> entries = HMDBParser.loadAll("HMDB00001-HMDB00010.xml",
-     *                                                         HMDBDefaultMarshals.COMMON_NAME);
+     *
+     * HMDBDefaultMarshals.COMMON_NAME);
      * }</pre></blockquote>
      *
      * @param file     an xml file
@@ -289,7 +301,8 @@ public final class HMDBParser implements Closeable {
      * <blockquote><pre>{@code
      * // load the common name from an xml file with 10 entries
      * Iterator<HMDBMetabolite> entries = HMDBParser.loadDirectory("/db/hmdb/xml",
-     *                                                             HMDBDefaultMarshals.COMMON_NAME);
+     *
+     * HMDBDefaultMarshals.COMMON_NAME);
      * while(entries.hasNext()){
      *    HMDBMetabolite entry = entries.next();
      * }
