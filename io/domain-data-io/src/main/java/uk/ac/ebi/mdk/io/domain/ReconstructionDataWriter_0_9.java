@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
- * ReconstructionDataWriter - 12.03.2012 <br/>
+ * ReconstructionDataWriter_0_9 - 12.03.2012 <br/>
  * <p/>
  * Writes a reconstruction to a data output stream.
  *
@@ -26,19 +26,19 @@ import java.util.Collection;
  * @version $Rev$
  */
 @CompatibleSince("0.9")
-public class ReconstructionDataWriter
+public class ReconstructionDataWriter_0_9
         implements EntityWriter<Reconstruction> {
 
-    private static final Logger LOGGER = Logger.getLogger(ReconstructionDataWriter.class);
+    private static final Logger LOGGER = Logger.getLogger(ReconstructionDataWriter_0_9.class);
 
     private DataOutput out;
     private EntityOutput entityOut;
     private IdentifierOutput identifierOutput;
     private AbstractDataOutput output;
 
-    public ReconstructionDataWriter(DataOutput out,
-                                    IdentifierOutput identifierOutput,
-                                    EntityOutput entityOut){
+    public ReconstructionDataWriter_0_9(DataOutput out,
+                                        IdentifierOutput identifierOutput,
+                                        EntityOutput entityOut){
         this.out = out;
         this.identifierOutput = identifierOutput;
         this.entityOut = entityOut;

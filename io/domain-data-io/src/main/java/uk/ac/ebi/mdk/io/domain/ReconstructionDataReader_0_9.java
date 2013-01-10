@@ -27,10 +27,10 @@ import java.io.IOException;
  * @version $Rev$
  */
 @CompatibleSince("0.9")
-public class ReconstructionDataReader
+public class ReconstructionDataReader_0_9
         implements EntityReader<Reconstruction> {
 
-    private static final Logger LOGGER = Logger.getLogger(ReconstructionDataReader.class);
+    private static final Logger LOGGER = Logger.getLogger(ReconstructionDataReader_0_9.class);
 
     private DataInput in;
     private EntityInput entityIn;
@@ -38,10 +38,10 @@ public class ReconstructionDataReader
     private EnumReader enumReader;
     private EntityFactory factory;
 
-    public ReconstructionDataReader(DataInput in,
-                                    EntityFactory factory,
-                                    IdentifierInput identifierInput,
-                                    EntityInput entityIn) {
+    public ReconstructionDataReader_0_9(DataInput in,
+                                        EntityFactory factory,
+                                        IdentifierInput identifierInput,
+                                        EntityInput entityIn) {
         this.in = in;
         this.identifierInput = identifierInput;
         this.entityIn = entityIn;
