@@ -5,10 +5,10 @@ import jp.genome.ws.kegg.KEGGPortType;
 import jp.genome.ws.kegg.StructureAlignment;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGDrugIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KeggGlycanIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.query.name.NameService;
 import uk.ac.ebi.mdk.service.query.name.PreferredNameService;
 import uk.ac.ebi.mdk.service.query.name.SynonymService;
@@ -25,7 +25,9 @@ import java.util.Map;
 
 /**
  * @author John May
+ * @deprecated KEGG SOAP API has been retired
  */
+@Deprecated
 public abstract class KEGGAdapter<I extends Identifier>
         extends AbstractSoapService<I>
         implements StructureService<I>,
@@ -185,7 +187,6 @@ public abstract class KEGGAdapter<I extends Identifier>
      * Returns the KEGG String entry (bget) for the given identifier
      *
      * @param identifier
-     *
      * @return
      */
     public String getEntry(I identifier) {
