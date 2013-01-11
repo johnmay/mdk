@@ -11,6 +11,7 @@
         <module>derby</module>
         <module>core</module>
         <module>soap</module>
+        <module>rest</module>
     </modules>
     <packaging>pom</packaging>
 
