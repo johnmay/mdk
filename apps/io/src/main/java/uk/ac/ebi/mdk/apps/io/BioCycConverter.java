@@ -21,11 +21,11 @@ import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
-import uk.ac.ebi.mdk.io.text.biocyc.AttributedEntry;
+import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 import uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader;
-import uk.ac.ebi.mdk.io.text.biocyc.attribute.Attribute;
-import uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute;
-import uk.ac.ebi.mdk.io.text.biocyc.attribute.ReactionAttribute;
+import uk.ac.ebi.mdk.io.text.attribute.Attribute;
+import uk.ac.ebi.mdk.io.text.biocyc.CompoundAttribute;
+import uk.ac.ebi.mdk.io.text.biocyc.ReactionAttribute;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute.CHEMICAL_FORMULA;
+import static uk.ac.ebi.mdk.io.text.biocyc.CompoundAttribute.CHEMICAL_FORMULA;
 
 /**
  * Converts a BioCyc project to MDK domain objects

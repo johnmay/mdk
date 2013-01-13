@@ -16,7 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package uk.ac.ebi.mdk.io.text.biocyc.attribute;
+package uk.ac.ebi.mdk.io.text.biocyc;
+
+import uk.ac.ebi.mdk.io.text.attribute.Attribute;
 
 /**
  * Attributes for BioCyc enzrxns.dat file

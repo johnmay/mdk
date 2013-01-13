@@ -1,10 +1,14 @@
 package uk.ac.ebi.mdk.service.loader.multiple;
 
+import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.KEGGDrugIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KeggGlycanIdentifier;
+import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundEntry;
+import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundField;
+import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundParser;
 import uk.ac.ebi.mdk.service.index.crossreference.KEGGCompoundCrossReferenceIndex;
 import uk.ac.ebi.mdk.service.index.data.KEGGCompoundDataIndex;
 import uk.ac.ebi.mdk.service.index.name.KEGGCompoundNameIndex;
@@ -14,22 +18,15 @@ import uk.ac.ebi.mdk.service.loader.writer.DefaultDataIndexWriter;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultNameIndexWriter;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * KEGGCompoundLoader - 27.02.2012 <br/>
- * <p/>
- * Loads names and formula's from the kegg/compound/compound file into lucene
- * indexes
+ * KEGGCompoundLoader - 27.02.2012 <br/> <p/> Loads names and formula's from the
+ * kegg/compound/compound file into lucene indexes
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -41,7 +38,7 @@ public class KEGGCompoundLoader
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundLoader.class);
 
     private static final Pattern COMPOUND_IDENTIFIER = Pattern.compile("(C\\d{5})");
-    private static final Pattern SAME_AS_REMARK      = Pattern.compile("Same as:((?:\\s[D|G]\\d{5})+)");
+    private static final Pattern SAME_AS_REMARK = Pattern.compile("Same as:((?:\\s[D|G]\\d{5})+)");
 
 
     public KEGGCompoundLoader() {
@@ -61,83 +58,88 @@ public class KEGGCompoundLoader
     public void update() throws IOException {
 
         ResourceFileLocation location = getLocation("KEGG Compound");
-        KEGGCompoundParser parser = new KEGGCompoundParser(location.open(),
-                                                           KEGGField.FORMULA, KEGGField.NAME, KEGGField.ENTRY,
-                                                           KEGGField.ENZYME, KEGGField.REMARK, KEGGField.DBLINKS);
-
         DefaultDataIndexWriter data = new DefaultDataIndexWriter(getIndex("kegg.data"));
         DefaultNameIndexWriter name = new DefaultNameIndexWriter(getIndex("kegg.names"));
         DefaultCrossReferenceIndexWriter xref = new DefaultCrossReferenceIndexWriter(getIndex("kegg.xref"));
 
-        IdentifierFactory idFactory = DefaultIdentifierFactory.getInstance();
+        try {
+            KEGGCompoundParser parser = new KEGGCompoundParser(new InputStreamReader(location.open()),
+                                                               KEGGCompoundField.FORMULA, KEGGCompoundField.NAME, KEGGCompoundField.ENTRY,
+                                                               KEGGCompoundField.ENZYME, KEGGCompoundField.REMARK, KEGGCompoundField.DBLINKS);
 
-        long start = System.currentTimeMillis();
-        Map<KEGGField, StringBuilder> map;
-        int count = 0;
-        while (!isCancelled() && (map = parser.readNext()) != null) {
 
-            String entry = map.get(KEGGField.ENTRY).toString();
-            String[] names = map.get(KEGGField.NAME).toString().split(";");
-            String remark = map.containsKey(KEGGField.REMARK)
-                            ? map.get(KEGGField.REMARK).toString() : "";
-            String dbLinks = map.containsKey(KEGGField.DBLINKS)
-                             ? map.get(KEGGField.DBLINKS).toString() : "";
-            String formula = map.containsKey(KEGGField.FORMULA)
-                             ? map.get(KEGGField.FORMULA).toString()
-                             : null; // index writer handles null values
+            IdentifierFactory idFactory = DefaultIdentifierFactory.getInstance();
 
-            if (entry.contains("Obsolete")) {
-                continue;
-            }
+            long start = System.currentTimeMillis();
+            KEGGCompoundEntry entry;
+            int count = 0;
+            while (!isCancelled() && (entry = parser.readNext()) != null) {
 
-            // get identifier and write the data
-            Matcher matcher = COMPOUND_IDENTIFIER.matcher(entry);
-            if (matcher.find()) {
+                String header = entry.get(KEGGCompoundField.ENTRY).toString();
+                String[] names = Joiner.on("\n").join(entry.get(KEGGCompoundField.NAME)).split(";");
+                String remark = entry.getFirst(KEGGCompoundField.REMARK, "");
+                String dbLinks = Joiner.on("\n").join(entry.get(KEGGCompoundField.DBLINKS));
 
-                String identifier = matcher.group(1);
+                String formula = entry.getFirst(KEGGCompoundField.FORMULA, null);
 
-                name.write(identifier, Arrays.asList(names));
-                data.write(identifier, "", formula);
-
-                Matcher remarkMatcher = SAME_AS_REMARK.matcher(remark);
-
-                if (remarkMatcher.matches()) {
-                    for (String accession : remarkMatcher.group(1).trim().split(" ")) {
-                        char c = accession.charAt(0);
-                        xref.write(entry, c == 'G'
-                                          ? new KeggGlycanIdentifier(accession)
-                                          : c == 'D'
-                                            ? new KEGGDrugIdentifier(accession)
-                                            : null);
-                    }
+                if (header.contains("Obsolete")) {
+                    continue;
                 }
 
-                for (String dblink : dbLinks.split("\n")) {
-                    String[] dbEntry = dblink.split(":");
+                // get identifier and write the data
+                Matcher matcher = COMPOUND_IDENTIFIER.matcher(header);
+                if (matcher.find()) {
 
-                    if (idFactory.hasSynonym(dbEntry[0])) {
-                        xref.write(entry,
-                                   idFactory.ofSynonym(dbEntry[0], dbEntry[1].trim()));
+                    String identifier = matcher.group(1);
+
+                    name.write(identifier, Arrays.asList(names));
+                    data.write(identifier, "", formula);
+
+                    Matcher remarkMatcher = SAME_AS_REMARK.matcher(remark);
+
+                    if (remarkMatcher.matches()) {
+                        for (String accession : remarkMatcher.group(1).trim().split(" ")) {
+                            char c = accession.charAt(0);
+                            xref.write(header, c == 'G'
+                                               ? new KeggGlycanIdentifier(accession)
+                                               : c == 'D'
+                                                 ? new KEGGDrugIdentifier(accession)
+                                                 : null);
+                        }
                     }
+
+                    for (String dblink : dbLinks.split("\n")) {
+                        String[] dbEntry = dblink.split(":");
+
+                        if (idFactory.hasSynonym(dbEntry[0])) {
+                            for (String accession : dbEntry[1].trim().split("\\s+")) {
+                                xref.write(header,
+                                           idFactory.ofSynonym(dbEntry[0], accession));
+                            }
+
+                        }
+
+                    }
+
 
                 }
 
+                if (++count % 200 == 0)
+                    fireProgressUpdate(location.progress());
 
             }
+            long end = System.currentTimeMillis();
 
-            if(++count % 200 == 0)
-                fireProgressUpdate(location.progress());
+            System.out.println("Loaded KEGG Compound: " + (end - start) + " ms");
 
+        } finally {
+
+            name.close();
+            data.close();
+            xref.close();
+
+            location.close();
         }
-        long end = System.currentTimeMillis();
-
-        System.out.println("Loaded KEGG Compound: " + (end - start) + " ms");
-
-        location.close();
-
-        name.close();
-        data.close();
-        xref.close();
 
     }
 
@@ -145,65 +147,6 @@ public class KEGGCompoundLoader
     @Override
     public String getName() {
         return "KEGG Compound";
-    }
-
-
-    // copied from chemet-io, didn't want to have a dependency as IO is quite messy with a lot of
-    // old classes and redundant dependencies
-    class KEGGCompoundParser {
-        private BufferedReader reader;
-        private EnumSet<KEGGField> filter = EnumSet.noneOf(KEGGField.class);
-
-
-        public KEGGCompoundParser(InputStream stream, KEGGField... field) {
-            // 12 mb of buffer
-            this.reader = new BufferedReader(new InputStreamReader(stream), 1024 * 12);
-            for (KEGGField f : field) {
-                filter.add(f);
-            }
-        }
-
-
-        public Map<KEGGField, StringBuilder> readNext() throws IOException {
-
-            StringBuilder sb = new StringBuilder(1000);
-
-            Map<KEGGField, StringBuilder> map = new EnumMap(KEGGField.class);
-
-            String line;
-            KEGGField field = null;
-            while ((line = reader.readLine()) != null && !line.equals("///")) {
-
-                String key = line.substring(0, Math.min(line.length(), 12)).trim();
-                field = key.isEmpty() ? field : KEGGField.valueOf(key);
-
-                if (filter.contains(field) && line.length() > 12) {
-                    if (!map.containsKey(field)) {
-                        map.put(field, new StringBuilder(line.substring(12)));
-                    } else {
-                        map.get(field).append("\n").append(line.substring(12));
-                    }
-                }
-
-            }
-            return line == null ? null : map;
-        }
-
-    }
-
-    public enum KEGGField {
-
-        ENTRY, NAME,
-        REACTION, FORMULA, MASS,
-        REMARK, PATHWAY,
-        ENZYME, DBLINKS,
-        ATOM, BOND,
-        COMMENT, BRACKET,
-        ORIGINAL, REPEAT,
-        SEQUENCE, ORGANISM,
-        GENE, REFERENCE,
-        // Glycan fields
-        COMPOSITION, NODE, EDGE, CLASS, ORTHOLOGY
     }
 
 }

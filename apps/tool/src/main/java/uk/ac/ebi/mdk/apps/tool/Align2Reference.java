@@ -372,8 +372,8 @@ public class Align2Reference extends CommandLineMain {
                     // matches
                     if (show && refps.isEmpty()) {
                         System.out.println("\t [match] " + referenceReaction);
-//                        MetabolicReaction rxn1 = m2.calculatedMetric(reaction).iterator().next();
-//                        MetabolicReaction rxn2 = m2.calculatedMetric(referenceReaction).iterator().next();
+//                        MetabolicReaction rxn1 = m2.calculatedMetric(reaction).iterator().readNext();
+//                        MetabolicReaction rxn2 = m2.calculatedMetric(referenceReaction).iterator().readNext();
 //                        System.out.println(rxn1.hashCode());
 //                        System.out.println(rxn2.hashCode());
 //                        System.out.println(rxn1.equals(rxn2));

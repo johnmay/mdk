@@ -22,9 +22,9 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.Isotope;
 import org.openscience.cdk.formula.MolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
-import uk.ac.ebi.mdk.io.text.biocyc.AttributedEntry;
+import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 import uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader;
-import uk.ac.ebi.mdk.io.text.biocyc.attribute.Attribute;
+import uk.ac.ebi.mdk.io.text.attribute.Attribute;
 import uk.ac.ebi.mdk.service.MultiIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.AbstractMultiIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.location.SystemLocation;
@@ -38,7 +38,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute.*;
+import static uk.ac.ebi.mdk.io.text.biocyc.CompoundAttribute.*;
 
 /**
  * Loads BioCyc Compound data (Name and Charge)

@@ -16,20 +16,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package uk.ac.ebi.mdk.io.text.biocyc;
+package uk.ac.ebi.mdk.io.text.attribute;
 
 import org.apache.log4j.Logger;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Simple class that provides the functionality of Mulitmap (see. Guava util library). The
- * primary use for the class is in parsing text attributed files (e.g. KEGG/BioCyc).
- * In addition to providing multi-map functionality it also has some convenience methods
- * such as {@see isFilled()} and {@see renew()}. The later ({@see renew()}) is convenient
- * for parsing files.
+ * Simple class that provides the functionality of Mulitmap (see. Guava util
+ * library). The primary use for the class is in parsing text attributed files
+ * (e.g. KEGG/BioCyc). In addition to providing multi-map functionality it also
+ * has some convenience methods such as {@see isFilled()} and {@see renew()}.
+ * The later ({@see renew()}) is convenient for parsing larger files. The entry
+ * maintains the ordering at which key/values were loaded and these are
+ * accessible with {@link #hasNext(Object, Object, Object)}  and {@link
+ * #getNext(java.util.Map.Entry)}.
  *
  * @author John May
+ * @see uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader
+ * @see uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundParser
  */
 public class AttributedEntry<K, V> {
 
@@ -38,12 +47,12 @@ public class AttributedEntry<K, V> {
     private int INDEX_TICKER = 0;
     private Map<K, List<V>> map = new HashMap<K, List<V>>();
 
-    // XXX could use a BiMap here
+    // entries ordered and accessible by index
     private Map<Integer, Map.Entry<K, V>> indexedEntries = new HashMap<Integer, Map.Entry<K, V>>();
+    // index ordered and accessible by Entry
     private Map<Map.Entry<K, V>, Integer> indexMap = new HashMap<Map.Entry<K, V>, Integer>();
 
     public AttributedEntry() {
-
     }
 
     public AttributedEntry(AttributedEntry<K, V> entry) {
@@ -60,7 +69,7 @@ public class AttributedEntry<K, V> {
      */
     public void put(K key, V value) {
 
-        Map.Entry<K,V> entry = new HashMap.SimpleEntry<K, V>(key, value);
+        Map.Entry<K, V> entry = new HashMap.SimpleEntry<K, V>(key, value);
 
         int index = INDEX_TICKER;
         indexedEntries.put(INDEX_TICKER, entry); // incremented after addition
@@ -91,11 +100,10 @@ public class AttributedEntry<K, V> {
     }
 
     /**
-     * Access value for the given key. If no key exists and
-     * empty list is returned.
+     * Access value for the given key. If no key exists and empty list is
+     * returned.
      *
      * @param key attribute key
-     *
      * @return values for the given key
      */
     public Collection<V> get(K key) {
@@ -108,11 +116,10 @@ public class AttributedEntry<K, V> {
     }
 
     /**
-     * Access the next entry that appeared in the input
+     * Access the readNext entry that appeared in the input
      *
      * @param key
      * @param value
-     *
      * @return
      */
     public Map.Entry<K, V> getNext(K key, V value) {
@@ -133,7 +140,6 @@ public class AttributedEntry<K, V> {
      * Inverts results of {@see isEmpty()}
      *
      * @return whether there are attributes in the entry
-     *
      * @see #isEmpty()
      */
     public boolean isFilled() {
@@ -158,9 +164,9 @@ public class AttributedEntry<K, V> {
     /**
      * Create a shallow copy of this entry and clear the current entry. This
      * functionality is useful when you need to pre-load and entry when parsing.
-     * Using this method it is possible to keep pre-loading into the same entry and
-     * then when an actual entry is required the renew method will renew a mutable
-     * entry.
+     * Using this method it is possible to keep pre-loading into the same entry
+     * and then when an actual entry is required the renew method will renew a
+     * mutable entry.
      *
      * @return shallow copy
      */
