@@ -1,6 +1,6 @@
 # SPI: Provides MDK QueryServices for this module
 uk.ac.ebi.mdk.service.query.ChEBIAdapter
 uk.ac.ebi.mdk.service.query.ChemSpiderAdapter
-uk.ac.ebi.mdk.service.query.KEGGCompoundAdapter
+# uk.ac.ebi.mdk.service.query.KEGGCompoundAdapter - no long active
 uk.ac.ebi.mdk.service.query.PubChemAdapter
 

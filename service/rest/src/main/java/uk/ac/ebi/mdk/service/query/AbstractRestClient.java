@@ -15,43 +15,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package uk.ac.ebi.mdk.io.text.kegg;
+package uk.ac.ebi.mdk.service.query;
+
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 /**
- * Enumeration of all possible KEGG Compound fields. These fields can be used in
- * combination with the {@link KEGGCompoundParser} to load specific parts of an
- * entry and ignore others.
- *
  * @author John May
- * @see KEGGCompoundParser
- * @see <a href="http://www.kegg.jp/kegg/rest/dbentry.html">DB Entry Format</a>
  */
-public enum KEGGCompoundField {
-    ENTRY,
-    NAME,
-    REACTION,
-    FORMULA,
-    MASS,
-    REMARK,
-    PATHWAY,
-    ENZYME,
-    DBLINKS,
-    ATOM,
-    BOND,
-    COMMENT,
-    BRACKET,
-    ORIGINAL,
-    REPEAT,
-    SEQUENCE,
-    ORGANISM,
-    GENE,
-    REFERENCE,
+public class AbstractRestClient<I extends Identifier>
+        implements QueryService<I> {
 
-    // > v57
-    BRITE,
-    EXACT_MASS,
-    MOL_WEIGHT,
+    private I template;
 
-    // glycan
-    COMPOSITION, NODE, EDGE, CLASS, ORTHOLOGY
+    public AbstractRestClient(I template) {
+        this.template = template;
+    }
+
+    @Override public I getIdentifier() {
+        return template;
+    }
+
+    @Override public ServiceType getServiceType() {
+        return ServiceType.REST_WEB_SERVICE;
+    }
+
+    @Override public void renew() {
+
+    }
+
+    @Override public void setMaxResults(int maxResults) {
+
+    }
+
+    @Override public void setMinSimilarity(float similarity) {
+
+    }
+
+    @Override public boolean startup() {
+        return true;
+    }
 }
