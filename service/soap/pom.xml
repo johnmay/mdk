@@ -130,10 +130,10 @@
                                     <namespace>http://www.chemspider.com/</namespace>
                                     <targetPackage>com.chemspider</targetPackage>
                                 </mapping>
-                                <mapping>
+<!--                                <mapping>
                                     <namespace>http://sabio.eml.org/</namespace>
                                     <targetPackage>org.h_its.sabiork</targetPackage>
-                                </mapping>
+                                </mapping>-->
 
                             </mappings>
                         </configuration>
