@@ -68,6 +68,10 @@ public class CrossReference<E extends Identifier, O extends Observation>
         super(identifier);
     }
 
+    public static <I extends Identifier> CrossReference<I,Observation> create(I identifier){
+        return new CrossReference<I, Observation>(identifier);
+    }
+
 
     public E getIdentifier() {
         return getValue();
