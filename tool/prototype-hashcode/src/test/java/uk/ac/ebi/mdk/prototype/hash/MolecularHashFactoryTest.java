@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.IntHashGenerator;
+import org.openscience.cdk.LongHashGenerator;
 import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.exception.NoSuchAtomTypeException;
@@ -37,7 +38,10 @@ import org.openscience.cdk.io.iterator.IteratingMDLReader;
 import org.openscience.cdk.number.XORShift;
 import org.openscience.cdk.parity.SP2Parity2DCalculator;
 import org.openscience.cdk.parity.component.IntStereoIndicator;
+import org.openscience.cdk.parity.component.LongStereoIndicator;
 import org.openscience.cdk.parity.locator.CumuleneProvider;
+import org.openscience.cdk.parity.locator.DoubleBondProvider;
+import org.openscience.cdk.parity.locator.EmptyStereoProvider;
 import org.openscience.cdk.parity.locator.StereoComponentProvider;
 import org.openscience.cdk.parity.locator.TetrahedralCenterProvider;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -184,15 +188,15 @@ public class MolecularHashFactoryTest {
         // for all depths 2-20 the codes should be different
         // for depth of 1 we get some overlap
         for (int d = 1; d < 8; d++) {
-            Map<Integer, Set<String>> hashes = new HashMap<Integer, Set<String>>();
+            Map<Long, Set<String>> hashes = new HashMap<Long, Set<String>>();
             List<AtomSeed> seeds = new ArrayList<AtomSeed>();
             seeds.add(new AtomicNumberSeed());
             seeds.add(new ConnectedAtomSeed());
-            StereoComponentProvider<Integer> provider = null;// new TetrahedralCenterProvider<Integer>(new IntStereoIndicator(1300141, 105913));
+            StereoComponentProvider<Long> provider = new TetrahedralCenterProvider(new LongStereoIndicator(1300141, 105913));
 
-            HashGenerator<Integer> generator = new IntHashGenerator(seeds, provider, new XORShift(), d);
+            HashGenerator<Long> generator = new LongHashGenerator(seeds, provider, d);
             for (IAtomContainer container : containers) {
-                int key = generator.generate(container);
+                long key = generator.generate(container);
                 if (!hashes.containsKey(key))
                     hashes.put(key, new HashSet<String>());
                 hashes.get(key)
@@ -228,10 +232,10 @@ public class MolecularHashFactoryTest {
 
             for (int d = 1; d < 8; d++) {
 
-                HashGenerator<Integer> generator = null; // new IntHashGenerator(seeds, new TetrahedralCenterProvider<Long>(new IntStereoIndicator(1300141, 105913)), d);
+                HashGenerator<Long> generator = new LongHashGenerator(seeds, new TetrahedralCenterProvider(new LongStereoIndicator(1300141, 105913)), d);
 
-                Integer orginal  = generator.generate(containers.get(i));
-                Integer inverted = generator.generate(invertedContainers.get(i));
+                Long orginal  = generator.generate(containers.get(i));
+                Long inverted = generator.generate(invertedContainers.get(i));
 
                 System.out
                       .printf("%20s 0x%x 0x%x\n", "", orginal, inverted);
@@ -642,16 +646,16 @@ public class MolecularHashFactoryTest {
         methods.add(new AtomicNumberSeed());
         methods.add(new ConnectedAtomSeed());
 
-        StereoComponentProvider<Integer> provider = null;
+        StereoComponentProvider<Long> provider = new DoubleBondProvider(new SP2Parity2DCalculator());
 
         for (int depth = 0; depth < 4; depth++) {
-            HashGenerator<Integer> off = new IntHashGenerator(methods, depth);
-            HashGenerator<Integer> on = new IntHashGenerator(methods, provider, depth);
+            HashGenerator<Long> off = new LongHashGenerator(methods, depth);
+            HashGenerator<Long> on  = new LongHashGenerator(methods, provider, depth);
 
             assertThat("molecules with different E/Z and E/Z off should be equal at depth " + depth,
                        off.generate(cis), is(off.generate(trans)));
             assertThat("molecules with different E/Z should not be equal at depth " + depth,
-                       on.generate(cis), is(not(on.generate(trans))));
+                       on.generate(cis),  is(not(on.generate(trans))));
         }
 
     }
