@@ -31,6 +31,8 @@ import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -133,13 +135,15 @@ public class KGMLReader {
         for (KGMLReaction reaction : getKGMLReactions()) {
             KGMLEntry rxnEntry = entries.get(reaction.getId());
 
+            BasicReactionIdentifier reactionId = new BasicReactionIdentifier(Integer.toString(rxnEntry.getId()));
+
             String[] names = rxnEntry.getName().split(" ");
             MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class,
-                                                    new KEGGReactionIdentifier(Integer.toString(rxnEntry.getId())),
-                                                    names[0].substring(3),
-                                                    names[0].substring(3));
+                                                    reactionId,
+                                                    names[0].substring(4),
+                                                    names[0].substring(4));
             for (String name : names) {
-                rxn.addAnnotation(new CrossReference(new KEGGReactionIdentifier(name.substring(3))));
+                rxn.addAnnotation(CrossReference.create(new BasicReactionIdentifier(names[0].substring(4))));
             }
             for (int id : reaction.getSubstrateIds()) {
                 MetabolicParticipant p = factory.ofClass(MetabolicParticipant.class);
