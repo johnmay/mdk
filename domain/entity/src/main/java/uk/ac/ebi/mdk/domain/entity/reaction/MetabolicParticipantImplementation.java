@@ -37,6 +37,7 @@ public class MetabolicParticipantImplementation
 
 
     public MetabolicParticipantImplementation() {
+        super(null, 1d, Organelle.CYTOPLASM);
     }
 
 
