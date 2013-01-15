@@ -50,8 +50,6 @@ public class ReconstructionDataWriterTest {
 
         entityOut.write(createReconstruction());
 
-        System.out.println(bytes.toByteArray().length);
-
         DataInputStream din = new DataInputStream(new ByteArrayInputStream(bytes.toByteArray()));
         EntityInput in = new EntityDataInputStream(v, din, factory,
                                                          new AnnotationDataInputStream(din, v),

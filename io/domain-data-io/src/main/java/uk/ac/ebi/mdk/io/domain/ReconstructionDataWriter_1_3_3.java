@@ -42,7 +42,7 @@ import java.util.Collection;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-@CompatibleSince("0.9")
+@CompatibleSince("1.3.3")
 public class ReconstructionDataWriter_1_3_3
         implements EntityWriter<Reconstruction> {
 
