@@ -33,15 +33,16 @@ import java.util.regex.Pattern;
  *
  * @author John May
  */
-public class ReferenceExtractor<A extends StringAnnotation>
+public final class ReferenceExtractor<A extends StringAnnotation>
         implements AnnotationVisitor<Identifier> {
 
     private final MultiGroupPatternMatcher<A> visitor;
     private final IdentifierFactory factory = DefaultIdentifierFactory.getInstance();
+    private final String overrideName;
 
     public static final String DEFAULT_RESOURCE_PATTERN  = "(?:[A-z0-9]+(?:\\s[A-z0-9]+)*?)";
     public static final String DEFAULT_SEPARATOR_PATTERN = "(?:\\s(?:id|identifier|accession))?[-:=]\\s*";
-    public static final String DEFAULT_ACCESSION_PATTERN = "[^ ]+";
+    public static final String DEFAULT_ACCESSION_PATTERN = "[^\\s]+";
 
     /**
      * Constructor a reference extractor for the given class. This method will use
@@ -50,13 +51,25 @@ public class ReferenceExtractor<A extends StringAnnotation>
      * @param c the class of annotation to extract from (e.g. Note.class)
      */
     public ReferenceExtractor(Class<? extends A> c) {
-        this(c, DEFAULT_RESOURCE_PATTERN, DEFAULT_SEPARATOR_PATTERN, DEFAULT_ACCESSION_PATTERN);
+        this(c, "", DEFAULT_RESOURCE_PATTERN, DEFAULT_SEPARATOR_PATTERN, DEFAULT_ACCESSION_PATTERN);
     }
 
+    /**
+     * Constructor a reference extractor for the given class. This method will use
+     * the default pattern to match identifier names and accessions.
+     *
+     * @param c the class of annotation to extract from (e.g. Note.class)
+     * @param overrideName override the use of a match resource name - useful when for example you want to match 'KEGG' to KEGG Compound.
+     * @param resourcePattern the pattern to match the resource part
+     * @param separatorPattern the pattern to match the separator part
+     * @param identifierPattern the pattern to match the identifier part
+     */
     public ReferenceExtractor(Class<? extends A> c,
+                              String overrideName,
                               String resourcePattern,
                               String separatorPattern,
                               String identifierPattern) {
+        this.overrideName = overrideName;
         this.visitor = new MultiGroupPatternMatcher<A>(c,
                                                        getPattern(resourcePattern,
                                                                   separatorPattern,
@@ -79,7 +92,7 @@ public class ReferenceExtractor<A extends StringAnnotation>
         if (groups.isEmpty())
             return IdentifierFactory.EMPTY_IDENTIFIER;
 
-        return factory.ofSynonym(groups.get(0), groups.get(1));
+        return factory.ofSynonym(overrideName.isEmpty() ? groups.get(0) : overrideName, groups.get(1));
 
     }
 
