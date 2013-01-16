@@ -49,6 +49,8 @@ public interface Reconstruction extends AnnotatedEntity {
      */
     public UUID uuid();
 
+    public File defaultLocation();
+
     public Genome getGenome();
 
     public void setGenome(Genome genome);

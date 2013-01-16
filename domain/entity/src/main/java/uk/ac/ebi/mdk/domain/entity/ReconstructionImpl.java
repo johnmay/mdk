@@ -400,14 +400,18 @@ public class ReconstructionImpl
     // TODO (jwmay) MOVE all methods below this comment
 
 
-    public void setContainer(File container) {
+    public final File defaultLocation() {
+        return new File(System.getProperty("user.home") + File.separator + getAccession() + RECONSTRUCTION_FILE_EXTENSION);
+    }
+
+    public final void setContainer(File container) {
         this.container = container;
     }
 
 
-    public File getContainer() {
+    public final File getContainer() {
         if (container == null) {
-            container = new File(System.getProperty("user.home") + File.separator + getAccession() + RECONSTRUCTION_FILE_EXTENSION);
+            this.container = defaultLocation();
         }
         return container;
     }
