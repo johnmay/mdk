@@ -36,7 +36,7 @@ import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
  */
 @Brief("BRENDA Chemical")
 public class BRENDAChemicalIdentifier
-        extends ChemicalIdentifier {
+        extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BRENDAChemicalIdentifier.class);
 

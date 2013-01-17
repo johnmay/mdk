@@ -20,23 +20,23 @@ package uk.ac.ebi.mdk.domain.identifier;
 import org.apache.log4j.Logger;
 
 /**
- * @name    ChemicalIdentifier – 2011.08.16
+ * @name    AbstractChemicalIdentifier – 2011.08.16
  *          An identifier for use with Chemicals
  * @version $Rev$ : Last Changed $Date$
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-public abstract class ChemicalIdentifier
+public abstract class AbstractChemicalIdentifier
         extends AbstractIdentifier implements uk.ac.ebi.mdk.domain.identifier.type.ChemicalIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger( ChemicalIdentifier.class );
+    private static final Logger LOGGER = Logger.getLogger( AbstractChemicalIdentifier.class );
 
 
-    public ChemicalIdentifier() {
+    public AbstractChemicalIdentifier() {
     }
 
 
-    public ChemicalIdentifier(String accession) {
+    public AbstractChemicalIdentifier(String accession) {
         super(accession);
     }
 

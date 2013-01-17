@@ -183,4 +183,5 @@ public interface ServiceManager {
                                                                           Class<? extends S>           serviceClass);
 
     public Collection<Identifier> getIdentifiers(Class<? extends QueryService> c);
+
 }

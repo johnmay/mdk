@@ -41,7 +41,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @Description("The Gmelin database is a large database of organometallic and inorganic compounds updated quarterly")
 @Synonyms("Gmelin Registry Number")
 public class GmelinRegistryIdentifier
-  extends ChemicalIdentifier {
+  extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(GmelinRegistryIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

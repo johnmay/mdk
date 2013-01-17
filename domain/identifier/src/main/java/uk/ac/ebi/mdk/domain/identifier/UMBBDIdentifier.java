@@ -41,7 +41,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @Description("University of Minnesota Biocatalysis/Biodegradation Database")
 @Synonyms("UM-BBD compID")
 public class UMBBDIdentifier
-  extends ChemicalIdentifier {
+  extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(UMBBDIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

@@ -39,7 +39,7 @@ import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
 @Brief("HSDB")
 @Description("Hazardous Substances Data Bank")
 public class HSDBIdentifier
-  extends ChemicalIdentifier {
+  extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(HSDBIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

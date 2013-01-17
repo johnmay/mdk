@@ -39,7 +39,7 @@ import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
 @Brief("ZINC")
 @Description("ZINC Open source database of commercially available lead compounds.")
 public class ZINCIdentifier
-  extends ChemicalIdentifier {
+  extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(ZINCIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

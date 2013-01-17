@@ -36,7 +36,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @Description("BioCyc Compound")
 @Synonyms({"MetaCyc accession", "BioCyc Chemical"})
 public class BioCycChemicalIdentifier
-        extends ChemicalIdentifier {
+        extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BioCycChemicalIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

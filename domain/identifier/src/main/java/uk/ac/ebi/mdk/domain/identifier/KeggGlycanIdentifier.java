@@ -35,7 +35,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @MIR(26)
 @Synonyms("KEGG GLYCAN accession")
 public class KeggGlycanIdentifier
-        extends ChemicalIdentifier implements KEGGIdentifier {
+        extends AbstractChemicalIdentifier implements KEGGIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(KeggGlycanIdentifier.class);
 

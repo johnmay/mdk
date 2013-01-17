@@ -38,7 +38,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @MIR(84)
 @Synonyms("ChEMBL")
 public class CHEMBLIdentifier
-        extends ChemicalIdentifier {
+        extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(CHEMBLIdentifier.class);
 

@@ -36,7 +36,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
  */
 @MIR(25)
 @Synonyms("KEGG DRUG accession")
-public class KEGGDrugIdentifier extends ChemicalIdentifier implements KEGGIdentifier {
+public class KEGGDrugIdentifier extends AbstractChemicalIdentifier implements KEGGIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGDrugIdentifier.class);
 

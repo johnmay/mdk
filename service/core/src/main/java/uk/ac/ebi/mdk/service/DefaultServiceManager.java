@@ -166,7 +166,7 @@ public class DefaultServiceManager implements ServiceManager {
      *
      * @return
      */
-    private Collection<Class<? extends QueryService>> getImplementingInterfaces(Class<?> c) {
+    public Collection<Class<? extends QueryService>> getImplementingInterfaces(Class<?> c) {
 
         if (interfaceMap.containsKey(c)) {
             return interfaceMap.get(c);
@@ -236,6 +236,9 @@ public class DefaultServiceManager implements ServiceManager {
             if (preference != 0) {
                 return preference;
             }
+            int cmp = o1.getIdentifier().compareTo(o2.getIdentifier());
+            if(cmp != 0)
+                return cmp;
             return o1.getClass().getName().compareTo(o2.getClass().getName());
         }
     }

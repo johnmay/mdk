@@ -41,7 +41,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @Description("Protein Data Bank Chemical")
 @Synonyms("PDBeChem accession")
 public class PDBChemIdentifier
-  extends ChemicalIdentifier {
+  extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(PDBChemIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

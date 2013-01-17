@@ -36,7 +36,7 @@ import uk.ac.ebi.mdk.deprecated.MIR;
  */
 @MIR(value = 237)
 public class CASIdentifier
-        extends ChemicalIdentifier {
+        extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(CASIdentifier.class);
 

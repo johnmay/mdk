@@ -26,7 +26,7 @@ import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.ChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.AbstractChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 
 
@@ -52,7 +52,7 @@ public class IdentifierDemo {
         id1.equals(id2);
         // true   - future support will allow comparisson to a String
 
-        if( id1 instanceof ChemicalIdentifier) {
+        if( id1 instanceof AbstractChemicalIdentifier) {
             // true
         }
 

@@ -38,7 +38,7 @@ import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
  */
 @Brief("BioWarehouse Chemical")
 public class BioWarehouseChemicalIdentifier
-  extends ChemicalIdentifier implements BioWarehouseIdentifier {
+  extends AbstractChemicalIdentifier implements BioWarehouseIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BioWarehouseChemicalIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

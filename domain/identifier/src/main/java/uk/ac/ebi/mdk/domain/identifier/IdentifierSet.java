@@ -83,7 +83,7 @@ public class IdentifierSet
     /**
      *
      * Accessor to all identifiers extending a given type. For example if you provide a
-     * ChemicalIdentifier class all chemical identifiers held within the set will also be
+     * AbstractChemicalIdentifier class all chemical identifiers held within the set will also be
      * returned (e.g. {@see ChEBIIdentifier} and {@see KEGGCompoundIdentifier})
      *
      * @param type

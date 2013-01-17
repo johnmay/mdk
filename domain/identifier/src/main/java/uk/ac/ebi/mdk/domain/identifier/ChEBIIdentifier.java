@@ -32,7 +32,7 @@ import uk.ac.ebi.mdk.deprecated.MIR;
  */
 @MIR(2)
 public final class ChEBIIdentifier
-        extends ChemicalIdentifier implements Cloneable {
+        extends AbstractChemicalIdentifier implements Cloneable {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBIIdentifier.class);
 

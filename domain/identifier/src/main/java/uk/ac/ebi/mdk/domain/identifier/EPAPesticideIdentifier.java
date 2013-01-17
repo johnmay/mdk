@@ -39,7 +39,7 @@ import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
 @Brief("EPA_PESTICIDE")
 @Description("EPA Pesticide Chemical Code")
 public class EPAPesticideIdentifier
-  extends ChemicalIdentifier {
+  extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(EPAPesticideIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

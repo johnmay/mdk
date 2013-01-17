@@ -41,7 +41,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @Description("Beilstein Registry Number")
 @Synonyms({"BRN Chemical Registry", "Beilstein Registry Number"})
 public class BRNIdentifier
-  extends ChemicalIdentifier {
+  extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BRNIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

@@ -31,7 +31,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
  */
 @MIR(51)
 @Synonyms("HMDB accession")
-public class HMDBIdentifier extends ChemicalIdentifier {
+public class HMDBIdentifier extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(HMDBIdentifier.class);
 

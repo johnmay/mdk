@@ -39,7 +39,7 @@ import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
 @Brief("EINECS")
 @Description("EINECS European Database of commercially available Chemicals")
 public class EINECSIdentifier
-  extends ChemicalIdentifier {
+  extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(EINECSIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

@@ -35,7 +35,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @MIR(33)
 @Synonyms({"PubChem Substance"})
 public class PubChemSubstanceIdentifier
-        extends ChemicalIdentifier {
+        extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(PubChemSubstanceIdentifier.class);
 

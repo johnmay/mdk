@@ -37,7 +37,7 @@ import uk.ac.ebi.mdk.deprecated.MIR;
  */
 @MIR(138)
 public class ChemSpiderIdentifier
-  extends ChemicalIdentifier {
+  extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(ChemSpiderIdentifier.class);
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(

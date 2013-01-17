@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.preference.type.IncrementalPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
 import uk.ac.ebi.mdk.ResourcePreferences;
-import uk.ac.ebi.mdk.domain.identifier.ChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.AbstractChemicalIdentifier;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 
@@ -40,7 +40,7 @@ import java.io.ObjectOutput;
 @Brief("Chemical")
 @Description("A basic auto-incrementing identifier for chemical compounds")
 public class BasicChemicalIdentifier
-        extends ChemicalIdentifier {
+        extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(BasicChemicalIdentifier.class);
 

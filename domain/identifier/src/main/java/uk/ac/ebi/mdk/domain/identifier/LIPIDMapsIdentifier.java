@@ -38,7 +38,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @MIR(52)
 @Synonyms({"LIPID MAPS instance accession", "LipidMAPS"})
 public class LIPIDMapsIdentifier
-        extends ChemicalIdentifier {
+        extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(LIPIDMapsIdentifier.class);
 

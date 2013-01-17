@@ -35,7 +35,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
 @MIR(34)
 @Synonyms({"PubChem", "PubChem Compound"})
 public class PubChemCompoundIdentifier
-        extends ChemicalIdentifier {
+        extends AbstractChemicalIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(PubChemCompoundIdentifier.class);
 

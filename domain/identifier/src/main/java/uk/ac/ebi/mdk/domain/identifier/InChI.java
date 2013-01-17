@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 @Brief("InChI")
 @Description("The IUPAC International Chemical Identifier ")
 public class InChI
-        extends ChemicalIdentifier
+        extends AbstractChemicalIdentifier
         implements Serializable {
 
     private static final long serialVersionUID = 8312829501093553787L;

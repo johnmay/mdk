@@ -36,7 +36,7 @@ import uk.ac.ebi.mdk.domain.identifier.type.KEGGIdentifier;
 @Synonyms({"cpd",
            "LIGAND-CPD"})
 public class KEGGCompoundIdentifier
-        extends ChemicalIdentifier
+        extends AbstractChemicalIdentifier
         implements KEGGIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundIdentifier.class);
