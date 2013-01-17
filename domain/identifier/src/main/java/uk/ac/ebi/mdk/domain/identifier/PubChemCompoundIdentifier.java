@@ -33,7 +33,7 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
  * @author  $Author$ (this version)
  */
 @MIR(34)
-@Synonyms({"PubChem", "PubChem Compound"})
+@Synonyms({"CID", "PubChem Compound"})
 public class PubChemCompoundIdentifier
         extends AbstractChemicalIdentifier {
 
