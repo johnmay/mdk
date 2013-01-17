@@ -8,6 +8,7 @@ import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
 import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
+import uk.ac.ebi.mdk.domain.entity.Task;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.security.InvalidParameterException;
@@ -23,7 +24,7 @@ import java.util.Set;
  */
 public abstract class RunnableTask
         extends AbstractAnnotatedEntity
-        implements Runnable {
+        implements Task, Runnable {
 
     private             TaskStatus status    = TaskStatus.QUEUED;
     public static final String     BASE_TYPE = "Task";

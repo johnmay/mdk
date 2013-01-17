@@ -19,6 +19,7 @@ package uk.ac.ebi.mdk.domain.annotation.task;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.AbstractAnnotation;
+import uk.ac.ebi.mdk.domain.entity.Task;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.lang.annotation.Context;
@@ -35,7 +36,7 @@ import java.io.ObjectOutput;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@Context
+@Context(Task.class)
 @Brief("Parameter")
 @Description("A parameter for a task (not necessarily external)")
 public class Parameter extends AbstractAnnotation {

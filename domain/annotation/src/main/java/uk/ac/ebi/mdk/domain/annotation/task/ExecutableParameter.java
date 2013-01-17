@@ -18,6 +18,7 @@
 
 package uk.ac.ebi.mdk.domain.annotation.task;
 
+import uk.ac.ebi.mdk.domain.entity.Task;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.lang.annotation.Description;
@@ -32,7 +33,7 @@ import java.io.File;
  * @name ExecutableParameter - 2011.10.13 <br> A special type of file parameter
  * the describes an executable
  */
-@Context
+@Context(Task.class)
 @Brief("Executable")
 @Description("A parameter for an external task that describes the executable")
 public class ExecutableParameter

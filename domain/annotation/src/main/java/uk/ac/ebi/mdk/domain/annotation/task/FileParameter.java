@@ -19,6 +19,7 @@
 package uk.ac.ebi.mdk.domain.annotation.task;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.entity.Task;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.lang.annotation.Context;
@@ -32,7 +33,7 @@ import java.io.File;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
-@Context
+@Context(Task.class)
 @Brief("File")
 @Description("A parameter for a task (not necessarily external) that uses a local file")
 public class FileParameter extends Parameter {
