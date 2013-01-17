@@ -20,8 +20,10 @@
  */
 package uk.ac.ebi.mdk.ui.edit.crossreference.module;
 
-import java.awt.Window;
+import java.awt.*;
 import javax.swing.JComponent;
+import javax.swing.undo.UndoManager;
+
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.caf.component.ExpandingComponentList;
@@ -49,15 +51,17 @@ public class ManualCrossReferenceModule implements CrossreferenceModule {
 
     private Metabolite metabolite;
 
+    private final UndoManager undoManager;
 
-    public ManualCrossReferenceModule(Window window) {
+    public ManualCrossReferenceModule(final Window window, UndoManager undoManager) {
+        this.undoManager = undoManager;
         expand = new ExpandingComponentList<IdentifierEditor>(window) {
-
             @Override
             public IdentifierEditor newComponent() {
                 return new IdentifierEditor();
             }
         };
+        expand.setBackground(window.getBackground());
     }
 
 

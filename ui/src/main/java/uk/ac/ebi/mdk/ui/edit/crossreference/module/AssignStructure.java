@@ -41,6 +41,7 @@ import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
@@ -69,8 +70,11 @@ public final class AssignStructure
 
     private String defaultText = "Paste InCHI, SMILES or Mol file here";
 
+    private final UndoManager undoManager;
 
-    public AssignStructure() {
+    public AssignStructure(UndoManager undoManager) {
+
+        this.undoManager = undoManager;
 
         component = PanelFactory.createDialogPanel("p, p:grow, min", "p, 4dlu, p");
 

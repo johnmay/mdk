@@ -57,6 +57,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -87,6 +88,7 @@ public class DatabaseSearch
     private Metabolite     context;
     private ServiceManager serviceManager;
     private ResourceList resourceList = new ResourceList();
+    private final UndoManager undoManager;
 
     private Timer timer = new Timer(500, new ActionListener() {
 
@@ -97,9 +99,10 @@ public class DatabaseSearch
     });
 
 
-    public DatabaseSearch(ServiceManager serviceManager) {
+    public DatabaseSearch(ServiceManager serviceManager, UndoManager undoManager) {
 
         this.serviceManager = serviceManager;
+        this.undoManager = undoManager;
 
         component = PanelFactory.createDialogPanel();
         component.setLayout(new FormLayout("p", "p, 4dlu, p"));
@@ -311,7 +314,7 @@ public class DatabaseSearch
                 context.addAnnotation(new Synonym(metabolte.getName()));
             }
 
-            context.addAnnotation(new CrossReference(metabolte.getIdentifier()));
+            context.addAnnotation(CrossReference.create(metabolte.getIdentifier()));
 
         }
 

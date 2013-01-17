@@ -144,6 +144,9 @@ public class IdentifierEditor extends JComponent {
 
     }
 
+    @Override public void setBackground(Color bg) {
+        type.setBackground(bg);
+    }
 
     /**
      * Turns on identifier suggestion. On every update of the field

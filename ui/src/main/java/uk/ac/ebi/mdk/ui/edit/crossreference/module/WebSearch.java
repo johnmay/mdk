@@ -26,6 +26,8 @@ import java.awt.event.ActionEvent;
 import java.net.URI;
 import java.net.URLEncoder;
 import javax.swing.*;
+import javax.swing.undo.UndoManager;
+
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
@@ -72,7 +74,11 @@ public class WebSearch
     };
 
 
-    public WebSearch() {
+    private final UndoManager undoManager;
+
+    public WebSearch(UndoManager undoManager) {
+
+        this.undoManager = undoManager;
 
         component = PanelFactory.createDialogPanel("left:p:grow, 4dlu, min", "p, 4dlu, p");
         field = FieldFactory.newField(30);

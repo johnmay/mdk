@@ -33,6 +33,7 @@ import uk.ac.ebi.mdk.tool.domain.PeptideFactory;
 import uk.ac.ebi.mdk.ui.tool.annotation.CrossreferenceModule;
 
 import javax.swing.*;
+import javax.swing.undo.UndoManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,11 +66,13 @@ public class PeptideGenerator implements CrossreferenceModule {
     };
 
     private Metabolite context;
+    private final UndoManager undoManager;
 
 
-    public PeptideGenerator(EntityFactory factory) {
+    public PeptideGenerator(EntityFactory factory, UndoManager undoManager) {
 
         this.factory = new PeptideFactory(factory);
+        this.undoManager = undoManager;
 
         component = PanelFactory.createDialogPanel("p, 4dlu, p, 4dlu, p, 4dlu, p", "p");
 

@@ -41,7 +41,7 @@ public class ChEBIStructureLoader
         addRequiredResource("ChEBI SDF",
                             "An SDF file containing the ChEBI ID as a property named <ChEBI ID>",
                             ResourceFileLocation.class,
-                            new GZIPRemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/SDF/ChEBI_complete.sdf.gz"));
+                            new GZIPRemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/SDF/ChEBI_lite.sdf.gz"));
 
     }
 
