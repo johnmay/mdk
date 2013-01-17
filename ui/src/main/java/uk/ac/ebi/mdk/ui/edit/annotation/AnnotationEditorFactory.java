@@ -200,7 +200,7 @@ public class AnnotationEditorFactory {
 
         @Override
         public JComponent getComponent() {
-            return LabelFactory.newFormLabel("N/A");
+            return LabelFactory.newFormLabel("not currently supported");
         }
 
         @Override
