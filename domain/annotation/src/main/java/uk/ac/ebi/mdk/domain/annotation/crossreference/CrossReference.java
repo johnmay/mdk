@@ -45,7 +45,7 @@ import java.util.List;
  * @author  $Author$ (this version)
  */
 @Context
-@Brief("Crossreference")
+@Brief("Cross-reference")
 @Description("A crossreference to an alternative identifier")
 public class CrossReference<E extends Identifier, O extends Observation>
         extends AbstractValueAnnotation<E>
