@@ -166,7 +166,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
         // sort by resource name
         Collections.sort(supportedIdentifiers, new Comparator<Identifier>() {
             public int compare(Identifier o1, Identifier o2) {
-                return o1.getResource().getName().compareTo(o2.getResource().getName());
+                return o1.getShortDescription().compareTo(o2.getShortDescription());
             }
         });
 
