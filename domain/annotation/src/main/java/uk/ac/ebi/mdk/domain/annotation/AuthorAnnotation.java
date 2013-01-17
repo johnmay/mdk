@@ -147,7 +147,7 @@ public class AuthorAnnotation
      */
     @Override
     public String getShortDescription() {
-        return "@" + author;
+        return author == null ? "Author Comment " : "@" + author;
     }
 
 
