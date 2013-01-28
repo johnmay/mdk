@@ -50,25 +50,25 @@ public final class BasicAtomHashGenerator
     }
 
     @Override
-    public Long[] generate(IAtomContainer container) {
+    public long[] generate(IAtomContainer container) {
         return generate(create(container),
                         seedGenerator.generate(container),
                         new StereoComponentAggregator<Long>(stereoProvider.getComponents(container)),
                         new BitSet(container.getAtomCount()));
     }
 
-    protected Long[] generate(int[][] connections, Long[] prev, StereoComponent<Long> stereo, BitSet terminallyRemovable) {
+    protected long[] generate(int[][] connections, long[] prev, StereoComponent<Long> stereo, BitSet terminallyRemovable) {
 
         int n = connections.length;
-        Long[] next = Arrays.copyOf(prev, n);
+        long[] next = Arrays.copyOf(prev, n);
 
         // holds our neighbour invariants (we need to two the original and the rotated)
-        long[] buffer = new long[n], buffer2 = new long[n];
+        long[] buffer = Arrays.copyOf(next, n), buffer2 = Arrays.copyOf(next, n);
 
         // configure stereo
-        while (stereo.configure(prev, next)) {
-            copy(next, prev);
-        }
+//        while (stereo.configure(prev, next)) {
+//            copy(next, prev);
+//        }
 
         for (int c = 0; c < this.cycles; c++) {
 
@@ -80,9 +80,9 @@ public final class BasicAtomHashGenerator
             copy(next, prev);
 
             // configure stereo after each cycle
-            while (stereo.configure(prev, next)) {
-                copy(next, prev);
-            }
+//            while (stereo.configure(prev, next)) {
+//                copy(next, prev);
+//            }
 
         }
 
@@ -90,7 +90,7 @@ public final class BasicAtomHashGenerator
     }
 
 
-    private long connected(int i, int[][] table, Long[] prev, long[] buffer, long[] rotated) {
+    private long connected(int i, int[][] table, long[] prev, long[] buffer, long[] rotated) {
 
 
         long  hash       = distribute(prev[i]);

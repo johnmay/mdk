@@ -34,7 +34,7 @@ public abstract class AbstractHashGenerator {
     protected final RandomNumberRotater rotater;
     protected final RandomNumberGenerator generator;
 
-    protected static final int LSB_MASK = 0x5;
+    protected static final int LOW_ORDER_BITS = 0x5;
 
     public AbstractHashGenerator(RandomNumberGenerator generator) {
         this.rotater = new RandomNumberRotater(generator);
@@ -52,19 +52,19 @@ public abstract class AbstractHashGenerator {
      * @param src  copy from here
      * @param dest copy to here
      */
-    protected static void copy(Long[] src, Long[] dest) {
+    protected static void copy(long[] src, long[] dest) {
         System.arraycopy(src, 0, dest, 0, src.length);
     }
 
-    protected void distributingCopy(Long[] src, Long[] dest) {
+    protected void distributingCopy(long[] src, long[] dest) {
         for(int i = 0; i < src.length; i++){
             dest[i] = src[i];
             src[i]  = distribute(src[i]);
         }
     }
 
-    protected Long[] distributingCopy(Long[] src) {
-        Long[] dest = new Long[src.length];
+    protected long[] distributingCopy(long[] src) {
+        long[] dest = Arrays.copyOf(src, src.length);
         distributingCopy(src, dest);
         return dest;
     }
@@ -82,11 +82,11 @@ public abstract class AbstractHashGenerator {
     }
 
     protected long distribute(Long value) {
-        return rotate(value, leastSignificantBits(value));
+        return rotate(value, lowOrderBits(value));
     }
 
     protected long distribute(long value) {
-        return rotate(value, leastSignificantBits(value));
+        return rotate(value, lowOrderBits(value));
     }
 
     protected final int[][] create(IAtomContainer container) {
@@ -137,8 +137,8 @@ public abstract class AbstractHashGenerator {
      * @param value
      * @return
      */
-    protected static int leastSignificantBits(long value) {
-        return 1 + ((int) value & LSB_MASK);
+    protected static int lowOrderBits(long value) {
+        return 1 + ((int) value & LOW_ORDER_BITS);
     }
 
     protected String toString(long[] values) {

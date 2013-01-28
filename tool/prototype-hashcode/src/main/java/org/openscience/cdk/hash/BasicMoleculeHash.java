@@ -41,9 +41,9 @@ public class BasicMoleculeHash extends AbstractHashGenerator
     }
 
     @Override
-    public Long generate(IAtomContainer container) {
+    public long generate(IAtomContainer container) {
 
-        Long[] hashes = atomGenerator.generate(container);
+        long[] hashes = atomGenerator.generate(container);
         long hash = INITIAL_HASH_VALUE;
 
         int n = hashes.length;
@@ -51,7 +51,7 @@ public class BasicMoleculeHash extends AbstractHashGenerator
         if (n == 0) return hash;
 
         Arrays.sort(hashes);
-        Long[] rotated = Arrays.copyOf(hashes, n);
+        long[] rotated = Arrays.copyOf(hashes, n);
 
         hash ^= (rotated[0] = hashes[0]);
         for (int i = 1; i < n; i++) {

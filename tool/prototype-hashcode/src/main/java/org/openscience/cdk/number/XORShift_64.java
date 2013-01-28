@@ -25,10 +25,9 @@ package org.openscience.cdk.number;
  */
 public class XORShift_64 implements RandomNumberGenerator {
     @Override
-    public long next(long seed) {
-        seed ^= seed << 21;
-        seed ^= seed >>> 35;
-        seed ^= seed << 4;
-        return seed;
+    public long next(long x) {
+        x = x ^ x << 21;
+        x = x ^ x >>> 35;
+        return x ^ x << 4;
     }
 }

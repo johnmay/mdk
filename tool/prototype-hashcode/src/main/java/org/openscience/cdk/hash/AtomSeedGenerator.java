@@ -41,10 +41,10 @@ public final class AtomSeedGenerator
     }
 
     @Override
-    public Long[] generate(IAtomContainer container) {
+    public long[] generate(IAtomContainer container) {
 
         int n = container.getAtomCount();
-        Long[] seeds = new Long[n];
+        long[] seeds = new long[n];
 
         long initial = n > 1 ? 389 % n : 1;
 
