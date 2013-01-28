@@ -48,15 +48,15 @@ public class PerturbedAtomHashGenerator extends AbstractHashGenerator
     }
 
     @Override
-    public Long[] generate(IAtomContainer container) {
+    public long[] generate(IAtomContainer container) {
 
         int[][] graph = basic.create(container);
         StereoComponent<Long> stereo = new StereoComponentAggregator<Long>(stereoComponentProvider.getComponents(container));
 
         BitSet reducible = new BitSet(container.getAtomCount());
 
-        Long[] seeds = seedGenerator.generate(container);
-        Long[] initial = basic.generate(graph, seeds, stereo, reducible);
+        long[] seeds = seedGenerator.generate(container);
+        long[] initial = basic.generate(graph, seeds, stereo, reducible);
 
         Map<Long, Integer> equivalent = new HashMap<Long, Integer>(graph.length + ((4 + graph.length) / 3));
 
@@ -75,13 +75,13 @@ public class PerturbedAtomHashGenerator extends AbstractHashGenerator
 
     }
 
-    private Long[] perturbed(Long[] initial, IAtomContainer container, int[][] graph, StereoComponent<Long> stereo, Map<Long, Integer> equivalent, BitSet reducible) {
+    private long[] perturbed(long[] initial, IAtomContainer container, int[][] graph, StereoComponent<Long> stereo, Map<Long, Integer> equivalent, BitSet reducible) {
 
         int n = container.getAtomCount();
         BitSet done = new BitSet(n);
 
         // where the final values will go
-        Long[] values = Arrays.copyOf(initial, initial.length);
+        long[] values = Arrays.copyOf(initial, initial.length);
         Counter[] counters = new Counter[n];
         for (int i = 0; i < n; i++) {
             counters[i] = new Counter(n);
@@ -117,14 +117,14 @@ public class PerturbedAtomHashGenerator extends AbstractHashGenerator
 
     }
 
-    private void include(Long[] primary, Long[] modified, Counter[] counters) {
+    private void include(long[] primary, long[] modified, Counter[] counters) {
         for (int i = 0; i < primary.length; i++) {
             primary[i] ^= rotate(modified[i], counters[i].register(modified[i]));
         }
     }
 
-    private Long[] modify(Long[] values, int index) {
-        Long[] copy = Arrays.copyOf(values, values.length);
+    private long[] modify(long[] values, int index) {
+        long[] copy = Arrays.copyOf(values, values.length);
         copy[index] = rotate(copy[index], 1);
         return copy;
     }
