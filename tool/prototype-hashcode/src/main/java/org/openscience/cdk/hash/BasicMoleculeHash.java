@@ -18,7 +18,6 @@
 package org.openscience.cdk.hash;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.number.MapCounter;
 
 import java.util.Arrays;
 
@@ -47,9 +46,18 @@ public class BasicMoleculeHash extends AbstractHashGenerator
         Long[] hashes = atomGenerator.generate(container);
         long hash = INITIAL_HASH_VALUE;
 
-        Counter counter = new Counter(hashes.length);
-        for (Long h : hashes) {
-            hash ^= rotate(h, counter.register(h));
+        int n = hashes.length;
+
+        if (n == 0) return hash;
+
+        Arrays.sort(hashes);
+        Long[] rotated = Arrays.copyOf(hashes, n);
+
+        hash ^= (rotated[0] = hashes[0]);
+        for (int i = 1; i < n; i++) {
+            hash ^= (rotated[i] =
+                    (hashes[i] == hashes[i - 1]) ? generate(rotated[i - 1])
+                                                 : hashes[i]);
         }
 
         return hash;

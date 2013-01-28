@@ -62,29 +62,24 @@ public final class BasicAtomHashGenerator
         int n = connections.length;
         Long[] next = Arrays.copyOf(prev, n);
 
-        // initialise value counters
-        Counter[] counters = new Counter[n];
-        for (int i = 0; i < n; i++) {
-            counters[i] = new Counter(cycles * 5);
-        }
+        // holds our neighbour invariants (we need to two the original and the rotated)
+        long[] buffer = new long[n], buffer2 = new long[n];
 
         // configure stereo
         while (stereo.configure(prev, next)) {
             copy(next, prev);
         }
 
-        BitSet reducibleScratch = new BitSet(n);
-
         for (int c = 0; c < this.cycles; c++) {
 
+            // include connect invariants
             for (int i = 0; i < connections.length; i++) {
-                next[i] = connected(i, connections, prev, counters[i], terminallyRemovable, reducibleScratch);
+                next[i] = connected(i, connections, prev, buffer, buffer2);
             }
-
-            terminallyRemovable.or(reducibleScratch);
 
             copy(next, prev);
 
+            // configure stereo after each cycle
             while (stereo.configure(prev, next)) {
                 copy(next, prev);
             }
@@ -95,21 +90,33 @@ public final class BasicAtomHashGenerator
     }
 
 
-    private long connected(int i, int[][] table, Long[] prev, Counter counter, BitSet reducible, BitSet reducibleScratch) {
-        long hash = distribute(prev[i]);
-        int nonterminalcount = 0;
-        for (int j : table[i]) {
-            hash ^= rotate(prev[j], counter.register(prev[j]));
-            if(!reducible.get(j))
-                nonterminalcount++;
+    private long connected(int i, int[][] table, Long[] prev, long[] buffer, long[] rotated) {
+
+
+        long  hash       = distribute(prev[i]);
+        int[] neighbours = table[i];
+        int   n          = neighbours.length;
+
+        if (n == 0)
+            return hash;
+
+        for (int j = 0; j < neighbours.length; j++) {
+            buffer[j] = prev[neighbours[j]];
         }
 
-        // we have one or less neighburs which we 'might' be in rings
-        // therefore we can't be in a ring and are reducible
-        if(nonterminalcount <= 1)
-            reducibleScratch.set(i);
+
+        Arrays.sort(buffer, 0, n);
+
+        hash ^= (rotated[0] = buffer[0]);
+        for (int j = 1; j < n; j++) {
+            if(buffer[j] == buffer[j - 1])
+                hash ^= (rotated[j] = generate(rotated[j - 1]));
+            else
+                hash ^= (rotated[j] = buffer[j]);
+        }
 
         return hash;
+
     }
 
 }

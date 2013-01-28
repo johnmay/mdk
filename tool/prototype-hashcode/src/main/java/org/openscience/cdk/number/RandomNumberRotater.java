@@ -36,9 +36,8 @@ public class RandomNumberRotater {
      * @return
      */
     public final long rotate(long value, int n) {
-        for (int i = 0; i < n; i++) {
+        while (n-- > 0)
             value = generator.next(value);
-        }
         return value;
     }
 

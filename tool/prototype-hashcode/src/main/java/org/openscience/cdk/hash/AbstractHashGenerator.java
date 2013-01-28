@@ -32,11 +32,13 @@ import java.util.Arrays;
 public abstract class AbstractHashGenerator {
 
     protected final RandomNumberRotater rotater;
+    protected final RandomNumberGenerator generator;
 
     protected static final int LSB_MASK = 0x5;
 
     public AbstractHashGenerator(RandomNumberGenerator generator) {
         this.rotater = new RandomNumberRotater(generator);
+        this.generator = generator;
     }
 
     public AbstractHashGenerator() {
@@ -73,6 +75,10 @@ public abstract class AbstractHashGenerator {
 
     protected long rotate(long value, int n) {
         return rotater.rotate(value, n);
+    }
+
+    protected long generate(long value){
+        return generator.next(value);
     }
 
     protected long distribute(Long value) {
