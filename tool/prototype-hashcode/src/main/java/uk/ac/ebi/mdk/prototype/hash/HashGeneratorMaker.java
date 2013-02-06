@@ -24,7 +24,6 @@ import org.openscience.cdk.hash.AtomHashGenerator;
 import org.openscience.cdk.hash.AtomSeedGenerator;
 import org.openscience.cdk.hash.BasicAtomHashGenerator;
 import org.openscience.cdk.hash.BasicMoleculeHash;
-import org.openscience.cdk.hash.CoordListAtomHashGenerator;
 import org.openscience.cdk.hash.MoleculeHashGenerator;
 import org.openscience.cdk.hash.PerturbedAtomHashGenerator;
 import org.openscience.cdk.interfaces.IAtom;
@@ -256,8 +255,7 @@ public class HashGeneratorMaker {
         AtomSeedGenerator seedGenerator = new AtomSeedGenerator(seeds);
         AtomHashGenerator atomGenerator = perturbed
                 ? new PerturbedAtomHashGenerator(seedGenerator, provider, depth)
-                : (coordList ? new CoordListAtomHashGenerator(seedGenerator, provider, depth)
-                : new BasicAtomHashGenerator(new AtomSeedGenerator(seeds), provider, depth));
+                : new BasicAtomHashGenerator(new AtomSeedGenerator(seeds), provider, depth);
         return new BasicMoleculeHash(atomGenerator);
     }
 
