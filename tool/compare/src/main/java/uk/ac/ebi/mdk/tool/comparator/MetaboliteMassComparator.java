@@ -18,9 +18,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
  */
-package uk.ac.ebi.core.comparator;
+package uk.ac.ebi.mdk.tool.comparator;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.annotation.ExactMass;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 /**
@@ -32,15 +35,22 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
  * @brief   ...class description...
  *
  */
-public class MetaboliteNameComparator extends AbstractLinkedComparator<Metabolite> {
+public class MetaboliteMassComparator extends AbstractLinkedComparator<Metabolite> {
     
-    private static final Logger LOGGER = Logger.getLogger(MetaboliteNameComparator.class);
+    private static final Logger LOGGER = Logger.getLogger(MetaboliteMassComparator.class);
 
     @Override
     protected int internalComparator(Metabolite s, Metabolite s1) {
-        String name = s.getName() != null ? s.getName() : "";
-        String name1 = s1.getName() != null ? s1.getName() : "";
+        Float mass = getMass(s);
+        Float mass1 = getMass(s1);
         
-        return name.compareToIgnoreCase(name1);
+        return mass.compareTo(mass1);
+    }
+
+    private Float getMass(Metabolite s) {
+        List<ExactMass> massAnnots = new ArrayList<ExactMass>(s.getAnnotations(ExactMass.class));
+        if(massAnnots.size()>0 && massAnnots.get(0).getValue()!=null)
+            return massAnnots.get(0).getValue();
+        return -1.0f;
     }
 }
