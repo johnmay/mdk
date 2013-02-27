@@ -48,13 +48,13 @@
             <artifactId>biojava3-core</artifactId>
             <groupId>org.biojava</groupId>
             <type>jar</type>
-            <version>3.0.4</version>
+            <version>3.0.5</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
-            <version>3.4.0</version>
+            <version>4.1.0</version>
         </dependency>
 
         <dependency>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>12.0</version>
+            <version>14.0</version>
         </dependency>
 
         <!-- remember: update NOTICE file also -->

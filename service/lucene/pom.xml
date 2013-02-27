@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-analyzers</artifactId>
-            <version>3.4.0</version>
+            <version>3.6.2</version>
         </dependency>
 
 
@@ -52,17 +52,17 @@
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-formula</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-fingerprint</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
 
