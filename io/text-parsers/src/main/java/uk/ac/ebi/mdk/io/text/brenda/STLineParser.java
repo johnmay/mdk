@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package uk.ac.ebi.metabolomes.parser.brenda;
+package uk.ac.ebi.mdk.io.text.brenda;
 
 import java.io.BufferedReader;
 import java.io.IOException;
