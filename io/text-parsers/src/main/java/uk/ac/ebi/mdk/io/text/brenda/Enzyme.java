@@ -1,4 +1,4 @@
-package uk.ac.ebi.metabolomes.parser.brenda;
+package uk.ac.ebi.mdk.io.text.brenda;
 
 import java.io.Serializable;
 import java.util.ArrayList;
