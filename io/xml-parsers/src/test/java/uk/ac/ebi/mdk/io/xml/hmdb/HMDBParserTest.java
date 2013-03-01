@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.io.xml.hmdb;
 
+import com.google.common.base.Joiner;
 import org.junit.Test;
 import uk.ac.ebi.mdk.io.xml.hmdb.marshal.HMDBDefaultMarshals;
 import uk.ac.ebi.mdk.io.xml.hmdb.marshal.HMDBXMLMarshal;
@@ -155,6 +156,8 @@ public class HMDBParserTest {
             assertThat(entry.getAccession(), is(""));
             entries.add(entry);
         }
+
+        System.out.println(Joiner.on("\n").join(entries));
 
         assertThat(indexOfName("1-Methylhistidine", entries), is(not(-1)));
         assertThat(indexOfName("1,3-Diaminopropane", entries), is(not(-1)));
