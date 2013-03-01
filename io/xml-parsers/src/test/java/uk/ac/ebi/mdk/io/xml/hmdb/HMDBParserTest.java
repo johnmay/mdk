@@ -31,9 +31,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Test for the HMDB Parser, note isolated parsing tests are located in {@link
@@ -52,7 +51,8 @@ public class HMDBParserTest {
         assertThat(metabolite.getAccession(), is("HMDB00001"));
         assertThat(metabolite.getCommonName(), is("1-Methylhistidine"));
 
-        assertThat(metabolite.getInChI(), is("InChI=1S/C7H11N3O2/c1-10-3-5(9-4-10)2-6(8)7(11)12/h3-4,6H,2,8H2,1H3,(H,11,12)/t6-/m0/s1"));
+        assertThat(metabolite
+                           .getInChI(), is("InChI=1S/C7H11N3O2/c1-10-3-5(9-4-10)2-6(8)7(11)12/h3-4,6H,2,8H2,1H3,(H,11,12)/t6-/m0/s1"));
         assertThat(metabolite.getSMILES(), is("CN1C=NC(C[C@H](N)C(O)=O)=C1"));
 
     }
@@ -89,14 +89,17 @@ public class HMDBParserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testLoad_Multiple() throws IOException {
-        File file = new File(getClass().getResource("HMDB00001-HMDB00005.xml").getFile());
+        File file = new File(getClass().getResource("HMDB00001-HMDB00005.xml")
+                                     .getFile());
         HMDBParser.load(file);
     }
 
     @Test public void testLoadAll() throws IOException {
-        File file = new File(getClass().getResource("HMDB00001-HMDB00005.xml").getFile());
+        File file = new File(getClass().getResource("HMDB00001-HMDB00005.xml")
+                                     .getFile());
         Collection<HMDBMetabolite> entries = HMDBParser.loadAll(file,
-                                                                HMDBDefaultMarshals.values());
+                                                                HMDBDefaultMarshals
+                                                                        .values());
         assertThat(entries.size(), is(3));
         List<HMDBMetabolite> metabolites = new ArrayList<HMDBMetabolite>(entries);
         assertThat(metabolites.get(0).getAccession(), is("HMDB00001"));
@@ -106,7 +109,8 @@ public class HMDBParserTest {
 
     @Test public void testLoadAll_Empty() throws IOException {
         File file = new File(getClass().getResource("HMDB00000.xml").getFile());
-        Collection<HMDBMetabolite> entries = HMDBParser.loadAll(file, HMDBDefaultMarshals.values());
+        Collection<HMDBMetabolite> entries = HMDBParser
+                .loadAll(file, HMDBDefaultMarshals.values());
         assertThat(entries.size(), is(0));
     }
 
@@ -115,35 +119,46 @@ public class HMDBParserTest {
         Iterator<HMDBMetabolite> it = HMDBParser.loadDirectory(dir);
 
         List<HMDBMetabolite> entries = new ArrayList<HMDBMetabolite>();
-        while(it.hasNext())
+        while (it.hasNext())
             entries.add(it.next());
 
-        System.out.println("testLoadDirectory");
-        System.out.println(entries);
-
-        assertThat(entries.get(0).getAccession(), is("HMDB00001"));
-        assertThat(entries.get(1).getAccession(), is("HMDB00002"));
-        assertThat(entries.get(2).getAccession(), is("HMDB00005"));
+        assertThat(indexOfAccession("HMDB00001", entries), is(not(-1)));
+        assertThat(indexOfAccession("HMDB00002", entries), is(not(-1)));
+        assertThat(indexOfAccession("HMDB00003", entries), is(not(-1)));
     }
+
+    private int indexOfAccession(String accession, List<HMDBMetabolite> entries) {
+        for (int i = 0; i < entries.size(); i++) {
+            if (accession.equals(entries.get(i).getAccession()))
+                return i;
+        }
+        return -1;
+    }
+
+    private int indexOfName(String name, List<HMDBMetabolite> entries) {
+        for (int i = 0; i < entries.size(); i++) {
+            if (name.equals(entries.get(i).getCommonName()))
+                return i;
+        }
+        return -1;
+    }
+
 
     @Test public void testLoadDirectory_NameOnly() throws IOException {
         File dir = new File(getClass().getResource("dir").getFile());
-        Iterator<HMDBMetabolite> entries = HMDBParser.loadDirectory(dir,
-                                                                    HMDBDefaultMarshals.COMMON_NAME);
-        HMDBMetabolite entry;
-        assertTrue(entries.hasNext());
-        entry = entries.next();
-        assertThat(entry.getAccession(), is(""));
-        assertThat(entry.getCommonName(), is("1-Methylhistidine"));
-        assertTrue(entries.hasNext());
-        entry = entries.next();
-        assertThat(entry.getAccession(), is(""));
-        assertThat(entry.getCommonName(), is("1,3-Diaminopropane"));
-        assertTrue(entries.hasNext());
-        entry = entries.next();
-        assertThat(entry.getAccession(), is(""));
-        assertThat(entry.getCommonName(), is("2-Ketobutyric acid"));
-        assertFalse(entries.hasNext());
+        Iterator<HMDBMetabolite> it = HMDBParser.loadDirectory(dir,
+                                                               HMDBDefaultMarshals.COMMON_NAME);
+
+        List<HMDBMetabolite> entries = new ArrayList<HMDBMetabolite>();
+        while (it.hasNext()) {
+            HMDBMetabolite entry = it.next();
+            assertThat(entry.getAccession(), is(""));
+            entries.add(entry);
+        }
+
+        assertThat(indexOfName("1-Methylhistidine", entries), is(not(-1)));
+        assertThat(indexOfName("1,3-Diaminopropane", entries), is(not(-1)));
+        assertThat(indexOfName("2-Ketobutyric acid", entries), is(not(-1)));
     }
 
     @Test(expected = IllegalArgumentException.class)
