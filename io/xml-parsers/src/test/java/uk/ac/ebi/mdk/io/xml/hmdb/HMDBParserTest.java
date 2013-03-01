@@ -112,14 +112,18 @@ public class HMDBParserTest {
 
     @Test public void testLoadDirectory() throws IOException {
         File dir = new File(getClass().getResource("dir").getFile());
-        Iterator<HMDBMetabolite> entries = HMDBParser.loadDirectory(dir);
-        assertTrue(entries.hasNext());
-        assertThat(entries.next().getAccession(), is("HMDB00001"));
-        assertTrue(entries.hasNext());
-        assertThat(entries.next().getAccession(), is("HMDB00002"));
-        assertTrue(entries.hasNext());
-        assertThat(entries.next().getAccession(), is("HMDB00005"));
-        assertFalse(entries.hasNext());
+        Iterator<HMDBMetabolite> it = HMDBParser.loadDirectory(dir);
+
+        List<HMDBMetabolite> entries = new ArrayList<HMDBMetabolite>();
+        while(it.hasNext())
+            entries.add(it.next());
+
+        System.out.println("testLoadDirectory");
+        System.out.println(entries);
+
+        assertThat(entries.get(0).getAccession(), is("HMDB00001"));
+        assertThat(entries.get(1).getAccession(), is("HMDB00002"));
+        assertThat(entries.get(2).getAccession(), is("HMDB00005"));
     }
 
     @Test public void testLoadDirectory_NameOnly() throws IOException {
