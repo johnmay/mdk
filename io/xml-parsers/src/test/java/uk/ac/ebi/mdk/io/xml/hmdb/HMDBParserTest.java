@@ -125,7 +125,7 @@ public class HMDBParserTest {
 
         assertThat(indexOfAccession("HMDB00001", entries), is(not(-1)));
         assertThat(indexOfAccession("HMDB00002", entries), is(not(-1)));
-        assertThat(indexOfAccession("HMDB00003", entries), is(not(-1)));
+        assertThat(indexOfAccession("HMDB00005", entries), is(not(-1)));
     }
 
     private int indexOfAccession(String accession, List<HMDBMetabolite> entries) {
@@ -156,8 +156,6 @@ public class HMDBParserTest {
             assertThat(entry.getAccession(), is(""));
             entries.add(entry);
         }
-
-        System.out.println(Joiner.on("\n").join(entries));
 
         assertThat(indexOfName("1-Methylhistidine", entries), is(not(-1)));
         assertThat(indexOfName("1,3-Diaminopropane", entries), is(not(-1)));
