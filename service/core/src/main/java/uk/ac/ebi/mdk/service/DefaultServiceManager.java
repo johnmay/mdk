@@ -7,6 +7,7 @@ import com.google.common.collect.TreeMultimap;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.query.QueryService;
 
@@ -28,6 +29,8 @@ import java.util.TreeSet;
  * @author John May
  */
 public class DefaultServiceManager implements ServiceManager {
+
+    private static final Logger LOGGER = Logger.getLogger(DefaultServiceManager.class);
 
     private final ServiceLoader<QueryService> serviceLoader = ServiceLoader.load(QueryService.class);
 
@@ -55,6 +58,7 @@ public class DefaultServiceManager implements ServiceManager {
             for (Class<? extends QueryService> serviceClass : getImplementingInterfaces(service.getClass())) {
                 ServiceKey key = new ServiceKey(identifierClass, serviceClass);
                 services.put(key, service);
+                LOGGER.debug(serviceClass.getSimpleName() + "service loaded");
             }
         }
 
