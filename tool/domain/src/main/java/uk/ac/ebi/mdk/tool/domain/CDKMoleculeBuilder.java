@@ -35,7 +35,7 @@ import uk.ac.ebi.mdk.domain.identifier.InChI;
 /**
  * Simplify building of molecules from several formats.
  * @author  johnmay
- * @deprecated stubbies in loading, causes more issues then it solves
+ * @deprecated subtleties in loading, causes more issues then it solves
  */
 @Deprecated
 public class CDKMoleculeBuilder {
