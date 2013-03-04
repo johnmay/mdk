@@ -21,7 +21,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerComparator;
 
 /**
- * Compare atom containers by their atom count.
+ * Compare atom containers by their atom count and sorts the atoms low to high.
  * @author  pmoreno
  */
 public final class AtomCountComparator implements Comparator<IAtomContainer> {
@@ -30,7 +30,7 @@ public final class AtomCountComparator implements Comparator<IAtomContainer> {
      * @inheritDoc
      */
     public int compare(IAtomContainer t, IAtomContainer t1) {
-        return -1 * nAtoms(t).compareTo(nAtoms(t1));
+        return nAtoms(t).compareTo(nAtoms(t1));
     }
 
 
