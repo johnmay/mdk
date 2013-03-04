@@ -36,15 +36,15 @@ public class AtomCountComparatorTest {
         IAtomContainer right = mock(IAtomContainer.class);
         when(left.getAtomCount()).thenReturn(5);
         when(right.getAtomCount()).thenReturn(10);
-        assertThat(new AtomCountComparator().compare(left, right), is(1));
-        assertThat(new AtomCountComparator().compare(right, left), is(-1));
+        assertThat(new AtomCountComparator().compare(left, right), is(-1));
+        assertThat(new AtomCountComparator().compare(right, left), is(1));
     }
 
     @Test
     public void testCompare_null() throws Exception {
         IAtomContainer left  = mock(IAtomContainer.class);
         when(left.getAtomCount()).thenReturn(5);
-        assertThat(new AtomCountComparator().compare(left, null), is(1));
-        assertThat(new AtomCountComparator().compare(null, left), is(-1));
+        assertThat(new AtomCountComparator().compare(left, null), is(-1));
+        assertThat(new AtomCountComparator().compare(null, left), is(1));
     }
 }
