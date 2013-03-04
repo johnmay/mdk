@@ -1,22 +1,18 @@
-/**
- * HeavyAtomCountComparator.java
+/*
+ * Copyright (c) 2013. Pablo Moreno
  *
- * 2012.03.11
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ * GNU Lesser General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.tool.comparator;
 
@@ -29,18 +25,14 @@ import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 
 /**
- * @name    HeavyAtomCountComparator
- * @date    2012.03.11
- * @version $Rev$ : Last Changed $Date$
+ * Compare atom container by their heavy atom count.
  * @author  pmoreno
- * @author  $Author$ (this version)
- * @brief   ...class description...
- *
  */
-public class HeavyAtomCountComparator implements Comparator<IAtomContainer> {
-    
-    private static final Logger LOGGER = Logger.getLogger(HeavyAtomCountComparator.class);
-    
+public final class HeavyAtomCountComparator implements Comparator<IAtomContainer> {
+
+    /**
+     * @inheritDoc
+     */
     @Override
     public int compare(IAtomContainer molA, IAtomContainer molB) {
         IMolecularFormula formA = MolecularFormulaManipulator.getMolecularFormula(molA);
@@ -50,5 +42,15 @@ public class HeavyAtomCountComparator implements Comparator<IAtomContainer> {
         List<IElement> heavyElementsB = MolecularFormulaManipulator.getHeavyElements(formB);
         
         return ((Integer)heavyElementsA.size()).compareTo(heavyElementsB.size());
+    }
+
+    /**
+     * Convenience comparator conjunction.
+     * @param other comparator to invoke if this comparator ties
+     * @return a new comparator composing this and <i>next</i>.
+     */
+    public static Comparator<IAtomContainer> and(Comparator<IAtomContainer> other) {
+        return new ComparatorConjunction<IAtomContainer>(new HeavyAtomCountComparator(),
+                                                         other);
     }
 }
