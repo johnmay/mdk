@@ -14,7 +14,7 @@ import java.io.StringWriter;
 import java.io.UTFDataFormatException;
 
 /**
- * AtomContainerAnnotationWriter - 09.03.2012 <br/>
+ * AtomContainerAnnotationWriter_0_8_5 - 09.03.2012 <br/>
  * <p/>
  * Class descriptions.
  *
@@ -23,14 +23,14 @@ import java.io.UTFDataFormatException;
  * @version $Rev$
  */
 @CompatibleSince("0.8.5")
-public class AtomContainerAnnotationWriter implements AnnotationWriter<AtomContainerAnnotation> {
+public class AtomContainerAnnotationWriter_0_8_5 implements AnnotationWriter<AtomContainerAnnotation> {
 
-    private static final Logger LOGGER = Logger.getLogger(AtomContainerAnnotationWriter.class);
+    private static final Logger LOGGER = Logger.getLogger(AtomContainerAnnotationWriter_0_8_5.class);
 
     private MDLV2000Writer mdl;
     private DataOutput out;
 
-    public AtomContainerAnnotationWriter(DataOutput out) {
+    public AtomContainerAnnotationWriter_0_8_5(DataOutput out) {
         this.out = out;
         this.mdl = new MDLV2000Writer();
     }

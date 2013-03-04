@@ -2,7 +2,7 @@ package uk.ac.ebi.mdk.io;
 
 import uk.ac.ebi.mdk.io.annotation.primitive.DoubleAnnotationWriterTest;
 import uk.ac.ebi.mdk.io.annotation.primitive.StringAnnotationWriterTest;
-import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationWriterTest;
+import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationWriter085Test;
 import uk.ac.ebi.mdk.io.annotation.CrossReferenceWriterTest;
 import uk.ac.ebi.mdk.io.annotation.GibbsEnergyWriterTest;
 
@@ -24,7 +24,7 @@ public class RewriteTestFiles {
 
         new StringAnnotationWriterTest().rewrite();
         new DoubleAnnotationWriterTest().rewrite();
-        new AtomContainerAnnotationWriterTest().rewrite();
+        new AtomContainerAnnotationWriter085Test().rewrite();
         new CrossReferenceWriterTest().rewrite();
         new GibbsEnergyWriterTest().rewrite();
 
