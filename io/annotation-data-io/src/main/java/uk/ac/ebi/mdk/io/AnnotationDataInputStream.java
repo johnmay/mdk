@@ -8,7 +8,8 @@ import uk.ac.ebi.mdk.domain.annotation.primitive.*;
 import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.FileParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
-import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationReader;
+import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationReader_0_8_5;
+import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationReader_1_3_4;
 import uk.ac.ebi.mdk.io.annotation.AuthorCommentReader;
 import uk.ac.ebi.mdk.io.annotation.CrossReferenceReader;
 import uk.ac.ebi.mdk.io.annotation.GibbsEnergyReader;
@@ -58,7 +59,8 @@ public class AnnotationDataInputStream
 
         // special readers
         add(AuthorAnnotation.class, new AuthorCommentReader(in));
-        add(AtomContainerAnnotation.class, new AtomContainerAnnotationReader(in));
+        add(AtomContainerAnnotation.class, new AtomContainerAnnotationReader_0_8_5(in));
+        add(AtomContainerAnnotation.class, new AtomContainerAnnotationReader_1_3_4(in));
         add(GibbsEnergy.class, new GibbsEnergyReader(in));
 
         // special readers for tasks

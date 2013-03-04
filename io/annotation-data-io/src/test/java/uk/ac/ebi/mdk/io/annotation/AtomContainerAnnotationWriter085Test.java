@@ -12,7 +12,7 @@ import uk.ac.ebi.mdk.io.AnnotationOutput;
 import java.io.*;
 
 /**
- * AtomContainerAnnotationWriterTest - 10.03.2012 <br/>
+ * AtomContainerAnnotationWriter085Test - 10.03.2012 <br/>
  * <p/>
  * Class descriptions.
  *
@@ -20,9 +20,9 @@ import java.io.*;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class AtomContainerAnnotationWriterTest {
+public class AtomContainerAnnotationWriter085Test {
 
-    private static final Logger LOGGER = Logger.getLogger(AtomContainerAnnotationWriterTest.class);
+    private static final Logger LOGGER = Logger.getLogger(AtomContainerAnnotationWriter085Test.class);
 
     /**
      * Can not test as the Mol file has a time stamp :-(...

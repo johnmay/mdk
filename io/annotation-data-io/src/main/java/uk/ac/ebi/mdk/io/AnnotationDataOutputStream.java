@@ -7,7 +7,8 @@ import uk.ac.ebi.mdk.domain.annotation.primitive.*;
 import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.FileParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
-import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationWriter;
+import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationWriter_0_8_5;
+import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationWriter_1_3_4;
 import uk.ac.ebi.mdk.io.annotation.AuthorCommentWriter;
 import uk.ac.ebi.mdk.io.annotation.CrossReferenceWriter;
 import uk.ac.ebi.mdk.io.annotation.GibbsEnergyWriter;
@@ -73,7 +74,8 @@ public class AnnotationDataOutputStream
 
         // specialised writers
         add(AuthorAnnotation.class, new AuthorCommentWriter(out));
-        add(AtomContainerAnnotation.class, new AtomContainerAnnotationWriter(out));
+        add(AtomContainerAnnotation.class, new AtomContainerAnnotationWriter_0_8_5(out));
+        add(AtomContainerAnnotation.class, new AtomContainerAnnotationWriter_1_3_4(out));
         add(GibbsEnergy.class, new GibbsEnergyWriter(out));
 
         // specialised specialised readers for tasks

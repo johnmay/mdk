@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 /**
- * AtomContainerAnnotationWriter - 09.03.2012 <br/>
+ * AtomContainerAnnotationWriter_0_8_5 - 09.03.2012 <br/>
  * <p/>
  * Class descriptions.
  *
@@ -24,16 +24,16 @@ import java.io.StringReader;
  * @version $Rev$
  */
 @CompatibleSince("0.8.5")
-public class AtomContainerAnnotationReader
+public class AtomContainerAnnotationReader_0_8_5
         implements AnnotationReader<AtomContainerAnnotation> {
 
-    private static final Logger LOGGER = Logger.getLogger(AtomContainerAnnotationReader.class);
+    private static final Logger LOGGER = Logger.getLogger(AtomContainerAnnotationReader_0_8_5.class);
     private IChemObjectBuilder BUILDER = SilentChemObjectBuilder.getInstance();
 
     private MDLV2000Reader mdl;
     private DataInput in;
 
-    public AtomContainerAnnotationReader(DataInput in) {
+    public AtomContainerAnnotationReader_0_8_5(DataInput in) {
         this.in = in;
         this.mdl = new MDLV2000Reader();
     }
