@@ -32,14 +32,11 @@ import uk.ac.ebi.mdk.service.index.other.ChEBISecondaryToPrimaryIDIndex;
 import uk.ac.ebi.mdk.service.query.AbstractLuceneService;
 
 /**
- * @name ChEBISecondaryToPrimaryIDQuery
- * @date 2013.02.28
- * @version $Rev$ : Last Changed $Date$
+ * A service for converting chebi secondary ids into primary ids.
  * @author pmoreno
- * @author $Author$ (this version)
- * @brief ...class description...
- *
+ * @deprecated don't use ChEBI secondary Ids, this should be a normalisation step not an accessible resource
  */
+@Deprecated
 public class ChEBISecondaryToPrimaryIDQuery extends AbstractLuceneService<ChEBIIdentifier> implements SecondaryToPrimaryIDResolverService<ChEBIIdentifier> {
 
     private static final Logger LOGGER = Logger.getLogger(ChEBISecondaryToPrimaryIDQuery.class);
