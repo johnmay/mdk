@@ -15,11 +15,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
-import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
-import uk.ac.ebi.mdk.service.query.name.IUPACNameService;
+import uk.ac.ebi.mdk.service.query.data.MolecularFormulaAccess;
+import uk.ac.ebi.mdk.service.query.name.IUPACNameAccess;
 import uk.ac.ebi.mdk.service.query.name.NameService;
-import uk.ac.ebi.mdk.service.query.name.PreferredNameService;
-import uk.ac.ebi.mdk.service.query.name.SynonymService;
+import uk.ac.ebi.mdk.service.query.name.PreferredNameAccess;
+import uk.ac.ebi.mdk.service.query.name.SynonymAccess;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 /**
  * RESTful adapter for the PubChem-Compound REST web-service. Most search
@@ -48,15 +51,16 @@ import java.util.TreeSet;
  */
 public class PubChemCompoundAdapter
         extends AbstractRestClient<PubChemCompoundIdentifier>
-        implements SynonymService<PubChemCompoundIdentifier>,
-                   IUPACNameService<PubChemCompoundIdentifier>,
+        implements SynonymAccess<PubChemCompoundIdentifier>,
+                   IUPACNameAccess<PubChemCompoundIdentifier>,
                    StructureService<PubChemCompoundIdentifier>,
-                   PreferredNameService<PubChemCompoundIdentifier>,
+                   PreferredNameAccess<PubChemCompoundIdentifier>,
                    NameService<PubChemCompoundIdentifier>,
-                   MolecularFormulaService<PubChemCompoundIdentifier> {
+                   MolecularFormulaAccess<PubChemCompoundIdentifier> {
 
     private static final Logger LOGGER = Logger
             .getLogger(PubChemCompoundAdapter.class);
+    private static final Pattern numeric = Pattern.compile("\\d+");
 
     private static final String prefix = "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/";
 
@@ -69,12 +73,40 @@ public class PubChemCompoundAdapter
 
     /**
      * @inheritDoc
-     * @deprecated unavailable
      */
     @Override
-    @Deprecated
     public Collection<PubChemCompoundIdentifier> searchName(String name, boolean approximate) {
-        return Collections.emptyList();
+
+        List<PubChemCompoundIdentifier> cids = new ArrayList<PubChemCompoundIdentifier>(5);
+        InputStream in = null;
+        try {
+            String address = new URI("http",
+                                     "pubchem.ncbi.nlm.nih.gov",
+                                     "/rest/pug/compound/name/" + name + "/cids/TXT/",
+                                     null).toASCIIString();
+            in = new URL(address).openStream();
+            LineReader lines = new LineReader(new InputStreamReader(in));
+            String line;
+            while ((line = lines.readLine()) != null) {
+                if (numeric.matcher(line).matches()) {
+                    cids.add(new PubChemCompoundIdentifier(line));
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.error("could not complete search for " + name, e);
+        } catch (URISyntaxException e) {
+            System.out.println(e);
+            LOGGER.error("could not encode URI for " + name, e);
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                // ignore
+            }
+        }
+        return cids;
     }
 
     /**
@@ -90,15 +122,6 @@ public class PubChemCompoundAdapter
                                 : names.subList(1, names.size());
     }
 
-    /**
-     * @inheritDoc
-     * @deprecated unavailable
-     */
-    @Override
-    @Deprecated
-    public Collection<PubChemCompoundIdentifier> searchPreferredName(String name, boolean approximate) {
-        return null;
-    }
 
     /**
      * Returns the IUPAC name which is used as the preferred name by PubChem.
@@ -111,16 +134,6 @@ public class PubChemCompoundAdapter
     public String getPreferredName(PubChemCompoundIdentifier identifier) {
         Collection<String> names = getNames(identifier);
         return names.isEmpty() ? "" : names.iterator().next();
-    }
-
-    /**
-     * @inheritDoc
-     * @deprecated unavailable
-     */
-    @Override
-    @Deprecated
-    public Collection<PubChemCompoundIdentifier> searchSynonyms(String name, boolean approximate) {
-        return Collections.emptyList();
     }
 
     /**
@@ -170,11 +183,6 @@ public class PubChemCompoundAdapter
         return iupacs.isEmpty() ? "" : iupacs.iterator().next();
     }
 
-    @Override
-    public Collection<PubChemCompoundIdentifier> searchIUPACName(String name, boolean approximate) {
-        // not available
-        return Collections.emptyList();
-    }
 
     @Override
     public IAtomContainer getStructure(PubChemCompoundIdentifier identifier) {
@@ -205,15 +213,6 @@ public class PubChemCompoundAdapter
 
     /**
      * @inheritDoc
-     * @deprecated unavailable
-     */
-    @Override
-    public Collection<PubChemCompoundIdentifier> searchMolecularFormula(String formula, boolean approximate) {
-        return Collections.emptyList();
-    }
-
-    /**
-     * @inheritDoc
      */
     @Override
     public String getMolecularFormula(PubChemCompoundIdentifier identifier) {
@@ -221,16 +220,6 @@ public class PubChemCompoundAdapter
                                               .getAccession(), "Molecular Formula")
                 .values("Molecular Formula");
         return formulas.isEmpty() ? "" : formulas.iterator().next();
-    }
-
-    /**
-     * @inheritDoc
-     * @deprecated unavailable
-     */
-    @Override
-    public Collection<PubChemCompoundIdentifier> searchMolecularFormula(IMolecularFormula formula, boolean approximate) {
-        // not available
-        return Collections.emptyList();
     }
 
     /**
