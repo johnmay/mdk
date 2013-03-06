@@ -28,6 +28,7 @@ import java.util.Collection;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author John May
@@ -54,6 +55,22 @@ public class PubChemCompoundAdapterTest {
                                                                           "AG-K-73579",
                                                                           "A8823"));
         assertThat(actual, is(expected));
+    }
+
+    @Test public void testSearchName() {
+        Collection<PubChemCompoundIdentifier> cids = service.searchName("pyruvate", false);
+        assertTrue(cids.contains(new PubChemCompoundIdentifier("107735")));
+        assertTrue(cids.contains(new PubChemCompoundIdentifier("1060")));
+    }
+
+    @Test public void testSearchName_Missing() {
+        assertTrue(service.searchName("ermmmm", false).isEmpty());
+    }
+
+    @Test public void testSearchName_Space() {
+        Collection<PubChemCompoundIdentifier> cids = service.searchName("acetyl coa", false);
+        assertTrue(cids.contains(new PubChemCompoundIdentifier("444493")));
+        assertTrue(cids.contains(new PubChemCompoundIdentifier("16218868")));
     }
 
     @Test public void testGetIUPACName() {

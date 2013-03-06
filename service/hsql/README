@@ -1,0 +1,3 @@
+The hsql module provides services that use an embedded HyperSQL databases. These
+services typically store relational data (e.g. reactions) and thus require a
+relational database.
