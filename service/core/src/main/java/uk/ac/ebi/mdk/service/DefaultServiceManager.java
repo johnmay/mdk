@@ -117,8 +117,8 @@ public class DefaultServiceManager implements ServiceManager {
      * @inheritDoc
      */
     @Override
-    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifierClass,
-                                                                          Class<? extends S> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier, T extends S> T getService(Class<? extends I> identifierClass,
+                                                                                       Class<? extends S> serviceClass) {
 
         ServiceKey key = new ServiceKey(identifierClass, serviceClass);
 
@@ -127,7 +127,7 @@ public class DefaultServiceManager implements ServiceManager {
         // sort into desired order
         for (QueryService service : implementations) {
             if (service.startup()) {
-                return (S) service;
+                return (T) service;
             }
         }
 

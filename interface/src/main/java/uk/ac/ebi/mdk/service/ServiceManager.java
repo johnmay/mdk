@@ -92,8 +92,8 @@ public interface ServiceManager {
      * @return instance of the service that matches the criteria (if no service
      *         matches and invalid parameter exception is thrown)
      */
-    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifierClass,
-                                                                          Class<? extends S> serviceClass);
+    public <S extends QueryService<I>, I extends Identifier, T extends S> T getService(Class<? extends I> identifierClass,
+                                                                                       Class<? extends S> serviceClass);
 
     public <S extends QueryService<I>, I extends Identifier> S getService(I identifier,
                                                                           Class<? extends S> serviceClass);
