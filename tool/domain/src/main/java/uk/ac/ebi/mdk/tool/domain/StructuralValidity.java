@@ -210,7 +210,7 @@ public class StructuralValidity {
                                                  Charge charge) {
 
 
-        IAtomContainer molecule = AtomContainerManipulator.removeHydrogens(structure.getStructure());
+        IAtomContainer molecule = structure.getStructure();
 
         // calculate the charge difference
         // negative charge diff: structure has less protons
@@ -230,8 +230,6 @@ public class StructuralValidity {
                 LOGGER.error("Unable to add implicit hydrogens " + ex.getMessage());
             }
         }
-
-        AtomContainerManipulator.convertImplicitToExplicitHydrogens(molecule);
 
         // complete correctness
         IMolecularFormula query   = formula.getFormula();

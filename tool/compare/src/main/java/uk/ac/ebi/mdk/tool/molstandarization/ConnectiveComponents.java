@@ -22,6 +22,7 @@ package uk.ac.ebi.mdk.tool.molstandarization;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IMoleculeSet;
@@ -38,8 +39,8 @@ import uk.ac.ebi.mdk.tool.comparator.AtomCountComparator;
  */
 public class ConnectiveComponents {
 
-    List<IAtomContainer> components = new ArrayList<IAtomContainer>();
-    AtomCountComparator comparator = new AtomCountComparator();
+    private final List<IAtomContainer>       components = new ArrayList<IAtomContainer>();
+    private final Comparator<IAtomContainer> comparator = Collections.reverseOrder(new AtomCountComparator());
 
     public ConnectiveComponents(IMoleculeSet mols) {
         for (IAtomContainer mol : mols.atomContainers()) {

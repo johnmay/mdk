@@ -1,2 +1,3 @@
 # list of QueryService implementations
 uk.ac.ebi.mdk.service.query.KEGGRestClient
+uk.ac.ebi.mdk.service.query.PubChemCompoundAdapter

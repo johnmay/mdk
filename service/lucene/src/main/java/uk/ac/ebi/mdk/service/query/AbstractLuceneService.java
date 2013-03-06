@@ -175,7 +175,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
         ScoreDoc[] scoreDocs = search(query, TopScoreDocCollector.create(5, true));
 
         if (scoreDocs.length > 1) {
-            LOGGER.warn("Expected a single hit");
+            LOGGER.warn("Expected a single hit for " + query);
         }
 
         return scoreDocs.length > 0 ? scoreDocs[0] : null;

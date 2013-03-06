@@ -1,22 +1,18 @@
-/**
- * CDKMoleculeBuilder.java
+/*
+ * Copyright (c) 2013. John May <jwmay@users.sf.net>
  *
- * 2011.07.18
- *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.tool.domain;
 
@@ -37,14 +33,11 @@ import org.openscience.cdk.tools.AtomTypeTools;
 import uk.ac.ebi.mdk.domain.identifier.InChI;
 
 /**
- * @name    CDKMoleculeBuilder
- * @date    2011.07.18
- * @version $Rev$ : Last Changed $Date$
+ * Simplify building of molecules from several formats.
  * @author  johnmay
- * @author  $Author$ (this version)
- * @brief   ...class description...
- *
+ * @deprecated subtleties in loading, causes more issues then it solves
  */
+@Deprecated
 public class CDKMoleculeBuilder {
 
     private static final Logger LOGGER = Logger.getLogger( CDKMoleculeBuilder.class );
