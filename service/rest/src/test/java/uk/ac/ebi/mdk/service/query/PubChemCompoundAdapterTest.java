@@ -19,7 +19,6 @@ package uk.ac.ebi.mdk.service.query;
 
 import org.junit.Test;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import sun.jvm.hotspot.utilities.Assert;
 import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
 
 import java.util.ArrayList;
