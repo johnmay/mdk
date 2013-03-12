@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import static uk.ac.ebi.mdk.service.EDTProgressListener.safeDispatch;
+
 /**
  * ${Name}.java - 21.02.2012 <br/> MetaInfo...
  *
@@ -111,12 +113,12 @@ public class LoaderRow extends JComponent {
         name = LabelFactory.newLabel(loader.getName());
 
         // name will indicate the progress
-        loader.addProgressListener(new ProgressListener() {
+        loader.addProgressListener(safeDispatch(new ProgressListener() {
             @Override public void progressed(String message) {
                 // already on EDT
                 name.setText(message);
             }
-        });
+        }));
 
 
         update = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/update_16x16.png"), new AbstractAction() {
