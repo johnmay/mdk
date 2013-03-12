@@ -14,10 +14,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package uk.ac.ebi.mdk.service.query;
 
 import au.com.bytecode.opencsv.CSVReader;
+import java.io.BufferedReader;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -44,6 +44,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 
 /**
  * A client for the KEGG REST API.
@@ -53,10 +54,10 @@ import java.util.List;
 public class KEGGRestClient
         extends AbstractRestClient<KEGGCompoundIdentifier>
         implements StructureService<KEGGCompoundIdentifier>,
-                   MolecularFormulaService<KEGGCompoundIdentifier>,
-                   PreferredNameService<KEGGCompoundIdentifier>,
-                   NameService<KEGGCompoundIdentifier>,
-                   SynonymService<KEGGCompoundIdentifier> {
+        MolecularFormulaService<KEGGCompoundIdentifier>,
+        PreferredNameService<KEGGCompoundIdentifier>,
+        NameService<KEGGCompoundIdentifier>,
+        SynonymService<KEGGCompoundIdentifier> {
 
     private final IChemObjectBuilder BUILDER = SilentChemObjectBuilder.getInstance();
 
@@ -99,17 +100,44 @@ public class KEGGRestClient
 
         } catch (IOException ex) {
             Logger.getLogger(getClass()).error("unable to load entry: " + address
-                                                       + " reason: " + ex.getMessage());
+                    + " reason: " + ex.getMessage());
         } finally {
             try {
-                if (in != null)
+                if (in != null) {
                     in.close();
+                }
             } catch (IOException ex) {
                 // can't do anything
             }
         }
 
         return names;
+    }
+
+    /**
+     * Retrieves the MDL Mol file from the REST service given a KEGG Compound Identifier.
+     *
+     * @param identifier
+     * @return
+     * @throws IOException
+     */
+    public String getMDLMol(KEGGCompoundIdentifier identifier) throws IOException {
+
+        String accession = identifier.getAccession();
+        String address = "http://rest.kegg.jp/get/cpd:" + accession + "/mol";
+
+        try {
+            StringBuilder builder = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getContent(address)));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line).append("\\n");
+            }
+            return builder.toString();
+        } catch (IOException e) {
+            Logger.getLogger(getClass()).error("unable to load mol from: " + address + " - " + e.getMessage());
+        }
+        return "";
     }
 
     @Override
@@ -130,8 +158,9 @@ public class KEGGRestClient
             Logger.getLogger(getClass()).error("unable to load mol from: " + address + " - " + e.getMessage());
         } finally {
             try {
-                if (reader != null)
+                if (reader != null) {
                     reader.close();
+                }
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
@@ -167,6 +196,18 @@ public class KEGGRestClient
         return getIdentifiers(address);
     }
 
+    /**
+     * Produces a list of KEGG Compound Identifiers that participate in the reactions with the given EC number.
+     *
+     * @param ec the desired EC number to query.
+     * @return a list of KEGG Compound Identifiers that participate in those reactions.
+     */
+    public Collection<KEGGCompoundIdentifier> getCompoundsForECNumber(ECNumber ec) {
+        String address = "http://rest.kegg.jp/link/compound/enzyme:" + ec.getAccession();
+
+        return getIdentifiers(address);
+    }
+
     @Override
     public String getMolecularFormula(KEGGCompoundIdentifier identifier) {
 
@@ -184,11 +225,12 @@ public class KEGGRestClient
 
         } catch (IOException ex) {
             Logger.getLogger(getClass()).error("unable to load entry: " + address
-                                                       + " reason: " + ex.getMessage());
+                    + " reason: " + ex.getMessage());
         } finally {
             try {
-                if (in != null)
+                if (in != null) {
                     in.close();
+                }
             } catch (IOException ex) {
                 // can't do anything
             }
@@ -206,9 +248,9 @@ public class KEGGRestClient
     public IMolecularFormula getIMolecularFormula(KEGGCompoundIdentifier identifier) {
         String formula = getMolecularFormula(identifier);
         return formula.isEmpty()
-               ? BUILDER.newInstance(IMolecularFormula.class)
-               : MolecularFormulaManipulator.getMolecularFormula(formula,
-                                                                 BUILDER);
+                ? BUILDER.newInstance(IMolecularFormula.class)
+                : MolecularFormulaManipulator.getMolecularFormula(formula,
+                BUILDER);
     }
 
     @Override
@@ -248,27 +290,27 @@ public class KEGGRestClient
         try {
             in = getContent(address);
             CSVReader reader = new CSVReader(new InputStreamReader(getContent(address)),
-                                             '\t', '\0');
+                    '\t', '\0');
             String[] row;
 
             while ((row = reader.readNext()) != null) {
                 // watch out for invalid entries
-                if (row[0].length() > 4)
+                if (row[0].length() > 4) {
                     identifiers.add(new KEGGCompoundIdentifier(row[0].substring(4)));
+                }
             }
 
         } catch (IOException ex) {
             Logger.getLogger(getClass()).error("unable to load entry: " + address);
         } finally {
             try {
-                if (in != null)
+                if (in != null) {
                     in.close();
+                }
             } catch (IOException ex) {
                 // can't do anything
             }
         }
         return identifiers;
     }
-
-
 }
