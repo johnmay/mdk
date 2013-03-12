@@ -17,6 +17,8 @@
 
 package uk.ac.ebi.mdk.deprecated;
 
+import com.sun.org.apache.xerces.internal.parsers.BasicParserConfiguration;
+import org.apache.log4j.BasicConfigurator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -177,14 +179,14 @@ public class MIRIAMLoader {
         if (nameEntryMap.containsKey(name)) {
             return nameEntryMap.get(name);
         }
-        logger.error("No MIRIAM entry found for name '" + name + "'");
+        logger.error("No MIRIAM entry found for name '" + name + "'" + " available: " + nameEntryMap.keySet());
         return null;
     }
 
 
     public MIRIAMEntry getEntry(int mir) {
         if (!mirMap.containsKey(mir)) {
-            throw new InvalidParameterException("No MIRIAM entry for mir:" + mir);
+            throw new InvalidParameterException("No MIRIAM entry for mir:" + mir + " available: " + resources.keySet());
         }
         return mirMap.get(mir);
     }
@@ -206,7 +208,7 @@ public class MIRIAMLoader {
         if (resources.containsKey(e)) {
             return resources.get(e).newInstance();
         } else {
-            logger.error("No entry found for resource: " + e.getId());
+            logger.error("No entry found for resource: " + e.getId() + " available: " + resources.keySet());
             return null;
         }
     }
@@ -268,8 +270,9 @@ public class MIRIAMLoader {
 
 
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         long start = System.currentTimeMillis();
-        MIRIAMLoader.getInstance();
+        MIRIAMLoader.getInstance().getEntry("urn.chebi");
         long end = System.currentTimeMillis();
         System.out.println("Time:" + (end - start) + " (ms)");
     }
