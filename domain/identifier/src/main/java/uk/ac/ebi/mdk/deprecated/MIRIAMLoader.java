@@ -20,6 +20,7 @@ package uk.ac.ebi.mdk.deprecated;
 import com.sun.org.apache.xerces.internal.parsers.BasicParserConfiguration;
 import org.apache.log4j.BasicConfigurator;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
@@ -30,6 +31,7 @@ import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import java.io.InputStream;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,6 +89,7 @@ public class MIRIAMLoader {
 
         if (stream == null) {
             logger.info("Unable to get stream for miriam.xml");
+            return;
         }
 
         Document xmlDocument = XMLHelper.buildDocument(stream);
@@ -101,6 +104,7 @@ public class MIRIAMLoader {
                                       "N/A",
                                       "None MIRIAM Entry",
                                       "",
+                                      Collections.<String>emptyList(),
                                       "http://www.google.com/search?q=$id",
                                       new ArrayList<String>(), false,
                                       "unknown"));
@@ -121,13 +125,28 @@ public class MIRIAMLoader {
                 String pattern = datatypeNode.getAttributes().getNamedItem("pattern").getNodeValue();
                 List<String> synonyms = new ArrayList<String>();
 
+                List<String> urns = new ArrayList<String>();
+
                 while (datatypeChild != null) {
                     if (datatypeChild.getNodeName().equals("name")) {
                         name = datatypeChild.getTextContent();
                     } else if (datatypeChild.getNodeName().equals("definition")) {
                         definition = datatypeChild.getTextContent();
                     } else if (datatypeChild.getNodeName().equals("uris")) {
-                        urn = datatypeChild.getChildNodes().item(1).getTextContent();
+                        NodeList uris = datatypeChild.getChildNodes();
+                        for(int i = 0; i < uris.getLength(); i++){
+                            NamedNodeMap atbs = uris.item(i).getAttributes();
+                            if(atbs != null) {
+                                Node type       = atbs.getNamedItem("type");
+                                Node deprecated = atbs.getNamedItem("deprecated");
+                                if(type != null && type.getNodeValue().equals("URN")){
+                                    if(deprecated == null || deprecated.equals("false")) {
+                                        urn = uris.item(i).getTextContent();
+                                    }
+                                    urns.add(uris.item(i).getTextContent());
+                                }
+                            }
+                        }
                     } else if (datatypeChild.getNodeName().equals("namespace")) {
                         namespace = datatypeChild.getTextContent();
                     } else if (datatypeChild.getNodeName().equals("resources")) {
@@ -146,12 +165,14 @@ public class MIRIAMLoader {
 
 
                 // add to the map
-                MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn, url, synonyms, true, namespace);
+                MIRIAMEntry entry = new MIRIAMEntry(id, pattern, name, definition, urn, urns, url, synonyms, true, namespace);
                 mirMap.put(mir, entry);
                 namespaces.put(namespace, entry);
                 nameEntryMap.put(name.toLowerCase(),
                                  entry);
-                urnEntryMap.put(entry.getBaseURN(), entry);
+                for(String _urn : entry.urns()){
+                    urnEntryMap.put(_urn, entry);
+                }
             }
             datatypeNode = datatypeNode.getNextSibling();
         }

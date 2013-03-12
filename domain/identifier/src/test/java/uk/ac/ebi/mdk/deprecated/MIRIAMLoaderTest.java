@@ -4,6 +4,7 @@
  */
 package uk.ac.ebi.mdk.deprecated;
 
+import org.apache.log4j.BasicConfigurator;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,11 +19,14 @@ import static org.junit.Assert.*;
  */
 public class MIRIAMLoaderTest {
 
+    private MIRIAMLoader loader = MIRIAMLoader.getInstance();
+
     public MIRIAMLoaderTest() {
     }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        BasicConfigurator.configure();
     }
 
     @AfterClass
@@ -48,8 +52,13 @@ public class MIRIAMLoaderTest {
     @Test
     public void testGetIdentifier() {
         ChEBIIdentifier chebiId = new ChEBIIdentifier(12);
-        String urn = chebiId.getURN();
-        assertEquals(chebiId, MIRIAMLoader.getInstance().getIdentifier(urn));
+        assertEquals(chebiId, loader.getIdentifier("urn:miriam:chebi:CHEBI%3A12"));
+    }
+
+    @Test
+    public void testGetIdentifier_deprecated() {
+        ChEBIIdentifier chebiId = new ChEBIIdentifier(12);
+        assertEquals(chebiId, loader.getIdentifier("urn:miriam:obo.chebi:CHEBI%3A12"));
     }
 
     @Test

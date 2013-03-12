@@ -50,6 +50,8 @@ public interface Resource {
      */
     public String getDescription();
 
+    public Collection<String> urns();
+
     /**
      * Persist URN of resource for provided
      * accession (if available)
