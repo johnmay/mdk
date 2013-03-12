@@ -76,6 +76,6 @@ public class AbstractResourceLoaderTest {
         ProgressListener listener = Mockito.mock(ProgressListener.class);
         loader.addProgressListener(listener);
         loader.fireProgressUpdate(0.5d);
-        Mockito.verify(listener, Mockito.times(1)).progressed(Mockito.anyString());
+        Mockito.verify(listener, Mockito.times(1)).progressed("50.00%");
     }
 }
