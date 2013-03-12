@@ -5,13 +5,18 @@
 
 package uk.ac.ebi.mdk.tool.inchi;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import net.sf.jniinchi.INCHI_OPTION;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.tool.inchi.InChIMoleculeChecker.InChIMoleculeCheckerResult;
 
@@ -25,10 +30,20 @@ import uk.ac.ebi.mdk.tool.inchi.InChIMoleculeChecker.InChIMoleculeCheckerResult;
  *
  * @author pmoreno
  */
-public class InChIProducer102beta extends InChIProducer {
+public class InChIProducer102beta extends AbstractInChIProducer implements InChIProducer {
 
     private static final Logger LOGGER = Logger.getLogger(InChIProducer102beta.class);
     private List<INCHI_OPTION> inchiOptions;
+    private IChemObjectBuilder builder;
+    
+    public InChIProducer102beta() {
+        this.builder = DefaultChemObjectBuilder.getInstance();
+    }
+    
+    public InChIProducer102beta(IChemObjectBuilder builder) {
+        this.builder = builder;
+    }
+    
     // TODO Handle exceptions
     @Override
     public InChIResult calculateInChI(IAtomContainer mol) {
@@ -113,5 +128,18 @@ public class InChIProducer102beta extends InChIProducer {
     @Override
     public void setInChIOptions(List<INCHI_OPTION> inchiConfigOptions) {
         this.inchiOptions = inchiConfigOptions;
+    }
+
+    @Override
+    public InChIResult calculateInChI(String mdlMol) {
+        MDLV2000Reader reader = new MDLV2000Reader(new InputStreamReader(new ByteArrayInputStream(mdlMol.getBytes())));
+        try {
+            IAtomContainer mol = reader.read(builder.newInstance(IAtomContainer.class));
+        
+            return calculateInChI(mol);
+        } catch(CDKException e) {
+            LOGGER.error("Could not read mdl mol string into an AtomContainer", e);
+        }
+        return null;
     }
 }
