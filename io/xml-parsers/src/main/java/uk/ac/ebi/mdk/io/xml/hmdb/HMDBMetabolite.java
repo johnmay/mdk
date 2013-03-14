@@ -59,7 +59,32 @@ public final class HMDBMetabolite {
 
     /* database cross-references */
     private final List<Identifier> xrefs = new ArrayList<Identifier>();
+    
+    /* body fluids where the metabolite is found */
+    private final List<String> bodyFluids = new ArrayList<String>();
+    
+    /* tissues where the metabolite is found */
+    private final List<String> tissues = new ArrayList<String>();
+    
+    /* Cellular locations where the metabolite has been found */
+    private final List<String> cellularLocation = new ArrayList<String>();
 
+    public Collection<String> getBodyFluids() {
+        return bodyFluids;
+    }
+    
+    public Collection<String> getTissues() {
+        return tissues;
+    }
+    
+    public void addTissue(String tissue) {
+        this.tissues.add(tissue);
+    }
+    
+    public void addBodyFluid(String bodyFluid) {
+        this.bodyFluids.add(bodyFluid);
+    }
+    
     public String getAccession() {
         return accession;
     }
@@ -153,5 +178,13 @@ public final class HMDBMetabolite {
         sb.append("Molecular Formula: ").append(formula).append(", ");
         sb.append("Database Cross-references: ").append(xrefs);
         return sb.toString();
+    }
+
+    public void addCellularLocation(String cellularLocation) {
+        this.cellularLocation.add(cellularLocation);
+    }
+
+    public Collection<String> getCellularLocations() {
+        return this.cellularLocation;
     }
 }
