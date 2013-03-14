@@ -20,6 +20,8 @@ package uk.ac.ebi.mdk.deprecated;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import uk.ac.ebi.mdk.domain.identifier.Resource;
@@ -51,23 +53,25 @@ public class MIRIAMEntry
     private String name;
     private String definition;
     private String urn;
+    private List<String> urns;
     private String url;
     private Boolean mapped;
     public final String namespace;
     private Collection<String> synonyms;
 
-    public MIRIAMEntry(String id, String regex, String resouceName, String definition, String urn,
+    public MIRIAMEntry(String id, String regex, String resouceName, String definition, String urn,   List<String> urns,
                        String url, Collection<String> synonyms, Boolean mapped, String namespace) {
-        this(id, Pattern.compile(regex), resouceName, definition, urn, url, synonyms, mapped, namespace);
+        this(id, Pattern.compile(regex), resouceName, definition, urn, urns, url, synonyms, mapped, namespace);
     }
 
-    public MIRIAMEntry(String id, Pattern pattern, String resouceName, String definition, String urn,
+    public MIRIAMEntry(String id, Pattern pattern, String resouceName, String definition, String urn, List<String> urns,
                        String url, Collection<String> synonyms,  Boolean mapped, String namespace) {
         this.id = id;
         this.pattern = pattern;
         this.name = resouceName;
         this.definition = definition;
         this.urn = urn;
+        this.urns = urns;
         this.url = url;
         this.synonyms = synonyms;
         this.mapped = mapped;
@@ -95,6 +99,10 @@ public class MIRIAMEntry
 
     public String getPattern() {
         return pattern.pattern();
+    }
+
+    public List<String> urns(){
+        return urns;
     }
 
     /**

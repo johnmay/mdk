@@ -77,13 +77,13 @@ public class MetaboliteComparison {
 
         Reconstruction[] recons = comparison.getReconstructions();
 
-        Map<Integer, Multimap<Reconstruction, Metabolite>> map = new HashMap<Integer, Multimap<Reconstruction, Metabolite>>();
+        Map<Long, Multimap<Reconstruction, Metabolite>> map = new HashMap<Long, Multimap<Reconstruction, Metabolite>>();
 
         for (int i = 0; i < recons.length; i++) {
             Reconstruction reconstruction = recons[i];
-            for (Entry<Metabolite, Integer> e : comparison.getMoleculeHashMap(reconstruction).entrySet()) {
+            for (Entry<Metabolite, Long> e : comparison.getMoleculeHashMap(reconstruction).entrySet()) {
 
-                Integer key = e.getValue();
+                Long key = e.getValue();
                 if (!map.containsKey(key)) {
                     Multimap<Reconstruction, Metabolite> sub = ArrayListMultimap.create();
                     map.put(key, sub);
@@ -97,8 +97,8 @@ public class MetaboliteComparison {
 
         Object[][] data = new Object[map.keySet().size()][recons.length];
         int i = 0;
-        for (Entry<Integer, Multimap<Reconstruction, Metabolite>> e : map.entrySet()) {
-            Integer key = e.getKey();
+        for (Entry<Long, Multimap<Reconstruction, Metabolite>> e : map.entrySet()) {
+            Long key = e.getKey();
             Multimap<Reconstruction, Metabolite> sub = e.getValue();
             for (int j = 0; j < recons.length; j++) {
 

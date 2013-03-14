@@ -130,11 +130,7 @@ public abstract class AbstractResourceLoader
      */
     protected final void fireProgressUpdate(final String message) {
         for (final ProgressListener listener : progressListeners) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override public void run() {
-                    listener.progressed(message);
-                }
-            });
+            listener.progressed(message);
         }
     }
 
