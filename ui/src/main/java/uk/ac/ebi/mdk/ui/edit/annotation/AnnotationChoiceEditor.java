@@ -111,6 +111,13 @@ public class AnnotationChoiceEditor extends JComponent {
         for (Annotation annotation : annotations) {
             model.addElement(annotation);
         }
+        type.setSelectedIndex(0);
+        // ensure default editor
+        @SuppressWarnings("unchecked")
+        Class<Annotation> defaultClass = (Class<Annotation>) type.getItemAt(0).getClass();
+        AbstractAnnotationEditor editor = EDITOR_FACTORY.newEditor(defaultClass);
+        editor.setAnnotationClass(defaultClass);
+        this.editor = editor;
         type.addItemListener(listener);
 
         // force update
