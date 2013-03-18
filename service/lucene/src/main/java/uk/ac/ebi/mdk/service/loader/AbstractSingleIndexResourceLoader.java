@@ -4,6 +4,9 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.service.SingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
 
+import java.io.IOException;
+import java.util.Date;
+
 /**
  * ${Name}.java - 20.02.2012 <br/>
  * <p/>
@@ -72,6 +75,8 @@ public abstract class AbstractSingleIndexResourceLoader
     public void revert() {
         if (index.canRevert()) {
             index.revert();
+        } else if(index.getLocation().exists()){
+            index.clean();
         }
     }
 
@@ -97,5 +102,24 @@ public abstract class AbstractSingleIndexResourceLoader
     @Override
     public boolean canRevert() {
         return index.canRevert();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public boolean loaded() {
+        return index.isAvailable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Date updated() {
+        Date date = new Date();
+        long modified = getIndex().getLocation().lastModified();
+        date.setTime(modified);
+        if(modified == 0L)
+            throw new IllegalArgumentException("no modified data, ensure with loader.loaded() before loader.updated()");
+        return date;
     }
 }

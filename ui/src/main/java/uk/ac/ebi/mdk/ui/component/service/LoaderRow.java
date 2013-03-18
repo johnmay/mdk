@@ -30,7 +30,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -53,7 +56,10 @@ public class LoaderRow extends JComponent {
     private JButton update;
     private JButton cancel;
     private ResourceLoader loader;
+    private JLabel info;
     private SwingWorker worker;
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy HH:mm");
 
     private LoaderConfiguration configuration;
 
@@ -75,6 +81,7 @@ public class LoaderRow extends JComponent {
                 loader.clean();
                 delete.setEnabled(loader.canBackup() || loader.canRevert());
                 revert.setEnabled(loader.canRevert());
+                updateButtons();
             }
         });
         delete.setToolTipText("Delete the current index and it's backup");
@@ -84,6 +91,7 @@ public class LoaderRow extends JComponent {
                 loader.revert();
                 delete.setEnabled(loader.canBackup() || loader.canRevert());
                 revert.setEnabled(loader.canRevert());
+                updateButtons();
             }
         });
         revert.setToolTipText("Revert to the previous version of the index");
@@ -193,6 +201,10 @@ public class LoaderRow extends JComponent {
         cancel.setEnabled(false);
         cancel.setVisible(false);
 
+        info = loader.loaded() ? LabelFactory.newLabel("updated " + dateFormat.format(loader.updated())) : LabelFactory.newLabel("");
+        info.setForeground(info.getForeground().brighter());
+        Font orgFont = info.getFont();
+        info.setFont(new Font(orgFont.getName(), orgFont.getStyle(), (int) (orgFont.getSize() * 0.9)));
 
         CellConstraints cc = new CellConstraints();
 
@@ -208,14 +220,15 @@ public class LoaderRow extends JComponent {
         controls.add(Box.createHorizontalStrut(10));
         controls.add(cancel);
 
-        setLayout(new FormLayout("p, p:grow, min",
+        setLayout(new FormLayout("p, p:grow, right:p, 4dlu, min",
                                  "5px, p, 5px, p"));
 
 
         add(controls, cc.xy(1, 2));
-        add(name, cc.xy(2, 2));
-        add(cancel, cc.xy(3, 2));
         add(configuration, cc.xyw(1, 4, 3, cc.LEFT, cc.CENTER));
+        add(name, cc.xy(2, 2));
+        add(info, cc.xy(3, 2));
+        add(cancel, cc.xy(5, 2));
         setBackground(Color.WHITE);
 
 
@@ -249,6 +262,11 @@ public class LoaderRow extends JComponent {
                 configure.setEnabled(true);
                 name.setIcon(null);
                 name.setText(loader.getName());
+                if(loader.loaded()){
+                    info.setText("updated " + dateFormat.format(loader.updated()));
+                } else {
+                    info.setText("");
+                }
             }
         });
     }

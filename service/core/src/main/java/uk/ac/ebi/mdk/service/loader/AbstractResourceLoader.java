@@ -10,6 +10,7 @@ import uk.ac.ebi.mdk.service.location.ResourceLocation;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -177,4 +178,11 @@ public abstract class AbstractResourceLoader
         cancelled = false;
     }
 
+    @Override public boolean loaded() {
+        throw new UnsupportedOperationException("currently only available for lucene loaders");
+    }
+
+    @Override public Date updated() {
+        throw new UnsupportedOperationException("currently only available for lucene loaders");
+    }
 }

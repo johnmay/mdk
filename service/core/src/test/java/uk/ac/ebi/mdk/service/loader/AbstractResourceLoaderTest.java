@@ -22,6 +22,7 @@ import org.mockito.Mockito;
 import uk.ac.ebi.mdk.service.ProgressListener;
 
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * @author John May
@@ -54,6 +55,14 @@ public class AbstractResourceLoaderTest {
         }
 
         @Override public String getName() {
+            return null;
+        }
+
+        @Override public boolean loaded() {
+            return false;
+        }
+
+        @Override public Date updated() {
             return null;
         }
     };
