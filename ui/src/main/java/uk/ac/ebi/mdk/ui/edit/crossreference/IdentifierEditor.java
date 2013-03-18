@@ -121,6 +121,10 @@ public class IdentifierEditor extends JComponent {
         });
         type.setEnabled(false);
 
+        // hide the type selection
+        if(classes.size() == 1){
+            type.setVisible(false);
+        }
 
         CellConstraints cc = new CellConstraints();
 
@@ -244,7 +248,7 @@ public class IdentifierEditor extends JComponent {
 
             type.setEnabled(isFilled());
 
-            if(!isFilled()){
+            if(!isFilled() || classes.size() == 1){
                 return;
             }
 
