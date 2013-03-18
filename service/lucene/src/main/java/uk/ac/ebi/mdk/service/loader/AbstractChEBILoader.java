@@ -58,7 +58,7 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
 
 
         ResourceFileLocation location = getLocation("ChEBI Compounds");
-        CSVReader csv = new CSVReader(new InputStreamReader(location.open()), '\t');
+        CSVReader csv = new CSVReader(new InputStreamReader(location.open()), '\t', '\0');
 
         List<String> header = Arrays.asList(csv.readNext());
         int accessionIndex  = header.indexOf("CHEBI_ACCESSION");
