@@ -95,11 +95,11 @@ public class LuceneServiceManager
      * @inheritDoc
      */
     @Override
-    public <S extends QueryService<I>, I extends Identifier, T extends S> T getService(Class<? extends I> identifier, Class<? extends S> c) {
+    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifier, Class<? extends S> c) {
 
         for (QueryService service : services.get(identifier)) {
             if (c.isAssignableFrom(service.getClass())) {
-                return (T) service;
+                return (S) service;
             }
         }
 
