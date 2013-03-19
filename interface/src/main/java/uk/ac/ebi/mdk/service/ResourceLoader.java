@@ -23,6 +23,7 @@ import uk.ac.ebi.mdk.service.location.LocationDescription;
 import uk.ac.ebi.mdk.service.location.ResourceLocation;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -179,5 +180,17 @@ public interface ResourceLoader {
      * will relieve a message of the current loader state.
      */
     public void addProgressListener(ProgressListener listener);
+
+    /**
+     * Indicates whether the resource is loaded
+     * @return index is loaded, or not
+     */
+    public boolean loaded();
+
+    /**
+     * Date when the index was last modified.
+     * @return data of modification
+     */
+    public Date updated();
 
 }

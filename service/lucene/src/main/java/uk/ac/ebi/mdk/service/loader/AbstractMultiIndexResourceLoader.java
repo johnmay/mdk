@@ -80,6 +80,8 @@ public abstract class AbstractMultiIndexResourceLoader
         for (LuceneIndex index : getIndices()) {
             if (index.canRevert()) {
                 index.revert();
+            } else if(index.getLocation().exists()){
+                index.clean();
             }
         }
     }
@@ -116,5 +118,24 @@ public abstract class AbstractMultiIndexResourceLoader
             revert = index.canRevert() || revert;
         }
         return revert;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public boolean loaded() {
+        return getIndices().iterator().next().isAvailable();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Date updated() {
+        Date date = new Date();
+        long modified = getIndices().iterator().next().getLocation().lastModified();
+        date.setTime(modified);
+        if(modified == 0L)
+            throw new IllegalArgumentException("no modified data, ensure with loader.loaded() before loader.updated()");
+        return date;
     }
 }
