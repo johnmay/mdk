@@ -20,6 +20,7 @@
  */
 package uk.ac.ebi.mdk.io.xml.sbml;
 
+import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.Model;
@@ -27,9 +28,11 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.xml.XMLNode;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
+import uk.ac.ebi.mdk.domain.annotation.Note;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -114,9 +117,12 @@ public class SBMLIOUtil {
         } else {
             String accession = id.getAccession();
             accession = accession.trim();
-            accession = accession.replaceAll(":", "%3A"); // replace spaces and dashes with underscores
-            accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
-            accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
+            accession = accession
+                    .replaceAll(":", "%3A"); // replace spaces and dashes with underscores
+            accession = accession
+                    .replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
+            accession = accession
+                    .replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
             sbmlRxn.setId(accession);
         }
 
@@ -146,7 +152,8 @@ public class SBMLIOUtil {
 
 
         CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
-        for (CrossReference xref : rxn.getAnnotationsExtending(CrossReference.class)) {
+        for (CrossReference xref : rxn
+                .getAnnotationsExtending(CrossReference.class)) {
             term.addResource(xref.getIdentifier().getURN());
         }
 
@@ -170,7 +177,8 @@ public class SBMLIOUtil {
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
 
-        MetabolicParticipant key = factory.newInstance(MetabolicParticipant.class);
+        MetabolicParticipant key = factory
+                .newInstance(MetabolicParticipant.class);
         key.setCoefficient(1d);
         key.setCompartment(participant.getCompartment());
         key.setMolecule(participant.getMolecule());
@@ -215,9 +223,12 @@ public class SBMLIOUtil {
         } else {
             String accession = id.getAccession();
             accession = accession.trim();
-            accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
-            accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
-            species.setId(accession + "_" + ((Compartment) participant.getCompartment())
+            accession = accession
+                    .replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
+            accession = accession
+                    .replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
+            species.setId(accession + "_" + ((Compartment) participant
+                    .getCompartment())
                     .getAbbreviation());
         }
 
@@ -230,20 +241,31 @@ public class SBMLIOUtil {
              .iterator()
              .hasNext()) {
 
-            for (CrossReference xref : m.getAnnotationsExtending(CrossReference.class)) {
+            for (CrossReference xref : m
+                    .getAnnotationsExtending(CrossReference.class)) {
                 String resource = xref.getIdentifier().getResolvableURL();
                 term.addResource(resource);
             }
 
         }
 
-        if (m.hasAnnotation(InChI.class) || m.hasAnnotation(AtomContainerAnnotation.class)) {
-            for (ChemicalStructure structure : m.getAnnotationsExtending(ChemicalStructure.class)) {
+        if (m.hasAnnotation(InChI.class) || m
+                .hasAnnotation(AtomContainerAnnotation.class)) {
+            for (ChemicalStructure structure : m
+                    .getAnnotationsExtending(ChemicalStructure.class)) {
                 // TODO: should abstract this mapping to an annotation handler
                 String inchi = structure.toInChI();
                 if (!inchi.isEmpty())
                     term.addResource("http://rdf.openmolecules.net/?" + inchi);
             }
+        }
+
+        if (m.hasAnnotation(Note.class)) {
+            String content = "<notes><html xmlns=\"http://www.w3.org/1999/xhtml\"><p>" + Joiner
+                    .on("</p><p>")
+                    .join(m.getAnnotations(Note.class)) + "</p></html></notes>";
+            XMLNode notes = XMLNode.convertStringToXMLNode(content);
+            species.setNotes(notes);
         }
 
         // if we've added annotation
@@ -271,8 +293,9 @@ public class SBMLIOUtil {
 
         Identifier identifier = compartment.getIdentifier();
         if (!identifier.getAccession().isEmpty()) {
-            sbmlCompartment.addCVTerm(new CVTerm(CVTerm.Qualifier.BQB_IS, identifier
-                    .getURN()));
+            sbmlCompartment
+                    .addCVTerm(new CVTerm(CVTerm.Qualifier.BQB_IS, identifier
+                            .getURN()));
         }
 
         model.addCompartment(sbmlCompartment);
