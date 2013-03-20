@@ -23,7 +23,7 @@ import java.util.Map;
 public class AbstractDataOutput<M> extends MarshalManager<M> {
 
     private DataOutput out;
-    private Map<Object, Integer> objectIds = new IdentityHashMap<Object, Integer>();
+    private Map<Object, Integer> objectIds = new IdentityHashMap<Object, Integer>(5000);
     private MutableInt iterator = new MutableInt(Integer.MIN_VALUE + 10);
 
     public AbstractDataOutput(DataOutput out, Version v) {
