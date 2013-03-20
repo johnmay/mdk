@@ -11,6 +11,7 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
 import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.CalloutDialog;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.utility.ResourceUtility;
@@ -29,11 +30,10 @@ import uk.ac.ebi.mdk.ui.component.service.location.LocationEditor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -75,7 +75,8 @@ public class LoaderRow extends JComponent {
 
         configuration.setVisible(false);
 
-        delete = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/trash_12x12.png"), new AbstractAction() {
+        delete = ButtonFactory.newCleanButton(ResourceUtility
+                                                      .getIcon("/uk/ac/ebi/chemet/render/images/cutout/trash_12x12.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 loader.clean();
@@ -85,7 +86,8 @@ public class LoaderRow extends JComponent {
             }
         });
         delete.setToolTipText("Delete the current index and it's backup");
-        revert = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/revert_16x16.png"), new AbstractAction() {
+        revert = ButtonFactory.newCleanButton(ResourceUtility
+                                                      .getIcon("/uk/ac/ebi/chemet/render/images/cutout/revert_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 loader.revert();
@@ -99,7 +101,8 @@ public class LoaderRow extends JComponent {
         final Animation expand = new Expand(configuration, 500);
         final Animation collapse = new Collapse(configuration, 500);
 
-        configure = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/cog_16x16.png"), new AbstractAction() {
+        configure = ButtonFactory.newCleanButton(ResourceUtility
+                                                         .getIcon("/uk/ac/ebi/chemet/render/images/cutout/cog_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 update.setEnabled(loader.canUpdate());
@@ -129,7 +132,8 @@ public class LoaderRow extends JComponent {
         }));
 
 
-        update = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/update_16x16.png"), new AbstractAction() {
+        update = ButtonFactory.newCleanButton(ResourceUtility
+                                                      .getIcon("/uk/ac/ebi/chemet/render/images/cutout/update_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
@@ -171,7 +175,8 @@ public class LoaderRow extends JComponent {
 
                                              );
 
-        cancel = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/cancel_16x16.png"), new AbstractAction() {
+        cancel = ButtonFactory.newCleanButton(ResourceUtility
+                                                      .getIcon("/uk/ac/ebi/chemet/render/images/cutout/cancel_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loader.cancel();
@@ -201,10 +206,12 @@ public class LoaderRow extends JComponent {
         cancel.setEnabled(false);
         cancel.setVisible(false);
 
-        info = loader.loaded() ? LabelFactory.newLabel("updated " + dateFormat.format(loader.updated())) : LabelFactory.newLabel("");
+        info = loader.loaded() ? LabelFactory.newLabel("updated " + dateFormat
+                .format(loader.updated())) : LabelFactory.newLabel("");
         info.setForeground(info.getForeground().brighter());
         Font orgFont = info.getFont();
-        info.setFont(new Font(orgFont.getName(), orgFont.getStyle(), (int) (orgFont.getSize() * 0.9)));
+        info.setFont(new Font(orgFont.getName(), orgFont
+                .getStyle(), (int) (orgFont.getSize() * 0.9)));
 
         CellConstraints cc = new CellConstraints();
 
@@ -230,8 +237,6 @@ public class LoaderRow extends JComponent {
         add(info, cc.xy(3, 2));
         add(cancel, cc.xy(5, 2));
         setBackground(Color.WHITE);
-
-
     }
 
     class MyUpdateChecker extends SwingWorker<Boolean, Object> {
@@ -262,8 +267,9 @@ public class LoaderRow extends JComponent {
                 configure.setEnabled(true);
                 name.setIcon(null);
                 name.setText(loader.getName());
-                if(loader.loaded()){
-                    info.setText("updated " + dateFormat.format(loader.updated()));
+                if (loader.loaded()) {
+                    info.setText("updated " + dateFormat
+                            .format(loader.updated()));
                 } else {
                     info.setText("");
                 }
@@ -280,7 +286,8 @@ public class LoaderRow extends JComponent {
 
         public LoaderConfiguration(ResourceLoader loader, LocationFactory factory) {
 
-            setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
+            setBorder(BorderFactory
+                              .createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
 
             this.loader = loader;
             this.factory = factory;
@@ -291,11 +298,14 @@ public class LoaderRow extends JComponent {
             editors = new HashMap<String, LocationEditor>();
 
 
-            for (Map.Entry<String, LocationDescription> e : loader.getRequiredResources().entrySet()) {
+            for (Map.Entry<String, LocationDescription> e : loader
+                    .getRequiredResources().entrySet()) {
 
 
                 layout.appendRow(new RowSpec(Sizes.PREFERRED));
-                add(LabelFactory.newFormLabel(e.getValue().getName(), e.getValue().getDescription()), cc.xy(1, layout.getRowCount()));
+                add(LabelFactory.newFormLabel(e.getValue().getName(), e
+                        .getValue().getDescription()), cc.xy(1, layout
+                        .getRowCount()));
 
                 LocationEditor editor = null;
 
@@ -327,7 +337,8 @@ public class LoaderRow extends JComponent {
 
                 try {
                     // replace with individual UI components for selecting
-                    ResourceLocation location = e.getValue().getResourceLocation();
+                    ResourceLocation location = e.getValue()
+                                                 .getResourceLocation();
                     // replace with individual UI components for selecting
                     if (location != null) {
                         loader.addLocation(key, location);
@@ -352,7 +363,8 @@ public class LoaderRow extends JComponent {
         private JPanel panel;
 
         protected Expand(JPanel panel, long duration) {
-            super(panel, new Dimension(panel.getPreferredSize().width, 0), panel.getPreferredSize(), duration);
+            super(panel, new Dimension(panel.getPreferredSize().width, 0), panel
+                    .getPreferredSize(), duration);
             this.panel = panel;
             addAnimationListener(this);
         }
@@ -366,6 +378,25 @@ public class LoaderRow extends JComponent {
         @Override
         public void animationStopped(AnimationEvent animationEvent) {
             //To change body of implemented methods use File | Settings | File Templates.
+            final CalloutDialog dialog = new CalloutDialog(SwingUtilities
+                                                             .getWindowAncestor(panel),
+                                                     Dialog.ModalityType.MODELESS);
+
+            dialog.setAnchor(configure);
+            dialog.getMainPanel().add(LabelFactory
+                                              .newLabel("Once configured, click the cog to register your changes"));
+            dialog.setAlwaysOnTop(true);
+            dialog.pack();
+            dialog.place();
+            dialog.setVisible(true);
+
+            Timer t = new Timer(2500, new ActionListener() {
+                @Override public void actionPerformed(ActionEvent e) {
+                    dialog.setVisible(false);
+                }
+            });
+            t.start();
+
         }
 
     }
@@ -374,7 +405,8 @@ public class LoaderRow extends JComponent {
         private JPanel panel;
 
         protected Collapse(JPanel panel, long duration) {
-            super(panel, panel.getPreferredSize(), new Dimension(panel.getPreferredSize().width, 0), duration);
+            super(panel, panel
+                    .getPreferredSize(), new Dimension(panel.getPreferredSize().width, 0), duration);
             this.panel = panel;
             addAnimationListener(this);
         }
@@ -417,7 +449,8 @@ public class LoaderRow extends JComponent {
             if (l == 0) return; // ignore resting state
 
             double position = (double) l / duration();
-            double proportion = (Math.cos(position * Math.PI + Math.PI) + 1) / 2;
+            double proportion = (Math
+                    .cos(position * Math.PI + Math.PI) + 1) / 2;
 
             int width = startSize.width + (int) ((xdiff) * proportion);
             int height = startSize.height + (int) ((ydiff) * proportion);
