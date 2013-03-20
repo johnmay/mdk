@@ -8,6 +8,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
@@ -22,7 +23,7 @@ import java.util.Map;
 public class AbstractDataOutput<M> extends MarshalManager<M> {
 
     private DataOutput out;
-    private Map<Object, Integer> objectIds = new HashMap<Object, Integer>();
+    private Map<Object, Integer> objectIds = new IdentityHashMap<Object, Integer>();
     private MutableInt iterator = new MutableInt(Integer.MIN_VALUE + 10);
 
     public AbstractDataOutput(DataOutput out, Version v) {
