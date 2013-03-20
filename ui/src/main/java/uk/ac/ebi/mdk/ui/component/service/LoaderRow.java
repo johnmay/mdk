@@ -384,8 +384,10 @@ public class LoaderRow extends JComponent {
 
             dialog.setAnchor(configure);
             dialog.getMainPanel().add(LabelFactory
-                                              .newLabel("Once configured, click the cog to register your changes"));
+                                              .newLabel("Once configured, click the cog again to register your changes"));
             dialog.setAlwaysOnTop(true);
+            dialog.setFocusable(false);
+            dialog.setFocusableWindowState(false);
             dialog.pack();
             dialog.place();
             dialog.setVisible(true);
