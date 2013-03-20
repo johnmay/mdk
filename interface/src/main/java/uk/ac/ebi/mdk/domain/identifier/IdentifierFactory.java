@@ -74,6 +74,9 @@ public interface IdentifierFactory {
      */
     public Identifier ofSynonym(String synonym, String accession);
 
+    public <I extends Identifier> I ofClass(Class<I> type);
+
+    public Collection<Class<? extends Identifier>> ofPattern(String accession);
 
     public static Identifier EMPTY_IDENTIFIER = new Identifier() {
         @Override
