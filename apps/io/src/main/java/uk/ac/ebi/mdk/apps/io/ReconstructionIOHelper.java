@@ -55,7 +55,7 @@ public class ReconstructionIOHelper {
         properties.load(new FileReader(info));
         String uuidString = properties.getProperty("uuid");
 
-        // info exists but no UUID -> say we match just incases
+        // info exists but no UUID -> we indicate it doesn't match
         if (uuidString == null)
             return false;
 

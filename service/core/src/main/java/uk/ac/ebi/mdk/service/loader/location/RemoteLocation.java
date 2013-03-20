@@ -1,11 +1,17 @@
 package uk.ac.ebi.mdk.service.loader.location;
 
 import com.google.common.io.CountingInputStream;
+import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
+import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -39,8 +45,19 @@ public class RemoteLocation
     }
 
     public URLConnection getConnection() throws IOException {
-        if (connection == null)
-            connection = getLocation().openConnection();
+        if (connection == null) {
+            ServicePreferences pref = ServicePreferences.getInstance();
+            BooleanPreference  use  = pref.getPreference("PROXY_SET");
+            if(use.get()){
+                StringPreference host = pref.getPreference("PROXY_HOST");
+                IntegerPreference port = pref.getPreference("PROXY_PORT");
+                InetSocketAddress address = new InetSocketAddress(host.get(),
+                                                                  port.get());
+                connection = getLocation().openConnection(new Proxy(Proxy.Type.HTTP, address));
+            } else {
+                connection = getLocation().openConnection();
+            }
+        }
         return connection;
     }
 

@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
+import uk.ac.ebi.mdk.ResourcePreferences;
 import uk.ac.ebi.mdk.domain.identifier.Resource;
 
 /**
@@ -167,8 +169,13 @@ public class MIRIAMEntry
      */
     public URL getURL(String accession) {
         try {
-            String url = this.url;
-            return new URL(url.replaceAll("\\$id", accession));
+            BooleanPreference useIdentifiersDotOrg = ResourcePreferences.getInstance().getPreference("IDENTIFIERS_DOT_ORG_URL");
+            if(useIdentifiersDotOrg.get()){
+                return new URL("http://identifiers.org/" + namespace + "/" + accession);
+            } else {
+                String url = this.url;
+                return new URL(url.replaceAll("\\$id", accession));
+            }
         } catch (MalformedURLException ex) {
             ex.printStackTrace();
         }

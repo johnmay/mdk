@@ -22,6 +22,8 @@ package uk.ac.ebi.mdk.domain.entity;
  * and open the template in the editor.
  */
 
+import uk.ac.ebi.caf.utility.preference.type.FilePreference;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 import uk.ac.ebi.mdk.domain.entity.collection.GenomeImplementation;
@@ -401,7 +403,9 @@ public class ReconstructionImpl
 
 
     public final File defaultLocation() {
-        return new File(System.getProperty("user.home") + File.separator + getAccession() + RECONSTRUCTION_FILE_EXTENSION);
+        FilePreference save_root = DomainPreferences.getInstance().getPreference("SAVE_LOCATION");
+        return new File(save_root.get(),
+                        getAccession() + RECONSTRUCTION_FILE_EXTENSION);
     }
 
     public final void setContainer(File container) {
