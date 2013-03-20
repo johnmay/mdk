@@ -33,7 +33,7 @@ public class ChEBIDataLoader extends AbstractChEBILoader {
         super(new ChEBIDataIndex());
 
         addRequiredResource("ChEBI Chemical Data",
-                            "",
+                            "chemical_data.tsv flatfile from ChEBI, specifying formulae and charges",
                             ResourceFileLocation.class,
                             new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/chemical_data.tsv"));
     }

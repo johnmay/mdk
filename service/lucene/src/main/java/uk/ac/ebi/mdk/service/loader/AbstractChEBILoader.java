@@ -42,7 +42,7 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
         super(index);
 
         addRequiredResource("ChEBI Compounds",
-                            "...",
+                            "compound.tsv file from ChEBI, specifying preferred names, secondary and primary accessions",
                             ResourceFileLocation.class,
                             new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv"));
 

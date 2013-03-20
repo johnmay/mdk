@@ -48,11 +48,11 @@ public class ChEBINameLoader extends AbstractChEBILoader {
         // note: ChEBI Compounds as already required by the super class, but as they have the same
         //       name the resource is collapsed down to a single entry
         addRequiredResource("ChEBI Compounds",
-                            "...",
+                            "compound.tsv flatfile from ChEBI, specifying preferred names, secondary and primary accessions",
                             ResourceFileLocation.class,
                             new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv"));
         addRequiredResource("ChEBI Names",
-                            "...",
+                            "name.tsv flatfile from ChEBI, specifying names and their tpyes (e.g. IUPAC/Synonym)",
                             ResourceFileLocation.class,
                             new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv"));
 
