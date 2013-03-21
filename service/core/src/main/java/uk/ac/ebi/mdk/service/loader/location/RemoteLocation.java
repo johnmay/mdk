@@ -100,29 +100,23 @@ public class RemoteLocation
     public boolean isAvailable() {
         try {
             URLConnection connection = openConnection();
+
+            // 600 ms time out
+            connection.setReadTimeout(600);
+            connection.setConnectTimeout(600);
+
             if (connection instanceof HttpURLConnection) {
                 HttpURLConnection http = (HttpURLConnection) connection;
-                http.setConnectTimeout(400);
-                http.setReadTimeout(400);
+                // header we don't need to wait as long
+                http.setConnectTimeout(300);
+                http.setReadTimeout(300);
                 http.setRequestMethod("HEAD");
                 int response = http.getResponseCode();
                 http.disconnect();
                 // 2** = response okay
                 return response < 300 && response > 199;
             } else {
-                boolean available = false;
-                if (proxySet()) {
-                    FTPHTTPClient client = new FTPHTTPClient(proxyHost(), proxyPort());
-                    client.connect(getLocation().getHost());
-                    available = client.isAvailable();
-                    client.disconnect();
-                } else {
-                    FTPClient client = new FTPClient();
-                    client.connect(getLocation().getHost());
-                    available = client.isAvailable();
-                    client.disconnect();
-                }
-                return available;
+                return connection.getContentLength() > 0;
             }
         } catch (IOException ex) {
             return false;
