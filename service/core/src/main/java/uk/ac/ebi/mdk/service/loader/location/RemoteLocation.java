@@ -1,8 +1,6 @@
 package uk.ac.ebi.mdk.service.loader.location;
 
 import com.google.common.io.CountingInputStream;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPHTTPClient;
 import sun.net.www.protocol.ftp.FtpURLConnection;
 import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
