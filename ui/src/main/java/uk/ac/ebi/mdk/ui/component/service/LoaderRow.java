@@ -105,7 +105,6 @@ public class LoaderRow extends JComponent {
                                                          .getIcon("/uk/ac/ebi/chemet/render/images/cutout/cog_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                update.setEnabled(loader.canUpdate());
                 delete.setEnabled(loader.canBackup() || loader.canRevert());
                 revert.setEnabled(loader.canRevert());
 

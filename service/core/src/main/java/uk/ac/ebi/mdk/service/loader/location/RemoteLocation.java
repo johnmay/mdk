@@ -1,6 +1,8 @@
 package uk.ac.ebi.mdk.service.loader.location;
 
 import com.google.common.io.CountingInputStream;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPHTTPClient;
 import sun.net.www.protocol.ftp.FtpURLConnection;
 import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
@@ -48,15 +50,29 @@ public class RemoteLocation
         return location;
     }
 
-    Proxy proxy() {
+    boolean proxySet() {
         ServicePreferences pref = ServicePreferences.getInstance();
-        BooleanPreference proxySet  = pref.getPreference("PROXY_SET");
-        StringPreference  proxyHost = pref.getPreference("PROXY_HOST");
+        BooleanPreference proxySet = pref.getPreference("PROXY_SET");
+        return proxySet.get();
+    }
+
+    String proxyHost() {
+        ServicePreferences pref = ServicePreferences.getInstance();
+        StringPreference proxyHost = pref.getPreference("PROXY_HOST");
+        return proxyHost.get();
+    }
+
+    int proxyPort() {
+        ServicePreferences pref = ServicePreferences.getInstance();
         IntegerPreference proxyPort = pref.getPreference("PROXY_PORT");
-        if(proxySet.get()) {
+        return proxyPort.get();
+    }
+
+    Proxy proxy() {
+        if (proxySet()) {
             return new Proxy(Proxy.Type.HTTP,
-                             new InetSocketAddress(proxyHost.get(),
-                                                   proxyPort.get()));
+                             new InetSocketAddress(proxyHost(),
+                                                   proxyPort()));
         }
         return Proxy.NO_PROXY;
     }
@@ -68,9 +84,9 @@ public class RemoteLocation
     public URLConnection getConnection() throws IOException {
         URLConnection result = connection;
         if (connection == null) {
-            synchronized (lock){
+            synchronized (lock) {
                 result = connection;
-                if(result == null) {
+                if (result == null) {
                     result = connection = openConnection();
                 }
             }
@@ -83,7 +99,31 @@ public class RemoteLocation
      */
     public boolean isAvailable() {
         try {
-            return getConnection().getContentLength() > 0;
+            URLConnection connection = openConnection();
+            if (connection instanceof HttpURLConnection) {
+                HttpURLConnection http = (HttpURLConnection) connection;
+                http.setConnectTimeout(400);
+                http.setReadTimeout(400);
+                http.setRequestMethod("HEAD");
+                int response = http.getResponseCode();
+                http.disconnect();
+                // 2** = response okay
+                return response < 300 && response > 199;
+            } else {
+                boolean available = false;
+                if (proxySet()) {
+                    FTPHTTPClient client = new FTPHTTPClient(proxyHost(), proxyPort());
+                    client.connect(getLocation().getHost());
+                    available = client.isAvailable();
+                    client.disconnect();
+                } else {
+                    FTPClient client = new FTPClient();
+                    client.connect(getLocation().getHost());
+                    available = client.isAvailable();
+                    client.disconnect();
+                }
+                return available;
+            }
         } catch (IOException ex) {
             return false;
         }
@@ -105,7 +145,8 @@ public class RemoteLocation
     }
 
     @Override public double progress() {
-        return counter.getCount() / (double) connection.getContentLength();
+        double progress = counter.getCount() / (double) connection.getContentLength();
+        return Math.max(progress, 0.0);
     }
 
     /**
@@ -113,7 +154,7 @@ public class RemoteLocation
      *
      * @inheritDoc
      */
-    public void close() {
+    public void close() throws IOException {
         if (stream != null) {
             try {
                 stream.close();
