@@ -106,7 +106,9 @@ public class IdentifierMapperTest {
                                                                        factory);
 
         Identifier id1 = mock(Identifier.class);
+        when(id1.isValid()).thenReturn(true);
         Identifier id2 = mock(Identifier.class);
+        when(id2.isValid()).thenReturn(true);
 
         when(factory.ofName("mock")).thenReturn(id1, id2);
 
