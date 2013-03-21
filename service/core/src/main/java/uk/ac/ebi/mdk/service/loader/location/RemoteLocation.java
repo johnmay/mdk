@@ -1,6 +1,7 @@
 package uk.ac.ebi.mdk.service.loader.location;
 
 import com.google.common.io.CountingInputStream;
+import sun.net.www.protocol.ftp.FtpURLConnection;
 import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
 import uk.ac.ebi.caf.utility.preference.type.StringPreference;
@@ -9,6 +10,7 @@ import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
@@ -47,13 +49,14 @@ public class RemoteLocation
     public URLConnection getConnection() throws IOException {
         if (connection == null) {
             ServicePreferences pref = ServicePreferences.getInstance();
-            BooleanPreference  use  = pref.getPreference("PROXY_SET");
-            if(use.get()){
+            BooleanPreference use = pref.getPreference("PROXY_SET");
+            if (use.get()) {
                 StringPreference host = pref.getPreference("PROXY_HOST");
                 IntegerPreference port = pref.getPreference("PROXY_PORT");
                 InetSocketAddress address = new InetSocketAddress(host.get(),
                                                                   port.get());
-                connection = getLocation().openConnection(new Proxy(Proxy.Type.HTTP, address));
+                connection = getLocation()
+                        .openConnection(new Proxy(Proxy.Type.HTTP, address));
             } else {
                 connection = getLocation().openConnection();
             }
@@ -81,7 +84,8 @@ public class RemoteLocation
     public InputStream open() throws IOException {
         if (stream == null) {
             connection = getConnection();
-            stream = counter = new CountingInputStream(connection.getInputStream());
+            stream = counter = new CountingInputStream(connection
+                                                               .getInputStream());
         }
         return stream;
     }
@@ -95,9 +99,18 @@ public class RemoteLocation
      *
      * @inheritDoc
      */
-    public void close() throws IOException {
+    public void close() {
         if (stream != null) {
-            stream.close();
+            try {
+                stream.close();
+            } catch (IOException e) {
+                // can't do anything
+            }
+            if (connection instanceof HttpURLConnection) {
+                ((HttpURLConnection) connection).disconnect();
+            } else if (connection instanceof FtpURLConnection) {
+                ((FtpURLConnection) connection).close();
+            }
             stream = null;
             connection = null;
         }
