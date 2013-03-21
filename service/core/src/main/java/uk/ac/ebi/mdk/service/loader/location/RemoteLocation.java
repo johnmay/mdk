@@ -28,11 +28,13 @@ import java.net.URLConnection;
 public class RemoteLocation
         implements ResourceFileLocation {
 
-    private URL location;
+    private final URL location;
+    private volatile URLConnection connection;
 
-    private URLConnection connection;
     private CountingInputStream counter;
     private InputStream stream;
+
+    private Object lock = new Object();
 
     public RemoteLocation(URL location) {
         this.location = location;
@@ -46,22 +48,22 @@ public class RemoteLocation
         return location;
     }
 
+
+    URLConnection openConnection() throws IOException {
+        return getLocation().openConnection();
+    }
+
     public URLConnection getConnection() throws IOException {
+        URLConnection result = connection;
         if (connection == null) {
-            ServicePreferences pref = ServicePreferences.getInstance();
-            BooleanPreference use = pref.getPreference("PROXY_SET");
-            if (use.get()) {
-                StringPreference host = pref.getPreference("PROXY_HOST");
-                IntegerPreference port = pref.getPreference("PROXY_PORT");
-                InetSocketAddress address = new InetSocketAddress(host.get(),
-                                                                  port.get());
-                connection = getLocation()
-                        .openConnection(new Proxy(Proxy.Type.HTTP, address));
-            } else {
-                connection = getLocation().openConnection();
+            synchronized (lock){
+                result = connection;
+                if(result == null) {
+                    result = connection = openConnection();
+                }
             }
         }
-        return connection;
+        return result;
     }
 
     /**
