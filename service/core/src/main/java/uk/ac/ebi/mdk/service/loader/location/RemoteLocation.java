@@ -48,9 +48,21 @@ public class RemoteLocation
         return location;
     }
 
+    Proxy proxy() {
+        ServicePreferences pref = ServicePreferences.getInstance();
+        BooleanPreference proxySet  = pref.getPreference("PROXY_SET");
+        StringPreference  proxyHost = pref.getPreference("PROXY_HOST");
+        IntegerPreference proxyPort = pref.getPreference("PROXY_PORT");
+        if(proxySet.get()) {
+            return new Proxy(Proxy.Type.HTTP,
+                             new InetSocketAddress(proxyHost.get(),
+                                                   proxyPort.get()));
+        }
+        return Proxy.NO_PROXY;
+    }
 
     URLConnection openConnection() throws IOException {
-        return getLocation().openConnection();
+        return getLocation().openConnection(proxy());
     }
 
     public URLConnection getConnection() throws IOException {
