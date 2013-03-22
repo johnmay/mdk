@@ -1,6 +1,7 @@
 package uk.ac.ebi.mdk.service.loader.location;
 
 import com.google.common.io.CountingInputStream;
+import org.apache.log4j.Logger;
 import sun.net.www.protocol.ftp.FtpURLConnection;
 import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
 import uk.ac.ebi.caf.utility.preference.type.IntegerPreference;
@@ -99,24 +100,28 @@ public class RemoteLocation
         try {
             URLConnection connection = openConnection();
 
-            // 600 ms time out
-            connection.setReadTimeout(600);
-            connection.setConnectTimeout(600);
+            // 1 second time out
+            connection.setReadTimeout(1000);
+            connection.setConnectTimeout(1000);
 
             if (connection instanceof HttpURLConnection) {
                 HttpURLConnection http = (HttpURLConnection) connection;
                 // header we don't need to wait as long
-                http.setConnectTimeout(300);
-                http.setReadTimeout(300);
+                http.setConnectTimeout(500);
+                http.setReadTimeout(500);
                 http.setRequestMethod("HEAD");
                 int response = http.getResponseCode();
                 http.disconnect();
                 // 2** = response okay
+                Logger.getLogger(getClass()).info(getLocation() + " response code: " + response);
                 return response < 300 && response > 199;
             } else {
-                return connection.getContentLength() > 0;
+                int length = connection.getContentLength();
+                Logger.getLogger(getClass()).info(getLocation() + " content length: " + length);
+                return length > 0;
             }
         } catch (IOException ex) {
+            Logger.getLogger(getClass()).warn(getLocation() + " is not available " + ex.getMessage());
             return false;
         }
     }
