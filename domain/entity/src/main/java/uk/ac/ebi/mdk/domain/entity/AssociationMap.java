@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -58,7 +59,7 @@ public final class AssociationMap {
      * @return associations, specified by UUIDs
      */
     public Collection<UUID> associations(Entity e) {
-        return associations.get(e.uuid());
+        return Collections.unmodifiableCollection(associations.get(e.uuid()));
     }
 
 
