@@ -8,6 +8,7 @@ import uk.ac.ebi.mdk.io.domain.ProteinProductDataWriter;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ReactionDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ReconstructionDataWriter_1_3_3;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataWriter;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.TransferRNADataWriter;
@@ -95,6 +96,7 @@ public class EntityDataOutputStream
 
         add(Reconstruction.class, new ReconstructionDataWriter_0_9(out, identifierOutput,  this));
         add(Reconstruction.class, new ReconstructionDataWriter_1_3_3(out, identifierOutput,  this));
+        add(Reconstruction.class, new ReconstructionDataWriter_1_3_9(out, identifierOutput,  this));
 
     }
 

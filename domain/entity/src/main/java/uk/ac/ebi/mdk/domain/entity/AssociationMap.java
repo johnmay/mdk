@@ -5,6 +5,8 @@ import com.google.common.collect.Multimap;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -62,6 +64,13 @@ public final class AssociationMap {
         return Collections.unmodifiableCollection(associations.get(e.uuid()));
     }
 
+    /**
+     * Access the keys of the associations
+     * @return UUID keys
+     */
+    public Set<UUID> keys(){
+        return Collections.unmodifiableSet(associations.keySet());
+    }
 
     public static AssociationMap create(int capacity) {
         return new AssociationMap(capacity);

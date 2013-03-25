@@ -29,6 +29,9 @@ import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -107,24 +110,6 @@ public interface Reconstruction extends AnnotatedEntity {
      */
     public void remove(GeneProduct product);
 
-    // new api
-
-    /**
-     * Proteome of the reconstruction.
-     *
-     * @return the proteome
-     * @see Proteome
-     */
-    public Proteome proteome();
-
-    public Collection<Reaction> reactionsOf(GeneProduct product);
-
-    public Collection<GeneProduct> enzymesOf(Reaction reaction);
-
-    public Collection<Reaction> participatesIn(Metabolite metabolite);
-
-    // end new api
-
     public boolean addSubset(EntityCollection subset);
 
     public boolean hasMatrix();
@@ -134,6 +119,28 @@ public interface Reconstruction extends AnnotatedEntity {
     public StoichiometricMatrix getMatrix();
 
     public Iterable<? extends EntityCollection> getSubsets();
+
+    // new API
+
+    /**
+     * Proteome of the reconstruction.
+     *
+     * @return the proteome
+     * @see Proteome
+     */
+    public Proteome proteome();
+
+    public void associate(GeneProduct product, Reaction reaction);
+
+    public List<Map.Entry<GeneProduct, Reaction>> productAssociations();
+
+    public Collection<Reaction> reactionsOf(GeneProduct product);
+
+    public Collection<GeneProduct> enzymesOf(Reaction reaction);
+
+    public Collection<Reaction> participatesIn(Metabolite metabolite);
+
+
 
     /**
      * Access an entity by UUID.
@@ -159,4 +166,9 @@ public interface Reconstruction extends AnnotatedEntity {
      * @return whether the entity was registered (false if null or not present)
      */
     public boolean deregister(Entity entity);
+
+    public interface Association {
+        public UUID from();
+        public Collection<UUID> to();
+    }
 }

@@ -11,6 +11,7 @@ import uk.ac.ebi.mdk.io.domain.ReactionDataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_0_9;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataReader;
 import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_1_3_3;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataReader;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.TransferRNADataReader;
@@ -94,6 +95,7 @@ public class EntityDataInputStream
 
         add(Reconstruction.class, new ReconstructionDataReader_0_9(in, factory, identifierInput, this));
         add(Reconstruction.class, new ReconstructionDataReader_1_3_3(in, factory, identifierInput, this));
+        add(Reconstruction.class, new ReconstructionDataReader_1_3_9(in, factory, identifierInput, this));
 
     }
 

@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.security.InvalidParameterException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -292,6 +293,7 @@ public class ReconstructionImpl
      * @param reaction a new reaction
      */
     public void addReaction(MetabolicReaction reaction) {
+        register(reaction);
         reactions.add(reaction);
 
         // duplicates will not be added
@@ -327,6 +329,21 @@ public class ReconstructionImpl
 
     public Collection<EntityCollection> getSubsets() {
         return subsets;
+    }
+
+    @Override
+    public List<Map.Entry<GeneProduct, Reaction>> productAssociations() {
+        List<Map.Entry<GeneProduct, Reaction>> associations = new ArrayList<Map.Entry<GeneProduct, Reaction>>(2000);
+        for(UUID uuid : gpr.keys()){
+            Entity entity = entity(uuid);
+            if(entity instanceof GeneProduct) {
+                for(UUID uuid2 : gpr.associations(entity)){
+                    associations.add(new AbstractMap.SimpleEntry<GeneProduct,Reaction>((GeneProduct) entity,
+                                                                                 (Reaction) entity(uuid2)));
+                }
+            }
+        }
+        return associations;
     }
 
     /**
@@ -411,6 +428,13 @@ public class ReconstructionImpl
             }
         }
         return Collections.unmodifiableCollection(entities);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public void associate(GeneProduct product, Reaction reaction) {
+        gpr.associate(product, reaction);
     }
 
     public Collection<GeneProduct> enzymesOf(Reaction reaction) {

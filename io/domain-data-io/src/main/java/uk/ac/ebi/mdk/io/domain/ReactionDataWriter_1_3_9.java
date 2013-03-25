@@ -61,13 +61,7 @@ public class ReactionDataWriter_1_3_9
 
         enumWriter.writeEnum( (Enum) rxn.getDirection());
 
-        // write modifiers
-        Collection<GeneProduct> modifiers = rxn.getModifiers();
-        out.writeByte(modifiers.size());
-        for(AnnotatedEntity entity : modifiers ){
-            entityOut.write(entity);
-        }
-
+        // associations (i.e. modifiers now handled in the reconstruction writer)
 
     }
 

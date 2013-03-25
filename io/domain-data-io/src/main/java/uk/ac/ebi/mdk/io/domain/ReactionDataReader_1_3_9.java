@@ -75,13 +75,6 @@ public class ReactionDataReader_1_3_9
 
         rxn.setDirection((Direction)enumReader.readEnum());
 
-        // read modifiers
-        int nModifiers = in.readByte();
-        for(int i = 0; i < nModifiers; i++){
-            rxn.addModifier( (GeneProduct) entityIn.read(reconstruction));
-        }
-
-
         return rxn;
 
     }

@@ -77,7 +77,8 @@ public class ReactionDataReader
         // read modifiers
         int nModifiers = in.readByte();
         for(int i = 0; i < nModifiers; i++){
-            rxn.addModifier( (GeneProduct) entityIn.read(reconstruction));
+            GeneProduct product = (GeneProduct) entityIn.read(reconstruction);
+            reconstruction.associate(product, rxn);
         }
 
 
