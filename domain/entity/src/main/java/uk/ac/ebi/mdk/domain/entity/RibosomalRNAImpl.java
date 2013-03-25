@@ -20,6 +20,8 @@ package uk.ac.ebi.mdk.domain.entity;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
+import java.util.UUID;
+
 
 /**
  *          RibsomalRNA - 2011.10.17 <br>
@@ -33,7 +35,8 @@ public class RibosomalRNAImpl extends AbstractRNAProduct implements RibosomalRNA
     private static final Logger LOGGER = Logger.getLogger(RibosomalRNAImpl.class);
 
 
-    public RibosomalRNAImpl() {
+    public RibosomalRNAImpl(UUID uuid) {
+        super(uuid);
     }
 
 
@@ -43,6 +46,6 @@ public class RibosomalRNAImpl extends AbstractRNAProduct implements RibosomalRNA
 
 
     public GeneProduct newInstance() {
-        return new RibosomalRNAImpl();
+        return new RibosomalRNAImpl(UUID.randomUUID());
     }
 }

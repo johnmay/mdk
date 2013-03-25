@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author johnmay
@@ -46,7 +47,8 @@ public class ProteinProductImpl
 
     private Set<ProteinSequence> sequences = new HashSet<ProteinSequence>(1);
 
-    public ProteinProductImpl() {
+    public ProteinProductImpl(UUID uuid) {
+        super(uuid);
     }
 
     public ProteinProductImpl(Identifier identifier, String abbreviation, String name) {
@@ -63,7 +65,7 @@ public class ProteinProductImpl
 
 
     public GeneProduct newInstance() {
-        return new ProteinProductImpl();
+        return new ProteinProductImpl(UUID.randomUUID());
     }
 
     @Override

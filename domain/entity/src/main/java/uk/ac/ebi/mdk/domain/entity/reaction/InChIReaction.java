@@ -21,6 +21,8 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.identifier.InChI;
 import uk.ac.ebi.mdk.domain.entity.reaction.filter.InChIFilter;
 
+import java.util.UUID;
+
 /**
  * @name    InChIReaction
  * @date    2011.08.08
@@ -35,7 +37,8 @@ public class InChIReaction
 
     private static final Logger LOGGER = Logger.getLogger( InChIReaction.class );
 
-    public InChIReaction() {
+    public InChIReaction(UUID uuid) {
+        super(uuid);
     }
     public InChIReaction(InChIFilter filter) {
         super(filter);

@@ -42,13 +42,6 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public static final String RECONSTRUCTION_FILE_EXTENSION = ".mr";
 
-    /**
-     * Access the universal unique identifier for the reconstruction.
-     *
-     * @return the reconstructions UUID
-     */
-    public UUID uuid();
-
     public File defaultLocation();
 
     public Genome getGenome();

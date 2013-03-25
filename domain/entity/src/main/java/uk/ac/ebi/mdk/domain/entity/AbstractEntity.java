@@ -24,6 +24,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.UUID;
 
 
 /**
@@ -43,10 +44,11 @@ public abstract class AbstractEntity implements Entity, Cloneable, Externalizabl
 
     private String name = "";
 
+    private final UUID uuid;
 
-    public AbstractEntity() {
+    public AbstractEntity(UUID uuid) {
+        this.uuid = uuid;
     }
-
 
     /**
      * Full instantiation constructor
@@ -57,11 +59,22 @@ public abstract class AbstractEntity implements Entity, Cloneable, Externalizabl
      * 
      */
     public AbstractEntity(Identifier identifier, String abbreviation, String name) {
+        this(UUID.randomUUID(), identifier, abbreviation, name);
+    }
+
+    public AbstractEntity(UUID uuid, Identifier identifier, String abbreviation, String name) {
+        this.uuid = uuid;
         this.identifier = identifier;
         this.abbreviation = abbreviation;
         this.name = name;
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override public UUID uuid() {
+        return uuid;
+    }
 
     /**
      * Access the abbreviation of the entity. The abbreviation is normally a

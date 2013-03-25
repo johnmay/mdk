@@ -39,6 +39,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 
 /**
@@ -63,7 +64,8 @@ public abstract class AbstractAnnotatedEntity
     private static AnnotationFactory ANNOTATION_FACTORY = DefaultAnnotationFactory.getInstance();
 
 
-    public AbstractAnnotatedEntity() {
+    public AbstractAnnotatedEntity(UUID uuid) {
+        super(uuid);
         AtomContainerSet set = new AtomContainerSet();
         set.addListener(set);
     }

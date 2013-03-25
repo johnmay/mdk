@@ -23,6 +23,7 @@ import uk.ac.ebi.mdk.domain.entity.AbstractEntity;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.UUID;
 
 
 /**
@@ -48,7 +49,8 @@ public class BasicParticipant<M, S extends Number>
      * Default constructor creates an empty participant without
      * any default instantiation of the molecule or coefficient
      */
-    public BasicParticipant() {
+    public BasicParticipant(UUID uuid) {
+        super(uuid);
     }
 
 
@@ -59,6 +61,7 @@ public class BasicParticipant<M, S extends Number>
      * @param molecule the molecule of the participant
      */
     public BasicParticipant(M molecule) {
+        super(UUID.randomUUID());
         this.molecule = molecule;
     }
 
@@ -71,6 +74,7 @@ public class BasicParticipant<M, S extends Number>
      * @param coefficient the coefficient
      */
     public BasicParticipant(M molecule, S coefficient) {
+        super(UUID.randomUUID());
         this.molecule = molecule;
         this.coefficient = coefficient;
     }
@@ -226,6 +230,6 @@ public class BasicParticipant<M, S extends Number>
      */
     @Override
     public Participant newInstance() {
-        return new BasicParticipant();
+        return new BasicParticipant(UUID.randomUUID());
     }
 }

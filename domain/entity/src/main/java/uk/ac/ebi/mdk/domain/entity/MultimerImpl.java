@@ -30,6 +30,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -48,7 +49,8 @@ public class MultimerImpl extends AbstractGeneProduct implements Multimer {
     private List<GeneProduct> subunits = new ArrayList();
 
 
-    public MultimerImpl() {
+    public MultimerImpl(UUID uuid) {
+        super(uuid);
     }
 
 
@@ -155,6 +157,6 @@ public class MultimerImpl extends AbstractGeneProduct implements Multimer {
 
 
     public GeneProduct newInstance() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new MultimerImpl(UUID.randomUUID());
     }
 }

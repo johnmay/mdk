@@ -28,6 +28,7 @@ import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author johnmay
@@ -41,7 +42,8 @@ public abstract class AbstractGeneProduct
     private static final Logger LOGGER = Logger.getLogger(AbstractGeneProduct.class);
     private Set<Gene> genes = new HashSet<Gene>(1); // 1 to 1 but can be more
 
-    public AbstractGeneProduct() {
+    public AbstractGeneProduct(UUID uuid) {
+        super(uuid);
     }
 
     public AbstractGeneProduct(Identifier identifier, String abbreviation, String name) {
