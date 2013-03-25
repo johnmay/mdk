@@ -20,6 +20,8 @@ package uk.ac.ebi.mdk.domain.entity.collection;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Manage reconstructions.
@@ -54,4 +56,13 @@ public interface ReconstructionManager {
      * @param reconstruction  the reconstruction to add
      */
     public void add(Reconstruction reconstruction);
+
+
+    public boolean remove(Reconstruction reconstruction);
+
+    /**
+     * Recently opened/saved reconstructions specified by their system path
+     * @return list of paths
+     */
+    public List<String> recent();
 }
