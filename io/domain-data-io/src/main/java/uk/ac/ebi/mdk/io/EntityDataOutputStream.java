@@ -2,9 +2,14 @@ package uk.ac.ebi.mdk.io;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
+import uk.ac.ebi.mdk.io.domain.GeneDataWriter_1_3_9;
+import uk.ac.ebi.mdk.io.domain.MetaboliteDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataWriter;
+import uk.ac.ebi.mdk.io.domain.ProteinProductDataWriter_1_3_9;
+import uk.ac.ebi.mdk.io.domain.ReactionDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ReconstructionDataWriter_1_3_3;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataWriter;
+import uk.ac.ebi.mdk.io.domain.RibosomalRNADataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.TransferRNADataWriter;
 import uk.ac.ebi.mdk.io.domain.MetaboliteDataWriter;
 import uk.ac.ebi.mdk.io.domain.ReactionDataWriter;
@@ -19,6 +24,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.io.domain.AnnotatedEntityDataWriter;
 import uk.ac.ebi.mdk.io.domain.EntityDataWriter;
+import uk.ac.ebi.mdk.io.domain.TransferRNADataWriter_1_3_9;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -68,15 +74,21 @@ public class EntityDataOutputStream
 
         // metabolome/reactome
         add(Metabolite.class, new MetaboliteDataWriter(out));
+        add(Metabolite.class, new MetaboliteDataWriter_1_3_9(out));
         add(MetabolicReaction.class, new ReactionDataWriter(out, this));
+        add(MetabolicReaction.class, new ReactionDataWriter_1_3_9(out, this));
 
         // gene
         add(Gene.class, new GeneDataWriter(out));
+        add(Gene.class, new GeneDataWriter_1_3_9(out));
 
         // gene products
         add(ProteinProduct.class, new ProteinProductDataWriter(out, this));
+        add(ProteinProduct.class, new ProteinProductDataWriter_1_3_9(out, this));
         add(RibosomalRNA.class, new RibosomalRNADataWriter(out, this));
+        add(RibosomalRNA.class, new RibosomalRNADataWriter_1_3_9(out, this));
         add(TransferRNA.class, new TransferRNADataWriter(out, this));
+        add(TransferRNA.class, new TransferRNADataWriter_1_3_9(out, this));
 
         add(Chromosome.class, new ChromosomeDataWriter(out, this));
         add(Genome.class, new GenomeDataWriter(out, this));
