@@ -27,18 +27,13 @@ import java.util.List;
 /**
  * @version $Rev$
  */
-public interface Proteome extends Collection<GeneProduct> {
+public interface Proteome extends Iterable<GeneProduct> {
 
+    public boolean add(GeneProduct product);
 
-    /**
-     * Access via accession
-     *
-     * @param accession
-     *
-     * @return
-     */
-    public List<GeneProduct> get(String accession);
+    public boolean remove(GeneProduct product);
 
+    public int size();
 
     /**
      * Associate a product with a reaction
