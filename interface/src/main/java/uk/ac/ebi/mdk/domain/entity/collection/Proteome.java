@@ -22,31 +22,71 @@ import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
- * @version $Rev$
+ * Describes a reconstruction proteome and provides utilities for gene product
+ * and reaction associations.
+ *
+ * @author john may
  */
 public interface Proteome extends Iterable<GeneProduct> {
 
+    /**
+     * Add a gene product to the protease
+     *
+     * @param product a new product
+     * @return whether the product was added
+     */
     public boolean add(GeneProduct product);
 
+    /**
+     * Remove a gene product from the proteome
+     *
+     * @param product the gene product to remove
+     * @return whether the proteome was modified
+     */
     public boolean remove(GeneProduct product);
 
-    public int size();
-
     /**
-     * Associate a product with a reaction
-     * @param product
-     * @param reaction
+     * Associate a product with a reaction, products are added as enzymes of the
+     * reaction.
+     *
+     * @param product  a gene product
+     * @param reaction a reaction
+     * @see #enzymesOf(uk.ac.ebi.mdk.domain.entity.Reaction)
      */
     public void associate(GeneProduct product, Reaction reaction);
 
     /**
      * Dissociate a product with a reaction
-     * @param product
-     * @param reaction
+     *
+     * @param product  a gene product
+     * @param reaction a reaction
      */
     public void disassociate(GeneProduct product, Reaction reaction);
+
+    /**
+     * Access the enzymes (gene products) which are associated with the given
+     * reaction.
+     *
+     * @param reaction a reaction
+     * @return enzymes associated with the provided reaction
+     */
+    public Collection<GeneProduct> enzymesOf(Reaction reaction);
+
+    /**
+     * Access the reactions which are associated with the given reaction.
+     *
+     * @param product a gene product
+     * @return reactions associated with the provided reaction
+     */
+    public Collection<GeneProduct> reactionsOf(GeneProduct product);
+
+    /**
+     * Size of the proteome
+     *
+     * @return the proteome size
+     */
+    public int size();
 
 }
