@@ -19,6 +19,7 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,5 +38,20 @@ public interface Proteome extends Collection<GeneProduct> {
      * @return
      */
     public List<GeneProduct> get(String accession);
+
+
+    /**
+     * Associate a product with a reaction
+     * @param product
+     * @param reaction
+     */
+    public void associate(GeneProduct product, Reaction reaction);
+
+    /**
+     * Dissociate a product with a reaction
+     * @param product
+     * @param reaction
+     */
+    public void disassociate(GeneProduct product, Reaction reaction);
 
 }

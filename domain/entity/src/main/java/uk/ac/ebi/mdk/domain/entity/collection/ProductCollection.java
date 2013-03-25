@@ -25,6 +25,7 @@ import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 
@@ -261,6 +262,13 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override public void associate(GeneProduct product, Reaction reaction) {
+        throw new UnsupportedOperationException("not supported yet");
+    }
+
+    @Override public void disassociate(GeneProduct product, Reaction reaction) {
+        throw new UnsupportedOperationException("not supported yet");
+    }
 
     /**
      * @inheritDoc
