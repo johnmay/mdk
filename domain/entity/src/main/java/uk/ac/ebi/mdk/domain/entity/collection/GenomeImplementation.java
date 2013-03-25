@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * GenomeImplementation - 2011.10.18 <br> Implementation of genome interface
@@ -44,7 +45,18 @@ public class GenomeImplementation implements Genome {
     private static final Logger LOGGER = Logger.getLogger(GenomeImplementation.class);
     private Map<Integer, Chromosome> chromosomes = new HashMap();
 
-    public GenomeImplementation() {
+    private final UUID uuid;
+
+    public GenomeImplementation(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    @Override public UUID uuid() {
+        return uuid;
+    }
+
+    @Override public Entity newInstance() {
+        return new GenomeImplementation(UUID.randomUUID());
     }
 
     /**
@@ -213,12 +225,6 @@ public class GenomeImplementation implements Genome {
     public String getBaseType() {
         return "Genome";
     }
-
-
-    public Entity newInstance() {
-        return new GenomeImplementation();
-    }
-
 
     public void writeExternal(ObjectOutput out) throws IOException {
         throw new UnsupportedOperationException("Not supported yet.");

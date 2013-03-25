@@ -36,8 +36,7 @@ import java.util.Collection;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public interface Genome
-        extends Entity {
+public interface Genome extends Entity {
 
     /**
      * Access to the collection of chromosomes for this genome

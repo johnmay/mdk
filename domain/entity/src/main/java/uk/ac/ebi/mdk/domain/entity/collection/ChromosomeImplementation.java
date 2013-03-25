@@ -30,6 +30,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -50,11 +51,13 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
     private List<Gene> genes = new ArrayList<Gene>();
 
 
-    public ChromosomeImplementation() {
+    public ChromosomeImplementation(UUID uuid) {
+        super(uuid);
     }
 
 
     protected ChromosomeImplementation(ObjectInput in) throws IOException, ClassNotFoundException {
+        super(UUID.randomUUID());
         readExternal(in);
     }
 
@@ -156,6 +159,6 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
 
 
     public Chromosome newInstance() {
-        return new ChromosomeImplementation();
+        return new ChromosomeImplementation(UUID.randomUUID());
     }
 }

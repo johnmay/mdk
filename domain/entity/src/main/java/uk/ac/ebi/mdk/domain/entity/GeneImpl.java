@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 
 /**
@@ -56,7 +57,8 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
     private Set<GeneProduct> products = new HashSet<GeneProduct>(1);
 
 
-    public GeneImpl() {
+    public GeneImpl(UUID uuid) {
+        super(uuid);
     }
 
 
@@ -143,7 +145,7 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
     }
 
     public Gene newInstance() {
-        return new GeneImpl();
+        return new GeneImpl(UUID.randomUUID());
     }
 
     @Override

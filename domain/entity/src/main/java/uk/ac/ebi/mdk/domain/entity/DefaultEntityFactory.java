@@ -52,20 +52,20 @@ public class DefaultEntityFactory
 
     private DefaultEntityFactory() {
 
-        for (Entity entity : Arrays.asList(new MetaboliteImpl(),
-                                           new MetabolicReactionImpl(),
-                                           new ProteinProductImpl(),
-                                           new RibosomalRNAImpl(),
-                                           new TransferRNAImpl(),
-                                           new GeneImpl(),
-                                           new ChromosomeImplementation(),
-                                           new GenomeImplementation(),
-                                           new MultimerImpl(),
-                                           new IdentifierReactionImplementation(),
-                                           new BasicParticipant(),
-                                           new ParticipantImplementation(),
+        for (Entity entity : Arrays.asList(new MetaboliteImpl(UUID.randomUUID()),
+                                           new MetabolicReactionImpl(UUID.randomUUID()),
+                                           new ProteinProductImpl(UUID.randomUUID()),
+                                           new RibosomalRNAImpl(UUID.randomUUID()),
+                                           new TransferRNAImpl(UUID.randomUUID()),
+                                           new GeneImpl(UUID.randomUUID()),
+                                           new ChromosomeImplementation(UUID.randomUUID()),
+                                           new GenomeImplementation(UUID.randomUUID()),
+                                           new MultimerImpl(UUID.randomUUID()),
+                                           new IdentifierReactionImplementation(UUID.randomUUID()),
+                                           new BasicParticipant(UUID.randomUUID()),
+                                           new ParticipantImplementation(UUID.randomUUID()),
                                            new MetabolicParticipantImplementation(),
-                                           new AbstractReaction(),
+                                           new AbstractReaction(UUID.randomUUID()),
                                            new ReconstructionImpl())) {
 
             entites.put(getEntityClass(entity.getClass()), entity);
@@ -198,6 +198,89 @@ public class DefaultEntityFactory
         return null;
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override public Metabolite metabolite() {
+        return metabolite(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Metabolite metabolite(UUID uuid) {
+        return new MetaboliteImpl(uuid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public ProteinProduct protein() {
+        return protein(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public ProteinProduct protein(UUID uuid) {
+        return new ProteinProductImpl(uuid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public TransferRNA tRNA() {
+        return tRNA(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public TransferRNA tRNA(UUID uuid) {
+        return new TransferRNAImpl(uuid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public RibosomalRNA rRNA() {
+        return rRNA(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public RibosomalRNA rRNA(UUID uuid) {
+        return new RibosomalRNAImpl(uuid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public MetabolicReaction reaction() {
+        return reaction(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public MetabolicReaction reaction(UUID uuid) {
+        return new MetabolicReactionImpl(uuid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Gene gene() {
+        return gene(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Gene gene(UUID uuid) {
+        return new GeneImpl(uuid);
+    }
 
     private static class DefaultEntityFactoryHolder {
 

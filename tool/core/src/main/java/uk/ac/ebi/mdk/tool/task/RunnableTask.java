@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * RunnableTask.java
@@ -26,22 +27,28 @@ public abstract class RunnableTask
         extends AbstractAnnotatedEntity
         implements Task, Runnable {
 
-    private             TaskStatus status    = TaskStatus.QUEUED;
-    public static final String     BASE_TYPE = "Task";
-    private             Date       start     = new Date();
+    private TaskStatus status = TaskStatus.QUEUED;
+    public static final String BASE_TYPE = "Task";
+    private Date start = new Date();
     private Date end;
     public Set<AnnotatedEntity> entities = new HashSet<AnnotatedEntity>();
 
     public RunnableTask() {
+        this(UUID.randomUUID());
     }
+
+    public RunnableTask(UUID uuid) {
+        super(uuid);
+    }
+
 
     public RunnableTask(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
     /**
-     * Returns the current elapsed time for task. If the task is completed
-     * then the completion time is return
+     * Returns the current elapsed time for task. If the task is completed then
+     * the completion time is return
      */
     public Date getElapesedTime() {
         long elapased = System.currentTimeMillis() - start.getTime();
@@ -51,11 +58,10 @@ public abstract class RunnableTask
     }
 
     /**
-     * Adds an entity to the task. All added entities will be pushed for update (if required)
-     * at task termination
+     * Adds an entity to the task. All added entities will be pushed for update
+     * (if required) at task termination
      *
      * @param entity
-     *
      * @return
      */
     public boolean add(AnnotatedEntity entity) {
@@ -63,11 +69,10 @@ public abstract class RunnableTask
     }
 
     /**
-     * Adds a collection  entities to the task. All added entities will be pushed for update (if required)
-     * at task termination
+     * Adds a collection  entities to the task. All added entities will be
+     * pushed for update (if required) at task termination
      *
      * @param entities
-     *
      * @return
      */
     public boolean addAll(Collection<? extends AnnotatedEntity> entities) {
@@ -106,7 +111,8 @@ public abstract class RunnableTask
     }
 
     /**
-     * Similar to {@see isCompleted()} but will return true if the task finished in error
+     * Similar to {@see isCompleted()} but will return true if the task finished
+     * in error
      */
     public boolean isFinished() {
         return this.status == TaskStatus.COMPLETED || this.status == TaskStatus.ERROR;
@@ -137,8 +143,8 @@ public abstract class RunnableTask
 
 
     /**
-     * Returns the command that will be executed on the command line. If no command is provided then
-     * an empty string is returned
+     * Returns the command that will be executed on the command line. If no
+     * command is provided then an empty string is returned
      */
     public String getCommand() {
 
@@ -146,7 +152,8 @@ public abstract class RunnableTask
 
         Collection<ExecutableParameter> execs = getAnnotations(ExecutableParameter.class);
         if (execs.size() > 1 || execs.isEmpty()) {
-            throw new InvalidParameterException("ExecutableParamer should be unique to class but there are " + execs.size());
+            throw new InvalidParameterException("ExecutableParamer should be unique to class but there are " + execs
+                    .size());
         }
 
         ExecutableParameter exec = execs.iterator().next();
@@ -155,7 +162,8 @@ public abstract class RunnableTask
 
         for (Parameter param : getAnnotationsExtending(Parameter.class)) {
             if (!param.equals(exec)) {
-                sb.append(param.getFlag()).append(" ").append(param.getValue()).append(" ");
+                sb.append(param.getFlag()).append(" ").append(param.getValue())
+                  .append(" ");
             }
         }
 

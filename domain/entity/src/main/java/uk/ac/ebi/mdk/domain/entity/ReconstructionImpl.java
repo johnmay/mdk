@@ -97,10 +97,6 @@ public class ReconstructionImpl
     // s matrix
     private StoichiometricMatrix matrix;
 
-    /* universal unique identifier -> non modifiable */
-    private final UUID uuid;
-
-
     /**
      * Constructor mainly used for creating a new ReconstructionImpl
      *
@@ -110,24 +106,22 @@ public class ReconstructionImpl
     public ReconstructionImpl(UUID uuid,
                               ReconstructionIdentifier id,
                               Taxonomy org) {
-        super(id, org.getCode(), org.getCommonName());
-        this.uuid = uuid;
+        super(uuid, id, org.getCode(), org.getCommonName());
         taxonomy = org;
         reactions = new ReactionList();
         metabolome = new MetabolomeImpl();
         products = new ProductCollection();
-        genome = new GenomeImplementation();
+        genome = new GenomeImplementation(UUID.randomUUID());
         subsets = new ArrayList<EntityCollection>();
     }
 
 
     public ReconstructionImpl(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
-        this.uuid = UUID.randomUUID();
         reactions = new ReactionList();
         metabolome = new MetabolomeImpl();
         products = new ProductCollection();
-        genome = new GenomeImplementation();
+        genome = new GenomeImplementation(UUID.randomUUID());
         subsets = new ArrayList<EntityCollection>();
     }
 
@@ -136,10 +130,10 @@ public class ReconstructionImpl
     * Default constructor
     */
     public ReconstructionImpl() {
-        this.uuid = UUID.randomUUID();
+        super(UUID.randomUUID());
         metabolome = new MetabolomeImpl();
         reactions = new ReactionList();
-        genome = new GenomeImplementation();
+        genome = new GenomeImplementation(UUID.randomUUID());
         products = new ProductCollection();
         subsets = new ArrayList<EntityCollection>();
     }
@@ -147,11 +141,6 @@ public class ReconstructionImpl
 
     public ReconstructionImpl newInstance() {
         return new ReconstructionImpl();
-    }
-
-
-    @Override public UUID uuid() {
-        return uuid;
     }
 
     /**
