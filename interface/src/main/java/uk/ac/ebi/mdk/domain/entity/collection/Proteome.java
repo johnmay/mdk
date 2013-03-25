@@ -18,8 +18,10 @@
 
 package uk.ac.ebi.mdk.domain.entity.collection;
 
+import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 
 import java.util.Collection;
 
@@ -48,24 +50,6 @@ public interface Proteome extends Iterable<GeneProduct> {
     public boolean remove(GeneProduct product);
 
     /**
-     * Associate a product with a reaction, products are added as enzymes of the
-     * reaction.
-     *
-     * @param product  a gene product
-     * @param reaction a reaction
-     * @see #enzymesOf(uk.ac.ebi.mdk.domain.entity.Reaction)
-     */
-    public void associate(GeneProduct product, Reaction reaction);
-
-    /**
-     * Dissociate a product with a reaction
-     *
-     * @param product  a gene product
-     * @param reaction a reaction
-     */
-    public void disassociate(GeneProduct product, Reaction reaction);
-
-    /**
      * Access the enzymes (gene products) which are associated with the given
      * reaction.
      *
@@ -80,7 +64,7 @@ public interface Proteome extends Iterable<GeneProduct> {
      * @param product a gene product
      * @return reactions associated with the provided reaction
      */
-    public Collection<GeneProduct> reactionsOf(GeneProduct product);
+    public Collection<MetabolicReaction> reactionsOf(GeneProduct product);
 
     /**
      * Size of the proteome
@@ -88,5 +72,4 @@ public interface Proteome extends Iterable<GeneProduct> {
      * @return the proteome size
      */
     public int size();
-
 }
