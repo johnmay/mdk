@@ -84,9 +84,8 @@ public class ReconstructionDataWriter_1_3_3
         }
 
         // PROTEOME
-        Collection<GeneProduct> products = reconstruction.getProducts();
-        out.writeInt(products.size());
-        for(GeneProduct p : products){
+        out.writeInt(reconstruction.proteome().size());
+        for(GeneProduct p : reconstruction.proteome()){
             entityOut.write(p);
         }
 

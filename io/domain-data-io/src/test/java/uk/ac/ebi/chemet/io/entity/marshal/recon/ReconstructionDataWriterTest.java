@@ -67,7 +67,7 @@ public class ReconstructionDataWriterTest {
         for(Gene g : recon.getGenes()){
             System.out.println(g + ": " + g.getStart() + ":" + g.getEnd() + " sequence " + g.getSequence().getSequenceAsString());
         }
-        for(GeneProduct gp : recon.getProducts()){
+        for(GeneProduct gp : recon.proteome()){
             System.out.println(gp + ": " + gp.getGenes());
         }
 

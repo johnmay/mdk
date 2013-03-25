@@ -113,7 +113,7 @@ public class ReconstructionImpl
 
     private Genome genome;
 
-    private ProductCollection products;
+    private Proteome proteome;
 
     private Reactome reactions;
 
@@ -137,7 +137,7 @@ public class ReconstructionImpl
         taxonomy = org;
         reactions = new ReactionList();
         metabolome = new MetabolomeImpl();
-        products = new ProductCollection();
+        proteome = new ProteomeImpl(this);
         genome = new GenomeImplementation(UUID.randomUUID());
         subsets = new ArrayList<EntityCollection>();
     }
@@ -147,7 +147,7 @@ public class ReconstructionImpl
         super(identifier, abbreviation, name);
         reactions = new ReactionList();
         metabolome = new MetabolomeImpl();
-        products = new ProductCollection();
+        proteome = new ProteomeImpl(this);
         genome = new GenomeImplementation(UUID.randomUUID());
         subsets = new ArrayList<EntityCollection>();
     }
@@ -161,7 +161,7 @@ public class ReconstructionImpl
         metabolome = new MetabolomeImpl();
         reactions = new ReactionList();
         genome = new GenomeImplementation(UUID.randomUUID());
-        products = new ProductCollection();
+        proteome = new ProteomeImpl(this);
         subsets = new ArrayList<EntityCollection>();
     }
 
@@ -223,14 +223,15 @@ public class ReconstructionImpl
 
 
     /**
-     * Access to the gene products associated with the reconstruction as {@see
+     * Access to the gene proteome associated with the reconstruction as {@see
      * ProductCollection}. The gene product collection contains a mix of
-     * Protein, Ribosomal RNA and Transfer RNA products
+     * Protein, Ribosomal RNA and Transfer RNA proteome
      *
      * @return
      */
+    @Deprecated
     public ProductCollection getProducts() {
-        return products;
+        throw new UnsupportedOperationException("use getProteome()");
     }
 
     /**
@@ -239,7 +240,7 @@ public class ReconstructionImpl
      * @param product
      */
     public void addProduct(GeneProduct product) {
-        products.add(product);
+        proteome.add(product);
     }
 
 
@@ -258,9 +259,20 @@ public class ReconstructionImpl
         return reactions;
     }
 
-
+    /**
+     * Use reconstruction.proteome();
+     * @return
+     */
+    @Deprecated
     public Proteome getProteome() {
-        return products;
+        return proteome;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Proteome proteome(){
+        return proteome;
     }
 
     /**
@@ -369,7 +381,7 @@ public class ReconstructionImpl
             gene.removeProduct(product);
         }
         product.clearGenes();
-        products.remove(product);
+        proteome.remove(product);
     }
 
     /**
@@ -524,8 +536,8 @@ public class ReconstructionImpl
         //        // genome
         //        genome.write(out);
         //
-        //        // products
-        //        products.writeExternal(out, genome);
+        //        // proteome
+        //        proteome.writeExternal(out, genome);
         //
         //        // metabolites
         //        out.writeInt(metabolites.size());
@@ -536,7 +548,7 @@ public class ReconstructionImpl
         //        // reactions
         //        out.writeInt(reactions.size());
         //        for (MetabolicReaction reaction : reactions) {
-        //            reaction.writeExternal(out, metabolites, products);
+        //            reaction.writeExternal(out, metabolites, proteome);
         //            // already writen so don't need to write
         //        }
     }
@@ -555,9 +567,9 @@ public class ReconstructionImpl
         //        // genome
         //        genome.read(in);
         //
-        //        // products
-        //        products = new ProductCollection();
-        //        products.readExternal(in, genome);
+        //        // proteome
+        //        proteome = new ProductCollection();
+        //        proteome.readExternal(in, genome);
         //
         //
         //
@@ -577,7 +589,7 @@ public class ReconstructionImpl
         //        int nRxns = in.readInt();
         //        for (int i = 0; i < nRxns; i++) {
         //            MetabolicReaction r = new MetabolicReaction();
-        //            r.readExternal(in, metabolites, products);
+        //            r.readExternal(in, metabolites, proteome);
         //            reactions.add(r);
         //        }
         //        long end = System.currentTimeMillis();

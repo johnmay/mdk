@@ -48,12 +48,20 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public void setGenome(Genome genome);
 
-    public Collection<GeneProduct> getProducts();
-
     public Reactome getReactome();
 
     public Metabolome getMetabolome();
 
+    /**
+     * @deprecated use {@link #proteome()}
+     */
+    @Deprecated
+    public Collection<GeneProduct> getProducts();
+
+    /**
+     * @deprecated use {@link #proteome()}
+     */
+    @Deprecated
     public Proteome getProteome();
 
     public Identifier getTaxonomy();
@@ -99,12 +107,23 @@ public interface Reconstruction extends AnnotatedEntity {
      */
     public void remove(GeneProduct product);
 
+    // new api
+
+    /**
+     * Proteome of the reconstruction.
+     *
+     * @return the proteome
+     * @see Proteome
+     */
+    public Proteome proteome();
 
     public Collection<Reaction> reactionsOf(GeneProduct product);
 
     public Collection<GeneProduct> enzymesOf(Reaction reaction);
 
     public Collection<Reaction> participatesIn(Metabolite metabolite);
+
+    // end new api
 
     public boolean addSubset(EntityCollection subset);
 

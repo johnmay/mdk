@@ -48,6 +48,7 @@ import java.util.Set;
  * @version $Rev$ : Last Changed $Date$
  * @name ProductCollection - 2011.10.07 <br> Class description
  */
+@Deprecated
 public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct>, Externalizable, Proteome {
 
     private static final Logger LOGGER = Logger.getLogger(ProductCollection.class);
