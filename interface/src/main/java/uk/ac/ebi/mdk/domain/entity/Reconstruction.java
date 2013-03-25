@@ -100,6 +100,12 @@ public interface Reconstruction extends AnnotatedEntity {
     public void remove(GeneProduct product);
 
 
+    public Collection<Reaction> reactionsOf(GeneProduct product);
+
+    public Collection<GeneProduct> enzymesOf(Reaction reaction);
+
+    public Collection<Reaction> participatesIn(Metabolite metabolite);
+
     public boolean addSubset(EntityCollection subset);
 
     public boolean hasMatrix();
