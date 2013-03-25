@@ -3,6 +3,7 @@ package uk.ac.ebi.mdk.io.domain;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.EnumReader;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
@@ -41,7 +42,7 @@ public class ChromosomeDataReader
         this.entityIn = entityIn;
     }
 
-    public Chromosome readEntity() throws IOException, ClassNotFoundException {
+    public Chromosome readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         Chromosome chromosome = factory.newInstance(Chromosome.class);
 
@@ -49,7 +50,7 @@ public class ChromosomeDataReader
 
         int n = in.readInt(); // n genes
         for(int i = 0 ; i < n; i++){
-            chromosome.add(entityIn.read(Gene.class));
+            chromosome.add(entityIn.read(Gene.class, reconstruction));
         }
         
         return chromosome;

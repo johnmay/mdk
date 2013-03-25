@@ -99,30 +99,30 @@ public class EntityDataInputStream
 
 
     @Override
-    public Entity read() throws IOException, ClassNotFoundException {
-        return read(readClass());
+    public Entity read(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
+        return read(readClass(), reconstruction);
     }
 
     @Override
-    public <E extends Entity> E read(Class<E> c) throws IOException, ClassNotFoundException {
+    public <E extends Entity> E read(Class<E> c, Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         Integer id = readObjectId();
 
-        return hasObject(id) ? (E) get(id) : (E) put(id, readNewEntity(c));
+        return hasObject(id) ? (E) get(id) : (E) put(id, readNewEntity(c, reconstruction));
     }
 
-    public Entity readNewEntity(Class c) throws IOException, ClassNotFoundException {
+    public Entity readNewEntity(Class c, Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         EntityReader reader = getMarshaller(c, getVersion());
-        Entity       entity = reader.readEntity();
+        Entity       entity = reader.readEntity(reconstruction);
 
         if (entity instanceof AnnotatedEntity) {
 
             annotatedEntityReader.setEntity((AnnotatedEntity) entity);
-            annotatedEntityReader.readEntity();
+            annotatedEntityReader.readEntity(reconstruction);
 
             entityReader.setEntity(entity);
-            entityReader.readEntity();
+            entityReader.readEntity(reconstruction);
 
         }
 

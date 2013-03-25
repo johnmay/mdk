@@ -2,6 +2,7 @@ package uk.ac.ebi.mdk.io.domain;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
@@ -36,13 +37,13 @@ public class GenomeDataReader
         this.entityIn = entityIn;
     }
 
-    public Genome readEntity() throws IOException, ClassNotFoundException {
+    public Genome readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         Genome genome = factory.newInstance(Genome.class);
 
         int n = in.readInt(); // n chromosome
         for(int i = 0 ; i < n; i++){
-            genome.add(entityIn.read(Chromosome.class));
+            genome.add(entityIn.read(Chromosome.class, reconstruction));
         }
         
         return genome;

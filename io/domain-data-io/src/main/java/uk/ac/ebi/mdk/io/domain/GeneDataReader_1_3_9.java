@@ -5,6 +5,7 @@ import org.biojava3.core.sequence.Strand;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.mdk.io.EnumReader;
 
@@ -37,7 +38,7 @@ public class GeneDataReader_1_3_9
         this.enumIn = new EnumReader(in);
     }
 
-    public Gene readEntity() throws IOException, ClassNotFoundException {
+    public Gene readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         Gene gene = factory.gene(UUID.fromString(in.readUTF()));
 

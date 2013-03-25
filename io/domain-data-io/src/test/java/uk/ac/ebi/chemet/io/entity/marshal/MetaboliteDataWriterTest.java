@@ -3,6 +3,7 @@ package uk.ac.ebi.chemet.io.entity.marshal;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import uk.ac.ebi.caf.utility.version.Version;
+import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.io.AnnotationDataInputStream;
 import uk.ac.ebi.mdk.io.AnnotationDataOutputStream;
 import uk.ac.ebi.mdk.io.EntityDataInputStream;
@@ -79,7 +80,7 @@ public class MetaboliteDataWriterTest {
                                                           new ObservationDataInputStream(din, v));
 
 
-        MetabolicReaction rxn2 = ein.read();
+        MetabolicReaction rxn2 = ein.read(new ReconstructionImpl());
         for (Participant<?, ?> r : rxn2.getReactants()) {
             for (Participant<?, ?> p : rxn2.getProducts()) {
                 if(r.getMolecule() == p.getMolecule()){

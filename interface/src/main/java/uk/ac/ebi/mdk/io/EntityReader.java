@@ -19,6 +19,7 @@
 package uk.ac.ebi.mdk.io;
 
 import uk.ac.ebi.mdk.domain.entity.Entity;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
 import java.io.IOException;
 
@@ -42,6 +43,6 @@ public interface EntityReader<E extends Entity> {
      * @throws IOException            low-level io error
      * @throws ClassNotFoundException low-level io error
      */
-    public E readEntity() throws IOException, ClassNotFoundException;
+    public E readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException;
 
 }

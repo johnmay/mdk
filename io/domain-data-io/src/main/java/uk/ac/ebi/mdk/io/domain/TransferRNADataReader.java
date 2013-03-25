@@ -2,6 +2,7 @@ package uk.ac.ebi.mdk.io.domain;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.mdk.io.SequenceSerializer;
@@ -37,7 +38,7 @@ public class TransferRNADataReader
         this.ein = ein;
     }
 
-    public TransferRNA readEntity() throws IOException, ClassNotFoundException {
+    public TransferRNA readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         TransferRNA trna = factory.newInstance(TransferRNA.class);
 
@@ -49,7 +50,7 @@ public class TransferRNADataReader
 
         int ngenes = in.readByte();
         for(int i = 0; i< ngenes; i++){
-            trna.addGene(ein.read(Gene.class));
+            trna.addGene(ein.read(Gene.class, reconstruction));
         }
 
 

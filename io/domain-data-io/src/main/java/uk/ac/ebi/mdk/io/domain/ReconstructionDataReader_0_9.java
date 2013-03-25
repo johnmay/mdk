@@ -49,7 +49,7 @@ public class ReconstructionDataReader_0_9
         this.factory = factory;
     }
 
-    public Reconstruction readEntity() throws IOException, ClassNotFoundException {
+    public Reconstruction readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         Reconstruction recon = factory.newInstance(Reconstruction.class);
 
@@ -59,25 +59,25 @@ public class ReconstructionDataReader_0_9
         recon.setContainer(new File(in.readUTF())); // set container
 
         // GENOME
-        Genome genome = entityIn.read(Genome.class);
+        Genome genome = entityIn.read(Genome.class, recon);
         recon.setGenome(genome);
 
         // METABOLOME
         int metabolites = in.readInt();
         for (int i = 0; i < metabolites; i++) {
-            recon.addMetabolite(entityIn.read(Metabolite.class));
+            recon.addMetabolite(entityIn.read(Metabolite.class, recon));
         }
 
         // PROTEOME
         int products = in.readInt();
         for (int i = 0; i < products; i++) {
-            recon.addProduct((GeneProduct) entityIn.read());
+            recon.addProduct((GeneProduct) entityIn.read(recon));
         }
 
         // REACTOME
         int reactions = in.readInt();
         for (int i = 0; i < reactions; i++) {
-            recon.addReaction(entityIn.read(MetabolicReaction.class));
+            recon.addReaction(entityIn.read(MetabolicReaction.class, recon));
         }
 
         return recon;

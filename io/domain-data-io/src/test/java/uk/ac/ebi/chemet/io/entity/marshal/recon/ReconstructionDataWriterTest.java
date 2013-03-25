@@ -56,7 +56,7 @@ public class ReconstructionDataWriterTest {
                                                          new ObservationDataInputStream(din, v));
 
 
-        ReconstructionImpl recon = in.read();
+        ReconstructionImpl recon = in.read(null);
 
         for(Metabolite m : recon.getMetabolome()){
             System.out.println(m);

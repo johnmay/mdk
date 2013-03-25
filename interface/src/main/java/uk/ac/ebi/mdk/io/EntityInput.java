@@ -19,6 +19,7 @@
 package uk.ac.ebi.mdk.io;
 
 import uk.ac.ebi.mdk.domain.entity.Entity;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
 import java.io.IOException;
 
@@ -47,7 +48,7 @@ public interface EntityInput {
      * @throws ClassNotFoundException thrown if a class is read
      *                                that cannot be found in the current scope
      */
-    public <E extends Entity> E read() throws IOException, ClassNotFoundException;
+    public <E extends Entity> E read(Reconstruction reconstruction) throws IOException, ClassNotFoundException;
 
     /**
      * Read the next entity data from the stream. This provides some minor efficiency
@@ -66,6 +67,6 @@ public interface EntityInput {
      * @throws ClassNotFoundException thrown if a class is read
      *                                that cannot be found in the current scope
      */
-    public <E extends Entity> E read(Class<E> c) throws IOException, ClassNotFoundException;
+    public <E extends Entity> E read(Class<E> c, Reconstruction reconstruction) throws IOException, ClassNotFoundException;
 
 }

@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.mdk.io.EnumReader;
 
@@ -36,7 +37,7 @@ public class MetaboliteDataReader_1_3_9
         this.enumIn = new EnumReader(in);
     }
 
-    public Metabolite readEntity() throws IOException, ClassNotFoundException {
+    public Metabolite readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         Metabolite m = factory.metabolite(UUID.fromString(in.readUTF()));
 
