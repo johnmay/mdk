@@ -29,7 +29,7 @@ public class ReconstructionComboBox {
     public void refresh() {
         model.removeAllElements();
         ReconstructionManager manager = DefaultReconstructionManager.getInstance();
-        for (Reconstruction reconstruction : manager.getProjects()) {
+        for (Reconstruction reconstruction : manager.reconstructions()) {
             model.addElement(reconstruction);
         }
     }
