@@ -48,7 +48,10 @@ import java.io.ObjectOutput;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -69,6 +72,30 @@ public class ReconstructionImpl
             .getLogger(
                     ReconstructionImpl.class);
 
+    /**
+     * Hash map of entities and their UUIDs
+     */
+    private final Map<UUID, Entity> entities = new HashMap<UUID, Entity>(10000);
+
+    /**
+     * Gene Product to Reaction map, not be confused with GPR -> Gene, Protein,
+     * Reaction
+     */
+    private final AssociationMap gpr = AssociationMap.create(2000);
+
+    /**
+     * Gene to Gene Product association
+     */
+    private final AssociationMap ggp = AssociationMap.create(2000);
+
+    /**
+     * Metabolite to Reaction association
+     */
+    private final AssociationMap mrx = AssociationMap.create(2000);
+
+    /**
+     * old fields below here
+     */
 
     private static final String DATA_FOLDER_NAME = "data";
 
@@ -157,10 +184,12 @@ public class ReconstructionImpl
     public String getAccession() {
         String accession = super.getAccession();
         if (accession.contains("%m")) {
-            accession = accession.replaceAll("%m", Integer.toString(metabolome.size()));
+            accession = accession.replaceAll("%m", Integer.toString(metabolome
+                                                                            .size()));
         }
         if (accession.contains("%n")) {
-            accession = accession.replaceAll("%n", Integer.toString(reactions.size()));
+            accession = accession.replaceAll("%n", Integer.toString(reactions
+                                                                            .size()));
         }
         return accession;
     }
@@ -361,6 +390,28 @@ public class ReconstructionImpl
         return (ReconstructionIdentifier) super.getIdentifier();
     }
 
+    private <E extends AnnotatedEntity> Collection<E> entities(Collection<UUID> uuids) {
+        List<E> entities = new ArrayList<E>();
+        for (UUID uuid : uuids) {
+            E product = entity(uuid);
+            if (product != null) {
+                entities.add(product);
+            }
+        }
+        return Collections.unmodifiableCollection(entities);
+    }
+
+    public Collection<GeneProduct> enzymesOf(Reaction reaction) {
+        return entities(gpr.associations(reaction));
+    }
+
+    public Collection<Reaction> reactionsOf(GeneProduct product) {
+        return entities(gpr.associations(product));
+    }
+
+    public Collection<Reaction> participatesIn(Metabolite metabolite) {
+        return entities(mrx.associations(metabolite));
+    }
 
     /**
      * @inheritDoc
@@ -385,14 +436,13 @@ public class ReconstructionImpl
 
     public boolean hasMatrix() {
         return matrix != null;
-
-
     }
     // TODO (jwmay) MOVE all methods below this comment
 
 
     public final File defaultLocation() {
-        FilePreference save_root = DomainPreferences.getInstance().getPreference("SAVE_LOCATION");
+        FilePreference save_root = DomainPreferences.getInstance()
+                                                    .getPreference("SAVE_LOCATION");
         return new File(save_root.get(),
                         getAccession() + RECONSTRUCTION_FILE_EXTENSION);
     }
@@ -492,7 +542,8 @@ public class ReconstructionImpl
     }
 
 
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException,
+                                                    ClassNotFoundException {
         //        super.readExternal(in);
         //
         //        container = new File(in.readUTF());
@@ -545,5 +596,21 @@ public class ReconstructionImpl
 
     public void setTaxonomy(Taxonomy taxonomy) {
         this.taxonomy = taxonomy;
+    }
+
+    @Override public boolean register(Entity entity) {
+        return entities.put(entity.uuid(), entity) == null;
+    }
+
+    @Override public boolean deregister(Entity entity) {
+        // clear all associations
+        gpr.clear(entity);
+        ggp.clear(entity);
+        mrx.clear(entity);
+        return entities.remove(entity.uuid()) != null;
+    }
+
+    @Override public <E extends Entity> E entity(UUID uuid) {
+        return (E) entities.get(uuid);
     }
 }

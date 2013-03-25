@@ -109,4 +109,29 @@ public interface Reconstruction extends AnnotatedEntity {
     public StoichiometricMatrix getMatrix();
 
     public Iterable<? extends EntityCollection> getSubsets();
+
+    /**
+     * Access an entity by UUID.
+     *
+     * @param uuid the uuid of the entity
+     * @return the entity (or null if not found)
+     */
+    public <E extends Entity> E entity(UUID uuid);
+
+    /**
+     * Register an entity with the reconstruction
+     *
+     * @param entity an entity
+     * @return whether the entity was registered (false if null or already
+     *         present)
+     */
+    public boolean register(Entity entity);
+
+    /**
+     * Deregister an entity with the reconstruction
+     *
+     * @param entity an entity
+     * @return whether the entity was registered (false if null or not present)
+     */
+    public boolean deregister(Entity entity);
 }
