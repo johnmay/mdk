@@ -54,8 +54,6 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
 
     private Chromosome chromosome;
 
-    private Set<GeneProduct> products = new HashSet<GeneProduct>(1);
-
 
     public GeneImpl(UUID uuid) {
         super(uuid);
@@ -129,20 +127,6 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
         this.sequence = sequence;
     }
 
-    @Override
-    public boolean removeProduct(GeneProduct product) {
-        return this.products.remove(product);
-    }
-
-    @Override
-    public boolean addProduct(GeneProduct product) {
-        return this.products.add(product);
-    }
-
-    @Override
-    public Collection<GeneProduct> getProducts() {
-        return Collections.unmodifiableSet(products);
-    }
 
     public Gene newInstance() {
         return new GeneImpl(UUID.randomUUID());

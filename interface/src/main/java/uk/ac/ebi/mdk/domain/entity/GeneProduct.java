@@ -38,29 +38,6 @@ import java.util.List;
 public interface GeneProduct extends AnnotatedEntity {
 
     /**
-     * Access all genes encoding this protein
-     *
-     * @return
-     */
-    public Collection<Gene> getGenes();
-
-
-    /**
-     * Removes all gene references within this product.
-     */
-    public void clearGenes();
-
-
-    public boolean addGene(Gene gene);
-
-    /**
-     * Remove the gene reference for the gene product.
-     *
-     * @param gene the gene link to remove.
-     */
-    public boolean remove(Gene gene);
-
-    /**
      * Access the name of the gene product
      *
      * @return

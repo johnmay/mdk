@@ -20,6 +20,7 @@ package uk.ac.ebi.mdk.io.domain;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
@@ -105,6 +106,12 @@ public class ReconstructionDataReader_1_3_9
         for (int i = 0; i < nProductAssociations; i++) {
             recon.associate(entityIn.read(GeneProduct.class, recon),
                             entityIn.read(Reaction.class, recon));
+        }
+
+        int nGeneAssociations = in.readInt();
+        for (int i = 0; i < nGeneAssociations; i++) {
+            recon.associate(entityIn.read(Gene.class, recon),
+                            entityIn.read(GeneProduct.class, recon));
         }
 
         return recon;

@@ -48,11 +48,6 @@ public class RibosomalRNADataReader
             rrna.addSequence(SequenceSerializer.readRNASequence(in));
 
 
-        int ngenes = in.readByte();
-        for(int i = 0; i< ngenes; i++){
-           rrna.addGene(ein.read(Gene.class, reconstruction));
-        }
-
         return rrna;
 
     }

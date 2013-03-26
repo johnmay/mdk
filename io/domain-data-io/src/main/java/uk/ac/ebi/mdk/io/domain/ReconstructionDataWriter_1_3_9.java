@@ -19,6 +19,7 @@ package uk.ac.ebi.mdk.io.domain;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
@@ -101,6 +102,13 @@ public class ReconstructionDataWriter_1_3_9
         List<Map.Entry<GeneProduct,Reaction>> productAssociations = reconstruction.productAssociations();
         out.writeInt(productAssociations.size());
         for(Map.Entry<GeneProduct,Reaction> e: productAssociations) {
+            entityOut.writeData(e.getKey());
+            entityOut.writeData(e.getValue());
+        }
+
+        List<Map.Entry<Gene,GeneProduct>> geneAssociations = reconstruction.geneAssociations();
+        out.writeInt(geneAssociations.size());
+        for(Map.Entry<Gene,GeneProduct> e: geneAssociations) {
             entityOut.writeData(e.getKey());
             entityOut.writeData(e.getValue());
         }

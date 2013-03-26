@@ -47,14 +47,6 @@ public class ProteinProductDataWriter_1_3_9
         for (ProteinSequence sequence : protein.getSequences()) {
             SequenceSerializer.writeProteinSequence(sequence, out);
         }
-        
-        // write associated genes
-        Collection<Gene> genes = protein.getGenes();
-        out.writeByte(genes.size());
-        for(Gene gene : genes){
-            eout.writeData(gene);
-        }
-
     }
 
 }

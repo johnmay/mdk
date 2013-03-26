@@ -3,6 +3,7 @@ package uk.ac.ebi.chemet.io.entity.marshal.recon;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import org.junit.Test;
+import org.openscience.cdk.CDKConstants;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.mdk.io.*;
 import uk.ac.ebi.mdk.domain.identifier.basic.*;
@@ -38,7 +39,7 @@ public class ReconstructionDataWriterTest {
     @Test
     public void testWrite() throws IOException, ClassNotFoundException {
 
-        Version v = new Version("0.9");
+        Version v = IOConstants.VERSION;
         EntityFactory factory = DefaultEntityFactory.getInstance();
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -68,7 +69,7 @@ public class ReconstructionDataWriterTest {
             System.out.println(g + ": " + g.getStart() + ":" + g.getEnd() + " sequence " + g.getSequence().getSequenceAsString());
         }
         for(GeneProduct gp : recon.proteome()){
-            System.out.println(gp + ": " + gp.getGenes());
+            System.out.println(gp + ": " + recon.genesOf(gp));
         }
 
     }
@@ -143,10 +144,9 @@ public class ReconstructionDataWriterTest {
         g4.setStart(1);
         g4.setEnd(8);
 
-        p1.addGene(g1);
-        p1.addGene(g2);
-
-        rna1.addGene(g3);
+        reconstruction.associate(g1, p1);
+        reconstruction.associate(g2, p2);
+        reconstruction.associate(g3, rna1);
 
         chromosome.add(g1);
         chromosome.add(g2);

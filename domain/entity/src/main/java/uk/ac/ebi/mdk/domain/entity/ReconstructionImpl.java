@@ -345,10 +345,10 @@ public class ReconstructionImpl
 
     @Override public List<Map.Entry<Gene, GeneProduct>> geneAssociations() {
         List<Map.Entry<Gene, GeneProduct>> associations = new ArrayList<Map.Entry<Gene, GeneProduct>>(2000);
-        for (UUID uuid : gpr.keys()) {
+        for (UUID uuid : ggp.keys()) {
             Entity entity = entity(uuid);
-            if (entity instanceof GeneProduct) {
-                for (UUID uuid2 : gpr.associations(entity)) {
+            if (entity instanceof Gene) {
+                for (UUID uuid2 : ggp.associations(entity)) {
                     associations
                             .add(new AbstractMap.SimpleEntry<Gene, GeneProduct>((Gene) entity,
                                                                                 (GeneProduct) entity(uuid2)));
@@ -408,9 +408,7 @@ public class ReconstructionImpl
      */
     @Override
     public void remove(Gene gene) {
-        for (GeneProduct p : new ArrayList<GeneProduct>(gene.getProducts())) {
-            p.remove(gene);
-        }
+        ggp.clear(gene);
         this.genome.remove(gene);
     }
 
@@ -419,11 +417,8 @@ public class ReconstructionImpl
      */
     @Override
     public void remove(GeneProduct product) {
-        for (Gene gene : new ArrayList<Gene>(product.getGenes())) {
-            gene.removeProduct(product);
-        }
-        product.clearGenes();
         proteome.remove(product);
+        ggp.clear(product);
     }
 
     /**

@@ -47,11 +47,12 @@ public class ProteinProductDataWriter
         }
         
         // write associated genes
-        Collection<Gene> genes = protein.getGenes();
-        out.writeByte(genes.size());
-        for(Gene gene : genes){
-            eout.writeData(gene);
-        }
+        // now done in reaction
+//        Collection<Gene> genes = protein.getGenes();
+//        out.writeByte(genes.size());
+//        for(Gene gene : genes){
+//            eout.writeData(gene);
+//        }
 
     }
 

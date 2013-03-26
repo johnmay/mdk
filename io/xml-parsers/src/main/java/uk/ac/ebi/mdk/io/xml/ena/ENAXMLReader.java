@@ -31,6 +31,7 @@ import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.RNAProduct;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -61,8 +62,12 @@ public class ENAXMLReader {
     private Map<String, Gene> geneMap = new HashMap<String, Gene>(); // mapped by locus
     private List<GeneProduct> products = new ArrayList();
     private Set<String> warnings = new HashSet<String>();
+    private final Reconstruction reconstruction;
 
     public ENAXMLReader(EntityFactory factory, InputStream in) throws XMLStreamException {
+
+        // used to store associations
+        this.reconstruction = factory.newReconstruction();
 
         XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
         xmlif.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.FALSE);
@@ -93,16 +98,18 @@ public class ENAXMLReader {
                             Gene gene = (Gene) feature.getEntity();
                             geneMap.put(feature.getLocusTag(), gene);
                             genes.add(gene);
+                            reconstruction.register(gene);
                         } else if (feature.isProduct()) {
                             GeneProduct product = (GeneProduct) feature.getEntity();
                             Gene gene = geneMap.get(feature.getLocusTag());
                             if (gene != null) {
-                                product.addGene(gene);
+                                reconstruction.associate(gene, product);
                             } else {
                                 LOGGER.error("No gene found for locus tag: " + feature
                                         .getLocusTag());
                             }
                             products.add(product);
+                            reconstruction.register(product);
                         }
 
                         warnings.addAll(feature.getWarnings());
@@ -131,7 +138,7 @@ public class ENAXMLReader {
         DNASequence genome = new DNASequence(getGenomeString());
         for (GeneProduct product : products) {
             if (product instanceof RNAProduct) {
-                Collection<Gene> pGenes = product.getGenes();
+                Collection<Gene> pGenes = reconstruction.genesOf(product);
                 for (Gene gene : pGenes) {
 
                     Sequence seq = genome.getSubSequence(gene.getStart(), gene.getEnd());
@@ -151,6 +158,10 @@ public class ENAXMLReader {
 
     public Set<String> getWarnings() {
         return warnings;
+    }
+
+    public List<Map.Entry<Gene,GeneProduct>> associations(){
+        return reconstruction.geneAssociations();
     }
 
     public List<Gene> getGeneMap() {

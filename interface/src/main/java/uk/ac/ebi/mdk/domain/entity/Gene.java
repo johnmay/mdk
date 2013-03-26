@@ -84,27 +84,6 @@ public interface Gene extends AnnotatedEntity {
     public Sequence getSequence();
 
     /**
-     * Remove the provided gene product.
-     * @param product the product produced
-     */
-    public boolean removeProduct(GeneProduct product);
-
-    /**
-     * Add a gene product which this gene produces.
-     *
-     * @param product a produce produced by this gene.
-     */
-    public boolean addProduct(GeneProduct product);
-
-    /**
-     * Access a collection of products produced by this gene.
-     *
-     * @return collection of products referencing this gene.
-     */
-    public Collection<GeneProduct> getProducts();
-
-
-    /**
      * Set the sequence of the gene (normally derived from the start and end
      * with the entire genome sequence
      *

@@ -48,12 +48,6 @@ public class TransferRNADataWriter_1_3_9
             SequenceSerializer.writeRNASequence(sequence, out);
         }
 
-        // write associated genes
-        Collection<Gene> genes = trna.getGenes();
-        out.writeByte(genes.size());
-        for(Gene gene : genes){
-            eout.writeData(gene);
-        }
 
     }
 
