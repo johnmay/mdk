@@ -90,9 +90,8 @@ public class ReconstructionDataWriter_1_3_3
         }
 
         // REACTOME
-        Collection<MetabolicReaction> reactions = reconstruction.getReactome();
-        out.writeInt(reactions.size());
-        for(MetabolicReaction r : reactions){
+        out.writeInt(reconstruction.reactome().size());
+        for(MetabolicReaction r : reconstruction.reactome()){
             entityOut.writeData(r);
         }
 

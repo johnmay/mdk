@@ -130,7 +130,20 @@ public interface Reconstruction extends AnnotatedEntity {
      */
     public Proteome proteome();
 
+    /**
+     * Reactome of the reconstruction
+     * @return the reactome
+     * @see Reactome
+     */
+    public Reactome reactome();
+
     public void associate(GeneProduct product, Reaction reaction);
+
+    public void dissociate(GeneProduct product, Reaction reaction);
+
+    public void associate(Metabolite metabolite, Reaction reaction);
+
+    public void dissociate(Metabolite metabolite, Reaction reaction);
 
     public List<Map.Entry<GeneProduct, Reaction>> productAssociations();
 
@@ -138,9 +151,7 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public Collection<GeneProduct> enzymesOf(Reaction reaction);
 
-    public Collection<Reaction> participatesIn(Metabolite metabolite);
-
-
+    public Collection<MetabolicReaction> participatesIn(Metabolite metabolite);
 
     /**
      * Access an entity by UUID.

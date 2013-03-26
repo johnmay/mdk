@@ -15,6 +15,7 @@ import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.reaction.*;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
@@ -172,11 +173,14 @@ public class BioCycConverter {
             reconstruction.addReaction(reaction);
         }
 
+        Map<Identifier,Reaction> idToReaction = new HashMap<Identifier, Reaction>();
+
         System.out.println("Duplicate reaction identifiers:");
         for (Reaction reaction : reconstruction.getReactome()) {
-            if (reconstruction.getReactome().getReactions(reaction.getIdentifier()).size() != 1) {
+            if (idToReaction.containsKey(reaction.getIdentifier())) {
                 System.out.println(reaction.getIdentifier());
             }
+            idToReaction.put(reaction.getIdentifier(), reaction);
         }
 
         reader.close();

@@ -28,16 +28,9 @@ import java.util.Collection;
 /**
  * @version $Rev$
  */
-public interface Reactome extends Collection<MetabolicReaction> {
+public interface Reactome extends Iterable<MetabolicReaction> {
 
-
-    /**
-     * Access reactions that contain the given metabolite
-     *
-     * @param m
-     * @return
-     */
-    public Collection<MetabolicReaction> getReactions(Metabolite m);
+    public boolean add(MetabolicReaction r);
 
     /**
      * Remove the reaction 'r' from the reactome.
@@ -46,36 +39,15 @@ public interface Reactome extends Collection<MetabolicReaction> {
      */
     public boolean remove(MetabolicReaction r);
 
-    /**
-     * Used to remove a key from the reaction lookup
-     *
-     * @param m the metabolite which is being removed
-     * @return whether any reaction references were removed
-     */
-    public boolean removeKey(Metabolite m, Reaction reaction);
+    public Collection<MetabolicReaction> participatesIn(Metabolite m);
+
+    public Collection<MetabolicReaction> toList();
 
     /**
-     * Indicates the following reactions should be updated in the participant
-     * lookup table (i.e. a participant was added/removed)
-     *
-     * @param reactions reactions to update
-     * @return whether the reactions were updated
+     * Reactome size
+     * @return
      */
-    public boolean update(Collection<MetabolicReaction> reactions);
+    public int size();
 
-    /**
-     * Indicates the reaction should be updated in the participant lookup table
-     * (i.e. a participant was added/removed)
-     *
-     * @param reaction the reaction to update
-     * @return whether the reactions were updated
-     */
-    public boolean update(MetabolicReaction reaction);
-
-    public MetabolicReaction getReaction(Identifier identifier);
-
-    public Collection<MetabolicReaction> getReactions(Identifier identifier);
-
-    // force rebuild of participant mapping
-    public void rebuildMaps();
+    public boolean isEmpty();
 }

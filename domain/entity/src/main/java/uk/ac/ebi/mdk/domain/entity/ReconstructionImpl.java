@@ -33,6 +33,7 @@ import uk.ac.ebi.mdk.domain.entity.collection.ProductCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
 import uk.ac.ebi.mdk.domain.entity.collection.ReactionList;
 import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
+import uk.ac.ebi.mdk.domain.entity.collection.ReactomeImpl;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -116,7 +117,7 @@ public class ReconstructionImpl
 
     private Proteome proteome;
 
-    private Reactome reactions;
+    private Reactome reactome;
 
     private Metabolome metabolome;
 
@@ -136,7 +137,7 @@ public class ReconstructionImpl
                               Taxonomy org) {
         super(uuid, id, org.getCode(), org.getCommonName());
         taxonomy = org;
-        reactions = new ReactionList();
+        reactome = new ReactomeImpl(this);
         metabolome = new MetabolomeImpl();
         proteome = new ProteomeImpl(this);
         genome = new GenomeImplementation(UUID.randomUUID());
@@ -146,7 +147,7 @@ public class ReconstructionImpl
 
     public ReconstructionImpl(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
-        reactions = new ReactionList();
+        reactome = new ReactomeImpl(this);
         metabolome = new MetabolomeImpl();
         proteome = new ProteomeImpl(this);
         genome = new GenomeImplementation(UUID.randomUUID());
@@ -160,7 +161,7 @@ public class ReconstructionImpl
     public ReconstructionImpl() {
         super(UUID.randomUUID());
         metabolome = new MetabolomeImpl();
-        reactions = new ReactionList();
+        reactome = new ReactomeImpl(this);
         genome = new GenomeImplementation(UUID.randomUUID());
         proteome = new ProteomeImpl(this);
         subsets = new ArrayList<EntityCollection>();
@@ -189,7 +190,7 @@ public class ReconstructionImpl
                                                                             .size()));
         }
         if (accession.contains("%n")) {
-            accession = accession.replaceAll("%n", Integer.toString(reactions
+            accession = accession.replaceAll("%n", Integer.toString(reactome
                                                                             .size()));
         }
         return accession;
@@ -253,26 +254,24 @@ public class ReconstructionImpl
      * @return
      */
     public Reactome getReactions() {
-        return reactions;
+        return reactome;
     }
 
+    /**
+     * @deprecated use {@link #reactome}
+     */
+    @Deprecated
     public Reactome getReactome() {
-        return reactions;
+        return reactome;
     }
 
     /**
      * Use reconstruction.proteome();
+     *
      * @return
      */
     @Deprecated
     public Proteome getProteome() {
-        return proteome;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override public Proteome proteome(){
         return proteome;
     }
 
@@ -285,6 +284,20 @@ public class ReconstructionImpl
         return metabolome;
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override public Proteome proteome() {
+        return proteome;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Reactome reactome() {
+        return reactome;
+    }
+
 
     /**
      * Add a new metabolic reaction to the reconstruction. Note this method does
@@ -293,8 +306,7 @@ public class ReconstructionImpl
      * @param reaction a new reaction
      */
     public void addReaction(MetabolicReaction reaction) {
-        register(reaction);
-        reactions.add(reaction);
+        reactome.add(reaction);
 
         // duplicates will not be added
         for (MetabolicParticipant p : reaction.getReactants()) {
@@ -334,12 +346,13 @@ public class ReconstructionImpl
     @Override
     public List<Map.Entry<GeneProduct, Reaction>> productAssociations() {
         List<Map.Entry<GeneProduct, Reaction>> associations = new ArrayList<Map.Entry<GeneProduct, Reaction>>(2000);
-        for(UUID uuid : gpr.keys()){
+        for (UUID uuid : gpr.keys()) {
             Entity entity = entity(uuid);
-            if(entity instanceof GeneProduct) {
-                for(UUID uuid2 : gpr.associations(entity)){
-                    associations.add(new AbstractMap.SimpleEntry<GeneProduct,Reaction>((GeneProduct) entity,
-                                                                                 (Reaction) entity(uuid2)));
+            if (entity instanceof GeneProduct) {
+                for (UUID uuid2 : gpr.associations(entity)) {
+                    associations
+                            .add(new AbstractMap.SimpleEntry<GeneProduct, Reaction>((GeneProduct) entity,
+                                                                                    (Reaction) entity(uuid2)));
                 }
             }
         }
@@ -357,12 +370,9 @@ public class ReconstructionImpl
             return;
 
         getMetabolome().remove(m);
-
-        List<MetabolicReaction> rs = new ArrayList<MetabolicReaction>(getReactome()
-                                                                              .getReactions(m));
-        for (MetabolicReaction r : rs) {
+        for (MetabolicReaction r : participatesIn(m)) {
             // remove reactome reference
-            getReactome().removeKey(m, r);
+            dissociate(m, r);
             // remove metabolite participants from reaction
             r.remove(m);
         }
@@ -430,12 +440,6 @@ public class ReconstructionImpl
         return Collections.unmodifiableCollection(entities);
     }
 
-    /**
-     * @inheritDoc
-     */
-    @Override public void associate(GeneProduct product, Reaction reaction) {
-        gpr.associate(product, reaction);
-    }
 
     public Collection<GeneProduct> enzymesOf(Reaction reaction) {
         return entities(gpr.associations(reaction));
@@ -445,8 +449,36 @@ public class ReconstructionImpl
         return entities(gpr.associations(product));
     }
 
-    public Collection<Reaction> participatesIn(Metabolite metabolite) {
+    public Collection<MetabolicReaction> participatesIn(Metabolite metabolite) {
         return entities(mrx.associations(metabolite));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public void associate(GeneProduct product, Reaction reaction) {
+        gpr.associate(product, reaction);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public void dissociate(GeneProduct product, Reaction reaction) {
+        gpr.dissociate(product, reaction);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public void associate(Metabolite metabolite, Reaction reaction) {
+        mrx.associate(metabolite, reaction);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public void dissociate(Metabolite metabolite, Reaction reaction) {
+        mrx.dissociate(metabolite, reaction);
     }
 
     /**

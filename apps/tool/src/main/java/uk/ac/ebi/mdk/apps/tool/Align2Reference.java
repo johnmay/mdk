@@ -225,7 +225,7 @@ public class Align2Reference extends CommandLineMain {
         final Map<Metabolite, Integer> countMap = new HashMap<Metabolite, java.lang.Integer>();
         Reactome reactome = query.getReactome();
         for (Metabolite m : query.getMetabolome()) {
-            countMap.put(m, reactome.getReactions(m).size());
+            countMap.put(m, reactome.participatesIn(m).size());
         }
 
         System.out.println("Most common metabolites:");
@@ -256,7 +256,7 @@ public class Align2Reference extends CommandLineMain {
         System.out.println();
         System.out.println("| REACTOME ALIGNMENT |");
 
-        EntityAligner<MetabolicReaction> reactionAligner = new MappedEntityAligner<MetabolicReaction>(reference.getReactome());
+        EntityAligner<MetabolicReaction> reactionAligner = new MappedEntityAligner<MetabolicReaction>(reference.reactome().toList());
 
 
         reactionAligner.push(new ReactionMatcher(aligner));
@@ -299,7 +299,7 @@ public class Align2Reference extends CommandLineMain {
 
                     System.out.print(r + " ");
 
-                    for (Reaction rxnRef : reference.getReactome().getReactions(r)) {
+                    for (Reaction rxnRef : reference.participatesIn(r)) {
 
                         Identifier identifier = rxnRef.getIdentifier();
 
@@ -317,6 +317,11 @@ public class Align2Reference extends CommandLineMain {
 
             }
 
+            Map<Identifier,MetabolicReaction> idToReaction = new HashMap<Identifier, MetabolicReaction>();
+            for(MetabolicReaction r : reference.reactome()){
+                idToReaction.put(r.getIdentifier(), r);
+            }
+
             System.out.println("Candidate matches for " + reaction);
             for (Map.Entry<Identifier, MutableInt> e : reactionReferences.entrySet()) {
 
@@ -324,11 +329,11 @@ public class Align2Reference extends CommandLineMain {
 
                 if (nParticipants >= adjustedCount(reaction, queryCurrencyMetabolites)) {
 
-                    Collection<MetabolicParticipant> refps = adjustedParticipants(reference.getReactome().getReaction(e.getKey()), referenceCurrencyMetabolites);
+                    Collection<MetabolicParticipant> refps = adjustedParticipants(idToReaction.get(e.getKey()), referenceCurrencyMetabolites);
 
                     boolean show = true;
 
-                    MetabolicReaction referenceReaction = reference.getReactome().getReaction(e.getKey());
+                    MetabolicReaction referenceReaction = idToReaction.get(e.getKey());
 
                     System.out.println(referenceReaction);
 
