@@ -74,6 +74,21 @@ public interface IdentifierFactory {
      */
     public Identifier ofSynonym(String synonym, String accession);
 
+    /**
+     * A new identifier instance for a given class.
+     *
+     * @param type class type
+     * @param <I> identifier type
+     * @return new identifier
+     */
+    public <I extends Identifier> I ofClass(Class<I> type);
+
+    /**
+     * Find identifier classes which match the provided pattern.
+     * @param accession an accession (e.g. 'CHEBI:12', 'C00009')
+     * @return collecition of classes which match
+     */
+    public Collection<Class<? extends Identifier>> ofPattern(String accession);
 
     public static Identifier EMPTY_IDENTIFIER = new Identifier() {
         @Override

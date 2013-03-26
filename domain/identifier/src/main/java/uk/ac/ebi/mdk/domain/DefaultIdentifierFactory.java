@@ -273,6 +273,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
     }
 
 
+    @Override
     public Collection<Class<? extends Identifier>> ofPattern(String accession) {
         Collection<Class<? extends Identifier>> matched = new ArrayList<Class<? extends Identifier>>();
         for (Identifier identifier : mapped) {

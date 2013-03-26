@@ -105,7 +105,6 @@ public class LoaderRow extends JComponent {
                                                          .getIcon("/uk/ac/ebi/chemet/render/images/cutout/cog_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                update.setEnabled(loader.canUpdate());
                 delete.setEnabled(loader.canBackup() || loader.canRevert());
                 revert.setEnabled(loader.canRevert());
 
@@ -384,8 +383,10 @@ public class LoaderRow extends JComponent {
 
             dialog.setAnchor(configure);
             dialog.getMainPanel().add(LabelFactory
-                                              .newLabel("Once configured, click the cog to register your changes"));
+                                              .newLabel("Once configured, click the cog again to register your changes"));
             dialog.setAlwaysOnTop(true);
+            dialog.setFocusable(false);
+            dialog.setFocusableWindowState(false);
             dialog.pack();
             dialog.place();
             dialog.setVisible(true);

@@ -19,6 +19,7 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,16 +27,26 @@ import java.util.List;
 /**
  * @version $Rev$
  */
-public interface Proteome extends Collection<GeneProduct> {
+public interface Proteome extends Iterable<GeneProduct> {
 
+    public boolean add(GeneProduct product);
+
+    public boolean remove(GeneProduct product);
+
+    public int size();
 
     /**
-     * Access via accession
-     *
-     * @param accession
-     *
-     * @return
+     * Associate a product with a reaction
+     * @param product
+     * @param reaction
      */
-    public List<GeneProduct> get(String accession);
+    public void associate(GeneProduct product, Reaction reaction);
+
+    /**
+     * Dissociate a product with a reaction
+     * @param product
+     * @param reaction
+     */
+    public void disassociate(GeneProduct product, Reaction reaction);
 
 }

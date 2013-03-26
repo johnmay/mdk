@@ -35,6 +35,7 @@ import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
@@ -74,7 +75,7 @@ public class ParticipantEditor extends JPanel {
 
     private JTextField stoichiometry;
 
-    private static DefaultReconstructionManager MANAGER = DefaultReconstructionManager.getInstance();
+    private static ReconstructionManager MANAGER = DefaultReconstructionManager.getInstance();
 
     // factories
     private static final MoleculeRenderer RENDERER = MoleculeRenderer.getInstance();
@@ -160,7 +161,7 @@ public class ParticipantEditor extends JPanel {
             participant = new MetabolicParticipantImplementation();
         }
 
-        Reconstruction recon = MANAGER.getActive();
+        Reconstruction recon = MANAGER.active();
         Collection<Metabolite> candidates = recon.getMetabolome().get(metabolite.getText());
 
         Metabolite entity;

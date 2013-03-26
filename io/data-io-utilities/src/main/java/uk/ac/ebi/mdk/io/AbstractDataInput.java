@@ -6,6 +6,7 @@ import uk.ac.ebi.caf.utility.version.Version;
 import java.io.DataInput;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
@@ -21,7 +22,7 @@ public class AbstractDataInput<M>
         extends MarshalManager<M> {
 
     private DataInput in;
-    private Map<Integer,Object> objectMap = new HashMap<Integer,Object>(300);
+    private Map<Integer,Object> objectMap = new HashMap<Integer, Object>(5000);
     
     public AbstractDataInput(DataInput in, Version version){
         super(version);
@@ -39,7 +40,11 @@ public class AbstractDataInput<M>
     
     private Class readNewClass() throws IOException, ClassNotFoundException {
         String name = in.readUTF();
-        return  Class.forName(name);
+        try {
+            return Class.forName(name);
+        }catch (ClassNotFoundException ex) {
+            throw new IOException("class not found: " + name);
+        }
     }
     
     public Integer readObjectId() throws IOException {

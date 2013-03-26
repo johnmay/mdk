@@ -5,6 +5,9 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
+import uk.ac.ebi.mdk.service.ProgressListener;
+import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;
 import uk.ac.ebi.mdk.service.index.name.ChEBINameIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractChEBILoader;
@@ -38,7 +41,8 @@ import java.util.regex.Pattern;
  */
 public class ChEBINameLoader extends AbstractChEBILoader {
 
-    private static final Logger LOGGER = Logger.getLogger(ChEBINameLoader.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ChEBINameLoader.class);
 
     public ChEBINameLoader() throws IOException {
         super(new ChEBINameIndex());
@@ -48,11 +52,11 @@ public class ChEBINameLoader extends AbstractChEBILoader {
         // note: ChEBI Compounds as already required by the super class, but as they have the same
         //       name the resource is collapsed down to a single entry
         addRequiredResource("ChEBI Compounds",
-                            "...",
+                            "compound.tsv flatfile from ChEBI, specifying preferred names, secondary and primary accessions",
                             ResourceFileLocation.class,
                             new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv"));
         addRequiredResource("ChEBI Names",
-                            "...",
+                            "name.tsv flatfile from ChEBI, specifying names and their tpyes (e.g. IUPAC/Synonym)",
                             ResourceFileLocation.class,
                             new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/names.tsv"));
 
@@ -173,7 +177,8 @@ public class ChEBINameLoader extends AbstractChEBILoader {
         if (!isCancelled()) {
 
             // get all the accessions to iterate through
-            Set<String> accessions = new HashSet<String>(preferredNameMap.size() * 2);
+            Set<String> accessions = new HashSet<String>(preferredNameMap
+                                                                 .size() * 2);
             accessions.addAll(synonyms.keySet());
             accessions.addAll(iupac.keySet());
             accessions.addAll(preferredNameMap.keySet());
@@ -203,7 +208,8 @@ public class ChEBINameLoader extends AbstractChEBILoader {
                                      ? inn.get(accession).iterator().next()
                                      : "";
 
-                    writer.write(accession, preferredName, iupacName, brandName, innName, synonyms.get(accession));
+                    writer.write(accession, preferredName, iupacName, brandName, innName, synonyms
+                            .get(accession));
 
 
                 }
@@ -265,7 +271,25 @@ public class ChEBINameLoader extends AbstractChEBILoader {
     public static void main(String[] args) throws Exception {
         ChEBINameLoader loader = new ChEBINameLoader();
         if (loader.canBackup()) loader.backup();
-        loader.update();
+
+        long t0 = System.nanoTime();
+        boolean update = loader.canUpdate();
+        long t1 = System.nanoTime();
+
+        BooleanPreference p = ServicePreferences.getInstance().getPreference("PROXY_SET");
+        p.put(true);
+
+        System.out.println((t1 - t0) / 1e6);
+        loader.addProgressListener(new ProgressListener() {
+            @Override public void progressed(String message) {
+                System.out.print("\r" + message);
+            }
+        });
+
+        System.out.println(update);
+
+        if(update)
+            loader.update();
     }
 
 }
