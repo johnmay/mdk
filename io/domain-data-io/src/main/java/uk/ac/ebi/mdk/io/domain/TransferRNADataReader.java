@@ -48,6 +48,11 @@ public class TransferRNADataReader
             trna.addSequence(SequenceSerializer.readRNASequence(in));
         }
 
+        int nGenes = in.readByte();
+        for(int i = 0; i < nGenes; i++){
+            reconstruction.associate(ein.read(Gene.class, reconstruction), trna);
+        }
+
         return trna;
 
     }

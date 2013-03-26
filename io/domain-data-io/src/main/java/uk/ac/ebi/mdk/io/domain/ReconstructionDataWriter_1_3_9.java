@@ -24,12 +24,14 @@ import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
 import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.io.AbstractDataOutput;
 import uk.ac.ebi.mdk.io.EntityOutput;
 import uk.ac.ebi.mdk.io.EntityWriter;
 import uk.ac.ebi.mdk.io.IdentifierOutput;
+import uk.ac.ebi.mdk.io.SequenceSerializer;
 
 import java.io.DataOutput;
 import java.io.IOException;
@@ -77,8 +79,7 @@ public class ReconstructionDataWriter_1_3_9
         out.writeUTF(reconstruction.getContainer().getAbsolutePath());
 
         // GENOME
-        Genome genome = reconstruction.getGenome();
-        entityOut.writeData(genome);
+        writeGenome(reconstruction);
 
         // METABOLOME
         Collection<Metabolite> metabolites = reconstruction.getMetabolome();
@@ -113,6 +114,25 @@ public class ReconstructionDataWriter_1_3_9
             entityOut.writeData(e.getValue());
         }
 
+    }
+
+    private void writeGenome(Reconstruction reconstruction) throws IOException {
+        Collection<Chromosome> chromosomes = reconstruction.getGenome().getChromosomes();
+        out.writeInt(chromosomes.size());
+
+        for(Chromosome chromosome : chromosomes){
+
+            SequenceSerializer.writeDNASequence(chromosome.getSequence(), out);
+
+            List<Gene> genes = chromosome.getGenes();
+
+            out.writeInt(genes.size());
+            for(Gene gene : genes){
+                entityOut.writeData(gene);
+            }
+
+            out.writeInt(chromosome.getChromosomeNumber());
+        }
     }
 
 }

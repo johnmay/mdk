@@ -1,7 +1,10 @@
 package uk.ac.ebi.mdk.io.domain;
 
 import org.apache.log4j.Logger;
+import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
 import uk.ac.ebi.mdk.io.EnumReader;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
@@ -12,6 +15,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.mdk.io.IdentifierInput;
+import uk.ac.ebi.mdk.io.SequenceSerializer;
 
 import java.io.DataInput;
 import java.io.File;
@@ -59,8 +63,7 @@ public class ReconstructionDataReader_0_9
         recon.setContainer(new File(in.readUTF())); // set container
 
         // GENOME
-        Genome genome = entityIn.read(Genome.class, recon);
-        recon.setGenome(genome);
+        readGenome(recon);
 
         // METABOLOME
         int metabolites = in.readInt();
@@ -82,6 +85,41 @@ public class ReconstructionDataReader_0_9
 
         return recon;
 
+    }
+
+    public void readGenome(Reconstruction recon) throws IOException,
+                                                        ClassNotFoundException {
+        in.readInt(); // genome object id
+        int nChromosomes = in.readInt();
+        for(int i = 0; i < nChromosomes; i++){
+
+            in.readInt(); // chromosome object id
+            Chromosome chromosome = factory.newInstance(Chromosome.class);
+            chromosome.setSequence(new ChromosomeSequence(SequenceSerializer.readDNASequence(in).toString()));
+
+            int nGenes = in.readInt();
+            for(int g = 0; g < nGenes; g++){
+                Gene gene = entityIn.read(Gene.class, recon);
+                chromosome.add(gene);
+                // todo, add association
+            }
+
+            // annotated entity fields
+            in.readInt(); // enum object id
+            int nAnnotations = in.readInt();
+            if(nAnnotations != 0)
+                throw new IOException("chromosomes from 1.3.3 should not have annotations, contact devs");
+            int nObservations = in.readInt();
+            if(nObservations != 0)
+                throw new IOException("chromosomes from 1.3.3 should not have observations, contact devs");
+
+            chromosome.setName(in.readUTF());
+            chromosome.setAbbreviation(in.readUTF());
+            chromosome.setIdentifier(identifierInput.read());
+
+            recon.getGenome().add(chromosome);
+
+        }
     }
 
 }

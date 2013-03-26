@@ -48,6 +48,10 @@ public class ProteinProductDataReader
             p.addSequence(SequenceSerializer.readProteinSequence(in));
         }
 
+        int nGenes = in.readByte();
+        for(int i = 0; i < nGenes; i++){
+            reconstruction.associate(ein.read(Gene.class, reconstruction), p);
+        }
 
         return p;
 
