@@ -31,7 +31,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -132,10 +131,27 @@ public interface Reconstruction extends AnnotatedEntity {
 
     /**
      * Reactome of the reconstruction
+     *
      * @return the reactome
      * @see Reactome
      */
     public Reactome reactome();
+
+    /**
+     * Associate a gene with a product of the gene.
+     *
+     * @param gene    a gene
+     * @param product a gene product
+     */
+    public void associate(Gene gene, GeneProduct product);
+
+    /**
+     * Dissociate a gene with a product of the gene.
+     *
+     * @param gene    a gene
+     * @param product a gene product
+     */
+    public void dissociate(Gene gene, GeneProduct product);
 
     public void associate(GeneProduct product, Reaction reaction);
 
@@ -146,6 +162,27 @@ public interface Reconstruction extends AnnotatedEntity {
     public void dissociate(Metabolite metabolite, Reaction reaction);
 
     public List<Map.Entry<GeneProduct, Reaction>> productAssociations();
+
+    public List<Map.Entry<Gene, GeneProduct>> geneAssociations();
+
+    /**
+     * Access the genes which encode the project. New associations can be added
+     * via {@link #associate(Gene, GeneProduct)}.
+     *
+     * @param product a gene product instance
+     * @return the genes encoding the gene product, or an empty collection if
+     *         none
+     */
+    public Collection<Gene> genesOf(GeneProduct product);
+
+    /**
+     * Access the products which are encoded by the provided gene.
+     *
+     * @param gene a gene instance
+     * @return the products encoded by this gene, or an empty collection if
+     *         none
+     */
+    public Collection<GeneProduct> productsOf(Gene gene);
 
     public Collection<Reaction> reactionsOf(GeneProduct product);
 
@@ -180,6 +217,7 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public interface Association {
         public UUID from();
+
         public Collection<UUID> to();
     }
 }

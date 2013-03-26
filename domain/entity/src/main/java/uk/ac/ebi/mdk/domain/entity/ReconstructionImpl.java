@@ -343,6 +343,21 @@ public class ReconstructionImpl
         return subsets;
     }
 
+    @Override public List<Map.Entry<Gene, GeneProduct>> geneAssociations() {
+        List<Map.Entry<Gene, GeneProduct>> associations = new ArrayList<Map.Entry<Gene, GeneProduct>>(2000);
+        for (UUID uuid : gpr.keys()) {
+            Entity entity = entity(uuid);
+            if (entity instanceof GeneProduct) {
+                for (UUID uuid2 : gpr.associations(entity)) {
+                    associations
+                            .add(new AbstractMap.SimpleEntry<Gene, GeneProduct>((Gene) entity,
+                                                                                (GeneProduct) entity(uuid2)));
+                }
+            }
+        }
+        return associations;
+    }
+
     @Override
     public List<Map.Entry<GeneProduct, Reaction>> productAssociations() {
         List<Map.Entry<GeneProduct, Reaction>> associations = new ArrayList<Map.Entry<GeneProduct, Reaction>>(2000);
@@ -440,6 +455,13 @@ public class ReconstructionImpl
         return Collections.unmodifiableCollection(entities);
     }
 
+    @Override public Collection<Gene> genesOf(GeneProduct product) {
+        return entities(ggp.associations(product));
+    }
+
+    @Override public Collection<GeneProduct> productsOf(Gene gene) {
+        return entities(ggp.associations(gene));
+    }
 
     public Collection<GeneProduct> enzymesOf(Reaction reaction) {
         return entities(gpr.associations(reaction));
@@ -451,6 +473,14 @@ public class ReconstructionImpl
 
     public Collection<MetabolicReaction> participatesIn(Metabolite metabolite) {
         return entities(mrx.associations(metabolite));
+    }
+
+    @Override public void associate(Gene gene, GeneProduct product) {
+        ggp.associate(gene, product);
+    }
+
+    @Override public void dissociate(Gene gene, GeneProduct product) {
+        ggp.dissociate(gene, product);
     }
 
     /**
