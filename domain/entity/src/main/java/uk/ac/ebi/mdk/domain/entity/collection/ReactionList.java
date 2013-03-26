@@ -30,6 +30,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -55,7 +56,8 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
 
 
 
-    @Override public Collection<MetabolicReaction> toList() {
+
+    @Override public List<MetabolicReaction> toList() {
         return null;
     }
 

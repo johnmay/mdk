@@ -105,7 +105,7 @@ public class ReactomeImpl implements Reactome {
      * @inheritDoc
      */
     @Override public List<MetabolicReaction> toList() {
-        return Collections.unmodifiableList(reactions);
+        return Collections.unmodifiableList(new ArrayList<MetabolicReaction>(reactions));
     }
 
     /**
