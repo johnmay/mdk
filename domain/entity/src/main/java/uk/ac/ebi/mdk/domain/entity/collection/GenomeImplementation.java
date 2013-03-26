@@ -20,6 +20,7 @@ package uk.ac.ebi.mdk.domain.entity.collection;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.io.IOException;
@@ -45,18 +46,10 @@ public class GenomeImplementation implements Genome {
     private static final Logger LOGGER = Logger.getLogger(GenomeImplementation.class);
     private Map<Integer, Chromosome> chromosomes = new HashMap();
 
-    private final UUID uuid;
+    private final Reconstruction reconstruction;
 
-    public GenomeImplementation(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    @Override public UUID uuid() {
-        return uuid;
-    }
-
-    @Override public Entity newInstance() {
-        return new GenomeImplementation(UUID.randomUUID());
+    public GenomeImplementation(Reconstruction reconstruction) {
+        this.reconstruction = reconstruction;
     }
 
     /**
@@ -86,14 +79,14 @@ public class GenomeImplementation implements Genome {
      */
     public Chromosome getChromosome(int number) {
 
-        if (chromosomes.containsKey(number)) {
-            return chromosomes.get(number);
+        Chromosome chromosome = chromosomes.get(number);
+
+        if(chromosome == null){
+            chromosome = new ChromosomeImplementation(reconstruction, number);
+            chromosomes.put(number, chromosome);
         }
 
-        throw new InvalidParameterException("Chromosome number "
-                                                    + number
-                                                    + " not pressent in genome");
-
+        return chromosome;
     }
 
     /**
@@ -126,28 +119,6 @@ public class GenomeImplementation implements Genome {
                                                    .remove(gene);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public void read(ObjectInput in) throws IOException, ClassNotFoundException {
-        int nChromsomes = in.readInt();
-        for (int i = 0; i < nChromsomes; i++) {
-            Chromosome c = new ChromosomeImplementation(in);
-            add(c);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public void write(ObjectOutput out) throws IOException {
-
-        out.writeInt(chromosomes.size());
-        for (Chromosome c : getChromosomes()) {
-            c.writeExternal(out);
-        }
-
-    }
 
 
     /**

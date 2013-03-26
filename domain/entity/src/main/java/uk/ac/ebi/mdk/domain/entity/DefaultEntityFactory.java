@@ -58,8 +58,6 @@ public class DefaultEntityFactory
                                            new RibosomalRNAImpl(UUID.randomUUID()),
                                            new TransferRNAImpl(UUID.randomUUID()),
                                            new GeneImpl(UUID.randomUUID()),
-                                           new ChromosomeImplementation(UUID.randomUUID()),
-                                           new GenomeImplementation(UUID.randomUUID()),
                                            new MultimerImpl(UUID.randomUUID()),
                                            new IdentifierReactionImplementation(UUID.randomUUID()),
                                            new BasicParticipant(UUID.randomUUID()),

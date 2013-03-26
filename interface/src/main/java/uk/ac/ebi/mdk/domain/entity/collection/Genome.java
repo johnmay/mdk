@@ -36,7 +36,7 @@ import java.util.Collection;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public interface Genome extends Entity {
+public interface Genome {
 
     /**
      * Access to the collection of chromosomes for this genome
@@ -64,25 +64,6 @@ public interface Genome extends Entity {
      */
     public Chromosome getChromosome(int number);
 
-
-    /**
-     * Adds a chromosome to the genome.
-     *
-     * @param chromosome The chromosome to add
-     * @return whether the chromosome added replaces an existing entry
-     */
-    public boolean add(Chromosome chromosome);
-
-
-    /**
-     * Removes a chromosome from the genome.
-     *
-     * @param chromosome The chromosome to remove
-     * @return whether the chromosome was removed (false if the chromosome was
-     *         not present in the genome)
-     */
-    public boolean remove(Chromosome chromosome);
-
     /**
      * Removes a single gene from it's chromosome. The chromosome reference on
      * the gene and the gene sequence (which is based on the chromosome sequence
@@ -104,23 +85,6 @@ public interface Genome extends Entity {
      * @return whether the gene was added to the chromosome
      */
     public boolean add(int number, Gene gene);
-
-
-    /**
-     * Reads a genome from an input stream
-     *
-     * @param in
-     */
-    public void read(ObjectInput in) throws IOException, ClassNotFoundException;
-
-
-    /**
-     * Writes the genome to an output stream
-     *
-     * @param out
-     */
-    public void write(ObjectOutput out) throws IOException;
-
 
     public Gene getGene(int number, int index);
 

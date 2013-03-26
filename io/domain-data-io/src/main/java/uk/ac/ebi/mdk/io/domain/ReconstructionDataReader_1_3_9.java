@@ -39,6 +39,8 @@ import uk.ac.ebi.mdk.io.SequenceSerializer;
 import java.io.DataInput;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -124,25 +126,22 @@ public class ReconstructionDataReader_1_3_9
     public void readGenome(Reconstruction recon) throws IOException,
                                                         ClassNotFoundException {
         int nChromosomes = in.readInt();
-        System.out.println(nChromosomes);
+
         for(int i = 0; i < nChromosomes; i++){
 
-            Chromosome chromosome = factory.newInstance(Chromosome.class);
-            chromosome.setSequence(new ChromosomeSequence(SequenceSerializer.readDNASequence(in).toString()));
+            ChromosomeSequence seq = new ChromosomeSequence(SequenceSerializer.readDNASequence(in).toString());
 
             int nGenes = in.readInt();
+            List<Gene> genes = new ArrayList<Gene>(nGenes);
             for(int g = 0; g < nGenes; g++){
                 Gene gene = entityIn.read(Gene.class, recon);
-                chromosome.add(gene);
-                // todo, add association
+                genes.add(gene);
+                // todo, add association for gene to chromosome
             }
 
-            chromosome.setName("");
-            chromosome.setAbbreviation("");
-            chromosome.setIdentifier(new ChromosomeNumber(in.readInt()));
-
-            recon.getGenome().add(chromosome);
-
+            Chromosome chromosome = recon.getGenome().getChromosome(in.readInt());
+            chromosome.setSequence(seq);
+            chromosome.addAll(genes);
         }
     }
 

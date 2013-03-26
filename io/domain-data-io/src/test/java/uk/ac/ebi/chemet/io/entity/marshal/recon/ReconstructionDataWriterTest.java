@@ -5,6 +5,7 @@ import org.biojava3.core.sequence.ChromosomeSequence;
 import org.junit.Test;
 import org.openscience.cdk.CDKConstants;
 import uk.ac.ebi.caf.utility.version.Version;
+import uk.ac.ebi.mdk.domain.entity.collection.ChromosomeImplementation;
 import uk.ac.ebi.mdk.io.*;
 import uk.ac.ebi.mdk.domain.identifier.basic.*;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
@@ -58,6 +59,8 @@ public class ReconstructionDataWriterTest {
 
 
         ReconstructionImpl recon = in.read(null);
+
+
 
         for(Metabolite m : recon.getMetabolome()){
             System.out.println(m);
@@ -126,9 +129,8 @@ public class ReconstructionDataWriterTest {
         r1.addModifier(p1);
         r2.setDirection(Direction.BACKWARD);
 
-        Chromosome chromosome = factory.ofClass(Chromosome.class, new ChromosomeNumber(1), "Chromosome 1", "ch1");
+        Chromosome chromosome = reconstruction.getGenome().getChromosome(1);
 
-        reconstruction.getGenome().add(chromosome);
         chromosome.setSequence(new ChromosomeSequence("AACGTGCTGATCGTACGTAGCTAGCTAGCATGCATGCATGCATGACTGCATAC".toLowerCase()));
 
         Gene g1 = factory.ofClass(Gene.class, new BasicGeneIdentifier(), "Gene 1", "g1");

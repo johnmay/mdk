@@ -140,7 +140,7 @@ public class ReconstructionImpl
         reactome = new ReactomeImpl(this);
         metabolome = new MetabolomeImpl();
         proteome = new ProteomeImpl(this);
-        genome = new GenomeImplementation(UUID.randomUUID());
+        genome = new GenomeImplementation(this);
         subsets = new ArrayList<EntityCollection>();
     }
 
@@ -150,7 +150,7 @@ public class ReconstructionImpl
         reactome = new ReactomeImpl(this);
         metabolome = new MetabolomeImpl();
         proteome = new ProteomeImpl(this);
-        genome = new GenomeImplementation(UUID.randomUUID());
+        genome = new GenomeImplementation(this);
         subsets = new ArrayList<EntityCollection>();
     }
 
@@ -162,7 +162,7 @@ public class ReconstructionImpl
         super(UUID.randomUUID());
         metabolome = new MetabolomeImpl();
         reactome = new ReactomeImpl(this);
-        genome = new GenomeImplementation(UUID.randomUUID());
+        genome = new GenomeImplementation(this);
         proteome = new ProteomeImpl(this);
         subsets = new ArrayList<EntityCollection>();
     }

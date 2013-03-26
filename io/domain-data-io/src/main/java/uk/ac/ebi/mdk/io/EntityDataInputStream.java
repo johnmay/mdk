@@ -15,12 +15,8 @@ import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataReader;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.TransferRNADataReader;
-import uk.ac.ebi.mdk.io.domain.ChromosomeDataReader;
 import uk.ac.ebi.mdk.io.domain.GeneDataReader;
-import uk.ac.ebi.mdk.io.domain.GenomeDataReader;
 import uk.ac.ebi.mdk.domain.entity.*;
-import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
-import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.io.domain.AnnotatedEntityDataReader;
@@ -89,9 +85,6 @@ public class EntityDataInputStream
         add(RibosomalRNA.class, new RibosomalRNADataReader_1_3_9(in, factory, this));
         add(TransferRNA.class, new TransferRNADataReader(in, factory, this));
         add(TransferRNA.class, new TransferRNADataReader_1_3_9(in, factory, this));
-
-        add(Chromosome.class, new ChromosomeDataReader(in, factory, this));
-        add(Genome.class, new GenomeDataReader(in, factory, this));
 
         add(Reconstruction.class, new ReconstructionDataReader_0_9(in, factory, identifierInput, this));
         add(Reconstruction.class, new ReconstructionDataReader_1_3_3(in, factory, identifierInput, this));

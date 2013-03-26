@@ -26,7 +26,6 @@ import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
-import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
@@ -37,6 +36,8 @@ import uk.ac.ebi.mdk.io.SequenceSerializer;
 import java.io.DataInput;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -50,7 +51,8 @@ import java.util.UUID;
 public class ReconstructionDataReader_1_3_3
         implements EntityReader<Reconstruction> {
 
-    private static final Logger LOGGER = Logger.getLogger(ReconstructionDataReader_1_3_3.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ReconstructionDataReader_1_3_3.class);
 
     private DataInput in;
     private EntityInput entityIn;
@@ -69,10 +71,12 @@ public class ReconstructionDataReader_1_3_3
         this.factory = factory;
     }
 
-    public Reconstruction readEntity(Reconstruction donotuse) throws IOException,
-                                        ClassNotFoundException {
+    public Reconstruction readEntity(Reconstruction donotuse) throws
+                                                              IOException,
+                                                              ClassNotFoundException {
 
-        Reconstruction recon = factory.newReconstruction(UUID.fromString(in.readUTF()));
+        Reconstruction recon = factory
+                .newReconstruction(UUID.fromString(in.readUTF()));
 
         recon.setTaxonomy(identifierInput.read());
 
@@ -108,34 +112,38 @@ public class ReconstructionDataReader_1_3_3
                                                         ClassNotFoundException {
         in.readInt(); // genome object id
         int nChromosomes = in.readInt();
-        for(int i = 0; i < nChromosomes; i++){
+        for (int i = 0; i < nChromosomes; i++) {
 
             in.readInt(); // chromosome object id
-            Chromosome chromosome = factory.newInstance(Chromosome.class);
-            chromosome.setSequence(new ChromosomeSequence(SequenceSerializer.readDNASequence(in).toString()));
+            ChromosomeSequence seq = new ChromosomeSequence(SequenceSerializer
+                                                                  .readDNASequence(in)
+                                                                  .toString());
 
             int nGenes = in.readInt();
-            for(int g = 0; g < nGenes; g++){
+            List<Gene> genes = new ArrayList<Gene>(nGenes);
+            for (int g = 0; g < nGenes; g++) {
                 Gene gene = entityIn.read(Gene.class, recon);
-                chromosome.add(gene);
+                genes.add(gene);
                 // todo, add association
             }
 
             // annotated entity fields
             in.readInt(); // enum object id
             int nAnnotations = in.readInt();
-            if(nAnnotations != 0)
+            if (nAnnotations != 0)
                 throw new IOException("chromosomes from 1.3.3 should not have annotations, contact devs");
             int nObservations = in.readInt();
-            if(nObservations != 0)
+            if (nObservations != 0)
                 throw new IOException("chromosomes from 1.3.3 should not have observations, contact devs");
 
-            chromosome.setName(in.readUTF());
-            chromosome.setAbbreviation(in.readUTF());
-            chromosome.setIdentifier(identifierInput.read());
 
-            recon.getGenome().add(chromosome);
+            in.readUTF(); // name
+            in.readUTF(); // abrv
+            identifierInput.read(); // chromosome id -> we lose the number
 
+            Chromosome chromosome = recon.getGenome().getChromosome(i + 1);
+            chromosome.setSequence(seq);
+            chromosome.addAll(genes);
         }
     }
 }

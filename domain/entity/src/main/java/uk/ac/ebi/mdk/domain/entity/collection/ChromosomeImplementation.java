@@ -19,6 +19,7 @@ package uk.ac.ebi.mdk.domain.entity.collection;
 
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.identifier.basic.ChromosomeNumber;
 import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
@@ -42,7 +43,7 @@ import java.util.UUID;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public class ChromosomeImplementation extends AbstractAnnotatedEntity implements Chromosome, Externalizable {
+public class ChromosomeImplementation implements Chromosome {
 
     private static final Logger LOGGER = Logger.getLogger(ChromosomeImplementation.class);
 
@@ -50,28 +51,20 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
 
     private List<Gene> genes = new ArrayList<Gene>();
 
+    private final Reconstruction reconstruction;
 
-    public ChromosomeImplementation(UUID uuid) {
-        super(uuid);
+    private final int number;
+
+    public ChromosomeImplementation(Reconstruction reconstruction, int number) {
+        this.reconstruction = reconstruction;
+        this.number = number;
     }
-
-
-    protected ChromosomeImplementation(ObjectInput in) throws IOException, ClassNotFoundException {
-        super(UUID.randomUUID());
-        readExternal(in);
-    }
-
-
-    public ChromosomeImplementation(int number, ChromosomeSequence sequence) {
-        super(new ChromosomeNumber(number), "CH:" + number, "Choromsome " + number);
-        this.sequence = sequence;
-    }
-
 
     /**
      * @inheritDoc
      */
     public boolean add(Gene gene) {
+        reconstruction.register(gene);
         gene.setChromosome(this);
         int length = sequence.getLength();
         if(gene.getEnd() < length)
@@ -104,7 +97,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
      * @inheritDoc
      */
     public int getChromosomeNumber() {
-        return ((ChromosomeNumber) getIdentifier()).getNumber();
+        return number;
     }
 
 
@@ -112,6 +105,7 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
      * @inheritDoc
      */
     public boolean remove(Gene gene) {
+        reconstruction.deregister(gene);
         gene.setChromosome(null);
         gene.setSequence(null);
         return genes.remove(gene);
@@ -136,29 +130,5 @@ public class ChromosomeImplementation extends AbstractAnnotatedEntity implements
     @Override
     public ChromosomeSequence getSequence() {
         return sequence;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-
-
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-
-
-    }
-
-
-    public Chromosome newInstance() {
-        return new ChromosomeImplementation(UUID.randomUUID());
     }
 }

@@ -26,6 +26,7 @@ import java.util.List;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 
 /**
@@ -36,7 +37,9 @@ import uk.ac.ebi.mdk.domain.entity.Gene;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public interface Chromosome extends Entity {
+public interface Chromosome {
+
+
 
     /**
      * A gene to the chromosome. This will set the circular reference for the gene
@@ -91,8 +94,4 @@ public interface Chromosome extends Entity {
     public ChromosomeSequence getSequence();
 
 
-    public void readExternal(ObjectInput out) throws ClassNotFoundException, IOException;
-
-
-    public void writeExternal(ObjectOutput out) throws IOException;
 }
