@@ -60,7 +60,7 @@ public class ReactomeImpl implements Reactome {
         return Collections.unmodifiableList(reactions).iterator();
     }
 
-    @Override public Collection<MetabolicReaction> toList() {
+    @Override public List<MetabolicReaction> toList() {
         return Collections.unmodifiableList(reactions);
     }
 
