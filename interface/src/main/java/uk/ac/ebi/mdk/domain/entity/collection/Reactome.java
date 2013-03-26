@@ -58,6 +58,17 @@ public interface Reactome extends Iterable<MetabolicReaction> {
      */
     public Collection<MetabolicReaction> participatesIn(Metabolite m);
 
+
+    /**
+     * Get the reaction for the given metabolite.
+     *
+     * @param m the metabolites
+     * @return the reactions m participates in
+     * @deprecated use the more descriptive {@link #participatesIn(uk.ac.ebi.mdk.domain.entity.Metabolite)}
+     */
+    @Deprecated
+    public Collection<MetabolicReaction> getReactions(Metabolite m);
+
     /**
      * Convert the reactome to an unmodifiable indexed {@link java.util.List}.
      *
