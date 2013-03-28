@@ -49,9 +49,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author John May
  * @see FingerprintReader
  */
-public final class FingerprintWriter implements Closeable {
+public class FingerprintWriter implements Closeable {
 
-    private BufferedWriter writer;
+    BufferedWriter writer;
 
     /**
      * Create a write for the specified fingerprint class and length.
