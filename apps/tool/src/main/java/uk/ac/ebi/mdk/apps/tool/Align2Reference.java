@@ -238,17 +238,17 @@ public class Align2Reference extends CommandLineMain {
 
         Set<Metabolite> queryCurrencyMetabolites = new HashSet<Metabolite>();
         Set<Metabolite> referenceCurrencyMetabolites = new HashSet<Metabolite>();
-        queryCurrencyMetabolites.addAll(query.getMetabolome().get("H+"));
-        queryCurrencyMetabolites.addAll(query.getMetabolome().get("H2O"));
-        queryCurrencyMetabolites.addAll(query.getMetabolome().get("CO2"));
-        queryCurrencyMetabolites.addAll(query.getMetabolome().get("ammonium"));
-        queryCurrencyMetabolites.addAll(query.getMetabolome().get("ammonia"));
-        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("H+"));
-        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("H2O"));
-        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("CO2"));
-        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("ammonium"));
-        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("ammonia"));
-        referenceCurrencyMetabolites.addAll(reference.getMetabolome().get("Phosphate"));
+        queryCurrencyMetabolites.addAll(query.getMetabolome().ofName("H+"));
+        queryCurrencyMetabolites.addAll(query.getMetabolome().ofName("H2O"));
+        queryCurrencyMetabolites.addAll(query.getMetabolome().ofName("CO2"));
+        queryCurrencyMetabolites.addAll(query.getMetabolome().ofName("ammonium"));
+        queryCurrencyMetabolites.addAll(query.getMetabolome().ofName("ammonia"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().ofName("H+"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().ofName("H2O"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().ofName("CO2"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().ofName("ammonium"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().ofName("ammonia"));
+        referenceCurrencyMetabolites.addAll(reference.getMetabolome().ofName("Phosphate"));
 
         int count = 0;
         int transport = 0;
@@ -261,10 +261,10 @@ public class Align2Reference extends CommandLineMain {
 
         reactionAligner.push(new ReactionMatcher(aligner));
         reactionAligner.push(new ReactionMatcher(aligner, false));
-        reactionAligner.push(new ReactionMatcher(aligner, true, Collections.singleton(reference.getMetabolome().get("H+").iterator().next())));
-        reactionAligner.push(new ReactionMatcher(aligner, false, Collections.singleton(reference.getMetabolome().get("H+").iterator().next())));
-        reactionAligner.push(new ReactionMatcher(aligner, false, new HashSet<Metabolite>(Arrays.asList(reference.getMetabolome().get("H+").iterator().next(),
-                                                                                                       reference.getMetabolome().get("H2O").iterator().next()))));
+        reactionAligner.push(new ReactionMatcher(aligner, true, Collections.singleton(reference.getMetabolome().ofName("H+").iterator().next())));
+        reactionAligner.push(new ReactionMatcher(aligner, false, Collections.singleton(reference.getMetabolome().ofName("H+").iterator().next())));
+        reactionAligner.push(new ReactionMatcher(aligner, false, new HashSet<Metabolite>(Arrays.asList(reference.getMetabolome().ofName("H+").iterator().next(),
+                                                                                                       reference.getMetabolome().ofName("H2O").iterator().next()))));
         reactionAligner.push(new ReactionMatcher(aligner, false, referenceCurrencyMetabolites));
 
         for (MetabolicReaction reaction : reactome) {

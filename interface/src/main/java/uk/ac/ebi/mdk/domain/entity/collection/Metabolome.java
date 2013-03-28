@@ -22,20 +22,75 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
- * @version $Rev$
+ * Describes a collection of metabolites and utility methods.
+ *
+ * @author johnmay
  */
-public interface Metabolome extends Collection<Metabolite> {
+public interface Metabolome extends Iterable<Metabolite> {
 
     /**
-     * Access metabolites by name
+     * Add a metabolite to the metabolome.
      *
-     * @param name
-     *
-     * @return
+     * @param m the metabolite to add
+     * @return whether the metabolite was added
+     * @throws IllegalArgumentException metabolite has a an identifier which
+     *                                  matches a metabolite already stored
      */
-    public Collection<Metabolite> get(String name);
+    public boolean add(Metabolite m);
 
-    public Metabolite get(Identifier identifier);
+    /**
+     * Remove a metabolite.
+     *
+     * @param m the metabolite to remove
+     * @return whether the metabolite was removed
+     */
+    public boolean remove(Metabolite m);
+
+    /**
+     * Access metabolites by name.
+     *
+     * @param name the name to find
+     * @return metabolites with the given name
+     */
+    public Collection<Metabolite> ofName(String name);
+
+    /**
+     * Access a metabolite by identifier.
+     *
+     * @param identifier an identifier
+     * @return a metabolite matching the identifier (null if none)
+     */
+    public Metabolite ofIdentifier(Identifier identifier);
+
+    /**
+     * Check whether the metabolome contains the provided metabolite.
+     *
+     * @param m the metabolite to test
+     * @return whether the metabolite is contained in the metabolome
+     */
+    public boolean contains(Metabolite m);
+
+    /**
+     * Determine whether the metabolome is empty.
+     *
+     * @return whether the metabolome is empty
+     */
+    public boolean isEmpty();
+
+    /**
+     * Convert the metabolome to a list.
+     *
+     * @return immutable list of metabolites
+     */
+    public List<Metabolite> toList();
+
+    /**
+     * The number of metabolites in the metabolome.
+     *
+     * @return the number of metabolites
+     */
+    public int size();
 }

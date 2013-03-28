@@ -18,35 +18,70 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
+ * A metabolome instance linked to a {@link Reconstruction}. When a new
+ * metabolite is added it will be {@link Reconstruction#register(uk.ac.ebi.mdk.domain.entity.Entity)}ed
+ * with the reconstruction.
+ *
  * @author johnmay
- * @date May 15, 2011
  */
-public class MetabolomeImpl
-        extends EntitySet<Metabolite> implements Metabolome {
+public class MetabolomeImpl implements Metabolome {
 
-    private Map<Identifier, Metabolite> identifierMap = new HashMap<Identifier, Metabolite>();
+    private final Map<Identifier, Metabolite> metabolites = new TreeMap<Identifier, Metabolite>();
 
+    private final Reconstruction reconstruction;
 
     /**
-     * Retrieves the metabolites that match the specified name. Note. this is
-     * not a search over the list (as the name can change)
+     * Create a new metabolome for the provided reconstruction.
      *
-     * @param name
-     *
-     * @return
+     * @param reconstruction to which this metabolome belongs
      */
-    public Collection<Metabolite> get(String name) {
+    public MetabolomeImpl(Reconstruction reconstruction) {
+        this.reconstruction = checkNotNull(reconstruction);
+    }
 
-        String clean = name.trim().toLowerCase();
+    /**
+     * @inheritDoc
+     */
+    @Override public boolean add(Metabolite m) {
+        return reconstruction.register(checkNotNull(m)) && _add(m);
+    }
+
+    private boolean _add(Metabolite m) {
+        if (metabolites.containsKey(m.getIdentifier()))
+            throw new IllegalArgumentException("clashing metabolite identifiers");
+        metabolites.put(m.getIdentifier(), m);
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public boolean remove(Metabolite m) {
+        reconstruction.deregister(checkNotNull(m));
+        return metabolites.remove(m.getIdentifier()) != null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Collection<Metabolite> ofName(String name) {
+
+        String clean = checkNotNull(name).trim().toLowerCase();
 
         Collection<Metabolite> metabolites = new ArrayList<Metabolite>();
 
@@ -61,53 +96,30 @@ public class MetabolomeImpl
 
     }
 
-
-    @Override
-    public boolean add(Metabolite metabolite) {
-        if (!identifierMap.isEmpty()) {
-            identifierMap.put(metabolite.getIdentifier(), metabolite);
-        }
-        return super.add(metabolite);
+    @Override public boolean contains(Metabolite m) {
+        return ofIdentifier(checkNotNull(m).getIdentifier()) != null;
     }
 
-
-    @Override
-    public boolean remove(Object o) {
-
-        boolean removed = super.remove(o);
-
-        if (removed && !identifierMap.isEmpty()) {
-            Metabolite m = (Metabolite) o;
-            identifierMap.remove(m.getIdentifier());
-        }
-
-        return removed;
-
+    @Override public List<Metabolite> toList() {
+        return Collections
+                .unmodifiableList(new ArrayList<Metabolite>(metabolites
+                                                                    .values()));
     }
 
-
-    /**
-     * Rebuilds the identifier map
-     */
-    public void rebuildMap() {
-        identifierMap.clear();
-        for (Metabolite m : this) {
-            identifierMap.put(m.getIdentifier(), m);
-        }
+    @Override public boolean isEmpty() {
+        return metabolites.isEmpty();
     }
 
+    @Override public int size() {
+        return metabolites.size();
+    }
 
-    @Override
-    public Metabolite get(Identifier identifier) {
+    @Override public Iterator<Metabolite> iterator() {
+        return metabolites.values().iterator();
+    }
 
-        // trigger rebuild if empty or identifier is not contained
-        if (identifierMap.isEmpty() ||
-                !identifierMap.containsKey(identifier)) {
-            rebuildMap();
-        }
-
-        return identifierMap.get(identifier);
-
+    @Override public Metabolite ofIdentifier(Identifier identifier) {
+        return metabolites.get(identifier);
     }
 
 }

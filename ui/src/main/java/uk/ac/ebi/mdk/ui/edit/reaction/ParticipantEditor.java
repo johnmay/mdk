@@ -162,7 +162,8 @@ public class ParticipantEditor extends JPanel {
         }
 
         Reconstruction recon = MANAGER.active();
-        Collection<Metabolite> candidates = recon.getMetabolome().get(metabolite.getText());
+        Collection<Metabolite> candidates = recon.getMetabolome().ofName(metabolite
+                                                                                 .getText());
 
         Metabolite entity;
         if (candidates.iterator().hasNext()) {

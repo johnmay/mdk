@@ -137,7 +137,7 @@ public class ReconstructionImpl
         super(uuid, id, org.getCode(), org.getCommonName());
         taxonomy = org;
         reactome = new ReactomeImpl(this);
-        metabolome = new MetabolomeImpl();
+        metabolome = new MetabolomeImpl(this);
         proteome = new ProteomeImpl(this);
         genome = new GenomeImpl(this);
         subsets = new ArrayList<EntityCollection>();
@@ -147,7 +147,7 @@ public class ReconstructionImpl
     public ReconstructionImpl(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
         reactome = new ReactomeImpl(this);
-        metabolome = new MetabolomeImpl();
+        metabolome =  new MetabolomeImpl(this);
         proteome = new ProteomeImpl(this);
         genome = new GenomeImpl(this);
         subsets = new ArrayList<EntityCollection>();
@@ -159,7 +159,7 @@ public class ReconstructionImpl
     */
     public ReconstructionImpl() {
         super(UUID.randomUUID());
-        metabolome = new MetabolomeImpl();
+        metabolome = new MetabolomeImpl(this);
         reactome = new ReactomeImpl(this);
         genome = new GenomeImpl(this);
         proteome = new ProteomeImpl(this);
