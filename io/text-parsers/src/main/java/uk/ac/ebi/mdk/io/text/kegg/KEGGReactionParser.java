@@ -31,7 +31,9 @@ import org.apache.log4j.Logger;
 /**
  *
  * @author pmoreno
+ * @deprecated needs clean up and testing
  */
+@Deprecated
 public class KEGGReactionParser {
 
     private BufferedReader reader;
