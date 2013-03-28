@@ -80,7 +80,7 @@
         <repository>
             <id>ebi-repo</id>
             <name>EBI maven repository</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo</url>
+            <url>${ebi.repo.nexus.url}</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -98,7 +98,7 @@
         <repository>
             <id>ebi-repo-snapshots</id>
             <name>EBI maven snapshots repository</name>
-            <url>http://www.ebi.ac.uk/~maven/m2repo_snapshots</url>
+            <url>${ebi.repo.snapshots.nexus.url}</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>interval:10080</updatePolicy>
