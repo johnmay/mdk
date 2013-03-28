@@ -17,6 +17,7 @@
 package uk.ac.ebi.mdk.service.query;
 
 import au.com.bytecode.opencsv.CSVReader;
+import java.io.BufferedReader;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -45,6 +46,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 
 /**
  * A client for the KEGG REST API.
@@ -54,10 +56,10 @@ import java.util.List;
 public class KEGGRestClient
         extends AbstractRestClient<KEGGCompoundIdentifier>
         implements StructureService<KEGGCompoundIdentifier>,
-                   MolecularFormulaService<KEGGCompoundIdentifier>,
-                   PreferredNameService<KEGGCompoundIdentifier>,
-                   NameService<KEGGCompoundIdentifier>,
-                   SynonymService<KEGGCompoundIdentifier> {
+        MolecularFormulaService<KEGGCompoundIdentifier>,
+        PreferredNameService<KEGGCompoundIdentifier>,
+        NameService<KEGGCompoundIdentifier>,
+        SynonymService<KEGGCompoundIdentifier> {
 
     private final IChemObjectBuilder BUILDER = SilentChemObjectBuilder
             .getInstance();
@@ -276,9 +278,9 @@ public class KEGGRestClient
     public IMolecularFormula getIMolecularFormula(KEGGCompoundIdentifier identifier) {
         String formula = getMolecularFormula(identifier);
         return formula.isEmpty()
-               ? BUILDER.newInstance(IMolecularFormula.class)
-               : MolecularFormulaManipulator.getMolecularFormula(formula,
-                                                                 BUILDER);
+                ? BUILDER.newInstance(IMolecularFormula.class)
+                : MolecularFormulaManipulator.getMolecularFormula(formula,
+                BUILDER);
     }
 
     @Override
@@ -318,7 +320,7 @@ public class KEGGRestClient
         try {
             in = getContent(address);
             CSVReader reader = new CSVReader(new InputStreamReader(getContent(address)),
-                                             '\t', '\0');
+                    '\t', '\0');
             String[] row;
 
             while ((row = reader.readNext()) != null) {
