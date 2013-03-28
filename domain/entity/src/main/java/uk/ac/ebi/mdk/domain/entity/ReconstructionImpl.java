@@ -25,13 +25,12 @@ package uk.ac.ebi.mdk.domain.entity;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
+import uk.ac.ebi.mdk.domain.entity.collection.GenomeImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.Genome;
-import uk.ac.ebi.mdk.domain.entity.collection.GenomeImplementation;
 import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
 import uk.ac.ebi.mdk.domain.entity.collection.MetabolomeImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.ProductCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
-import uk.ac.ebi.mdk.domain.entity.collection.ReactionList;
 import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mdk.domain.entity.collection.ReactomeImpl;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
@@ -140,7 +139,7 @@ public class ReconstructionImpl
         reactome = new ReactomeImpl(this);
         metabolome = new MetabolomeImpl();
         proteome = new ProteomeImpl(this);
-        genome = new GenomeImplementation(this);
+        genome = new GenomeImpl(this);
         subsets = new ArrayList<EntityCollection>();
     }
 
@@ -150,7 +149,7 @@ public class ReconstructionImpl
         reactome = new ReactomeImpl(this);
         metabolome = new MetabolomeImpl();
         proteome = new ProteomeImpl(this);
-        genome = new GenomeImplementation(this);
+        genome = new GenomeImpl(this);
         subsets = new ArrayList<EntityCollection>();
     }
 
@@ -162,7 +161,7 @@ public class ReconstructionImpl
         super(UUID.randomUUID());
         metabolome = new MetabolomeImpl();
         reactome = new ReactomeImpl(this);
-        genome = new GenomeImplementation(this);
+        genome = new GenomeImpl(this);
         proteome = new ProteomeImpl(this);
         subsets = new ArrayList<EntityCollection>();
     }
@@ -220,7 +219,7 @@ public class ReconstructionImpl
      * @return All genes currently in the reconstruction
      */
     public Collection<Gene> getGenes() {
-        return genome.getGenes();
+        return genome.genes();
     }
 
 

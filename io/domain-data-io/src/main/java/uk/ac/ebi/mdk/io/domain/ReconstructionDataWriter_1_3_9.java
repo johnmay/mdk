@@ -25,7 +25,6 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
-import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.io.AbstractDataOutput;
 import uk.ac.ebi.mdk.io.EntityOutput;
@@ -117,14 +116,14 @@ public class ReconstructionDataWriter_1_3_9
     }
 
     private void writeGenome(Reconstruction reconstruction) throws IOException {
-        Collection<Chromosome> chromosomes = reconstruction.getGenome().getChromosomes();
+        Collection<Chromosome> chromosomes = reconstruction.getGenome().chromosomes();
         out.writeInt(chromosomes.size());
 
         for(Chromosome chromosome : chromosomes){
 
             SequenceSerializer.writeDNASequence(chromosome.getSequence(), out);
 
-            List<Gene> genes = chromosome.getGenes();
+            List<Gene> genes = chromosome.genes();
 
             out.writeInt(genes.size());
             for(Gene gene : genes){

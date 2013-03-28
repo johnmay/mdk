@@ -81,7 +81,7 @@ public interface Chromosome {
      *
      * @return
      */
-    public List<Gene> getGenes();
+    public List<Gene> genes();
 
 
     /**

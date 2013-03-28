@@ -18,8 +18,6 @@
 package uk.ac.ebi.mdk.domain.entity;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.entity.collection.ChromosomeImplementation;
-import uk.ac.ebi.mdk.domain.entity.collection.GenomeImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.*;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;

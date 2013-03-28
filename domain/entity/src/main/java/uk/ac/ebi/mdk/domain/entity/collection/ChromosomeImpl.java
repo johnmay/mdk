@@ -20,22 +20,15 @@ package uk.ac.ebi.mdk.domain.entity.collection;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.mdk.domain.identifier.basic.ChromosomeNumber;
-import uk.ac.ebi.mdk.domain.entity.AbstractAnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 
 /**
- * ChromosomeImplementation - 2011.10.17 <br>
+ * ChromosomeImpl - 2011.10.17 <br>
  * A class description of a chromosome. This effectively wraps
  * BioJava3 ChromosomeSequence object to act as a buffer with our CheMet objects
  *
@@ -43,9 +36,9 @@ import java.util.UUID;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
-public class ChromosomeImplementation implements Chromosome {
+public class ChromosomeImpl implements Chromosome {
 
-    private static final Logger LOGGER = Logger.getLogger(ChromosomeImplementation.class);
+    private static final Logger LOGGER = Logger.getLogger(ChromosomeImpl.class);
 
     private ChromosomeSequence sequence = new ChromosomeSequence("");
 
@@ -55,7 +48,7 @@ public class ChromosomeImplementation implements Chromosome {
 
     private final int number;
 
-    public ChromosomeImplementation(Reconstruction reconstruction, int number) {
+    public ChromosomeImpl(Reconstruction reconstruction, int number) {
         this.reconstruction = reconstruction;
         this.number = number;
     }
@@ -88,7 +81,7 @@ public class ChromosomeImplementation implements Chromosome {
     /**
      * @inheritDoc
      */
-    public List<Gene> getGenes() {
+    public List<Gene> genes() {
         return genes;
     }
 

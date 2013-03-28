@@ -17,52 +17,42 @@
  */
 package uk.ac.ebi.mdk.domain.entity.collection;
 
-import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.util.Collection;
 
 
 /**
- * Genome - 2011.10.18 <br> The genome defines a container for multiple
- * chromosomes which in turn define locations of contained genes. The genome
- * interface provides convenience methods for accessing chromosomes by number
- * and list all genes in the genome.
+ * The genome defines a collection of genes which are associate to {@link
  *
  * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$ : Last Changed $Date$
  */
 public interface Genome {
 
     /**
-     * Access to the collection of chromosomes for this genome
+     * The chromosomes for this genome.
      *
-     * @return
+     * @return immutable collection of chromosomes
      */
-    public Collection<Chromosome> getChromosomes();
+    public Collection<Chromosome> chromosomes();
 
 
     /**
-     * Access a collection of all genes stored on all chromosomes
+     * The genes stored on all chromosomes
      *
-     * @return collection of genes
+     * @return immutable collection of genes
      */
-    public Collection<Gene> getGenes();
-
+    public Collection<Gene> genes();
 
     /**
      * Access a chromosome within the genome by it's number. Attempting to
-     * access a chromosome number which does not occur will throw an {@see
-     * InvalidParameterException}
+     * access a chromosome number which is not present will create a new
+     * chromosome.
      *
      * @param number - chromosome number
      * @return an instance of a chromosome associated with that number
      */
-    public Chromosome getChromosome(int number);
+    public Chromosome chromosome(int number);
 
     /**
      * Removes a single gene from it's chromosome. The chromosome reference on
@@ -73,21 +63,4 @@ public interface Genome {
      * @return whether the gene was removed
      */
     public boolean remove(Gene gene);
-
-
-    /**
-     * Convenience method to add a gene to the genome on the specified
-     * chromosome. If a number is provided that does not map to a chromosome an
-     * {@see InvalidParameterException} will be thrown
-     *
-     * @param number - the chromosome number that the gene will be added too
-     * @param gene   - a gene to add
-     * @return whether the gene was added to the chromosome
-     */
-    public boolean add(int number, Gene gene);
-
-    public Gene getGene(int number, int index);
-
-
-    public int[] getIndex(Gene gene);
 }

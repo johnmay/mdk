@@ -27,9 +27,7 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
-import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
-import uk.ac.ebi.mdk.domain.identifier.basic.ChromosomeNumber;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.mdk.io.EnumReader;
@@ -139,7 +137,7 @@ public class ReconstructionDataReader_1_3_9
                 // todo, add association for gene to chromosome
             }
 
-            Chromosome chromosome = recon.getGenome().getChromosome(in.readInt());
+            Chromosome chromosome = recon.getGenome().chromosome(in.readInt());
             chromosome.setSequence(seq);
             chromosome.addAll(genes);
         }

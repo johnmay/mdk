@@ -3,9 +3,7 @@ package uk.ac.ebi.chemet.io.entity.marshal.recon;
 import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
 import org.junit.Test;
-import org.openscience.cdk.CDKConstants;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.mdk.domain.entity.collection.ChromosomeImplementation;
 import uk.ac.ebi.mdk.io.*;
 import uk.ac.ebi.mdk.domain.identifier.basic.*;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
@@ -17,7 +15,6 @@ import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicGeneIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.basic.ChromosomeNumber;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
@@ -129,7 +126,7 @@ public class ReconstructionDataWriterTest {
         r1.addModifier(p1);
         r2.setDirection(Direction.BACKWARD);
 
-        Chromosome chromosome = reconstruction.getGenome().getChromosome(1);
+        Chromosome chromosome = reconstruction.getGenome().chromosome(1);
 
         chromosome.setSequence(new ChromosomeSequence("AACGTGCTGATCGTACGTAGCTAGCTAGCATGCATGCATGCATGACTGCATAC".toLowerCase()));
 

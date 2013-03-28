@@ -73,7 +73,7 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
     }
 
 
-    public Chromosome getChromosome() {
+    public Chromosome chromosome() {
         return chromosome;
     }
 

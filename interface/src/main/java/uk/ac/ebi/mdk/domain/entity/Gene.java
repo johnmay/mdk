@@ -37,7 +37,7 @@ public interface Gene extends AnnotatedEntity {
      *
      * @return
      */
-    public Chromosome getChromosome();
+    public Chromosome chromosome();
 
     public void setChromosome(Chromosome chromosome);
 
