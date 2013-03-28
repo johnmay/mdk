@@ -26,6 +26,7 @@ import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -45,6 +46,9 @@ public class MetabolicReactionImpl
 
     private ReactionType type = ReactionTypeImpl.ENZYMATIC;
 
+    public MetabolicReactionImpl(UUID uuid){
+        super(uuid);
+    }
 
     public MetabolicReactionImpl() {
         this(BasicReactionIdentifier.nextIdentifier(), "", "");

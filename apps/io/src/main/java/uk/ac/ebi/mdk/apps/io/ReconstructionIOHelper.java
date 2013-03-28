@@ -160,7 +160,7 @@ public class ReconstructionIOHelper {
 
 
         long start = System.currentTimeMillis();
-        Reconstruction reconstruction = entityInput.read();
+        Reconstruction reconstruction = entityInput.read(null);
         long end = System.currentTimeMillis();
         LOGGER.info("Loaded project data in " + (end - start) + " (ms)");
 

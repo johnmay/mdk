@@ -17,6 +17,7 @@
  */
 package uk.ac.ebi.mdk.domain.entity;
 
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 
@@ -121,4 +122,83 @@ public interface EntityFactory {
 
 
     public Class<? extends Entity> getClass(String className);
+
+    /**
+     * A new metabolite instance
+     * @return a new metabolite
+     */
+    public Metabolite metabolite();
+
+    /**
+     * A new metabolite instance with a given UUID
+     * @param uuid the metabolite uuid
+     * @return a new metabolite
+     */
+    public Metabolite metabolite(UUID uuid);
+
+    /**
+     * A new protein instance
+     * @return a new protein
+     */
+    public ProteinProduct protein();
+
+    /**
+     * A new protein instance with a given UUID
+     * @param uuid the protein uuid
+     * @return a new protein
+     */
+    public ProteinProduct protein(UUID uuid);
+
+    /**
+     * A new transfer RNA instance
+     * @return a new transfer RNA
+     */
+    public TransferRNA tRNA();
+
+    /**
+     * A new transfer RNA instance
+     * @param uuid the transfer RNA uuid
+     * @return a new transfer RNA
+     */
+    public TransferRNA tRNA(UUID uuid);
+
+    /**
+     * A new ribosomal RNA instance
+     * @return a new ribosomal RNA
+     */
+    public RibosomalRNA rRNA();
+
+    /**
+     * A new ribosomal RNA instance
+     * @param uuid the ribosomal RNA uuid
+     * @return a new ribosomal RNA
+     */
+    public RibosomalRNA rRNA(UUID uuid);
+
+    /**
+     * Create a new reaction.
+     * @return a new reaction instance
+     */
+    public MetabolicReaction reaction();
+
+    /**
+     * Create a new reaction.
+     * @param uuid the reaction uuid
+     * @return a new reaction instance
+     */
+    public MetabolicReaction reaction(UUID uuid);
+
+    /**
+     * Create a new gene
+     * @return new gene instance
+     */
+    public Gene gene();
+
+    /**
+     * Create a new gene
+     * @param  uuid the gene uuid
+     * @return a new gene
+     */
+    public Gene gene(UUID uuid);
+
 }

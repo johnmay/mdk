@@ -19,10 +19,34 @@ package uk.ac.ebi.mdk.domain.entity;
 
 import org.junit.Test;
 
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+
 /**
  * @author John May
  */
 public class ReconstructionImplTest {
+
+    @Test public void testRegister() {
+        Reconstruction recon = new ReconstructionImpl();
+        Metabolite m = new MetaboliteImpl();
+        assertTrue(recon.register(m));
+        assertFalse(recon.register(m));
+        assertNotNull(recon.entity(m.uuid()));
+    }
+
+    @Test public void testDeregister() {
+        Reconstruction recon = new ReconstructionImpl();
+        Metabolite m = new MetaboliteImpl();
+        assertTrue(recon.register(m));
+        assertNotNull(recon.entity(m.uuid()));
+        assertFalse(recon.register(m));
+        assertTrue(recon.deregister(m));
+        assertFalse(recon.deregister(m));
+        assertNull(recon.entity(m.uuid()));
+    }
 
     @Test
     public void testRemove_Metabolite_Null() throws Exception {

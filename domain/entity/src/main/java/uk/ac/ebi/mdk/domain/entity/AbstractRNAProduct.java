@@ -28,6 +28,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -44,7 +45,8 @@ public abstract class AbstractRNAProduct extends AbstractGeneProduct implements 
     private List<RNASequence> sequences = new ArrayList();
 
 
-    public AbstractRNAProduct() {
+    public AbstractRNAProduct(UUID uuid) {
+        super(uuid);
     }
 
 

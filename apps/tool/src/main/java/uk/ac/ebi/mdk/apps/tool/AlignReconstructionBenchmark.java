@@ -35,8 +35,8 @@ public class AlignReconstructionBenchmark {
 
         System.out.println("Aligning query reconstruction " + query.getName() + " to " + reference.getName());
 
-        final List<Metabolite> referenceList = new ArrayList<Metabolite>(reference.getMetabolome());
-        final List<Metabolite> queryList = new ArrayList<Metabolite>(reference.getMetabolome());
+        final List<Metabolite> referenceList = new ArrayList<Metabolite>(reference.getMetabolome().toList());
+        final List<Metabolite> queryList = new ArrayList<Metabolite>(reference.getMetabolome().toList());
 
         // break point for starting visual vm
         Scanner scanner = new Scanner(System.in);

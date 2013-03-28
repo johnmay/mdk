@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.UUID;
 
 
 /**
@@ -43,16 +44,19 @@ public class ParticipantImplementation<M, S extends Number, C> extends BasicPart
     protected C compartment;
 
 
-    public ParticipantImplementation() {
+    public ParticipantImplementation(UUID uuid) {
+        super(uuid);
     }
 
 
     public ParticipantImplementation(M molecule) {
+        this(UUID.randomUUID());
         this.molecule = molecule;
     }
 
 
     public ParticipantImplementation(M molecule, S coefficient) {
+        this(UUID.randomUUID());
         this.molecule = molecule;
         this.coefficient = coefficient;
     }
@@ -183,6 +187,6 @@ public class ParticipantImplementation<M, S extends Number, C> extends BasicPart
 
     @Override
     public CompartmentalisedParticipant newInstance() {
-        return new ParticipantImplementation();
+        return new ParticipantImplementation(UUID.randomUUID());
     }
 }

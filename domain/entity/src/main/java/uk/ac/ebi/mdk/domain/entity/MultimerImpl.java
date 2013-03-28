@@ -30,6 +30,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -48,7 +49,8 @@ public class MultimerImpl extends AbstractGeneProduct implements Multimer {
     private List<GeneProduct> subunits = new ArrayList();
 
 
-    public MultimerImpl() {
+    public MultimerImpl(UUID uuid) {
+        super(uuid);
     }
 
 
@@ -98,28 +100,6 @@ public class MultimerImpl extends AbstractGeneProduct implements Multimer {
     }
 
 
-    /**
-     * Returns a collection (list) of all genes of the subunits
-     * @return
-     */
-    public Collection<Gene> getGenes() {
-        List<Gene> genes = new ArrayList();
-        for (GeneProduct product : subunits) {
-            genes.addAll(product.getGenes());
-        }
-        return genes;
-    }
-
-
-    /**
-     * Throws an UnsupportedOperationException as the call to add a gene to a
-     * multimeric product is ambiguous
-     */
-    public boolean addGene(Gene gene) {
-        throw new UnsupportedOperationException("Unable to add a gene to a multimer");
-    }
-
-
     public List<? extends Sequence> getSequences() {
         List<Sequence> sequences = new ArrayList();
         for (GeneProduct product : subunits) {
@@ -155,6 +135,6 @@ public class MultimerImpl extends AbstractGeneProduct implements Multimer {
 
 
     public GeneProduct newInstance() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new MultimerImpl(UUID.randomUUID());
     }
 }

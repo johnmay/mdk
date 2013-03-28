@@ -17,8 +17,11 @@
 package uk.ac.ebi.mdk.io.text.kegg;
 
 
+import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,16 +33,16 @@ import java.util.Map;
  * @brief   ...class description...
  *
  */
-public class KEGGReactionEntry {
+public final class KEGGReactionEntry extends AttributedEntry<KEGGReactionField, StringBuilder> {
 
         private String reactionID;
         private String name;
-        private ArrayList<String> compNames;
-        private HashMap<String, Integer> compId2coeff;
-        private HashMap<String, String> rpair;
+        private List<String> compNames;
+        private Map<String, Integer> compId2coeff;
+        private Map<String, String> rpair;
         private String comment;
-        private ArrayList<String> pathways;
-        private ArrayList<String> ecs;
+        private List<String> pathways;
+        private List<String> ecs;
 
         public KEGGReactionEntry() {
             compNames = new ArrayList<String>();
@@ -73,15 +76,15 @@ public class KEGGReactionEntry {
             this.compId2coeff.put(comp, coeff);
         }
 
-        public HashMap<String, Integer> getCompId2coeff() {
+        public Map<String, Integer> getCompId2coeff() {
             return compId2coeff;
         }
 
-        public ArrayList<String> getPathways() {
+        public List<String> getPathways() {
             return pathways;
         }
 
-        public ArrayList<String> getEcNumbers() {
+        public List<String> getEcNumbers() {
             return ecs;
         }
 

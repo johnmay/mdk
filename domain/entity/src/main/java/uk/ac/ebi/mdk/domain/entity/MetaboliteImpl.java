@@ -29,6 +29,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 
 import java.util.Collection;
+import java.util.UUID;
 
 
 /**
@@ -52,6 +53,11 @@ public class MetaboliteImpl
 
 
     public MetaboliteImpl() {
+        this(UUID.randomUUID());
+    }
+
+    public MetaboliteImpl(UUID uuid){
+        super(uuid);
     }
 
 

@@ -26,6 +26,7 @@ import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 
@@ -47,6 +48,7 @@ import java.util.Set;
  * @version $Rev$ : Last Changed $Date$
  * @name ProductCollection - 2011.10.07 <br> Class description
  */
+@Deprecated
 public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct>, Externalizable, Proteome {
 
     private static final Logger LOGGER = Logger.getLogger(ProductCollection.class);
@@ -110,6 +112,16 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         return addAnnotation(id.getAccession(), annotation);
     }
 
+
+    @Override public Collection<GeneProduct> enzymesOf(Reaction reaction) {
+        return null;
+    }
+
+
+    @Override
+    public Collection<MetabolicReaction> reactionsOf(GeneProduct product) {
+        return null;
+    }
 
     public boolean addAnnotation(String accession, Annotation annotation) {
         throw new UnsupportedOperationException();
@@ -260,14 +272,6 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
     public void clear() {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override public void associate(GeneProduct product, Reaction reaction) {
-        throw new UnsupportedOperationException("not supported yet");
-    }
-
-    @Override public void disassociate(GeneProduct product, Reaction reaction) {
-        throw new UnsupportedOperationException("not supported yet");
     }
 
     /**

@@ -30,6 +30,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -40,6 +41,7 @@ import java.util.NoSuchElementException;
  * @name ReactionSet - 2011.10.04 <br> Provides access to a set of reactions and
  * alogrithms that work on them
  */
+@Deprecated
 public final class ReactionList extends ArrayList<MetabolicReaction> implements Collection<MetabolicReaction>, Reactome {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionList.class);
@@ -52,6 +54,12 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     public ReactionList() {
     }
 
+
+
+
+    @Override public List<MetabolicReaction> toList() {
+        return null;
+    }
 
     public ReactionList(Collection<MetabolicReactionImpl> reactions) {
         super(reactions);
@@ -110,7 +118,6 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     /**
      * @inheritDoc
      */
-    @Override
     public boolean removeKey(Metabolite m, Reaction reaction) {
         return participantMap.remove(m.getIdentifier(), reaction);
     }
@@ -118,7 +125,6 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     /**
      * @inheritDoc
      */
-    @Override
     public boolean update(Collection<MetabolicReaction> reactions) {
 
         boolean changed = false;
@@ -133,10 +139,14 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
 
     }
 
+    @Override
+    public Collection<MetabolicReaction> participatesIn(Metabolite m) {
+        return null;
+    }
+
     /**
      * @inheritDoc
      */
-    @Override
     public boolean update(MetabolicReaction reaction) {
 
         Identifier identifier = reaction.getIdentifier();
@@ -186,7 +196,6 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
         return participantMap.get(m.getIdentifier());
     }
 
-    @Override
     public MetabolicReaction getReaction(Identifier identifier) {
         Collection<MetabolicReaction> reactions = getReactions(identifier);
         if (reactions.size() == 1) {
@@ -199,7 +208,6 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
 
     }
 
-    @Override
     public Collection<MetabolicReaction> getReactions(Identifier identifier) {
         return reactionMap.get(identifier);
     }

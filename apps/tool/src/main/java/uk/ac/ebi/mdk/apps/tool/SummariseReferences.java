@@ -160,7 +160,7 @@ public class SummariseReferences extends CommandLineMain {
         for (Map.Entry<Identifier, Identifier> e : nonChebi.entries()) {
             chemicalTSV.writeNext(new String[]{
                     e.getKey().getAccession(),
-                    reconstruction.getMetabolome().get(e.getKey()).getName(),
+                    reconstruction.getMetabolome().ofIdentifier(e.getKey()).getName(),
                     e.getValue().getAccession(),
                     e.getValue().getResource().getName(),
                     ((MIRIAMEntry) e.getValue().getResource()).getId()

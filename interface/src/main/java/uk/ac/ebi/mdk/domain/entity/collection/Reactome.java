@@ -19,63 +19,74 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
-import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
- * @version $Rev$
+ * Describes a container for metabolic reactions.
+ *
+ * @author john may
  */
-public interface Reactome extends Collection<MetabolicReaction> {
-
+public interface Reactome extends Iterable<MetabolicReaction> {
 
     /**
-     * Access reactions that contain the given metabolite
+     * Add a reaction to the reactome.
      *
-     * @param m
-     * @return
+     * @param r a reaction
+     * @return if the reaction as added
      */
-    public Collection<MetabolicReaction> getReactions(Metabolite m);
+    public boolean add(MetabolicReaction r);
 
     /**
-     * Remove the reaction 'r' from the reactome.
+     * Remove the reaction <i>r</i> from the reactome.
      *
      * @param r a reaction to remove
+     * @return if the reaction was removed, false - reaction was not in
+     *         reactome
      */
     public boolean remove(MetabolicReaction r);
 
     /**
-     * Used to remove a key from the reaction lookup
+     * Access the reactions which the metabolite <i>m</i> participates in either
+     * as a reactant or a product. If the metabolite participates in no
+     * reactions an empty collection is returned.
      *
-     * @param m the metabolite which is being removed
-     * @return whether any reaction references were removed
+     * @param m a metabolite
+     * @return reactions that <i>m</i> participates in
      */
-    public boolean removeKey(Metabolite m, Reaction reaction);
+    public Collection<MetabolicReaction> participatesIn(Metabolite m);
+
 
     /**
-     * Indicates the following reactions should be updated in the participant
-     * lookup table (i.e. a participant was added/removed)
+     * Get the reaction for the given metabolite.
      *
-     * @param reactions reactions to update
-     * @return whether the reactions were updated
+     * @param m the metabolites
+     * @return the reactions m participates in
+     * @deprecated use the more descriptive {@link #participatesIn(uk.ac.ebi.mdk.domain.entity.Metabolite)}
      */
-    public boolean update(Collection<MetabolicReaction> reactions);
+    @Deprecated
+    public Collection<MetabolicReaction> getReactions(Metabolite m);
 
     /**
-     * Indicates the reaction should be updated in the participant lookup table
-     * (i.e. a participant was added/removed)
+     * Convert the reactome to an unmodifiable indexed {@link java.util.List}.
      *
-     * @param reaction the reaction to update
-     * @return whether the reactions were updated
+     * @return list of reactions in the reactome
      */
-    public boolean update(MetabolicReaction reaction);
+    public List<MetabolicReaction> toList();
 
-    public MetabolicReaction getReaction(Identifier identifier);
+    /**
+     * Number of reactions in the reactome.
+     *
+     * @return the number of reactions.
+     */
+    public int size();
 
-    public Collection<MetabolicReaction> getReactions(Identifier identifier);
-
-    // force rebuild of participant mapping
-    public void rebuildMaps();
+    /**
+     * Determine if the reactome is empty.
+     *
+     * @return {@literal true} if there are no reaction.
+     */
+    public boolean isEmpty();
 }

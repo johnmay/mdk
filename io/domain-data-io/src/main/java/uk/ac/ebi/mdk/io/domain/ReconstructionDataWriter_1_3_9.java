@@ -19,19 +19,25 @@ package uk.ac.ebi.mdk.io.domain;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.mdk.domain.entity.collection.Genome;
+import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
+import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.io.AbstractDataOutput;
 import uk.ac.ebi.mdk.io.EntityOutput;
 import uk.ac.ebi.mdk.io.EntityWriter;
 import uk.ac.ebi.mdk.io.IdentifierOutput;
+import uk.ac.ebi.mdk.io.SequenceSerializer;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ReconstructionDataWriter_0_9 - 12.03.2012 <br/>
@@ -42,18 +48,18 @@ import java.util.Collection;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-@CompatibleSince("1.3.3")
-public class ReconstructionDataWriter_1_3_3
+@CompatibleSince("1.3.9")
+public class ReconstructionDataWriter_1_3_9
         implements EntityWriter<Reconstruction> {
 
-    private static final Logger LOGGER = Logger.getLogger(ReconstructionDataWriter_1_3_3.class);
+    private static final Logger LOGGER = Logger.getLogger(ReconstructionDataWriter_1_3_9.class);
 
     private DataOutput out;
     private EntityOutput entityOut;
     private IdentifierOutput identifierOutput;
     private AbstractDataOutput output;
 
-    public ReconstructionDataWriter_1_3_3(DataOutput out,
+    public ReconstructionDataWriter_1_3_9(DataOutput out,
                                           IdentifierOutput identifierOutput,
                                           EntityOutput entityOut){
         this.out = out;
@@ -73,30 +79,60 @@ public class ReconstructionDataWriter_1_3_3
         out.writeUTF(reconstruction.getContainer().getAbsolutePath());
 
         // GENOME
-        Genome genome = reconstruction.getGenome();
-        entityOut.writeData(genome);
+        writeGenome(reconstruction);
 
         // METABOLOME
-        Collection<Metabolite> metabolites = reconstruction.getMetabolome();
-        out.writeInt(metabolites.size());
-        for(Metabolite m : metabolites){
+        Metabolome metabolome = reconstruction.getMetabolome();
+        out.writeInt(metabolome.size());
+        for(Metabolite m : metabolome){
             entityOut.writeData(m);
         }
 
         // PROTEOME
-        Collection<GeneProduct> products = reconstruction.getProducts();
-        out.writeInt(products.size());
-        for(GeneProduct p : products){
+        out.writeInt(reconstruction.proteome().size());
+        for(GeneProduct p : reconstruction.proteome()){
             entityOut.write(p);
         }
 
         // REACTOME
-        Collection<MetabolicReaction> reactions = reconstruction.getReactome();
-        out.writeInt(reactions.size());
-        for(MetabolicReaction r : reactions){
+        out.writeInt(reconstruction.reactome().size());
+        for(MetabolicReaction r : reconstruction.reactome()){
             entityOut.writeData(r);
         }
 
+        List<Map.Entry<GeneProduct,Reaction>> productAssociations = reconstruction.productAssociations();
+        out.writeInt(productAssociations.size());
+        for(Map.Entry<GeneProduct,Reaction> e: productAssociations) {
+            entityOut.writeData(e.getKey());
+            entityOut.writeData(e.getValue());
+        }
+
+        List<Map.Entry<Gene,GeneProduct>> geneAssociations = reconstruction.geneAssociations();
+        out.writeInt(geneAssociations.size());
+        for(Map.Entry<Gene,GeneProduct> e: geneAssociations) {
+            entityOut.writeData(e.getKey());
+            entityOut.writeData(e.getValue());
+        }
+
+    }
+
+    private void writeGenome(Reconstruction reconstruction) throws IOException {
+        Collection<Chromosome> chromosomes = reconstruction.getGenome().chromosomes();
+        out.writeInt(chromosomes.size());
+
+        for(Chromosome chromosome : chromosomes){
+
+            SequenceSerializer.writeDNASequence(chromosome.sequence(), out);
+
+            List<Gene> genes = chromosome.genes();
+
+            out.writeInt(genes.size());
+            for(Gene gene : genes){
+                entityOut.writeData(gene);
+            }
+
+            out.writeInt(chromosome.number());
+        }
     }
 
 }

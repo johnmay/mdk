@@ -1,11 +1,13 @@
 package uk.ac.ebi.mdk.io.xml.uniprot;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
+
 import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.junit.Assert;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtCrossreferenceMarshal;
+import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtHostOrganismMarshal;
 import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtIdentifierMarhsal;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
@@ -17,13 +19,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class UniProtXMLReaderTest extends TestCase {
+public class UniProtXMLReaderTest  {
 
     private static final Logger LOGGER = Logger.getLogger(UniProtXMLReaderTest.class);
 
@@ -54,6 +60,37 @@ public class UniProtXMLReaderTest extends TestCase {
         Assert.assertNotNull(productList.get(21).getAnnotations(CrossReference.class).iterator().next().getIdentifier());
         Assert.assertEquals(ECNumber.class, productList.get(21).getAnnotations(CrossReference.class).iterator().next().getIdentifier().getClass());
         Assert.assertEquals(new ECNumber("3.2.1.153"), productList.get(21).getAnnotations(CrossReference.class).iterator().next().getIdentifier());
+        reader.close();
+
+    }
+
+    @Test
+    public void testHostOrganismMarshal() throws IOException, XMLStreamException {
+
+        InputStream in = getClass().getResourceAsStream("uniprot_sprot.xml");
+
+        UniProtXMLReader reader = new UniProtXMLReader(in, DefaultEntityFactory.getInstance());
+
+        reader.addMarshal(new UniProtIdentifierMarhsal());
+        reader.addMarshal(new UniProtHostOrganismMarshal(DefaultIdentifierFactory.getInstance(), true));
+
+        List<ProteinProduct> productList = new ArrayList<ProteinProduct>();
+
+        while(reader.hasNext()){
+            productList.add(reader.next());
+        }
+
+        Assert.assertEquals(24, productList.size());
+
+        int taxonmyXrefs = 0;
+
+        for(CrossReference xref : productList.get(1).getAnnotations(CrossReference.class)){
+            if(xref.getIdentifier() instanceof Taxonomy){
+                taxonmyXrefs++;
+            }
+        }
+        assertThat(taxonmyXrefs, is(0));
+
         reader.close();
 
     }

@@ -46,12 +46,6 @@ public class RibosomalRNADataWriter
             SequenceSerializer.writeRNASequence(sequence, out);
         }
 
-        // write associated genes
-        Collection<Gene> genes = rrna.getGenes();
-        out.writeByte(genes.size());
-        for(Gene gene : genes){
-            eout.writeData(gene);
-        }
 
     }
 

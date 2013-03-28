@@ -28,6 +28,7 @@ import java.io.ObjectOutput;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author johnmay
@@ -38,43 +39,14 @@ import java.util.Set;
 public abstract class AbstractGeneProduct
         extends AbstractAnnotatedEntity implements GeneProduct {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractGeneProduct.class);
-    private Set<Gene> genes = new HashSet<Gene>(1); // 1 to 1 but can be more
-
-    public AbstractGeneProduct() {
+    public AbstractGeneProduct(UUID uuid) {
+        super(uuid);
     }
 
     public AbstractGeneProduct(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
 
-    public boolean addGene(Gene gene) {
-        gene.addProduct(this);
-        this.genes.add(gene);
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void clearGenes() {
-        this.genes.clear();
-    }
-
-    public Collection<Gene> getGenes() {
-        return this.genes;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public boolean remove(Gene gene) {
-        this.genes.remove(gene);
-        gene.removeProduct(this);
-        return true;
-    }
 
     @Override
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
@@ -87,28 +59,10 @@ public abstract class AbstractGeneProduct
     }
 
     public void readExternal(ObjectInput in, Genome genome) throws IOException, ClassNotFoundException {
-        super.readExternal(in);
 
-        int n = in.readInt();
-        for (int i = 0; i < n; i++) {
-            int c = in.readInt();
-            int g = in.readInt();
-            this.genes.add(genome.getGene(c, g));
-        }
     }
 
     public void writeExternal(ObjectOutput out, Genome genome) throws IOException {
-
-        super.writeExternal(out);
-
-        out.writeInt(genes.size());
-
-        for (Gene gene : genes) {
-            int[] index = genome.getIndex(gene);
-            out.writeInt(index[0]);
-            out.writeInt(index[1]);
-        }
-
 
     }
 }

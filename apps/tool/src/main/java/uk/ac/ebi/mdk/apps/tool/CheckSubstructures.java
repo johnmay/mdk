@@ -66,7 +66,7 @@ public class CheckSubstructures extends CommandLineMain {
             }
         }
 
-        final EntityAligner<Metabolite> aligner = new CachedEntityAligner<Metabolite>(reference.getMetabolome());
+        final EntityAligner<Metabolite> aligner = new CachedEntityAligner<Metabolite>(reference.getMetabolome().toList());
 
         aligner.push(new DirectMatcher<Metabolite>());
         aligner.push(new SubstructureMatcher(new Fingerprinter(), Boolean.TRUE));

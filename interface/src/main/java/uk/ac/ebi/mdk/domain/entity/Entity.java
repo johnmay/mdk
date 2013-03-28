@@ -19,6 +19,8 @@ package uk.ac.ebi.mdk.domain.entity;
 
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
+import java.util.UUID;
+
 
 /**
  * @name    ReconstructionEntity - 2011.10.10 <br>
@@ -28,6 +30,14 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
  * @author  $Author$ (this version)
  */
 public interface Entity {
+
+    /**
+     * Universal Unique Identifier for this entity. This UUID is persisted for the
+     * life of the object and through serialization.
+     *
+     * @return unique identifier
+     */
+    public UUID uuid();
 
     public String getName();
 

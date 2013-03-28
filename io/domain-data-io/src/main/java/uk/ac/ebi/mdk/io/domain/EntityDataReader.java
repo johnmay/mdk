@@ -2,6 +2,7 @@ package uk.ac.ebi.mdk.io.domain;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.mdk.io.IdentifierInput;
 import uk.ac.ebi.mdk.domain.entity.Entity;
@@ -42,7 +43,7 @@ public class EntityDataReader
         this.entity = entity;
     }
     
-    public Entity readEntity() throws IOException, ClassNotFoundException {
+    public Entity readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         entity.setName(in.readUTF());
         entity.setAbbreviation(in.readUTF());

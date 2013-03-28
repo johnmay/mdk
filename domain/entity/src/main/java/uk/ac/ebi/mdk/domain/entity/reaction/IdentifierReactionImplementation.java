@@ -20,6 +20,8 @@ package uk.ac.ebi.mdk.domain.entity.reaction;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
+import java.util.UUID;
+
 /**
  * IdentifierReactionImplementation - 05.03.2012 <br/>
  * <p/>
@@ -35,8 +37,12 @@ public class IdentifierReactionImplementation<I extends Identifier>
 
     private static final Logger LOGGER = Logger.getLogger(IdentifierReactionImplementation.class);
 
+    public IdentifierReactionImplementation(UUID uuid) {
+        super(uuid);
+    }
+
     @Override
     public IdentifierReaction newInstance() {
-        return new IdentifierReactionImplementation();    //To change body of overridden methods use File | Settings | File Templates.
+        return new IdentifierReactionImplementation(UUID.randomUUID());    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

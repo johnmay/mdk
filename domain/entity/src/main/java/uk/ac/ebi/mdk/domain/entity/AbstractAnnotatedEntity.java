@@ -17,7 +17,6 @@
 
 package uk.ac.ebi.mdk.domain.entity;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.log4j.Logger;
@@ -39,6 +38,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 
 /**
@@ -52,22 +52,33 @@ public abstract class AbstractAnnotatedEntity
         implements Externalizable,
                    AnnotatedEntity {
 
-    private transient static final Logger logger = Logger.getLogger(AbstractAnnotatedEntity.class);
+    private transient static final Logger logger = Logger
+            .getLogger(AbstractAnnotatedEntity.class);
 
-    private ListMultimap<Class, Annotation> annotations = ArrayListMultimap.create();
+    private ListMultimap<Class, Annotation> annotations = ArrayListMultimap
+            .create();
 
     private ObservationCollection observations = new ObservationCollection();
 
     private Enum<? extends Rating> rating = StarRating.ONE_STAR;
 
-    private static AnnotationFactory ANNOTATION_FACTORY = DefaultAnnotationFactory.getInstance();
+    private static AnnotationFactory ANNOTATION_FACTORY = DefaultAnnotationFactory
+            .getInstance();
 
 
-    public AbstractAnnotatedEntity() {
+    public AbstractAnnotatedEntity(UUID uuid) {
+        super(uuid);
         AtomContainerSet set = new AtomContainerSet();
         set.addListener(set);
     }
 
+
+    public AbstractAnnotatedEntity(UUID uuid,
+                                   Identifier identifier,
+                                   String abbreviation,
+                                   String name) {
+        super(uuid, identifier, abbreviation, name);
+    }
 
     public AbstractAnnotatedEntity(Identifier identifier,
                                    String abbreviation,
@@ -120,7 +131,8 @@ public abstract class AbstractAnnotatedEntity
 
     @Override
     public boolean hasAnnotation(Annotation annotation) {
-        return annotations.containsKey(annotation.getClass()) && annotations.get(annotation.getClass()).contains(annotation);
+        return annotations.containsKey(annotation.getClass()) && annotations
+                .get(annotation.getClass()).contains(annotation);
     }
 
 
@@ -134,7 +146,6 @@ public abstract class AbstractAnnotatedEntity
      * Accessor to all annotations of a given type
      *
      * @param c
-     *
      * @return
      */
     @Override
@@ -150,7 +161,6 @@ public abstract class AbstractAnnotatedEntity
      * CrossReference
      *
      * @param base
-     *
      * @return
      */
     public <T extends Annotation> Set<T> getAnnotationsExtending(final T base) {
@@ -162,7 +172,6 @@ public abstract class AbstractAnnotatedEntity
      * {@see getAnnotationsExtending(Annotation)}
      *
      * @param c
-     *
      * @return
      */
     public <T extends Annotation> Set<T> getAnnotationsExtending(final Class<T> c) {
@@ -182,7 +191,6 @@ public abstract class AbstractAnnotatedEntity
      * Remove an annotation from the entity
      *
      * @param annotation
-     *
      * @return
      */
     public boolean removeAnnotation(final Annotation annotation) {
@@ -219,11 +227,11 @@ public abstract class AbstractAnnotatedEntity
      * Adds an observation to the descriptor
      *
      * @param observation The new observation to add
-     *
      * @return whether the underlying collection was modified
      */
     public boolean addObservation(Observation observation) {
-        observation.setEntity(this); // set association as we pass to observation collection
+        observation
+                .setEntity(this); // set association as we pass to observation collection
         return observations.add(observation);
     }
 
@@ -232,7 +240,6 @@ public abstract class AbstractAnnotatedEntity
      * Removes an observation to the descriptor
      *
      * @param observation The observation to remove
-     *
      * @return whether the underlying collection was modified
      */
     public boolean removeObservation(Observation observation) {
@@ -261,7 +268,8 @@ public abstract class AbstractAnnotatedEntity
 
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException,
+                                                    ClassNotFoundException {
         // old
     }
 
@@ -270,7 +278,6 @@ public abstract class AbstractAnnotatedEntity
     public void writeExternal(ObjectOutput out) throws IOException {
         // old
     }
-
 
 
 }

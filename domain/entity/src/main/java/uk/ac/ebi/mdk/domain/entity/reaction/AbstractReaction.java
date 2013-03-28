@@ -36,6 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 
 /**
@@ -96,7 +97,8 @@ public class AbstractReaction<P extends Participant>
      * comparator for class of molecule used in the generic reaction. Ideally
      * this should be a singleton class.
      */
-    public AbstractReaction() {
+    public AbstractReaction(UUID uuid) {
+        super(uuid);
         reactants = new LinkedList<P>();
         products = new LinkedList<P>();
     }
@@ -118,7 +120,7 @@ public class AbstractReaction<P extends Participant>
      * @param filter The filter to use
      */
     public AbstractReaction(AbstractParticipantFilter filter) {
-        this();
+        this(UUID.randomUUID());
         this.filter = filter;
     }
 
@@ -406,7 +408,7 @@ public class AbstractReaction<P extends Participant>
 
 
     public Reaction newInstance() {
-        return new AbstractReaction();
+        return new AbstractReaction(UUID.randomUUID());
     }
 
     private Map<Integer, MutableInt> map = new HashMap<Integer, MutableInt>();

@@ -2,6 +2,7 @@ package uk.ac.ebi.mdk.io.domain;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.EnumReader;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
@@ -47,7 +48,7 @@ public class ReactionDataReader
 
     }
 
-    public MetabolicReaction readEntity() throws IOException, ClassNotFoundException {
+    public MetabolicReaction readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         MetabolicReaction rxn = factory.newInstance(MetabolicReaction.class);
 
@@ -57,7 +58,7 @@ public class ReactionDataReader
             MetabolicParticipant p = factory.newInstance(MetabolicParticipant.class);
             p.setCoefficient(in.readDouble());
             p.setCompartment((Compartment)enumReader.readEnum());
-            p.setMolecule(entityIn.read(Metabolite.class));
+            p.setMolecule(entityIn.read(Metabolite.class, reconstruction));
             rxn.addReactant(p);
         }
 
@@ -67,7 +68,7 @@ public class ReactionDataReader
             MetabolicParticipant p = factory.newInstance(MetabolicParticipant.class);
             p.setCoefficient(in.readDouble());
             p.setCompartment((Compartment)enumReader.readEnum());
-            p.setMolecule(entityIn.read(Metabolite.class));
+            p.setMolecule(entityIn.read(Metabolite.class, reconstruction));
             rxn.addProduct(p);
         }
 
@@ -76,7 +77,8 @@ public class ReactionDataReader
         // read modifiers
         int nModifiers = in.readByte();
         for(int i = 0; i < nModifiers; i++){
-            rxn.addModifier( (GeneProduct) entityIn.read());
+            GeneProduct product = (GeneProduct) entityIn.read(reconstruction);
+            reconstruction.associate(product, rxn);
         }
 
 

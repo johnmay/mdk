@@ -2,6 +2,7 @@ package uk.ac.ebi.mdk.io.domain;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.mdk.io.SequenceSerializer;
@@ -37,7 +38,7 @@ public class ProteinProductDataReader
         this.ein = ein;
     }
 
-    public ProteinProduct readEntity() throws IOException, ClassNotFoundException {
+    public ProteinProduct readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         ProteinProduct p = factory.newInstance(ProteinProduct.class);
 
@@ -47,9 +48,9 @@ public class ProteinProductDataReader
             p.addSequence(SequenceSerializer.readProteinSequence(in));
         }
 
-        int ngenes = in.readByte();
-        for(int i = 0; i< ngenes; i++){
-            p.addGene(ein.read(Gene.class));
+        int nGenes = in.readByte();
+        for(int i = 0; i < nGenes; i++){
+            reconstruction.associate(ein.read(Gene.class, reconstruction), p);
         }
 
         return p;

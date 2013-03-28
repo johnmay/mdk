@@ -29,6 +29,8 @@ import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -42,25 +44,26 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public static final String RECONSTRUCTION_FILE_EXTENSION = ".mr";
 
-    /**
-     * Access the universal unique identifier for the reconstruction.
-     *
-     * @return the reconstructions UUID
-     */
-    public UUID uuid();
-
     public File defaultLocation();
 
     public Genome getGenome();
 
     public void setGenome(Genome genome);
 
-    public Collection<GeneProduct> getProducts();
-
     public Reactome getReactome();
 
     public Metabolome getMetabolome();
 
+    /**
+     * @deprecated use {@link #proteome()}
+     */
+    @Deprecated
+    public Collection<GeneProduct> getProducts();
+
+    /**
+     * @deprecated use {@link #proteome()}
+     */
+    @Deprecated
     public Proteome getProteome();
 
     public Identifier getTaxonomy();
@@ -106,7 +109,6 @@ public interface Reconstruction extends AnnotatedEntity {
      */
     public void remove(GeneProduct product);
 
-
     public boolean addSubset(EntityCollection subset);
 
     public boolean hasMatrix();
@@ -116,4 +118,106 @@ public interface Reconstruction extends AnnotatedEntity {
     public StoichiometricMatrix getMatrix();
 
     public Iterable<? extends EntityCollection> getSubsets();
+
+    // new API
+
+    /**
+     * Proteome of the reconstruction.
+     *
+     * @return the proteome
+     * @see Proteome
+     */
+    public Proteome proteome();
+
+    /**
+     * Reactome of the reconstruction
+     *
+     * @return the reactome
+     * @see Reactome
+     */
+    public Reactome reactome();
+
+    /**
+     * Associate a gene with a product of the gene.
+     *
+     * @param gene    a gene
+     * @param product a gene product
+     */
+    public void associate(Gene gene, GeneProduct product);
+
+    /**
+     * Dissociate a gene with a product of the gene.
+     *
+     * @param gene    a gene
+     * @param product a gene product
+     */
+    public void dissociate(Gene gene, GeneProduct product);
+
+    public void associate(GeneProduct product, Reaction reaction);
+
+    public void dissociate(GeneProduct product, Reaction reaction);
+
+    public void associate(Metabolite metabolite, Reaction reaction);
+
+    public void dissociate(Metabolite metabolite, Reaction reaction);
+
+    public List<Map.Entry<GeneProduct, Reaction>> productAssociations();
+
+    public List<Map.Entry<Gene, GeneProduct>> geneAssociations();
+
+    /**
+     * Access the genes which encode the project. New associations can be added
+     * via {@link #associate(Gene, GeneProduct)}.
+     *
+     * @param product a gene product instance
+     * @return the genes encoding the gene product, or an empty collection if
+     *         none
+     */
+    public Collection<Gene> genesOf(GeneProduct product);
+
+    /**
+     * Access the products which are encoded by the provided gene.
+     *
+     * @param gene a gene instance
+     * @return the products encoded by this gene, or an empty collection if
+     *         none
+     */
+    public Collection<GeneProduct> productsOf(Gene gene);
+
+    public Collection<Reaction> reactionsOf(GeneProduct product);
+
+    public Collection<GeneProduct> enzymesOf(Reaction reaction);
+
+    public Collection<MetabolicReaction> participatesIn(Metabolite metabolite);
+
+    /**
+     * Access an entity by UUID.
+     *
+     * @param uuid the uuid of the entity
+     * @return the entity (or null if not found)
+     */
+    public <E extends Entity> E entity(UUID uuid);
+
+    /**
+     * Register an entity with the reconstruction
+     *
+     * @param entity an entity
+     * @return whether the entity was registered (false if null or already
+     *         present)
+     */
+    public boolean register(Entity entity);
+
+    /**
+     * Deregister an entity with the reconstruction
+     *
+     * @param entity an entity
+     * @return whether the entity was registered (false if null or not present)
+     */
+    public boolean deregister(Entity entity);
+
+    public interface Association {
+        public UUID from();
+
+        public Collection<UUID> to();
+    }
 }

@@ -17,82 +17,72 @@
  */
 package uk.ac.ebi.mdk.domain.entity.collection;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import org.biojava3.core.sequence.ChromosomeSequence;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+
 import java.util.Collection;
 import java.util.List;
 
-import org.biojava3.core.sequence.ChromosomeSequence;
-import uk.ac.ebi.mdk.domain.entity.Entity;
-import uk.ac.ebi.mdk.domain.entity.Gene;
-
-
 /**
- * Chromosome – 2011.09.12 <br>
- * Interface description of a chromosome
+ * Describes a chromosome which holds a collection of genes and the sequence of
+ * the whole chromosome.
  *
  * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$ : Last Changed $Date$
  */
-public interface Chromosome extends Entity {
+public interface Chromosome {
 
     /**
-     * A gene to the chromosome. This will set the circular reference for the gene
-     * back to this chromosome as well as the sequence (based on start/end)
+     * Add a gene to the chromosome. This will set the circular reference for
+     * the gene back to this chromosome as well as the sequence (based on
+     * start/end)
      *
-     * @param gene
-     *
-     * @return whether the gene was added (false if the gene is already present)
+     * @param gene the gene to add
+     * @return whether the gene was added (false if the gene is already
+     *         present)
      */
     public boolean add(Gene gene);
-
 
     /**
      * Iteratively add genes to the chromosome
      *
-     * @param genes
-     *
-     * @return whether the gene was added (false if the gene is already present)
+     * @param genes genes ato add
+     * @return whether any genes were added
      */
     public boolean addAll(Collection<? extends Gene> genes);
 
-
+    /**
+     * Remove a gene from the chromosome
+     *
+     * @param gene the gene to remove
+     * @return whether the gene was removed
+     */
     public boolean remove(Gene gene);
 
-
     /**
-     * Removes all genes and their references back to this chromosome. Note
-     * the sequence of the gene is also unset
+     * Removes all genes and their references back to this chromosome. Note the
+     * sequence of the gene is also unset
      *
-     * @param genes
-     *
-     * @return
+     * @param genes the genes to remove
+     * @return whether any genes were removed
      */
     public boolean removeAll(Collection<? extends Gene> genes);
-
 
     /**
      * Returns all the genes on this chromosome
      *
-     * @return
+     * @return immutable list of genes
      */
-    public List<Gene> getGenes();
-
+    public List<Gene> genes();
 
     /**
-     * Access the number of the chromosome
+     * Number the chromosome is identified by.
      */
-    public int getChromosomeNumber();
+    public int number();
 
-    public void setSequence(ChromosomeSequence sequence);
-
-    public ChromosomeSequence getSequence();
-
-
-    public void readExternal(ObjectInput out) throws ClassNotFoundException, IOException;
-
-
-    public void writeExternal(ObjectOutput out) throws IOException;
+    /**
+     * Access the chromosome sequence
+     *
+     * @return the sequence
+     */
+    public ChromosomeSequence sequence();
 }
