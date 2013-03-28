@@ -17,6 +17,7 @@
  */
 package uk.ac.ebi.mdk.domain.entity.collection;
 
+import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 
 import java.util.Collection;
@@ -47,12 +48,22 @@ public interface Genome {
     /**
      * Access a chromosome within the genome by it's number. Attempting to
      * access a chromosome number which is not present will create a new
-     * chromosome.
+     * chromosome (with a null sequence).
      *
      * @param number - chromosome number
      * @return an instance of a chromosome associated with that number
      */
     public Chromosome chromosome(int number);
+
+    /**
+     * Create a new chromosome with the specified number and sequence.
+     *
+     * @param number   chromosome number
+     * @param sequence the sequence
+     * @return a new chromosome registered with the genome
+     * @throws IllegalArgumentException the number is already specified
+     */
+    public Chromosome createChromosome(int number, ChromosomeSequence sequence);
 
     /**
      * Removes a single gene from it's chromosome. The chromosome reference on

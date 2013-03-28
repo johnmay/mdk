@@ -121,7 +121,7 @@ public class ReconstructionDataWriter_1_3_9
 
         for(Chromosome chromosome : chromosomes){
 
-            SequenceSerializer.writeDNASequence(chromosome.getSequence(), out);
+            SequenceSerializer.writeDNASequence(chromosome.sequence(), out);
 
             List<Gene> genes = chromosome.genes();
 
@@ -130,7 +130,7 @@ public class ReconstructionDataWriter_1_3_9
                 entityOut.writeData(gene);
             }
 
-            out.writeInt(chromosome.getChromosomeNumber());
+            out.writeInt(chromosome.number());
         }
     }
 

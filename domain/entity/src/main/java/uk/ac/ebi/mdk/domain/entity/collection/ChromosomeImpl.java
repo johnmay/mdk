@@ -17,59 +17,57 @@
 
 package uk.ac.ebi.mdk.domain.entity.collection;
 
-import org.apache.log4j.Logger;
 import org.biojava3.core.sequence.ChromosomeSequence;
-import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
 /**
- * ChromosomeImpl - 2011.10.17 <br>
- * A class description of a chromosome. This effectively wraps
- * BioJava3 ChromosomeSequence object to act as a buffer with our CheMet objects
+ * An implementation of chromosome that is linked to a reconstruction. Each gene
+ * is registered with the reconstruction when it is added to the chromosome.
  *
- * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$ : Last Changed $Date$
+ * @author john may
+ * @see Genome#chromosome(int)
  */
 public class ChromosomeImpl implements Chromosome {
 
-    private static final Logger LOGGER = Logger.getLogger(ChromosomeImpl.class);
+    private final ChromosomeSequence sequence;
 
-    private ChromosomeSequence sequence = new ChromosomeSequence("");
-
-    private List<Gene> genes = new ArrayList<Gene>();
+    private final List<Gene> genes = new ArrayList<Gene>(2000);
 
     private final Reconstruction reconstruction;
 
     private final int number;
 
-    public ChromosomeImpl(Reconstruction reconstruction, int number) {
+    /**
+     * A new chromosome for the specified reconstruction.
+     *
+     * @param reconstruction the reconstruction
+     * @param number         the chromosome number
+     * @param sequence       chromosome sequence
+     */
+    public ChromosomeImpl(Reconstruction reconstruction, int number, ChromosomeSequence sequence) {
         this.reconstruction = reconstruction;
         this.number = number;
+        this.sequence = sequence;
     }
 
     /**
      * @inheritDoc
      */
-    public boolean add(Gene gene) {
-        reconstruction.register(gene);
-        gene.setChromosome(this);
-        int length = sequence.getLength();
-        if(gene.getEnd() < length)
-        gene.setSequence(sequence.getSubSequence(gene.getStart(), gene.getEnd()));
-        return genes.add(gene);
+    @Override public boolean add(Gene gene) {
+        return reconstruction.register(gene) && genes.add(link(gene));
     }
-
 
     /**
      * @inheritDoc
      */
-    public boolean addAll(Collection<? extends Gene> genes) {
+    @Override public boolean addAll(Collection<? extends Gene> genes) {
         boolean changed = false;
         for (Gene gene : genes) {
             changed = add(gene) || changed;
@@ -77,38 +75,32 @@ public class ChromosomeImpl implements Chromosome {
         return changed;
     }
 
-
     /**
      * @inheritDoc
      */
-    public List<Gene> genes() {
-        return genes;
+    @Override public List<Gene> genes() {
+        return Collections.unmodifiableList(genes);
     }
 
-
     /**
      * @inheritDoc
      */
-    public int getChromosomeNumber() {
+    @Override public int number() {
         return number;
     }
 
-
     /**
      * @inheritDoc
      */
-    public boolean remove(Gene gene) {
+    @Override public boolean remove(Gene gene) {
         reconstruction.deregister(gene);
-        gene.setChromosome(null);
-        gene.setSequence(null);
-        return genes.remove(gene);
+        return genes.remove(unlink(gene));
     }
 
-
     /**
      * @inheritDoc
      */
-    public boolean removeAll(Collection<? extends Gene> genes) {
+    @Override public boolean removeAll(Collection<? extends Gene> genes) {
         boolean changed = false;
         for (Gene gene : genes) {
             changed = remove(gene) || changed;
@@ -116,12 +108,27 @@ public class ChromosomeImpl implements Chromosome {
         return changed;
     }
 
-    public void setSequence(ChromosomeSequence sequence) {
-        this.sequence = sequence;
+    /**
+     * @inheritDoc
+     */
+    @Override public ChromosomeSequence sequence() {
+        return sequence;
     }
 
-    @Override
-    public ChromosomeSequence getSequence() {
-        return sequence;
+    private Gene link(Gene gene) {
+        gene.setChromosome(this);
+        if(sequence == null)
+            return gene;
+        int length = sequence.getLength();
+        if (gene.getEnd() < length)
+            gene.setSequence(sequence.getSubSequence(gene.getStart(), gene
+                    .getEnd()));
+        return gene;
+    }
+
+    private Gene unlink(Gene gene) {
+        gene.setChromosome(null);
+        gene.setSequence(null);
+        return gene;
     }
 }

@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.domain.entity.collection;
 
+import org.biojava3.core.sequence.ChromosomeSequence;
 import uk.ac.ebi.mdk.domain.entity.Gene;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
@@ -75,10 +76,19 @@ public class GenomeImpl implements Genome {
         Chromosome chromosome = chromosomes.get(number);
 
         if (chromosome == null) {
-            chromosome = new ChromosomeImpl(reconstruction, number);
+            chromosome = new ChromosomeImpl(reconstruction, number, null);
             chromosomes.put(number, chromosome);
         }
 
+        return chromosome;
+    }
+
+    @Override
+    public Chromosome createChromosome(int number, ChromosomeSequence sequence) {
+        if (chromosomes.containsKey(number))
+            throw new IllegalArgumentException("chromosome " + number + " already exists");
+        Chromosome chromosome = new ChromosomeImpl(reconstruction, number, sequence);
+        chromosomes.put(number, chromosome);
         return chromosome;
     }
 
