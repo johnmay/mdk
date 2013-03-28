@@ -79,7 +79,7 @@ public class Align2Reference extends CommandLineMain {
 
         MolecularHashFactory.getInstance().setDepth(1);
 
-        final EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.getMetabolome(), false);
+        final EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.getMetabolome().toList(), false);
 
         final List<MetaboliteHashCodeMatcher> hashCodeMatchers = new ArrayList<MetaboliteHashCodeMatcher>();
         hashCodeMatchers.add(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,

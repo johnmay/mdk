@@ -60,7 +60,7 @@ public class FindMismatches extends CommandLineMain {
         Reconstruction query = getReconstruction(getFile("q"));
         Reconstruction reference = getReconstruction(getFile("r"));
 
-        EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.getMetabolome(),
+        EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.getMetabolome().toList(),
                                                                                 true,
                                                                                 true);
 
