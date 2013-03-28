@@ -17,7 +17,6 @@
 package uk.ac.ebi.mdk.service.query;
 
 import au.com.bytecode.opencsv.CSVReader;
-import java.io.BufferedReader;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -27,6 +26,7 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundEntry;
 import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundField;
 import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundParser;
@@ -36,6 +36,7 @@ import uk.ac.ebi.mdk.service.query.name.PreferredNameService;
 import uk.ac.ebi.mdk.service.query.name.SynonymService;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -44,7 +45,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 
 /**
  * A client for the KEGG REST API.
@@ -54,12 +54,13 @@ import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 public class KEGGRestClient
         extends AbstractRestClient<KEGGCompoundIdentifier>
         implements StructureService<KEGGCompoundIdentifier>,
-        MolecularFormulaService<KEGGCompoundIdentifier>,
-        PreferredNameService<KEGGCompoundIdentifier>,
-        NameService<KEGGCompoundIdentifier>,
-        SynonymService<KEGGCompoundIdentifier> {
+                   MolecularFormulaService<KEGGCompoundIdentifier>,
+                   PreferredNameService<KEGGCompoundIdentifier>,
+                   NameService<KEGGCompoundIdentifier>,
+                   SynonymService<KEGGCompoundIdentifier> {
 
-    private final IChemObjectBuilder BUILDER = SilentChemObjectBuilder.getInstance();
+    private final IChemObjectBuilder BUILDER = SilentChemObjectBuilder
+            .getInstance();
 
     public KEGGRestClient() {
         super(new KEGGCompoundIdentifier());
@@ -70,7 +71,8 @@ public class KEGGRestClient
 
         if (approximate) {
             // log warning about not being supported
-            Logger.getLogger(getClass()).warn("KEGG Rest Client does not support approximate matching");
+            Logger.getLogger(getClass())
+                  .warn("KEGG Rest Client does not support approximate matching");
         }
 
         String address = "http://rest.kegg.jp/find/compound/" + name;
@@ -92,15 +94,18 @@ public class KEGGRestClient
         try {
             in = getContent(address);
 
-            KEGGCompoundEntry entry = KEGGCompoundParser.load(in, KEGGCompoundField.NAME);
+            KEGGCompoundEntry entry = KEGGCompoundParser
+                    .load(in, KEGGCompoundField.NAME);
 
             for (String name : entry.get(KEGGCompoundField.NAME)) {
                 names.add(name.replaceAll(";", "").trim());
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(getClass()).error("unable to load entry: " + address
-                    + " reason: " + ex.getMessage());
+            Logger.getLogger(getClass())
+                  .error("unable to load entry: " + address
+                                 + " reason: " + ex
+                          .getMessage());
         } finally {
             try {
                 if (in != null) {
@@ -115,27 +120,37 @@ public class KEGGRestClient
     }
 
     /**
-     * Retrieves the MDL Mol file from the REST service given a KEGG Compound Identifier.
+     * Retrieve the MDL Mol file for a given KEGG Compound Identifier. If no
+     * compound could be found an empty string is returned.
      *
-     * @param identifier
-     * @return
-     * @throws IOException
+     * @param identifier an identifier
+     * @return MDL Mol file as a string
      */
-    public String getMDLMol(KEGGCompoundIdentifier identifier) throws IOException {
+    public String getMDLMol(KEGGCompoundIdentifier identifier) {
 
         String accession = identifier.getAccession();
         String address = "http://rest.kegg.jp/get/cpd:" + accession + "/mol";
 
+        BufferedReader reader = null;
         try {
             StringBuilder builder = new StringBuilder();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(getContent(address)));
+            reader = new BufferedReader(new InputStreamReader(getContent(address)));
             String line;
             while ((line = reader.readLine()) != null) {
-                builder.append(line).append("\\n");
+                builder.append(line).append("\n");
             }
             return builder.toString();
         } catch (IOException e) {
-            Logger.getLogger(getClass()).error("unable to load mol from: " + address + " - " + e.getMessage());
+            Logger.getLogger(getClass())
+                  .error("unable to load mol from: " + address + " - " + e
+                          .getMessage());
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close();
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
         }
         return "";
     }
@@ -149,13 +164,18 @@ public class KEGGRestClient
         MDLV2000Reader reader = null;
         try {
             reader = new MDLV2000Reader(getContent(address));
-            IAtomContainer molecule = reader.read(BUILDER.newInstance(IAtomContainer.class));
+            IAtomContainer molecule = reader
+                    .read(BUILDER.newInstance(IAtomContainer.class));
             reader.close();
             return molecule;
         } catch (IOException e) {
-            Logger.getLogger(getClass()).error("unable to load mol from: " + address + " - " + e.getMessage());
+            Logger.getLogger(getClass())
+                  .error("unable to load mol from: " + address + " - " + e
+                          .getMessage());
         } catch (CDKException e) {
-            Logger.getLogger(getClass()).error("unable to load mol from: " + address + " - " + e.getMessage());
+            Logger.getLogger(getClass())
+                  .error("unable to load mol from: " + address + " - " + e
+                          .getMessage());
         } finally {
             try {
                 if (reader != null) {
@@ -188,7 +208,8 @@ public class KEGGRestClient
 
         if (approximate) {
             // log warning about not being supported
-            Logger.getLogger(getClass()).warn("KEGG Rest Client does not support approximate matching");
+            Logger.getLogger(getClass())
+                  .warn("KEGG Rest Client does not support approximate matching");
         }
 
 
@@ -197,13 +218,16 @@ public class KEGGRestClient
     }
 
     /**
-     * Produces a list of KEGG Compound Identifiers that participate in the reactions with the given EC number.
+     * Produces a list of KEGG Compound Identifiers that participate in the
+     * reactions with the given EC number.
      *
      * @param ec the desired EC number to query.
-     * @return a list of KEGG Compound Identifiers that participate in those reactions.
+     * @return a list of KEGG Compound Identifiers that participate in those
+     *         reactions.
      */
     public Collection<KEGGCompoundIdentifier> getCompoundsForECNumber(ECNumber ec) {
-        String address = "http://rest.kegg.jp/link/compound/enzyme:" + ec.getAccession();
+        String address = "http://rest.kegg.jp/link/compound/enzyme:" + ec
+                .getAccession();
 
         return getIdentifiers(address);
     }
@@ -219,13 +243,16 @@ public class KEGGRestClient
         try {
             in = getContent(address);
 
-            KEGGCompoundEntry entry = KEGGCompoundParser.load(in, KEGGCompoundField.FORMULA);
+            KEGGCompoundEntry entry = KEGGCompoundParser
+                    .load(in, KEGGCompoundField.FORMULA);
 
             return entry.getFirst(KEGGCompoundField.FORMULA, "");
 
         } catch (IOException ex) {
-            Logger.getLogger(getClass()).error("unable to load entry: " + address
-                    + " reason: " + ex.getMessage());
+            Logger.getLogger(getClass())
+                  .error("unable to load entry: " + address
+                                 + " reason: " + ex
+                          .getMessage());
         } finally {
             try {
                 if (in != null) {
@@ -241,16 +268,17 @@ public class KEGGRestClient
 
     @Override
     public Collection<KEGGCompoundIdentifier> searchMolecularFormula(IMolecularFormula formula, boolean approximate) {
-        return searchMolecularFormula(MolecularFormulaManipulator.getString(formula), approximate);
+        return searchMolecularFormula(MolecularFormulaManipulator
+                                              .getString(formula), approximate);
     }
 
     @Override
     public IMolecularFormula getIMolecularFormula(KEGGCompoundIdentifier identifier) {
         String formula = getMolecularFormula(identifier);
         return formula.isEmpty()
-                ? BUILDER.newInstance(IMolecularFormula.class)
-                : MolecularFormulaManipulator.getMolecularFormula(formula,
-                BUILDER);
+               ? BUILDER.newInstance(IMolecularFormula.class)
+               : MolecularFormulaManipulator.getMolecularFormula(formula,
+                                                                 BUILDER);
     }
 
     @Override
@@ -290,18 +318,20 @@ public class KEGGRestClient
         try {
             in = getContent(address);
             CSVReader reader = new CSVReader(new InputStreamReader(getContent(address)),
-                    '\t', '\0');
+                                             '\t', '\0');
             String[] row;
 
             while ((row = reader.readNext()) != null) {
                 // watch out for invalid entries
                 if (row[0].length() > 4) {
-                    identifiers.add(new KEGGCompoundIdentifier(row[0].substring(4)));
+                    identifiers
+                            .add(new KEGGCompoundIdentifier(row[0].substring(4)));
                 }
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(getClass()).error("unable to load entry: " + address);
+            Logger.getLogger(getClass())
+                  .error("unable to load entry: " + address);
         } finally {
             try {
                 if (in != null) {
