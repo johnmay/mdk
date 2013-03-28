@@ -126,9 +126,7 @@ public class ReconstructionDataWriterTest {
         r1.addModifier(p1);
         r2.setDirection(Direction.BACKWARD);
 
-        Chromosome chromosome = reconstruction.getGenome().chromosome(1);
-
-        chromosome.setSequence(new ChromosomeSequence("AACGTGCTGATCGTACGTAGCTAGCTAGCATGCATGCATGCATGACTGCATAC".toLowerCase()));
+        Chromosome chromosome = reconstruction.getGenome().createChromosome(1, new ChromosomeSequence("AACGTGCTGATCGTACGTAGCTAGCTAGCATGCATGCATGCATGACTGCATAC".toLowerCase()));
 
         Gene g1 = factory.ofClass(Gene.class, new BasicGeneIdentifier(), "Gene 1", "g1");
         g1.setStart(1);
