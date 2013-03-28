@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 /**
  *
  * @author pmoreno
- * @deprecated needs clean up and testing
+ * @deprecated needs clean up using KEGGReactionField's and AttributedEntry similar to KEGGCompoundParser
  */
 @Deprecated
 public class KEGGReactionParser {
