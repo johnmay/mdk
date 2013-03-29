@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author John May
  */
-public class ReactomeImpl implements Reactome {
+public final class ReactomeImpl implements Reactome {
 
     private final Reconstruction reconstruction;
 

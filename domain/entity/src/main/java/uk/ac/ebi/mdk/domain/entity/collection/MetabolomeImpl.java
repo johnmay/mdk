@@ -39,7 +39,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author johnmay
  */
-public class MetabolomeImpl implements Metabolome {
+public final class MetabolomeImpl implements Metabolome {
 
     private final Map<Identifier, Metabolite> metabolites = new TreeMap<Identifier, Metabolite>();
 

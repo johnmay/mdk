@@ -36,7 +36,7 @@ import java.util.TreeMap;
  * @author john may
  * @see Genome
  */
-public class GenomeImpl implements Genome {
+public final class GenomeImpl implements Genome {
 
     private final Reconstruction reconstruction;
 

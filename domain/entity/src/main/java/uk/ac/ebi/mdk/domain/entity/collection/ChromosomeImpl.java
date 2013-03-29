@@ -34,7 +34,7 @@ import java.util.List;
  * @author john may
  * @see Genome#chromosome(int)
  */
-public class ChromosomeImpl implements Chromosome {
+public final class ChromosomeImpl implements Chromosome {
 
     private final ChromosomeSequence sequence;
 
