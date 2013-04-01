@@ -63,7 +63,7 @@ public class ReconstructionDataWriterTest {
             System.out.println(m);
         }
         for(MetabolicReaction r : recon.getReactome()){
-            System.out.println(r + "modifiers: " + r.getModifiers());
+            System.out.println(r + "modifiers: " + recon.enzymesOf(r));
         }
         for(Gene g : recon.getGenes()){
             System.out.println(g + ": " + g.getStart() + ":" + g.getEnd() + " sequence " + g.getSequence().getSequenceAsString());
@@ -123,7 +123,7 @@ public class ReconstructionDataWriterTest {
         reconstruction.addProduct(rna1);
         reconstruction.addProduct(rna2);
 
-        r1.addModifier(p1);
+        reconstruction.associate(p1, r1);
         r2.setDirection(Direction.BACKWARD);
 
         Chromosome chromosome = reconstruction.getGenome().createChromosome(1, new ChromosomeSequence("AACGTGCTGATCGTACGTAGCTAGCTAGCATGCATGCATGCATGACTGCATAC".toLowerCase()));

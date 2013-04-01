@@ -11,6 +11,7 @@ import uk.ac.ebi.mdk.io.EntityDataOutputStream;
 import uk.ac.ebi.mdk.domain.entity.MetaboliteImpl;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityOutput;
+import uk.ac.ebi.mdk.io.IOConstants;
 import uk.ac.ebi.mdk.io.ObservationDataInputStream;
 import uk.ac.ebi.mdk.io.ObservationDataOutputStream;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
@@ -61,7 +62,7 @@ public class MetaboliteDataWriterTest {
         ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(bytestream);
 
-        Version v = new Version("0.9");
+        Version v = IOConstants.CURRENT;
 
         EntityOutput eout = new EntityDataOutputStream(v,
                                                              out,
