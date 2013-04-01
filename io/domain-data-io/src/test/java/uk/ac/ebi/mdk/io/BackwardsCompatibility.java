@@ -45,6 +45,20 @@ public class BackwardsCompatibility {
         check(load("test_recon_1_0_0"));
     }
 
+    @Test public void test_1_0_1() throws IOException, ClassNotFoundException {
+        check(load("test_recon_1_0_1"));
+    }
+
+    @Test public void test_1_0_2() throws IOException, ClassNotFoundException {
+        check(load("test_recon_1_0_2"));
+    }
+
+    @Test public void test_1_0_2_1() throws IOException,
+                                            ClassNotFoundException {
+        check(load("test_recon_1_0_2_1"));
+    }
+
+
     public void check(Reconstruction reconstruction) throws IOException,
                                                             ClassNotFoundException {
 
@@ -187,6 +201,10 @@ public class BackwardsCompatibility {
         EntityInput entityInput = new EntityDataInputStream(version, entityStream, factory, annotationInput, observationInput);
 
         Reconstruction reconstruction = entityInput.read(null);
+
+        annotationStream.close();
+        observationStream.close();
+        entityStream.close();
 
         return reconstruction;
     }

@@ -75,8 +75,7 @@ public class ReconstructionDataReader_1_3_3
                                                               IOException,
                                                               ClassNotFoundException {
 
-        Reconstruction recon = factory
-                .newReconstruction(UUID.fromString(in.readUTF()));
+        Reconstruction recon = factory.newReconstruction(UUID.fromString(in.readUTF()));
 
         recon.setTaxonomy(identifierInput.read());
 

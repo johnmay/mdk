@@ -50,7 +50,7 @@ public class ChromosomeNumber extends AbstractIdentifier {
 
     @Override
     public void setAccession(String accession) {
-        number = Integer.parseInt(accession);
+        number = accession.isEmpty() ? 1 : Integer.parseInt(accession);
     }
 
     public int getNumber() {

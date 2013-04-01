@@ -58,7 +58,6 @@ public class ReconstructionDataReader_0_9
                                                                     ClassNotFoundException {
 
         Reconstruction recon = factory.newInstance(Reconstruction.class);
-
         recon.setTaxonomy(identifierInput.read());
 
         // container
@@ -121,6 +120,7 @@ public class ReconstructionDataReader_0_9
             in.readUTF(); // name
             in.readUTF(); // abrv
             identifierInput.read(); // chromosome id -> we lose the number
+
 
             Chromosome chromosome = recon.getGenome().createChromosome(i + 1, seq);
             chromosome.addAll(genes);
