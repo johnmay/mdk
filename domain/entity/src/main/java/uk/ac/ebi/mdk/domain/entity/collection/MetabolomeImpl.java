@@ -96,8 +96,12 @@ public final class MetabolomeImpl implements Metabolome {
 
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override public boolean contains(Metabolite m) {
-        return ofIdentifier(checkNotNull(m).getIdentifier()) != null;
+        // id may not be unique, reference equality currently needed
+        return ofIdentifier(checkNotNull(m).getIdentifier()) == m;
     }
 
     @Override public List<Metabolite> toList() {

@@ -297,6 +297,20 @@ public class ReconstructionImpl
         return reactome;
     }
 
+   /**
+     * @inheritDoc
+     */
+    @Override public Metabolome metabolome() {
+        return metabolome;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Genome genome() {
+        return genome;
+    }
+
 
     /**
      * Add a new metabolic reaction to the reconstruction. Note this method does
@@ -383,15 +397,13 @@ public class ReconstructionImpl
         if (m == null)
             return;
 
-        getMetabolome().remove(m);
         for (MetabolicReaction r : participatesIn(m)) {
             // remove reactome reference
             dissociate(m, r);
             // remove metabolite participants from reaction
             r.remove(m);
         }
-
-
+        metabolome.remove(m);
     }
 
     /**

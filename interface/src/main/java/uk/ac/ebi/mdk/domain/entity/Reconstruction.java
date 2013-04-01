@@ -46,13 +46,27 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public File defaultLocation();
 
+    /**
+     * @deprecated use {@link #genome()}}
+     */
+    @Deprecated
     public Genome getGenome();
 
-    public void setGenome(Genome genome);
-
+    /**
+     * @deprecated use {@link #reactome()}}
+     */
+    @Deprecated
     public Reactome getReactome();
 
+    /**
+     * @deprecated use {@link #metabolome()}
+     */
+    @Deprecated
     public Metabolome getMetabolome();
+
+    public Metabolome metabolome();
+
+    public Genome genome();
 
     /**
      * @deprecated use {@link #proteome()}
