@@ -33,10 +33,6 @@ import java.util.Collection;
  */
 public interface MetabolicReaction extends Reaction<MetabolicParticipant> {
 
-    public void addModifier(GeneProduct product);
-
-    public Collection<GeneProduct> getModifiers();
-
     /**
      * Remove the metabolite 'm' from this reaction. If the metabolite is null
      * no removal is attempted.

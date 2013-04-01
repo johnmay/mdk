@@ -20,7 +20,6 @@ import uk.ac.ebi.mdk.io.domain.MetaboliteDataWriter;
 import uk.ac.ebi.mdk.io.domain.MetaboliteDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataWriter;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataWriter_1_3_9;
-import uk.ac.ebi.mdk.io.domain.ReactionDataWriter;
 import uk.ac.ebi.mdk.io.domain.ReactionDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ReconstructionDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataWriter;
@@ -76,7 +75,6 @@ public class EntityDataOutputStream
         // metabolome/reactome
         add(Metabolite.class, new MetaboliteDataWriter(out));
         add(Metabolite.class, new MetaboliteDataWriter_1_3_9(out));
-        add(MetabolicReaction.class, new ReactionDataWriter(out, this));
         add(MetabolicReaction.class, new ReactionDataWriter_1_3_9(out, this));
 
         // gene

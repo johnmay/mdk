@@ -42,8 +42,6 @@ public class MetabolicReactionImpl
 
     private static final Logger LOGGER = Logger.getLogger(MetabolicReactionImpl.class);
 
-    private List<GeneProduct> modifiers = new ArrayList<GeneProduct>();
-
     private ReactionType type = ReactionTypeImpl.ENZYMATIC;
 
     public MetabolicReactionImpl(UUID uuid){
@@ -58,17 +56,6 @@ public class MetabolicReactionImpl
     public MetabolicReactionImpl(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
     }
-
-
-    public void addModifier(GeneProduct product) {
-        modifiers.add(product);
-    }
-
-
-    public Collection<GeneProduct> getModifiers() {
-        return modifiers;
-    }
-
 
     public void setType(ReactionType type) {
         this.type = type;
