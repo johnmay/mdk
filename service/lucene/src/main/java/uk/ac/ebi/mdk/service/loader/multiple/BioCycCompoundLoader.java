@@ -51,10 +51,11 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
     private static final Pattern REMOVE_TAGS = Pattern.compile("</?(?:i|sub|sup|em|small)/?>", Pattern.CASE_INSENSITIVE);
     private static final Pattern ATOM_CHARGE = Pattern.compile("\\(.+?\\s(.+?)\\)");
 
+    private final String org;
 
-    public BioCycCompoundLoader() {
+    public BioCycCompoundLoader(String org) {
 
-
+        this.org = org;
         addRequiredResource("BioCyc Compounds",
                             "compounds.dat file from a BioCyc database",
                             ResourceFileLocation.class);
@@ -81,9 +82,9 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
             Collection<String> synonyms = entry.get(SYNONYMS);
             String systematicName = entry.has(SYSTEMATIC_NAME) ? entry.getFirst(SYSTEMATIC_NAME) : "";
 
-            nameWriter.write(identifier, clean(commonName), clean(systematicName), clean(synonyms));
+            nameWriter.write(org + ":" + identifier, clean(commonName), clean(systematicName), clean(synonyms));
 
-            dataWriter.write(identifier,
+            dataWriter.write(org + ":" + identifier,
                              entry.has(ATOM_CHARGES) ? getCharge(entry.get(ATOM_CHARGES)) : "",
                              entry.has(CHEMICAL_FORMULA) ? getFormula(entry.get(CHEMICAL_FORMULA)) : "");
 
@@ -175,7 +176,7 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
     }
 
     public static void main(String[] args) throws IOException {
-        MultiIndexResourceLoader loader = new BioCycCompoundLoader();
+        MultiIndexResourceLoader loader = new BioCycCompoundLoader("META");
         loader.addLocation("biocyc.compounds", new SystemLocation("/databases/biocyc/MetaCyc/data/compounds.dat"));
         if (loader.canBackup()) loader.backup();
         if (loader.canUpdate()) loader.update();

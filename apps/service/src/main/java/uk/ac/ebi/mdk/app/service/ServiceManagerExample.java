@@ -35,7 +35,7 @@ public class ServiceManagerExample {
                                                                new KEGGCompoundIdentifier("C00010"),
                                                                new ChEBIIdentifier("CHEBI:57299"),
                                                                new LIPIDMapsIdentifier("LMFA01010004"),
-                                                               new BioCycChemicalIdentifier("ATP"),
+                                                               new BioCycChemicalIdentifier("META", "ATP"),
                                                                new PubChemCompoundIdentifier("5957"),
                                                                new ChemSpiderIdentifier("5742"));
 

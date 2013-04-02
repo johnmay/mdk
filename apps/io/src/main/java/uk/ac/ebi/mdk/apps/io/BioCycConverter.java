@@ -56,15 +56,16 @@ public class BioCycConverter {
     private File   root;
     private File   data;
     private String name;
+    private String organism;
 
     private Reconstruction reconstruction;
 
-    public BioCycConverter(File root, String name) {
+    public BioCycConverter(File root, String name, String organism) {
 
         this.root = root;
         this.name = name;
         this.data = new File(root, "data");
-
+        this.organism = organism;
 
         reconstruction = create();
 
@@ -221,12 +222,12 @@ public class BioCycConverter {
 
     }
 
-    public static Metabolite dat2Metabolite(AttributedEntry<Attribute, String> entry) {
+    public Metabolite dat2Metabolite(AttributedEntry<Attribute, String> entry) {
 
         Metabolite m = DefaultEntityFactory.getInstance().ofClass(Metabolite.class);
 
         // basic info
-        m.setIdentifier(new BioCycChemicalIdentifier(entry.getFirst(CompoundAttribute.UNIQUE_ID)));
+        m.setIdentifier(new BioCycChemicalIdentifier(organism, entry.getFirst(CompoundAttribute.UNIQUE_ID)));
         m.setName(clean(entry.getFirst(CompoundAttribute.COMMON_NAME, "unnamed entity")));
         m.setAbbreviation(clean(entry.getFirst(CompoundAttribute.ABBREV_NAME, m.getName())));
 
@@ -361,7 +362,7 @@ public class BioCycConverter {
 
         // create a new one
         Metabolite m = DefaultEntityFactory.getInstance().ofClass(Metabolite.class);
-        m.setIdentifier(new BioCycChemicalIdentifier(uid));
+        m.setIdentifier(new BioCycChemicalIdentifier(organism, uid));
         m.setAbbreviation("n/a");
         m.setName("unnamed metabolite");
 
@@ -491,7 +492,8 @@ public class BioCycConverter {
     // second arg name
     public static void main(String[] args) throws IOException {
 
-        BioCycConverter converter = new BioCycConverter(new File(args[0]), args[1]);
+        // args[2] = organism, e.g. META for metacyc
+        BioCycConverter converter = new BioCycConverter(new File(args[0]), args[1], args[2]);
         converter.importMetabolites();
         converter.importClasses();
         converter.importReactions();

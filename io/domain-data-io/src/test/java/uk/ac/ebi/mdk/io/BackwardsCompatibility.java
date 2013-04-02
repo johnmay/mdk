@@ -95,7 +95,7 @@ public class BackwardsCompatibility {
         assertThat(xrefs, hasItem(CrossReference
                                           .create(new HMDBIdentifier("HMDB00538"))));
         assertThat(xrefs, hasItem(CrossReference
-                                          .create(new BioCycChemicalIdentifier("ATP"))));
+                                          .create(new BioCycChemicalIdentifier("META", "ATP"))));
 
         assertFalse(reconstruction.participatesIn(atp).isEmpty());
         assertFalse(reconstruction.participatesIn(gtp).isEmpty());

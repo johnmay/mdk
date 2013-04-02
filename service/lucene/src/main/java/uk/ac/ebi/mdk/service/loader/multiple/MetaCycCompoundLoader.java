@@ -30,7 +30,7 @@ public class MetaCycCompoundLoader extends BioCycCompoundLoader {
     private static final Logger LOGGER = Logger.getLogger(MetaCycCompoundLoader.class);
 
     public MetaCycCompoundLoader() {
-        super();
+        super("META");
         addIndex("biocyc.names", new MetaCycNameIndex());
 
         addIndex("biocyc.data", new DefaultNameIndex("MetaCyc Data",

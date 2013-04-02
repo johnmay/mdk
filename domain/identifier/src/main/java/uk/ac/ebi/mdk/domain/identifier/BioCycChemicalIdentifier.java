@@ -18,6 +18,7 @@
 package uk.ac.ebi.mdk.domain.identifier;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.deprecated.MIR;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
@@ -32,23 +33,19 @@ import uk.ac.ebi.mdk.deprecated.Synonyms;
  * @name KEGGCompoundIdentifier – 2011.08.16
  * An identifier for KEGG Compound
  */
-@Brief("BioCyc")
-@Description("BioCyc Compound")
+@MIR(194)
 @Synonyms({"MetaCyc accession", "BioCyc Chemical"})
 public class BioCycChemicalIdentifier
         extends AbstractChemicalIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(BioCycChemicalIdentifier.class);
-    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(
-            BioCycChemicalIdentifier.class);
-
+    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(BioCycChemicalIdentifier.class);
 
     public BioCycChemicalIdentifier() {
     }
 
 
-    public BioCycChemicalIdentifier(String accession) {
-        super(accession);
+    public BioCycChemicalIdentifier(String organism, String accession) {
+        super(organism + ":" + accession);
     }
 
 

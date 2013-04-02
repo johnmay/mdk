@@ -11,7 +11,7 @@ public class MetaCycStructureLoader extends BioCycStructureLoader {
     private static final Logger LOGGER = Logger.getLogger(MetaCycStructureLoader.class);
 
     public MetaCycStructureLoader() {
-        super(new MetaCycStructureIndex());
+        super("META", new MetaCycStructureIndex());
     }
 
 }

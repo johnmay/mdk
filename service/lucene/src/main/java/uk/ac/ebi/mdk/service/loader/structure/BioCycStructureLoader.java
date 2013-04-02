@@ -19,8 +19,12 @@ public class BioCycStructureLoader extends AbstractSingleIndexResourceLoader {
 
     private static final Logger LOGGER = Logger.getLogger(BioCycStructureLoader.class);
 
-    public BioCycStructureLoader(LuceneIndex index) {
+    private final String org;
+
+    public BioCycStructureLoader(String org, LuceneIndex index) {
         super(index);
+
+        this.org = org;
 
         addRequiredResource("Mol Folder",
                             "Mol folder containing .mol files and the BioCyc identifier as the name of the file",
@@ -52,7 +56,7 @@ public class BioCycStructureLoader extends AbstractSingleIndexResourceLoader {
             try {
                 mdlReader.setReader(in);
                 IAtomContainer molecule = mdlReader.read(new AtomContainer());
-                writer.write(name.substring(0, name.indexOf(".mol")), molecule);
+                writer.write(org + ":" + name.substring(0, name.indexOf(".mol")), molecule);
                 mdlReader.close();
             } catch (Exception ex) {
                 LOGGER.warn("Could not read entry: " + name + " reason: " + ex.getMessage());
