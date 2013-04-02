@@ -32,8 +32,10 @@ import uk.ac.ebi.caf.component.CalloutDialog;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
 import uk.ac.ebi.mdk.service.ProgressListener;
 import uk.ac.ebi.mdk.service.ResourceLoader;
+import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;
 import uk.ac.ebi.mdk.service.location.LocationDescription;
 import uk.ac.ebi.mdk.service.location.LocationFactory;
@@ -75,6 +77,9 @@ public class LoaderRow extends JComponent {
     private ResourceLoader loader;
     private JLabel info;
     private SwingWorker worker;
+    final BooleanPreference hints = ServicePreferences.getInstance()
+                                                      .getPreference("SHOW_HINTS");
+
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy HH:mm");
 
@@ -393,6 +398,10 @@ public class LoaderRow extends JComponent {
 
         @Override
         public void animationStopped(AnimationEvent animationEvent) {
+
+            if(!hints.get())
+                return;
+
             //To change body of implemented methods use File | Settings | File Templates.
             final CalloutDialog dialog = new CalloutDialog(SwingUtilities
                                                              .getWindowAncestor(panel),
@@ -406,6 +415,7 @@ public class LoaderRow extends JComponent {
             dialog.setFocusableWindowState(false);
             dialog.pack();
             dialog.place();
+
             dialog.setVisible(true);
 
             Timer t = new Timer(2500, new ActionListener() {
