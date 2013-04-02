@@ -73,24 +73,6 @@ public class MetabolomeImplTest {
         verify(recon).register(m4);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testAdd_duppId() throws Exception {
-        Reconstruction recon = mock(Reconstruction.class);
-        when(recon.register(any(Entity.class))).thenReturn(true);
-        Metabolome metabolome = new MetabolomeImpl(recon);
-        Metabolite m1 = mock(Metabolite.class);
-        Metabolite m2 = mock(Metabolite.class);
-        Metabolite m1dupp = mock(Metabolite.class);
-        when(m1.getIdentifier()).thenReturn(new BasicChemicalIdentifier("m1"));
-        when(m2.getIdentifier()).thenReturn(new BasicChemicalIdentifier("m2"));
-        when(m1dupp.getIdentifier()).thenReturn(new BasicChemicalIdentifier("m1"));
-        metabolome.add(m1);
-        metabolome.add(m2);
-        verify(recon).register(m1);
-        verify(recon).register(m2);
-        metabolome.add(m1dupp);
-    }
-
     @Test
     public void testRemove() throws Exception {
         Reconstruction recon = mock(Reconstruction.class);
