@@ -331,12 +331,12 @@ public class MetabolomeImplTest {
         metabolome.add(m3);
         assertThat(metabolome.size(), is(3));
         assertNotNull(metabolome.ofIdentifier(new BasicChemicalIdentifier("m1")));
-        assertThat(metabolome.ofIdentifier(new BasicChemicalIdentifier("m1")), is(m1));
+        assertThat(metabolome.ofIdentifier(new BasicChemicalIdentifier("m1")), hasItem(m1));
         assertNotNull(metabolome.ofIdentifier(new BasicChemicalIdentifier("m2")));
-        assertThat(metabolome.ofIdentifier(new BasicChemicalIdentifier("m2")), is(m2));
+        assertThat(metabolome.ofIdentifier(new BasicChemicalIdentifier("m2")), hasItem(m2));
         assertNotNull(metabolome.ofIdentifier(new BasicChemicalIdentifier("m3")));
-        assertThat(metabolome.ofIdentifier(new BasicChemicalIdentifier("m3")), is(m3));
+        assertThat(metabolome.ofIdentifier(new BasicChemicalIdentifier("m3")), hasItem(m3));
 
-        assertNull(metabolome.ofIdentifier(new BasicChemicalIdentifier("m4")));
+        assertTrue(metabolome.ofIdentifier(new BasicChemicalIdentifier("m4")).isEmpty());
     }
 }

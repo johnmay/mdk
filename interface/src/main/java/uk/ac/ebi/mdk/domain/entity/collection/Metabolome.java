@@ -63,7 +63,7 @@ public interface Metabolome extends Iterable<Metabolite> {
      * @param identifier an identifier
      * @return a metabolite matching the identifier (null if none)
      */
-    public Metabolite ofIdentifier(Identifier identifier);
+    public Collection<Metabolite> ofIdentifier(Identifier identifier);
 
     /**
      * Check whether the metabolome contains the provided metabolite.

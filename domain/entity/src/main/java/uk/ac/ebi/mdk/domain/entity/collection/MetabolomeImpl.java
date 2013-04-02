@@ -17,6 +17,9 @@
 
 package uk.ac.ebi.mdk.domain.entity.collection;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.TreeMultimap;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -41,7 +44,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class MetabolomeImpl implements Metabolome {
 
-    private final Map<Identifier, Metabolite> metabolites = new TreeMap<Identifier, Metabolite>();
+    private final Multimap<Identifier, Metabolite> metabolites = HashMultimap.create();
 
     private final Reconstruction reconstruction;
 
@@ -73,7 +76,7 @@ public final class MetabolomeImpl implements Metabolome {
      */
     @Override public boolean remove(Metabolite m) {
         reconstruction.deregister(checkNotNull(m));
-        return metabolites.remove(m.getIdentifier()) != null;
+        return metabolites.remove(m.getIdentifier(), m);
     }
 
     /**
@@ -101,7 +104,11 @@ public final class MetabolomeImpl implements Metabolome {
      */
     @Override public boolean contains(Metabolite m) {
         // id may not be unique, reference equality currently needed
-        return ofIdentifier(checkNotNull(m).getIdentifier()) == m;
+        for(Metabolite n : ofIdentifier(checkNotNull(m).getIdentifier())){
+            if(m == n)
+                return true;
+        }
+        return false;
     }
 
     @Override public List<Metabolite> toList() {
@@ -122,7 +129,7 @@ public final class MetabolomeImpl implements Metabolome {
         return metabolites.values().iterator();
     }
 
-    @Override public Metabolite ofIdentifier(Identifier identifier) {
+    @Override public Collection<Metabolite> ofIdentifier(Identifier identifier) {
         return metabolites.get(identifier);
     }
 
