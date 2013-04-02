@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-ackage uk.ac.ebi.mdk.ui.edit.annotation;
+package uk.ac.ebi.mdk.ui.edit.annotation;
 
 import uk.ac.ebi.caf.component.factory.CheckBoxFactory;
 import uk.ac.ebi.mdk.domain.annotation.primitive.BooleanAnnotation;
