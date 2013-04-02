@@ -223,13 +223,14 @@ public class SBMLIOUtil {
         } else {
             String accession = id.getAccession();
             accession = accession.trim();
-            accession = accession
-                    .replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
-            accession = accession
-                    .replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
-            species.setId(accession + "_" + ((Compartment) participant
-                    .getCompartment())
-                    .getAbbreviation());
+            accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
+            accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
+            String compartment = ((Compartment) participant.getCompartment()).getAbbreviation();
+            // suffix compartment to id
+            if(!id.getAccession().endsWith("_" + compartment))
+                species.setId(accession + "_" + compartment);
+            else
+                species.setId(accession);
         }
 
         species.setName(m.getName());
