@@ -65,8 +65,6 @@ public final class MetabolomeImpl implements Metabolome {
     }
 
     private boolean _add(Metabolite m) {
-        if (metabolites.containsKey(m.getIdentifier()))
-            throw new IllegalArgumentException("clashing metabolite identifiers");
         metabolites.put(m.getIdentifier(), m);
         return true;
     }
