@@ -89,6 +89,13 @@ public class BiochemRxnImpl implements BiochemicalReaction {
     }
 
     /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Collection<GeneProduct> getModifiers() {
+        return new LinkedList<GeneProduct>(modifiers);
+    }
+    /**
      * {@inheritDoc} 
      */
     @Override
@@ -427,6 +434,11 @@ public class BiochemRxnImpl implements BiochemicalReaction {
     @Override
     public BiochemicalReaction newInstance() {
         return new BiochemRxnImpl(new MetabolicReactionImpl());
+    }
+
+    @Override
+    public MetabolicReaction getMetabolicReaction() {
+        return r;
     }
 
    

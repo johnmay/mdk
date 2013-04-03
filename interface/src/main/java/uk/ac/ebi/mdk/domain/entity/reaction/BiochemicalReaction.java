@@ -16,6 +16,7 @@
  */
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
+import java.util.Collection;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 
 /**
@@ -38,4 +39,13 @@ public interface BiochemicalReaction extends MetabolicReaction {
      * @return 
      */
     public boolean removeModifier(GeneProduct g);
+
+    /**
+     * Returns the underlying metabolic reaction.
+     * 
+     * @return 
+     */
+    public MetabolicReaction getMetabolicReaction();
+    
+    public Collection<GeneProduct> getModifiers();
 }

@@ -35,6 +35,7 @@ import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mdk.domain.entity.collection.ReactomeImpl;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.BiochemicalReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
@@ -328,8 +329,15 @@ public class ReconstructionImpl
         for (MetabolicParticipant p : reaction.getProducts()) {
             addMetabolite(p.getMolecule());
         }
-
     }
+    
+    public void addReaction(BiochemicalReaction reaction) {
+        MetabolicReaction metRxn = reaction.getMetabolicReaction();
+        this.addReaction(metRxn);
+        for (GeneProduct geneProduct : reaction.getModifiers()) {
+            associate(geneProduct, metRxn);
+        }
+    }    
 
 
     /**
