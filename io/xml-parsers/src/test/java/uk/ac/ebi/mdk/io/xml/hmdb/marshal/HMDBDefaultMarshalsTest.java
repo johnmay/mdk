@@ -466,7 +466,7 @@ public class HMDBDefaultMarshalsTest {
         HMDBDefaultMarshals.BIOCYC.marshal(xmlr, metabolite);
 
         assertThat(metabolite.getCrossReferences().iterator().next(),
-                   is((Identifier) new BioCycChemicalIdentifier("ATP")));
+                   is((Identifier) new BioCycChemicalIdentifier("META", "ATP")));
 
     }
 
