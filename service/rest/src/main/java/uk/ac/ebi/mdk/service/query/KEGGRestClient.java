@@ -345,4 +345,9 @@ public class KEGGRestClient
         }
         return identifiers;
     }
+
+
+    @Override public boolean startup() {
+        return super.startup() && reachable("http://www.kegg.jp/");
+    }
 }

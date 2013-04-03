@@ -143,13 +143,13 @@ public class PubChemAdapter
 
     @Override
     public boolean startup() {
-        if (service != null) return true;
+        if (service != null) return true && reachable("http://pubchem.ncbi.nlm.nih.gov/");
         try {
             service = locator.getPUGSoap();
         } catch (ServiceException ex) {
             LOGGER.error("Startup failed on SOAP Web Service: " + ex.getMessage());
         }
-        return service != null;
+        return service != null && reachable("http://pubchem.ncbi.nlm.nih.gov/");
     }
 
     public static void main(String[] args) throws ServiceException {

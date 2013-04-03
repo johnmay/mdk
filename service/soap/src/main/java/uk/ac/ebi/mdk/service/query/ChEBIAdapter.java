@@ -175,15 +175,18 @@ public class ChEBIAdapter
         return new ChEBIIdentifier();
     }
 
+    private static final String address = "http://www.ebi.ac.uk/chebi/";
+
     @Override
     public boolean startup() {
-        if (service != null) return true;
+        if (service != null)
+            return reachable(address);
         try {
             service = locator.getChebiWebServicePort();
         } catch (ServiceException ex) {
             LOGGER.error("Startup failed on SOAP Web Service: " + ex.getMessage());
         }
-        return service != null;
+        return service != null && reachable(address);
     }
 
     @Override

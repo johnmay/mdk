@@ -18,11 +18,13 @@
 package uk.ac.ebi.mdk.service.query;
 
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.AbstractService;
 
 /**
  * @author John May
  */
 public class AbstractRestClient<I extends Identifier>
+        extends AbstractService<I>
         implements QueryService<I> {
 
     private I template;

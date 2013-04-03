@@ -317,4 +317,7 @@ public class PubChemCompoundAdapter
 
     }
 
+    @Override public boolean startup() {
+        return super.startup() && reachable("http://pubchem.ncbi.nlm.nih.gov/");
+    }
 }

@@ -4,6 +4,11 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.query.QueryService;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+
 /**
  * @author John May
  */
@@ -58,5 +63,24 @@ public abstract class AbstractService<I extends Identifier> implements QueryServ
         identifier.setAccession(accession);
         return identifier;
 
+    }
+
+    public boolean reachable(String address) {
+        try {
+            URL url = new URL(address);
+            URLConnection connection = url.openConnection();
+            if(connection instanceof HttpURLConnection){
+                connection.setReadTimeout(500);
+                connection.setConnectTimeout(500);
+                int response = ((HttpURLConnection) connection).getResponseCode();
+                ((HttpURLConnection) connection).disconnect();
+                return response >= 200 && response < 300;
+            } else {
+                LOGGER.error("unknown protocal for checking reachability of web-service");
+            }
+        } catch (IOException e) {
+            LOGGER.error(e);
+        }
+        return false;
     }
 }

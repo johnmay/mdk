@@ -9,8 +9,13 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.AbstractService;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * @author John May
@@ -19,15 +24,17 @@ public abstract class AbstractSoapService<I extends Identifier>
         extends AbstractService<I>
         implements QueryService<I> {
 
-    private static final Logger LOGGER = Logger.getLogger(AbstractSoapService.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(AbstractSoapService.class);
 
     private MDLV2000Reader reader = new MDLV2000Reader();
     private MDLV2000Writer writer = new MDLV2000Writer();
 
-    private static final IChemObjectBuilder BUILDER = SilentChemObjectBuilder.getInstance();
+    private static final IChemObjectBuilder BUILDER = SilentChemObjectBuilder
+            .getInstance();
 
     public I getIdentifier(String accession) {
-        I identifier =  getIdentifier();
+        I identifier = getIdentifier();
         identifier.setAccession(accession);
         return identifier;
     }
@@ -37,14 +44,14 @@ public abstract class AbstractSoapService<I extends Identifier>
         return ServiceType.SOAP_WEB_SERVICE;
     }
 
-    public String structure2Mol(IAtomContainer structure){
+    public String structure2Mol(IAtomContainer structure) {
 
         StringWriter sw = new StringWriter();
 
-        try{
+        try {
             writer.setWriter(sw);
             writer.write(structure);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             LOGGER.error("Unable to create mol entry from structure");
         }
 
@@ -53,23 +60,24 @@ public abstract class AbstractSoapService<I extends Identifier>
     }
 
     /**
-     * Convert a MDL molfile string to a CDK strucutre.
-     * emtpty structure returned by default
+     * Convert a MDL molfile string to a CDK strucutre. emtpty structure
+     * returned by default
+     *
      * @param mol
      * @return
      */
-    public IAtomContainer mol2Structure(String mol){
+    public IAtomContainer mol2Structure(String mol) {
 
-        if(mol == null || mol.isEmpty()){
+        if (mol == null || mol.isEmpty()) {
             return BUILDER.newInstance(IAtomContainer.class);
         }
 
         StringReader sr = new StringReader(mol);
 
-        try{
+        try {
             reader.setReader(sr);
             return reader.read(BUILDER.newInstance(IAtomContainer.class));
-        } catch (Exception ex){
+        } catch (Exception ex) {
             LOGGER.error("Unable to create mol entry from structure");
         }
 
