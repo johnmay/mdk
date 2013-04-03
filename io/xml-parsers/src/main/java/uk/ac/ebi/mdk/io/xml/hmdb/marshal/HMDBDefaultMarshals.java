@@ -149,7 +149,16 @@ public enum HMDBDefaultMarshals implements HMDBXMLMarshal {
      * load BioCyc cross-references, no indication is given of which pathway
      * genome database (PDGB) is used
      */
-    BIOCYC("biocyc_id", new IdentifierMarshal(new BioCycChemicalIdentifier())),
+    BIOCYC("biocyc_id"){
+        @Override
+        public void marshal(XMLStreamReader2 xmlr,
+                            HMDBMetabolite metabolite) throws
+                                                       XMLStreamException {
+            if (xmlr.next() == XMLEvent.CHARACTERS) {
+                metabolite.addCrossReference(new BioCycChemicalIdentifier("HUMAN", xmlr.getText()));
+            }
+        }
+    },
 
     /**
      * The HMDB currently contains a typo. Both this marshal and and {@link
