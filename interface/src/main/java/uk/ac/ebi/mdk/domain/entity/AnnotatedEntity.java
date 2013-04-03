@@ -166,10 +166,4 @@ public interface AnnotatedEntity extends Entity {
      * Set the rating for this entity
      */
     public void setRating(Enum<? extends Rating> rating);
-
-
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException;
-
-
-    public void writeExternal(ObjectOutput out) throws IOException;
 }
