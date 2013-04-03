@@ -468,7 +468,7 @@ public class HMDBDefaultMarshalsTest {
         System.out.println(metabolite.getCrossReferences());
 
         assertThat(metabolite.getCrossReferences().iterator().next(),
-                   is((Identifier) new BioCycChemicalIdentifier("HUMAN", "ATP")));
+                   is((Identifier) BioCycChemicalIdentifier.human("ATP")));
 
     }
 

@@ -17,28 +17,25 @@
 
 package uk.ac.ebi.mdk.domain.identifier;
 
-import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.deprecated.MIR;
-import uk.ac.ebi.mdk.lang.annotation.Brief;
-import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
-import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
 import uk.ac.ebi.mdk.deprecated.Synonyms;
+import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
 
 
 /**
  * @author pmoreno
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @name KEGGCompoundIdentifier – 2011.08.16
- * An identifier for KEGG Compound
+ * @name KEGGCompoundIdentifier – 2011.08.16 An identifier for KEGG Compound
  */
 @MIR(194)
 @Synonyms({"MetaCyc accession", "BioCyc Chemical"})
 public class BioCycChemicalIdentifier
         extends AbstractChemicalIdentifier {
 
-    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(BioCycChemicalIdentifier.class);
+    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER
+            .getMetaInfo(BioCycChemicalIdentifier.class);
 
     public BioCycChemicalIdentifier() {
     }
@@ -56,8 +53,6 @@ public class BioCycChemicalIdentifier
     public BioCycChemicalIdentifier newInstance() {
         return new BioCycChemicalIdentifier();
     }
-
-
 
 
     /**
@@ -86,6 +81,27 @@ public class BioCycChemicalIdentifier
         return DESCRIPTION.resource;
     }
 
+    public static BioCycChemicalIdentifier meta(String accession) {
+        return new BioCycChemicalIdentifier("META", accession);
+    }
+
+    public static BioCycChemicalIdentifier human(String accession) {
+        return new BioCycChemicalIdentifier("HUMAN", accession);
+    }
+
+    public static BioCycChemicalIdentifier ecoli(String accession) {
+        return new BioCycChemicalIdentifier("ECOLI", accession);
+    }
+
+    /**
+     * @deprecated Incorrect id format
+     */
+    @Deprecated
+    public static BioCycChemicalIdentifier old(String accession) {
+        BioCycChemicalIdentifier id = new BioCycChemicalIdentifier();
+        id.setAccession(accession);
+        return id;
+    }
 
 }
 

@@ -155,7 +155,7 @@ public enum HMDBDefaultMarshals implements HMDBXMLMarshal {
                             HMDBMetabolite metabolite) throws
                                                        XMLStreamException {
             if (xmlr.next() == XMLEvent.CHARACTERS) {
-                metabolite.addCrossReference(new BioCycChemicalIdentifier("HUMAN", xmlr.getText()));
+                metabolite.addCrossReference(BioCycChemicalIdentifier.human(xmlr.getText()));
             }
         }
     },
