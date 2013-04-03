@@ -32,6 +32,7 @@ import uk.ac.ebi.caf.component.CalloutDialog;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.caf.utility.font.EBIIcon;
 import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
 import uk.ac.ebi.mdk.service.ProgressListener;
 import uk.ac.ebi.mdk.service.ResourceLoader;
@@ -93,12 +94,17 @@ public class LoaderRow extends JComponent {
 
         setOpaque(false);
 
+
         configuration = new LoaderConfiguration(loader, factory);
 
         configuration.setVisible(false);
 
-        delete = ButtonFactory.newCleanButton(ResourceUtility
-                                                      .getIcon("/uk/ac/ebi/chemet/render/images/cutout/trash_12x12.png"), new AbstractAction() {
+        ImageIcon deleteIcon = EBIIcon.DELETE.create().size(14f).highlight().icon();
+        ImageIcon resetIcon = EBIIcon.REFRESH.create().size(14f).flipHorizontal().highlight().icon();
+        ImageIcon downloadIcon = EBIIcon.DOWNLOAD.create().size(14f).highlight().icon();
+        ImageIcon settingsIcon = EBIIcon.SETTINGS.create().size(14f).highlight().icon();
+
+        delete = ButtonFactory.newCleanButton(deleteIcon, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 loader.clean();
@@ -108,8 +114,7 @@ public class LoaderRow extends JComponent {
             }
         });
         delete.setToolTipText("Delete the current index and it's backup");
-        revert = ButtonFactory.newCleanButton(ResourceUtility
-                                                      .getIcon("/uk/ac/ebi/chemet/render/images/cutout/revert_16x16.png"), new AbstractAction() {
+        revert = ButtonFactory.newCleanButton(resetIcon, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 loader.revert();
@@ -123,8 +128,7 @@ public class LoaderRow extends JComponent {
         final Animation expand = new Expand(configuration, 500);
         final Animation collapse = new Collapse(configuration, 500);
 
-        configure = ButtonFactory.newCleanButton(ResourceUtility
-                                                         .getIcon("/uk/ac/ebi/chemet/render/images/cutout/cog_16x16.png"), new AbstractAction() {
+        configure = ButtonFactory.newCleanButton(settingsIcon, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 delete.setEnabled(loader.canBackup() || loader.canRevert());
@@ -153,8 +157,7 @@ public class LoaderRow extends JComponent {
         }));
 
 
-        update = ButtonFactory.newCleanButton(ResourceUtility
-                                                      .getIcon("/uk/ac/ebi/chemet/render/images/cutout/update_16x16.png"), new AbstractAction() {
+        update = ButtonFactory.newCleanButton(downloadIcon, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
