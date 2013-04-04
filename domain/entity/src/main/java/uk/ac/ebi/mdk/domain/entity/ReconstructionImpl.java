@@ -320,6 +320,12 @@ public class ReconstructionImpl
      * @param reaction a new reaction
      */
     public void addReaction(MetabolicReaction reaction) {
+
+        if(reaction instanceof BiochemicalReaction){
+            addReaction((BiochemicalReaction) reaction);
+            return;
+        }
+
         reactome.add(reaction);
 
         // duplicates will not be added
