@@ -331,6 +331,12 @@ public class ReconstructionImpl
         }
     }
     
+    /**
+     * Add a new biochemical reaction to the reconstruction. Note this method does
+     * not check for duplications. Gene product modifier associations are added.
+     *
+     * @param reaction a new reaction
+     */
     public void addReaction(BiochemicalReaction reaction) {
         MetabolicReaction metRxn = reaction.getMetabolicReaction();
         this.addReaction(metRxn);
