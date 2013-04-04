@@ -50,13 +50,18 @@ public class BiochemRxnImpl implements BiochemicalReaction {
     private MetabolicReaction r;
     private Collection<GeneProduct> modifiers;
 
-    private BiochemRxnImpl(MetabolicReaction metabolicReaction) {
+    public BiochemRxnImpl(MetabolicReaction metabolicReaction) {
         this.r = metabolicReaction;
         initModifiers();
     }
     
     public BiochemRxnImpl(UUID uuid){
         this.r = new MetabolicReactionImpl(uuid);
+        initModifiers();
+    }
+    
+    public BiochemRxnImpl() {
+        this.r = new MetabolicReactionImpl();
         initModifiers();
     }
     
