@@ -58,7 +58,7 @@ public final class BiochemRxnImpl implements BiochemicalReaction {
      */
     public BiochemRxnImpl(MetabolicReaction delegate, Collection<GeneProduct> modifiers) {
         this.r = checkNotNull(delegate, "no reaction provided");
-        this.modifiers = Collections.unmodifiableCollection(modifiers);
+        this.modifiers = modifiers;
     }
 
     /**
