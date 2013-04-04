@@ -17,17 +17,12 @@
 
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
-import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Rating;
@@ -36,13 +31,8 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 
 /**
- * @name    BiochemRxnImpl
  * @date    2013.04.03
- * @version $Rev$ : Last Changed $Date$
  * @author  Pablo Moreno <pablacious at users.sf.net>
- * @author  $Author$ (this version)
- * @brief   ...class description...
- *
  */
 public class BiochemRxnImpl implements BiochemicalReaction {
 
