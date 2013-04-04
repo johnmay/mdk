@@ -18,6 +18,7 @@
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -30,42 +31,44 @@ import uk.ac.ebi.mdk.domain.entity.collection.ObservationManager;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
- * @date    2013.04.03
- * @author  Pablo Moreno <pablacious at users.sf.net>
+ * Associate a {@link MetabolicReaction} with one or more {@link GeneProduct}s
+ * (modifiers). This allows the reaction to be coupled with enzymes which
+ * encoded it. When added to a reconstruction the delegate will be un-boxed and
+ * the modifiers added to the proteome.
+ *
+ * @author Pablo Moreno <pablacious at users.sf.net>
+ * @date 2013.04.03
+ * @see MetabolicReaction
+ * @see uk.ac.ebi.mdk.domain.entity.Reconstruction#addReaction(MetabolicReaction)
  */
-public class BiochemRxnImpl implements BiochemicalReaction {
+public final class BiochemRxnImpl implements BiochemicalReaction {
 
+    private final MetabolicReaction r;
+    private final Collection<GeneProduct> modifiers;
 
-    private MetabolicReaction r;
-    private Collection<GeneProduct> modifiers;
+    /**
+     * Create a new biochemical reaction from a delegate and a collection of
+     * modifiers
+     *
+     * @param delegate  reaction
+     * @param modifiers gene products
+     */
+    public BiochemRxnImpl(MetabolicReaction delegate, Collection<GeneProduct> modifiers) {
+        this.r = checkNotNull(delegate, "no reaction provided");
+        this.modifiers = Collections.unmodifiableCollection(modifiers);
+    }
 
-    public BiochemRxnImpl(MetabolicReaction metabolicReaction) {
-        this.r = metabolicReaction;
-        initModifiers();
+    /**
+     * Create a new biochemical reaction from a delegate.
+     *
+     * @param delegate  reaction
+     */
+    public BiochemRxnImpl(MetabolicReaction delegate) {
+        this(delegate, new LinkedList<GeneProduct>());
     }
-    
-    public BiochemRxnImpl(UUID uuid){
-        this.r = new MetabolicReactionImpl(uuid);
-        initModifiers();
-    }
-    
-    public BiochemRxnImpl() {
-        this.r = new MetabolicReactionImpl();
-        initModifiers();
-    }
-    
-    public BiochemRxnImpl(Identifier identifier, String abbreviation, String name) {
-        this.r = new MetabolicReactionImpl(identifier, abbreviation, name);
-        initModifiers();
-    }
-    
-    private void initModifiers() {
-        this.modifiers = new LinkedList<GeneProduct>();
-    }
-    
-    
-    
 
     /**
      * {@inheritDoc}
@@ -88,7 +91,7 @@ public class BiochemRxnImpl implements BiochemicalReaction {
      */
     @Override
     public Collection<GeneProduct> getModifiers() {
-        return new LinkedList<GeneProduct>(modifiers);
+        return Collections.unmodifiableCollection(modifiers);
     }
     /**
      * {@inheritDoc} 
@@ -431,10 +434,47 @@ public class BiochemRxnImpl implements BiochemicalReaction {
         return new BiochemRxnImpl(new MetabolicReactionImpl());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MetabolicReaction getMetabolicReaction() {
         return r;
     }
 
-   
+    /**
+     * Utility method to create a biochemical reaction and a new underlying
+     * delegate.
+     *
+     * @return a new instance with an empty underlying reaction
+     */
+    public static BiochemicalReaction createWithDelegate(){
+        return new BiochemRxnImpl(new MetabolicReactionImpl(), new LinkedList<GeneProduct>());
+    }
+
+    /**
+     * Utility method to create a biochemical reaction and a new underlying
+     * delegate.
+     *
+     * @param uuid UUID for the underlying delegate (used also by the
+     *             biochemical reaction)
+     * @return a new instance with an empty underlying reaction
+     */
+    public static BiochemicalReaction createWithDelegate(UUID uuid) {
+        return new BiochemRxnImpl(new MetabolicReactionImpl(uuid), new LinkedList<GeneProduct>());
+    }
+
+    /**
+     * Utility method to create a biochemical reaction and a new underlying
+     * delegate.
+     *
+     * @param id id of the underlying reaction
+     * @param abrv abbreviation of the underlying reaction
+     * @param name name of the underlying reaction
+     * @return a new instance with an empty underlying reaction
+     */
+    public static BiochemicalReaction createWithDelegate(Identifier id, String abrv, String name){
+        return new BiochemRxnImpl(new MetabolicReactionImpl(id, abrv, name), new LinkedList<GeneProduct>());
+    }
+
 }
