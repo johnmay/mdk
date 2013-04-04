@@ -17,17 +17,44 @@
 
 package uk.ac.ebi.mdk.domain.entity;
 
+import org.junit.Assert;
 import org.junit.Test;
+import uk.ac.ebi.mdk.domain.entity.reaction.BiochemicalReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+
+import java.util.UUID;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author John May
  */
 public class ReconstructionImplTest {
+
+    @Test public void testAddBioChemReaction() {
+
+        MetabolicReaction delegate = mock(MetabolicReaction.class);
+
+        BiochemicalReaction biochem = mock(BiochemicalReaction.class);
+        when(biochem.getMetabolicReaction()).thenReturn(delegate);
+        when(delegate.uuid()).thenReturn(uuid("r1"));
+        when(biochem.uuid()).thenReturn(uuid("br1"));
+
+        Reconstruction recon = new ReconstructionImpl();
+        recon.addReaction(biochem);
+
+        assertNull(recon.entity(uuid("br1")));
+        assertNotNull(recon.entity(uuid("r1")));
+    }
+
+    private static final UUID uuid(String x){
+        return UUID.nameUUIDFromBytes(x.getBytes());
+    }
 
     @Test public void testRegister() {
         Reconstruction recon = new ReconstructionImpl();
