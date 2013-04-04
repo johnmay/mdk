@@ -16,36 +16,46 @@
  */
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
-import java.util.Collection;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
 
+import java.util.Collection;
+
 /**
+ * Describes a biochemical reaction which binds enzyme modifiers ({@link
+ * GeneProduct}s) to a {@link MetabolicReaction}.
  *
  * @author Pablo Moreno <pablacious at users.sf.net>
  */
 public interface BiochemicalReaction extends MetabolicReaction {
-    
+
     /**
      * Adds the gene product 'g' as modifier for the reaction.
-     * 
-     * @param g
-     * @return true if the modifier was added. 
+     *
+     * @param g add a modifier
+     * @return true if the modifier was added.
      */
     public boolean addModifier(GeneProduct g);
-    
+
     /**
-     * Removes gene product 'p' as from the list of modifiers registered with the reaction.
-     * @param g
-     * @return 
+     * Removes gene product 'p' as from the list of modifiers registered with
+     * the reaction.
+     *
+     * @param g remove a modifier
+     * @return whether the modifier was removed, false = no pressent
      */
     public boolean removeModifier(GeneProduct g);
 
     /**
      * Returns the underlying metabolic reaction.
-     * 
-     * @return 
+     *
+     * @return the delegated reaction
      */
     public MetabolicReaction getMetabolicReaction();
-    
+
+    /**
+     * access collection of modifiers (enzymes) of this reaction.
+     *
+     * @return immutable collection of modifiers
+     */
     public Collection<GeneProduct> getModifiers();
 }
