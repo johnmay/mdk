@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.regex.Pattern;
 
 /**
  * @author John May
@@ -107,6 +108,10 @@ public interface IdentifierFactory {
 
         @Override
         public URL getURL() {
+            return null;
+        }
+
+        @Override public Pattern pattern() {
             return null;
         }
 

@@ -20,6 +20,7 @@ import uk.ac.ebi.mdk.domain.Descriptor;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 /**
  * Identifier – 2011.09.15 <br> Interface for an identifier object
@@ -58,6 +59,14 @@ public interface Identifier extends Descriptor, Comparable<Identifier> {
      * @return URL for the identifier
      */
     public URL getURL();
+
+
+    /**
+     * Access the identifier pattern.
+     *
+     * @return compiled pattern to match identifier
+     */
+    public Pattern pattern();
 
     /**
      * Access the URN for use in RDF annotations, in particular the Systems

@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.domain.identifier;
 
+import uk.ac.ebi.mdk.deprecated.IdPattern;
 import uk.ac.ebi.mdk.deprecated.MIR;
 import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
 import uk.ac.ebi.mdk.deprecated.Synonyms;
@@ -30,6 +31,7 @@ import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
  * @name KEGGCompoundIdentifier – 2011.08.16 An identifier for KEGG Compound
  */
 @MIR(194)
+@IdPattern("^[A-Z-0-9]+(?<!CHEBI)(\\\\:)?[A-Za-z0-9-]+$")
 @Synonyms({"MetaCyc accession", "BioCyc Chemical"})
 public class BioCycChemicalIdentifier
         extends AbstractChemicalIdentifier {
