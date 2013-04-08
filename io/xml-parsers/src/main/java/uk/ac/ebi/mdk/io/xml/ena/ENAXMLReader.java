@@ -64,19 +64,22 @@ public class ENAXMLReader {
     private Set<String> warnings = new HashSet<String>();
     private final Reconstruction reconstruction;
 
-    public ENAXMLReader(EntityFactory factory, InputStream in) throws XMLStreamException {
+    public ENAXMLReader(EntityFactory factory, InputStream in) throws
+                                                               XMLStreamException {
 
         // used to store associations
         this.reconstruction = factory.newReconstruction();
 
-        XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
+        XMLInputFactory2 xmlif = (XMLInputFactory2) XMLInputFactory2
+                .newInstance();
         xmlif.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, Boolean.FALSE);
         xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.FALSE);
         xmlif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.TRUE);
         xmlif.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
         xmlif.configureForSpeed();
 
-        XMLStreamReader2 xmlr = (XMLStreamReader2) xmlif.createXMLStreamReader(in);
+        XMLStreamReader2 xmlr = (XMLStreamReader2) xmlif
+                .createXMLStreamReader(in);
 
         int event;
 
@@ -100,13 +103,16 @@ public class ENAXMLReader {
                             genes.add(gene);
                             reconstruction.register(gene);
                         } else if (feature.isProduct()) {
-                            GeneProduct product = (GeneProduct) feature.getEntity();
+                            GeneProduct product = (GeneProduct) feature
+                                    .getEntity();
                             Gene gene = geneMap.get(feature.getLocusTag());
                             if (gene != null) {
                                 reconstruction.associate(gene, product);
                             } else {
-                                LOGGER.error("No gene found for locus tag: " + feature
-                                        .getLocusTag());
+                                LOGGER.error("No gene found for '" + feature
+                                        .getProteinIdentifier() + "' locus tag: '" + feature
+                                        .getLocusTag() + "' location " + feature
+                                        .start() + "..." + feature.end());
                             }
                             products.add(product);
                             reconstruction.register(product);
@@ -141,9 +147,11 @@ public class ENAXMLReader {
                 Collection<Gene> pGenes = reconstruction.genesOf(product);
                 for (Gene gene : pGenes) {
 
-                    Sequence seq = genome.getSubSequence(gene.getStart(), gene.getEnd());
+                    Sequence seq = genome.getSubSequence(gene.getStart(), gene
+                            .getEnd());
 
-                    seq = gene.getStrand() == Strand.NEGATIVE ? seq.getInverse() : seq;
+                    seq = gene.getStrand() == Strand.NEGATIVE ? seq.getInverse()
+                                                              : seq;
 
                     if (seq.getLength() > 0) {
                         DNASequence dna = new DNASequence(seq.getSequenceAsString());
@@ -160,7 +168,7 @@ public class ENAXMLReader {
         return warnings;
     }
 
-    public List<Map.Entry<Gene,GeneProduct>> associations(){
+    public List<Map.Entry<Gene, GeneProduct>> associations() {
         return reconstruction.geneAssociations();
     }
 
