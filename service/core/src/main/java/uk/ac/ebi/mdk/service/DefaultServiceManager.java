@@ -58,7 +58,7 @@ public class DefaultServiceManager implements ServiceManager {
             for (Class<? extends QueryService> serviceClass : getImplementingInterfaces(service.getClass())) {
                 ServiceKey key = new ServiceKey(identifierClass, serviceClass);
                 services.put(key, service);
-                LOGGER.debug(serviceClass.getSimpleName() + "service loaded");
+                LOGGER.debug(serviceClass.getSimpleName() + " service loaded for " + identifierClass.getSimpleName());
             }
         }
 
