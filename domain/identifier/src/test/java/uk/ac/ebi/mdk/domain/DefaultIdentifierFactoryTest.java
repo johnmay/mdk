@@ -6,12 +6,21 @@ package uk.ac.ebi.mdk.domain;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.HMDBIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
 import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+
+import java.util.Collection;
+
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 
 /**
@@ -55,6 +64,20 @@ public class DefaultIdentifierFactoryTest {
 
 
         }
+    }
+
+    IdentifierFactory ids = DefaultIdentifierFactory.getInstance();
+
+    @Test public void ofPattern_MetaCyc() {
+        Collection<Class<? extends Identifier>> classes = ids.ofPattern("META:ATP");
+        assertThat(classes.size(), is(1));
+        assertThat(classes, hasItem(BioCycChemicalIdentifier.class));
+    }
+
+    @Test public void ofPattern_ChEBI() {
+        Collection<Class<? extends Identifier>> classes = ids.ofPattern("CHEBI:12");
+        assertThat(classes.size(), is(1));
+        assertThat(classes, hasItem(ChEBIIdentifier.class));
     }
 
     @Test
