@@ -46,6 +46,7 @@ public class ParserFactory {
         blastParsers.put("2.2.25+", new BLASTRowParser_V2_2_24());
         blastParsers.put("2.2.26+", new BLASTRowParser_V2_2_24());
         blastParsers.put("2.2.27+", new BLASTRowParser_V2_2_24());
+        blastParsers.put("2.2.28+", new BLASTRowParser_V2_2_24());
     }
 
     private static class AlignmentFactoryHolder {
