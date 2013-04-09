@@ -9,7 +9,12 @@ import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.name.NameService;
 
+import java.util.Arrays;
 import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author John May
@@ -21,10 +26,13 @@ public class NameCandidateFactoryTest {
     @Test
     public void testGetCandidates() throws Exception {
 
-        ServiceManager manager = DefaultServiceManager.getInstance();
 
-        NameService<ChEBIIdentifier> service = manager.getService(ChEBIIdentifier.class,
-                                                                  NameService.class);
+        NameService<ChEBIIdentifier> service = mock(NameService.class);
+
+        ChEBIIdentifier id = new ChEBIIdentifier("ChEBI:15422");
+
+        when(service.searchName("ATP", false)).thenReturn(Arrays.asList(id));
+        when(service.getNames(id)).thenReturn(Arrays.asList("ATP"));
 
         NameCandidateFactory factory = new NameCandidateFactory<ChEBIIdentifier>(new ChemicalFingerprintEncoder(),
                                                                                  service);
@@ -32,7 +40,7 @@ public class NameCandidateFactoryTest {
         factory.setMaxResults(5);
         Set<Candidate> candidates = factory.getCandidates("ATP", false);
 
-        Assert.assertTrue(candidates.contains(new Candidate<ChEBIIdentifier>(new ChEBIIdentifier("ChEBI:15422"), "ATP", 0)));
+        Assert.assertThat(candidates, hasItem(new Candidate<ChEBIIdentifier>(new ChEBIIdentifier("ChEBI:15422"), "ATP", 0)));
 
     }
 }

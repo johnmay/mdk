@@ -18,26 +18,84 @@
 package uk.ac.ebi.mdk.domain;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.identifier.*;
-import uk.ac.ebi.mdk.domain.identifier.basic.*;
-import uk.ac.ebi.mdk.domain.identifier.classification.*;
+import uk.ac.ebi.mdk.domain.identifier.BRENDAChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.BRNIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.CASIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.CHEMBLIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChemIDplusIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChemSpiderIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.DrugBankIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.EINECSIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.EPAPesticideIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.GmelinRegistryIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.HMDBIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.HSDBIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.HSSPIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
+import uk.ac.ebi.mdk.domain.identifier.InChI;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGDrugIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KeggGlycanIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.LIPIDMapsIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.PDBChemIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.PDBIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.PubChemSubstanceIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.PubMedIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.TrEMBLIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.UMBBDIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ZINCIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicGeneIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicRNAIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.ChromosomeNumber;
+import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.TaskIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.BRENDATissueOntologyIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.CellTypeOntologyIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.classification.ExperimentalFactorOntologyIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.FoundationalModelOfAnatomyOntologyIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.classification.GeneOntologyAnnotation;
+import uk.ac.ebi.mdk.domain.identifier.classification.GeneOntologyTerm;
+import uk.ac.ebi.mdk.domain.identifier.classification.InterPro;
+import uk.ac.ebi.mdk.domain.identifier.classification.KEGGOrthology;
+import uk.ac.ebi.mdk.domain.identifier.classification.TransportClassificationNumber;
 import uk.ac.ebi.mdk.domain.identifier.type.SequenceIdentifier;
 
-import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 
 /**
- * IdentifierFactory.java
- * Factory for identifiers
+ * IdentifierFactory.java Factory for identifiers
  *
  * @author johnmay
  * @date May 6, 2011
  */
 public class DefaultIdentifierFactory implements IdentifierFactory {
 
-    private static final Logger logger = Logger.getLogger(DefaultIdentifierFactory.class);
+    private static final Logger logger = Logger
+            .getLogger(DefaultIdentifierFactory.class);
 
     private static final String IDENTIFIER_MAPPING_FILE = "IdentifierResourceMapping.properties";
 
@@ -123,14 +181,16 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
         for (Identifier identifier : supportedIdentifiers) {
 
             identifiers.put(identifier.getClass(), identifier);
-            identifierNames.put(identifier.getShortDescription().toLowerCase(Locale.ENGLISH),
+            identifierNames.put(identifier.getShortDescription()
+                                          .toLowerCase(Locale.ENGLISH),
                                 identifier);
 
             // add to the mapped/unmapped set
             Set set = identifier.getResource().isMapped() ? mapped : unmapped;
             set.add(identifier);
 
-            synonyms.put(identifier.getShortDescription().toLowerCase(Locale.ENGLISH), identifier);
+            synonyms.put(identifier.getShortDescription()
+                                   .toLowerCase(Locale.ENGLISH), identifier);
             for (String synonym : identifier.getSynonyms()) {
 
                 String key = synonym.toLowerCase(Locale.ENGLISH);
@@ -166,7 +226,8 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
         // sort by resource name
         Collections.sort(supportedIdentifiers, new Comparator<Identifier>() {
             public int compare(Identifier o1, Identifier o2) {
-                return o1.getShortDescription().compareTo(o2.getShortDescription());
+                return o1.getShortDescription()
+                         .compareTo(o2.getShortDescription());
             }
         });
 
@@ -185,7 +246,8 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
 
 
     /**
-     * Resolves a sequence header e.g. sp|Q38483|EKFF_EKH to one of our identifiers
+     * Resolves a sequence header e.g. sp|Q38483|EKFF_EKH to one of our
+     * identifiers
      */
     public IdentifierSet resolveSequenceHeader(String header) {
 
@@ -219,7 +281,6 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
      * Construct an identifier of a given class
      *
      * @param type
-     *
      * @return
      */
     public <I extends Identifier> I ofClass(Class<I> type) {
@@ -232,9 +293,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
         return identifier;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Identifier ofName(String name) {
 
@@ -262,9 +321,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Identifier ofName(String name, String accession) {
         Identifier identifier = ofName(name);
@@ -277,9 +334,11 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
     public Collection<Class<? extends Identifier>> ofPattern(String accession) {
         Collection<Class<? extends Identifier>> matched = new ArrayList<Class<? extends Identifier>>();
         for (Identifier identifier : mapped) {
-            Pattern pattern = identifier.getResource().getCompiledPattern();
-            if (pattern.matcher(accession).matches()) {
-                matched.add(identifier.getClass());
+            Pattern pattern = identifier.pattern();
+            if (pattern != null) {
+                if (pattern.matcher(accession).matches()) {
+                    matched.add(identifier.getClass());
+                }
             }
         }
         return matched;
@@ -300,7 +359,6 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
      * specified in the IdentifierMetaInfo properites resource file.
      *
      * @param synonym
-     *
      * @return
      */
     @Override public Identifier ofSynonym(String synonym) {

@@ -165,11 +165,8 @@ public class ENAFeatureParser {
 
                 matcher = COMPLEMENT_AND_JOIN_MATCH.matcher(location);
                 if (matcher.matches()) {
-                    System.err.println("complement(join(..not yet handled..))");
-                    return;
+                    warnings.add("complement(join(..not yet handled..))");
                 }
-
-
             }
         }
 
@@ -251,6 +248,14 @@ public class ENAFeatureParser {
                 .get("codon_start") : "-1");
     }
 
+    public int start(){
+        return start;
+    }
+
+    public int end(){
+        return end;
+    }
+
     /**
      * Returns a Gene, ProteinProduct, TranscriptionRNA of RibsombalRNA
      *
@@ -318,7 +323,7 @@ public class ENAFeatureParser {
      */
     public Identifier getProteinIdentifier() {
         return qualifiers.containsKey("protein_id")
-                ? new DynamicIdentifier("ENA Protein ID", qualifiers.get("protein_id")) : new BasicProteinIdentifier();
+                ? new DynamicIdentifier("ENA Protein ID", qualifiers.get("protein_id")) : BasicProteinIdentifier.nextIdentifier();
     }
 
     public String getProduct() {

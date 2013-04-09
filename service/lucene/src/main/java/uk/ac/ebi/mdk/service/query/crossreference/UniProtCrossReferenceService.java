@@ -1,5 +1,6 @@
 package uk.ac.ebi.mdk.service.query.crossreference;
 
+import uk.ac.ebi.mdk.domain.identifier.UniProtIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
 import uk.ac.ebi.mdk.service.index.crossreference.UniProtCrossReferenceIndex;
@@ -15,8 +16,8 @@ import uk.ac.ebi.mdk.service.query.CrossReferenceService;
  * @version $Rev$
  */
 public class UniProtCrossReferenceService
-        extends AbstractCrossreferenceService<SwissProtIdentifier>
-        implements CrossReferenceService<SwissProtIdentifier> {
+        extends AbstractCrossreferenceService<UniProtIdentifier>
+        implements CrossReferenceService<UniProtIdentifier> {
 
     public UniProtCrossReferenceService() {
         super(new UniProtCrossReferenceIndex());
@@ -26,15 +27,14 @@ public class UniProtCrossReferenceService
      * @inheritDoc
      */
     @Override
-    public SwissProtIdentifier getIdentifier() {
-        return new SwissProtIdentifier();
+    public UniProtIdentifier getIdentifier() {
+        return new UniProtIdentifier();
     }
 
 
-    public static void main(String[] args) {
-        CrossReferenceService service = new UniProtCrossReferenceService();
-        System.out.println(service.searchCrossReferences(new ECNumber("1.1.1.1")));
-    }
+
+
+
 
 }
 

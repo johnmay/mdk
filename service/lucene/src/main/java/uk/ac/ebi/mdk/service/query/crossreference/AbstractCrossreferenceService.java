@@ -1,6 +1,7 @@
 package uk.ac.ebi.mdk.service.query.crossreference;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
@@ -102,7 +103,7 @@ public abstract class AbstractCrossreferenceService<I extends Identifier>
             return indexMap.get(id);
         }
 
-        Query q = new TermQuery(CLASS_ID.createTerm(id));
+        Query q = new TermQuery(new Term(CLASS_ID.field(), id));
         String name = firstValue(q, CLASS_NAME);
         try {
             Class c = Class.forName(name);

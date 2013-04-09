@@ -21,11 +21,14 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Collection;
+import java.util.Iterator;
 
 import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
 import uk.ac.ebi.mdk.domain.identifier.type.ProteinIdentifier;
 import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
 import uk.ac.ebi.mdk.deprecated.MIR;
+import uk.ac.ebi.mdk.domain.identifier.type.SequenceIdentifier;
 
 
 /**
@@ -35,8 +38,8 @@ import uk.ac.ebi.mdk.deprecated.MIR;
  * @author johnmay
  * @date Mar 21, 2011
  */
-@MIR(value = 5)
-public abstract class UniProtIdentifier
+@MIR(5)
+public class UniProtIdentifier
         extends AbstractIdentifier
         implements ProteinIdentifier, Externalizable {
 
@@ -55,7 +58,7 @@ public abstract class UniProtIdentifier
 
     public enum Status {
 
-        REVIEWED, UNREVIEWED
+        REVIEWED, UNREVIEWED, UNKNOWN
     };
 
     private String name = "";
@@ -65,6 +68,17 @@ public abstract class UniProtIdentifier
         //  setResource( Resource.UNIPROT );
     }
 
+    @Override public Identifier newInstance() {
+        return new UniProtIdentifier();
+    }
+
+    @Override public Collection<String> getHeaderCodes() {
+        throw new UnsupportedOperationException("");
+    }
+
+    @Override public SequenceIdentifier ofHeader(Iterator<String> token) {
+        throw new UnsupportedOperationException("");
+    }
 
     public UniProtIdentifier(String identifier, Boolean check) {
         this();
@@ -157,7 +171,9 @@ public abstract class UniProtIdentifier
     /**
      * Returns the status of the entry
      */
-    public abstract UniProtIdentifier.Status getStatus();
+    public UniProtIdentifier.Status getStatus(){
+        return Status.UNKNOWN;
+    }
 
 
     public void setName(String name) {

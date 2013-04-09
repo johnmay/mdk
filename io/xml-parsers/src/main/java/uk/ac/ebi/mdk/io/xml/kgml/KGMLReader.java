@@ -31,6 +31,7 @@ import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 
@@ -139,7 +140,7 @@ public class KGMLReader {
 
             String[] names = rxnEntry.getName().split(" ");
             MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class,
-                                                    reactionId,
+                                                    BasicReactionIdentifier.nextIdentifier(),
                                                     names[0].substring(4),
                                                     names[0].substring(4));
             for (String name : names) {
@@ -166,7 +167,7 @@ public class KGMLReader {
 
     public Metabolite getMetabolite(KGMLEntry entry){
         String subName = entry.getName().substring(4);
-        Metabolite m = factory.newInstance(Metabolite.class, new KEGGCompoundIdentifier(subName), subName, subName);
+        Metabolite m = factory.newInstance(Metabolite.class, BasicChemicalIdentifier.nextIdentifier(), subName, subName);
         m.addAnnotation(new KEGGCrossReference(new KEGGCompoundIdentifier(subName)));
         return m;
 

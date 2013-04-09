@@ -26,6 +26,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.net.URL;
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 /**
  * Abstract class for that all identifiers should extend. If the sub-class has
@@ -41,7 +42,8 @@ public abstract class AbstractIdentifier
         extends AbstractDescriptor
         implements Identifier {
 
-    public static final IdentifierLoader IDENTIFIER_LOADER = IdentifierLoader.getInstance();
+    public static final IdentifierLoader IDENTIFIER_LOADER = IdentifierLoader
+            .getInstance();
     private String accession;
 
     public AbstractIdentifier() {
@@ -54,17 +56,13 @@ public abstract class AbstractIdentifier
         this.accession = accession;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public String getAccession() {
         return accession;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public void setAccession(String accession) {
         if (accession == null)
@@ -72,29 +70,30 @@ public abstract class AbstractIdentifier
         this.accession = accession;
     }
 
-    /**
-     * @inheritDoc
-     */
+
+    @Override public Pattern pattern() {
+        return IDENTIFIER_LOADER.getMetaInfo(getClass()).pattern();
+    }
+
+    /** @inheritDoc */
     @Override
     public Resource getResource() {
         return IDENTIFIER_LOADER.getEntry(getClass());
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public boolean isValid() {
         Resource resource = getResource();
         if (resource != null) {
-            return resource.getCompiledPattern().matcher(accession).matches();
+            Pattern p = pattern();
+            if (p != null)
+                return p.matcher(accession).matches();
         }
         // no resource, we cannot check if the accession is valid
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public String toString() {
         return accession;
@@ -112,9 +111,7 @@ public abstract class AbstractIdentifier
         return getShortDescription() + " " + getAccession();
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public int hashCode() {
         int hash = 257;
@@ -124,9 +121,7 @@ public abstract class AbstractIdentifier
         return hash;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -144,17 +139,13 @@ public abstract class AbstractIdentifier
         return true;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public String getURN() {
         return getResource().getURN(getAccession());
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public URL getURL() {
         return getResource().getURL(getAccession());
@@ -168,9 +159,7 @@ public abstract class AbstractIdentifier
         return "http://identifiers.org/" + ((MIRIAMEntry) getResource()).namespace + "/" + accession + "/";
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Collection<String> getSynonyms() {
         return IDENTIFIER_LOADER.getDatabaseSynonyms(getClass());
