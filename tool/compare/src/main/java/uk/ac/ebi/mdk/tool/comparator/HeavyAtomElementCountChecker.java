@@ -53,7 +53,7 @@ public final class HeavyAtomElementCountChecker {
             Integer countElementA = hsymbolsCountA.get(symbA);
             Integer countElementB = hsymbolsCountB.get(symbA);
             
-            if(countElementA!=countElementB)
+            if(!countElementA.equals(countElementB))
                 return false;
         }
         return true;

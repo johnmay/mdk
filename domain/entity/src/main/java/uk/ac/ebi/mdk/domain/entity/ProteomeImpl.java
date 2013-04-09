@@ -69,7 +69,7 @@ public final class ProteomeImpl implements Proteome {
      */
     @Override
     public Collection<MetabolicReaction> reactionsOf(GeneProduct product) {
-        return reactionsOf(product);
+        return reconstruction.reactionsOf(product);
     }
 
     /**

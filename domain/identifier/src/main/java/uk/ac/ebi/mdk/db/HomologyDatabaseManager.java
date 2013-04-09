@@ -149,8 +149,8 @@ public class HomologyDatabaseManager {
      *
      * @return whether there is a path available
      */
-    public boolean hasPath(String key) {
-        return files.containsKey(key) || files.containsKey(alias.inverse().containsKey(key));
+    public boolean hasPath(final String key) {
+        return files.containsKey(getAlias(key)) || files.containsKey(key);
     }
 
     /**

@@ -424,7 +424,9 @@ public class Align2Reference extends CommandLineMain {
                     }
                 }
         );
-        sortedEntries.addAll(map.entrySet());
+        for(Map.Entry<K,V> e : map.entrySet()){
+            sortedEntries.add(e);
+        }
         return sortedEntries;
     }
 

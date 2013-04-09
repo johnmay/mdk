@@ -287,8 +287,8 @@ public class InChI
      * @brief Clone method returns a clone of the InChI object
      * and it's underlying inchi, inchiKey and AuxInfo fiels
      */
-    @Override
-    public InChI clone() {
+
+    public InChI copy() {
         return new InChI(name, inchi, key, auxInfo);
     }
 
