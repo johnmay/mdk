@@ -37,18 +37,22 @@ import uk.ac.ebi.mdk.tool.task.RunnableTask;
 import java.io.File;
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @name HomologySearchFactory - 2011.10.10 <br>
- * Class description
+ * @name HomologySearchFactory - 2011.10.10 <br> Class description
  */
 public class HomologySearchFactory {
 
-    private static final Logger LOGGER = Logger.getLogger(HomologySearchFactory.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(HomologySearchFactory.class);
 
     private HomologySearchFactory() {
     }
@@ -65,9 +69,12 @@ public class HomologySearchFactory {
     public RunnableTask getTabularSwissProtBLASTP(Collection<GeneProduct> products,
                                                   double expected,
                                                   int cpu,
-                                                  int results) throws IOException, Exception {
+                                                  int results) throws
+                                                               IOException,
+                                                               Exception {
         // should check for swiss prot and throw an expection if not
-        return getBlastP(products, HomologyDatabaseManager.getInstance().getPath("SwissProt"), expected, cpu, results, 6);
+        return getBlastP(products, HomologyDatabaseManager.getInstance()
+                                                          .getPath("SwissProt"), expected, cpu, results, 6);
     }
 
     /**
@@ -78,9 +85,7 @@ public class HomologySearchFactory {
      * @param expected
      * @param cpu
      * @param results
-     *
      * @return
-     *
      * @throws IOException
      * @throws Exception
      */
@@ -88,7 +93,8 @@ public class HomologySearchFactory {
                                          File database,
                                          double expected,
                                          int cpu,
-                                         int results) throws IOException, Exception {
+                                         int results) throws IOException,
+                                                             Exception {
         return getBlastP(products, database, expected, cpu, results, 6);
     }
 
@@ -100,7 +106,6 @@ public class HomologySearchFactory {
      * @param cpu      The number of cpus to allow
      * @param results  the number of results to allow
      * @param format   the blast format 7=xml, 8=tabular....
-     *
      * @return A runnable task to perform the blast search externally
      */
     public RunnableTask getBlastP(Collection<GeneProduct> products,
@@ -110,7 +115,8 @@ public class HomologySearchFactory {
                                   int results,
                                   int format) throws IOException, Exception {
 
-        FilePreference blastpath = DomainPreferences.getInstance().getPreference("BLASTP_PATH");
+        FilePreference blastpath = DomainPreferences.getInstance()
+                                                    .getPreference("BLASTP_PATH");
         String blastp = blastpath.get().getAbsolutePath();
 
         if (blastp == null) {
@@ -128,14 +134,17 @@ public class HomologySearchFactory {
                 if (protein.getSequences().size() > 1) {
                     LOGGER.info("Protein with multiple sequences");
                 }
-
-                ProteinSequence sequence = protein.getSequences().iterator().next();
-                sequence.setOriginalHeader(protein.getAccession()); // ensure the output has matching ids
-                if (accessionMap.containsKey(protein.getAccession())) {
-                    throw new IllegalArgumentException("Clashing protein accessions: '" + protein.getAccession() + "' sequence will not be used in search.");
-                } else {
-                    accessionMap.put(protein.getAccession(), protein);
-                    sequences.add(sequence);
+                if (!protein.getSequences().isEmpty()) {
+                    ProteinSequence sequence = protein.getSequences().iterator()
+                                                      .next();
+                    sequence.setOriginalHeader(protein.getAccession()); // ensure the output has matching ids
+                    if (accessionMap.containsKey(protein.getAccession())) {
+                        throw new IllegalArgumentException("Clashing protein accessions: '" + protein
+                                .getAccession() + "' sequence will not be used in search.");
+                    } else {
+                        accessionMap.put(protein.getAccession(), protein);
+                        sequences.add(sequence);
+                    }
                 }
             }
         }
@@ -144,20 +153,28 @@ public class HomologySearchFactory {
 
         FastaWriterHelper.writeProteinSequence(input, sequences);
 
-        RunnableTask task = new BLASTHomologySearch(accessionMap, new TaskIdentifier(UUID.randomUUID().toString()));
+        RunnableTask task = new BLASTHomologySearch(accessionMap, new TaskIdentifier(UUID.randomUUID()
+                                                                                         .toString()));
 
         // executable parameter
         task.addAnnotation(new ExecutableParameter("BLASTP", "BlastP executable", new File(blastp)));
 
-        task.addAnnotation(new Parameter("Database", "The database to search", "-db", database.getAbsolutePath()));
-        task.addAnnotation(new Parameter("Expected value", "Results above the specified threshold will be ignored", "-evalue", String.format("%.1e", expected)));
-        task.addAnnotation(new Parameter("Threads", "The number of threads to split the task accross", "-num_threads", Integer.toString(cpu)));
-        task.addAnnotation(new Parameter("Number of Descriptions", "The maximum number of descriptions to display", "-num_descriptions", Integer.toString(results)));
-        task.addAnnotation(new Parameter("Number of Alignments", "The maximum number of alignments to display", "-num_alignments", Integer.toString(results)));
-        task.addAnnotation(new Parameter("Output Format", "Format of blast output (4=tsv, 5=xml)", "-outfmt", Integer.toString(format)));
+        task.addAnnotation(new Parameter("Database", "The database to search", "-db", database
+                .getAbsolutePath()));
+        task.addAnnotation(new Parameter("Expected value", "Results above the specified threshold will be ignored", "-evalue", String
+                .format("%.1e", expected)));
+        task.addAnnotation(new Parameter("Threads", "The number of threads to split the task accross", "-num_threads", Integer
+                .toString(cpu)));
+        task.addAnnotation(new Parameter("Number of Descriptions", "The maximum number of descriptions to display", "-num_descriptions", Integer
+                .toString(results)));
+        task.addAnnotation(new Parameter("Number of Alignments", "The maximum number of alignments to display", "-num_alignments", Integer
+                .toString(results)));
+        task.addAnnotation(new Parameter("Output Format", "Format of blast output (4=tsv, 5=xml)", "-outfmt", Integer
+                .toString(format)));
 
         task.addAnnotation(new FileParameter("Query File", "The query file", "-query", input));
-        task.addAnnotation(new FileParameter("Output File", "The output file", "-out", File.createTempFile("blast", "")));
+        task.addAnnotation(new FileParameter("Output File", "The output file", "-out", File
+                .createTempFile("blast", "")));
 
         return task;
     }
