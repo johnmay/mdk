@@ -18,20 +18,6 @@ import static org.junit.Assert.*;
  */
 public class ECNumberTest {
 
-    public ECNumberTest() {
-    }
-
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-
     @Test
     public void testUnderterminedParsing() {
         Identifier id = new ECNumber("EC-Undertermined");
@@ -44,6 +30,11 @@ public class ECNumberTest {
         assertEquals("5.3.1.23", id.getAccession());
     }
 
-
+    /** test for E.C. from UniProt-KB P94368 */
+    @Test public void testP94368(){
+        Identifier id = new ECNumber();
+        id.setAccession("4.2.1.136");
+        assertEquals("4.2.1.136", id.getAccession());
+    }
 }
 

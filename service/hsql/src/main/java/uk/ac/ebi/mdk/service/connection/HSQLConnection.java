@@ -84,7 +84,7 @@ public class HSQLConnection extends BasicServiceLocation
     @Override
     public void commit() throws SQLException {
         if (connection != null)
-            commit();
+            connection.commit();
     }
 
 }
