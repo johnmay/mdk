@@ -78,7 +78,7 @@ public class Citation implements Comparable<Citation>{
             return false;
         }
         final Citation other = (Citation) obj;
-        if (this.pubmedId != other.pubmedId) {
+        if (!this.pubmedId.equals(other.pubmedId)) {
             return false;
         }
         if(this.pubmedId == null) {

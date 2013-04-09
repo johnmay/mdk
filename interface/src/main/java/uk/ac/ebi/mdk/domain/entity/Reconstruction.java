@@ -197,7 +197,7 @@ public interface Reconstruction extends AnnotatedEntity {
      */
     public Collection<GeneProduct> productsOf(Gene gene);
 
-    public Collection<Reaction> reactionsOf(GeneProduct product);
+    public Collection<MetabolicReaction> reactionsOf(GeneProduct product);
 
     public Collection<GeneProduct> enzymesOf(Reaction reaction);
 

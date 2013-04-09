@@ -140,7 +140,7 @@ public class MIRIAMLoader {
                                 Node type       = atbs.getNamedItem("type");
                                 Node deprecated = atbs.getNamedItem("deprecated");
                                 if(type != null && type.getNodeValue().equals("URN")){
-                                    if(deprecated == null || deprecated.equals("false")) {
+                                    if(deprecated == null || deprecated.getTextContent().equals("false")) {
                                         urn = uris.item(i).getTextContent();
                                     }
                                     urns.add(uris.item(i).getTextContent());

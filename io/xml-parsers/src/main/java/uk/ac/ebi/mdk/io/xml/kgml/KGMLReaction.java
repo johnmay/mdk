@@ -38,7 +38,6 @@ import java.util.List;
 public class KGMLReaction {
 
     private int id;
-    private String name;
     private List<Integer> substrateIds;
     private List<Integer> productIds;
 
@@ -81,10 +80,6 @@ public class KGMLReaction {
 
     public int getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public List<Integer> getSubstrateIds() {

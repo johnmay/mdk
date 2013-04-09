@@ -97,10 +97,7 @@ public class UniProtIdentifier
 
 
     public final String parse(String identifier) {
-        String parsedIdentifier = identifier;
-
-        // first trim spaces
-        parsedIdentifier.trim();
+        String parsedIdentifier = identifier.trim();
 
         // remove the version
         if (parsedIdentifier.contains(".")) {

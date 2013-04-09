@@ -31,8 +31,8 @@ public class SimpleStereoUpDownBondCountChecker {
 
     private SimpleStereoUpDownBondCountChecker(){};
 
-    private static Integer getUpBonds(IAtomContainer mol) {
-        Integer count = 0;
+    private static int getUpBonds(IAtomContainer mol) {
+        int count = 0;
         for (IBond iBond : mol.bonds()) {
             if (iBond.getStereo().equals(IBond.Stereo.UP) ||
                     iBond.getStereo().equals(IBond.Stereo.UP_INVERTED)) // XXX: UP should count with DOWN_INVERTED
@@ -41,8 +41,8 @@ public class SimpleStereoUpDownBondCountChecker {
         return count;
     }
 
-    private static Integer getDownBonds(IAtomContainer mol) {
-        Integer count = 0;
+    private static int getDownBonds(IAtomContainer mol) {
+        int count = 0;
         for (IBond iBond : mol.bonds()) {
             if (iBond.getStereo().equals(IBond.Stereo.DOWN) ||
                     iBond.getStereo().equals(IBond.Stereo.DOWN_INVERTED)) // XXX: DOWN should count with UP_INVERTED
@@ -52,11 +52,11 @@ public class SimpleStereoUpDownBondCountChecker {
     }
 
     public static boolean equals(IAtomContainer molA, IAtomContainer molB) {
-        Integer upA = getUpBonds(molA);
-        Integer doA = getDownBonds(molA);
+        int upA = getUpBonds(molA);
+        int doA = getDownBonds(molA);
 
-        Integer upB = getUpBonds(molB);
-        Integer doB = getDownBonds(molB);
+        int upB = getUpBonds(molB);
+        int doB = getDownBonds(molB);
 
         // if the number of up and downs bonds and different, they are clearly different.
         if ((upA + doA) != (upB + doB))

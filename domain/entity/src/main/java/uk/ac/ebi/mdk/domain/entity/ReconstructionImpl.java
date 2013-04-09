@@ -493,7 +493,7 @@ public class ReconstructionImpl
         return entities(gpr.associations(reaction));
     }
 
-    public Collection<Reaction> reactionsOf(GeneProduct product) {
+    public Collection<MetabolicReaction> reactionsOf(GeneProduct product) {
         return entities(gpr.associations(product));
     }
 
