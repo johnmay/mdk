@@ -108,6 +108,7 @@ public class ENAXMLReader {
                             Gene gene = geneMap.get(feature.getLocusTag());
                             if (gene != null) {
                                 reconstruction.associate(gene, product);
+                                gene.setName(feature.geneName());
                             } else {
                                 LOGGER.error("No gene found for '" + feature
                                         .getProteinIdentifier() + "' locus tag: '" + feature
