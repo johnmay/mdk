@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,21 +19,17 @@
 package uk.ac.ebi.mdk.domain.identifier.classification;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.deprecated.MIR;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.deprecated.Synonyms;
 
 
 /**
- *          GeneOntologyTerm – 2011.09.14 <br>
- *          Identifier for http://www.ebi.ac.uk/GOA/
- * @version $Rev$ : Last Changed $Date$
+ * GOA identifier
  * @author  johnmay
- * @author  $Author$ (this version)
  */
-@Brief("UniProtKB-GOA")
-@Description("The UniProtKB GO annotation program aims to provide high-quality Gene Ontology (GO) annotations to proteins in the UniProt Knowledgebase (UniProtKB)")
-@Synonyms("GOA")
+@MIR(196)
 public class GeneOntologyAnnotation
   extends ClassificationIdentifier {
 
