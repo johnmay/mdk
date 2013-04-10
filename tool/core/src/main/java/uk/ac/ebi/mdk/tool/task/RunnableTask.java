@@ -29,6 +29,11 @@ public abstract class RunnableTask
 
     private TaskStatus status = TaskStatus.QUEUED;
     public static final String BASE_TYPE = "Task";
+
+    private long nanoStart = System.nanoTime();
+    ;
+    private long nanoEnd;
+
     private Date start = new Date();
     private Date end;
     public Set<AnnotatedEntity> entities = new HashSet<AnnotatedEntity>();
@@ -55,6 +60,16 @@ public abstract class RunnableTask
         return isFinished()
                ? end
                : new Date(elapased);
+    }
+
+    /**
+     * The number of elapsed nano seconds since the task started.
+     *
+     * @return nano seconds
+     */
+    @Override public long elapsed() {
+        return isFinished() ? nanoEnd - nanoStart
+                            : System.nanoTime() - nanoStart;
     }
 
     /**
@@ -87,9 +102,7 @@ public abstract class RunnableTask
         return start;
     }
 
-    /**
-     * Returns a set of all entities added to the task
-     */
+    /** Returns a set of all entities added to the task */
     public Set<AnnotatedEntity> getEntities() {
         return entities;
     }
@@ -120,11 +133,13 @@ public abstract class RunnableTask
 
     public void setErrorStatus() {
         end = getElapesedTime();
+        nanoEnd = System.nanoTime();
         this.status = TaskStatus.ERROR;
     }
 
     public void setCompletedStatus() {
         end = getElapesedTime();
+        nanoEnd = System.nanoTime();
         this.status = TaskStatus.COMPLETED;
     }
 
@@ -138,7 +153,13 @@ public abstract class RunnableTask
      * @return A thread of this runnable object
      */
     public Thread getRunnableThread() {
-        return new Thread(this);
+        final Runnable self = this;
+        return new Thread(new Runnable() {
+            @Override public void run() {
+                nanoStart = System.nanoTime();
+                self.run();
+            }
+        });
     }
 
 
