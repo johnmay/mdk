@@ -22,38 +22,43 @@ import uk.ac.ebi.mdk.deprecated.MIR;
 import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
 import uk.ac.ebi.mdk.deprecated.Synonyms;
 import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
 
+import java.util.regex.Pattern;
 
-/**
- * @author pmoreno
- * @author $Author$ (this version)
- * @version $Rev$ : Last Changed $Date$
- * @name KEGGCompoundIdentifier – 2011.08.16 An identifier for KEGG Compound
- */
+/** @author John May */
+@Brief("MetaCyc")
 @MIR(194)
-@IdPattern("^[A-Z-0-9]+(?<!CHEBI)(\\:)?[A-Za-z0-9-]+$")
-@Synonyms({"BioCyc Chemical"})
-public class BioCycChemicalIdentifier
-        extends AbstractChemicalIdentifier {
+@Synonyms("MetaCyc accession")
+@IdPattern("^(?:META:[A-z0-9]+)|(?:[A-z0-9]+)$")
+public final class MetaCycIdentifier extends BioCycChemicalIdentifier {
 
-    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(BioCycChemicalIdentifier.class);
+    private static final Pattern PREFIX = Pattern.compile("^META:([A-z0-9])+$");
+    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(MetaCycIdentifier.class);
 
-    public BioCycChemicalIdentifier() {
+    public MetaCycIdentifier() {
     }
 
-
-    public BioCycChemicalIdentifier(String organism, String accession) {
-        super(organism + ":" + accession);
+    public MetaCycIdentifier(String accession) {
+        super(PREFIX.matcher(accession).matches() ? "" : "META:", accession);
     }
 
+    @Override public void setAccession(String accession) {
+        if(PREFIX.matcher(accession).matches())
+            super.setAccession(accession);
+        else
+            super.setAccession("META:" + accession);
+    }
 
     /**
      * @inheritDoc
      */
     @Override
-    public BioCycChemicalIdentifier newInstance() {
-        return new BioCycChemicalIdentifier();
+    public MetaCycIdentifier newInstance() {
+        return new MetaCycIdentifier();
     }
+
+
 
 
     /**
@@ -82,27 +87,4 @@ public class BioCycChemicalIdentifier
         return DESCRIPTION.resource;
     }
 
-    public static BioCycChemicalIdentifier meta(String accession) {
-        return new BioCycChemicalIdentifier("META", accession);
-    }
-
-    public static BioCycChemicalIdentifier human(String accession) {
-        return new BioCycChemicalIdentifier("HUMAN", accession);
-    }
-
-    public static BioCycChemicalIdentifier ecoli(String accession) {
-        return new BioCycChemicalIdentifier("ECOLI", accession);
-    }
-
-    /**
-     * @deprecated Incorrect id format
-     */
-    @Deprecated
-    public static BioCycChemicalIdentifier old(String accession) {
-        BioCycChemicalIdentifier id = new BioCycChemicalIdentifier();
-        id.setAccession(accession);
-        return id;
-    }
-
 }
-

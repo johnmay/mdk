@@ -41,6 +41,7 @@ import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGDrugIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KeggGlycanIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.LIPIDMapsIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.MetaCycIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.PDBChemIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.PDBIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.PubChemCompoundIdentifier;
@@ -139,6 +140,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
             new PDBChemIdentifier(),
             new CHEMBLIdentifier(),
             new BioCycChemicalIdentifier(),
+            new MetaCycIdentifier(),
             new KeggGlycanIdentifier(),
             new KEGGOrthology(),
             new ChemSpiderIdentifier(),

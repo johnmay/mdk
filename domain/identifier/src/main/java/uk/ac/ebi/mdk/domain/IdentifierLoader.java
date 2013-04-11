@@ -102,12 +102,14 @@ public class IdentifierLoader
 
         int mir = getMIR(c);
 
-        if (mir != 0) {
+        String name = super.getShortDescription(c);
+
+        if (mir != 0 && name.equals("Unknown")) {
             MIRIAMEntry entry = MIRIAM_LOADER.getEntry(mir);
             return entry.getName();
         }
 
-        return super.getShortDescription(c);
+        return name;
 
     }
 
