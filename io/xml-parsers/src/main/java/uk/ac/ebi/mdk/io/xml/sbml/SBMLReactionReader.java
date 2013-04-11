@@ -307,9 +307,7 @@ public class SBMLReactionReader {
             metabolite.setCharge(((Integer) charge).doubleValue());
 
             for (CVTerm term : species.getCVTerms()) {
-                System.out.println("loading cv-term");
                 for (String resource : term.getResources()) {
-                    System.out.println("resource: " + resource);
                     //XXX bit of a hack - need a handler class
                     if (resource.startsWith("urn:miriam")) {
                         Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(resource);
