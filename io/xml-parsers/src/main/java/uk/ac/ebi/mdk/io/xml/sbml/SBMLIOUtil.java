@@ -87,11 +87,23 @@ public class SBMLIOUtil {
     private Map<Compartment, org.sbml.jsbml.Compartment> compartmentMap = new HashMap<Compartment, org.sbml.jsbml.Compartment>();
 
     private EntityFactory factory;
+    
+    private SBMLSideCompoundHandler sideCompHandler;
+    private Boolean sideCompoundHandlerAvailable;
 
     public SBMLIOUtil(EntityFactory factory, int level, int version) {
         this.level = level;
         this.version = version;
         this.factory = factory;
+        this.sideCompoundHandlerAvailable = false;
+    }
+    
+    public SBMLIOUtil(EntityFactory factory, int level, int version, SBMLSideCompoundHandler sideCompHandler) {
+        this.level = level;
+        this.version = version;
+        this.factory = factory;
+        this.sideCompHandler = sideCompHandler;
+        this.sideCompoundHandlerAvailable = true;
     }
 
 
@@ -112,10 +124,11 @@ public class SBMLIOUtil {
         Model model = new Model(level, version);
         doc.setModel(model);
 
-        for (MetabolicReaction rxn : reconstruction.getReactome()) {
+        for (MetabolicReaction rxn : reconstruction.reactome()) {
             addReaction(model, rxn);
         }
-
+        if(sideCompoundHandlerAvailable)
+            sideCompHandler.writeSideCompoundAnnotations(model);
         return doc;
 
     }
@@ -161,10 +174,16 @@ public class SBMLIOUtil {
         int index = 0;
 
         for (MetabolicParticipant p : rxn.getReactants()) {
-            sbmlRxn.addReactant(getSpeciesReference(model, p, sbmlRxn, index++));
+            SpeciesReference ref = getSpeciesReference(model, p, sbmlRxn, index++);
+            sbmlRxn.addReactant(ref);
+            if(p.isSideCompound() && sideCompoundHandlerAvailable)
+                sideCompHandler.registerAsSideCompound(new Species(ref.getSpecies()));
         }
         for (MetabolicParticipant p : rxn.getProducts()) {
-            sbmlRxn.addProduct(getSpeciesReference(model, p, sbmlRxn, index++));
+            SpeciesReference ref = getSpeciesReference(model, p, sbmlRxn, index++); 
+            sbmlRxn.addProduct(ref);
+            if(p.isSideCompound() && sideCompoundHandlerAvailable)
+                sideCompHandler.registerAsSideCompound(new Species(ref.getSpecies()));
         }
 
 

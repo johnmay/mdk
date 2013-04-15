@@ -43,6 +43,8 @@ public class BasicParticipant<M, S extends Number>
     protected M molecule;
 
     protected S coefficient;
+    
+    private boolean sideCompound = false;
 
 
     /**
@@ -231,5 +233,21 @@ public class BasicParticipant<M, S extends Number>
     @Override
     public Participant newInstance() {
         return new BasicParticipant(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean isSideCompound() {
+        return sideCompound;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void setSideCompound(Boolean sideComp) {
+        this.sideCompound = sideComp;
     }
 }
