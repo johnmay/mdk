@@ -23,4 +23,5 @@ package uk.ac.ebi.mdk.domain.entity;
  * @author John May
  */
 public interface Task extends AnnotatedEntity {
+    long elapsed();
 }

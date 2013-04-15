@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * SBMLReactionReader.java
  *
@@ -290,9 +307,7 @@ public class SBMLReactionReader {
             metabolite.setCharge(((Integer) charge).doubleValue());
 
             for (CVTerm term : species.getCVTerms()) {
-                System.out.println("loading cv-term");
                 for (String resource : term.getResources()) {
-                    System.out.println("resource: " + resource);
                     //XXX bit of a hack - need a handler class
                     if (resource.startsWith("urn:miriam")) {
                         Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(resource);

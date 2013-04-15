@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. John May <jwmay@users.sf.net>
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -32,12 +32,11 @@ import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
  */
 @MIR(194)
 @IdPattern("^[A-Z-0-9]+(?<!CHEBI)(\\:)?[A-Za-z0-9-]+$")
-@Synonyms({"MetaCyc accession", "BioCyc Chemical"})
+@Synonyms({"BioCyc Chemical"})
 public class BioCycChemicalIdentifier
         extends AbstractChemicalIdentifier {
 
-    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER
-            .getMetaInfo(BioCycChemicalIdentifier.class);
+    private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(BioCycChemicalIdentifier.class);
 
     public BioCycChemicalIdentifier() {
     }

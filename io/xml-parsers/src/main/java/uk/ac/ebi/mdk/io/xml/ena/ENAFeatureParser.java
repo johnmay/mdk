@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * ENAFeatureParser.java
  *
@@ -27,6 +44,7 @@ import org.biojava3.core.sequence.template.AbstractSequence;
 import org.codehaus.stax2.XMLStreamReader2;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.Locus;
+import uk.ac.ebi.mdk.domain.annotation.Note;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
@@ -61,7 +79,8 @@ import java.util.regex.Pattern;
  */
 public class ENAFeatureParser {
 
-    private static final Logger LOGGER = Logger.getLogger(ENAFeatureParser.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ENAFeatureParser.class);
     private Set<String> warnings = new HashSet<String>();
     private static DefaultIdentifierFactory IDENTIFIER_FACTORY = DefaultIdentifierFactory
             .getInstance();
@@ -115,8 +134,10 @@ public class ENAFeatureParser {
 
     ;
     private Pattern IDENTITY_MATCH = Pattern.compile("(\\d+)\\.\\.(\\d+)");
-    private Pattern COMPLEMENT_MATCH = Pattern.compile("complement\\((\\d+)\\.\\.(\\d+)\\)");
-    private Pattern COMPLEMENT_AND_JOIN_MATCH = Pattern.compile("complement\\(join\\((\\d+)\\.\\.(\\d+),(\\d+)\\.\\.(\\d+)\\)\\)");
+    private Pattern COMPLEMENT_MATCH = Pattern
+            .compile("complement\\((\\d+)\\.\\.(\\d+)\\)");
+    private Pattern COMPLEMENT_AND_JOIN_MATCH = Pattern
+            .compile("complement\\(join\\((\\d+)\\.\\.(\\d+),(\\d+)\\.\\.(\\d+)\\)\\)");
     private Map<String, Resolver> resolverMap = new HashMap<String, Resolver>();
 
     {
@@ -130,7 +151,8 @@ public class ENAFeatureParser {
      *
      * @param xmlr
      */
-    public ENAFeatureParser(EntityFactory factory, XMLStreamReader2 xmlr) throws XMLStreamException {
+    public ENAFeatureParser(EntityFactory factory, XMLStreamReader2 xmlr) throws
+                                                                          XMLStreamException {
 
         this.factory = factory;
 
@@ -141,7 +163,8 @@ public class ENAFeatureParser {
             if (attrName.equals("name")) {
                 type = Type.of(xmlr.getAttributeValue(i));
                 if (type == Type.UNKNOWN)
-                    warnings.add("unknown attribute type: " + xmlr.getAttributeValue(i));
+                    warnings.add("unknown attribute type: " + xmlr
+                            .getAttributeValue(i));
             } else if (attrName.equals("location")) {
                 String location = xmlr.getAttributeValue(i);
 
@@ -227,32 +250,47 @@ public class ENAFeatureParser {
     }
 
     public String getLocusTag() {
-        return qualifiers.containsKey("locus_tag") ? qualifiers.get("locus_tag") : "";
+        return qualifiers.containsKey("locus_tag") ? qualifiers.get("locus_tag")
+                                                   : "";
+    }
+
+    /**
+     * Access the gene name, set on proteins only.
+     *
+     * @return name of gene
+     */
+    public String geneName() {
+        String gname = qualifiers.get("gene");
+        return gname != null ? gname : "";
     }
 
     public String getOldLocusTag() {
-        return qualifiers.containsKey("old_locus_tag") ? qualifiers.get("old_locus_tag") : "";
+        return qualifiers.containsKey("old_locus_tag") ? qualifiers
+                .get("old_locus_tag") : "";
     }
 
     public int getTranslationTable() {
-        return Integer.parseInt(qualifiers.containsKey("transl_table") ? qualifiers
-                .get("transl_table") : "-1");
+        return Integer.parseInt(
+                qualifiers.containsKey("transl_table") ? qualifiers
+                        .get("transl_table") : "-1");
     }
 
     public String getTranslation() {
-        return qualifiers.containsKey("translation") ? qualifiers.get("translation") : "";
+        return qualifiers.containsKey("translation") ? qualifiers
+                .get("translation") : "";
     }
 
     public Integer getCodonStart() {
-        return Integer.parseInt(qualifiers.containsKey("codon_start") ? qualifiers
-                .get("codon_start") : "-1");
+        return Integer.parseInt(
+                qualifiers.containsKey("codon_start") ? qualifiers
+                        .get("codon_start") : "-1");
     }
 
-    public int start(){
+    public int start() {
         return start;
     }
 
-    public int end(){
+    public int end() {
         return end;
     }
 
@@ -276,10 +314,16 @@ public class ENAFeatureParser {
 
     private ProteinProduct getCodingSequence() {
 
-        ProteinProduct cds = factory.ofClass(ProteinProduct.class, getProteinIdentifier(), getLocusTag(), getProduct());
+        ProteinProduct cds = factory
+                .ofClass(ProteinProduct.class, getProteinIdentifier(), getProduct(), getLocusTag());
 
         for (Identifier identifier : identifiers.getIdentifiers()) {
             cds.addAnnotation(new CrossReference(identifier));
+        }
+
+        String noteContent = qualifiers.get("note");
+        if (noteContent != null) {
+            cds.addAnnotation(new Note(noteContent));
         }
 
         cds.addSequence(new ProteinSequence(getTranslation()));
@@ -290,9 +334,11 @@ public class ENAFeatureParser {
 
     private RNAProduct getRNA() {
         if (isRRNA()) {
-            return factory.ofClass(RibosomalRNA.class, BasicRNAIdentifier.nextIdentifier(), getLocusTag(), getProduct());
+            return factory.ofClass(RibosomalRNA.class, BasicRNAIdentifier
+                    .nextIdentifier(), getProduct(), getLocusTag());
         } else if (isTRNA()) {
-            return factory.ofClass(TransferRNA.class, BasicRNAIdentifier.nextIdentifier(), getLocusTag(), getProduct());
+            return factory.ofClass(TransferRNA.class, BasicRNAIdentifier
+                    .nextIdentifier(), getProduct(), getLocusTag());
         }
         return null;
     }
@@ -318,21 +364,19 @@ public class ENAFeatureParser {
 
     }
 
-    /**
-     * CDS only
-     */
+    /** CDS only */
     public Identifier getProteinIdentifier() {
         return qualifiers.containsKey("protein_id")
-                ? new DynamicIdentifier("ENA Protein ID", qualifiers.get("protein_id")) : BasicProteinIdentifier.nextIdentifier();
+               ? new DynamicIdentifier("ENA Protein ID", qualifiers
+                .get("protein_id")) : BasicProteinIdentifier.nextIdentifier();
     }
 
     public String getProduct() {
-        return qualifiers.containsKey("product") ? qualifiers.get("product") : "";
+        return qualifiers.containsKey("product") ? qualifiers.get("product")
+                                                 : "";
     }
 
-    /**
-     * RESOLVERS *
-     */
+    /** RESOLVERS * */
     private interface Resolver {
 
         public void resolve(XMLStreamReader2 xmlr) throws XMLStreamException;
@@ -342,7 +386,8 @@ public class ENAFeatureParser {
 
         public void resolve(XMLStreamReader2 xmlr) throws XMLStreamException {
             String db = xmlr.getAttributeValue(0);
-            Identifier identifier = IDENTIFIER_FACTORY.ofSynonym(db, xmlr.getAttributeValue(1));
+            Identifier identifier = IDENTIFIER_FACTORY.ofSynonym(db, xmlr
+                    .getAttributeValue(1));
             if (identifier != IdentifierFactory.EMPTY_IDENTIFIER)
                 identifiers.add(identifier);
             else

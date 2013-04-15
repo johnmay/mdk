@@ -21,73 +21,80 @@
  */
 package uk.ac.ebi.mdk.domain.entity;
 
-import java.util.Collection;
-
-import uk.ac.ebi.mdk.domain.entity.metabolite.MetaboliteClass;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.entity.metabolite.MetaboliteClass;
+
+import java.util.Collection;
 
 
 /**
- * Description of a metabolic instance.
+ * Describes a metabolite.
  *
  * @author johnmay
+ * @see AnnotatedEntity
  */
 public interface Metabolite extends AnnotatedEntity {
 
     /**
-     * Access the charge of this metabolite. If no charge
-     * has been added this should return {@see Double#NAN}
+     * Access the charge of this metabolite. If no charge has been added this
+     * should return {@see Double#NAN}
      *
-     * @return charge value for the metabolite of NAN if
-     *         not set
+     * @return charge value for the metabolite of NAN if not set
      */
-    public Double getCharge();
+    Double getCharge();
 
     /**
-     * Set the charge on the metabolite
+     * Set the charge on the metabolite.
      *
-     * @param charge
+     * @param charge value
      */
-    public void setCharge(Double charge);
+    void setCharge(Double charge);
 
     /**
-     * Set whether the molecule is generic. A generic metabolite
-     * is much like an abstract class. It provides some information
-     * on the metabolite but is not concrete.
+     * Set whether the molecule is generic. A generic metabolite is much like an
+     * abstract class. It provides some information on the metabolite but is not
+     * concrete.
      *
      * @param generic if the metabolic is generic
      */
-    public void setGeneric(boolean generic);
+    void setGeneric(boolean generic);
 
     /**
-     * Access whether the metabolite is generic
+     * Access whether the metabolite is generic.
      *
-     * @return
+     * @return whether the metabolite is generic
      */
-    public boolean isGeneric();
-
-
-    public void setType(Enum<? extends MetaboliteClass> type);
-
-
-    public Enum<? extends MetaboliteClass> getType();
+    boolean isGeneric();
 
     /**
-     * Method determines whether this metabolite has a
-     * chemical structure annotation (see. chemet-annotation)
-     * module for types of annotations.
+     * Set the metabolite type.
+     *
+     * @param type class of this metabolite
+     */
+    void setType(Enum<? extends MetaboliteClass> type);
+
+    /**
+     * Access the metabolite type.
+     *
+     * @return the metabolite class
+     */
+    Enum<? extends MetaboliteClass> getType();
+
+    /**
+     * Method determines whether this metabolite has a chemical structure
+     * annotation (see. chemet-annotation) module for types of annotations.
      *
      * @return whether there is structure for this metabolite
      */
-    public boolean hasStructure();
+    boolean hasStructure();
 
     /**
-     * Convenience method for accessing all associated chemical
-     * structures. If no chemical structure is present on the
-     * metabolite an empty collection is returned.
+     * Convenience method for accessing all associated chemical structures. If
+     * no chemical structure is present on the metabolite an empty collection is
+     * returned.
      *
      * @return collection of {@see ChemicalStructure} annotations
      */
-    public Collection<ChemicalStructure> getStructures();
+    Collection<ChemicalStructure> getStructures();
 
 }
