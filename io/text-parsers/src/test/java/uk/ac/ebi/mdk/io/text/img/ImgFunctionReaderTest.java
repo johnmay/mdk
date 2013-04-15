@@ -82,6 +82,6 @@ public class ImgFunctionReaderTest {
     @Test public void test() throws IOException {
         InputStream in = getClass().getResourceAsStream("img-sample.tsv");
         Collection<ImgFunction> funcs = ImgFunctionReader.fromInputStream(in);
-        assertThat(funcs.size(), is(27));
+        assertThat(funcs.size(), is(26));
     }
 }
