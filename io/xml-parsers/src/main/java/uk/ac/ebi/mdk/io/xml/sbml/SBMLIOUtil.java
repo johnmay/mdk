@@ -72,12 +72,21 @@ public class SBMLIOUtil {
     private EntityFactory factory;
     
     private SBMLSideCompoundHandler sideCompHandler;
+    private Boolean sideCompoundHandlerAvailable;
 
     public SBMLIOUtil(EntityFactory factory, int level, int version) {
         this.level = level;
         this.version = version;
         this.factory = factory;
-        this.sideCompHandler = new SimpleSideCompoundHandler();
+        this.sideCompoundHandlerAvailable = false;
+    }
+    
+    public SBMLIOUtil(EntityFactory factory, int level, int version, SBMLSideCompoundHandler sideCompHandler) {
+        this.level = level;
+        this.version = version;
+        this.factory = factory;
+        this.sideCompHandler = sideCompHandler;
+        this.sideCompoundHandlerAvailable = true;
     }
 
 
@@ -101,7 +110,8 @@ public class SBMLIOUtil {
         for (MetabolicReaction rxn : reconstruction.reactome()) {
             addReaction(model, rxn);
         }
-        sideCompHandler.writeSideCompoundAnnotations(model);
+        if(sideCompoundHandlerAvailable)
+            sideCompHandler.writeSideCompoundAnnotations(model);
         return doc;
 
     }
@@ -149,13 +159,13 @@ public class SBMLIOUtil {
         for (MetabolicParticipant p : rxn.getReactants()) {
             SpeciesReference ref = getSpeciesReference(model, p, sbmlRxn, index++);
             sbmlRxn.addReactant(ref);
-            if(p.isSideCompound())
+            if(p.isSideCompound() && sideCompoundHandlerAvailable)
                 sideCompHandler.registerAsSideCompound(new Species(ref.getSpecies()));
         }
         for (MetabolicParticipant p : rxn.getProducts()) {
             SpeciesReference ref = getSpeciesReference(model, p, sbmlRxn, index++); 
             sbmlRxn.addProduct(ref);
-            if(p.isSideCompound())
+            if(p.isSideCompound() && sideCompoundHandlerAvailable)
                 sideCompHandler.registerAsSideCompound(new Species(ref.getSpecies()));
         }
 
