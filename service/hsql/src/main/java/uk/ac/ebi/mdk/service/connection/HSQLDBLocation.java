@@ -29,58 +29,53 @@ import java.sql.SQLException;
  *
  * @author John May
  */
-public class HSQLConnection extends BasicServiceLocation
-                            implements DatabaseLocation {
+public class HSQLDBLocation extends BasicServiceLocation
+        implements DatabaseLocation {
 
-    private static final String protocol = "dbc:hsqldb:file:";
-    private final        String url;
+    private static final String protocol = "jdbc:hsqldb:file:";
+    private final String url;
 
     private volatile Connection connection;
-    private final    Object     lock = new Object();
+    private final Object lock = new Object();
 
     /**
      * Create a new connection of the given name and the provided path.
+     *
      * @param name name of the connection
      * @param path relative path to the database
      */
-    public HSQLConnection(String name, String path) {
+    public HSQLDBLocation(String name, String path) {
         super(name, path);
-        this.url = protocol + getLocation().getAbsolutePath() + ";shutdown=true";
+        this.url = protocol + getLocation().getAbsolutePath() + "/content;shutdown=true";
     }
 
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Connection getConnection() throws SQLException {
         Connection result = connection;
-        if (result == null){
+        if (result == null) {
             synchronized (lock) {
                 result = connection;
-                if(result == null)
-                    connection = result = DriverManager.getConnection(url, "sa", "");
+                if (result == null)
+                    connection = result = DriverManager
+                            .getConnection(url, "sa", "");
             }
         }
         return result;
     }
 
-
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public void close() throws SQLException {
         if (connection != null) {
-            connection.commit();
             connection.close();
+            connection = null;
         }
     }
 
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public void commit() throws SQLException {
         if (connection != null)
