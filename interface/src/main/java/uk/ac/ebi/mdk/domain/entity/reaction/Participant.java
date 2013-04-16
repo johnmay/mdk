@@ -53,4 +53,19 @@ public interface Participant<M, S extends Number> extends Entity, Comparable<Par
 
 
     public void setMolecule(M molecule);
+    
+    /**
+     * Whether the participant is considered a side compound or not in this reaction.
+     * 
+     * @return true if it is a side compound. 
+     */
+    public boolean isSideCompound();
+    
+    /**
+     * Sets whether the participant is a side compound or not in the reaction.
+     * 
+     * @param sideComp true to set as side compound in this reaction.
+     * @return 
+     */
+    public void setSideCompound(Boolean sideComp);
 }
