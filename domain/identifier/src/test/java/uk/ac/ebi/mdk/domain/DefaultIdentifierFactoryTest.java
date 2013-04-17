@@ -29,6 +29,7 @@ import uk.ac.ebi.mdk.domain.identifier.HMDBIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
+import uk.ac.ebi.mdk.domain.identifier.MetaCycIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
@@ -87,8 +88,9 @@ public class DefaultIdentifierFactoryTest {
 
     @Test public void ofPattern_MetaCyc() {
         Collection<Class<? extends Identifier>> classes = ids.ofPattern("META:ATP");
-        assertThat(classes.size(), is(1));
+        assertThat(classes.size(), is(2));
         assertThat(classes, hasItem(BioCycChemicalIdentifier.class));
+        assertThat(classes, hasItem(MetaCycIdentifier.class));
     }
 
     @Test public void ofPattern_ChEBI() {
