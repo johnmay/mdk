@@ -1,28 +1,34 @@
 /*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the Lesser GNU General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.identifier;
 
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Collection;
+import java.util.Iterator;
 
 import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
 import uk.ac.ebi.mdk.domain.identifier.type.ProteinIdentifier;
 import uk.ac.ebi.mdk.domain.IdentifierMetaInfo;
 import uk.ac.ebi.mdk.deprecated.MIR;
+import uk.ac.ebi.mdk.domain.identifier.type.SequenceIdentifier;
 
 
 /**
@@ -32,8 +38,8 @@ import uk.ac.ebi.mdk.deprecated.MIR;
  * @author johnmay
  * @date Mar 21, 2011
  */
-@MIR(value = 5)
-public abstract class UniProtIdentifier
+@MIR(5)
+public class UniProtIdentifier
         extends AbstractIdentifier
         implements ProteinIdentifier, Externalizable {
 
@@ -52,7 +58,7 @@ public abstract class UniProtIdentifier
 
     public enum Status {
 
-        REVIEWED, UNREVIEWED
+        REVIEWED, UNREVIEWED, UNKNOWN
     };
 
     private String name = "";
@@ -62,6 +68,17 @@ public abstract class UniProtIdentifier
         //  setResource( Resource.UNIPROT );
     }
 
+    @Override public Identifier newInstance() {
+        return new UniProtIdentifier();
+    }
+
+    @Override public Collection<String> getHeaderCodes() {
+        throw new UnsupportedOperationException("");
+    }
+
+    @Override public SequenceIdentifier ofHeader(Iterator<String> token) {
+        throw new UnsupportedOperationException("");
+    }
 
     public UniProtIdentifier(String identifier, Boolean check) {
         this();
@@ -80,10 +97,7 @@ public abstract class UniProtIdentifier
 
 
     public final String parse(String identifier) {
-        String parsedIdentifier = identifier;
-
-        // first trim spaces
-        parsedIdentifier.trim();
+        String parsedIdentifier = identifier.trim();
 
         // remove the version
         if (parsedIdentifier.contains(".")) {
@@ -154,7 +168,9 @@ public abstract class UniProtIdentifier
     /**
      * Returns the status of the entry
      */
-    public abstract UniProtIdentifier.Status getStatus();
+    public UniProtIdentifier.Status getStatus(){
+        return Status.UNKNOWN;
+    }
 
 
     public void setName(String name) {

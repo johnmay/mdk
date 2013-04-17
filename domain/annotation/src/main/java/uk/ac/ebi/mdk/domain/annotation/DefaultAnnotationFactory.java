@@ -1,22 +1,23 @@
-/**
- * This file is part of the CheMet library
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.annotation;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
@@ -54,8 +55,8 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
     // reflective map
     private static Constructor[] constructors = new Constructor[Byte.MAX_VALUE];
 
-    private static Map<Class, Annotation> instances = new HashMap<Class, Annotation>();
-    private Multimap<Class<? extends Annotation>, Class<? extends Annotation>> subclasses = HashMultimap.create();
+    private static Map<Class, Annotation>                                             instances  = new HashMap<Class, Annotation>();
+    private        Multimap<Class<? extends Annotation>, Class<? extends Annotation>> subclasses = HashMultimap.create();
 
     private ListMultimap<Class, Annotation> contextMap = ArrayListMultimap.create();
 
@@ -102,6 +103,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
                                                    new InChI(),
                                                    new Charge(),
                                                    new GibbsEnergy(),
+                                                   new Note(),
                                                    Lumped.getInstance(),
                                                    ACPAssociated.getInstance())) {
 
@@ -336,6 +338,69 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
 
         return subclasses.get(c);
 
+    }
+
+
+    @Override
+    public <T extends Annotation> Collection<? extends T> getSubclassInstances(Class<T> c) {
+
+        Collection<T> instances = new TreeSet<T>(new Comparator<Annotation>() {
+            @Override
+            public int compare(Annotation o1, Annotation o2) {
+                return o1.getBrief().compareTo(o2.getBrief());
+            }
+        });
+
+        for(Class<? extends Annotation> subclass : getSubclasses(c)){
+            instances.add((T) ofClass(subclass));
+        }
+
+        return instances;
+
+    }
+
+    /**
+     * Stuff used to generate some wiki pages
+     *
+     * @return
+     */
+    private String getWikiHTML() {
+
+
+        StringBuilder sb = new StringBuilder();
+        Annotation[] annotations = instances.values().toArray(new Annotation[0]);
+        Arrays.sort(annotations, new Comparator<Annotation>() {
+            @Override
+            public int compare(Annotation o1, Annotation o2) {
+                return o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
+            }
+        });
+        for (Annotation annotation : annotations) {
+            sb.append("<tr>");
+            sb.append("<td>").append(annotation.getBrief()).append("</td>");
+            sb.append("<td>").append(annotation.getDescription()).append("</td>");
+            sb.append("<td>").append(Joiner.on(", ").join(filter(Arrays.asList(annotation.getClass().getAnnotation(Context.class).value())))).append("</td>");
+            sb.append("<td><code><a href=\"").append("http://www.github.com/johnmay/mdk/tree/develop/domain/annotation/src/main/java/").append(annotation.getClass().getName().replaceAll("\\.", "/")).append(".java\">");
+            sb.append(annotation.getClass().getSimpleName()).append("</a></code></td>");
+            sb.append("</tr>");
+        }
+
+        return sb.toString();
+
+    }
+
+    private List<String> filter(List<Class<? extends AnnotatedEntity>> classes) {
+        List<String> scopes = new ArrayList<String>();
+        for (Class c : classes) {
+            if (c != AnnotatedEntity.class)
+                scopes.add(c.getSimpleName());
+        }
+        return scopes;
+    }
+
+    public static void main(String[] args) {
+        DefaultAnnotationFactory FACTORY = DefaultAnnotationFactory.getInstance();
+        System.out.println(FACTORY.getWikiHTML());
     }
 
 

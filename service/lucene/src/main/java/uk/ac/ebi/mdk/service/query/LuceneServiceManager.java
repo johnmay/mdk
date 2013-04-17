@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.query;
 
 import com.google.common.collect.HashMultimap;
@@ -17,6 +34,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.ServiceManager;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -78,7 +96,8 @@ public class LuceneServiceManager
      * @inheritDoc
      */
     @Override
-    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifier, Class<S> c) {
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifier,
+                                                                                Class<? extends S> c) {
 
         for (QueryService service : services.get(identifier)) {
             if (c.isAssignableFrom(service.getClass()) && service.startup()) {
@@ -93,7 +112,7 @@ public class LuceneServiceManager
      * @inheritDoc
      */
     @Override
-    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifier, Class<S> c) {
+    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifier, Class<? extends S> c) {
 
         for (QueryService service : services.get(identifier)) {
             if (c.isAssignableFrom(service.getClass())) {
@@ -106,12 +125,12 @@ public class LuceneServiceManager
     }
 
     @Override
-    public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<S> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<? extends S> serviceClass) {
         return hasService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
 
     @Override
-    public <S extends QueryService<I>, I extends Identifier> S getService(I identifier, Class<S> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> S getService(I identifier, Class<? extends S> serviceClass) {
         return getService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
 
@@ -158,12 +177,12 @@ public class LuceneServiceManager
         }
 
         // may want to do something better
-        throw new InvalidParameterException("No " + classes + "service available for " + identifier.getSimpleName());
+        throw new InvalidParameterException("No " + Arrays.toString(classes) + "service available for " + identifier.getSimpleName());
 
     }
 
     @Override
-    public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass, Class<S> service) {
+    public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass, Class<? extends S> service) {
         return null;
     }
 

@@ -1,22 +1,18 @@
-/**
- * LocalAlignmentListCellRenderer.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.12.12
- *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.ui.render.list;
 
@@ -62,21 +58,18 @@ public class LocalAlignmentListCellRenderer
         COMPLEX_RENDERER.setGranularity(0.8f);
     }
 
-
     @Override
-    public JLabel getRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public JLabel getComponent(JList list, Object value, int index) {
 
         LocalAlignment alignment = (LocalAlignment) value;
         AlignmentRenderer renderer = alignment.hasSequences() ? COMPLEX_RENDERER : BASIC_RENDERER;
         Icon icon = new ImageIcon(renderer.render(alignment, (GeneProduct) alignment.getEntity()));
 
-        JLabel label = super.getRendererComponent(list, value, index, isSelected, cellHasFocus);
+        setIcon(icon);
+        setText(alignment.getSubject());
+        setToolTipText(TextUtility.html(alignment.getHTMLSummary()));
 
-        label.setIcon(icon);
-        label.setText(alignment.getSubject());
-        label.setToolTipText(TextUtility.html(alignment.getHTMLSummary()));
-
-        return label;
+        return this;
     }
 
 }

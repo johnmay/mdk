@@ -5,19 +5,26 @@
     <parent>
         <artifactId>mdk-service</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.3.1</version>
+        <version>1.4.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mdk-service-lucene</artifactId>
-    <version>1.3.1</version>
+    <version>1.4.0</version>
     <groupId>uk.ac.ebi.mdk</groupId>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/service/lucene-service</url>
 
     <dependencies>
 
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-entity</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-        <!-- chemet -->
+
+        <!-- MDK -->
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-service-core</artifactId>
@@ -39,23 +46,28 @@
             <artifactId>lucene-analyzers</artifactId>
             <version>3.4.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>3.4.0</version>
+        </dependency>
 
 
         <!-- chemistry development kit -->
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-io</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-formula</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-fingerprint</artifactId>
-            <version>1.4.9</version>
+            <version>${cdk.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -75,7 +87,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
 

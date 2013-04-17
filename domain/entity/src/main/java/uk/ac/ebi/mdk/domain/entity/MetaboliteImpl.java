@@ -1,23 +1,20 @@
-/**
- * Metabolite.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.09.05
- *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity;
 
 import com.google.common.base.Objects;
@@ -32,11 +29,11 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 
 import java.util.Collection;
+import java.util.UUID;
 
 
 /**
- * Metabolite – 2011.09.05 <br>
- * Class description
+ * Metabolite – 2011.09.05 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -56,6 +53,11 @@ public class MetaboliteImpl
 
 
     public MetaboliteImpl() {
+        this(UUID.randomUUID());
+    }
+
+    public MetaboliteImpl(UUID uuid){
+        super(uuid);
     }
 
 
@@ -72,12 +74,18 @@ public class MetaboliteImpl
      */
     public MetaboliteImpl(String abbreviation, String name) {
         // accession is ignored here
-        super(new BasicChemicalIdentifier(), abbreviation, name);
+        super(BasicChemicalIdentifier.nextIdentifier(), abbreviation, name);
+    }
+
+    public MetaboliteImpl(String name) {
+        // accession is ignored here
+        this("", name);
     }
 
 
     /**
-     * Accessor to whether the molecule is generic (contains one or more -R groups)
+     * Accessor to whether the molecule is generic (contains one or more -R
+     * groups)
      *
      * @return
      */
@@ -101,8 +109,8 @@ public class MetaboliteImpl
      */
     public Double getCharge() {
         return hasAnnotation(Charge.class)
-               ? getAnnotations(Charge.class).iterator().next().getValue()
-               : 0d;
+                ? getAnnotations(Charge.class).iterator().next().getValue()
+                : 0d;
     }
 
 

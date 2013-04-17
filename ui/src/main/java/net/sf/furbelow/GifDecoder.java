@@ -1,12 +1,18 @@
-/* This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * <p/>
- * This library is distributed in the hope that it will be useful,
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.  
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.sf.furbelow;
 
@@ -16,30 +22,6 @@ import java.util.*;
 import java.awt.*;
 import java.awt.image.*;
 
-/**
- * Class GifDecoder - Decodes a GIF file into one or more frames. <br>
- * 
- * <pre>
- *   Example:
- *      GifDecoder d = new GifDecoder();
- *      d.read(&quot;sample.gif&quot;);
- *      int n = d.getFrameCount();
- *      for (int i = 0; i &lt; n; i++) {
- *         BufferedImage frame = d.getFrame(i);  // frame i
- *         int t = d.getDelay(i);  // display duration of frame in milliseconds
- *         // do something with frame
- *      }
- * </pre>
- * 
- * No copyright asserted on the source code of this class. May be used
- * for any purpose, however, refer to the Unisys LZW patent for any
- * additional restrictions. Please forward any corrections to
- * kweiner@fmsware.com.
- * 
- * @author Kevin Weiner, FM Software; LZW decoder adapted from John
- *         Cristy's ImageMagick.
- * @version 1.03 November 2003
- */
 public class GifDecoder {
     /**
      * File read status: No errors.

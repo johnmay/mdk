@@ -1,19 +1,18 @@
 /*
- * Copyright (C) 2012  John May and Pablo Moreno
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package uk.ac.ebi.mdk.service.query.name;
@@ -25,22 +24,14 @@ import uk.ac.ebi.mdk.service.query.QueryService;
 import java.util.Collection;
 
 /**
- * SynonymService.java - 21.02.2012 <br/>
- * <p/>
- * Class descriptions.
+ * Search and access synonyms.
  *
  * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$
  */
 public interface SynonymService<I extends Identifier>
-        extends QueryService<I> {
+        extends SynonymSearch<I>,
+                SynonymAccess<I>,
+                QueryService<I> {
     
     public static Term SYNONYM = new Term("Synonym");
-
-    public Collection<I> searchSynonyms(String name, boolean approximate);
-
-    public Collection<String> getSynonyms(I identifier);
-
-    
 }

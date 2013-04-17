@@ -1,23 +1,44 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.io;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
+import uk.ac.ebi.mdk.io.domain.GeneDataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.MetaboliteDataReader;
+import uk.ac.ebi.mdk.io.domain.MetaboliteDataReader_1_3_9;
+import uk.ac.ebi.mdk.io.domain.ProteinProductDataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ReactionDataReader;
-import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader;
+import uk.ac.ebi.mdk.io.domain.ReactionDataReader_1_3_9;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_0_9;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataReader;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_1_3_3;
+import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataReader;
+import uk.ac.ebi.mdk.io.domain.RibosomalRNADataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.TransferRNADataReader;
-import uk.ac.ebi.mdk.io.domain.ChromosomeDataReader;
 import uk.ac.ebi.mdk.io.domain.GeneDataReader;
-import uk.ac.ebi.mdk.io.domain.GenomeDataReader;
 import uk.ac.ebi.mdk.domain.entity.*;
-import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
-import uk.ac.ebi.mdk.domain.entity.collection.Genome;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.io.domain.AnnotatedEntityDataReader;
 import uk.ac.ebi.mdk.io.domain.EntityDataReader;
+import uk.ac.ebi.mdk.io.domain.TransferRNADataReader_1_3_9;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -66,49 +87,54 @@ public class EntityDataInputStream
 
 
         add(Metabolite.class, new MetaboliteDataReader(in, factory));
+        add(Metabolite.class, new MetaboliteDataReader_1_3_9(in, factory));
         add(MetabolicReaction.class, new ReactionDataReader(in, factory, this));
+        add(MetabolicReaction.class, new ReactionDataReader_1_3_9(in, factory, this));
 
         // gene
         add(Gene.class, new GeneDataReader(in, factory));
+        add(Gene.class, new GeneDataReader_1_3_9(in, factory));
 
         // gene products
         add(ProteinProduct.class, new ProteinProductDataReader(in, factory, this));
+        add(ProteinProduct.class, new ProteinProductDataReader_1_3_9(in, factory, this));
         add(RibosomalRNA.class, new RibosomalRNADataReader(in, factory, this));
+        add(RibosomalRNA.class, new RibosomalRNADataReader_1_3_9(in, factory, this));
         add(TransferRNA.class, new TransferRNADataReader(in, factory, this));
+        add(TransferRNA.class, new TransferRNADataReader_1_3_9(in, factory, this));
 
-        add(Chromosome.class, new ChromosomeDataReader(in, factory, this));
-        add(Genome.class, new GenomeDataReader(in, factory, this));
-
-        add(Reconstruction.class, new ReconstructionDataReader(in, factory, identifierInput, this));
+        add(Reconstruction.class, new ReconstructionDataReader_0_9(in, factory, identifierInput, this));
+        add(Reconstruction.class, new ReconstructionDataReader_1_3_3(in, factory, identifierInput, this));
+        add(Reconstruction.class, new ReconstructionDataReader_1_3_9(in, factory, identifierInput, this));
 
     }
 
 
     @Override
-    public Entity read() throws IOException, ClassNotFoundException {
-        return read(readClass());
+    public Entity read(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
+        return read(readClass(), reconstruction);
     }
 
     @Override
-    public <E extends Entity> E read(Class<E> c) throws IOException, ClassNotFoundException {
+    public <E extends Entity> E read(Class<E> c, Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         Integer id = readObjectId();
 
-        return hasObject(id) ? (E) get(id) : (E) put(id, readNewEntity(c));
+        return hasObject(id) ? (E) get(id) : (E) put(id, readNewEntity(c, reconstruction));
     }
 
-    public Entity readNewEntity(Class c) throws IOException, ClassNotFoundException {
+    public Entity readNewEntity(Class c, Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         EntityReader reader = getMarshaller(c, getVersion());
-        Entity       entity = reader.readEntity();
+        Entity       entity = reader.readEntity(reconstruction);
 
         if (entity instanceof AnnotatedEntity) {
 
             annotatedEntityReader.setEntity((AnnotatedEntity) entity);
-            annotatedEntityReader.readEntity();
+            annotatedEntityReader.readEntity(reconstruction);
 
             entityReader.setEntity(entity);
-            entityReader.readEntity();
+            entityReader.readEntity(reconstruction);
 
         }
 

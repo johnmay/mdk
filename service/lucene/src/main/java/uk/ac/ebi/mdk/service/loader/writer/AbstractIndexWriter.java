@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.loader.writer;
 
 import org.apache.lucene.document.Document;
@@ -38,7 +55,7 @@ public class AbstractIndexWriter {
 
         IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_34,
                                                          index.getAnalyzer());
-        config.setRAMBufferSizeMB(50.0d);
+        config.setRAMBufferSizeMB(25.0d);
         writer = new IndexWriter(index.getDirectory(),
                                  config);
 

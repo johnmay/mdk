@@ -1,39 +1,38 @@
 /*
- * Copyright (C) 2012  John May and Pablo Moreno
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package uk.ac.ebi.mdk.domain.tool;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.*;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
+
+import static uk.ac.ebi.mdk.domain.identifier.Taxonomy.Kingdom.EUKARYOTA;
 
 /**
  * Provides automated resolution of compartments from a given string. This should be used
  * for low-level resolution where you can handle unresolvable cases appropriately.
- *
+ * <p/>
  * Example usage:
  * <pre>{@code
  * AutomaticCompartmentResolver resolver = new AutomaticCompartmentResolver();
@@ -45,14 +44,15 @@ import java.util.Set;
  *     }
  * }
  * }</pre>
+ *
  * @author johnmay
  */
 public class AutomaticCompartmentResolver implements CompartmentResolver {
 
     private static final Logger LOGGER = Logger.getLogger(AutomaticCompartmentResolver.class);
 
-    private Multimap<String, Compartment> compartments = HashMultimap.create();
-    private Set<String>                   ambiguous = new HashSet<String>();
+    private ListMultimap<String, Compartment> compartments = ArrayListMultimap.create();
+    private Set<String>                       ambiguous    = new HashSet<String>();
 
     /**
      * Default constructor uses several compartment enumerations for the resolver
@@ -83,6 +83,41 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
 
     }
 
+    /**
+     * Modest constraint that only include the cell type, tissue and organ compartments
+     * if the kingdom is a eukaryote. By default the organelle and membrance compartments
+     * are always added.
+     *
+     * @param kingdom kingdom to constrain the compartments
+     *
+     * @see CellType
+     * @see Organ
+     * @see Tissue
+     * @see Organelle
+     * @see Membrane
+     */
+    public AutomaticCompartmentResolver(Taxonomy.Kingdom kingdom){
+
+        for (Compartment compartment : Organelle.values()) {
+            addCompartment(compartment);
+        }
+        for (Compartment compartment : Membrane.values()) {
+            addCompartment(compartment);
+        }
+
+        if(EUKARYOTA.equals(kingdom)){
+            for (Compartment compartment : CellType.values()) {
+                addCompartment(compartment);
+            }
+            for (Compartment compartment : Tissue.values()) {
+                addCompartment(compartment);
+            }
+            for (Compartment compartment : Organ.values()) {
+                addCompartment(compartment);
+            }
+        }
+
+    }
 
 
     /**
@@ -101,6 +136,8 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
             compartment);
         put("[" + compartment.getAbbreviation() + "]",
             compartment);
+        for(String synonym : compartment.getSynonyms())
+            put(synonym, compartment);
     }
 
     /**
@@ -125,7 +162,7 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
 
     /**
      * Convenience method inverting the result of {@see #isAmbiguous(String)}.
-     *
+     * <p/>
      * <pre>{@code
      * AutomaticCompartmentResolver resolver = new AutomaticCompartmentResolver();
      * for(String name : Arrays.asList("c", "g", "e", "a")){
@@ -138,7 +175,9 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
      * }</pre>
      *
      * @param compartment compartment to attempt resolution for
+     *
      * @return whether the compartment can be resolved
+     *
      * @see #isAmbiguous(String)
      */
     public boolean canResolve(String compartment) {
@@ -165,7 +204,7 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
      * @return whether the provided compartment name is ambiguous or not pressent
      */
     @Override
-    public boolean isAmbiguous(String compartment){
+    public boolean isAmbiguous(String compartment) {
         compartment = compartment.toLowerCase(Locale.ENGLISH);
         return ambiguous.contains(compartment) || !compartments.containsKey(compartment);
     }
@@ -195,6 +234,12 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
 
         return Organelle.UNKNOWN;
 
+    }
+
+    @Override
+    public List<Compartment> getCompartments(String compartment) {
+        compartment = compartment.toLowerCase(Locale.ENGLISH);
+        return compartments.get(compartment);
     }
 
     /**

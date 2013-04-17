@@ -1,23 +1,20 @@
-/**
- * RNAProduct.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.10.07
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ * GNU Lesser General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity;
 
 import org.apache.log4j.Logger;
@@ -31,6 +28,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -47,7 +45,8 @@ public abstract class AbstractRNAProduct extends AbstractGeneProduct implements 
     private List<RNASequence> sequences = new ArrayList();
 
 
-    public AbstractRNAProduct() {
+    public AbstractRNAProduct(UUID uuid) {
+        super(uuid);
     }
 
 

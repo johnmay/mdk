@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service;
 
 import com.google.common.base.Joiner;
@@ -7,30 +24,46 @@ import com.google.common.collect.TreeMultimap;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.query.QueryService;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Queue;
+import java.util.ServiceLoader;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author John May
  */
 public class DefaultServiceManager implements ServiceManager {
 
+    private static final Logger LOGGER = Logger.getLogger(DefaultServiceManager.class);
+
     private final ServiceLoader<QueryService> serviceLoader = ServiceLoader.load(QueryService.class);
 
-    private final Multimap<ServiceKey, QueryService> services = TreeMultimap.create(new ServiceKeyComparator(),
-                                                                                    new ServiceComparator());
+    private final Multimap<ServiceKey, QueryService>                services     = TreeMultimap.create(new ServiceKeyComparator(),
+                                                                                                       new ServiceComparator());
     private final Multimap<Class<?>, Class<? extends QueryService>> interfaceMap = HashMultimap.create();
 
     private static class DefaultServiceManagerHolder {
         private static DefaultServiceManager INSTANCE = new DefaultServiceManager();
     }
 
+
     public static ServiceManager getInstance() {
         return DefaultServiceManagerHolder.INSTANCE;
     }
+
 
     private DefaultServiceManager() {
 
@@ -42,25 +75,29 @@ public class DefaultServiceManager implements ServiceManager {
             for (Class<? extends QueryService> serviceClass : getImplementingInterfaces(service.getClass())) {
                 ServiceKey key = new ServiceKey(identifierClass, serviceClass);
                 services.put(key, service);
+                LOGGER.debug(serviceClass.getSimpleName() + " service loaded for " + identifierClass.getSimpleName());
             }
         }
 
     }
 
+
     @Override
-    public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<S> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<? extends S> serviceClass) {
         return hasService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
 
+
     @Override
-    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifierClass, Class<S> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> boolean hasService(Class<? extends I> identifierClass,
+                                                                                Class<? extends S> serviceClass) {
         ServiceKey key = new ServiceKey(identifierClass, serviceClass);
-        if(!services.containsKey(key)){
+        if (!services.containsKey(key)) {
             return false;
         }
 
-        for(QueryService service : services.get(key)){
-            if(service.startup()){
+        for (QueryService service : services.get(key)) {
+            if (service.startup()) {
                 return true;
             }
         }
@@ -69,10 +106,13 @@ public class DefaultServiceManager implements ServiceManager {
 
     }
 
+
     @Override
-    public <S extends QueryService<I>, I extends Identifier> S getService(I identifier, Class<S> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> S getService(I identifier,
+                                                                                       Class<? extends S> serviceClass) {
         return getService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
+
 
     @Override
     public Collection<Identifier> getIdentifiers(Class<? extends QueryService> c) {
@@ -89,11 +129,13 @@ public class DefaultServiceManager implements ServiceManager {
 
     }
 
+
     /**
      * @inheritDoc
      */
     @Override
-    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifierClass, Class<S> serviceClass) {
+    public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifierClass,
+                                                                          Class<? extends S> serviceClass) {
 
         ServiceKey key = new ServiceKey(identifierClass, serviceClass);
 
@@ -111,11 +153,12 @@ public class DefaultServiceManager implements ServiceManager {
 
     }
 
+
     /**
      * @inheritDOc
      */
     public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass,
-                                                                          Class<S> serviceClass) {
+                                                                          Class<? extends S> serviceClass) {
 
         Collection<Class<? extends QueryService>> interfaces = getImplementingInterfaces(serviceClass);
         interfaces.add(serviceClass);
@@ -126,7 +169,7 @@ public class DefaultServiceManager implements ServiceManager {
 
         Set<QueryService> services = new HashSet<QueryService>();
         for (Class<? extends QueryService> serviceInterface : getImplementingInterfaces(serviceClass)) {
-            services.add(getService(identifierClass, serviceInterface));
+            services.add((QueryService<?>) getService(identifierClass, serviceInterface));
         }
 
         enhancer.setCallback(new ServiceInterceptor(services));
@@ -138,14 +181,13 @@ public class DefaultServiceManager implements ServiceManager {
 
 
     /**
-     * Class traversal algorithm adapted from:
-     * <a href="http://today.java.net/pub/a/today/2008/08/21/complex-table-cell-rendering.html">Article</a>
+     * Class traversal algorithm adapted from: <a href="http://today.java.net/pub/a/today/2008/08/21/complex-table-cell-rendering.html">Article</a>
      *
      * @param c
      *
      * @return
      */
-    private Collection<Class<? extends QueryService>> getImplementingInterfaces(Class<?> c) {
+    public Collection<Class<? extends QueryService>> getImplementingInterfaces(Class<?> c) {
 
         if (interfaceMap.containsKey(c)) {
             return interfaceMap.get(c);
@@ -187,8 +229,10 @@ public class DefaultServiceManager implements ServiceManager {
         return implementations;
     }
 
+
     /**
-     * Compares SerivceKeys based on their identifier class and then their service class.
+     * Compares SerivceKeys based on their identifier class and then their
+     * service class.
      */
     private class ServiceKeyComparator implements Comparator<ServiceKey> {
         @Override
@@ -202,8 +246,9 @@ public class DefaultServiceManager implements ServiceManager {
     }
 
     /**
-     * Compare services instances using the priority and then the name of the service class.
-     * This way the top services are always the highest priority.
+     * Compare services instances using the priority and then the name of the
+     * service class. This way the top services are always the highest
+     * priority.
      */
     private class ServiceComparator implements Comparator<QueryService> {
         @Override
@@ -212,6 +257,9 @@ public class DefaultServiceManager implements ServiceManager {
             if (preference != 0) {
                 return preference;
             }
+            int cmp = o1.getIdentifier().compareTo(o2.getIdentifier());
+            if(cmp != 0)
+                return cmp;
             return o1.getClass().getName().compareTo(o2.getClass().getName());
         }
     }
@@ -222,12 +270,14 @@ public class DefaultServiceManager implements ServiceManager {
      */
     private class ServiceInterceptor implements MethodInterceptor {
 
-        private Set<QueryService> services = new TreeSet<QueryService>(new ServiceComparator());
-        private Map<Method, QueryService> methods = new HashMap<Method, QueryService>();
+        private Set<QueryService>         services = new TreeSet<QueryService>(new ServiceComparator());
+        private Map<Method, QueryService> methods  = new HashMap<Method, QueryService>();
+
 
         public ServiceInterceptor(Set<QueryService> services) {
             this.services.addAll(services);
         }
+
 
         @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
@@ -300,11 +350,13 @@ public class DefaultServiceManager implements ServiceManager {
         private final String identifier;
         private final String service;
 
+
         public ServiceKey(Class<? extends Identifier> identifier,
                           Class<? extends QueryService> service) {
             this.identifier = identifier.getName();
             this.service = service.getName();
         }
+
 
         @Override
         public boolean equals(Object o) {
@@ -314,11 +366,14 @@ public class DefaultServiceManager implements ServiceManager {
 
             ServiceKey that = (ServiceKey) o;
 
-            if (identifier != null ? !identifier.equals(that.identifier) : that.identifier != null) return false;
-            if (service != null ? !service.equals(that.service) : that.service != null) return false;
+            if (identifier != null ? !identifier.equals(that.identifier)
+                                   : that.identifier != null) return false;
+            if (service != null ? !service.equals(that.service)
+                                : that.service != null) return false;
 
             return true;
         }
+
 
         @Override
         public int hashCode() {

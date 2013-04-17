@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.loader.structure;
 
 import org.apache.log4j.Logger;
@@ -52,6 +69,8 @@ public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoad
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
         MDLV2000Reader mdlReader = new MDLV2000Reader();
 
+        int count = 0;
+
         while (location.hasNext() && !isCancelled()) {
 
             InputStream in   = location.next();
@@ -69,6 +88,12 @@ public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoad
             } catch (Exception ex) {
                 LOGGER.warn("Could not read entry: " + name);
             }
+
+
+            // update progress every 25 entries
+            if(++count % 25 == 0)
+                fireProgressUpdate(location.progress());
+
         }
 
         writer.close();

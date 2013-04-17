@@ -1,23 +1,22 @@
 /*
- * Copyright (C) 2012  John May and Pablo Moreno
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity;
 
-import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.log4j.Logger;
@@ -36,13 +35,15 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 
 /**
- * AnnotatedEntity.java – MetabolicDevelopmentKit – Jun 23, 2011
- * AnnotatedEntity contains collections of annotations and observations on objects
+ * AnnotatedEntity.java – MetabolicDevelopmentKit – Jun 23, 2011 AnnotatedEntity
+ * contains collections of annotations and observations on objects
  *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
  */
@@ -51,21 +52,33 @@ public abstract class AbstractAnnotatedEntity
         implements Externalizable,
                    AnnotatedEntity {
 
-    private transient static final Logger logger = Logger.getLogger(AbstractAnnotatedEntity.class);
+    private transient static final Logger logger = Logger
+            .getLogger(AbstractAnnotatedEntity.class);
 
-    private ListMultimap<Class, Annotation> annotations = ArrayListMultimap.create();
+    private ListMultimap<Class, Annotation> annotations = ArrayListMultimap
+            .create();
 
     private ObservationCollection observations = new ObservationCollection();
 
     private Enum<? extends Rating> rating = StarRating.ONE_STAR;
 
-    private static AnnotationFactory                ANNOTATION_FACTORY = DefaultAnnotationFactory.getInstance();
+    private static AnnotationFactory ANNOTATION_FACTORY = DefaultAnnotationFactory
+            .getInstance();
 
-    public AbstractAnnotatedEntity() {
+
+    public AbstractAnnotatedEntity(UUID uuid) {
+        super(uuid);
         AtomContainerSet set = new AtomContainerSet();
         set.addListener(set);
     }
 
+
+    public AbstractAnnotatedEntity(UUID uuid,
+                                   Identifier identifier,
+                                   String abbreviation,
+                                   String name) {
+        super(uuid, identifier, abbreviation, name);
+    }
 
     public AbstractAnnotatedEntity(Identifier identifier,
                                    String abbreviation,
@@ -106,7 +119,7 @@ public abstract class AbstractAnnotatedEntity
      */
     @Override
     public Collection<Annotation> getAnnotations() {
-        return annotations.values();
+        return Collections.unmodifiableCollection(annotations.values());
     }
 
 
@@ -118,19 +131,21 @@ public abstract class AbstractAnnotatedEntity
 
     @Override
     public boolean hasAnnotation(Annotation annotation) {
-        return annotations.containsKey(annotation.getClass()) && annotations.get(annotation.getClass()).contains(annotation);
+        return annotations.containsKey(annotation.getClass()) && annotations
+                .get(annotation.getClass()).contains(annotation);
     }
+
 
     @Override
     public Collection<Class> getAnnotationClasses() {
         return annotations.keySet();
     }
 
+
     /**
      * Accessor to all annotations of a given type
      *
      * @param c
-     *
      * @return
      */
     @Override
@@ -140,12 +155,12 @@ public abstract class AbstractAnnotatedEntity
 
 
     /**
-     * Accessor to all annotations extending a given type. For example if you provide a CrossReference
-     * class all Classification annotations will also be returned this is because Classification is
-     * a sub-class of CrossReference
+     * Accessor to all annotations extending a given type. For example if you
+     * provide a CrossReference class all Classification annotations will also
+     * be returned this is because Classification is a sub-class of
+     * CrossReference
      *
      * @param base
-     *
      * @return
      */
     public <T extends Annotation> Set<T> getAnnotationsExtending(final T base) {
@@ -157,7 +172,6 @@ public abstract class AbstractAnnotatedEntity
      * {@see getAnnotationsExtending(Annotation)}
      *
      * @param c
-     *
      * @return
      */
     public <T extends Annotation> Set<T> getAnnotationsExtending(final Class<T> c) {
@@ -177,16 +191,17 @@ public abstract class AbstractAnnotatedEntity
      * Remove an annotation from the entity
      *
      * @param annotation
-     *
      * @return
      */
     public boolean removeAnnotation(final Annotation annotation) {
         return annotations.get(annotation.getClass()).remove(annotation);
     }
 
+
     public Collection<Class<? extends Observation>> getObservationClasses() {
         return observations.getClasses();
     }
+
 
     public Collection<Observation> getObservations(Class<? extends Observation> c) {
         return observations.get(c);
@@ -212,11 +227,11 @@ public abstract class AbstractAnnotatedEntity
      * Adds an observation to the descriptor
      *
      * @param observation The new observation to add
-     *
      * @return whether the underlying collection was modified
      */
     public boolean addObservation(Observation observation) {
-        observation.setEntity(this); // set association as we pass to observation collection
+        observation
+                .setEntity(this); // set association as we pass to observation collection
         return observations.add(observation);
     }
 
@@ -225,7 +240,6 @@ public abstract class AbstractAnnotatedEntity
      * Removes an observation to the descriptor
      *
      * @param observation The observation to remove
-     *
      * @return whether the underlying collection was modified
      */
     public boolean removeObservation(Observation observation) {
@@ -254,7 +268,8 @@ public abstract class AbstractAnnotatedEntity
 
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException,
+                                                    ClassNotFoundException {
         // old
     }
 
@@ -265,36 +280,4 @@ public abstract class AbstractAnnotatedEntity
     }
 
 
-    @Override
-    public int hashCode() {
-        int hash = super.hashCode();
-        return Objects.hashCode(hash, annotations, observations);
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if (!super.equals(obj)) {
-            return false;
-        }
-
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-
-        //        final AnnotatedEntity other = (AnnotatedEntity) obj;
-        //        if( this.annotations != other.annotations &&
-        //            (this.annotations == null || !this.annotations.equals(other.annotations)) ) {
-        //            return false;
-        //        }
-        //        if( this.observations != other.observations &&
-        //            (this.observations == null || !this.observations.equals(other.observations)) ) {
-        //            return false;
-        //        }
-        return true;
-    }
 }

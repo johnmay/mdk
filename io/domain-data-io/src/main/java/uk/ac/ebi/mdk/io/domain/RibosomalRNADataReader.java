@@ -1,7 +1,25 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.io.domain;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
 import uk.ac.ebi.mdk.io.SequenceSerializer;
@@ -37,7 +55,7 @@ public class RibosomalRNADataReader
         this.ein = ein;
     }
 
-    public RibosomalRNA readEntity() throws IOException, ClassNotFoundException {
+    public RibosomalRNA readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         RibosomalRNA rrna = factory.newInstance(RibosomalRNA.class);
 
@@ -46,10 +64,9 @@ public class RibosomalRNADataReader
         for(int i = 0 ; i < n; i++)
             rrna.addSequence(SequenceSerializer.readRNASequence(in));
 
-
-        int ngenes = in.readByte();
-        for(int i = 0; i< ngenes; i++){
-           rrna.addGene(ein.read(Gene.class));
+        int nGenes = in.readByte();
+        for(int i = 0; i < nGenes; i++){
+            reconstruction.associate(ein.read(Gene.class, reconstruction), rrna);
         }
 
         return rrna;

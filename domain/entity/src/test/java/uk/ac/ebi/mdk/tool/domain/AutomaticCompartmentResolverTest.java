@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.tool.domain;
 
 import junit.framework.Assert;
@@ -24,9 +41,9 @@ public class AutomaticCompartmentResolverTest {
         Assert.assertFalse(resolver.isAmbiguous("e"));
     }
 
-    @Test(expected = InvalidParameterException.class)
+    @Test
     public void testGetCompartment_thrown() throws Exception {
-        Assert.assertNull(resolver.getCompartment("no such compartment"));
+        Assert.assertEquals(Organelle.UNKNOWN, resolver.getCompartment("no such compartment"));
     }
 
     @Test public void testGetCompartment_abbreviation() throws Exception {

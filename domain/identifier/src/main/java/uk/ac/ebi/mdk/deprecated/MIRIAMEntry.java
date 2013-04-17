@@ -1,26 +1,31 @@
 /*
- *     This file is part of Metabolic Network Builder
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- *     Metabolic Network Builder is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU Lesser General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU Lesser General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.deprecated;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
+import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
+import uk.ac.ebi.mdk.ResourcePreferences;
 import uk.ac.ebi.mdk.domain.identifier.Resource;
 
 /**
@@ -50,25 +55,29 @@ public class MIRIAMEntry
     private String name;
     private String definition;
     private String urn;
+    private List<String> urns;
     private String url;
     private Boolean mapped;
+    public final String namespace;
     private Collection<String> synonyms;
 
-    public MIRIAMEntry(String id, String regex, String resouceName, String definition, String urn,
-                       String url, Collection<String> synonyms, Boolean mapped) {
-        this(id, Pattern.compile(regex), resouceName, definition, urn, url, synonyms, mapped);
+    public MIRIAMEntry(String id, String regex, String resouceName, String definition, String urn,   List<String> urns,
+                       String url, Collection<String> synonyms, Boolean mapped, String namespace) {
+        this(id, Pattern.compile(regex), resouceName, definition, urn, urns, url, synonyms, mapped, namespace);
     }
 
-    public MIRIAMEntry(String id, Pattern pattern, String resouceName, String definition, String urn,
-                       String url, Collection<String> synonyms,  Boolean mapped) {
+    public MIRIAMEntry(String id, Pattern pattern, String resouceName, String definition, String urn, List<String> urns,
+                       String url, Collection<String> synonyms,  Boolean mapped, String namespace) {
         this.id = id;
         this.pattern = pattern;
         this.name = resouceName;
         this.definition = definition;
         this.urn = urn;
+        this.urns = urns;
         this.url = url;
         this.synonyms = synonyms;
         this.mapped = mapped;
+        this.namespace = namespace;
     }
 
     /**
@@ -92,6 +101,10 @@ public class MIRIAMEntry
 
     public String getPattern() {
         return pattern.pattern();
+    }
+
+    public List<String> urns(){
+        return urns;
     }
 
     /**
@@ -130,6 +143,18 @@ public class MIRIAMEntry
         return sb.toString();
     }
 
+    /**
+     * XXX: Complete hack until we can fix the miriam library.
+     * @param accession an accession for this resource
+     * @return
+     */
+    @Deprecated
+    public String getIdentiers(String accession) {
+        StringBuilder sb = new StringBuilder(urn.length());
+        sb.append(urn).append(':').append(accession.replace(":", "%3A"));
+        return sb.toString();
+    }
+
     public String getBaseURL() {
         return this.url;
     }
@@ -144,8 +169,13 @@ public class MIRIAMEntry
      */
     public URL getURL(String accession) {
         try {
-            String url = this.url;
-            return new URL(url.replaceAll("\\$id", accession));
+            BooleanPreference useIdentifiersDotOrg = ResourcePreferences.getInstance().getPreference("IDENTIFIERS_DOT_ORG_URL");
+            if(useIdentifiersDotOrg.get()){
+                return new URL("http://identifiers.org/" + namespace + "/" + accession);
+            } else {
+                String url = this.url;
+                return new URL(url.replaceAll("\\$id", accession));
+            }
         } catch (MalformedURLException ex) {
             ex.printStackTrace();
         }

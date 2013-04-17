@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.loader.structure;
 
 import org.apache.log4j.Logger;
@@ -19,8 +36,12 @@ public class BioCycStructureLoader extends AbstractSingleIndexResourceLoader {
 
     private static final Logger LOGGER = Logger.getLogger(BioCycStructureLoader.class);
 
-    public BioCycStructureLoader(LuceneIndex index) {
+    private final String org;
+
+    public BioCycStructureLoader(String org, LuceneIndex index) {
         super(index);
+
+        this.org = org;
 
         addRequiredResource("Mol Folder",
                             "Mol folder containing .mol files and the BioCyc identifier as the name of the file",
@@ -39,6 +60,7 @@ public class BioCycStructureLoader extends AbstractSingleIndexResourceLoader {
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
         MDLV2000Reader mdlReader = new MDLV2000Reader();
 
+        int count = 0;
         while (location.hasNext() && !isCancelled()) {
 
             InputStream in = location.next();
@@ -51,11 +73,15 @@ public class BioCycStructureLoader extends AbstractSingleIndexResourceLoader {
             try {
                 mdlReader.setReader(in);
                 IAtomContainer molecule = mdlReader.read(new AtomContainer());
-                writer.write(name.substring(0, name.indexOf(".mol")), molecule);
+                writer.write(org + ":" + name.substring(0, name.indexOf(".mol")), molecule);
                 mdlReader.close();
             } catch (Exception ex) {
                 LOGGER.warn("Could not read entry: " + name + " reason: " + ex.getMessage());
             }
+
+            if(++count % 150 == 0)
+                fireProgressUpdate(location.progress());
+
         }
 
         writer.close();

@@ -1,9 +1,27 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.loader.crossreference;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.service.index.crossreference.ChEBICrossReferenceIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractChEBILoader;
 import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
@@ -67,6 +85,7 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
 
         String[] row = tsv.readNext();
         Map<String, Integer> map = getHeaderMap(row);
+        int count = 0;
         while ((row = tsv.readNext()) != null) {
 
             if (isCancelled()) break;
@@ -76,15 +95,22 @@ public class ChEBICrossReferenceLoader extends AbstractChEBILoader {
             String accession = row[map.get("ACCESSION_NUMBER")];
 
             // create an instance of the identifier and add it to the map
-            try {
-                Identifier id = DefaultIdentifierFactory.getInstance().ofSynonym(type);
-                id.setAccession(accession);
-                if(isActive(identifier)){
-                    crossreferences.put(getPrimaryIdentifier(identifier), id);
-                }
-            } catch (Exception e) {
-                LOGGER.warn(e.getMessage());
+
+            Identifier id = DefaultIdentifierFactory.getInstance().ofSynonym(type, accession);
+
+            // skip this empty identifier
+            if(id == IdentifierFactory.EMPTY_IDENTIFIER) {
+                LOGGER.warn("Skipping reference of type: " + type + " no identifier found");
+                continue;
             }
+
+            if(isActive(identifier)){
+                crossreferences.put(getPrimaryIdentifier(identifier), id);
+            }
+
+            if(++count % 200 == 0)
+                fireProgressUpdate(location.progress());
+
         }
 
         // put references from the map into the index

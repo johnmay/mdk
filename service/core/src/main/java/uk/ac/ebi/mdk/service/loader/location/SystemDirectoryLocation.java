@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.loader.location;
 
 import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
@@ -8,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -28,9 +46,17 @@ public class SystemDirectoryLocation
     private File activeFile;
     private InputStream activeStream;
 
+    private int counter = 0;
+    private int size = 0;
+
     public SystemDirectoryLocation(File directory) {
         this.directory = directory;
-        this.fileIterator = Arrays.asList(directory.listFiles()).iterator();
+
+        List<File> files = Arrays.asList(directory.listFiles());
+
+        this.size         = files.size();
+        this.fileIterator = files.iterator();
+
     }
 
     /**
@@ -71,6 +97,7 @@ public class SystemDirectoryLocation
                 activeStream.close();
             }
 
+            counter++;
             activeStream = new FileInputStream(activeFile);
 
             return activeStream;
@@ -81,6 +108,9 @@ public class SystemDirectoryLocation
 
     }
 
+    @Override public double progress() {
+        return counter / (double) size;
+    }
 
     @Override
     public void close() throws IOException {

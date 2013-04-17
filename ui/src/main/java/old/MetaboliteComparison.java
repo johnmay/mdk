@@ -1,22 +1,18 @@
-/**
- * Comparisson.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.11.29
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ * GNU Lesser General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package old;
 
@@ -77,13 +73,13 @@ public class MetaboliteComparison {
 
         Reconstruction[] recons = comparison.getReconstructions();
 
-        Map<Integer, Multimap<Reconstruction, Metabolite>> map = new HashMap<Integer, Multimap<Reconstruction, Metabolite>>();
+        Map<Long, Multimap<Reconstruction, Metabolite>> map = new HashMap<Long, Multimap<Reconstruction, Metabolite>>();
 
         for (int i = 0; i < recons.length; i++) {
             Reconstruction reconstruction = recons[i];
-            for (Entry<Metabolite, Integer> e : comparison.getMoleculeHashMap(reconstruction).entrySet()) {
+            for (Entry<Metabolite, Long> e : comparison.getMoleculeHashMap(reconstruction).entrySet()) {
 
-                Integer key = e.getValue();
+                Long key = e.getValue();
                 if (!map.containsKey(key)) {
                     Multimap<Reconstruction, Metabolite> sub = ArrayListMultimap.create();
                     map.put(key, sub);
@@ -97,8 +93,8 @@ public class MetaboliteComparison {
 
         Object[][] data = new Object[map.keySet().size()][recons.length];
         int i = 0;
-        for (Entry<Integer, Multimap<Reconstruction, Metabolite>> e : map.entrySet()) {
-            Integer key = e.getKey();
+        for (Entry<Long, Multimap<Reconstruction, Metabolite>> e : map.entrySet()) {
+            Long key = e.getKey();
             Multimap<Reconstruction, Metabolite> sub = e.getValue();
             for (int j = 0; j < recons.length; j++) {
 

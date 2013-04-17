@@ -1,20 +1,20 @@
 /*
- * Copyright (C) 2012  John May and Pablo Moreno
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -25,29 +25,41 @@ import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 
-import java.io.*;
-import java.util.*;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.NotSerializableException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 
 /**
- * @name    ProductCollection - 2011.10.07 <br>
- *          Class description
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name ProductCollection - 2011.10.07 <br> Class description
  */
+@Deprecated
 public class ProductCollection implements Iterable<GeneProduct>, Collection<GeneProduct>, Externalizable, Proteome {
 
     private static final Logger LOGGER = Logger.getLogger(ProductCollection.class);
 
-    private List<GeneProduct> productList = new ArrayList();
+    private List<GeneProduct> productList = new ArrayList<GeneProduct>();
 
-    private ArrayListMultimap<Class<? extends Entity>, GeneProduct> products = ArrayListMultimap.create();
+    private ArrayListMultimap<Class<? extends Entity>, GeneProduct> products = ArrayListMultimap
+            .create();
 
-    private ArrayListMultimap<String, GeneProduct> accessionMap = ArrayListMultimap.create();
+    private ArrayListMultimap<String, GeneProduct> accessionMap = ArrayListMultimap
+            .create();
     // could use identifier but accession should be unique
 
     private EntityFactory factory;
@@ -65,6 +77,7 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
     /**
      * Add a single gene product
+     *
      * @param product
      * @return
      */
@@ -82,6 +95,7 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
     /**
      * Adds a collection of gene products
+     *
      * @param products
      * @return
      */
@@ -98,6 +112,16 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
         return addAnnotation(id.getAccession(), annotation);
     }
 
+
+    @Override public Collection<GeneProduct> enzymesOf(Reaction reaction) {
+        return null;
+    }
+
+
+    @Override
+    public Collection<MetabolicReaction> reactionsOf(GeneProduct product) {
+        return null;
+    }
 
     public boolean addAnnotation(String accession, Annotation annotation) {
         throw new UnsupportedOperationException();
@@ -120,15 +144,13 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
 
     /**
-     *
-     * Adds an observation to product(s) matching the specified accession. If 
+     * Adds an observation to product(s) matching the specified accession. If
      * there are multiple products with the same accession the observation is
      * added to all
      *
      * @param accession
      * @param observation
      * @return
-     * 
      */
     public boolean addObservation(String accession, Observation observation) {
 
@@ -150,8 +172,10 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
 
     /**
-     * Adds an observation to product(s) matching the specified accession. If there are multiple products with the
-     * same accession the observation is added to all
+     * Adds an observation to product(s) matching the specified accession. If
+     * there are multiple products with the same accession the observation is
+     * added to all
+     *
      * @param accession
      * @param observation
      * @return
@@ -176,6 +200,7 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
     /**
      * Returns an iterator for all products
+     *
      * @return
      */
     public Iterator<GeneProduct> iterator() {
@@ -214,7 +239,15 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
 
     public boolean remove(Object o) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return o instanceof GeneProduct ? remove((GeneProduct) o) : false;
+    }
+
+    public boolean remove(GeneProduct product) {
+        boolean changed = false;
+        changed = products.get(factory.getEntityClass(product.getClass())).remove(product) || changed;
+        changed = productList.remove(product) || changed;
+        accessionMap.remove(product.getIdentifier(), product);
+        return changed;
     }
 
 
@@ -224,7 +257,11 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
 
 
     public boolean removeAll(Collection<?> c) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        boolean removed = false;
+        for (Object obj : c) {
+            removed = remove(c) || removed;
+        }
+        return removed;
     }
 
 
@@ -236,7 +273,6 @@ public class ProductCollection implements Iterable<GeneProduct>, Collection<Gene
     public void clear() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 
     /**
      * @inheritDoc

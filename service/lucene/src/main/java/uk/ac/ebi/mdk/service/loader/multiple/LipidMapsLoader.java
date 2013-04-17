@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.loader.multiple;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -34,7 +51,7 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
                             "Folder containing multiple '.tsv' entries (can be compressed with Zip). The" +
                                     " file ending '...All.tsv' will be used to load the index ",
                             ResourceDirectoryLocation.class,
-                            new ZIPRemoteLocation("http://www.lipidmaps.org/downloads/LMSD_20120125_tsv.zip"));
+                            new ZIPRemoteLocation("http://www.lipidmaps.org/downloads/LMSD_20120412_tsv.zip"));
 
     }
 
@@ -63,18 +80,19 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
         DefaultNameIndexWriter writer = new DefaultNameIndexWriter(getIndex("lipid.maps.names"));
 
-        String[] row = reader.readNext();
+        String[] row;
+        reader.readNext(); // skip headers
         while ((row = reader.readNext()) != null && !isCancelled()) {
 
             // name data
             String identifier = row[0];
-            String preferred  = row[11];
+            String preferred = row[11];
             String systematic = row[1];
-            String synonyms   = row[2];
+            String synonyms = row[2];
 
             // chemical data
-            String formula    = row[6];
-            String exactmass  = row[5];
+            String formula = row[6];
+            String exactmass = row[5];
 
 
             writer.write(identifier, preferred, systematic, "", "", Arrays.asList(synonyms.split(";")));
@@ -89,6 +107,7 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
         ResourceDirectoryLocation location = getLocation("lipid.maps.folder");
 
+        int count = 0;
         while (location.hasNext()) {
 
             InputStream in = location.next();
@@ -96,6 +115,9 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
             if (name.endsWith("All.tsv"))
                 update(in);
+
+            // could give better indicator
+            fireProgressUpdate(location.progress());
 
         }
         location.close();
@@ -110,6 +132,6 @@ public class LipidMapsLoader extends AbstractMultiIndexResourceLoader {
 
     @Override
     public String getName() {
-        return "Lipid Maps";
+        return "Lipid Maps Name";
     }
 }

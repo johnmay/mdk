@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.ui.component.compare;
 
 import org.apache.log4j.Logger;
@@ -19,14 +36,12 @@ public class MatcherStackList extends MutableJList<MatcherDescription> {
         super(MatcherDescription.class);
         setCellRenderer(new DefaultRenderer<MatcherDescription>() {
             @Override
-            public JLabel getRendererComponent(JList list, MatcherDescription matcher, int index, boolean isSelected, boolean cellHasFocus) {
+            public JLabel getComponent(JList list, MatcherDescription matcher, int index) {
 
-                JLabel label = super.getRendererComponent(list, matcher, index, isSelected, cellHasFocus);
+                setText(matcher.getName());
+                setToolTipText(matcher.getDescription());
 
-                label.setText(matcher.getName());
-                label.setToolTipText(matcher.getDescription());
-
-                return label;
+                return this;
 
             }
         });

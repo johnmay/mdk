@@ -1,27 +1,24 @@
-/**
- * MoleculeRenderer.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.09.08
- *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.ui.render.molecule;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
@@ -46,11 +43,12 @@ import java.util.List;
 
 
 /**
- *          MoleculeRenderer – 2011.09.08 <br>
- *          Class description
+ * MoleculeRenderer – 2011.09.08 <br>
+ * Class description
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class MoleculeRenderer {
 
@@ -91,7 +89,7 @@ public class MoleculeRenderer {
     }
 
 
-    public BufferedImage getImage(IAtomContainer molecule,
+    public BufferedImage getImage(IAtomContainer container,
                                   Rectangle bounds,
                                   Color background) throws CDKException {
 
@@ -99,17 +97,19 @@ public class MoleculeRenderer {
         BufferedImage img = new BufferedImage(bounds.width, bounds.height,
                                               BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g2 = (Graphics2D) img.getGraphics();
-//        structureGenerator.setMolecule(new Molecule(molecule));
+//        structureGenerator.setMolecule(new Molecule(container));
 //        structureGenerator.generateCoordinates();
 //        IMolecule moleculeWithXYZ = structureGenerator.getMolecule();
         g2.setColor(background);
         g2.fill(bounds);
-        try {
-            renderer.paint(molecule, new AWTDrawVisitor(g2), bounds, true);
-        } catch (IllegalArgumentException ex) {
-            LOGGER.debug("Molecule did not have coordinates!");
-            String unrendered = "no-coordinates";
-            g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(9.0f));
+
+        g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(9.0f));
+        g2.setFont(g2.getFont().deriveFont(Font.ITALIC));
+
+        if (GeometryTools.has2DCoordinatesNew(container) == 2) {
+            renderer.paint(container, new AWTDrawVisitor(g2), bounds, true);
+        } else {
+            String unrendered = "No 2D Coordinates";
             int width = g2.getFontMetrics().stringWidth(unrendered);
             g2.setColor(Color.RED);
             g2.drawString(unrendered, bounds.width / 2 - width / 2, bounds.height / 2);

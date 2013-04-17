@@ -1,19 +1,20 @@
 /*
- *     This file is part of Metabolic Network Builder
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- *     Metabolic Network Builder is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU Lesser General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU Lesser General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity;
 
 import com.google.common.base.Objects;
@@ -23,6 +24,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.UUID;
 
 
 /**
@@ -42,10 +44,11 @@ public abstract class AbstractEntity implements Entity, Cloneable, Externalizabl
 
     private String name = "";
 
+    private final UUID uuid;
 
-    public AbstractEntity() {
+    public AbstractEntity(UUID uuid) {
+        this.uuid = uuid;
     }
-
 
     /**
      * Full instantiation constructor
@@ -56,11 +59,22 @@ public abstract class AbstractEntity implements Entity, Cloneable, Externalizabl
      * 
      */
     public AbstractEntity(Identifier identifier, String abbreviation, String name) {
+        this(UUID.randomUUID(), identifier, abbreviation, name);
+    }
+
+    public AbstractEntity(UUID uuid, Identifier identifier, String abbreviation, String name) {
+        this.uuid = uuid;
         this.identifier = identifier;
         this.abbreviation = abbreviation;
         this.name = name;
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override public UUID uuid() {
+        return uuid;
+    }
 
     /**
      * Access the abbreviation of the entity. The abbreviation is normally a
@@ -129,31 +143,4 @@ public abstract class AbstractEntity implements Entity, Cloneable, Externalizabl
         return name;
     }
 
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(identifier, name, abbreviation);
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final AbstractEntity other = (AbstractEntity) obj;
-        if (this.identifier != other.identifier && (this.identifier == null || !this.identifier.equals(other.identifier))) {
-            return false;
-        }
-        if ((this.abbreviation == null) ? (other.abbreviation != null) : !this.abbreviation.equals(other.abbreviation)) {
-            return false;
-        }
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
-            return false;
-        }
-        return true;
-    }
 }

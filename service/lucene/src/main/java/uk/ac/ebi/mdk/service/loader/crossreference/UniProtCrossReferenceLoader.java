@@ -1,17 +1,34 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.loader.crossreference;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 import uk.ac.ebi.mdk.io.xml.uniprot.UniProtXMLReader;
 import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtCrossreferenceMarshal;
 import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtIdentifierMarhsal;
+import uk.ac.ebi.mdk.service.index.LuceneIndex;
 import uk.ac.ebi.mdk.service.index.crossreference.UniProtCrossReferenceIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultCrossReferenceIndexWriter;
-import uk.ac.ebi.mdk.domain.entity.EntityFactory;
-import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
-import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
-import uk.ac.ebi.mdk.service.index.LuceneIndex;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 
 import javax.xml.stream.XMLStreamException;
@@ -24,10 +41,11 @@ import java.io.IOException;
  * @author $Author$ (this version)
  * @version $Rev$
  */
-public class UniProtCrossReferenceLoader extends AbstractSingleIndexResourceLoader {
+public class UniProtCrossReferenceLoader
+        extends AbstractSingleIndexResourceLoader {
 
     private static final Logger LOGGER = Logger.getLogger(UniProtCrossReferenceLoader.class);
-    private EntityFactory     entityFactory;
+    private EntityFactory entityFactory;
     private DefaultIdentifierFactory identifierFactory;
 
     public UniProtCrossReferenceLoader(LuceneIndex index,
@@ -55,20 +73,27 @@ public class UniProtCrossReferenceLoader extends AbstractSingleIndexResourceLoad
     @Override
     public void update() throws IOException {
 
-        ResourceFileLocation             location = getLocation("UniProt XML");
-        UniProtXMLReader                 reader = null;
+        ResourceFileLocation location = getLocation("UniProt XML");
+        UniProtXMLReader reader = null;
         DefaultCrossReferenceIndexWriter writer = new DefaultCrossReferenceIndexWriter(getIndex());
 
         try {
+
+            int count = 0;
 
             reader = new UniProtXMLReader(location.open(), entityFactory);
 
             reader.addMarshal(new UniProtIdentifierMarhsal());
             reader.addMarshal(new UniProtCrossreferenceMarshal(identifierFactory));
 
-            while (reader.hasNext() && !isCancelled()){
+            while (reader.hasNext() && !isCancelled()) {
 
                 ProteinProduct product = reader.next();
+
+                // only update progress every 400 entries
+                if(++count % 400 == 0)
+                    fireProgressUpdate(location.progress());
+
 
                 // XXX: we should really use getAnnotationsExtending here to catch
                 //      cross-reference subclasses. However at the time of writing
@@ -76,7 +101,7 @@ public class UniProtCrossReferenceLoader extends AbstractSingleIndexResourceLoad
                 //      and checking for subclasses would dramatically reduce the speed
                 //      of the loader (unit test checks we catch identifiers that may
                 //      be subclasses (i.e. ECNumber) - johnmay
-                for(CrossReference xref : product.getAnnotations(CrossReference.class)){
+                for (CrossReference xref : product.getAnnotations(CrossReference.class)) {
                     writer.write(product.getAccession(), xref.getIdentifier());
                 }
 
@@ -91,4 +116,5 @@ public class UniProtCrossReferenceLoader extends AbstractSingleIndexResourceLoad
         location.close();
 
     }
+
 }

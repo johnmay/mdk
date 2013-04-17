@@ -1,23 +1,20 @@
-/**
- * WriteReactionsMain.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.05.06
- *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.identifier;
 
 import uk.ac.ebi.mdk.lang.annotation.Brief;
@@ -42,7 +39,7 @@ import java.util.regex.Pattern;
 @Brief("InChI")
 @Description("The IUPAC International Chemical Identifier ")
 public class InChI
-        extends ChemicalIdentifier
+        extends AbstractChemicalIdentifier
         implements Serializable {
 
     private static final long serialVersionUID = 8312829501093553787L;
@@ -290,8 +287,8 @@ public class InChI
      * @brief Clone method returns a clone of the InChI object
      * and it's underlying inchi, inchiKey and AuxInfo fiels
      */
-    @Override
-    public InChI clone() {
+
+    public InChI copy() {
         return new InChI(name, inchi, key, auxInfo);
     }
 

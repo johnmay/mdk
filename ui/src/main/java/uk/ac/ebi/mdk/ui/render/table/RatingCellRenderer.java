@@ -1,60 +1,66 @@
-/**
- * RatingCellRenderer.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.12.09
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ * GNU Lesser General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.ui.render.table;
 
 import com.explodingpixels.data.Rating;
-import com.explodingpixels.macwidgets.ITunesRatingTableCellRenderer;
-import java.awt.Component;
-import java.util.EnumMap;
-import java.util.Map;
-import javax.swing.JTable;
+import com.explodingpixels.macwidgets.RatingComponent;
 import uk.ac.ebi.mdk.domain.entity.StarRating;
 
-/**
- *          RatingCellRenderer - 2011.12.09 <br>
- *          Class wraps MacWidgets render for use with our own Rating class
- * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
- */
-public class RatingCellRenderer extends ITunesRatingTableCellRenderer {
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
-    private static final Map<StarRating, Rating> ratingMap = new EnumMap<StarRating, Rating>(StarRating.class);
+/**
+ * RatingCellRenderer - 2011.12.09 <br>
+ * Class wraps MacWidgets render for use with our own Rating class
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
+ * @version $Rev$ : Last Changed $Date$
+ */
+public class RatingCellRenderer extends DefaultTableCellRenderer {
+
+    private static final Map<StarRating, RatingComponent> components = new HashMap<StarRating, RatingComponent>();
 
     static {
-        ratingMap.put(StarRating.ONE_STAR, Rating.ONE_STAR);
-        ratingMap.put(StarRating.TWO_STARS, Rating.TWO_STARS);
-        ratingMap.put(StarRating.THREE_STARS, Rating.THREE_STARS);
-        ratingMap.put(StarRating.FOUR_STARS, Rating.FOUR_STARS);
-        ratingMap.put(StarRating.FIVE_STARS, Rating.FIVE_STARS);
-        ratingMap.put(StarRating.NO_RATING, Rating.NO_RATING);
+        components.put(StarRating.NO_RATING, new RatingComponent(Rating.NO_RATING));
+        components.put(StarRating.ONE_STAR, new RatingComponent(Rating.ONE_STAR));
+        components.put(StarRating.TWO_STARS, new RatingComponent(Rating.TWO_STARS));
+        components.put(StarRating.THREE_STARS, new RatingComponent(Rating.THREE_STARS));
+        components.put(StarRating.FOUR_STARS, new RatingComponent(Rating.FOUR_STARS));
+        components.put(StarRating.FIVE_STARS, new RatingComponent(Rating.FIVE_STARS));
     }
+
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
-        if (value instanceof StarRating) {
-            return super.getTableCellRendererComponent(table, ratingMap.get((StarRating) value), isSelected, hasFocus, row, column);
-        }
+//        // get correct bg/fg color
+        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        JComponent component = components.get((StarRating) value).getComponent();
 
-        return super.getTableCellRendererComponent(table, Rating.NO_RATING, isSelected, hasFocus, row, column);
+        component.setOpaque(isOpaque());
+        component.setBackground(new Color(getBackground().getRGB()));
+        component.setForeground(new Color(getForeground().getRGB()));
+
+        return component;
     }
+
+
 }

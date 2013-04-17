@@ -1,18 +1,48 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.ui.component.service;
 
-import com.jgoodies.animation.*;
+import com.jgoodies.animation.AbstractAnimation;
+import com.jgoodies.animation.Animation;
+import com.jgoodies.animation.AnimationEvent;
+import com.jgoodies.animation.AnimationListener;
+import com.jgoodies.animation.Animator;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.Sizes;
 import net.sf.furbelow.SpinningDial;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.caf.component.CalloutDialog;
 import uk.ac.ebi.caf.component.factory.ButtonFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.utility.ResourceUtility;
+import uk.ac.ebi.caf.utility.font.EBIIcon;
+import uk.ac.ebi.caf.utility.preference.type.BooleanPreference;
+import uk.ac.ebi.mdk.service.ProgressListener;
 import uk.ac.ebi.mdk.service.ResourceLoader;
+import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;
-import uk.ac.ebi.mdk.service.location.*;
+import uk.ac.ebi.mdk.service.location.LocationDescription;
+import uk.ac.ebi.mdk.service.location.LocationFactory;
+import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
+import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
+import uk.ac.ebi.mdk.service.location.ResourceLocation;
 import uk.ac.ebi.mdk.ui.component.service.location.DirectoryLocationEditor;
 import uk.ac.ebi.mdk.ui.component.service.location.FileLocationEditor;
 import uk.ac.ebi.mdk.ui.component.service.location.LocationEditor;
@@ -20,11 +50,15 @@ import uk.ac.ebi.mdk.ui.component.service.location.LocationEditor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
+import static uk.ac.ebi.mdk.service.EDTProgressListener.safeDispatch;
 
 /**
  * ${Name}.java - 21.02.2012 <br/> MetaInfo...
@@ -42,7 +76,13 @@ public class LoaderRow extends JComponent {
     private JButton update;
     private JButton cancel;
     private ResourceLoader loader;
+    private JLabel info;
     private SwingWorker worker;
+    final BooleanPreference hints = ServicePreferences.getInstance()
+                                                      .getPreference("SHOW_HINTS");
+
+
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy HH:mm");
 
     private LoaderConfiguration configuration;
 
@@ -54,25 +94,33 @@ public class LoaderRow extends JComponent {
 
         setOpaque(false);
 
+
         configuration = new LoaderConfiguration(loader, factory);
 
         configuration.setVisible(false);
 
-        delete = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/trash_12x12.png"), new AbstractAction() {
+        ImageIcon deleteIcon = EBIIcon.DELETE.create().size(14f).highlight().icon();
+        ImageIcon resetIcon = EBIIcon.REFRESH.create().size(14f).flipHorizontal().highlight().icon();
+        ImageIcon downloadIcon = EBIIcon.DOWNLOAD.create().size(14f).highlight().icon();
+        ImageIcon settingsIcon = EBIIcon.SETTINGS.create().size(14f).highlight().icon();
+
+        delete = ButtonFactory.newCleanButton(deleteIcon, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 loader.clean();
                 delete.setEnabled(loader.canBackup() || loader.canRevert());
                 revert.setEnabled(loader.canRevert());
+                updateButtons();
             }
         });
         delete.setToolTipText("Delete the current index and it's backup");
-        revert = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/revert_16x16.png"), new AbstractAction() {
+        revert = ButtonFactory.newCleanButton(resetIcon, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 loader.revert();
                 delete.setEnabled(loader.canBackup() || loader.canRevert());
                 revert.setEnabled(loader.canRevert());
+                updateButtons();
             }
         });
         revert.setToolTipText("Revert to the previous version of the index");
@@ -80,10 +128,9 @@ public class LoaderRow extends JComponent {
         final Animation expand = new Expand(configuration, 500);
         final Animation collapse = new Collapse(configuration, 500);
 
-        configure = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/cog_16x16.png"), new AbstractAction() {
+        configure = ButtonFactory.newCleanButton(settingsIcon, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                update.setEnabled(loader.canUpdate());
                 delete.setEnabled(loader.canBackup() || loader.canRevert());
                 revert.setEnabled(loader.canRevert());
 
@@ -98,13 +145,24 @@ public class LoaderRow extends JComponent {
             }
         });
         configure.setToolTipText("Configure loader");
+
         name = LabelFactory.newLabel(loader.getName());
 
-        update = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/update_16x16.png"), new AbstractAction() {
+        // name will indicate the progress
+        loader.addProgressListener(safeDispatch(new ProgressListener() {
+            @Override public void progressed(String message) {
+                // already on EDT
+                name.setText(message);
+            }
+        }));
+
+
+        update = ButtonFactory.newCleanButton(downloadIcon, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                name.setIcon(new SpinningDial(16, 16));
+                SpinningDial dial = new SpinningDial(16, 16);
+                name.setIcon(dial);
                 update.setEnabled(false);
                 delete.setEnabled(false);
                 configure.setEnabled(false);
@@ -123,6 +181,7 @@ public class LoaderRow extends JComponent {
                             loader.update();
                             cancel.setEnabled(false);
                             cancel.setVisible(false);
+                            name.setText(loader.getName());
                         } catch (MissingLocationException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         } catch (IOException e) {
@@ -138,9 +197,10 @@ public class LoaderRow extends JComponent {
             }
         }
 
-        );
+                                             );
 
-        cancel = ButtonFactory.newCleanButton(ResourceUtility.getIcon("/uk/ac/ebi/chemet/render/images/cutout/cancel_16x16.png"), new AbstractAction() {
+        cancel = ButtonFactory.newCleanButton(ResourceUtility
+                                                      .getIcon("/uk/ac/ebi/chemet/render/images/cutout/cancel_16x16.png"), new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loader.cancel();
@@ -160,7 +220,7 @@ public class LoaderRow extends JComponent {
             }
         }
 
-        );
+                                             );
         update.setToolTipText("Update the index");
 
         update.setEnabled(false);
@@ -170,6 +230,12 @@ public class LoaderRow extends JComponent {
         cancel.setEnabled(false);
         cancel.setVisible(false);
 
+        info = loader.loaded() ? LabelFactory.newLabel("updated " + dateFormat
+                .format(loader.updated())) : LabelFactory.newLabel("");
+        info.setForeground(info.getForeground().brighter());
+        Font orgFont = info.getFont();
+        info.setFont(new Font(orgFont.getName(), orgFont
+                .getStyle(), (int) (orgFont.getSize() * 0.9)));
 
         CellConstraints cc = new CellConstraints();
 
@@ -185,17 +251,16 @@ public class LoaderRow extends JComponent {
         controls.add(Box.createHorizontalStrut(10));
         controls.add(cancel);
 
-        setLayout(new FormLayout("p, p:grow, min",
+        setLayout(new FormLayout("p, p:grow, right:p, 4dlu, min",
                                  "5px, p, 5px, p"));
 
 
         add(controls, cc.xy(1, 2));
-        add(name, cc.xy(2, 2));
-        add(cancel, cc.xy(3, 2));
         add(configuration, cc.xyw(1, 4, 3, cc.LEFT, cc.CENTER));
+        add(name, cc.xy(2, 2));
+        add(info, cc.xy(3, 2));
+        add(cancel, cc.xy(5, 2));
         setBackground(Color.WHITE);
-
-
     }
 
     class MyUpdateChecker extends SwingWorker<Boolean, Object> {
@@ -225,6 +290,13 @@ public class LoaderRow extends JComponent {
                 revert.setEnabled(loader.canRevert());
                 configure.setEnabled(true);
                 name.setIcon(null);
+                name.setText(loader.getName());
+                if (loader.loaded()) {
+                    info.setText("updated " + dateFormat
+                            .format(loader.updated()));
+                } else {
+                    info.setText("");
+                }
             }
         });
     }
@@ -238,7 +310,8 @@ public class LoaderRow extends JComponent {
 
         public LoaderConfiguration(ResourceLoader loader, LocationFactory factory) {
 
-            setBorder(BorderFactory.createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
+            setBorder(BorderFactory
+                              .createMatteBorder(0, 1, 1, 1, Color.LIGHT_GRAY));
 
             this.loader = loader;
             this.factory = factory;
@@ -249,11 +322,14 @@ public class LoaderRow extends JComponent {
             editors = new HashMap<String, LocationEditor>();
 
 
-            for (Map.Entry<String, LocationDescription> e : loader.getRequiredResources().entrySet()) {
+            for (Map.Entry<String, LocationDescription> e : loader
+                    .getRequiredResources().entrySet()) {
 
 
                 layout.appendRow(new RowSpec(Sizes.PREFERRED));
-                add(LabelFactory.newFormLabel(e.getValue().getName(), e.getValue().getDescription()), cc.xy(1, layout.getRowCount()));
+                add(LabelFactory.newFormLabel(e.getValue().getName(), e
+                        .getValue().getDescription()), cc.xy(1, layout
+                        .getRowCount()));
 
                 LocationEditor editor = null;
 
@@ -285,7 +361,8 @@ public class LoaderRow extends JComponent {
 
                 try {
                     // replace with individual UI components for selecting
-                    ResourceLocation location = e.getValue().getResourceLocation();
+                    ResourceLocation location = e.getValue()
+                                                 .getResourceLocation();
                     // replace with individual UI components for selecting
                     if (location != null) {
                         loader.addLocation(key, location);
@@ -310,7 +387,8 @@ public class LoaderRow extends JComponent {
         private JPanel panel;
 
         protected Expand(JPanel panel, long duration) {
-            super(panel, new Dimension(panel.getPreferredSize().width, 0), panel.getPreferredSize(), duration);
+            super(panel, new Dimension(panel.getPreferredSize().width, 0), panel
+                    .getPreferredSize(), duration);
             this.panel = panel;
             addAnimationListener(this);
         }
@@ -323,7 +401,33 @@ public class LoaderRow extends JComponent {
 
         @Override
         public void animationStopped(AnimationEvent animationEvent) {
+
+            if(!hints.get())
+                return;
+
             //To change body of implemented methods use File | Settings | File Templates.
+            final CalloutDialog dialog = new CalloutDialog(SwingUtilities
+                                                             .getWindowAncestor(panel),
+                                                     Dialog.ModalityType.MODELESS);
+
+            dialog.setAnchor(configure);
+            dialog.getMainPanel().add(LabelFactory
+                                              .newLabel("Once configured, click the cog again to register your changes"));
+            dialog.setAlwaysOnTop(true);
+            dialog.setFocusable(false);
+            dialog.setFocusableWindowState(false);
+            dialog.pack();
+            dialog.place();
+
+            dialog.setVisible(true);
+
+            Timer t = new Timer(2500, new ActionListener() {
+                @Override public void actionPerformed(ActionEvent e) {
+                    dialog.setVisible(false);
+                }
+            });
+            t.start();
+
         }
 
     }
@@ -332,7 +436,8 @@ public class LoaderRow extends JComponent {
         private JPanel panel;
 
         protected Collapse(JPanel panel, long duration) {
-            super(panel, panel.getPreferredSize(), new Dimension(panel.getPreferredSize().width, 0), duration);
+            super(panel, panel
+                    .getPreferredSize(), new Dimension(panel.getPreferredSize().width, 0), duration);
             this.panel = panel;
             addAnimationListener(this);
         }
@@ -375,7 +480,8 @@ public class LoaderRow extends JComponent {
             if (l == 0) return; // ignore resting state
 
             double position = (double) l / duration();
-            double proportion = (Math.cos(position * Math.PI + Math.PI) + 1) / 2;
+            double proportion = (Math
+                    .cos(position * Math.PI + Math.PI) + 1) / 2;
 
             int width = startSize.width + (int) ((xdiff) * proportion);
             int height = startSize.height + (int) ((ydiff) * proportion);

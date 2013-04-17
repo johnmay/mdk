@@ -1,25 +1,21 @@
-package uk.ac.ebi.mdk.ui.edit.reaction;
-
-/**
- * ParticipantEditor.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2012.02.13
- *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package uk.ac.ebi.mdk.ui.edit.reaction;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -35,6 +31,7 @@ import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.collection.DefaultReconstructionManager;
+import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
@@ -74,7 +71,7 @@ public class ParticipantEditor extends JPanel {
 
     private JTextField stoichiometry;
 
-    private static DefaultReconstructionManager MANAGER = DefaultReconstructionManager.getInstance();
+    private static ReconstructionManager MANAGER = DefaultReconstructionManager.getInstance();
 
     // factories
     private static final MoleculeRenderer RENDERER = MoleculeRenderer.getInstance();
@@ -160,8 +157,9 @@ public class ParticipantEditor extends JPanel {
             participant = new MetabolicParticipantImplementation();
         }
 
-        Reconstruction recon = MANAGER.getActive();
-        Collection<Metabolite> candidates = recon.getMetabolome().get(metabolite.getText());
+        Reconstruction recon = MANAGER.active();
+        Collection<Metabolite> candidates = recon.getMetabolome().ofName(metabolite
+                                                                                 .getText());
 
         Metabolite entity;
         if (candidates.iterator().hasNext()) {

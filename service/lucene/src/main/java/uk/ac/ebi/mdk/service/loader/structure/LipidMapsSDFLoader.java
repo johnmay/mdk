@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.loader.structure;
 
 import org.apache.log4j.Logger;
@@ -29,7 +46,7 @@ public class LipidMapsSDFLoader extends AbstractSingleIndexResourceLoader {
         addRequiredResource("Lipid Maps SDF",
                             "A lipid maps SDF folder/directory (can be zipped)",
                             ResourceDirectoryLocation.class,
-                            new ZIPRemoteLocation("http://www.lipidmaps.org/downloads/LMSDFDownload25Jan12.zip"));
+                            new ZIPRemoteLocation("http://www.lipidmaps.org/downloads/LMSDFDownload23Apr12.zip"));
     }
 
     public LipidMapsSDFLoader() throws IOException {
@@ -43,6 +60,7 @@ public class LipidMapsSDFLoader extends AbstractSingleIndexResourceLoader {
 
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
 
+
         while (location.hasNext() && !isCancelled()){
 
             InputStream in   = location.next();
@@ -55,11 +73,15 @@ public class LipidMapsSDFLoader extends AbstractSingleIndexResourceLoader {
             IteratingMDLReader reader = new IteratingMDLReader(in,
                                                                SilentChemObjectBuilder.getInstance(),
                                                                true);
-
+            int count = 0;
             while (reader.hasNext() && !isCancelled()){
                 IAtomContainer molecule = reader.next();
                 String identifier = molecule.getProperty(CDKConstants.TITLE).toString();
                 writer.write(identifier, molecule);
+
+                // update progress every 150 entries
+                if(++count % 150 == 0)
+                    fireProgressUpdate(location.progress());
             }
 
             writer.close();

@@ -1,11 +1,24 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2013 Pablo Moreno <pablacious at users.sf.net>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.tool.inchi;
 
 import com.google.common.io.Files;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -21,11 +34,9 @@ import uk.ac.ebi.mdk.tool.inchi.InChIMoleculeChecker.InChIMoleculeCheckerResult;
  *
  * @author pmoreno
  */
-public class InChIProducerBinary102beta extends InChIProducer {
+public class InChIProducerBinary102beta extends AbstractInChIProducer implements InChIProducer {
 
     private final String path = System.getProperty("user.home") + System.getProperty("file.separator") + ".uk.ac.ebi.metabolomes" + System.getProperty("file.separator") + "bin/";
-    //private final String tmp = System.getProperty("user.home") + System.getProperty("file.separator") + ".uk.ac.ebi.metabolomes" + System.getProperty("file.separator") + "tmp/";
-    //private final String shellMol2InChi = "mol2InChI.sh";
     private final String shellMol2InChi = "mol2InChI_1.03.sh";
     private String inchiOptions;
     private Logger logger = Logger.getLogger(InChIProducerBinary102beta.class.getName());
@@ -48,53 +59,22 @@ public class InChIProducerBinary102beta extends InChIProducer {
                 logger.trace("Molecule has null bonds, atoms or is emtpy");
             return null;
         }
-        // improve this
-        
-        //File tmpDir = new File(tmp + File.separator + "dir" + Math.round(1000 * Math.random()));
         File tmpDir = Files.createTempDir();
         if (!tmpDir.mkdir()) {
             logger.error("Cannot create temporary directory");
             return null;
         }
-        String tmpFileName = tmpDir.getAbsolutePath() + File.separator + "fileInChiFromCDKMol";
-        String outputFileName = tmpDir.getAbsolutePath() + File.separator + "output";
-        String logFileName = tmpDir.getAbsolutePath() + File.separator + "logFile";
+        String tmpMolFile = tmpDir.getAbsolutePath() + File.separator + "fileInChiFromCDKMol";        
         MDLV2000Writer w;
         try {
-            w = new MDLV2000Writer(new FileWriter(new File(tmpFileName)));
+            w = new MDLV2000Writer(new FileWriter(new File(tmpMolFile)));
             w.writeMolecule(mol);
             w.close();
         } catch (Exception ex) {
             logger.error("Could not write mol file for inchi calculations.", ex);
             return null;
         }
-        //System.out.println(path + shellMol2InChi + " " + tmpFileName + " " + outputFileName + " " + logFileName + " " + inchiOptions);
-        if (this.runProcess(path + shellMol2InChi + " " + tmpFileName + " " + outputFileName + " " + logFileName +" "+inchiOptions)) {
-            String line = null;
-            BufferedReader r;
-            try {
-                r = new BufferedReader(new FileReader(outputFileName));
-                line = r.readLine();
-                line += "\t"+r.readLine();
-                r.close();
-            } catch (IOException ex) {
-                logger.error("Problems reading binary result file", ex);
-                return null;
-            }
-            String[] tokens = line.split("\t");
-            if (tokens.length < 4) {
-                return null;
-            }
-
-            InChIResult res = new InChIResult();
-            res.setInchi(tokens[1]);
-            res.setAuxInfo(tokens[2]);
-            res.setInchiKey(tokens[3]);
-            deleteTmpDirAndFiles(tmpDir);
-            return res;
-        } else {
-            return null;
-        }
+        return getInChIForMolFile(tmpDir, tmpMolFile);
 
 
     }
@@ -150,6 +130,58 @@ public class InChIProducerBinary102beta extends InChIProducer {
                 continue;
             }
 
+        }
+    }
+
+    @Override
+    public InChIResult calculateInChI(String mdlMol) {
+        File tmpDir = Files.createTempDir();
+        if (!tmpDir.mkdir()) {
+            logger.error("Cannot create temporary directory");
+            return null;
+        }
+        String tmpMolFile = tmpDir.getAbsolutePath() + File.separator + "fileInChiFromCDKMol";   
+        BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter(tmpMolFile));
+            writer.write(mdlMol);
+            writer.close();
+        } catch(IOException e) {
+            logger.error("Could not write MDL mol to file ", e);
+        } 
+        
+        return getInChIForMolFile(tmpDir, tmpMolFile);
+    }
+
+    private InChIResult getInChIForMolFile(File tmpDir, String tmpFileName) {
+        String outputFileName = tmpDir.getAbsolutePath() + File.separator + "output";
+        String logFileName = tmpDir.getAbsolutePath() + File.separator + "logFile";
+        //System.out.println(path + shellMol2InChi + " " + tmpFileName + " " + outputFileName + " " + logFileName + " " + inchiOptions);        
+        if (this.runProcess(path + shellMol2InChi + " " + tmpFileName + " " + outputFileName + " " + logFileName +" "+inchiOptions)) {
+            String line = null;
+            BufferedReader r;
+            try {
+                r = new BufferedReader(new FileReader(outputFileName));
+                line = r.readLine();
+                line += "\t"+r.readLine();
+                r.close();
+            } catch (IOException ex) {
+                logger.error("Problems reading binary result file", ex);
+                return null;
+            }
+            String[] tokens = line.split("\t");
+            if (tokens.length < 4) {
+                return null;
+            }
+
+            InChIResult res = new InChIResult();
+            res.setInchi(tokens[1]);
+            res.setAuxInfo(tokens[2]);
+            res.setInchiKey(tokens[3]);
+            deleteTmpDirAndFiles(tmpDir);
+            return res;
+        } else {
+            return null;
         }
     }
 }

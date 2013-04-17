@@ -1,50 +1,88 @@
 /*
- *     This file is part of Metabolic Network Builder
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- *     Metabolic Network Builder is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU Lesser General Public License as published by
- *     the Free Software Foundation, either version 3 of the License, or
- *     (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     Foobar is distributed in the hope that it will be useful,
- *     but WITHOUT ANY WARRANTY; without even the implied warranty of
- *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *     You should have received a copy of the GNU Lesser General Public License
- *     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity.collection;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.TreeMultimap;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 
 /**
+ * A metabolome instance linked to a {@link Reconstruction}. When a new
+ * metabolite is added it will be {@link Reconstruction#register(uk.ac.ebi.mdk.domain.entity.Entity)}ed
+ * with the reconstruction.
+ *
  * @author johnmay
- * @date May 15, 2011
  */
-public class MetabolomeImpl
-        extends EntitySet<Metabolite> implements Metabolome {
+public final class MetabolomeImpl implements Metabolome {
 
-    private Map<Identifier, Metabolite> identifierMap = new HashMap<Identifier, Metabolite>();
+    private final Multimap<Identifier, Metabolite> metabolites = HashMultimap.create();
+
+    private final Reconstruction reconstruction;
 
     /**
-     * Retrieves the metabolites that match the specified name.
-     * Note. this is not a search over the list (as the name can change)
+     * Create a new metabolome for the provided reconstruction.
      *
-     * @param name
-     *
-     * @return
+     * @param reconstruction to which this metabolome belongs
      */
-    public Collection<Metabolite> get(String name) {
+    public MetabolomeImpl(Reconstruction reconstruction) {
+        this.reconstruction = checkNotNull(reconstruction);
+    }
 
-        String clean = name.trim().toLowerCase();
+    /**
+     * @inheritDoc
+     */
+    @Override public boolean add(Metabolite m) {
+        return reconstruction.register(checkNotNull(m)) && _add(m);
+    }
+
+    private boolean _add(Metabolite m) {
+        metabolites.put(m.getIdentifier(), m);
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public boolean remove(Metabolite m) {
+        reconstruction.deregister(checkNotNull(m));
+        return metabolites.remove(m.getIdentifier(), m);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Collection<Metabolite> ofName(String name) {
+
+        String clean = checkNotNull(name).trim().toLowerCase();
 
         Collection<Metabolite> metabolites = new ArrayList<Metabolite>();
 
@@ -59,49 +97,38 @@ public class MetabolomeImpl
 
     }
 
-    @Override
-    public boolean add(Metabolite metabolite) {
-        if (!identifierMap.isEmpty()) {
-            identifierMap.put(metabolite.getIdentifier(), metabolite);
-        }
-        return super.add(metabolite);
-    }
-
-    @Override
-    public boolean remove(Object o) {
-
-        boolean removed = super.remove(o);
-
-        if (removed && !identifierMap.isEmpty()) {
-            Metabolite m = (Metabolite) o;
-            identifierMap.remove(m.getIdentifier());
-        }
-
-        return removed;
-
-    }
-
     /**
-     * Rebuilds the identifier map
+     * @inheritDoc
      */
-    public void rebuildIdentifierMap() {
-        identifierMap.clear();
-        for (Metabolite m : this) {
-            identifierMap.put(m.getIdentifier(), m);
+    @Override public boolean contains(Metabolite m) {
+        // id may not be unique, reference equality currently needed
+        for(Metabolite n : ofIdentifier(checkNotNull(m).getIdentifier())){
+            if(m == n)
+                return true;
         }
+        return false;
     }
 
-    @Override
-    public Metabolite get(Identifier identifier) {
+    @Override public List<Metabolite> toList() {
+        return Collections
+                .unmodifiableList(new ArrayList<Metabolite>(metabolites
+                                                                    .values()));
+    }
 
-        // trigger rebuild if empty or identifier is not contained
-        if (identifierMap.isEmpty() ||
-                !identifierMap.containsKey(identifier)) {
-            rebuildIdentifierMap();
-        }
+    @Override public boolean isEmpty() {
+        return metabolites.isEmpty();
+    }
 
-        return identifierMap.get(identifier);
+    @Override public int size() {
+        return metabolites.size();
+    }
 
+    @Override public Iterator<Metabolite> iterator() {
+        return metabolites.values().iterator();
+    }
+
+    @Override public Collection<Metabolite> ofIdentifier(Identifier identifier) {
+        return metabolites.get(identifier);
     }
 
 }

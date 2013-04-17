@@ -5,7 +5,7 @@
     <parent>
         <artifactId>mdk-service</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.3.1</version>
+        <version>1.4.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -19,9 +19,14 @@
             <version>1.4</version>
         </dependency>
         <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+        <dependency>
             <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
-            <version>1.1</version>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -51,7 +56,7 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
+            <version>1.2.17</version>
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
@@ -72,23 +77,30 @@
         </resources>
 
         <plugins>
+
+            <!-- Plugin for building SOAP Web Service clients -->
             <plugin>
+
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>axistools-maven-plugin</artifactId>
                 <version>1.4</version>
+
                 <executions>
                     <execution>
                         <id>build-clients</id>
                         <goals>
                             <goal>wsdl2java</goal>
                         </goals>
-                        <configuration>                            
+                        <configuration>
                             <sourceDirectory>src/main/resources/wsdl</sourceDirectory>
                             <outputDirectory>src/main/generated-sources</outputDirectory>
                             <useEmitter>true</useEmitter>
+
+                            <!-- We provide mappings for namespace to packages in order
+                                 to neaten up the package space -->
                             <mappings>
 
-                                <!-- EBI -->
+                                <!-- EMBL-EBI -->
                                 <mapping>
                                     <namespace>http://www.ebi.ac.uk/webservices/chebi</namespace>
                                     <targetPackage>uk.ac.ebi.ws.chebi</targetPackage>
@@ -118,10 +130,10 @@
                                     <namespace>http://www.chemspider.com/</namespace>
                                     <targetPackage>com.chemspider</targetPackage>
                                 </mapping>
-                                <mapping>
+<!--                                <mapping>
                                     <namespace>http://sabio.eml.org/</namespace>
                                     <targetPackage>org.h_its.sabiork</targetPackage>
-                                </mapping>
+                                </mapping>-->
 
                             </mappings>
                         </configuration>
@@ -136,7 +148,7 @@
                     <dependency>
                         <groupId>javax.activation</groupId>
                         <artifactId>activation</artifactId>
-                        <version>1.1</version>
+                        <version>1.1.1</version>
                     </dependency>
                 </dependencies>
             </plugin>

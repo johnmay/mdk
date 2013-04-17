@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * SBMLIOUtil.java
  *
@@ -20,14 +37,28 @@
  */
 package uk.ac.ebi.mdk.io.xml.sbml;
 
+import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
-import org.sbml.jsbml.*;
+import org.sbml.jsbml.CVTerm;
+import org.sbml.jsbml.Model;
+import org.sbml.jsbml.Reaction;
+import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.Species;
+import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.xml.XMLNode;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.annotation.InChI;
+import uk.ac.ebi.mdk.domain.annotation.Note;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
-import uk.ac.ebi.mdk.domain.entity.reaction.*;
+import uk.ac.ebi.mdk.domain.entity.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.HashMap;
@@ -35,8 +66,7 @@ import java.util.Map;
 
 
 /**
- * SBMLIOUtil – 2011.09.27 <br>
- * Class description
+ * SBMLIOUtil – 2011.09.27 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -52,27 +82,39 @@ public class SBMLIOUtil {
 
     private long metaIdticker = 0;
 
-    private Map<CompartmentalisedParticipant, SpeciesReference> speciesReferences = new HashMap();
+    private Map<CompartmentalisedParticipant, Species> speciesReferences = new HashMap<CompartmentalisedParticipant, Species>();
 
     private Map<Compartment, org.sbml.jsbml.Compartment> compartmentMap = new HashMap<Compartment, org.sbml.jsbml.Compartment>();
 
     private EntityFactory factory;
+    
+    private SBMLSideCompoundHandler sideCompHandler;
+    private Boolean sideCompoundHandlerAvailable;
 
     public SBMLIOUtil(EntityFactory factory, int level, int version) {
         this.level = level;
         this.version = version;
         this.factory = factory;
+        this.sideCompoundHandlerAvailable = false;
+    }
+    
+    public SBMLIOUtil(EntityFactory factory, int level, int version, SBMLSideCompoundHandler sideCompHandler) {
+        this.level = level;
+        this.version = version;
+        this.factory = factory;
+        this.sideCompHandler = sideCompHandler;
+        this.sideCompoundHandlerAvailable = true;
     }
 
 
     public SBMLIOUtil(EntityFactory factory) {
-        this(factory, 2, 2);
+        this(factory, 2, 4);
     }
 
 
     private String nextMetaId() {
         metaIdticker++;
-        return Long.toString(metaIdticker);
+        return String.format("_%09d", metaIdticker);
     }
 
 
@@ -82,10 +124,11 @@ public class SBMLIOUtil {
         Model model = new Model(level, version);
         doc.setModel(model);
 
-        for (MetabolicReaction rxn : reconstruction.getReactome()) {
+        for (MetabolicReaction rxn : reconstruction.reactome()) {
             addReaction(model, rxn);
         }
-
+        if(sideCompoundHandlerAvailable)
+            sideCompHandler.writeSideCompoundAnnotations(model);
         return doc;
 
     }
@@ -98,20 +141,24 @@ public class SBMLIOUtil {
         // set id and meta-id
         Identifier id = rxn.getIdentifier();
         sbmlRxn.setMetaId(nextMetaId());
+        sbmlRxn.setName(rxn.getName());
         if (id == null) {
             sbmlRxn.setId("rxn" + metaIdticker); // maybe need a try/catch to reset valid id
         } else {
             String accession = id.getAccession();
             accession = accession.trim();
-            accession = accession.replaceAll(":", "%3A"); // replace spaces and dashes with underscores
-            accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
-            accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
+            accession = accession
+                    .replaceAll(":", "%3A"); // replace spaces and dashes with underscores
+            accession = accession
+                    .replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
+            accession = accession
+                    .replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
             sbmlRxn.setId(accession);
         }
 
         Direction direction = rxn.getDirection();
 
-        if (direction instanceof Direction) {
+        if (direction != null) {
 
             Direction directionImplementation = (Direction) direction;
 
@@ -124,42 +171,34 @@ public class SBMLIOUtil {
 
         }
 
+        int index = 0;
+
         for (MetabolicParticipant p : rxn.getReactants()) {
-            sbmlRxn.addReactant(getSpeciesReference(model, p));
+            SpeciesReference ref = getSpeciesReference(model, p, sbmlRxn, index++);
+            sbmlRxn.addReactant(ref);
+            if(p.isSideCompound() && sideCompoundHandlerAvailable)
+                sideCompHandler.registerAsSideCompound(new Species(ref.getSpecies()));
         }
         for (MetabolicParticipant p : rxn.getProducts()) {
-            sbmlRxn.addProduct(getSpeciesReference(model, p));
-
+            SpeciesReference ref = getSpeciesReference(model, p, sbmlRxn, index++); 
+            sbmlRxn.addProduct(ref);
+            if(p.isSideCompound() && sideCompoundHandlerAvailable)
+                sideCompHandler.registerAsSideCompound(new Species(ref.getSpecies()));
         }
 
-        for (CrossReference xref : rxn.getAnnotationsExtending(CrossReference.class)) {
-            String resource = xref.getIdentifier().getURN();
-            CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS_DESCRIBED_BY, resource);
+
+        CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
+        for (CrossReference xref : rxn
+                .getAnnotationsExtending(CrossReference.class)) {
+            term.addResource(xref.getIdentifier().getURN());
+        }
+
+        if (!term.getResources().isEmpty())
             sbmlRxn.addCVTerm(term);
+
+        if (!model.addReaction(sbmlRxn)) {
+            // could inform user that the reaction couldn't be added
         }
-
-        //        sbmlRxn.setNotes("<cml xmlns=\"http://www.xml-cml.org/schema\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:conventions=\"http://www.xml-cml.org/convention/\" convention=\"conventions:molecular\"><dc:title>test file for http://www.xml-cml.org/conventions/molecular convention</dc:title><dc:description>should not fail because atoms in formula/atomArray do not need ids</dc:description><dc:date>2009-04-05</dc:date><molecule id=\"m1\"><formula><atomArray><atom elementType=\"H\" isotopeNumber=\"2\" /></atomArray></formula></molecule></cml>");
-        //        XMLNode annotation = new XMLNode(new XMLTriple("title",
-        //                                                       "http://purl.org/dc/elements/1.1/",
-        //                                                       "dc"));
-        //        annotation.addAttr("xmlns:dc", "http://purl.org/dc/elements/1.1/");
-        //        annotation.addChild(new XMLNode("John Doe"));
-        //        XMLNode notes = new XMLNode("notes");
-        //        notes.addChild(annotation);
-        //        sbmlRxn.setNotes(notes);
-
-        //        try {
-        //
-        //            DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
-        //            DocumentBuilder docBuilder = dbfac.newDocumentBuilder();
-        //            Document doc = docBuilder.newDocument();
-        //            XMLAnnotationWriter writer = new XMLAnnotationWriter(doc);
-        //            sbmlRxn.setNotes(writer.getSBMLNotes(rxn));
-        //        } catch (Exception ex) {
-        //            LOGGER.error(ex);
-        //        }
-
-        model.addReaction(sbmlRxn);
 
         return sbmlRxn;
 
@@ -167,28 +206,33 @@ public class SBMLIOUtil {
 
 
     public SpeciesReference getSpeciesReference(Model model,
-                                                CompartmentalisedParticipant<Metabolite, Double,  Compartment> participant) {
+                                                CompartmentalisedParticipant<Metabolite, Double, Compartment> participant,
+                                                Reaction reaction,
+                                                Integer index) {
 
         // we need a key as the coef are part of the reaction not the species...
         // however the compartment is part of the species not the reaction
 
-        MetabolicParticipant key = factory.newInstance(MetabolicParticipant.class);
+        MetabolicParticipant key = factory
+                .newInstance(MetabolicParticipant.class);
         key.setCoefficient(1d);
         key.setCompartment(participant.getCompartment());
         key.setMolecule(participant.getMolecule());
 
         // create a new entry if one doesn't exists
-        if (speciesReferences.containsKey(key) == false) {
+        if (!speciesReferences.containsKey(key)) {
             speciesReferences.put(key, addSpecies(model, participant));
         }
 
-        SpeciesReference sref = speciesReferences.get(key);
+        Species species = speciesReferences.get(key);
 
         // need to set the stoichiometry on each species reference
-        SpeciesReference srefCopy = new SpeciesReference(sref.getSpecies());
-        srefCopy.setStoichiometry(participant.getCoefficient());
+        SpeciesReference reference = new SpeciesReference();
+        reference.setId(species.getId() + "_" + reaction.getId() + "_" + index);
+        reference.setSpecies(species);
+        reference.setStoichiometry(participant.getCoefficient());
 
-        return srefCopy;
+        return reference;
 
     }
 
@@ -198,11 +242,10 @@ public class SBMLIOUtil {
      *
      * @param model
      * @param participant
-     *
      * @return
      */
-    public SpeciesReference addSpecies(Model model,
-                                       CompartmentalisedParticipant<Metabolite, Double, Compartment> participant) {
+    public Species addSpecies(Model model,
+                              CompartmentalisedParticipant<Metabolite, Double, Compartment> participant) {
 
         Species species = new Species(level, version);
 
@@ -218,31 +261,61 @@ public class SBMLIOUtil {
             accession = accession.trim();
             accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
             accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
-            species.setId(accession + "_" + ((Compartment) participant.getCompartment()).getAbbreviation());
+            String compartment = ((Compartment) participant.getCompartment()).getAbbreviation();
+            // suffix compartment to id
+            if(!id.getAccession().endsWith("_" + compartment))
+                species.setId(accession + "_" + compartment);
+            else
+                species.setId(accession);
         }
 
         species.setName(m.getName());
         species.setCompartment(getCompartment(model, participant));
 
-        if (m.getAnnotationsExtending(CrossReference.class).iterator().hasNext()) {
-            CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
-            for (CrossReference xref : m.getAnnotationsExtending(CrossReference.class)) {
-                String resource = xref.getIdentifier().getURN();
+        CVTerm term = new CVTerm(CVTerm.Qualifier.BQB_IS);
+
+        if (m.getAnnotationsExtending(CrossReference.class)
+             .iterator()
+             .hasNext()) {
+
+            for (CrossReference xref : m
+                    .getAnnotationsExtending(CrossReference.class)) {
+                String resource = xref.getIdentifier().getResolvableURL();
                 term.addResource(resource);
             }
-            species.addCVTerm(term);
+
         }
 
+        if (m.hasAnnotation(InChI.class) || m
+                .hasAnnotation(AtomContainerAnnotation.class)) {
+            for (ChemicalStructure structure : m
+                    .getAnnotationsExtending(ChemicalStructure.class)) {
+                // TODO: should abstract this mapping to an annotation handler
+                String inchi = structure.toInChI();
+                if (!inchi.isEmpty())
+                    term.addResource("http://rdf.openmolecules.net/?" + inchi);
+            }
+        }
+
+        if (m.hasAnnotation(Note.class)) {
+            String content = "<notes><html xmlns=\"http://www.w3.org/1999/xhtml\"><p>" + Joiner
+                    .on("</p><p>")
+                    .join(m.getAnnotations(Note.class)) + "</p></html></notes>";
+            XMLNode notes = XMLNode.convertStringToXMLNode(content);
+            species.setNotes(notes);
+        }
+
+        // if we've added annotation
+        if (!term.getResources().isEmpty())
+            species.addCVTerm(term);
 
         model.addSpecies(species);
 
-        SpeciesReference sr = new SpeciesReference(species);
-
-        return sr;
+        return species;
     }
 
 
-    public org.sbml.jsbml.Compartment getCompartment(Model model, CompartmentalisedParticipant<?, ?,Compartment> participant) {
+    public org.sbml.jsbml.Compartment getCompartment(Model model, CompartmentalisedParticipant<?, ?, Compartment> participant) {
 
         if (compartmentMap.containsKey(participant.getCompartment())) {
             return compartmentMap.get(participant.getCompartment());
@@ -254,6 +327,13 @@ public class SBMLIOUtil {
 
         sbmlCompartment.setId(compartment.getAbbreviation());
         sbmlCompartment.setName(compartment.getDescription());
+
+        Identifier identifier = compartment.getIdentifier();
+        if (!identifier.getAccession().isEmpty()) {
+            sbmlCompartment
+                    .addCVTerm(new CVTerm(CVTerm.Qualifier.BQB_IS, identifier
+                            .getURN()));
+        }
 
         model.addCompartment(sbmlCompartment);
 

@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.apps.tool;
 
 import au.com.bytecode.opencsv.CSVWriter;
@@ -12,10 +29,14 @@ import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.StereoSeed;
 import uk.ac.ebi.mdk.tool.MappedEntityAligner;
-import uk.ac.ebi.mdk.tool.domain.MolecularHash;
-import uk.ac.ebi.mdk.tool.domain.MolecularHashFactory;
-import uk.ac.ebi.mdk.tool.domain.hash.*;
+import uk.ac.ebi.mdk.prototype.hash.MolecularHash;
+import uk.ac.ebi.mdk.prototype.hash.MolecularHashFactory;
 import uk.ac.ebi.mdk.tool.match.EntityAligner;
 import uk.ac.ebi.mdk.tool.match.MetaboliteHashCodeMatcher;
 import uk.ac.ebi.mdk.tool.match.NameMatcher;
@@ -56,7 +77,7 @@ public class FindMismatches extends CommandLineMain {
         Reconstruction query = getReconstruction(getFile("q"));
         Reconstruction reference = getReconstruction(getFile("r"));
 
-        EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.getMetabolome(),
+        EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.getMetabolome().toList(),
                                                                                 true,
                                                                                 true);
 

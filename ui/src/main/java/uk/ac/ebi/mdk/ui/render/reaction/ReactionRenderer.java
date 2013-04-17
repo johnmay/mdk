@@ -1,22 +1,18 @@
-/**
- * ReactionRenderer.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.09.27
- *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.ui.render.reaction;
 
@@ -263,7 +259,7 @@ public class ReactionRenderer {
 
         Metabolite metabolite = p.getMolecule();
         String compartment = "[" + ((Compartment) p.getCompartment()).getAbbreviation() + "]";
-        g2.setColor(Color.LIGHT_GRAY);
+        g2.setColor(Color.GRAY);
         g2.setFont(new Font("Courier New", Font.PLAIN, 10));
         int compartmentWidth = g2.getFontMetrics().stringWidth(compartment);
         int compartmentHeight = g2.getFontMetrics().getHeight();
@@ -278,8 +274,9 @@ public class ReactionRenderer {
             g2.dispose();
         } else {
             g2.setColor(Color.LIGHT_GRAY);
-            g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(18f));
-            String na = "unavailable";
+            g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(14f));
+            g2.setFont(g2.getFont().deriveFont(Font.ITALIC));
+            String na = "no structure";
             int mW = g2.getFontMetrics().stringWidth(na);
             int mH = g2.getFontMetrics().getHeight();
 
@@ -299,7 +296,7 @@ public class ReactionRenderer {
         g2.setColor(Color.LIGHT_GRAY);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         String direction = "+";
-        g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(34f));
+        g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(32f));
         int width = g2.getFontMetrics().stringWidth(direction);
         int height = g2.getFontMetrics().getHeight();
         g2.drawString(direction, (int) bounds.getCenterX() - (width / 2), (int) bounds.getCenterY() + (height / 2));
@@ -328,6 +325,7 @@ public class ReactionRenderer {
 
         String symbol = direction.getSymbol();
         g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(34f * scale));
+
         Rectangle2D sBounds = g2.getFontMetrics().getStringBounds(symbol, g2);
         int width = (int) sBounds.getWidth();
         int height = (int) sBounds.getHeight();

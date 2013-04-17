@@ -1,7 +1,25 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.io.domain;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.io.EnumReader;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityReader;
@@ -41,9 +59,13 @@ public class ReactionDataReader
         this.entityIn = entityIn;
         this.enumReader = new EnumReader(in);
         this.factory = factory;
+
+        // compartment name mappings (name has changed on enumeration)
+        enumReader.put("EXTRACELLULA", "EXTRACELLULAR");
+
     }
 
-    public MetabolicReaction readEntity() throws IOException, ClassNotFoundException {
+    public MetabolicReaction readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         MetabolicReaction rxn = factory.newInstance(MetabolicReaction.class);
 
@@ -53,7 +75,7 @@ public class ReactionDataReader
             MetabolicParticipant p = factory.newInstance(MetabolicParticipant.class);
             p.setCoefficient(in.readDouble());
             p.setCompartment((Compartment)enumReader.readEnum());
-            p.setMolecule(entityIn.read(Metabolite.class));
+            p.setMolecule(entityIn.read(Metabolite.class, reconstruction));
             rxn.addReactant(p);
         }
 
@@ -63,7 +85,7 @@ public class ReactionDataReader
             MetabolicParticipant p = factory.newInstance(MetabolicParticipant.class);
             p.setCoefficient(in.readDouble());
             p.setCompartment((Compartment)enumReader.readEnum());
-            p.setMolecule(entityIn.read(Metabolite.class));
+            p.setMolecule(entityIn.read(Metabolite.class, reconstruction));
             rxn.addProduct(p);
         }
 
@@ -72,7 +94,8 @@ public class ReactionDataReader
         // read modifiers
         int nModifiers = in.readByte();
         for(int i = 0; i < nModifiers; i++){
-            rxn.addModifier( (GeneProduct) entityIn.read());
+            GeneProduct product = (GeneProduct) entityIn.read(reconstruction);
+            reconstruction.associate(product, rxn);
         }
 
 

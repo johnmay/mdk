@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.apps.io;
 
 import org.apache.log4j.Logger;
@@ -15,17 +32,18 @@ import uk.ac.ebi.mdk.domain.entity.*;
 import uk.ac.ebi.mdk.domain.entity.reaction.*;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
-import uk.ac.ebi.mdk.io.text.biocyc.AttributedEntry;
+import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 import uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader;
-import uk.ac.ebi.mdk.io.text.biocyc.attribute.Attribute;
-import uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute;
-import uk.ac.ebi.mdk.io.text.biocyc.attribute.ReactionAttribute;
+import uk.ac.ebi.mdk.io.text.attribute.Attribute;
+import uk.ac.ebi.mdk.io.text.biocyc.CompoundAttribute;
+import uk.ac.ebi.mdk.io.text.biocyc.ReactionAttribute;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -35,7 +53,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute.CHEMICAL_FORMULA;
+import static uk.ac.ebi.mdk.io.text.biocyc.CompoundAttribute.CHEMICAL_FORMULA;
 
 /**
  * Converts a BioCyc project to MDK domain objects
@@ -55,19 +73,20 @@ public class BioCycConverter {
     private File   root;
     private File   data;
     private String name;
+    private String organism;
 
     private Reconstruction reconstruction;
 
-    public BioCycConverter(File root, String name) {
+    public BioCycConverter(File root, String name, String organism) {
 
         this.root = root;
         this.name = name;
         this.data = new File(root, "data");
-
+        this.organism = organism;
 
         reconstruction = create();
 
-        resolver.put("cco-out", Organelle.EXTRACELLULA);
+        resolver.put("cco-out", Organelle.EXTRACELLULAR);
         resolver.put("cco-in", Organelle.CYTOPLASM);
         resolver.put("nill", Organelle.CYTOPLASM);
 
@@ -172,11 +191,14 @@ public class BioCycConverter {
             reconstruction.addReaction(reaction);
         }
 
+        Map<Identifier,Reaction> idToReaction = new HashMap<Identifier, Reaction>();
+
         System.out.println("Duplicate reaction identifiers:");
         for (Reaction reaction : reconstruction.getReactome()) {
-            if (reconstruction.getReactome().getReactions(reaction.getIdentifier()).size() != 1) {
+            if (idToReaction.containsKey(reaction.getIdentifier())) {
                 System.out.println(reaction.getIdentifier());
             }
+            idToReaction.put(reaction.getIdentifier(), reaction);
         }
 
         reader.close();
@@ -217,12 +239,12 @@ public class BioCycConverter {
 
     }
 
-    public static Metabolite dat2Metabolite(AttributedEntry<Attribute, String> entry) {
+    public Metabolite dat2Metabolite(AttributedEntry<Attribute, String> entry) {
 
         Metabolite m = DefaultEntityFactory.getInstance().ofClass(Metabolite.class);
 
         // basic info
-        m.setIdentifier(new BioCycChemicalIdentifier(entry.getFirst(CompoundAttribute.UNIQUE_ID)));
+        m.setIdentifier(new BioCycChemicalIdentifier(organism, entry.getFirst(CompoundAttribute.UNIQUE_ID)));
         m.setName(clean(entry.getFirst(CompoundAttribute.COMMON_NAME, "unnamed entity")));
         m.setAbbreviation(clean(entry.getFirst(CompoundAttribute.ABBREV_NAME, m.getName())));
 
@@ -357,7 +379,7 @@ public class BioCycConverter {
 
         // create a new one
         Metabolite m = DefaultEntityFactory.getInstance().ofClass(Metabolite.class);
-        m.setIdentifier(new BioCycChemicalIdentifier(uid));
+        m.setIdentifier(new BioCycChemicalIdentifier(organism, uid));
         m.setAbbreviation("n/a");
         m.setName("unnamed metabolite");
 
@@ -487,7 +509,8 @@ public class BioCycConverter {
     // second arg name
     public static void main(String[] args) throws IOException {
 
-        BioCycConverter converter = new BioCycConverter(new File(args[0]), args[1]);
+        // args[2] = organism, e.g. META for metacyc
+        BioCycConverter converter = new BioCycConverter(new File(args[0]), args[1], args[2]);
         converter.importMetabolites();
         converter.importClasses();
         converter.importReactions();

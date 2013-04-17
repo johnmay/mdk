@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.tool;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -6,15 +23,21 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.Entity;
 import uk.ac.ebi.mdk.tool.match.EntityMatcher;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Entity aligner flattens all metrics (per matcher) into a single map which
- * is then searched. This is ideal for a 'match any' comparison.
+ * Entity aligner flattens all metrics (per matcher) into a single map which is
+ * then searched. This is ideal for a 'match any' comparison.
  *
  * @author John May
  */
-public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner<E> {
+public class MappedEntityAligner<E extends Entity>
+        extends AbstractEntityAligner<E> {
 
     private static final Logger LOGGER = Logger.getLogger(MappedEntityAligner.class);
 
@@ -25,9 +48,11 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
         super(references, Boolean.TRUE, Boolean.FALSE);
     }
 
+
     public MappedEntityAligner(Collection<E> references, Boolean cached, Boolean greedy) {
         super(references, cached, greedy);
     }
+
 
     /**
      * Convenience constructor sets cached=true but allows setting of 'greedy'
@@ -38,6 +63,7 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
     public MappedEntityAligner(Collection<E> references, Boolean greedy) {
         super(references, Boolean.TRUE, greedy);
     }
+
 
     /**
      * Adds a reference and updates the metric map
@@ -57,6 +83,7 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
 
     }
 
+
     @Override
     public void addReferences(Collection<? extends E> references) {
         super.addReferences(references);
@@ -69,6 +96,7 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
         }
     }
 
+
     public MetricMap getMetricMap(EntityMatcher matcher) {
 
         // check if the metric map for this matcher exists (presumes
@@ -78,10 +106,14 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
         }
 
         // build metric map
+        LOGGER.debug("Building metric map for: " + matcher.toString());
+        long start = System.currentTimeMillis();
         MetricMap map = new MetricMap(references.size());
         for (E entity : references) {
             map.put(entity, matcher);
         }
+        long end = System.currentTimeMillis();
+        LOGGER.debug("Time to build: " + (end - start) + " ms");
 
         // add to the map of metric maps (bit of a mouthful)
         metricMaps.put(matcher, map);
@@ -117,9 +149,11 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
 
         private ListMultimap<Object, E> map;
 
+
         public MetricMap(int size) {
             map = ArrayListMultimap.create(size, 2);
         }
+
 
         public void put(E entity, EntityMatcher m) {
             Object metric = m.calculatedMetric(entity);
@@ -132,17 +166,21 @@ public class MappedEntityAligner<E extends Entity> extends AbstractEntityAligner
             }
         }
 
+
         public boolean containsKey(Object o) {
             return map.containsKey(o);
         }
+
 
         public List<E> get(Object o) {
             return map.get(o);
         }
 
+
         public Set<Object> getKeys() {
             return map.keySet();
         }
+
 
         public boolean isEmpty() {
             return map.isEmpty();

@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.chemet.io.entity.marshal.recon;
 
 import org.apache.log4j.Logger;
@@ -15,7 +32,6 @@ import uk.ac.ebi.mdk.domain.entity.collection.Chromosome;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicGeneIdentifier;
-import uk.ac.ebi.mdk.domain.identifier.basic.ChromosomeNumber;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
@@ -38,7 +54,7 @@ public class ReconstructionDataWriterTest {
     @Test
     public void testWrite() throws IOException, ClassNotFoundException {
 
-        Version v = new Version("0.9");
+        Version v = IOConstants.VERSION;
         EntityFactory factory = DefaultEntityFactory.getInstance();
 
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -50,27 +66,27 @@ public class ReconstructionDataWriterTest {
 
         entityOut.write(createReconstruction());
 
-        System.out.println(bytes.toByteArray().length);
-
         DataInputStream din = new DataInputStream(new ByteArrayInputStream(bytes.toByteArray()));
         EntityInput in = new EntityDataInputStream(v, din, factory,
                                                          new AnnotationDataInputStream(din, v),
                                                          new ObservationDataInputStream(din, v));
 
 
-        ReconstructionImpl recon = in.read();
+        ReconstructionImpl recon = in.read(null);
+
+
 
         for(Metabolite m : recon.getMetabolome()){
             System.out.println(m);
         }
         for(MetabolicReaction r : recon.getReactome()){
-            System.out.println(r + "modifiers: " + r.getModifiers());
+            System.out.println(r + "modifiers: " + recon.enzymesOf(r));
         }
         for(Gene g : recon.getGenes()){
             System.out.println(g + ": " + g.getStart() + ":" + g.getEnd() + " sequence " + g.getSequence().getSequenceAsString());
         }
-        for(GeneProduct gp : recon.getProducts()){
-            System.out.println(gp + ": " + gp.getGenes());
+        for(GeneProduct gp : recon.proteome()){
+            System.out.println(gp + ": " + recon.genesOf(gp));
         }
 
     }
@@ -108,7 +124,7 @@ public class ReconstructionDataWriterTest {
         r1.addReactant(new MetabolicParticipantImplementation(m2));
         r1.addProduct(new MetabolicParticipantImplementation(m3));
 
-        r2.addReactant(new MetabolicParticipantImplementation(m3, Organelle.EXTRACELLULA));
+        r2.addReactant(new MetabolicParticipantImplementation(m3, Organelle.EXTRACELLULAR));
         r2.addProduct(new MetabolicParticipantImplementation(m3));
 
         reconstruction.addReaction(r1);
@@ -124,13 +140,10 @@ public class ReconstructionDataWriterTest {
         reconstruction.addProduct(rna1);
         reconstruction.addProduct(rna2);
 
-        r1.addModifier(p1);
+        reconstruction.associate(p1, r1);
         r2.setDirection(Direction.BACKWARD);
 
-        Chromosome chromosome = factory.ofClass(Chromosome.class, new ChromosomeNumber(1), "Chromosome 1", "ch1");
-
-        reconstruction.getGenome().add(chromosome);
-        chromosome.setSequence(new ChromosomeSequence("AACGTGCTGATCGTACGTAGCTAGCTAGCATGCATGCATGCATGACTGCATAC".toLowerCase()));
+        Chromosome chromosome = reconstruction.getGenome().createChromosome(1, new ChromosomeSequence("AACGTGCTGATCGTACGTAGCTAGCTAGCATGCATGCATGCATGACTGCATAC".toLowerCase()));
 
         Gene g1 = factory.ofClass(Gene.class, new BasicGeneIdentifier(), "Gene 1", "g1");
         g1.setStart(1);
@@ -145,10 +158,9 @@ public class ReconstructionDataWriterTest {
         g4.setStart(1);
         g4.setEnd(8);
 
-        p1.addGene(g1);
-        p1.addGene(g2);
-
-        rna1.addGene(g3);
+        reconstruction.associate(g1, p1);
+        reconstruction.associate(g2, p2);
+        reconstruction.associate(g3, rna1);
 
         chromosome.add(g1);
         chromosome.add(g2);

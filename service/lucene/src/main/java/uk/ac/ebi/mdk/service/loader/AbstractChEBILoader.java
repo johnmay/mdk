@@ -1,9 +1,27 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.loader;
 
 import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
 import uk.ac.ebi.mdk.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.mdk.service.exception.MissingLocationException;
 import uk.ac.ebi.mdk.service.index.LuceneIndex;
@@ -41,9 +59,9 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
         super(index);
 
         addRequiredResource("ChEBI Compounds",
-                            "...",
+                            "compound.tsv file from ChEBI, specifying preferred names, secondary and primary accessions",
                             ResourceFileLocation.class,
-                            new ZIPRemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv.zip"));
+                            new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/compounds.tsv"));
 
     }
 
@@ -57,7 +75,7 @@ public abstract class AbstractChEBILoader extends AbstractSingleIndexResourceLoa
 
 
         ResourceFileLocation location = getLocation("ChEBI Compounds");
-        CSVReader csv = new CSVReader(new InputStreamReader(location.open()), '\t');
+        CSVReader csv = new CSVReader(new InputStreamReader(location.open()), '\t', '\0');
 
         List<String> header = Arrays.asList(csv.readNext());
         int accessionIndex  = header.indexOf("CHEBI_ACCESSION");

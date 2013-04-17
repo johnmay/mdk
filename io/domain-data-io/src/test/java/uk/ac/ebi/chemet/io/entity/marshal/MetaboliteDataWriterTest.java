@@ -1,8 +1,26 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.chemet.io.entity.marshal;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import uk.ac.ebi.caf.utility.version.Version;
+import uk.ac.ebi.mdk.domain.entity.ReconstructionImpl;
 import uk.ac.ebi.mdk.io.AnnotationDataInputStream;
 import uk.ac.ebi.mdk.io.AnnotationDataOutputStream;
 import uk.ac.ebi.mdk.io.EntityDataInputStream;
@@ -10,6 +28,7 @@ import uk.ac.ebi.mdk.io.EntityDataOutputStream;
 import uk.ac.ebi.mdk.domain.entity.MetaboliteImpl;
 import uk.ac.ebi.mdk.io.EntityInput;
 import uk.ac.ebi.mdk.io.EntityOutput;
+import uk.ac.ebi.mdk.io.IOConstants;
 import uk.ac.ebi.mdk.io.ObservationDataInputStream;
 import uk.ac.ebi.mdk.io.ObservationDataOutputStream;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
@@ -60,7 +79,7 @@ public class MetaboliteDataWriterTest {
         ByteArrayOutputStream bytestream = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(bytestream);
 
-        Version v = new Version("0.9");
+        Version v = IOConstants.CURRENT;
 
         EntityOutput eout = new EntityDataOutputStream(v,
                                                              out,
@@ -79,7 +98,7 @@ public class MetaboliteDataWriterTest {
                                                           new ObservationDataInputStream(din, v));
 
 
-        MetabolicReaction rxn2 = ein.read();
+        MetabolicReaction rxn2 = ein.read(new ReconstructionImpl());
         for (Participant<?, ?> r : rxn2.getReactants()) {
             for (Participant<?, ?> p : rxn2.getProducts()) {
                 if(r.getMolecule() == p.getMolecule()){

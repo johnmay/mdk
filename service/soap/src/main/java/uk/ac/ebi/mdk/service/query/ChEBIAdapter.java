@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.query;
 
 import org.apache.log4j.Logger;
@@ -28,8 +45,8 @@ public class ChEBIAdapter
                    PreferredNameService<ChEBIIdentifier>,
                    StructureService<ChEBIIdentifier> {
 
-    private static final Logger LOGGER = Logger.getLogger(ChEBIAdapter.class);
-    private static int DEFAULT_CACHE_SIZE = 200;
+    private static final Logger LOGGER             = Logger.getLogger(ChEBIAdapter.class);
+    private static       int    DEFAULT_CACHE_SIZE = 200;
     private int cacheSize;
 
     private Map<ChEBIIdentifier, Entity> entites = new LinkedHashMap<ChEBIIdentifier, Entity>() {
@@ -156,8 +173,10 @@ public class ChEBIAdapter
 
         try {
             LiteEntityList ents = service.getLiteEntity(name, a, getMaxResults(), StarsCategory.value3);
-            for (LiteEntity entity : ents.getListElement()) {
-                identifiers.add(getIdentifier(entity.getChebiId()));
+            if (ents != null && ents.getListElement() != null) {
+                for (LiteEntity entity : ents.getListElement()) {
+                    identifiers.add(getIdentifier(entity.getChebiId()));
+                }
             }
 
         } catch (RemoteException ex) {
@@ -173,15 +192,18 @@ public class ChEBIAdapter
         return new ChEBIIdentifier();
     }
 
+    private static final String address = "http://www.ebi.ac.uk/chebi/";
+
     @Override
     public boolean startup() {
-        if (service != null) return true;
+        if (service != null)
+            return reachable(address);
         try {
             service = locator.getChebiWebServicePort();
         } catch (ServiceException ex) {
             LOGGER.error("Startup failed on SOAP Web Service: " + ex.getMessage());
         }
-        return service != null;
+        return service != null && reachable(address);
     }
 
     @Override

@@ -1,27 +1,24 @@
-/**
- * MatrixTable.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.11.24
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- *
- * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.ui.component.matrix;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
-import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.matrix.AbstractReactionMatrix;
 import uk.ac.ebi.mdk.ui.render.table.VerticalTableHeaderCellRenderer;
 
@@ -36,10 +33,10 @@ import java.util.List;
 /**
  * MatrixTable - 2011.11.24 <br> Displays a matrix with column and row names
  *
- * @version $Rev$ : Last Changed $Date: 2011-12-13 08:59:08 +0000 (Tue,
- * 13 Dec 2011) $
  * @author johnmay
  * @author $Author$ (this version)
+ * @version $Rev$ : Last Changed $Date: 2011-12-13 08:59:08 +0000 (Tue, 13 Dec
+ *          2011) $
  */
 public class MatrixPane extends JScrollPane {
 
@@ -55,20 +52,20 @@ public class MatrixPane extends JScrollPane {
         String[] rxns = new String[matrix.getReactionCount()];
         for (int i = 0; i < rxns.length; i++) {
             Object rxn = matrix.getReaction(i);
-            if (rxn instanceof MetabolicReactionImpl) {
-                rxns[i] = ((MetabolicReactionImpl) rxn).getAbbreviation();
+            if (rxn instanceof MetabolicReaction) {
+                rxns[i] = ((MetabolicReaction) rxn).getAbbreviation();
             } else {
-                rxns[i] = "rxn" + i;
+                rxns[i] = rxn.toString();
             }
 
-        }        
+        }
 
         //XXX it should use the matrix is the model
         table = new JTable(matrix.getFixedMatrix(),
                            rxns);
-        
+
         setViewportView(table);
-        
+
 
         table.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(8f));
 
@@ -92,17 +89,20 @@ public class MatrixPane extends JScrollPane {
             }
         };
 
-        JList rh = new JList(lm);
-        rh.setFixedCellWidth(120);
-        rh.setCellRenderer(new RowHeaderRenderer(table));
-        setRowHeaderView(rh);
+
 //        setCorner(JScrollPane.UPPER_RIGHT_CORNER, );
 
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table.setRowHeight(15);
+        table.setRowHeight(20);
         for (int i = 0; i < table.getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setPreferredWidth(15);
+            table.getColumnModel().getColumn(i).setPreferredWidth(25);
         }
+
+        JList rh = new JList(lm);
+        rh.setFixedCellWidth(120);
+        rh.setFixedCellHeight(table.getRowHeight());
+        rh.setCellRenderer(new RowHeaderRenderer(table));
+        setRowHeaderView(rh);
 
     }
 

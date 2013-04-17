@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2013. EMBL, European Bioinformatics Institute
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<metabolite>
+    <version>3.0</version>
+    <creation_date>2005-11-16 08:48:42 -0700</creation_date>
+    <update_date>2012-09-15 18:10:06 -0600</update_date>
+    <accession>HMDB00001</accession>
+    <secoundary_accessions>
+        <accession>HMDB04935</accession>
+        <accession>HMDB06703</accession>
+        <accession>HMDB06704</accession>
+    </secoundary_accessions>
+    <common_name>1-Methylhistidine</common_name>
+    <description>One-methylhistidine (1-MHis) is derived mainly from the anserine of dietary flesh sources, especially poultry. The enzyme, carnosinase, splits anserine into b-alanine and 1-MHis. High levels of 1-MHis tend to inhibit the enzyme carnosinase and increase anserine levels. Conversely, genetic variants with deficient carnosinase activity in plasma show increased 1-MHis excretions when they consume a high meat diet. Reduced serum carnosinase activity is also found in patients with Parkinson's disease and multiple sclerosis and patients following a cerebrovascular accident. Vitamin E deficiency can lead to 1-methylhistidinuria from increased oxidative effects in skeletal muscle.</description>
+    <synonyms>
+        <synonym>1 methylhistidine</synonym>
+        <synonym>1-MHis</synonym>
+        <synonym>1-Methyl-Histidine</synonym>
+        <synonym>1-Methyl-L-histidine</synonym>
+        <synonym>1-N-Methyl-L-histidine</synonym>
+        <synonym>1-methyl histidine</synonym>
+        <synonym>L-1-Methylhistidine</synonym>
+        <synonym>N1-Methyl-L-histidine</synonym>
+        <synonym>pi-methylhistidine</synonym>
+    </synonyms>
+    <chemical_formula>C7H11N3O2</chemical_formula>
+    <average_molecular_weight>169.1811</average_molecular_weight>
+    <monisotopic_moleculate_weight>169.085126611</monisotopic_moleculate_weight>
+    <iupac_name>(2S)-2-amino-3-(1-methyl-1H-imidazol-4-yl)propanoic acid</iupac_name>
+    <traditional_iupac>4-methyl-histidine</traditional_iupac>
+    <cas_registry_number>332-80-9</cas_registry_number>
+    <smiles>CN1C=NC(C[C@H](N)C(O)=O)=C1</smiles>
+    <inchi>InChI=1S/C7H11N3O2/c1-10-3-5(9-4-10)2-6(8)7(11)12/h3-4,6H,2,8H2,1H3,(H,11,12)/t6-/m0/s1</inchi>
+    <inchkey>InChIKey=BRMWTNUJHUMWMS-LURJTMIESA-N</inchkey>
+    <taxonomy>
+        <kingdom>Organic Compounds</kingdom>
+        <super_class>Amino Acids, Peptides, and Analogues</super_class>
+        <class>Amino Acids and Derivatives</class>
+        <other_descriptors>
+            <descriptor>Aromatic Heteromonocyclic Compounds</descriptor>
+        </other_descriptors>
+        <substituents>
+            <substitient>aminoimidazole</substitient>
+            <substitient>carboxylic acid</substitient>
+            <substitient>imidazole</substitient>
+            <substitient>imidazolyl carboxylic acid derivative</substitient>
+            <substitient>primary aliphatic amine (alkylamine)</substitient>
+        </substituents>
+        <direct_parent>Alpha Amino Acids and Derivatives</direct_parent>
+    </taxonomy>
+    <ontology>
+        <status>detected and quantified</status>
+        <origins>
+            <origin>Endogenous</origin>
+        </origins>
+        <biofunctions>
+            <biofunction>Protein synthesis, amino acid biosynthesis</biofunction>
+        </biofunctions>
+        <applications>
+        </applications>
+        <cellular_locations>
+        </cellular_locations>
+    </ontology>
+    <melting_point>246 - 248 C</melting_point>
+    <formal_charge>0</formal_charge>
+    <physiological_charge>0</physiological_charge>
+    <state>Solid</state>
+    <experimental_water_solubility/>
+    <experimental_logp/>
+    <predicted_properties>
+        <water_solubility/>
+        <logp>
+            <chemaxon>-3.07</chemaxon>
+            <alopgs>-1.39</alopgs>
+        </logp>
+        <logs>-1.39</logs>
+        <pka/>
+        <hydrogen_acceptor_count>4</hydrogen_acceptor_count>
+        <hydrogen_donar_count>2</hydrogen_donar_count>
+        <polar_surface_area>81.14</polar_surface_area>
+        <rotatable_bond_count>3</rotatable_bond_count>
+        <refractivity>42.4</refractivity>
+        <polarizability>17.0</polarizability>
+    </predicted_properties>
+    <spectra>
+        <spectrum_id>64</spectrum_id>
+        <spectrum_id>1</spectrum_id>
+        <spectrum_id>2</spectrum_id>
+        <spectrum_id>3</spectrum_id>
+        <spectrum_id>7083</spectrum_id>
+        <spectrum_id>7369</spectrum_id>
+        <spectrum_id>14</spectrum_id>
+    </spectra>
+    <biofluid_locations>
+        <biofluid>Blood</biofluid>
+        <biofluid>Cerebrospinal Fluid</biofluid>
+        <biofluid>Saliva</biofluid>
+        <biofluid>Urine</biofluid>
+    </biofluid_locations>
+    <tissue_locations>
+        <tissue>Muscle</tissue>
+        <tissue>Skeletal Muscle</tissue>
+    </tissue_locations>
+    <pathways>
+        <pathway>
+            <name>Histidine Metabolism</name>
+            <smpdb_id>SMP00044</smpdb_id>
+            <kegg_map_id>map00340</kegg_map_id>
+        </pathway>
+    </pathways>
+    <normal_concentrations>
+        <concentration>
+            <biofluid>Blood</biofluid>
+            <concentration_value>7.7 +/- 1.9</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Runners (preexercise)</subject_condition>
+            <references>
+                <pubmed_id>7061274</pubmed_id>
+                <reference>7061274</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Blood</biofluid>
+            <concentration_value>14.4 +/- 2.3</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Runners (immediately postexercise)</subject_condition>
+            <references>
+                <pubmed_id>7061274</pubmed_id>
+                <reference>7061274</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Blood</biofluid>
+            <concentration_value>19.6 +/- 2.6</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Runners (6 hours postexercise)</subject_condition>
+            <references>
+                <pubmed_id>7061274</pubmed_id>
+                <reference>7061274</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Blood</biofluid>
+            <concentration_value>12.7 +/- 2.9</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Weight Lifters (preexercise)</subject_condition>
+            <references>
+                <pubmed_id>7061274</pubmed_id>
+                <reference>7061274</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Blood</biofluid>
+            <concentration_value>20.2 +/- 4.0</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Weight Lifters (postexercise)</subject_condition>
+            <references>
+                <pubmed_id>7061274</pubmed_id>
+                <reference>7061274</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Blood</biofluid>
+            <concentration_value>9.1 +/- 7.2</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <subject_age>Children:1-13 yrs old</subject_age>
+            <subject_sex>N/A</subject_sex>
+            <subject_condition>Normal</subject_condition>
+            <references>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Blood</biofluid>
+            <concentration_value>4.0 +/- 8.0</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Normal</subject_condition>
+            <references>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Cerebrospinal Fluid</biofluid>
+            <concentration_value>4.0 +/- 1.74</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Normal</subject_condition>
+            <references>
+                <pubmed_id>17031479</pubmed_id>
+                <reference>17031479</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Saliva</biofluid>
+            <concentration_value>26.34</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Normal</subject_condition>
+            <references>
+                <pubmed_id>1819935</pubmed_id>
+                <reference>1819935</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>8.3 (2.4-28.4)</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Normal</subject_condition>
+            <references>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>17.74-153.77</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Normal</subject_condition>
+            <references>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>30.0 +/- 43.0</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Both</subject_sex>
+            <subject_condition>Normal</subject_condition>
+            <references>
+                <pubmed_id>15899597</pubmed_id>
+                <reference>15899597</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>4.6 +/- 2.7</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Male</subject_sex>
+            <subject_condition>Vegetarian (Black male)</subject_condition>
+            <references>
+                <pubmed_id>11052553</pubmed_id>
+                <reference>11052553</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>2.3 +/- 5.1</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Female</subject_sex>
+            <subject_condition>Vegetarian (White female)</subject_condition>
+            <references>
+                <pubmed_id>11052553</pubmed_id>
+                <reference>11052553</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>46.1 +/- 53.5</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Female</subject_sex>
+            <subject_condition> Omnivore (Black Female)</subject_condition>
+            <references>
+                <pubmed_id>11052553</pubmed_id>
+                <reference>11052553</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>15.9 +/- 19.5</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Female</subject_sex>
+            <subject_condition>Vegetarian (Black Female)</subject_condition>
+            <references>
+                <pubmed_id>11052553</pubmed_id>
+                <reference>11052553</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>28.1 +/- 31.8</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Male</subject_sex>
+            <subject_condition>Omnivore(White Male)</subject_condition>
+            <references>
+                <pubmed_id>11052553</pubmed_id>
+                <reference>11052553</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>1.3 +/- 2.76</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Male</subject_sex>
+            <subject_condition>Vegetarian(White Male)</subject_condition>
+            <references>
+                <pubmed_id>11052553</pubmed_id>
+                <reference>11052553</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>45.5 +/- 41.6</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Male</subject_sex>
+            <subject_condition>Omnivore(Black Male)</subject_condition>
+            <references>
+                <pubmed_id>11052553</pubmed_id>
+                <reference>11052553</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>33.6 +/- 36.4</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <subject_age>Adult:&gt;18 yrs old</subject_age>
+            <subject_sex>Female</subject_sex>
+            <subject_condition> Omnivore (White Female)</subject_condition>
+            <references>
+                <pubmed_id>11052553</pubmed_id>
+                <reference>11052553</reference>
+            </references>
+        </concentration>
+    </normal_concentrations>
+    <abnormal_concentrations>
+        <concentration>
+            <biofluid>Blood</biofluid>
+            <concentration_value>28.8 +/- 18.2</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <patient_age>Adult:&gt;18 yrs old</patient_age>
+            <patient_sex>Both</patient_sex>
+            <patient_information>Kidney disease</patient_information>
+            <comment>Patients with chronic renal failure on maintenance hemodialysis. These subjects were treated with nocturnal hemodialysis for 8 h during the night, 6 times/week.</comment>
+            <references>
+                <pubmed_id>10838467</pubmed_id>
+                <reference>10838467</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Blood</biofluid>
+            <concentration_value>83.1 +/- 21.7</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <patient_age>Adult:&gt;18 yrs old</patient_age>
+            <patient_sex>Both</patient_sex>
+            <patient_information>Kidney disease</patient_information>
+            <comment>Patients with chronic renal failure on maintenance hemodialysis. These subjects were treated with conventional hemodialysis for 4 h, 3 times/week.</comment>
+            <references>
+                <pubmed_id>10838467</pubmed_id>
+                <reference>10838467</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Blood</biofluid>
+            <concentration_value>10.66 +/- 2.68</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <patient_age>Elderly:&gt;65 yrs old</patient_age>
+            <patient_sex>Both</patient_sex>
+            <patient_information>Alzheimer's disease</patient_information>
+            <comment>Probable Alzheimer's disease</comment>
+            <references>
+                <pubmed_id>17031479</pubmed_id>
+                <reference>17031479</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Cerebrospinal Fluid</biofluid>
+            <concentration_value>2.6 +/- 1.13</concentration_value>
+            <concentration_units>uM</concentration_units>
+            <patient_age>Adult:&gt;18 yrs old</patient_age>
+            <patient_sex>Both</patient_sex>
+            <patient_information>Alzheimer's disease</patient_information>
+            <references>
+                <pubmed_id>17031479</pubmed_id>
+                <reference>17031479</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>10.9 +/- 10.1 </concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <patient_age>Adult:&gt;18 yrs old</patient_age>
+            <patient_sex>Both</patient_sex>
+            <patient_information>Obesity</patient_information>
+            <references>
+                <pubmed_id>15899597</pubmed_id>
+                <reference>15899597</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>17.5 +/- 25.7</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <patient_age>Adult:&gt;18 yrs old</patient_age>
+            <patient_sex>Both</patient_sex>
+            <patient_information>Diabetes</patient_information>
+            <references>
+                <pubmed_id>15899597</pubmed_id>
+                <reference>15899597</reference>
+            </references>
+        </concentration>
+        <concentration>
+            <biofluid>Urine</biofluid>
+            <concentration_value>15.7 +/- 4.04</concentration_value>
+            <concentration_units>umol/mmol creatinine</concentration_units>
+            <patient_age>Adult:&gt;18 yrs old</patient_age>
+            <patient_sex>Both</patient_sex>
+            <patient_information>Alzheimer's disease </patient_information>
+            <comment>Probable Alzheimer's disease</comment>
+            <references>
+                <pubmed_id>17031479</pubmed_id>
+                <reference>17031479</reference>
+            </references>
+        </concentration>
+    </abnormal_concentrations>
+    <diseases>
+        <disease>
+            <name>Kidney disease</name>
+            <omim_id/>
+            <references>
+                <pumed_id>11380830</pumed_id>
+                <pumed_id>11418788</pumed_id>
+                <pumed_id>12865413</pumed_id>
+                <pumed_id>2013627</pumed_id>
+                <pumed_id>9607216</pumed_id>
+                <pumed_id>6833425</pumed_id>
+                <pumed_id>10649708</pumed_id>
+                <pumed_id>14500028</pumed_id>
+                <pumed_id>10838467</pumed_id>
+                <pumed_id>914932</pumed_id>
+                <pumed_id>11573638</pumed_id>
+                <pumed_id>7723896</pumed_id>
+                <pumed_id>16087168</pumed_id>
+                <pumed_id>17571253</pumed_id>
+                <pumed_id>17699218</pumed_id>
+                <pumed_id>17073580</pumed_id>
+                <pumed_id>16401621</pumed_id>
+                <pumed_id>9174262</pumed_id>
+                <pumed_id>12032193</pumed_id>
+            </references>
+        </disease>
+        <disease>
+            <name>Alzheimer's disease</name>
+            <omim_id>104300</omim_id>
+            <references>
+                <pumed_id>8595727</pumed_id>
+                <pumed_id>16244393</pumed_id>
+                <pumed_id>17031479</pumed_id>
+                <pumed_id>8356878</pumed_id>
+                <pumed_id>12391605</pumed_id>
+                <pumed_id>11959400</pumed_id>
+                <pumed_id>15361288</pumed_id>
+                <pumed_id>9693263</pumed_id>
+                <pumed_id>15465626</pumed_id>
+                <pumed_id>15061359</pumed_id>
+                <pumed_id>10494443</pumed_id>
+                <pumed_id>15898106</pumed_id>
+                <pumed_id>11255442</pumed_id>
+                <pumed_id>12498967</pumed_id>
+                <pumed_id>16227558</pumed_id>
+                <pumed_id>9720975</pumed_id>
+                <pumed_id>15590150</pumed_id>
+            </references>
+        </disease>
+        <disease>
+            <name>Obesity</name>
+            <omim_id>601665</omim_id>
+            <references>
+                <pumed_id>17264178</pumed_id>
+                <pumed_id>16253646</pumed_id>
+                <pumed_id>2401584</pumed_id>
+                <pumed_id>15899597</pumed_id>
+            </references>
+        </disease>
+        <disease>
+            <name>Diabetes mellitus type 2</name>
+            <omim_id>125853</omim_id>
+            <references>
+                <pumed_id>11887176</pumed_id>
+                <pumed_id>16731998</pumed_id>
+                <pumed_id>18184896</pumed_id>
+                <pumed_id>15982426</pumed_id>
+                <pumed_id>9357814</pumed_id>
+                <pumed_id>12067838</pumed_id>
+                <pumed_id>17161231</pumed_id>
+                <pumed_id>11315839</pumed_id>
+                <pumed_id>17659063</pumed_id>
+                <pumed_id>17705693</pumed_id>
+                <pumed_id>1456422</pumed_id>
+                <pumed_id>8234346</pumed_id>
+                <pumed_id>9591306</pumed_id>
+                <pumed_id>16966827</pumed_id>
+                <pumed_id>7096503</pumed_id>
+                <pumed_id>2614280</pumed_id>
+                <pumed_id>18760976</pumed_id>
+                <pumed_id>11815509</pumed_id>
+                <pumed_id>15899597</pumed_id>
+                <pumed_id>6321058</pumed_id>
+                <pumed_id>10431355</pumed_id>
+                <pumed_id>6810706</pumed_id>
+                <pumed_id>7758205</pumed_id>
+            </references>
+        </disease>
+    </diseases>
+    <drugbank_id/>
+    <phenol_explorer_compound_id/>
+    <phenol_explorer_metabolite_id/>
+    <foodb_id>FDB012119</foodb_id>
+    <knapsack_id/>
+    <chemspider_id>83153</chemspider_id>
+    <kegg_id>C01152</kegg_id>
+    <biocyc_id>CPD-1823</biocyc_id>
+    <bigg_id/>
+    <wikipidia/>
+    <nugowiki>HMDB00001</nugowiki>
+    <metagene/>
+    <metlin_id>3741</metlin_id>
+    <pubchem_compound_id>92105</pubchem_compound_id>
+    <het_id>HIC</het_id>
+    <chebi_id>50599</chebi_id>
+    <synthesis_reference>Jain, Rahul; Cohen, Louis A. Regiospecific alkylation of histidine and histamine at N-1 (t).Tetrahedron  (1996),  52(15),  5363-70.</synthesis_reference>
+    <general_references>
+        <pubmed_id>1484110</pubmed_id>
+        <pubmed_id>1819935</pubmed_id>
+        <pubmed_id>2593832</pubmed_id>
+        <pubmed_id>2912013</pubmed_id>
+        <pubmed_id>7061274</pubmed_id>
+        <pubmed_id>7762816</pubmed_id>
+        <pubmed_id>9029312</pubmed_id>
+        <pubmed_id>9478024</pubmed_id>
+        <pubmed_id>10362454</pubmed_id>
+        <pubmed_id>11052553</pubmed_id>
+        <pubmed_id>14156296</pubmed_id>
+        <pubmed_id>15899597</pubmed_id>
+    </general_references>
+    <protein_associations>
+        <protein>
+            <protein_id>5714</protein_id>
+            <name>Protein arginine N-methyltransferase 3</name>
+            <uniprot_id>O60678</uniprot_id>
+            <gene_name>PRMT3</gene_name>
+            <type>enzyme</type>
+        </protein>
+        <protein>
+            <protein_id>5713</protein_id>
+            <name>Beta-Ala-His dipeptidase</name>
+            <uniprot_id>Q96KN2</uniprot_id>
+            <gene_name>CNDP1</gene_name>
+            <type>enzyme</type>
+        </protein>
+    </protein_associations>
+</metabolite>

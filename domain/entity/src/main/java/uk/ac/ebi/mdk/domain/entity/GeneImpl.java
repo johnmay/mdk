@@ -1,23 +1,20 @@
-/**
- * GeneImpl.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.10.17
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ * GNU Lesser General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity;
 
 import org.apache.log4j.Logger;
@@ -29,14 +26,19 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 
 /**
- *          GeneImpl - 2011.10.17 <br>
- *          An implementation of the Gene interface
+ * GeneImpl - 2011.10.17 <br> An implementation of the Gene interface
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
 
@@ -53,7 +55,8 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
     private Chromosome chromosome;
 
 
-    public GeneImpl() {
+    public GeneImpl(UUID uuid) {
+        super(uuid);
     }
 
 
@@ -70,7 +73,7 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
     }
 
 
-    public Chromosome getChromosome() {
+    public Chromosome chromosome() {
         return chromosome;
     }
 
@@ -126,34 +129,12 @@ public class GeneImpl extends AbstractAnnotatedEntity implements Gene {
 
 
     public Gene newInstance() {
-        return new GeneImpl();
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        GeneImpl that = (GeneImpl) o;
-
-        if (end      != that.end)    return false;
-        if (start    != that.start)  return false;
-        if (sequence != null ? !sequence.getSequenceAsString().equals(that.sequence != null ? that.sequence.getSequenceAsString() : "" ) : that.sequence != null) return false;
-        if (strand   != that.strand) return false;
-
-        return true;
+        return new GeneImpl(UUID.randomUUID());
     }
 
     @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + start;
-        result = 31 * result + end;
-        result = 31 * result + (strand != null ? strand.hashCode() : 0);
-        result = 31 * result + (sequence != null ? sequence.getSequenceAsString().hashCode() : 0);
-        return result;
+    public String toString() {
+        return super.toString() + start + ".." + end;
     }
 
     @Override

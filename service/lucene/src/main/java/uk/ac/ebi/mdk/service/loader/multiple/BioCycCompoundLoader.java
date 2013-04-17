@@ -1,19 +1,18 @@
 /*
- * Copyright (C) 2012  John May and Pablo Moreno
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package uk.ac.ebi.mdk.service.loader.multiple;
@@ -22,9 +21,9 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.Isotope;
 import org.openscience.cdk.formula.MolecularFormula;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
-import uk.ac.ebi.mdk.io.text.biocyc.AttributedEntry;
+import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 import uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader;
-import uk.ac.ebi.mdk.io.text.biocyc.attribute.Attribute;
+import uk.ac.ebi.mdk.io.text.attribute.Attribute;
 import uk.ac.ebi.mdk.service.MultiIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.AbstractMultiIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.location.SystemLocation;
@@ -38,7 +37,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute.*;
+import static uk.ac.ebi.mdk.io.text.biocyc.CompoundAttribute.*;
 
 /**
  * Loads BioCyc Compound data (Name and Charge)
@@ -51,10 +50,11 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
     private static final Pattern REMOVE_TAGS = Pattern.compile("</?(?:i|sub|sup|em|small)/?>", Pattern.CASE_INSENSITIVE);
     private static final Pattern ATOM_CHARGE = Pattern.compile("\\(.+?\\s(.+?)\\)");
 
+    private final String org;
 
-    public BioCycCompoundLoader() {
+    public BioCycCompoundLoader(String org) {
 
-
+        this.org = org;
         addRequiredResource("BioCyc Compounds",
                             "compounds.dat file from a BioCyc database",
                             ResourceFileLocation.class);
@@ -70,6 +70,7 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
         DefaultNameIndexWriter nameWriter = new DefaultNameIndexWriter(getIndex("biocyc.names"));
         DefaultDataIndexWriter dataWriter = new DefaultDataIndexWriter(getIndex("biocyc.data"));
 
+        int count = 0;
         while (reader.hasNext()) {
 
             AttributedEntry<Attribute, String> entry = reader.next();
@@ -80,11 +81,16 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
             Collection<String> synonyms = entry.get(SYNONYMS);
             String systematicName = entry.has(SYSTEMATIC_NAME) ? entry.getFirst(SYSTEMATIC_NAME) : "";
 
-            nameWriter.write(identifier, clean(commonName), clean(systematicName), clean(synonyms));
+            nameWriter.write(org + ":" + identifier, clean(commonName), clean(systematicName), clean(synonyms));
 
-            dataWriter.write(identifier,
+            dataWriter.write(org + ":" + identifier,
                              entry.has(ATOM_CHARGES) ? getCharge(entry.get(ATOM_CHARGES)) : "",
                              entry.has(CHEMICAL_FORMULA) ? getFormula(entry.get(CHEMICAL_FORMULA)) : "");
+
+            if(++count % 200 == 0)
+                fireProgressUpdate(location.progress());
+
+
         }
 
         nameWriter.close();
@@ -169,7 +175,7 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
     }
 
     public static void main(String[] args) throws IOException {
-        MultiIndexResourceLoader loader = new BioCycCompoundLoader();
+        MultiIndexResourceLoader loader = new BioCycCompoundLoader("META");
         loader.addLocation("biocyc.compounds", new SystemLocation("/databases/biocyc/MetaCyc/data/compounds.dat"));
         if (loader.canBackup()) loader.backup();
         if (loader.canUpdate()) loader.update();

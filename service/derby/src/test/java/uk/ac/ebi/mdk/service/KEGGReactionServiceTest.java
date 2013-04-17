@@ -21,7 +21,6 @@ public class KEGGReactionServiceTest {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGReactionServiceTest.class);
 
-    @Test
     public void testService() throws SQLException {
 
         EntityFactory factory = DefaultEntityFactory.getInstance();

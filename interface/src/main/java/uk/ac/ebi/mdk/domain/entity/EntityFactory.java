@@ -1,24 +1,26 @@
 /*
- * Copyright (C) 2012  John May and Pablo Moreno
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.domain.entity;
 
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.entity.Entity;
+
+import java.util.UUID;
 
 
 /**
@@ -27,6 +29,19 @@ import uk.ac.ebi.mdk.domain.entity.Entity;
  * @author johnmay
  */
 public interface EntityFactory {
+
+    /**
+     * Create a new reconstruction with a random UUID
+     * @return reconstruction instance
+     */
+    public Reconstruction newReconstruction();
+
+    /**
+     * Create a new reconstruction with the specified UUID
+     * @param uuid the UUID to use for the reconstruction
+     * @return reconstruction instance
+     */
+    public Reconstruction newReconstruction(UUID uuid);
 
     /**
      * Build an entity of defined class type
@@ -106,4 +121,83 @@ public interface EntityFactory {
 
 
     public Class<? extends Entity> getClass(String className);
+
+    /**
+     * A new metabolite instance
+     * @return a new metabolite
+     */
+    public Metabolite metabolite();
+
+    /**
+     * A new metabolite instance with a given UUID
+     * @param uuid the metabolite uuid
+     * @return a new metabolite
+     */
+    public Metabolite metabolite(UUID uuid);
+
+    /**
+     * A new protein instance
+     * @return a new protein
+     */
+    public ProteinProduct protein();
+
+    /**
+     * A new protein instance with a given UUID
+     * @param uuid the protein uuid
+     * @return a new protein
+     */
+    public ProteinProduct protein(UUID uuid);
+
+    /**
+     * A new transfer RNA instance
+     * @return a new transfer RNA
+     */
+    public TransferRNA tRNA();
+
+    /**
+     * A new transfer RNA instance
+     * @param uuid the transfer RNA uuid
+     * @return a new transfer RNA
+     */
+    public TransferRNA tRNA(UUID uuid);
+
+    /**
+     * A new ribosomal RNA instance
+     * @return a new ribosomal RNA
+     */
+    public RibosomalRNA rRNA();
+
+    /**
+     * A new ribosomal RNA instance
+     * @param uuid the ribosomal RNA uuid
+     * @return a new ribosomal RNA
+     */
+    public RibosomalRNA rRNA(UUID uuid);
+
+    /**
+     * Create a new reaction.
+     * @return a new reaction instance
+     */
+    public MetabolicReaction reaction();
+
+    /**
+     * Create a new reaction.
+     * @param uuid the reaction uuid
+     * @return a new reaction instance
+     */
+    public MetabolicReaction reaction(UUID uuid);
+
+    /**
+     * Create a new gene
+     * @return new gene instance
+     */
+    public Gene gene();
+
+    /**
+     * Create a new gene
+     * @param  uuid the gene uuid
+     * @return a new gene
+     */
+    public Gene gene(UUID uuid);
+
 }

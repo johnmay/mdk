@@ -1,23 +1,20 @@
-/**
- * Multimer.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.10.24
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ * GNU Lesser General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity;
 
 import org.apache.log4j.Logger;
@@ -33,6 +30,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -51,7 +49,8 @@ public class MultimerImpl extends AbstractGeneProduct implements Multimer {
     private List<GeneProduct> subunits = new ArrayList();
 
 
-    public MultimerImpl() {
+    public MultimerImpl(UUID uuid) {
+        super(uuid);
     }
 
 
@@ -101,28 +100,6 @@ public class MultimerImpl extends AbstractGeneProduct implements Multimer {
     }
 
 
-    /**
-     * Returns a collection (list) of all genes of the subunits
-     * @return
-     */
-    public Collection<Gene> getGenes() {
-        List<Gene> genes = new ArrayList();
-        for (GeneProduct product : subunits) {
-            genes.addAll(product.getGenes());
-        }
-        return genes;
-    }
-
-
-    /**
-     * Throws an UnsupportedOperationException as the call to add a gene to a
-     * multimeric product is ambiguous
-     */
-    public boolean addGene(Gene gene) {
-        throw new UnsupportedOperationException("Unable to add a gene to a multimer");
-    }
-
-
     public List<? extends Sequence> getSequences() {
         List<Sequence> sequences = new ArrayList();
         for (GeneProduct product : subunits) {
@@ -158,6 +135,6 @@ public class MultimerImpl extends AbstractGeneProduct implements Multimer {
 
 
     public GeneProduct newInstance() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new MultimerImpl(UUID.randomUUID());
     }
 }

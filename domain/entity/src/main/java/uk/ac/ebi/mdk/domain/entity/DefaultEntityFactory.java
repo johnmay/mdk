@@ -1,31 +1,32 @@
 /*
- * Copyright (C) 2012  John May and Pablo Moreno
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.entity.collection.ChromosomeImplementation;
-import uk.ac.ebi.mdk.domain.entity.collection.GenomeImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.*;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -49,20 +50,18 @@ public class DefaultEntityFactory
 
     private DefaultEntityFactory() {
 
-        for (Entity entity : Arrays.asList(new MetaboliteImpl(),
-                                           new MetabolicReactionImpl(),
-                                           new ProteinProductImpl(),
-                                           new RibosomalRNAImpl(),
-                                           new TransferRNAImpl(),
-                                           new GeneImpl(),
-                                           new ChromosomeImplementation(),
-                                           new GenomeImplementation(),
-                                           new MultimerImpl(),
-                                           new IdentifierReactionImplementation(),
-                                           new BasicParticipant(),
-                                           new ParticipantImplementation(),
+        for (Entity entity : Arrays.asList(new MetaboliteImpl(UUID.randomUUID()),
+                                           new MetabolicReactionImpl(UUID.randomUUID()),
+                                           new ProteinProductImpl(UUID.randomUUID()),
+                                           new RibosomalRNAImpl(UUID.randomUUID()),
+                                           new TransferRNAImpl(UUID.randomUUID()),
+                                           new GeneImpl(UUID.randomUUID()),
+                                           new MultimerImpl(UUID.randomUUID()),
+                                           new IdentifierReactionImplementation(UUID.randomUUID()),
+                                           new BasicParticipant(UUID.randomUUID()),
+                                           new ParticipantImplementation(UUID.randomUUID()),
                                            new MetabolicParticipantImplementation(),
-                                           new AbstractReaction(),
+                                           new AbstractReaction(UUID.randomUUID()),
                                            new ReconstructionImpl())) {
 
             entites.put(getEntityClass(entity.getClass()), entity);
@@ -78,6 +77,14 @@ public class DefaultEntityFactory
         return DefaultEntityFactoryHolder.INSTANCE;
     }
 
+
+    @Override public Reconstruction newReconstruction() {
+        return new ReconstructionImpl();
+    }
+
+    @Override public Reconstruction newReconstruction(UUID uuid) {
+        return new ReconstructionImpl(uuid, new ReconstructionIdentifier(), new Taxonomy());
+    }
 
     /**
      * @inheritDoc
@@ -187,6 +194,89 @@ public class DefaultEntityFactory
         return null;
     }
 
+    /**
+     * @inheritDoc
+     */
+    @Override public Metabolite metabolite() {
+        return metabolite(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Metabolite metabolite(UUID uuid) {
+        return new MetaboliteImpl(uuid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public ProteinProduct protein() {
+        return protein(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public ProteinProduct protein(UUID uuid) {
+        return new ProteinProductImpl(uuid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public TransferRNA tRNA() {
+        return tRNA(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public TransferRNA tRNA(UUID uuid) {
+        return new TransferRNAImpl(uuid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public RibosomalRNA rRNA() {
+        return rRNA(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public RibosomalRNA rRNA(UUID uuid) {
+        return new RibosomalRNAImpl(uuid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public MetabolicReaction reaction() {
+        return reaction(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public MetabolicReaction reaction(UUID uuid) {
+        return new MetabolicReactionImpl(uuid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Gene gene() {
+        return gene(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override public Gene gene(UUID uuid) {
+        return new GeneImpl(uuid);
+    }
 
     private static class DefaultEntityFactoryHolder {
 

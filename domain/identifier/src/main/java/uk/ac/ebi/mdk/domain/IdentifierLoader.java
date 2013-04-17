@@ -1,39 +1,41 @@
-/**
- * IdentifierLoader.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.09.15
- *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain;
 
+import uk.ac.ebi.mdk.deprecated.IdPattern;
 import uk.ac.ebi.mdk.deprecated.MIR;
 import uk.ac.ebi.mdk.deprecated.MIRIAMEntry;
 import uk.ac.ebi.mdk.deprecated.MIRIAMLoader;
 import uk.ac.ebi.mdk.deprecated.Synonyms;
-import uk.ac.ebi.mdk.domain.identifier.AbstractIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.tool.MetaInfoLoader;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 
 /**
- * IdentifierLoader – 2011.09.15 <br>
- * Class description
+ * IdentifierLoader – 2011.09.15 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -43,7 +45,8 @@ public class IdentifierLoader
         extends DefaultLoader
         implements MetaInfoLoader {
 
-    private static final MIRIAMLoader MIRIAM_LOADER = MIRIAMLoader.getInstance();
+    private static final MIRIAMLoader MIRIAM_LOADER = MIRIAMLoader
+            .getInstance();
 
     private Map<Class, IdentifierMetaInfo> loaded = new HashMap<Class, IdentifierMetaInfo>(32);
 
@@ -66,7 +69,6 @@ public class IdentifierLoader
      * Returns the MIRIAM MIR Identifier
      *
      * @param type
-     *
      * @return
      */
     public int getMIR(Class<? extends Identifier> type) {
@@ -86,7 +88,6 @@ public class IdentifierLoader
      * Returns the miriam entry for this identifier class
      *
      * @param type
-     *
      * @return
      */
     public MIRIAMEntry getEntry(Class type) {
@@ -95,27 +96,25 @@ public class IdentifierLoader
     }
 
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public String getShortDescription(Class c) {
 
         int mir = getMIR(c);
 
-        if (mir != 0) {
+        String name = super.getShortDescription(c);
+
+        if (mir != 0 && name.equals("Unknown")) {
             MIRIAMEntry entry = MIRIAM_LOADER.getEntry(mir);
             return entry.getName();
         }
 
-        return super.getShortDescription(c);
+        return name;
 
     }
 
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public String getLongDescription(Class c) {
 
@@ -135,7 +134,6 @@ public class IdentifierLoader
      * Access the synonyms for this identifier
      *
      * @param type
-     *
      * @return
      */
     public Collection<String> getDatabaseSynonyms(Class type) {
@@ -155,6 +153,23 @@ public class IdentifierLoader
         return synonyms;
     }
 
+    /**
+     * Access the pattern.
+     *
+     * @param c the class
+     * @return compiled pattern
+     */
+    private Pattern pattern(final Class<? extends Identifier> c) {
+        IdPattern annotation = (IdPattern) c.getAnnotation(IdPattern.class);
+        if (annotation != null) {
+            return Pattern.compile(annotation.value());
+        }
+        int mir = getMIR(c);
+        if (mir != 0)
+            return MIRIAM_LOADER.getEntry(mir).getCompiledPattern();
+        else
+            return null;
+    }
 
     public IdentifierMetaInfo load(Class c) {
         IdentifierMetaInfo metaInfo = getMetaInfo(c);
@@ -165,7 +180,8 @@ public class IdentifierLoader
     private IdentifierMetaInfo loadMetaInfo(Class c) {
         IdentifierMetaInfo metaInfo = new IdentifierMetaInfo(super.getMetaInfo(c),
                                                              getEntry(c),
-                                                             getDatabaseSynonyms(c));
+                                                             getDatabaseSynonyms(c),
+                                                             pattern(c));
         loaded.put(c, metaInfo);
         return metaInfo;
     }

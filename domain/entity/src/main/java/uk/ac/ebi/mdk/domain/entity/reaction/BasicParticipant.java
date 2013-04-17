@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.domain.entity.reaction;
 
 import org.apache.log4j.Logger;
@@ -6,6 +23,7 @@ import uk.ac.ebi.mdk.domain.entity.AbstractEntity;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.UUID;
 
 
 /**
@@ -25,13 +43,16 @@ public class BasicParticipant<M, S extends Number>
     protected M molecule;
 
     protected S coefficient;
+    
+    private boolean sideCompound = false;
 
 
     /**
      * Default constructor creates an empty participant without
      * any default instantiation of the molecule or coefficient
      */
-    public BasicParticipant() {
+    public BasicParticipant(UUID uuid) {
+        super(uuid);
     }
 
 
@@ -42,6 +63,7 @@ public class BasicParticipant<M, S extends Number>
      * @param molecule the molecule of the participant
      */
     public BasicParticipant(M molecule) {
+        super(UUID.randomUUID());
         this.molecule = molecule;
     }
 
@@ -54,6 +76,7 @@ public class BasicParticipant<M, S extends Number>
      * @param coefficient the coefficient
      */
     public BasicParticipant(M molecule, S coefficient) {
+        super(UUID.randomUUID());
         this.molecule = molecule;
         this.coefficient = coefficient;
     }
@@ -209,6 +232,22 @@ public class BasicParticipant<M, S extends Number>
      */
     @Override
     public Participant newInstance() {
-        return new BasicParticipant();
+        return new BasicParticipant(UUID.randomUUID());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public boolean isSideCompound() {
+        return sideCompound;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void setSideCompound(Boolean sideComp) {
+        this.sideCompound = sideComp;
     }
 }

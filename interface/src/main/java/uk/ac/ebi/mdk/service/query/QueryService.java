@@ -1,19 +1,18 @@
 /*
- * Copyright (C) 2012  John May and Pablo Moreno
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package uk.ac.ebi.mdk.service.query;
@@ -35,20 +34,26 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 public interface QueryService<I extends Identifier> {
 
     public enum ServiceType {
-        LUCENE_INDEX(1),
-        RELATIONAL_DATABASE(2),
-        REST_WEB_SERVICE(3),
-        SOAP_WEB_SERVICE(4),
-        AGGREGATED(5);
+        LUCENE_INDEX(1, false),
+        RELATIONAL_DATABASE(2, false),
+        REST_WEB_SERVICE(3, true),
+        SOAP_WEB_SERVICE(4, true),
+        AGGREGATED(5, true);
 
         private Integer priority;
+        private boolean remote;
 
-        private ServiceType(int priority) {
+        private ServiceType(int priority, boolean remote) {
             this.priority = priority;
+            this.remote = remote;
         }
 
         public Integer getPriority() {
             return priority;
+        }
+
+        public boolean remote(){
+            return remote;
         }
 
     }

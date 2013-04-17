@@ -1,31 +1,33 @@
 /*
- * Copyright (C) 2012  John May and Pablo Moreno
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package uk.ac.ebi.mdk.tool.domain;
 
+import com.google.common.collect.MapMaker;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.Atom;
-import org.openscience.cdk.Bond;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
-import org.openscience.cdk.normalize.SMSDNormalizer;
+import org.openscience.cdk.silent.Atom;
+import org.openscience.cdk.silent.Bond;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
@@ -33,9 +35,9 @@ import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 
+import javax.vecmath.Point2d;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,15 +46,13 @@ import java.util.regex.Pattern;
 
 
 /**
- *
  * DipeptideFactory 2012.01.13
  *
- * @version $Rev$ : Last Changed $Date$
  * @author johnmay
  * @author $Author$ (this version)
  *
- * Class description
- *
+ *         Class description
+ * @version $Rev$ : Last Changed $Date$
  */
 public class PeptideFactory {
 
@@ -63,61 +63,66 @@ public class PeptideFactory {
 
     public PeptideFactory(EntityFactory factory) {
         this.factory = factory;
+        new MapMaker().initialCapacity(5).makeMap();
     }
 
 
-    public IAtomContainer generateStructure(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
+    public IAtomContainer generateStructure(AminoAcid... aminoacids) throws
+                                                                     IOException,
+                                                                     CDKException,
+                                                                     Exception {
         IAtomContainer peptide = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
 
 
-        IAtomContainer current = SMSDNormalizer.makeDeepCopy(aminoacids[0].getMolecule());
-        IAtomContainer next = null;;
+        IAtomContainer prev = aminoacids[0].copyOf();
+        IAtomContainer next = null;
 
-        peptide.add(current);
+        peptide.add(prev);
 //        for (IBond bond : AtomContainerManipulator.getBondArray(current)) {
 //            bond.setStereo(bond.getStereo() == Stereo.UP ? Stereo.DOWN : bond.getStereo() == Stereo.DOWN ? Stereo.UP : bond.getStereo());
 //        }
 
         // N terminus
-        removeAtom(peptide, aminoacids[0].getNTerminal(current));
+        removeAtom(peptide, aminoacids[0].nTerminalAtom(prev));
 
         for (int i = 0; i < aminoacids.length; i++) {
 
 
             if (i + 1 < aminoacids.length) {
 
-                next = SMSDNormalizer.makeDeepCopy(aminoacids[i + 1].getMolecule());
+                next = aminoacids[i + 1].copyOf();
 
-
-//                // required to sort out stereo-chem
-//                if (i % 2 != 0) {
-//                    for (IBond bond : AtomContainerManipulator.getBondArray(next)) {
-//                        bond.setStereo(bond.getStereo() == Stereo.UP ? Stereo.DOWN : bond.getStereo() == Stereo.DOWN ? Stereo.UP : bond.getStereo());
-//                    }
-//                }
+                if ((i + 1) % 2 != 0)
+                    reflect(aminoacids[i + 1], next);
 
                 peptide.add(next);
 
-                IAtom c = removeAtom(peptide, aminoacids[i].getCTerminal(current));
+                IAtom cTerminal = aminoacids[i].cTerminalAtom(prev);
+                IAtom nTerminal = removeAtom(peptide, aminoacids[i + 1].nTerminalAtom(next));
 
-                IAtom n = removeAtom(peptide, aminoacids[i + 1].getNTerminal(next));
+                // align next with prev
+                Point2d cCoordinate = cTerminal.getPoint2d();
+                Point2d nCoordinate = nTerminal.getPoint2d();
 
+                GeometryTools.translate2D(next,
+                                          cCoordinate.x - nCoordinate.x,
+                                          cCoordinate.y - nCoordinate.y);
 
-                peptide.addBond(new Bond(n, c));
+                IAtom alphaCarbon = removeAtom(peptide, cTerminal);
+                peptide.addBond(new Bond(nTerminal, alphaCarbon));
 
             }
-
-
 
 
             if (i == aminoacids.length - 1) {
                 IAtom oxygen = new Atom("O");
                 peptide.addAtom(oxygen);
                 peptide.addBond(new Bond(oxygen,
-                                         removeAtom(peptide, aminoacids[i].getCTerminal(current))));
+                                         removeAtom(peptide, aminoacids[i].cTerminalAtom(prev))));
+                oxygen.setPoint2d(aminoacids[i].cTerminalAtom(prev).getPoint2d());
             }
 
-            current = next;
+            prev = next;
 
         }
 
@@ -129,7 +134,35 @@ public class PeptideFactory {
     }
 
 
-    public Metabolite generateMetabolite(AminoAcid... aminoacids) throws IOException, CDKException, Exception {
+    public static void reflect(AminoAcid aa, IAtomContainer molecule) {
+
+        // get the plane to reflect on
+        IAtom c = aa.cTerminalAtom(molecule);
+        double plane = c.getPoint2d().y;
+
+        for (IAtom atom : molecule.atoms()) {
+            if (atom != c) {
+                double delta = atom.getPoint2d().y - plane;
+                atom.getPoint2d().set(atom.getPoint2d().x,
+                                      plane - delta);
+            }
+        }
+
+        // correct stereo - have control of mol files thus only stereo
+        // bonds are up/down and not up_inverted/down_inverted
+        for (IBond bond : molecule.bonds()) {
+            if (bond.getStereo() == IBond.Stereo.DOWN)
+                bond.setStereo(IBond.Stereo.UP);
+            if (bond.getStereo() == IBond.Stereo.UP)
+                bond.setStereo(IBond.Stereo.DOWN);
+        }
+
+    }
+
+    public Metabolite generateMetabolite(AminoAcid... aminoacids) throws
+                                                                  IOException,
+                                                                  CDKException,
+                                                                  Exception {
 
         Metabolite m = factory.newInstance(Metabolite.class,
                                            BasicChemicalIdentifier.nextIdentifier(),
@@ -193,7 +226,7 @@ public class PeptideFactory {
                     // add aa
                     aas.add(aa);
                     peptide = matcher.replaceFirst("");
-
+                    break; // force restart (otherwise ala-ala would match L and then D, we want L and L)
                 }
             }
             if (!found) {
@@ -206,35 +239,12 @@ public class PeptideFactory {
 
     }
 
-
-    private static int getAtomIndex(IAtomContainer structure,
-                                    String query,
-                                    String neighbour) {
-        for (int i = 0; i < structure.getAtomCount(); i++) {
-
-            IAtom atom = structure.getAtom(i);
-            String symbol = atom.getSymbol();
-
-            if (symbol.equals(query)) {
-                for (IAtom connected : structure.getConnectedAtomsList(atom)) {
-                    if (connected.getSymbol().equals(neighbour)) {
-                        return i;
-                    }
-                }
-            }
-
-        }
-
-        throw new InvalidParameterException("No match found!");
-    }
-
     /**
-     * Similar to
-     * {@see IAtomContainer#removeAtomAndConnectedElectronContainers(IAtom)} but
-     * returns a list of the atoms that the molecule was connected to
+     * Similar to {@see IAtomContainer#removeAtomAndConnectedElectronContainers(IAtom)}
+     * but returns a list of the atoms that the molecule was connected to
+     *
      * @param molecule
      * @param atom
-     *
      * @return
      */
     public static List<IAtom> removeAtomAndGetConnected(IAtomContainer molecule, IAtom atom) {
@@ -248,15 +258,12 @@ public class PeptideFactory {
 
 
     /**
-     * This method is similar to
-     * {@see IAtomContainer#removeAtomAndConnectedElectronContainers(IAtom)}
+     * This method is similar to {@see IAtomContainer#removeAtomAndConnectedElectronContainers(IAtom)}
      * however the method returns a single atom. If the atom to remove is
      * connected to more then one a RuntimeException is thrown
      *
-     *
      * @param molecule
      * @param atom
-     *
      * @return
      */
     public static IAtom removeAtom(IAtomContainer molecule, IAtom atom) {
@@ -270,6 +277,7 @@ public class PeptideFactory {
         return connected.iterator().next();
 
     }
+
     public static enum AminoAcid {
 
         /*
@@ -353,20 +361,24 @@ public class PeptideFactory {
                 reader.read(molecule);
                 AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
             } catch (Exception ex) {
-                LOGGER.error("Could not load structure for "
-                             + name() + ": " + ex.getMessage());
+                LOGGER.error("Could not load amino acid "
+                                     + name() + ": " + ex.getMessage());
             }
 
 
-
             displayName = name().replaceAll("_", "-");
-            displayName = name().equals("GLY") ? displayName.substring(0, 1) + displayName.substring(1).toLowerCase() : displayName.substring(0, 3) + displayName.substring(3).toLowerCase();
+            displayName = name().equals("GLY")
+                          ? displayName.substring(0, 1) + displayName.substring(1).toLowerCase()
+                          : displayName.substring(0, 3) + displayName.substring(3).toLowerCase();
 
 
             String stereo = displayName.substring(0, 1).toLowerCase();
-            String code = name().equals("GLY") ? "gly" : displayName.substring(2, 5).toLowerCase();
+            String code = name().equals("GLY") ? "gly"
+                                               : displayName.substring(2, 5).toLowerCase();
 
-            pattern = name().equals("GLY") ? Pattern.compile("(?:" + code + ")-?") : Pattern.compile("(?:" + stereo + "-" + code + "|" + code + ")-?");
+            pattern =
+                    name().equals("GLY") ? Pattern.compile("(?:" + code + ")-?")
+                                         : Pattern.compile("(?:" + stereo + "-" + code + "|" + code + ")-?");
 
         }
 
@@ -381,8 +393,49 @@ public class PeptideFactory {
         }
 
 
-        public IAtomContainer getMolecule() {
-            return molecule;
+        public IAtomContainer copyOf() {
+            return copy(molecule);
+        }
+
+        private static IAtomContainer copy(IAtomContainer src) {
+
+            IChemObjectBuilder builder = src.getBuilder();
+
+            IAtomContainer dest = builder.newInstance(IAtomContainer.class,
+                                                      0, 0, 0, 0);
+
+            IAtom[] atoms = new IAtom[src.getAtomCount()];
+            IBond[] bonds = new IBond[src.getBondCount()];
+
+            for (int i = 0; i < atoms.length; i++) {
+                atoms[i] = copy(src.getAtom(i));
+            }
+
+            for (int i = 0; i < bonds.length; i++) {
+                IBond bond = src.getBond(i);
+                bonds[i] = builder.newInstance(IBond.class,
+                                               atoms[src.getAtomNumber(bond.getAtom(0))],
+                                               atoms[src.getAtomNumber(bond.getAtom(1))],
+                                               bond.getOrder());
+                bonds[i].setStereo(bond.getStereo());
+            }
+
+            // stereo elements not yet copied
+
+            dest.setAtoms(atoms);
+            dest.setBonds(bonds);
+
+            return dest;
+
+        }
+
+        private static IAtom copy(IAtom src) {
+            IAtom dest = src.getBuilder().newInstance(IAtom.class);
+            dest.setSymbol(src.getSymbol());
+            dest.setFormalCharge(src.getFormalCharge());
+            dest.setValency(src.getValency());
+            dest.setPoint2d(new Point2d(src.getPoint2d()));
+            return dest;
         }
 
 
@@ -390,14 +443,21 @@ public class PeptideFactory {
             return names;
         }
 
+        public int cTerminalIndex() {
+            return 0;
+        }
 
-        public IAtom getCTerminal(IAtomContainer container) {
-            return container.getAtom(getAtomIndex(molecule, "R", "C"));
+        public int nTerminalIndex() {
+            return molecule.getAtomCount() - 1;
+        }
+
+        public IAtom cTerminalAtom(IAtomContainer container) {
+            return container.getAtom(cTerminalIndex());
         }
 
 
-        public IAtom getNTerminal(IAtomContainer container) {
-            return container.getAtom(getAtomIndex(molecule, "R", "N"));
+        public IAtom nTerminalAtom(IAtomContainer container) {
+            return container.getAtom(nTerminalIndex());
         }
 
 
@@ -405,5 +465,7 @@ public class PeptideFactory {
         public String toString() {
             return displayName;
         }
-    };
+    }
+
+    ;
 }

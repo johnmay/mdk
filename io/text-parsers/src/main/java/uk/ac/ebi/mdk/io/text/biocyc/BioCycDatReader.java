@@ -1,26 +1,26 @@
 /*
- * Copyright (C) 2012  John May and Pablo Moreno
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package uk.ac.ebi.mdk.io.text.biocyc;
 
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.io.text.biocyc.attribute.Attribute;
+import uk.ac.ebi.mdk.io.text.attribute.Attribute;
+import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,10 +45,10 @@ import java.util.regex.Pattern;
  *
  * while (reader.hasNext()) {
  *
- *    AttributedEntry<Attribute, String> entry = reader.next();
+ *    AttributedEntry<Attribute, String> entry = reader.readNext();
  *
  *    if (entry.has(COMMON_NAME) && entry.isSingular(COMMON_NAME))
- *        System.out.println(entry.get(COMMON_NAME).iterator().next());
+ *        System.out.println(entry.get(COMMON_NAME).iterator().readNext());
  *    // safe
  *    for (String synonym : entry.get(SYNONYMS))
  *        System.out.println("\t" + synonym);
@@ -58,9 +58,9 @@ import java.util.regex.Pattern;
  *
  * @author John May
  * @see Attribute
- * @see uk.ac.ebi.mdk.io.text.biocyc.attribute.CompoundAttribute
- * @see uk.ac.ebi.mdk.io.text.biocyc.attribute.ReactionAttribute
- * @see uk.ac.ebi.mdk.io.text.biocyc.attribute.EnzymaticReactionAttribute
+ * @see CompoundAttribute
+ * @see ReactionAttribute
+ * @see EnzymaticReactionAttribute
  */
 public class BioCycDatReader {
 
@@ -124,7 +124,7 @@ public class BioCycDatReader {
      *
      * @param in desired input stream
      *
-     * @see #add(uk.ac.ebi.mdk.io.text.biocyc.attribute.Attribute)
+     * @see #add(uk.ac.ebi.mdk.io.text.attribute.Attribute)
      */
     public BioCycDatReader(InputStream in) {
         this.in = new BufferedReader(new InputStreamReader(in));
@@ -172,7 +172,7 @@ public class BioCycDatReader {
      * attributes it is skipped. An empty entry will only be returned if the end
      * of the file is reached.
      *
-     * @return next filled entry
+     * @return readNext filled entry
      *
      * @throws IOException low-level IO exception
      */
@@ -201,19 +201,19 @@ public class BioCycDatReader {
     }
 
     /**
-     * Access the next entry in the reader. If no entry exists
+     * Access the readNext entry in the reader. If no entry exists
      * a {@see NoSuchelementException} will be thrown
      *
-     * @return the next entry
+     * @return the readNext entry
      */
     public AttributedEntry<Attribute, String> next() {
         if (hasNext())
             return entry.renew();
-        throw new NoSuchElementException("No next entry in BioCyc dat file");
+        throw new NoSuchElementException("No readNext entry in BioCyc dat file");
     }
 
     /**
-     * Determine whether there is an 'next' entry in the file
+     * Determine whether there is an 'readNext' entry in the file
      *
      * @return whether there is an entry to access
      */

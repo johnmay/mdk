@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.io;
 
 import uk.ac.ebi.caf.utility.version.Version;
@@ -7,7 +24,8 @@ import uk.ac.ebi.mdk.domain.annotation.primitive.*;
 import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.FileParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
-import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationWriter;
+import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationWriter_0_8_5;
+import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationWriter_1_3_4;
 import uk.ac.ebi.mdk.io.annotation.AuthorCommentWriter;
 import uk.ac.ebi.mdk.io.annotation.CrossReferenceWriter;
 import uk.ac.ebi.mdk.io.annotation.GibbsEnergyWriter;
@@ -73,7 +91,8 @@ public class AnnotationDataOutputStream
 
         // specialised writers
         add(AuthorAnnotation.class, new AuthorCommentWriter(out));
-        add(AtomContainerAnnotation.class, new AtomContainerAnnotationWriter(out));
+        add(AtomContainerAnnotation.class, new AtomContainerAnnotationWriter_0_8_5(out));
+        add(AtomContainerAnnotation.class, new AtomContainerAnnotationWriter_1_3_4(out));
         add(GibbsEnergy.class, new GibbsEnergyWriter(out));
 
         // specialised specialised readers for tasks

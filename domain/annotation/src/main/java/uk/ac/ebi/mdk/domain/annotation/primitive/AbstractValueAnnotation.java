@@ -1,20 +1,20 @@
-/**
- * This file is part of the CheMet library
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.annotation.primitive;
 
 import org.apache.log4j.Logger;
@@ -52,7 +52,12 @@ public abstract class AbstractValueAnnotation<T>
      * Constructor provides a value to store
      */
     public AbstractValueAnnotation(T value) {
+
+        if(value == null)
+            throw new IllegalArgumentException("Cannot create null annotaton");
+
         this.value = value;
+
     }
 
     /**
@@ -61,6 +66,8 @@ public abstract class AbstractValueAnnotation<T>
      * @param value new state
      */
     public void setValue(T value) {
+        if(value == null)
+            throw new IllegalArgumentException("Value cannot be null");
         this.value = value;
     }
 

@@ -1,23 +1,20 @@
-/**
- * ProteinProduct.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.10.07
- *
- * This file is part of the CheMet library
- * 
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
- * CheMet is distributed in the hope that it will be useful,
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
+ * GNU Lesser General Public License for more details.
+ *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity;
 
 import org.apache.log4j.Logger;
@@ -30,24 +27,28 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
- * @name    ProteinProduct - 2011.10.07 <br>
- *          A class to describe and store data on a protein gene product
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
+ * @name ProteinProduct - 2011.10.07 <br> A class to describe and store data on
+ * a protein gene product
  */
 public class ProteinProductImpl
-    extends AbstractGeneProduct
-    implements ProteinProduct {
+        extends AbstractGeneProduct
+        implements ProteinProduct {
 
     private static final Logger LOGGER = Logger.getLogger(ProteinProductImpl.class);
 
-    private List<ProteinSequence> sequences = new ArrayList();
+    private Set<ProteinSequence> sequences = new HashSet<ProteinSequence>(1);
 
-    public ProteinProductImpl() {
+    public ProteinProductImpl(UUID uuid) {
+        super(uuid);
     }
 
     public ProteinProductImpl(Identifier identifier, String abbreviation, String name) {
@@ -55,7 +56,7 @@ public class ProteinProductImpl
     }
 
     public List<ProteinSequence> getSequences() {
-        return sequences;
+        return new ArrayList<ProteinSequence>(sequences);
     }
 
     public boolean addSequence(Sequence sequence) {
@@ -64,7 +65,7 @@ public class ProteinProductImpl
 
 
     public GeneProduct newInstance() {
-        return new ProteinProductImpl();
+        return new ProteinProductImpl(UUID.randomUUID());
     }
 
     @Override

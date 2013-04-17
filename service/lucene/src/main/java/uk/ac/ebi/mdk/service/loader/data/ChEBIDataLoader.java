@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.loader.data;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -7,6 +24,7 @@ import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.service.index.data.ChEBIDataIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractChEBILoader;
+import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
 import uk.ac.ebi.mdk.service.loader.location.ZIPRemoteLocation;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultDataIndexWriter;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
@@ -32,9 +50,9 @@ public class ChEBIDataLoader extends AbstractChEBILoader {
         super(new ChEBIDataIndex());
 
         addRequiredResource("ChEBI Chemical Data",
-                            "",
+                            "chemical_data.tsv flatfile from ChEBI, specifying formulae and charges",
                             ResourceFileLocation.class,
-                            new ZIPRemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/chemical_data.tsv.zip"));
+                            new RemoteLocation("ftp://ftp.ebi.ac.uk/pub/databases/chebi/Flat_file_tab_delimited/chemical_data.tsv"));
     }
 
     public static void main(String[] args) throws Exception{
@@ -58,6 +76,7 @@ public class ChEBIDataLoader extends AbstractChEBILoader {
         Multimap<String, DataValue> values = HashMultimap.create();
 
         String[] row = null;
+        int count = 0;
         while((row = csv.readNext()) != null){
 
             // user cancelled
@@ -69,6 +88,9 @@ public class ChEBIDataLoader extends AbstractChEBILoader {
             String source = row[sourceindex];
 
             values.put(id, new DataValue(type, data, source));
+
+            if(++count % 200 == 0)
+                fireProgressUpdate(location.progress());
 
         }
 

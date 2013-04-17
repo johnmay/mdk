@@ -1,4 +1,21 @@
 /*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -6,12 +23,22 @@ package uk.ac.ebi.mdk.domain;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.HMDBIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
+import uk.ac.ebi.mdk.domain.identifier.MetaCycIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicProteinIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+
+import java.util.Collection;
+
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 
 /**
@@ -55,6 +82,21 @@ public class DefaultIdentifierFactoryTest {
 
 
         }
+    }
+
+    IdentifierFactory ids = DefaultIdentifierFactory.getInstance();
+
+    @Test public void ofPattern_MetaCyc() {
+        Collection<Class<? extends Identifier>> classes = ids.ofPattern("META:ATP");
+        assertThat(classes.size(), is(2));
+        assertThat(classes, hasItem(BioCycChemicalIdentifier.class));
+        assertThat(classes, hasItem(MetaCycIdentifier.class));
+    }
+
+    @Test public void ofPattern_ChEBI() {
+        Collection<Class<? extends Identifier>> classes = ids.ofPattern("CHEBI:12");
+        assertThat(classes.size(), is(1));
+        assertThat(classes, hasItem(ChEBIIdentifier.class));
     }
 
     @Test

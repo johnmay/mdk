@@ -1,26 +1,25 @@
-/**
- * This file is part of the CheMet library
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
- *
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.annotation.crossreference;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.DefaultLoader;
 import uk.ac.ebi.mdk.domain.MetaInfo;
-import uk.ac.ebi.mdk.domain.annotation.AnnotationVisitor;
 import uk.ac.ebi.mdk.domain.annotation.ObservationBasedAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractValueAnnotation;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -46,7 +45,7 @@ import java.util.List;
  * @author  $Author$ (this version)
  */
 @Context
-@Brief("Crossreference")
+@Brief("Cross-reference")
 @Description("A crossreference to an alternative identifier")
 public class CrossReference<E extends Identifier, O extends Observation>
         extends AbstractValueAnnotation<E>
@@ -67,6 +66,10 @@ public class CrossReference<E extends Identifier, O extends Observation>
 
     public CrossReference(E identifier) {
         super(identifier);
+    }
+
+    public static <I extends Identifier> CrossReference<I,Observation> create(I identifier){
+        return new CrossReference<I, Observation>(identifier);
     }
 
 
@@ -148,11 +151,6 @@ public class CrossReference<E extends Identifier, O extends Observation>
         throw new UnsupportedOperationException();
     }
 
-
-    @Override
-    public Object accept(AnnotationVisitor visitor) {
-        return visitor.visit(this);
-    }
 
 
 }

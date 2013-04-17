@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package uk.ac.ebi.mdk.service.query;
 
 import gov.nih.nlm.ncbi.pubchem.ws.*;
@@ -38,9 +55,10 @@ public class PubChemAdapter
     @Override
     public IAtomContainer getStructure(PubChemCompoundIdentifier identifier) {
 
-        ArrayOfInt aoi = new ArrayOfInt(new int[]{Integer.parseInt(identifier.getAccession())});
-
         try {
+
+            ArrayOfInt aoi = new ArrayOfInt(new int[]{Integer.parseInt(identifier.getAccession())});
+
             String listKey = service.inputList(aoi, PCIDType.eID_CID);
             StringHolder sh = new StringHolder();
             DataBlobTypeHolder blob = new DataBlobTypeHolder();
@@ -49,6 +67,8 @@ public class PubChemAdapter
             return mol2Structure(new String(blob.value.getData()));
 
 
+        } catch (NumberFormatException ex) {
+            LOGGER.error("invalid PubChem-Compound identifier - accession must be a number");
         } catch (RemoteException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -140,13 +160,13 @@ public class PubChemAdapter
 
     @Override
     public boolean startup() {
-        if (service != null) return true;
+        if (service != null) return true && reachable("http://pubchem.ncbi.nlm.nih.gov/");
         try {
             service = locator.getPUGSoap();
         } catch (ServiceException ex) {
             LOGGER.error("Startup failed on SOAP Web Service: " + ex.getMessage());
         }
-        return service != null;
+        return service != null && reachable("http://pubchem.ncbi.nlm.nih.gov/");
     }
 
     public static void main(String[] args) throws ServiceException {

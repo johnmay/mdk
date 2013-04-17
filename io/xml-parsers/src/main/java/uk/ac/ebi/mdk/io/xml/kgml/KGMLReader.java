@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * KGMLReader.java
  *
@@ -31,6 +48,9 @@ import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -133,13 +153,15 @@ public class KGMLReader {
         for (KGMLReaction reaction : getKGMLReactions()) {
             KGMLEntry rxnEntry = entries.get(reaction.getId());
 
+            BasicReactionIdentifier reactionId = new BasicReactionIdentifier(Integer.toString(rxnEntry.getId()));
+
             String[] names = rxnEntry.getName().split(" ");
             MetabolicReaction rxn = factory.ofClass(MetabolicReaction.class,
-                                                    new KEGGReactionIdentifier(Integer.toString(rxnEntry.getId())),
-                                                    names[0].substring(3),
-                                                    names[0].substring(3));
+                                                    BasicReactionIdentifier.nextIdentifier(),
+                                                    names[0].substring(4),
+                                                    names[0].substring(4));
             for (String name : names) {
-                rxn.addAnnotation(new CrossReference(new KEGGReactionIdentifier(name.substring(3))));
+                rxn.addAnnotation(CrossReference.create(new BasicReactionIdentifier(names[0].substring(4))));
             }
             for (int id : reaction.getSubstrateIds()) {
                 MetabolicParticipant p = factory.ofClass(MetabolicParticipant.class);
@@ -162,7 +184,7 @@ public class KGMLReader {
 
     public Metabolite getMetabolite(KGMLEntry entry){
         String subName = entry.getName().substring(4);
-        Metabolite m = factory.newInstance(Metabolite.class, new KEGGCompoundIdentifier(subName), subName, subName);
+        Metabolite m = factory.newInstance(Metabolite.class, BasicChemicalIdentifier.nextIdentifier(), subName, subName);
         m.addAnnotation(new KEGGCrossReference(new KEGGCompoundIdentifier(subName)));
         return m;
 

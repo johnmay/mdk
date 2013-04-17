@@ -1,29 +1,27 @@
-/**
- * ReactionSet.java
+/*
+ * Copyright (c) 2013. EMBL, European Bioinformatics Institute
  *
- * 2011.10.04
- *
- * This file is part of the CheMet library
- *
- * The CheMet library is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * CheMet is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with CheMet.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
@@ -32,6 +30,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -39,19 +38,28 @@ import java.util.NoSuchElementException;
  * @author johnmay
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @name ReactionSet - 2011.10.04 <br>
- * Provides access to a set of reactions and alogrithms that work on them
+ * @name ReactionSet - 2011.10.04 <br> Provides access to a set of reactions and
+ * alogrithms that work on them
  */
+@Deprecated
 public final class ReactionList extends ArrayList<MetabolicReaction> implements Collection<MetabolicReaction>, Reactome {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionList.class);
 
-    private Multimap<Identifier, MetabolicReaction> participantMap = ArrayListMultimap.create();
-    private Multimap<Identifier, MetabolicReaction> reactionMap    = ArrayListMultimap.create();
+    private Multimap<Identifier, MetabolicReaction> participantMap = ArrayListMultimap
+            .create();
+    private Multimap<Identifier, MetabolicReaction> reactionMap = ArrayListMultimap
+            .create();
 
     public ReactionList() {
     }
 
+
+
+
+    @Override public List<MetabolicReaction> toList() {
+        return null;
+    }
 
     public ReactionList(Collection<MetabolicReactionImpl> reactions) {
         super(reactions);
@@ -60,6 +68,12 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
 
     @Override
     public boolean add(MetabolicReaction rxn) {
+
+        if (rxn == null)
+            return false;
+
+        if (reactionMap.containsKey(rxn.getIdentifier()))
+            return false;
 
         for (MetabolicParticipant m : rxn.getParticipants()) {
             participantMap.get(m.getMolecule().getIdentifier()).add(rxn);
@@ -86,8 +100,12 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
     }
 
 
-    public boolean remove(MetabolicReactionImpl rxn) {
-        for (Metabolite m : rxn.getAllReactionMolecules()) {
+    @Override
+    public boolean remove(MetabolicReaction rxn) {
+
+        // remove links to metabolites
+        for (MetabolicParticipant p : rxn.getParticipants()) {
+            Metabolite m = p.getMolecule();
             participantMap.get(m.getIdentifier()).remove(rxn);
             if (participantMap.get(m.getIdentifier()).isEmpty()) {
                 participantMap.removeAll(m.getIdentifier());
@@ -97,6 +115,64 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
         return super.remove(rxn);
     }
 
+    /**
+     * @inheritDoc
+     */
+    public boolean removeKey(Metabolite m, Reaction reaction) {
+        return participantMap.remove(m.getIdentifier(), reaction);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public boolean update(Collection<MetabolicReaction> reactions) {
+
+        boolean changed = false;
+
+        for (MetabolicReaction reaction : reactions) {
+            if (reactionMap.containsEntry(reaction.getIdentifier(), reaction)) {
+                changed = update(reaction) || changed;
+            }
+        }
+
+        return changed;
+
+    }
+
+    @Override
+    public Collection<MetabolicReaction> participatesIn(Metabolite m) {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public boolean update(MetabolicReaction reaction) {
+
+        Identifier identifier = reaction.getIdentifier();
+
+        if (reactionMap.containsKey(identifier)) {
+
+            PARTICIPANTS:
+            for (MetabolicParticipant p : reaction.getParticipants()) {
+
+                Identifier id = p.getMolecule().getIdentifier();
+
+                boolean found = false;
+                for (MetabolicReaction rxn : participantMap.get(id)) {
+                    if (rxn == reaction)
+                        continue PARTICIPANTS; // continue to next participant
+                }
+
+                participantMap.put(id, reaction);
+
+            }
+            return true;
+        }
+
+        return false;
+
+    }
 
     @Override
     public boolean removeAll(Collection<?> rxns) {
@@ -113,14 +189,13 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
 
 
     /**
-     * Returns a list of reactions that contain Metabolite m
-     * If not mapping is found an empty collection is returned
+     * Returns a list of reactions that contain Metabolite m If not mapping is
+     * found an empty collection is returned
      */
     public Collection<MetabolicReaction> getReactions(Metabolite m) {
         return participantMap.get(m.getIdentifier());
     }
 
-    @Override
     public MetabolicReaction getReaction(Identifier identifier) {
         Collection<MetabolicReaction> reactions = getReactions(identifier);
         if (reactions.size() == 1) {
@@ -133,7 +208,6 @@ public final class ReactionList extends ArrayList<MetabolicReaction> implements 
 
     }
 
-    @Override
     public Collection<MetabolicReaction> getReactions(Identifier identifier) {
         return reactionMap.get(identifier);
     }
