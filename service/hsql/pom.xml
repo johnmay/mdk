@@ -110,7 +110,7 @@
                         </generate>
                         <target>
                             <packageName>uk.ac.ebi.mdk.jooq</packageName>
-                            <directory>target/generated-sources/jooq</directory>
+                            <directory>${project.basedir}/target/generated-sources/jooq</directory>
                         </target>
                     </generator>
                 </configuration>
