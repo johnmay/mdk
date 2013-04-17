@@ -5,7 +5,7 @@
     <parent>
         <artifactId>mdk-io</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.4.0</version>
+        <version>1.4.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-interface</artifactId>
-            <version>1.4.0</version>
+            <version>1.4.1-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
     </dependencies>
