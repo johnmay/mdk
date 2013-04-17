@@ -29,7 +29,7 @@
         <module>core</module>
         <module>soap</module>
         <module>rest</module>
-        <module>hsql</module>
+        <module>hsqldb</module>
     </modules>
     <packaging>pom</packaging>
 
