@@ -47,8 +47,9 @@ import uk.ac.ebi.mdk.tool.inchi.InChIResult;
  * @author pmoreno
  * @author $Author$ (this version)
  * @brief ...class description...
- *
+ * @deprecated scraping ws, do not use!
  */
+@Deprecated
 public class KEGGCompoundConnectivityLoader extends AbstractSingleIndexResourceLoader {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundConnectivityLoader.class);
@@ -64,40 +65,39 @@ public class KEGGCompoundConnectivityLoader extends AbstractSingleIndexResourceL
      * @throws IOException 
      */
     public KEGGCompoundConnectivityLoader() throws IOException {
-        super(new MoleculeCollectionConnectivityIndex(COLLECTION));
-        
-        addRequiredResource("KEGG Compound List",
-                "List of compounds from KEGG REST Service",
-                ResourceFileLocation.class,
-                new RemoteLocation("http://rest.kegg.jp/list/compound"));
+        super(new MoleculeCollectionConnectivityIndex(COLLECTION));//
+//        addRequiredResource("KEGG Compound List",
+//                "List of compounds from KEGG REST Service",
+//                ResourceFileLocation.class,
+//                new RemoteLocation("http://rest.kegg.jp/list/compound"));
     }
 
     
     
     @Override
     public void update() throws IOException {
-        ResourceFileLocation location = getLocation("KEGG MDL Files");                
-        BufferedReader dir = new BufferedReader(new InputStreamReader(location.open()));                
-        
-        List<MoleculeConnectivity> connectivities = new ArrayList<MoleculeConnectivity>();
-        
-        KEGGRestClient client = new KEGGRestClient();
-        InChIProducer inChIProducer = new InChIProducerBinary102beta();
-
-        CSVReader reader = new CSVReader(new InputStreamReader(location.open()), '\t', '\0');
-        String[] line;
-        while((line = reader.readNext())!=null) {
-            KEGGCompoundIdentifier identifier = new KEGGCompoundIdentifier(line[0].replaceFirst("cpd:", ""));
-            InChIResult inchi = inChIProducer.calculateInChI(client.getMDLMol(identifier));
-            if(inchi!=null) {
-                String con = InChIConnectivity.getInChIConnectivity(inchi.getInchi());
-                MoleculeConnectivity connectivity = new MoleculeCollectionConnectivityLoader.MoleculeConnectivity(identifier, con);
-                connectivities.add(connectivity);
-            }
-        }
-        
-        MoleculeCollectionConnectivityLoader loader = new MoleculeCollectionConnectivityLoader(COLLECTION, connectivities.iterator());
-        loader.update();
+//        ResourceFileLocation location = getLocation("KEGG MDL Files");
+//        BufferedReader dir = new BufferedReader(new InputStreamReader(location.open()));
+//
+//        List<MoleculeConnectivity> connectivities = new ArrayList<MoleculeConnectivity>();
+//
+//        KEGGRestClient client = new KEGGRestClient();
+//        InChIProducer inChIProducer = new InChIProducerBinary102beta();
+//
+//        CSVReader reader = new CSVReader(new InputStreamReader(location.open()), '\t', '\0');
+//        String[] line;
+//        while((line = reader.readNext())!=null) {
+//            KEGGCompoundIdentifier identifier = new KEGGCompoundIdentifier(line[0].replaceFirst("cpd:", ""));
+//            InChIResult inchi = inChIProducer.calculateInChI(client.getMDLMol(identifier));
+//            if(inchi!=null) {
+//                String con = InChIConnectivity.getInChIConnectivity(inchi.getInchi());
+//                MoleculeConnectivity connectivity = new MoleculeCollectionConnectivityLoader.MoleculeConnectivity(identifier, con);
+//                connectivities.add(connectivity);
+//            }
+//        }
+//
+//        MoleculeCollectionConnectivityLoader loader = new MoleculeCollectionConnectivityLoader(COLLECTION, connectivities.iterator());
+//        loader.update();
     }
     
 }
