@@ -23,6 +23,7 @@ import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -204,6 +205,15 @@ public class KeggFlatfile<E extends Enum & KEGGField>
                                                                                                  FileNotFoundException {
         return new KeggFlatfile<KEGGReactionField>(r,
                                                    REACTION_FIELDS);
+    }
+
+    public static AttributedEntry<KEGGCompoundField, String> compound(final String path) throws
+                                                                                         IOException {
+        if (path.startsWith("http://")) {
+            return compound(new URL(path));
+        } else {
+            return compound(new FileInputStream(path));
+        }
     }
 
     public static AttributedEntry<KEGGCompoundField, String> compound(final URL url) throws
