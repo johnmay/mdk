@@ -114,12 +114,6 @@
                                     <targetPackage>uk.ac.ebi.ws.jdispatcher</targetPackage>
                                 </mapping>
 
-                                <!-- KEGG -->
-                                <mapping>
-                                    <namespace>SOAP/KEGG</namespace>
-                                    <targetPackage>jp.genome.ws.kegg</targetPackage>
-                                </mapping>
-
                                 <!-- NCBI -->
                                 <mapping>
                                     <namespace>http://pubchem.ncbi.nlm.nih.gov/</namespace>
