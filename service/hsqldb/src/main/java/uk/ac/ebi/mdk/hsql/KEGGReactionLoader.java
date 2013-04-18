@@ -83,7 +83,7 @@ final class KEGGReactionLoader extends AbstractHSQLLoader {
                                .values(e.accession())
                                .returning(REACTION.ID).fetch().get(0).getId();
                 for (String ec : e.enzymes()) {
-                    create.insertInto(EC, EC.EC_, EC.REACTION_ID)
+                    create.insertInto(EC, EC.NUMBER, EC.REACTION_ID)
                           .values(ec, id)
                           .execute();
                 }

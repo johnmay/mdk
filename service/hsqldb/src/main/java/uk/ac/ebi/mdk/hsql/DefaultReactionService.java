@@ -59,10 +59,10 @@ final class DefaultReactionService {
     }
 
     public List<String> ec(final String accession) {
-        return create.select(EC.EC_).from(REACTION)
+        return create.select(EC.NUMBER).from(REACTION)
                      .join(EC).on(EC.REACTION_ID.eq(REACTION.ID))
                      .where(REACTION.ACCESSION.eq(accession))
-                     .fetch().getValues(EC.EC_);
+                     .fetch().getValues(EC.NUMBER);
     }
 
     public List<String> reaction(final String accession) {
@@ -73,7 +73,7 @@ final class DefaultReactionService {
                                                                .eq(COMPOUND.ID))
                                  .where(REACTION.ACCESSION.eq(accession))
                                  .fetch();
-
+        System.out.println(r);
         return null;
     }
 
@@ -94,7 +94,7 @@ final class DefaultReactionService {
         return create.select(REACTION.ACCESSION)
                      .from(EC)
                      .join(REACTION).on(EC.REACTION_ID.equal(REACTION.ID))
-                     .where(EC.EC_.eq(ec))
+                     .where(EC.NUMBER.eq(ec))
                      .fetch()
                      .getValues(REACTION.ACCESSION);
     }
