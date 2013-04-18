@@ -114,7 +114,7 @@ public class KEGGCompoundParserTest {
 
     @Test public void testRead_Iterable() throws IOException {
 
-        InputStreamReader in = new InputStreamReader(getClass().getResourceAsStream("C00009-C00011.txt"));
+        InputStreamReader in = new InputStreamReader(getClass().getResourceAsStream("compound.txt"));
         KEGGCompoundParser parser = new KEGGCompoundParser(in, KEGGCompoundField.ENTRY);
 
         List<KEGGCompoundEntry> entries = new ArrayList<KEGGCompoundEntry>(5);

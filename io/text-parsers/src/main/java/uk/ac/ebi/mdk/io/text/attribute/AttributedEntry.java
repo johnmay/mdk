@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ import java.util.Map;
  * @see uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader
  * @see uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundParser
  */
-public class AttributedEntry<K, V> {
+public class AttributedEntry<K extends Enum, V> {
 
     private static final Logger LOGGER = Logger.getLogger(AttributedEntry.class);
 
