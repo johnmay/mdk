@@ -17,7 +17,12 @@
 
 package uk.ac.ebi.mdk.hsql;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import uk.ac.ebi.mdk.service.connection.HSQLDBLocation;
@@ -26,7 +31,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static uk.ac.ebi.mdk.jooq.public_.Tables.COMPOUND;
+import static uk.ac.ebi.mdk.jooq.public_.Tables.EC;
+import static uk.ac.ebi.mdk.jooq.public_.Tables.PARTICIPANT;
 import static uk.ac.ebi.mdk.jooq.public_.Tables.REACTION;
+
 
 /** @author John May */
 final class DefaultReactionService {
@@ -44,30 +52,64 @@ final class DefaultReactionService {
                 this.create = DSL
                         .using(location.getConnection(), SQLDialect.HSQLDB);
             } catch (SQLException e) {
+                Logger.getLogger(getClass()).error(e);
             }
         }
         return create != null;
     }
 
-    public void searchParticipants(final String accession) {
-        System.out.println(create.select()
-                                 .from(COMPOUND)
-                                 .where(COMPOUND.ACCESSION.eq(accession)));
+    public List<String> ec(final String accession) {
+        return create.select(EC.EC_).from(REACTION)
+                     .join(EC).on(EC.REACTION_ID.eq(REACTION.ID))
+                     .where(REACTION.ACCESSION.eq(accession))
+                     .fetch().getValues(EC.EC_);
+    }
+
+    public List<String> reaction(final String accession) {
+        Result<Record> r = create.select().from(REACTION)
+                                 .join(PARTICIPANT).on(PARTICIPANT.REACTION_ID
+                                                                  .eq(REACTION.ID))
+                                 .join(COMPOUND).on(PARTICIPANT.COMPOUND_ID
+                                                               .eq(COMPOUND.ID))
+                                 .where(REACTION.ACCESSION.eq(accession))
+                                 .fetch();
+
+        return null;
+    }
+
+    public List<String> reactionsInvolving(final String accession) {
+        return create.select(REACTION.ACCESSION)
+                     .from(COMPOUND)
+                     .join(PARTICIPANT).on(PARTICIPANT.COMPOUND_ID
+                                                      .equal(COMPOUND.ID))
+                     .join(REACTION).on(PARTICIPANT.REACTION_ID
+                                                   .equal(REACTION.ID))
+                     .where(COMPOUND.ACCESSION.eq(accession))
+                     .fetch()
+                     .getValues(REACTION.ACCESSION);
 
     }
 
     public List<String> searchEC(final String ec) {
         return create.select(REACTION.ACCESSION)
-                     .from(REACTION)
-                     .where(REACTION.EC.eq(ec)).fetch()
-                     .getValues(REACTION.ACCESSION, String.class);
+                     .from(EC)
+                     .join(REACTION).on(EC.REACTION_ID.equal(REACTION.ID))
+                     .where(EC.EC_.eq(ec))
+                     .fetch()
+                     .getValues(REACTION.ACCESSION);
     }
 
+
     public static void main(String[] args) {
-        DefaultReactionService service = Hsqldb.reactionService(Hsqldb.keggReactionConnection());
+        BasicConfigurator.configure();
+        Logger.getRootLogger().setLevel(Level.ERROR);
+        DefaultReactionService service = Hsqldb
+                .reactionService(Hsqldb.keggReactionConnection());
         service.startup();
         System.out.println(service.searchEC("1.1.1.85"));
-        service.searchParticipants("C00009");
+        System.out.println(service.reactionsInvolving("C00023"));
+        service.reaction("R04124");
+        System.out.println(service.ec("R00001"));
     }
 
 }
