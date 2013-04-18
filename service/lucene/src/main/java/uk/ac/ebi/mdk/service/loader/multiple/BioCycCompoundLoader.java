@@ -24,6 +24,7 @@ import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 import uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader;
 import uk.ac.ebi.mdk.io.text.attribute.Attribute;
+import uk.ac.ebi.mdk.io.text.biocyc.CompoundAttribute;
 import uk.ac.ebi.mdk.service.MultiIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.AbstractMultiIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.location.SystemLocation;
@@ -66,14 +67,14 @@ public class BioCycCompoundLoader extends AbstractMultiIndexResourceLoader {
 
         ResourceFileLocation location = getLocation("biocyc.compounds");
 
-        BioCycDatReader reader = new BioCycDatReader(location.open(), values());
+        BioCycDatReader<CompoundAttribute> reader = new BioCycDatReader<CompoundAttribute>(location.open(), values());
         DefaultNameIndexWriter nameWriter = new DefaultNameIndexWriter(getIndex("biocyc.names"));
         DefaultDataIndexWriter dataWriter = new DefaultDataIndexWriter(getIndex("biocyc.data"));
 
         int count = 0;
         while (reader.hasNext()) {
 
-            AttributedEntry<Attribute, String> entry = reader.next();
+            AttributedEntry<CompoundAttribute, String> entry = reader.next();
 
             String identifier = entry.has(UNIQUE_ID) ? entry.getFirst(UNIQUE_ID) : "";
             String commonName = entry.has(COMMON_NAME) ? entry.getFirst(COMMON_NAME) : "";

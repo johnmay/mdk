@@ -62,7 +62,7 @@ import java.util.regex.Pattern;
  * @see ReactionAttribute
  * @see EnzymaticReactionAttribute
  */
-public class BioCycDatReader {
+public class BioCycDatReader<A extends Enum & Attribute> {
 
     private static final Logger LOGGER = Logger.getLogger(BioCycDatReader.class);
 
@@ -73,8 +73,8 @@ public class BioCycDatReader {
     private Pattern COMMENT = Pattern.compile("\\A#");
     private Pattern ENTRY;
 
-    private AttributedEntry<Attribute, String> entry = new AttributedEntry<Attribute, String>();
-    private Map<String, Attribute> attributes = new HashMap<String, Attribute>();
+    private AttributedEntry<A, String> entry = new AttributedEntry<A, String>();
+    private Map<String, A> attributes = new HashMap<String, A>();
 
     /**
      * Constructor which provides desired attributes to be parsed. This constructor is
@@ -110,10 +110,10 @@ public class BioCycDatReader {
      * @param in         input stream to read from
      * @param attributes attributes that will be parsed
      */
-    public BioCycDatReader(InputStream in, Attribute... attributes) {
+    public BioCycDatReader(InputStream in, A... attributes) {
         this.in = new BufferedReader(new InputStreamReader(in));
 
-        Set<Attribute> attributeSet = new HashSet<Attribute>(Arrays.asList(attributes));
+        Set<A> attributeSet = new HashSet<A>(Arrays.asList(attributes));
         addAll(attributeSet);
 
     }
@@ -124,11 +124,11 @@ public class BioCycDatReader {
      *
      * @param in desired input stream
      *
-     * @see #add(uk.ac.ebi.mdk.io.text.attribute.Attribute)
+     * @see #add(A)
      */
     public BioCycDatReader(InputStream in) {
         this.in = new BufferedReader(new InputStreamReader(in));
-        ENTRY = getPattern(new HashSet<Attribute>());
+        ENTRY = getPattern(Collections.<A>emptySet());
     }
 
     /**
@@ -139,10 +139,10 @@ public class BioCycDatReader {
      *
      * @param attribute new attribute to parse
      */
-    public void add(Attribute attribute) {
+    public void add(A attribute) {
         attributes.put(attribute.getName(), attribute);
         // rebuild pattern
-        ENTRY = getPattern(new HashSet<Attribute>(attributes.values()));
+        ENTRY = getPattern(new HashSet<A>(attributes.values()));
     }
 
     /**
@@ -160,11 +160,11 @@ public class BioCycDatReader {
      *
      * @param attributes additional attributes to accept
      */
-    public void addAll(Collection<Attribute> attributes) {
-        for (Attribute attribute : attributes) {
+    public void addAll(Collection<A> attributes) {
+        for (A attribute : attributes) {
             this.attributes.put(attribute.getName(), attribute);
         }
-        ENTRY = getPattern(new HashSet<Attribute>(attributes));
+        ENTRY = getPattern(new HashSet<A>(attributes));
     }
 
     /**
@@ -176,7 +176,7 @@ public class BioCycDatReader {
      *
      * @throws IOException low-level IO exception
      */
-    private AttributedEntry<Attribute, String> readEntry() throws IOException {
+    private AttributedEntry<A, String> readEntry() throws IOException {
 
         String line;
         while ((line = in.readLine()) != null) {
@@ -206,7 +206,7 @@ public class BioCycDatReader {
      *
      * @return the readNext entry
      */
-    public AttributedEntry<Attribute, String> next() {
+    public AttributedEntry<A, String> next() {
         if (hasNext())
             return entry.renew();
         throw new NoSuchElementException("No readNext entry in BioCyc dat file");
@@ -248,11 +248,11 @@ public class BioCycDatReader {
      *
      * @return pattern compiled pattern
      */
-    private Pattern getPattern(Set<Attribute> attributes) {
+    private Pattern getPattern(Set<A> attributes) {
 
         StringBuilder sb = new StringBuilder();
 
-        Iterator<Attribute> iterator = attributes.iterator();
+        Iterator<A> iterator = attributes.iterator();
 
         while (iterator.hasNext()) {
             Attribute attribute = iterator.next();

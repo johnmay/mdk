@@ -219,24 +219,30 @@ public class KeggFlatfile<E extends Enum & KEGGField>
     }
 
     public static Iterable<ReactionEntry> reactions(final File f) throws
-                                                                                               FileNotFoundException {
+                                                                  FileNotFoundException {
         return reactions(new FileReader(f));
     }
 
     public static Iterable<ReactionEntry> reactions(final String path) throws
-                                                                                                    FileNotFoundException {
+                                                                       FileNotFoundException {
         return reactions(new File(path));
     }
 
+    public static Iterable<ReactionEntry> reactions(final InputStream in) throws
+                                                                         IOException {
+        return reactions(new InputStreamReader(in));
+    }
+
     public static Iterable<ReactionEntry> reactions(final Reader r) throws
-                                                                                                 FileNotFoundException {
+                                                                    FileNotFoundException {
         return FluentIterable.from(new KeggFlatfile<KEGGReactionField>(r,
-                                                   REACTION_FIELDS)).transform(new Function<AttributedEntry<KEGGReactionField, String>, ReactionEntry>() {
-            @Override
-            public ReactionEntry apply(AttributedEntry<KEGGReactionField, String> e) {
-                return new ReactionEntry(e);
-            }
-        });
+                                                                       REACTION_FIELDS))
+                             .transform(new Function<AttributedEntry<KEGGReactionField, String>, ReactionEntry>() {
+                                 @Override
+                                 public ReactionEntry apply(AttributedEntry<KEGGReactionField, String> e) {
+                                     return new ReactionEntry(e);
+                                 }
+                             });
     }
 
     public static AttributedEntry<KEGGCompoundField, String> compound(final String path) throws

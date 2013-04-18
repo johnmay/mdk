@@ -55,7 +55,7 @@
         <dependency>
             <groupId>uk.ac.ebi.mdk</groupId>
             <artifactId>mdk-interface</artifactId>
-            <version>1.4.1-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
     </dependencies>

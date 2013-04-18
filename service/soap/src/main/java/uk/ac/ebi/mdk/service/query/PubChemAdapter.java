@@ -168,12 +168,4 @@ public class PubChemAdapter
         }
         return service != null && reachable("http://pubchem.ncbi.nlm.nih.gov/");
     }
-
-    public static void main(String[] args) throws ServiceException {
-        KEGGCompoundAdapter keggws = new KEGGCompoundAdapter();
-        PubChemAdapter adapter = new PubChemAdapter();
-        //System.out.println(adapter.structureSearch(keggws.getStructure(new KEGGCompoundIdentifier("C00002")), true));
-        System.out.println(adapter.getStructure(new PubChemCompoundIdentifier("73")).getAtomCount());
-    }
-
 }

@@ -239,7 +239,7 @@ public class BioCycConverter {
 
     }
 
-    public Metabolite dat2Metabolite(AttributedEntry<Attribute, String> entry) {
+    public Metabolite dat2Metabolite(AttributedEntry<CompoundAttribute, String> entry) {
 
         Metabolite m = DefaultEntityFactory.getInstance().ofClass(Metabolite.class);
 
@@ -272,7 +272,7 @@ public class BioCycConverter {
 
     }
 
-    public MetabolicReaction dat2Reaction(AttributedEntry<Attribute, String> entry) {
+    public MetabolicReaction dat2Reaction(AttributedEntry<ReactionAttribute, String> entry) {
 
         MetabolicReaction rxn = DefaultEntityFactory.getInstance().ofClass(MetabolicReaction.class);
 
@@ -326,7 +326,7 @@ public class BioCycConverter {
         return rxn;
     }
 
-    private MetabolicParticipant getParticipant(AttributedEntry<Attribute, String> entry, Attribute attribute, String uid) {
+    private MetabolicParticipant getParticipant(AttributedEntry<ReactionAttribute, String> entry, ReactionAttribute attribute, String uid) {
 
         Metabolite m = getMetabolite(uid);
         Double coef = 1d;
