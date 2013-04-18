@@ -48,7 +48,7 @@ public class KeggFlatfileTest {
 
     @Test public void testReaction() throws Exception {
         Iterable<AttributedEntry<KEGGReactionField, String>> entries =
-                KeggFlatfile.reaction(reader("reaction"));
+                KeggFlatfile.reactions(reader("reaction"));
         Iterator<AttributedEntry<KEGGReactionField, String>> it = entries
                 .iterator();
         AttributedEntry<KEGGReactionField, String> e = it.next();

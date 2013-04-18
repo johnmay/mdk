@@ -26,7 +26,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,6 +52,12 @@ public class KeggFlatfile<E extends Enum & KEGGField>
         implements Iterable<AttributedEntry<E, String>>,
                    Closeable {
 
+    private static final Collection<KEGGCompoundField> COMPOUND_FIELDS = Arrays
+            .asList(KEGGCompoundField.values());
+    private static final Collection<KEGGReactionField> REACTION_FIELDS = Arrays
+            .asList(KEGGReactionField.values());
+
+
     /** separates the records. */
     private static final String RECORD_SEPARATOR = "///";
 
@@ -65,10 +74,10 @@ public class KeggFlatfile<E extends Enum & KEGGField>
     private final Map<String, E> fields = new HashMap<String, E>(31);
 
     /**
-     * Create a new parser for the specified fields.
+     * Create a new parser for the specified COMPOUND_FIELDS.
      *
      * @param r  a reader
-     * @param fs collection of all possible fields.
+     * @param fs collection of all possible COMPOUND_FIELDS.
      */
     KeggFlatfile(final Reader r, final Collection<E> fs) {
         checkNotNull(r, "no reader proivded");
@@ -181,39 +190,58 @@ public class KeggFlatfile<E extends Enum & KEGGField>
         return key + EMPTY_FIELD.substring(key.length());
     }
 
-    public static Iterable<AttributedEntry<KEGGReactionField, String>> reaction(final File f) throws
-                                                                                              FileNotFoundException {
-        return reaction(new FileReader(f));
+    public static Iterable<AttributedEntry<KEGGReactionField, String>> reactions(final File f) throws
+                                                                                               FileNotFoundException {
+        return reactions(new FileReader(f));
     }
 
-    public static Iterable<AttributedEntry<KEGGReactionField, String>> reaction(final String path) throws
-                                                                                                   FileNotFoundException {
-        return reaction(new File(path));
+    public static Iterable<AttributedEntry<KEGGReactionField, String>> reactions(final String path) throws
+                                                                                                    FileNotFoundException {
+        return reactions(new File(path));
     }
 
-    public static Iterable<AttributedEntry<KEGGReactionField, String>> reaction(final Reader r) throws
-                                                                                                FileNotFoundException {
-        Collection<KEGGReactionField> fields = Arrays.asList(KEGGReactionField
-                                                                     .values());
+    public static Iterable<AttributedEntry<KEGGReactionField, String>> reactions(final Reader r) throws
+                                                                                                 FileNotFoundException {
         return new KeggFlatfile<KEGGReactionField>(r,
-                                                   fields);
+                                                   REACTION_FIELDS);
     }
 
-    public static Iterable<AttributedEntry<KEGGCompoundField, String>> compound(final File f) throws
-                                                                                              FileNotFoundException {
-        return compound(new FileReader(f));
+    public static AttributedEntry<KEGGCompoundField, String> compound(final URL url) throws
+                                                                                     IOException {
+        return compound(url.openStream());
     }
 
-    public static Iterable<AttributedEntry<KEGGCompoundField, String>> compound(final String path) throws
-                                                                                                   FileNotFoundException {
-        return compound(new File(path));
+    public static AttributedEntry<KEGGCompoundField, String> compound(final InputStream in) throws
+                                                                                            IOException {
+        KeggFlatfile<KEGGCompoundField> flatfile = new KeggFlatfile<KEGGCompoundField>(new InputStreamReader(in),
+                                                                                       COMPOUND_FIELDS);
+        try {
+            return flatfile.read();
+        } finally {
+            flatfile.close();
+        }
     }
 
-    public static Iterable<AttributedEntry<KEGGCompoundField, String>> compound(final Reader r) throws
-                                                                                                FileNotFoundException {
+    public static Iterable<AttributedEntry<KEGGCompoundField, String>> compounds(final File f) throws
+                                                                                               FileNotFoundException {
+        return compounds(new FileReader(f));
+    }
+
+    public static Iterable<AttributedEntry<KEGGCompoundField, String>> compounds(final InputStream in) throws
+                                                                                                       FileNotFoundException {
+        return compounds(new InputStreamReader(in));
+    }
+
+    public static Iterable<AttributedEntry<KEGGCompoundField, String>> compounds(final String path) throws
+                                                                                                    FileNotFoundException {
+        return compounds(new File(path));
+    }
+
+    public static Iterable<AttributedEntry<KEGGCompoundField, String>> compounds(final Reader r) throws
+                                                                                                 FileNotFoundException {
         Collection<KEGGCompoundField> fields = Arrays.asList(KEGGCompoundField
                                                                      .values());
-        return new KeggFlatfile<KEGGCompoundField>(r, fields);
+        return new KeggFlatfile<KEGGCompoundField>(r, COMPOUND_FIELDS);
     }
 
 }
