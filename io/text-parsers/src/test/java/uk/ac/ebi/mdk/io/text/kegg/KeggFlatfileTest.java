@@ -25,6 +25,7 @@ import java.io.Reader;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -47,29 +48,22 @@ public class KeggFlatfileTest {
     }
 
     @Test public void testReaction() throws Exception {
-        Iterable<AttributedEntry<KEGGReactionField, String>> entries =
+        Iterable<ReactionEntry> entries =
                 KeggFlatfile.reactions(reader("reaction"));
-        Iterator<AttributedEntry<KEGGReactionField, String>> it = entries
+        Iterator<ReactionEntry> it = entries
                 .iterator();
-        AttributedEntry<KEGGReactionField, String> e = it.next();
-        assertThat(e.getFirst(ENTRY), is("R00001                      Reaction"));
-        assertThat(e.getFirst(EQUATION), is("C00890 + n C00001 <=> (n+1) C02174"));
-        assertThat(e.getFirst(DEFINITION), is("Polyphosphate + n H2O <=> (n+1) Oligophosphate"));
-        assertThat(e.getFirst(NAME), is("Polyphosphate polyphosphohydrolase"));
+        ReactionEntry e = it.next();
+        assertThat(e.accession(), is("R00001"));
+        assertThat(e.name(), is("Polyphosphate polyphosphohydrolase"));
 
         e = it.next();
-        assertThat(e.getFirst(ENTRY), is("R00002                      Reaction"));
-        assertThat(e.getFirst(NAME), is("Reduced ferredoxin:dinitrogen oxidoreductase (ATP-hydrolysing)"));
-        assertThat(e.get(DEFINITION), hasItems("16 ATP + 16 H2O + 8 Reduced ferredoxin <=> 8 e- + 16 Orthophosphate",
-                                               "+ 16 ADP + 8 Oxidized ferredoxin"));
-        assertThat(e.get(EQUATION), hasItems("16 C00002 + 16 C00001 + 8 C00138 <=> 8 C05359 + 16 C00009 + 16",
-                                             "C00008 + 8 C00139"));
-        assertThat(e.get(COMMENT), hasItems("a part of multi-step reaction (see R05185,",
-                                            "R00002+R00067+R00153+R02802+R04782)"));
-        assertThat(e.get(RPAIR), hasItems("RP00003  C00002_C00008 main",
+        assertThat(e.accession(), is("R00002"));
+        assertThat(e.name(), is("Reduced ferredoxin:dinitrogen oxidoreductase (ATP-hydrolysing)"));
+        assertThat(e.comment(), is("a part of multi-step reaction (see R05185,R00002+R00067+R00153+R02802+R04782)"));
+        assertThat(e.rpairs(), hasItems("RP00003  C00002_C00008 main",
                                           "RP00010  C00002_C00009 leave",
                                           "RP05676  C00001_C00009 leave"));
-        assertThat(e.getFirst(ENZYME), is("1.18.6.1"));
+        assertThat(e.enzymes(), hasItem("1.18.6.1"));
     }
 
     @Test public void testKey() throws Exception {

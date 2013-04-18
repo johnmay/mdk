@@ -91,13 +91,8 @@ public class KEGGRestClient
 
         Collection<String> names = new ArrayList<String>(10);
 
-        InputStream in = null;
-
         try {
-            in = getContent(address);
-
-            KEGGCompoundEntry entry = KEGGCompoundParser
-                    .load(in, KEGGCompoundField.NAME);
+            AttributedEntry<KEGGCompoundField, String> entry = KeggFlatfile.compound(address);
 
             for (String name : entry.get(KEGGCompoundField.NAME)) {
                 names.add(name.replaceAll(";", "").trim());
@@ -108,14 +103,6 @@ public class KEGGRestClient
                   .error("unable to load entry: " + address
                                  + " reason: " + ex
                           .getMessage());
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                // can't do anything
-            }
         }
 
         return names;

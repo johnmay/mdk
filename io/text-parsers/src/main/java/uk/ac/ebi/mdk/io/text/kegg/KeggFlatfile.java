@@ -17,6 +17,8 @@
 
 package uk.ac.ebi.mdk.io.text.kegg;
 
+import com.google.common.base.Function;
+import com.google.common.collect.FluentIterable;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 
@@ -191,20 +193,50 @@ public class KeggFlatfile<E extends Enum & KEGGField>
         return key + EMPTY_FIELD.substring(key.length());
     }
 
-    public static Iterable<AttributedEntry<KEGGReactionField, String>> reactions(final File f) throws
+    public static ReactionEntry reaction(final String path) throws
+                                                            IOException {
+        if (path.startsWith("http://")) {
+            return reaction(new URL(path));
+        } else {
+            return reaction(new FileInputStream(path));
+        }
+    }
+
+    public static ReactionEntry reaction(final URL url) throws
+                                                        IOException {
+        return reaction(url.openStream());
+    }
+
+    public static ReactionEntry reaction(final InputStream in) throws
+                                                               IOException {
+        KeggFlatfile<KEGGReactionField> flatfile = new KeggFlatfile<KEGGReactionField>(new InputStreamReader(in),
+                                                                                       REACTION_FIELDS);
+        try {
+            return new ReactionEntry(flatfile.read());
+        } finally {
+            flatfile.close();
+        }
+    }
+
+    public static Iterable<ReactionEntry> reactions(final File f) throws
                                                                                                FileNotFoundException {
         return reactions(new FileReader(f));
     }
 
-    public static Iterable<AttributedEntry<KEGGReactionField, String>> reactions(final String path) throws
+    public static Iterable<ReactionEntry> reactions(final String path) throws
                                                                                                     FileNotFoundException {
         return reactions(new File(path));
     }
 
-    public static Iterable<AttributedEntry<KEGGReactionField, String>> reactions(final Reader r) throws
+    public static Iterable<ReactionEntry> reactions(final Reader r) throws
                                                                                                  FileNotFoundException {
-        return new KeggFlatfile<KEGGReactionField>(r,
-                                                   REACTION_FIELDS);
+        return FluentIterable.from(new KeggFlatfile<KEGGReactionField>(r,
+                                                   REACTION_FIELDS)).transform(new Function<AttributedEntry<KEGGReactionField, String>, ReactionEntry>() {
+            @Override
+            public ReactionEntry apply(AttributedEntry<KEGGReactionField, String> e) {
+                return new ReactionEntry(e);
+            }
+        });
     }
 
     public static AttributedEntry<KEGGCompoundField, String> compound(final String path) throws
