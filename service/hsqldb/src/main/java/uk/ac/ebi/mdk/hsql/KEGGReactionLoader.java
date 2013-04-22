@@ -73,9 +73,14 @@ final class KEGGReactionLoader extends AbstractHSQLLoader {
 
             Iterable<ReactionEntry> entries = KeggFlatfile
                     .reactions(location.open());
+            int done = 0;
             for (ReactionEntry e : entries) {
 
                 if (isCancelled()) break;
+
+                if ((++done % 100) == 0) {
+                    fireProgressUpdate(location.progress());
+                }
 
                 reactionInsert.values(e.accession());
 
