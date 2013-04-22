@@ -25,6 +25,8 @@ import org.jooq.Record;
 import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.service.ReactionDescription;
 import uk.ac.ebi.mdk.service.connection.HSQLDBLocation;
 
 import java.sql.SQLException;
@@ -65,7 +67,7 @@ final class DefaultReactionService {
                      .fetch().getValues(EC.NUMBER);
     }
 
-    public List<String> reaction(final String accession) {
+    public ReactionDescription reaction(final String accession) {
         Result<Record> r = create.select().from(REACTION)
                                  .join(PARTICIPANT).on(PARTICIPANT.REACTION_ID
                                                                   .eq(REACTION.ID))
@@ -73,8 +75,20 @@ final class DefaultReactionService {
                                                                .eq(COMPOUND.ID))
                                  .where(REACTION.ACCESSION.eq(accession))
                                  .fetch();
-        System.out.println(r);
-        return null;
+        ReactionDescription reaction = new ReactionDescription(Direction.BIDIRECTIONAL);
+        for (Record record : r) {
+            String side = record.getValue(PARTICIPANT.SIDE);
+            if (side.equals("r")) {
+                reaction.addReactant(record.getValue(COMPOUND.ACCESSION),
+                                     record.getValue(PARTICIPANT.COMPARTMENT),
+                                     record.getValue(PARTICIPANT.COEFFICIENT));
+            } else {
+                reaction.addProduct(record.getValue(COMPOUND.ACCESSION),
+                                    record.getValue(PARTICIPANT.COMPARTMENT),
+                                    record.getValue(PARTICIPANT.COEFFICIENT));
+            }
+        }
+        return reaction;
     }
 
     public List<String> reactionsInvolving(final String accession) {
@@ -108,7 +122,7 @@ final class DefaultReactionService {
         service.startup();
         System.out.println(service.searchEC("1.1.1.85"));
         System.out.println(service.reactionsInvolving("C00023"));
-        service.reaction("R04124");
+        System.out.println(service.reaction("R04124"));
         System.out.println(service.ec("R00001"));
     }
 
