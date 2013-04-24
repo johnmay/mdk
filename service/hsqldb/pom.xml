@@ -59,6 +59,19 @@
             <version>${project.version}</version>
             <type>jar</type>
         </dependency>
+        <!-- annoying but looks like we need these dependencies -->
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-entity</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.mdk</groupId>
+            <artifactId>mdk-domain-identifier</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
 
     <build>
@@ -116,7 +129,9 @@
                         </generate>
                         <target>
                             <packageName>uk.ac.ebi.mdk.jooq</packageName>
-                            <directory>${project.basedir}/target/generated-sources/jooq</directory>
+                            <directory>
+                                ${project.basedir}/target/generated-sources/jooq
+                            </directory>
                         </target>
                     </generator>
                 </configuration>

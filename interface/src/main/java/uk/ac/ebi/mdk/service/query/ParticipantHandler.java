@@ -26,7 +26,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
  *
  * @author John May
  */
-interface ParticipantHandler<P extends Participant> {
+public interface ParticipantHandler<P extends Participant> {
 
     /**
      * Handle the compound, compartment and coefficient from a reaction service

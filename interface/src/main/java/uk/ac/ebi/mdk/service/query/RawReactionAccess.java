@@ -27,7 +27,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
  *
  * @author John May
  */
-interface RawReactionAccess<I extends Identifier>
+public interface RawReactionAccess<I extends Identifier>
         extends QueryService<I> {
 
     /**

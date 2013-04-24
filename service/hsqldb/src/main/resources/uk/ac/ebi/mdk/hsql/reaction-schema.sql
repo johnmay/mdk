@@ -1,8 +1,9 @@
 DROP SCHEMA PUBLIC CASCADE;
 CREATE TABLE reaction (id IDENTITY,
+                       name      VARCHAR(150),
                        accession VARCHAR(10),
-                       direction VARCHAR(3) DEFAULT '<=>',
-                       CONSTRAINT direction_enum CHECK ( direction IN ( '->', '<-', '<=>', '<?>') ),
+                       direction VARCHAR(4) DEFAULT '<==>',
+                       CONSTRAINT direction_enum CHECK ( direction IN ( '-->', '<--', '<==>', '<?>') ),
                        CONSTRAINT accession_index UNIQUE(accession));
 CREATE TABLE ec (id IDENTITY,
                  reaction_id INT,

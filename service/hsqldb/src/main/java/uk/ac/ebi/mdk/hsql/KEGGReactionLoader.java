@@ -18,6 +18,7 @@
 package uk.ac.ebi.mdk.hsql;
 
 import com.google.common.collect.Maps;
+import com.google.common.primitives.Ints;
 import org.jooq.DSLContext;
 import org.jooq.InsertValuesStep1;
 import org.jooq.impl.DSL;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Math.min;
 import static org.jooq.SQLDialect.HSQLDB;
 import static uk.ac.ebi.mdk.jooq.public_.Tables.COMPOUND;
 import static uk.ac.ebi.mdk.jooq.public_.Tables.EC;
@@ -83,9 +85,10 @@ final class KEGGReactionLoader extends AbstractHSQLLoader {
                 }
 
                 reactionInsert.values(e.accession());
+                String name = e.name();
 
-                int id = create.insertInto(REACTION, REACTION.ACCESSION)
-                               .values(e.accession())
+                int id = create.insertInto(REACTION, REACTION.ACCESSION, REACTION.NAME)
+                               .values(e.accession(), name.substring(0, min(name.length(), 150)))
                                .returning(REACTION.ID).fetch().get(0).getId();
                 for (String ec : e.enzymes()) {
                     create.insertInto(EC, EC.NUMBER, EC.REACTION_ID)
