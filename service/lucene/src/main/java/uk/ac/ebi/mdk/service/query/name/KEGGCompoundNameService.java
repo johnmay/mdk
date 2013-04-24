@@ -25,9 +25,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * KEGGCompoundNameService - 23.02.2012 <br/>
- * <p/>
- * Class descriptions.
+ * KEGGCompoundNameService - 23.02.2012 <br/> <p/> Class descriptions.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -35,18 +33,17 @@ import java.util.HashSet;
  */
 public class KEGGCompoundNameService
         extends AbstractLuceneService<KEGGCompoundIdentifier>
-        implements
-                   PreferredNameService<KEGGCompoundIdentifier>,
+        implements PreferredNameService<KEGGCompoundIdentifier>,
+                   PreferredNameAccess<KEGGCompoundIdentifier>,
+                   PreferredNameSearch<KEGGCompoundIdentifier>,
                    SynonymService<KEGGCompoundIdentifier>,
-                   NameService<KEGGCompoundIdentifier>{
+                   NameService<KEGGCompoundIdentifier> {
 
     public KEGGCompoundNameService() {
         super(new KEGGCompoundNameIndex());
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Collection<KEGGCompoundIdentifier> searchName(String name, boolean approximate) {
         // use set as to avoid duplicates
@@ -59,9 +56,7 @@ public class KEGGCompoundNameService
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Collection<String> getNames(KEGGCompoundIdentifier identifier) {
         // use set as to avoid duplicates
@@ -77,41 +72,31 @@ public class KEGGCompoundNameService
 
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Collection<KEGGCompoundIdentifier> searchPreferredName(String name, boolean approximate) {
         return getIdentifiers(construct(name, PREFERRED_NAME, approximate));
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public String getPreferredName(KEGGCompoundIdentifier identifier) {
         return firstValue(identifier, PREFERRED_NAME);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Collection<KEGGCompoundIdentifier> searchSynonyms(String name, boolean approximate) {
         return getIdentifiers(construct(name, SYNONYM, approximate));
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Collection<String> getSynonyms(KEGGCompoundIdentifier identifier) {
         return firstValues(identifier, SYNONYM);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public KEGGCompoundIdentifier getIdentifier() {
         return new KEGGCompoundIdentifier();

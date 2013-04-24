@@ -53,7 +53,7 @@ import static uk.ac.ebi.mdk.jooq.public_.Tables.REACTION;
 
 
 /** @author John May */
-final class DefaultReactionService<I extends Identifier>
+public class DefaultReactionService<I extends Identifier>
         implements RawReactionAccess<I>,
                    CrossReferenceService<I>,
                    PreferredNameAccess<I> {
@@ -64,7 +64,7 @@ final class DefaultReactionService<I extends Identifier>
     private final I identifier;
     private int max = 50;
 
-    DefaultReactionService(HSQLDBLocation location, I identifier) {
+    public DefaultReactionService(HSQLDBLocation location, I identifier) {
         this.location = location;
         this.identifier = identifier;
     }

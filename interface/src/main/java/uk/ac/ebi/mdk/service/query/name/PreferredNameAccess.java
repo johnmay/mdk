@@ -17,11 +17,14 @@
 
 package uk.ac.ebi.mdk.service.query.name;
 
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.service.query.QueryService;
+
 /**
  * Describe a service which can access preferred names for a given identifier.
  * @author John May
  */
-public interface PreferredNameAccess<I> {
+public interface PreferredNameAccess<I extends Identifier> extends QueryService<I> {
 
     /**
      * Provides the preferred name for the given identifier. If no preferred name
