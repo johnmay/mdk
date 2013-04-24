@@ -27,6 +27,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGReactionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.hsql.handler.HandlerBuilder;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.CrossReferenceService;
@@ -66,20 +67,12 @@ public class KEGGReactionDemo {
                             PreferredNameAccess.class);
         System.out.println(cpdNames.getClass());
 
-        ParticipantHandler<MetabolicParticipant> handler = new ParticipantHandler<MetabolicParticipant>() {
-            @Override
-            public MetabolicParticipant handle(String compound, String compartment, double coefficient) {
-                Metabolite m = entities.metabolite();
-                m.setIdentifier(new KEGGCompoundIdentifier(compound));
-                m.setName(cpdNames.getPreferredName(new KEGGCompoundIdentifier(compound)));
-                return new MetabolicParticipantImplementation(m, coefficient);
-            }
-        };
+        ParticipantHandler<MetabolicParticipant> handler = HandlerBuilder.automatic(new KEGGCompoundIdentifier());
 
         System.out.println("fetching 1000 reactions");
         long t0 = System.nanoTime();
         String prefix = "R00000";
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10; i++) {
             String number = Integer.toString(i);
             String accession = prefix.substring(0, prefix.length() - number
                     .length()) + number;
