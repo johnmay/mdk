@@ -35,15 +35,18 @@ class MetabolicParticipantHandler
     private final Function<Metabolite, Metabolite> annotator;
     private final EntityFactory entities;
     private final Identifier identifier;
+    private final MoleculeCache<Metabolite> cache;
 
     MetabolicParticipantHandler(EntityFactory entities,
                                 Identifier identifier,
                                 CompartmentResolver resolver,
-                                Function<Metabolite, Metabolite> annotator) {
+                                Function<Metabolite, Metabolite> annotator,
+                                MoleculeCache<Metabolite> cache) {
         this.entities = entities;
         this.identifier = identifier;
         this.resolver = resolver;
         this.annotator = annotator;
+        this.cache = cache;
     }
 
     private Identifier toIdentifier(String accession) {
@@ -55,11 +58,15 @@ class MetabolicParticipantHandler
     @Override
     public MetabolicParticipant handle(String compound, String compartment, double coefficient) {
         MetabolicParticipant p = new MetabolicParticipantImplementation();
-        Identifier id = toIdentifier(compound);
-        Metabolite m = entities.metabolite();
-        m.setIdentifier(id);
-        m.addAnnotation(CrossReference.create(id));
-        p.setMolecule(annotator.apply(m));
+        Metabolite m = cache.get(compound);
+        if (m == null) {
+            m = entities.metabolite();
+            Identifier id = toIdentifier(compound);
+            m.setIdentifier(id);
+            m.addAnnotation(CrossReference.create(id));
+            annotator.apply(m);
+        }
+        p.setMolecule(cache.register(compound, m));
         p.setCompartment(resolver.getCompartment(compartment));
         p.setCoefficient(coefficient);
         return p;

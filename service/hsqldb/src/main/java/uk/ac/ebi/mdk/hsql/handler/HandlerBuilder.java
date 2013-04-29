@@ -46,6 +46,7 @@ public class HandlerBuilder {
     private CompartmentResolver resolver = new AutomaticCompartmentResolver();
     private final Class<? extends Identifier> type;
     private Function<Metabolite, Metabolite> annotator = Functions.identity();
+    private MoleculeCache<Metabolite> cache = MoleculeCache.empty();
 
     /**
      * Start building a handler for the given id.
@@ -64,6 +65,19 @@ public class HandlerBuilder {
      */
     public HandlerBuilder withResolver(CompartmentResolver resolver) {
         this.resolver = resolver;
+        return this;
+    }
+
+    /**
+     * Use the metabolite cache to index compounds and cache any created
+     * metabolites. When the compound is encountered again it uses the instance
+     * which was registered with the key.
+     *
+     * @param cache molecule cache
+     * @return self-reference
+     */
+    public HandlerBuilder withCache(MoleculeCache<Metabolite> cache) {
+        this.cache = cache;
         return this;
     }
 
@@ -117,7 +131,8 @@ public class HandlerBuilder {
         return new MetabolicParticipantHandler(entities,
                                                ids.ofClass(type),
                                                resolver,
-                                               annotator);
+                                               annotator,
+                                               cache);
     }
 
     public static ParticipantHandler<MetabolicParticipant> automatic(Identifier id) {
