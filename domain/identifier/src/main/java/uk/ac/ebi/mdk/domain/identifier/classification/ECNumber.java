@@ -157,6 +157,12 @@ public class ECNumber
 
     }
 
+    /**
+     * Check if this E.C. number is partial (i.e. 1.1.1.-).
+     */
+    public boolean isPartial() {
+        return enzymeEntry == 0;
+    }
 
     /**
      * @param enzymeClass
