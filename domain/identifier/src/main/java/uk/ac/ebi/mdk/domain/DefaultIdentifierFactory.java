@@ -39,6 +39,7 @@ import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
 import uk.ac.ebi.mdk.domain.identifier.InChI;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGDrugIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGReactionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KeggGlycanIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.LIPIDMapsIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.MetaCycIdentifier;
@@ -153,7 +154,8 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
             new CellTypeOntologyIdentifier(),
             new FoundationalModelOfAnatomyOntologyIdentifier(),
             new BRENDATissueOntologyIdentifier(),
-            new TransportClassificationNumber()));
+            new TransportClassificationNumber(),
+            new KEGGReactionIdentifier()));
 
     private Map<String, Identifier> synonyms = new HashMap();
 

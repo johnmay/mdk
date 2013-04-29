@@ -49,7 +49,8 @@ public class MetabolicParticipantHandlerTest {
         ParticipantHandler<MetabolicParticipant> handler = new MetabolicParticipantHandler(factory,
                                                                                            new KEGGCompoundIdentifier(),
                                                                                            resolver,
-                                                                                           annotator);
+                                                                                           annotator,
+                                                                                           MoleculeCache.<Metabolite>empty());
         MetabolicParticipant m = handler.handle("C00001", "c", 1.0);
         verify(resolver).getCompartment("c");
         assertThat(m.getCompartment(), is((Compartment) Organelle.CYTOPLASM));
@@ -68,7 +69,8 @@ public class MetabolicParticipantHandlerTest {
         ParticipantHandler<MetabolicParticipant> handler = new MetabolicParticipantHandler(factory,
                                                                                            new KEGGCompoundIdentifier(),
                                                                                            resolver,
-                                                                                           annotator);
+                                                                                           annotator,
+                                                                                           MoleculeCache.<Metabolite>empty());
         MetabolicParticipant m = handler.handle("C00001", "c", 1.0);
         verify(annotator).apply(mock);
     }

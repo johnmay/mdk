@@ -22,17 +22,15 @@
 
 package uk.ac.ebi.mdk.domain.identifier.classification;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
-/**
- *
- * @author johnmay
- */
+/** @author johnmay */
 public class ECNumberTest {
 
     @Test
@@ -40,7 +38,13 @@ public class ECNumberTest {
         Identifier id = new ECNumber("EC-Undertermined");
         assertEquals("-.-.-.-", id.getAccession());
     }
-    
+
+    @Test
+    public void testPartial() {
+        assertFalse(new ECNumber("1.1.1.1").isPartial());
+        assertTrue(new ECNumber("1.1.1.-").isPartial());
+    }
+
     @Test
     public void testNormalParsing() {
         Identifier id = new ECNumber("EC-5.3.1.23");
@@ -48,7 +52,7 @@ public class ECNumberTest {
     }
 
     /** test for E.C. from UniProt-KB P94368 */
-    @Test public void testP94368(){
+    @Test public void testP94368() {
         Identifier id = new ECNumber();
         id.setAccession("4.2.1.136");
         assertEquals("4.2.1.136", id.getAccession());

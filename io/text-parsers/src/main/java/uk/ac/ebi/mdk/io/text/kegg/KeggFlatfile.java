@@ -59,6 +59,8 @@ public class KeggFlatfile<E extends Enum & KEGGField>
             .asList(KEGGCompoundField.values());
     private static final Collection<KEGGReactionField> REACTION_FIELDS = Arrays
             .asList(KEGGReactionField.values());
+    private static final Collection<KeggGlycanField> GLYCAN_FIELDS = Arrays
+            .asList(KeggGlycanField.values());
 
 
     /** separates the records. */
@@ -229,7 +231,7 @@ public class KeggFlatfile<E extends Enum & KEGGField>
     }
 
     public static Iterable<ReactionEntry> reactions(final InputStream in) throws
-                                                                         IOException {
+                                                                          IOException {
         return reactions(new InputStreamReader(in));
     }
 
@@ -263,6 +265,31 @@ public class KeggFlatfile<E extends Enum & KEGGField>
                                                                                             IOException {
         KeggFlatfile<KEGGCompoundField> flatfile = new KeggFlatfile<KEGGCompoundField>(new InputStreamReader(in),
                                                                                        COMPOUND_FIELDS);
+        try {
+            return flatfile.read();
+        } finally {
+            flatfile.close();
+        }
+    }
+
+    public static AttributedEntry<KeggGlycanField, String> glycan(final String path) throws
+                                                                                     IOException {
+        if (path.startsWith("http://")) {
+            return glycan(new URL(path));
+        } else {
+            return glycan(new FileInputStream(path));
+        }
+    }
+
+    public static AttributedEntry<KeggGlycanField, String> glycan(final URL url) throws
+                                                                                 IOException {
+        return glycan(url.openStream());
+    }
+
+    public static AttributedEntry<KeggGlycanField, String> glycan(final InputStream in) throws
+                                                                                        IOException {
+        KeggFlatfile<KeggGlycanField> flatfile = new KeggFlatfile<KeggGlycanField>(new InputStreamReader(in),
+                                                                                   GLYCAN_FIELDS);
         try {
             return flatfile.read();
         } finally {

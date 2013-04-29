@@ -76,7 +76,7 @@ package uk.ac.ebi.mdk.domain.matrix;
      public int addReaction(MetabolicReaction reaction) {
 
 
-         return addReaction(reaction.getAbbreviation(),
+         return addReaction(reaction.getAccession(),
                             getMetabolites(reaction),
                             getStoichiometries(reaction),
                             ((Direction) reaction.getDirection()).isReversible());
