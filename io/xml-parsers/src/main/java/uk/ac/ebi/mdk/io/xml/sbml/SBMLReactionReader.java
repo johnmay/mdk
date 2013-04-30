@@ -222,7 +222,8 @@ public class SBMLReactionReader {
 
             // normalise compartments
             for (Compartment compartment : model.getListOfCompartments()) {
-                compartment.setId(compartment.getId().toLowerCase());
+                compartment.setId(normalise(compartment.getId()));
+                compartment.setName(normalise(compartment.getName()));
             }
 
             normalised = Boolean.TRUE;
@@ -243,11 +244,13 @@ public class SBMLReactionReader {
         Compartment compartment = species.getCompartmentInstance();
 
         if (compartment == null) {
-            LOGGER.error("unable to find instance of SBML compartment '" + species.getCompartment() + "' on species '" + species.getId() + "'- please ensure names are exact");
             // check for case conflicts periplasm != Periplasm
             normalise();
-            compartment = model.getCompartment(species.getCompartment().toLowerCase());
+            compartment = model.getCompartment(normalise(species.getCompartment()));
         }
+
+        if(compartment == null)
+            return resolver.getCompartment("");
 
         if (compartments.containsKey(compartment)) {
             return compartments.get(compartment);
