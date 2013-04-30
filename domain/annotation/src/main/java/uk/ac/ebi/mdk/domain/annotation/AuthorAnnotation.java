@@ -181,7 +181,7 @@ public class AuthorAnnotation
     }
 
 
-    public Annotation getInstance(String value) {
+    public AuthorAnnotation getInstance(String value) {
         return new AuthorAnnotation(value);
     }
 }

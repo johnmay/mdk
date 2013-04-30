@@ -32,6 +32,6 @@ public interface StringAnnotation extends Annotation {
 
     public void setValue(String value);
 
-    public Annotation getInstance(String value);
+    public StringAnnotation getInstance(String value);
 
 }

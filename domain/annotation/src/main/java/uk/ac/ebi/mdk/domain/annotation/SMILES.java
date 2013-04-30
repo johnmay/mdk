@@ -75,7 +75,7 @@ public class SMILES
     }
 
 
-    public Annotation getInstance(String value) {
+    public SMILES getInstance(String value) {
         return new SMILES(value);
     }
     
