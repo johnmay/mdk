@@ -122,45 +122,6 @@ public class MetaboliteImpl
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public boolean equals(Object obj) {
-
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final MetaboliteImpl other = (MetaboliteImpl) obj;
-
-        if (!super.equals(other)) {
-            return false;
-        }
-
-        if (this.generic != other.generic) {
-            return false;
-        }
-        if (this.type != other.type) {
-            return false;
-        }
-
-        return true;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public int hashCode() {
-        int hash = super.hashCode();
-        return hash + Objects.hashCode(generic, type);
-    }
-
-
     public Enum<? extends MetaboliteClass> getType() {
         return type;
     }
@@ -170,11 +131,9 @@ public class MetaboliteImpl
         this.type = type;
     }
 
-
     public Entity newInstance() {
         return new MetaboliteImpl();
     }
-
 
     /**
      * @inheritDoc
