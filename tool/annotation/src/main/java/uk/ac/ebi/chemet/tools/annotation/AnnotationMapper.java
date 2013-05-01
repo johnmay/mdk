@@ -20,11 +20,12 @@ package uk.ac.ebi.chemet.tools.annotation;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
-import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.AnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
-import uk.ac.ebi.mdk.domain.observation.Observation;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -44,7 +45,7 @@ import java.util.Set;
  *         return entity.getAbbreviation();
  *     }
  * }
- * IdentifierMapper mapper = new IdentifierMapper(entities, accessor);
+ * AnnotationMapper mapper = new AnnotationMapper(entities, accessor);
  *
  * // map the following accessions to entities which are abbreviated 'atp'
  * mapper.map("atp", "CHEBI:12");
@@ -66,10 +67,11 @@ import java.util.Set;
  *
  * @author John May
  */
-public final class IdentifierMapper<K> {
+public final class AnnotationMapper<K> {
 
     private final Handler handler;
     private final IdentifierFactory idFactory;
+    private final AnnotationFactory annotations = DefaultAnnotationFactory.getInstance();
 
     /* keys which did not map */
     private final Set<K> unmapped = new HashSet<K>();
@@ -85,13 +87,13 @@ public final class IdentifierMapper<K> {
 
     private final Multimap<K, AnnotatedEntity> map;
 
-    public IdentifierMapper(Collection<? extends AnnotatedEntity> entities, KeyAccessor<K> keyAccessor) {
+    public AnnotationMapper(Collection<? extends AnnotatedEntity> entities, KeyAccessor<K> keyAccessor) {
         this(entities,
              keyAccessor, new BasicHandler(),
              DefaultIdentifierFactory.getInstance());
     }
 
-    public IdentifierMapper(Collection<? extends AnnotatedEntity> entities,
+    public AnnotationMapper(Collection<? extends AnnotatedEntity> entities,
                             KeyAccessor<K> keyAccessor,
                             Handler handler,
                             IdentifierFactory idFactory) {
@@ -177,11 +179,17 @@ public final class IdentifierMapper<K> {
      * @see #unmapped()
      */
     public boolean map(K key, Identifier id) {
+        if (id == null)
+            throw new IllegalArgumentException("no identifier provided");
+        return map(key, annotations.getCrossReference(id));
+    }
+
+    public boolean map(K key, Annotation annotation) {
         final Collection<AnnotatedEntity> entities = map.get(key);
         if (!entities.isEmpty()) {
             boolean mapped = false;
             for (AnnotatedEntity e : entities)
-                mapped = handler.handle(e, id) || mapped;
+                mapped = handler.handle(e, annotation) || mapped;
             return mapped;
         } else {
             unmapped.add(key);
@@ -203,7 +211,7 @@ public final class IdentifierMapper<K> {
      * pattern.
      *
      * <blockquote><pre>
-     * IdentifierMapper mapper = ...;
+     * AnnotationMapper mapper = ...;
      * mapper.map(key, "CHEBI:12", "HMBD");
      * </pre></blockquote>
      *
@@ -242,11 +250,9 @@ public final class IdentifierMapper<K> {
         K key(AnnotatedEntity entity);
     }
 
-    /**
-     * Handle mapping of entities with identifiers
-     */
+    /** Handle mapping of entities with identifiers */
     public static interface Handler {
-        boolean handle(AnnotatedEntity entity, Identifier id);
+        boolean handle(AnnotatedEntity entity, Annotation id);
     }
 
     /**
@@ -254,8 +260,9 @@ public final class IdentifierMapper<K> {
      * entity.
      */
     private static class BasicHandler implements Handler {
-        @Override public boolean handle(AnnotatedEntity entity, Identifier id) {
-            entity.addAnnotation(new CrossReference<Identifier, Observation>(id));
+        @Override
+        public boolean handle(AnnotatedEntity entity, Annotation annotation) {
+            entity.addAnnotation(annotation);
             return true;
         }
     }

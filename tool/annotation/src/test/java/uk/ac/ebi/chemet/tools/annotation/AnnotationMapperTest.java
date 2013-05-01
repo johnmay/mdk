@@ -19,6 +19,8 @@ package uk.ac.ebi.chemet.tools.annotation;
 
 import org.junit.Test;
 import org.mockito.Matchers;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
@@ -43,7 +45,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author John May
  */
-public class IdentifierMapperTest {
+public class AnnotationMapperTest {
 
     @Test
     public void inferred() throws Exception {
@@ -52,17 +54,17 @@ public class IdentifierMapperTest {
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
 
-        IdentifierMapper.KeyAccessor<String> accessor = mock(IdentifierMapper.KeyAccessor.class);
+        AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
         IdentifierFactory factory = mock(IdentifierFactory.class);
 
         when(accessor.key(Matchers.<AnnotatedEntity>anyObject()))
                 .thenReturn("a", "b", "c");
 
-        IdentifierMapper.Handler handler = mock(IdentifierMapper.Handler.class);
+        AnnotationMapper.Handler handler = mock(AnnotationMapper.Handler.class);
         when(handler.handle(any(AnnotatedEntity.class),
-                            any(Identifier.class))).thenReturn(true);
+                            any(Annotation.class))).thenReturn(true);
 
-        IdentifierMapper<String> mapper = new IdentifierMapper<String>(es,
+        AnnotationMapper<String> mapper = new AnnotationMapper<String>(es,
                                                                        accessor,
                                                                        handler,
                                                                        factory);
@@ -79,8 +81,10 @@ public class IdentifierMapperTest {
         when(factory.ofPattern("id1")).thenReturn(id1s);
         when(factory.ofClass(Identifier.class)).thenReturn(id1);
 
+        Annotation expected = DefaultAnnotationFactory.getInstance().getCrossReference(id1);
+
         assertTrue(mapper.map("b", "id1"));
-        verify(handler).handle(es.get(1), id1);
+        verify(handler).handle(es.get(1), expected);
     }
 
     @Test
@@ -90,32 +94,37 @@ public class IdentifierMapperTest {
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
 
-        IdentifierMapper.KeyAccessor<String> accessor = mock(IdentifierMapper.KeyAccessor.class);
+        AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
         IdentifierFactory factory = mock(IdentifierFactory.class);
 
         when(accessor.key(Matchers.<AnnotatedEntity>anyObject()))
                 .thenReturn("a", "b", "c");
 
-        IdentifierMapper.Handler handler = mock(IdentifierMapper.Handler.class);
+        AnnotationMapper.Handler handler = mock(AnnotationMapper.Handler.class);
         when(handler.handle(any(AnnotatedEntity.class),
-                            any(Identifier.class))).thenReturn(true);
+                            any(Annotation.class))).thenReturn(true);
 
-        IdentifierMapper<String> mapper = new IdentifierMapper<String>(es,
+        AnnotationMapper<String> mapper = new AnnotationMapper<String>(es,
                                                                        accessor,
                                                                        handler,
                                                                        factory);
+
 
         Identifier id1 = mock(Identifier.class);
         when(id1.isValid()).thenReturn(true);
         Identifier id2 = mock(Identifier.class);
         when(id2.isValid()).thenReturn(true);
 
+        Annotation expected1 = DefaultAnnotationFactory.getInstance().getCrossReference(id1);
+        Annotation expected2 = DefaultAnnotationFactory.getInstance().getCrossReference(id2);
+
+
         when(factory.ofName("mock")).thenReturn(id1, id2);
 
         assertTrue(mapper.map("a", "id1", "mock"));
-        verify(handler).handle(es.get(0), id1);
+        verify(handler).handle(es.get(0), expected1);
         assertTrue(mapper.map("c", "id2", "mock"));
-        verify(handler).handle(es.get(2), id2);
+        verify(handler).handle(es.get(2), expected2);
     }
 
 
@@ -126,16 +135,16 @@ public class IdentifierMapperTest {
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
 
-        IdentifierMapper.KeyAccessor<String> accessor = mock(IdentifierMapper.KeyAccessor.class);
+        AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
 
         when(accessor.key(Matchers.<AnnotatedEntity>anyObject()))
                 .thenReturn("a", "b", "a", "c");
 
-        IdentifierMapper.Handler handler = mock(IdentifierMapper.Handler.class);
+        AnnotationMapper.Handler handler = mock(AnnotationMapper.Handler.class);
         when(handler.handle(any(AnnotatedEntity.class),
-                            any(Identifier.class))).thenReturn(true);
+                            any(Annotation.class))).thenReturn(true);
 
-        IdentifierMapper<String> mapper = new IdentifierMapper<String>(es,
+        AnnotationMapper<String> mapper = new AnnotationMapper<String>(es,
                                                                        accessor,
                                                                        handler,
                                                                        mock(IdentifierFactory.class));
@@ -144,7 +153,7 @@ public class IdentifierMapperTest {
         assertTrue(mapper.map("a", mock(Identifier.class)));
 
         verify(handler, times(2))
-                .handle(any(AnnotatedEntity.class), any(Identifier.class));
+                .handle(any(AnnotatedEntity.class), any(Annotation.class));
     }
 
     @Test
@@ -154,16 +163,16 @@ public class IdentifierMapperTest {
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
 
-        IdentifierMapper.KeyAccessor<String> accessor = mock(IdentifierMapper.KeyAccessor.class);
+        AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
 
         when(accessor.key(Matchers.<AnnotatedEntity>anyObject()))
                 .thenReturn("a", "b", "c");
 
-        IdentifierMapper.Handler handler = mock(IdentifierMapper.Handler.class);
+        AnnotationMapper.Handler handler = mock(AnnotationMapper.Handler.class);
         when(handler.handle(any(AnnotatedEntity.class),
-                            any(Identifier.class))).thenReturn(true);
+                            any(Annotation.class))).thenReturn(true);
 
-        IdentifierMapper<String> mapper = new IdentifierMapper<String>(es,
+        AnnotationMapper<String> mapper = new AnnotationMapper<String>(es,
                                                                        accessor,
                                                                        handler,
                                                                        mock(IdentifierFactory.class));
@@ -173,7 +182,7 @@ public class IdentifierMapperTest {
         assertTrue(mapper.map("b", mock(Identifier.class)));
 
         verify(handler, times(2))
-                .handle(any(AnnotatedEntity.class), any(Identifier.class));
+                .handle(any(AnnotatedEntity.class), any(Annotation.class));
     }
 
     @Test
@@ -184,12 +193,12 @@ public class IdentifierMapperTest {
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
 
-        IdentifierMapper.KeyAccessor<String> accessor = mock(IdentifierMapper.KeyAccessor.class);
+        AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
 
         when(accessor.key(Matchers.<AnnotatedEntity>anyObject()))
                 .thenReturn("a", "b", "c");
 
-        IdentifierMapper<String> mapper = new IdentifierMapper<String>(es,
+        AnnotationMapper<String> mapper = new AnnotationMapper<String>(es,
                                                                        accessor);
 
         assertTrue(mapper.map("a", mock(Identifier.class)));
@@ -210,7 +219,7 @@ public class IdentifierMapperTest {
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
 
-        IdentifierMapper.KeyAccessor<String> accessor = mock(IdentifierMapper.KeyAccessor.class);
+        AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
 
         Identifier idMock = mock(Identifier.class);
         IdentifierFactory idFactoryMock = mock(IdentifierFactory.class);
@@ -221,9 +230,9 @@ public class IdentifierMapperTest {
         when(accessor.key(Matchers.<AnnotatedEntity>anyObject()))
                 .thenReturn("a", "b", "c");
 
-        IdentifierMapper<String> mapper = new IdentifierMapper<String>(es,
+        AnnotationMapper<String> mapper = new AnnotationMapper<String>(es,
                                                                        accessor,
-                                                                       mock(IdentifierMapper.Handler.class),
+                                                                       mock(AnnotationMapper.Handler.class),
                                                                        idFactoryMock);
 
         assertFalse(mapper.map("a", "mock accession", "mock"));
@@ -241,10 +250,10 @@ public class IdentifierMapperTest {
         when(idFactoryMock.ofName("mock"))
                 .thenReturn(IdentifierFactory.EMPTY_IDENTIFIER);
 
-        IdentifierMapper<String> mapper = new IdentifierMapper<String>(Collections
+        AnnotationMapper<String> mapper = new AnnotationMapper<String>(Collections
                                                                                .<AnnotatedEntity>emptyList(),
-                                                                       mock(IdentifierMapper.KeyAccessor.class),
-                                                                       mock(IdentifierMapper.Handler.class),
+                                                                       mock(AnnotationMapper.KeyAccessor.class),
+                                                                       mock(AnnotationMapper.Handler.class),
                                                                        idFactoryMock);
 
         assertFalse(mapper.map("b", "mock"));
@@ -264,10 +273,10 @@ public class IdentifierMapperTest {
         when(idMock.isValid()).thenReturn(false);
         when(idFactoryMock.ofPattern("mock")).thenReturn(matchingIds);
 
-        IdentifierMapper<String> mapper = new IdentifierMapper<String>(Collections
+        AnnotationMapper<String> mapper = new AnnotationMapper<String>(Collections
                                                                                .<AnnotatedEntity>emptyList(),
-                                                                       mock(IdentifierMapper.KeyAccessor.class),
-                                                                       mock(IdentifierMapper.Handler.class),
+                                                                       mock(AnnotationMapper.KeyAccessor.class),
+                                                                       mock(AnnotationMapper.Handler.class),
                                                                        idFactoryMock);
 
         assertFalse(mapper.map("b", "mock"));
