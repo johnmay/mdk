@@ -171,9 +171,7 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
 
     private String normalise(String key){
         key = key.toLowerCase(Locale.ENGLISH);
-        key = key.replaceAll("_+", "");
-        key = key.replaceAll("-+", "");
-        key = key.replaceAll("", "");
+        key = key.replaceAll("[-_ ]+", "");
         return key;
     }
 
