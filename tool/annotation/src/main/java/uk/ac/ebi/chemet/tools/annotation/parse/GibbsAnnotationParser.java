@@ -14,6 +14,8 @@ final class GibbsAnnotationParser extends AnnotationParser<GibbsEnergy> {
 
     private final static Pattern DOUBLE_PATTERN = Pattern
             .compile("([-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
+    private final static Pattern UNSIGNED_DOUBLE_PATTERN = Pattern
+            .compile("([0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?)");
 
     /** @inheritDoc */
     @Override public GibbsEnergy parse(String str) {
@@ -22,8 +24,9 @@ final class GibbsAnnotationParser extends AnnotationParser<GibbsEnergy> {
         Matcher matcher = DOUBLE_PATTERN.matcher(str);
         if (matcher.find()) {
             String energy = matcher.group(1);
-            if (matcher.find(matcher.end())) {
-                String error = matcher.group(1);
+            Matcher unsignedMatcher = UNSIGNED_DOUBLE_PATTERN.matcher(str);
+            if (unsignedMatcher.find(matcher.end())) {
+                String error = unsignedMatcher.group(1);
                 return new GibbsEnergy(Double.parseDouble(energy),
                                        Double.parseDouble(error));
             }

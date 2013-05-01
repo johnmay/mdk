@@ -28,6 +28,14 @@ public class GibbsAnnotationParserTest {
     }
 
     @Test
+    public void testParse_badPlusMinus() throws Exception {
+        AnnotationParser<GibbsEnergy> parser = new GibbsAnnotationParser();
+        GibbsEnergy energy = parser.parse("2.3+/-0.06");
+        assertEquals(energy.getValue(), 2.3, 0.1);
+        assertEquals(energy.getError(), 0.06, 0.1);
+    }
+
+    @Test
     public void testParse_Prefix() throws Exception {
         AnnotationParser<GibbsEnergy> parser = new GibbsAnnotationParser();
         GibbsEnergy energy = parser.parse("ΔG=2.3 ± 0.01");
