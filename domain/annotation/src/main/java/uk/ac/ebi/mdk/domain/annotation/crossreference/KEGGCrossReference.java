@@ -36,7 +36,7 @@ import uk.ac.ebi.mdk.domain.DefaultLoader;
  * Class metaInfo
  */
 @Context(Metabolite.class)
-@Brief("KEGG Compound Cross-reference")
+@Brief("KEGG Compound")
 @Description("A cross-reference that specifically links to the KEGG Compound database")
 public class KEGGCrossReference<O extends Observation> extends CrossReference<KEGGCompoundIdentifier, O> {
 
