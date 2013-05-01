@@ -1,6 +1,7 @@
 package uk.ac.ebi.chemet.tools.annotation.parse;
 
 import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
+import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 
 /**
@@ -16,6 +17,10 @@ public abstract class AnnotationParser<A> {
 
     public static AnnotationParser<StringAnnotation> basic(StringAnnotation a) {
         return new StringAnnotationParser(a);
+    }
+
+    public static AnnotationParser<DoubleAnnotation> number(DoubleAnnotation a) {
+        return new DoubleAnnotationParser(a);
     }
 
     /**

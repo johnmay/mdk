@@ -81,6 +81,10 @@ public class GibbsEnergy
     public String toString(){
         return getValue() + " \u00B1 " + getError();
     }
+
+    @Override public GibbsEnergy forValue(double v) {
+        return new GibbsEnergy(v, 0.0);
+    }
     
 }
 

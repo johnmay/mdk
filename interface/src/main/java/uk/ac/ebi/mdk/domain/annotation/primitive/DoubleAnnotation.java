@@ -32,4 +32,6 @@ public interface DoubleAnnotation extends Annotation {
 
     public void setValue(Double value);
 
+    public DoubleAnnotation forValue(double v);
+
 }
