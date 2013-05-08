@@ -5,9 +5,9 @@ import uk.ac.ebi.mdk.domain.annotation.Note;
 import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.*;
-import static org.mockito.AdditionalMatchers.*;
 
 /** @author John May */
 public class StringAnnotationParserTest {
