@@ -162,7 +162,7 @@ public class SBMLReactionReader {
                 new BasicReactionIdentifier(sbmlReaction.getId()),
                 sbmlReaction.getName(),
                 sbmlReaction.getMetaId());
-        LOGGER.info("Reading SBML reaction " + reaction);
+        LOGGER.debug("Reading SBML reaction " + reaction);
 
         for (int i = 0; i < sbmlReaction.getNumReactants(); i++) {
             reaction.addReactant(getMetaboliteParticipant(sbmlReaction.getReactant(i)));
@@ -298,7 +298,7 @@ public class SBMLReactionReader {
         if (speciesMap.containsKey(species)) {
             metabolite = speciesMap.get(species);
         } else if (speciesNameMap.containsKey(species.getName())) {
-            LOGGER.info("Using existing species with the same name:" + species.getName());
+            LOGGER.debug("Using existing species with the same name:" + species.getName());
             metabolite = speciesNameMap.get(species.getName());
         } else {
             metabolite = factory.newInstance(Metabolite.class,
