@@ -127,7 +127,6 @@ public class MoleculeCollectionConnectivityLoader extends AbstractSingleIndexRes
         IndexWriter writer = new IndexWriter(indexDirectory, new IndexWriterConfig(Version.LUCENE_34, getIndex().getAnalyzer()));        
         writer.deleteDocuments(queryCollection);
         writer.close();
-        indexDirectory.close();
     }
 
     @Override
