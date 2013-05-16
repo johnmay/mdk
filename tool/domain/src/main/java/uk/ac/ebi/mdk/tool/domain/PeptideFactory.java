@@ -432,6 +432,7 @@ public class PeptideFactory {
         private static IAtom copy(IAtom src) {
             IAtom dest = src.getBuilder().newInstance(IAtom.class);
             dest.setSymbol(src.getSymbol());
+            dest.setAtomicNumber(src.getAtomicNumber());
             dest.setFormalCharge(src.getFormalCharge());
             dest.setValency(src.getValency());
             dest.setPoint2d(new Point2d(src.getPoint2d()));
