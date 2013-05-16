@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.apps.tool;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
@@ -37,6 +38,7 @@ import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Set;
 import java.util.UUID;
 
@@ -89,6 +91,9 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
             }
         }
 
+        CSVWriter csv = new CSVWriter(new OutputStreamWriter(System.out), ',', '"');
+
+
         for (final Metabolite metabolite : input.metabolome()) {
             for (ChemicalStructure structure : metabolite.getStructures()) {
                 long hashCode = generator.generate(structure.getStructure());
@@ -96,15 +101,21 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
                     for (Metabolite refMetabolite : index.get(hashCode)) {
                         for (MetabolicReaction rxn : exchanged
                                 .get(refMetabolite)) {
-                            System.out.println(metabolite
-                                                       + "\t"
-                                                       + occurences[metaboliteIdx.get(metabolite.uuid())]
-                                                       + "\t"
-                                                       + rxn);
+                            csv.writeNext(new String[]{metabolite.toString(),
+                                                       Integer.toString(occurences[metaboliteIdx.get(metabolite.uuid())]),
+                                                       rxn.toString()});
+
                         }
                     }
                 }
             }
+        }
+
+        try {
+            csv.flush();
+            csv.close();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
     }
 
@@ -129,6 +140,7 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
      * reactions in which they are exchanged.
      *
      * @param reconstruction reconstruction instance
+     *
      * @return exchanged metabolites
      */
     private Multimap<Metabolite, MetabolicReaction> exchanged(final Reconstruction reconstruction) {
@@ -147,7 +159,9 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
      * Read a reconstruction for the given file name.
      *
      * @param f a file
+     *
      * @return read reconstruction
+     *
      * @throws IllegalArgumentException thrown if there was a problem reading
      *                                  the reconstruction
      */
