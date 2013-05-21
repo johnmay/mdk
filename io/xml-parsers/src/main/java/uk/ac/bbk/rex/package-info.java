@@ -9,7 +9,7 @@
                                      elementFormDefault = XmlNsForm.QUALIFIED,
                                      xmlns = {@XmlNs(
                                          namespaceURI = "http://www.bbk.ac.uk/rex/",
-                                         prefix = "rex")}) package uk.ac.ebi.mdk.io.xml.rex;
+                                         prefix = "rex")}) package uk.ac.bbk.rex;
 
 import javax.xml.bind.annotation.XmlNs;
 import javax.xml.bind.annotation.XmlNsForm;
