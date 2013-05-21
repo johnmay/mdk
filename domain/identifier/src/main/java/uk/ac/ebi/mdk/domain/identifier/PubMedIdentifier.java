@@ -28,7 +28,16 @@ import uk.ac.ebi.mdk.deprecated.MIR;
 @MIR(15)
 public class PubMedIdentifier extends AbstractIdentifier {
 
-    private static final Logger LOGGER = Logger.getLogger(PubMedIdentifier.class);
+    public PubMedIdentifier() {
+    }
+
+    public PubMedIdentifier(int id) {
+        super(Integer.toString(id));
+    }
+
+    public PubMedIdentifier(String accession) {
+        super(accession);
+    }
 
     @Override
     public PubMedIdentifier newInstance() {
