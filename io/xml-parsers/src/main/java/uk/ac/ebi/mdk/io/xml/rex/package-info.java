@@ -6,7 +6,10 @@
 //
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://www.bbk.ac.uk/rex/",
-                                     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
-    @javax.xml.bind.annotation.XmlNs(namespaceURI = "http://www.bbk.ac.uk/rex/", prefix = "rex")
-})
-package uk.ac.bbk.rex;
+                                     elementFormDefault = XmlNsForm.QUALIFIED,
+                                     xmlns = {@XmlNs(
+                                         namespaceURI = "http://www.bbk.ac.uk/rex/",
+                                         prefix = "rex")}) package uk.ac.ebi.mdk.io.xml.rex;
+
+import javax.xml.bind.annotation.XmlNs;
+import javax.xml.bind.annotation.XmlNsForm;
