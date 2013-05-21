@@ -51,7 +51,7 @@ public class RExHandler {
     public String marshal(final RExExtract extract) throws JAXBException {
         final Extract xmlExtract = new Extract();
         xmlExtract.setSentence(extract.sentence());
-        xmlExtract.setSource(extract.source().getURL().toString());
+        xmlExtract.setSource(extract.source().getResolvableURL());
         for (final RExTag tag : extract.tags()) {
             Tag xmlTag = new Tag();
             xmlTag.setStart(tag.start());
@@ -60,7 +60,9 @@ public class RExHandler {
             xmlExtract.getTag().add(xmlTag);
         }
         StringWriter sw = new StringWriter();
-        marshaller.marshal(xmlExtract, sw);
+        Extracts xmlExtracts = new Extracts();
+        xmlExtracts.getExtract().add(xmlExtract);
+        marshaller.marshal(xmlExtracts, sw);
         return sw.toString();
     }
 
