@@ -47,6 +47,7 @@ public class RExHandler {
 
     public String marshal(final RExExtract extract) {
         final Extract xmlExtract = new Extract();
+        return "";
     }
 
     public List<RExExtract> unmarshal(final String str) throws JAXBException {
