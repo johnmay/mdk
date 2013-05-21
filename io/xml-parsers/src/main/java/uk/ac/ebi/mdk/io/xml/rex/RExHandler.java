@@ -20,9 +20,11 @@ package uk.ac.ebi.mdk.io.xml.rex;
 import uk.ac.bbk.rex.Extract;
 import uk.ac.bbk.rex.Extracts;
 import uk.ac.bbk.rex.Tag;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.annotation.rex.RExTag;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -40,10 +42,13 @@ public class RExHandler {
     Unmarshaller unmarshaller;
     Marshaller   marshaller;
 
+    IdentifierFactory identifiers;
+
     public RExHandler() throws JAXBException {
         this.context = JAXBContext.newInstance(Extracts.class);
         this.unmarshaller = context.createUnmarshaller();
         this.marshaller = context.createMarshaller();
+        this.identifiers = DefaultIdentifierFactory.getInstance();
         marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
     }
@@ -70,7 +75,7 @@ public class RExHandler {
         Extracts xmlExtracts = (Extracts) unmarshaller.unmarshal(new StringReader(str));
         List<RExExtract> extracts = new ArrayList<RExExtract>(1);
         for (Extract e : xmlExtracts.getExtract()) {
-            Identifier identifier = null;
+            Identifier identifier = identifiers.ofURL(e.getSource());
             String sentence = e.getSentence().replaceAll("\n", "")
                                              .replaceAll("\\s+", " ");
             List<RExTag> tags = new ArrayList<RExTag>(4);

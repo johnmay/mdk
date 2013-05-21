@@ -17,9 +17,12 @@
 
 package uk.ac.ebi.mdk.ui.render.table;
 
+import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.annotation.rex.RExTag;
 
+import javax.swing.Box;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.table.TableCellRenderer;
@@ -31,6 +34,8 @@ import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+import static uk.ac.ebi.mdk.domain.annotation.rex.RExTag.Type.ACTION;
+import static uk.ac.ebi.mdk.domain.annotation.rex.RExTag.Type.MODIFIER;
 import static uk.ac.ebi.mdk.domain.annotation.rex.RExTag.Type.PRODUCT;
 import static uk.ac.ebi.mdk.domain.annotation.rex.RExTag.Type.SUBSTRATE;
 
@@ -41,31 +46,58 @@ import static uk.ac.ebi.mdk.domain.annotation.rex.RExTag.Type.SUBSTRATE;
  */
 public class RExExtractRenderer implements TableCellRenderer {
 
+    private final Box panel = Box.createVerticalBox();
+    private final JLabel    source;
     private final JTextPane sentence;
 
     private final Map<RExTag.Type, Style> style = new HashMap<RExTag.Type, Style>();
 
     public RExExtractRenderer() {
         this.sentence = new JTextPane();
-        style.put(SUBSTRATE, sentence.addStyle("substrate", null));
-        style.put(PRODUCT, sentence.addStyle("product", null));
+        this.source = LabelFactory.newLabel("");
+        this.panel.add(source);
+        this.panel.add(sentence);
 
-        StyleConstants.setBackground(style.get(SUBSTRATE), new Color(255, 200,
-                                                                     200));
+        source.setAlignmentX(Component.LEFT_ALIGNMENT);
+        sentence.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        sentence.setFont(source.getFont());
+        sentence.setForeground(source.getForeground());
+
+        style.put(ACTION, sentence.addStyle("action", null));
+        style.put(SUBSTRATE, sentence.addStyle("participant", null));
+        style.put(PRODUCT, style.get(SUBSTRATE));
+        style.put(MODIFIER, sentence.addStyle("modifier", null));
+
+        StyleConstants.setBackground(style.get(ACTION), new Color(255, 200,
+                                                                  200));
         StyleConstants.setBackground(style.get(PRODUCT), new Color(200, 255,
                                                                    200));
-
+        StyleConstants.setBackground(style.get(MODIFIER), new Color(200, 200,
+                                                                    255));
     }
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         RExExtract extract = (RExExtract) value;
+        source.setText(extract.source().getAccession());
         sentence.setText(extract.sentence());
         StyledDocument doc = sentence.getStyledDocument();
         for (final RExTag tag : extract.tags()) {
             doc.setCharacterAttributes(tag.start(), tag.length(), style.get(
                 tag.type()), true);
         }
-        return sentence;
+
+        // pack the row around the label and pane
+        int w = table.getColumnModel().getColumn(column).getWidth();
+        sentence.setSize(w, Short.MAX_VALUE);
+        sentence.setSize(w, sentence.getPreferredSize().height);
+        int h = sentence.getHeight() + source.getHeight() + 20;
+
+        if(table.getRowHeight(row) != h){
+            table.setRowHeight(row, h);
+        }
+
+        return panel;
     }
 }
