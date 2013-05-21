@@ -71,7 +71,8 @@ public class RExHandler {
         List<RExExtract> extracts = new ArrayList<RExExtract>(1);
         for (Extract e : xmlExtracts.getExtract()) {
             Identifier identifier = null;
-            String sentence = e.getSentence();
+            String sentence = e.getSentence().replaceAll("\n", "")
+                                             .replaceAll("\\s+", " ");
             List<RExTag> tags = new ArrayList<RExTag>(4);
             for (final Tag tag : e.getTag()) {
                 tags.add(new RExTag(tag.getStart(), tag.getLength(), tag.getType()));
