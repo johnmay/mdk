@@ -45,6 +45,7 @@
     <xsd:attribute name="type" type="xsd:string" use="required"/>
     <xsd:attribute name="start" type="xsd:int" use="required"/>
     <xsd:attribute name="length" type="xsd:int" use="required"/>
+    <xsd:attribute name="metaid" type="xsd:int" use="optional"/>
   </xsd:complexType>
 
   <xsd:simpleType name="type">
