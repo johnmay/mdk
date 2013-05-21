@@ -93,21 +93,9 @@
         <artifactId>jaxb2-maven-plugin</artifactId>
         <version>1.5</version>
         <configuration>
-
-
-
           <schemaDirectory>src/main/resources/uk/ac/bbk/rex</schemaDirectory>
-          <bindingDirectory>src/main/resources/uk/ac/bbk/rex</bindingDirectory>
           <schemaFiles>rex.xsd</schemaFiles>
-          <bindingFiles>rex-binding.xjb</bindingFiles>
-
-          <schemaIncludes>
-            <include>rex.xsd</include>
-          </schemaIncludes>
-
-          <bindingIncludes>
-            <include>rex-binding.xjb</include>
-          </bindingIncludes>
+          <packageName>uk.ac.bbk.rex</packageName>
           <npa>true</npa>
         </configuration>
         <executions>
