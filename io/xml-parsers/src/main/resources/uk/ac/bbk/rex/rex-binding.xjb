@@ -1,0 +1,15 @@
+<jxb:bindings version="1.0"
+              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+              xmlns:namespace="http://jaxb2-commons.dev.java.net/namespace-prefix"
+              jxb:extensionBindingPrefixes="xjc">
+
+  <jxb:bindings schemaLocation="rex.xsd">
+    <jxb:schemaBindings>
+      <jxb:package name="uk.ac.bbk.REx" />
+    </jxb:schemaBindings>
+    <jxb:bindings>
+      <namespace:prefix name="rex" />
+    </jxb:bindings>
+  </jxb:bindings>
+
+</jxb:bindings>
