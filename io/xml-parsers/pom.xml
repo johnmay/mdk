@@ -89,37 +89,35 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.jvnet.jaxb2.maven2</groupId>
-        <artifactId>maven-jaxb2-plugin</artifactId>
-        <version>0.8.3</version>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jaxb2-maven-plugin</artifactId>
+        <version>1.5</version>
         <configuration>
+
+
+
           <schemaDirectory>src/main/resources/uk/ac/bbk/rex</schemaDirectory>
           <bindingDirectory>src/main/resources/uk/ac/bbk/rex</bindingDirectory>
+          <schemaFiles>rex.xsd</schemaFiles>
+          <bindingFiles>rex-binding.xjb</bindingFiles>
+
           <schemaIncludes>
             <include>rex.xsd</include>
           </schemaIncludes>
+
           <bindingIncludes>
             <include>rex-binding.xjb</include>
           </bindingIncludes>
-          <args>
-            <arg>-extension</arg>
-            <arg>-Xnamespace-prefix</arg>
-          </args>
+          <npa>true</npa>
         </configuration>
         <executions>
           <execution>
             <goals>
-              <goal>generate</goal>
+              <goal>xjc</goal>
             </goals>
           </execution>
         </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.jvnet.jaxb2_commons</groupId>
-            <artifactId>jaxb2-namespace-prefix</artifactId>
-            <version>1.1</version>
-          </dependency>
-        </dependencies>
+
       </plugin>
     </plugins>
   </build>
