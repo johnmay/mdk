@@ -29,6 +29,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +44,24 @@ public class RExHandler {
         this.context = JAXBContext.newInstance(Extracts.class);
         this.unmarshaller = context.createUnmarshaller();
         this.marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
     }
 
-    public String marshal(final RExExtract extract) {
+    public String marshal(final RExExtract extract) throws JAXBException {
         final Extract xmlExtract = new Extract();
-        return "";
+        xmlExtract.setSentence(extract.sentence());
+        xmlExtract.setSource(extract.source().getURL().toString());
+        for (final RExTag tag : extract.tags()) {
+            Tag xmlTag = new Tag();
+            xmlTag.setStart(tag.start());
+            xmlTag.setLength(tag.length());
+            xmlTag.setType(tag.type().toString());
+            xmlExtract.getTag().add(xmlTag);
+        }
+        StringWriter sw = new StringWriter();
+        marshaller.marshal(xmlExtract, sw);
+        return sw.toString();
     }
 
     public List<RExExtract> unmarshal(final String str) throws JAXBException {

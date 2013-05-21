@@ -25,11 +25,16 @@ public class RExTag {
     private final int start, length;
     private final Type type;
 
-    enum Type {
+    public static enum Type {
         SUBSTRATE,
         PRODUCT,
         ACTION,
         MODIFIER;
+
+        @Override public String toString() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
+
     }
 
     public RExTag(int start, int length, Type type) {
@@ -42,5 +47,17 @@ public class RExTag {
         this.start = start;
         this.length = length;
         this.type = Type.valueOf(type.toUpperCase(Locale.ENGLISH));
+    }
+
+    public int start() {
+        return start;
+    }
+
+    public int length() {
+        return length;
+    }
+
+    public Type type() {
+        return type;
     }
 }
