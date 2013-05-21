@@ -5,7 +5,8 @@
 // Generated on: 2013.05.21 at 12:42:32 PM BST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.bbk.ac.uk/rex/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.bbk.ac.uk/rex/",
+                                     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED, xmlns = {
     @javax.xml.bind.annotation.XmlNs(namespaceURI = "http://www.bbk.ac.uk/rex/", prefix = "rex")
 })
-package uk.ac.ebi.mdk.io.xml.rex;
+package uk.ac.bbk.rex;

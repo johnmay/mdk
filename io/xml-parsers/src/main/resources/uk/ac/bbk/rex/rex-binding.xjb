@@ -4,7 +4,7 @@
 
   <jxb:bindings schemaLocation="rex.xsd">
     <jxb:schemaBindings>
-      <jxb:package name="uk.ac.bbk.REx" />
+      <jxb:package name="uk.ac.bbk.rex" />
     </jxb:schemaBindings>
   </jxb:bindings>
 
