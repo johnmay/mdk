@@ -17,22 +17,28 @@
 
 package uk.ac.ebi.mdk.domain.annotation.rex;
 
+import uk.ac.ebi.mdk.domain.annotation.AbstractAnnotation;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 /** @author John May */
-public final class RExExtract {
+@Brief("REx Extract")
+@Description("todo")
+public final class RExExtract extends AbstractAnnotation {
 
     private final Identifier   source;
     private final String       sentence;
     private final List<RExTag> tags;
 
     public RExExtract() {
-        this(IdentifierFactory.EMPTY_IDENTIFIER, "", Collections.<RExTag>emptyList());
+        this(IdentifierFactory.EMPTY_IDENTIFIER, "",
+             Collections.<RExTag>emptyList());
     }
 
     public RExExtract(Identifier source, String sentence, List<RExTag> tags) {
@@ -51,5 +57,9 @@ public final class RExExtract {
 
     public Collection<RExTag> tags() {
         return Collections.unmodifiableList(tags);
+    }
+
+    @Override public RExExtract newInstance() {
+        return new RExExtract();
     }
 }

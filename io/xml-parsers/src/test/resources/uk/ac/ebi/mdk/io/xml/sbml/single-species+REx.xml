@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version2" level="2" version="2">
+  <model>
+    <listOfCompartments>
+      <compartment id="c" name="cytoplasm"
+                   metaid="_3c5af4ff_5bc4_43b0_a6eb_56cce68659f0">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                   xmlns:bqbiol="http://biomodels.net/biology-qualifiers/"
+            >
+            <rdf:Description rdf:about="#_3c5af4ff_5bc4_43b0_a6eb_56cce68659f0">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="urn:miriam:obo.go:GO%3A0005737"/>
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </compartment>
+      <compartment id="e" name="extracellular"
+                   metaid="_08891cd6_1b92_4918_86c6_4c6be928f45c">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                   xmlns:bqbiol="http://biomodels.net/biology-qualifiers/"
+            >
+            <rdf:Description rdf:about="#_08891cd6_1b92_4918_86c6_4c6be928f45c">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="urn:miriam:obo.go:GO%3A0005576"/>
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </compartment>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="M06371_c" name="atp" metaid="2" compartment="c">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                   xmlns:bqbiol="http://biomodels.net/biology-qualifiers/"
+            >
+            <rdf:Description rdf:about="#2">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li
+                    rdf:resource="http://identifiers.org/obo.chebi/CHEBI:35696"/>
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li
+                    rdf:resource="http://identifiers.org/obo.chebi/CHEBI:48828"/>
+                </rdf:Bag>
+              </bqbiol:is>
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li
+                    rdf:resource="http://identifiers.org/kegg.compound/C00175"/>
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="R06531" metaid="1" reversible="false">
+        <annotation>
+          <rex:extracts xmlns:rex="http://www.bbk.ac.uk/rex/">
+            <rex:extract source="http://identifers.org/pubmed/18372246/">
+              <rex:sentence>Next Section Abstract In Archaea, acetate formation
+                and ATP synthesis from acetyl-CoA is catalyzed by an unusual
+                ADP-forming acetyl-CoA synthetase (ACD) (acetyl-CoA + ADP + Pi ⇆
+                acetate + ATP + HS-CoA) catalyzing the formation of acetate from
+                acetyl-CoA and concomitant ATP synthesis by the mechanism of
+                substrate level phosphorylation.
+              </rex:sentence>
+              <rex:tag length="10" start="75" type="substrate"/>
+              <rex:tag length="3" start="56" type="product"/>
+              <rex:tag length="21" start="125" type="modifier"/>
+            </rex:extract>
+          </rex:extracts>
+        </annotation>
+        <listOfReactants>
+          <speciesReference id="M06371_c_R06531_0" species="M06371_c"
+                            stoichiometry="1"/>
+        </listOfReactants>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

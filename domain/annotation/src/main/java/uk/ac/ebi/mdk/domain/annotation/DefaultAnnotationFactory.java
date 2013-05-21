@@ -23,7 +23,13 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.annotation.crossreference.*;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.ChEBICrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.Citation;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.Classification;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.KEGGCrossReference;
+import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.FileParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
@@ -38,7 +44,16 @@ import uk.ac.ebi.mdk.lang.annotation.Context;
 
 import java.lang.reflect.Constructor;
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -50,7 +65,8 @@ import java.util.*;
  */
 public class DefaultAnnotationFactory implements AnnotationFactory {
 
-    private static final Logger LOGGER = Logger.getLogger(DefaultAnnotationFactory.class);
+    private static final Logger LOGGER = Logger.getLogger(
+        DefaultAnnotationFactory.class);
 
     // reflective map
     private static Constructor[] constructors = new Constructor[Byte.MAX_VALUE];
@@ -79,33 +95,17 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
 
     private DefaultAnnotationFactory() {
 
-        for (Annotation annotation : Arrays.asList(new AtomContainerAnnotation(),
-                                                   new MolecularFormula(),
-                                                   new AuthorAnnotation(),
-                                                   new CrossReference(),
-                                                   new Classification(),
-                                                   new EnzymeClassification(),
-                                                   new ChEBICrossReference(),
-                                                   new KEGGCrossReference(),
-                                                   new Subsystem(),
-                                                   new ExecutableParameter(),
-                                                   new FileParameter(),
-                                                   new Parameter(),
-                                                   new Synonym(),
-                                                   new SystematicName(),
-                                                   new Locus(),
-                                                   new Citation(),
-                                                   new FluxLowerBound(),
-                                                   new FluxUpperBound(),
-                                                   new Source(),
-                                                   new ExactMass(),
-                                                   new SMILES(),
-                                                   new InChI(),
-                                                   new Charge(),
-                                                   new GibbsEnergy(),
-                                                   new Note(),
-                                                   Lumped.getInstance(),
-                                                   ACPAssociated.getInstance())) {
+        for (Annotation annotation : Arrays.asList(
+            new AtomContainerAnnotation(), new MolecularFormula(),
+            new AuthorAnnotation(), new CrossReference(), new Classification(),
+            new EnzymeClassification(), new ChEBICrossReference(),
+            new KEGGCrossReference(), new Subsystem(),
+            new ExecutableParameter(), new FileParameter(), new Parameter(),
+            new Synonym(), new SystematicName(), new Locus(), new Citation(),
+            new FluxLowerBound(), new FluxUpperBound(), new Source(),
+            new ExactMass(), new SMILES(), new InChI(), new Charge(),
+            new GibbsEnergy(), new Note(), Lumped.getInstance(),
+            ACPAssociated.getInstance(), new RExExtract())) {
 
             instances.put(annotation.getClass(), annotation);
 
@@ -128,18 +128,17 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
     }
 
     /**
-     * Access a list of annotations that are specific to the
-     * provided entity class. Note: the annotations contained
-     * with in the list should only be used to construct
-     * new entities and not to store information. The instances_old
-     * instead of the classes are returned to avoid extra object
+     * Access a list of annotations that are specific to the provided entity
+     * class. Note: the annotations contained with in the list should only be
+     * used to construct new entities and not to store information. The
+     * instances_old instead of the classes are returned to avoid extra object
      * creation.
      *
-     * @param entity instance of the entity you which to get context
-     *               annotations for
+     * @param entity instance of the entity you which to get context annotations
+     *               for
      *
-     * @return List of annotations that can be added to that class which
-     *         are intended for new instantiation only
+     * @return List of annotations that can be added to that class which are
+     *         intended for new instantiation only
      */
     public List<Annotation> ofContext(AnnotatedEntity entity) {
         return ofContext(entity.getClass());
@@ -147,18 +146,17 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
 
 
     /**
-     * Access a list of annotations that are specific to the
-     * provided entity class. Note: the annotations contained
-     * with in the list should only be used to construct
-     * new entities and not to store information. The instances_old
-     * instead of the classes are returned to avoid extra object
+     * Access a list of annotations that are specific to the provided entity
+     * class. Note: the annotations contained with in the list should only be
+     * used to construct new entities and not to store information. The
+     * instances_old instead of the classes are returned to avoid extra object
      * creation.
      *
      * @param entityClass class of the entity you which to get context
      *                    annotations for
      *
-     * @return List of annotations that can be added to that class which
-     *         are intended for new instantiation only
+     * @return List of annotations that can be added to that class which are
+     *         intended for new instantiation only
      */
     public List<Annotation> ofContext(Class<? extends AnnotatedEntity> entityClass) {
 
@@ -170,16 +168,19 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
         List<Annotation> annotations = new ArrayList<Annotation>();
 
         for (Annotation annotation : instances.values()) {
-            Context context = annotation.getClass().getAnnotation(Context.class);
+            Context context = annotation.getClass().getAnnotation(
+                Context.class);
 
             if (context == null) {
-                LOGGER.warn("No @Context for " + annotation.getClass().getSimpleName());
+                LOGGER.warn(
+                    "No @Context for " + annotation.getClass().getSimpleName());
                 continue;
             }
 
             for (Class c : context.value()) {
-                if (!visited.contains(annotation.getClass())
-                        && (entityClass.isAssignableFrom(c) || c.isAssignableFrom(entityClass))) {
+                if (!visited.contains(
+                    annotation.getClass()) && (entityClass.isAssignableFrom(
+                    c) || c.isAssignableFrom(entityClass))) {
                     annotations.add(annotation);
                     visited.add(annotation.getClass());
                 }
@@ -212,17 +213,16 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
             return (A) annotation.newInstance();
         }
 
-        throw new InvalidParameterException("Unable to get instance of annotation class: "
-                                                    + c);
+        throw new InvalidParameterException(
+            "Unable to get instance of annotation class: " + c);
     }
 
 
     /**
      * Construct an empty annotation given it's index. It the index returns a
      * null pointer then an InvalidParameterException is thrown informing of the
-     * problematic index. The index is given in the
-     * uk.ac.ebi.annotation/AnnotationDescription.properties file which in turn
-     * is loaded by {
+     * problematic index. The index is given in the uk.ac.ebi.annotation/AnnotationDescription.properties
+     * file which in turn is loaded by {
      *
      * @param index
      *
@@ -231,19 +231,21 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
      * @see AnnotationLoader}.
      * @deprecated use AnnotationFactory.ofClass(Class)
      */
-    @SuppressWarnings("unchecked")
-    @Deprecated
+    @SuppressWarnings("unchecked") @Deprecated
     public <A extends Annotation> A ofIndex(byte index) {
-        throw new UnsupportedOperationException("Deprecated method, use AnnotationFactory.ofClass(Class)");
+        throw new UnsupportedOperationException(
+            "Deprecated method, use AnnotationFactory.ofClass(Class)");
     }
 
     /**
-     * Access a set of annotation flags that could match this entity. This provides suggestion
-     * of matching flag's for this entity using the {@see AbstractFlag.matches(AnnotatedEntity)}
+     * Access a set of annotation flags that could match this entity. This
+     * provides suggestion of matching flag's for this entity using the {@see
+     * AbstractFlag.matches(AnnotatedEntity)}
      *
      * @param entity the entity to collect matching flags for
      *
-     * @return annotations which could be added to the entity (may need user prompt)
+     * @return annotations which could be added to the entity (may need user
+     *         prompt)
      *
      * @see Flag#matches(uk.ac.ebi.mdk.domain.entity.AnnotatedEntity)
      */
@@ -253,7 +255,8 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
 
         for (Flag flag : flags) {
             if (flag.matches(entity)) {
-                matching.add(flag); // don't need a new instance as there is not data stored
+                matching.add(
+                    flag); // don't need a new instance as there is not data stored
             }
         }
 
@@ -262,10 +265,10 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
 
     /**
      * Builds a cross-reference from the identifier. The cross-reference is
-     * designated either a {@see ChEBICrossReference},
-     * {@see KEGGCompoundIdentifier}, {@see EnzymeClassification} or
-     * {@see Classification}. If no appropiate cross-reference is
-     * available then the default {@see CrossReference} class is return
+     * designated either a {@see ChEBICrossReference}, {@see
+     * KEGGCompoundIdentifier}, {@see EnzymeClassification} or {@see
+     * Classification}. If no appropiate cross-reference is available then the
+     * default {@see CrossReference} class is return
      *
      * @param identifier
      *
@@ -273,7 +276,8 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
      */
     public <I extends Identifier> CrossReference<I, Observation> getCrossReference(I identifier) {
 
-        CrossReference<I, Observation> xref = (CrossReference<I, Observation>) getCrossReference(identifier.getClass());
+        CrossReference<I, Observation> xref = (CrossReference<I, Observation>) getCrossReference(
+            identifier.getClass());
 
         xref.setIdentifier(identifier);
 
@@ -310,15 +314,14 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
         }
 
         if (xrefs.size() > 1) {
-            LOGGER.error("More then one potential cross-reference, this should be resolved!");
+            LOGGER.error(
+                "More then one potential cross-reference, this should be resolved!");
         }
 
         return xrefs.isEmpty() ? new CrossReference() : xrefs.iterator().next();
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Collection<Class<? extends Annotation>> getSubclasses(Class<? extends Annotation> c) {
 
@@ -351,7 +354,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
             }
         });
 
-        for(Class<? extends Annotation> subclass : getSubclasses(c)){
+        for (Class<? extends Annotation> subclass : getSubclasses(c)) {
             instances.add((T) ofClass(subclass));
         }
 
@@ -368,20 +371,29 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
 
 
         StringBuilder sb = new StringBuilder();
-        Annotation[] annotations = instances.values().toArray(new Annotation[0]);
+        Annotation[] annotations = instances.values().toArray(
+            new Annotation[0]);
         Arrays.sort(annotations, new Comparator<Annotation>() {
             @Override
             public int compare(Annotation o1, Annotation o2) {
-                return o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
+                return o1.getClass().getSimpleName().compareTo(
+                    o2.getClass().getSimpleName());
             }
         });
         for (Annotation annotation : annotations) {
             sb.append("<tr>");
             sb.append("<td>").append(annotation.getBrief()).append("</td>");
-            sb.append("<td>").append(annotation.getDescription()).append("</td>");
-            sb.append("<td>").append(Joiner.on(", ").join(filter(Arrays.asList(annotation.getClass().getAnnotation(Context.class).value())))).append("</td>");
-            sb.append("<td><code><a href=\"").append("http://www.github.com/johnmay/mdk/tree/develop/domain/annotation/src/main/java/").append(annotation.getClass().getName().replaceAll("\\.", "/")).append(".java\">");
-            sb.append(annotation.getClass().getSimpleName()).append("</a></code></td>");
+            sb.append("<td>").append(annotation.getDescription()).append(
+                "</td>");
+            sb.append("<td>").append(Joiner.on(", ").join(filter(Arrays.asList(
+                annotation.getClass().getAnnotation(
+                    Context.class).value())))).append("</td>");
+            sb.append("<td><code><a href=\"").append(
+                "http://www.github.com/johnmay/mdk/tree/develop/domain/annotation/src/main/java/").append(
+                annotation.getClass().getName().replaceAll("\\.", "/")).append(
+                ".java\">");
+            sb.append(annotation.getClass().getSimpleName()).append(
+                "</a></code></td>");
             sb.append("</tr>");
         }
 
@@ -392,8 +404,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
     private List<String> filter(List<Class<? extends AnnotatedEntity>> classes) {
         List<String> scopes = new ArrayList<String>();
         for (Class c : classes) {
-            if (c != AnnotatedEntity.class)
-                scopes.add(c.getSimpleName());
+            if (c != AnnotatedEntity.class) scopes.add(c.getSimpleName());
         }
         return scopes;
     }
