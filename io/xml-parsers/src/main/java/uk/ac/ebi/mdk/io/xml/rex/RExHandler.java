@@ -33,6 +33,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /** @author John May */
@@ -53,34 +54,39 @@ public class RExHandler {
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
     }
 
-    public String marshal(final RExExtract extract) throws JAXBException {
-        final Extract xmlExtract = new Extract();
-        xmlExtract.setSentence(extract.sentence());
-        xmlExtract.setSource(extract.source().getResolvableURL());
-        for (final RExTag tag : extract.tags()) {
-            Tag xmlTag = new Tag();
-            xmlTag.setStart(tag.start());
-            xmlTag.setLength(tag.length());
-            xmlTag.setType(tag.type().toString());
-            xmlExtract.getTag().add(xmlTag);
+    public String marshal(final Collection<RExExtract> extracts) throws
+                                                                 JAXBException {
+        Extracts xmlExtracts = new Extracts();
+        for (RExExtract extract : extracts) {
+            final Extract xmlExtract = new Extract();
+            xmlExtract.setSentence(extract.sentence());
+            xmlExtract.setSource(extract.source().getResolvableURL());
+            for (final RExTag tag : extract.tags()) {
+                Tag xmlTag = new Tag();
+                xmlTag.setStart(tag.start());
+                xmlTag.setLength(tag.length());
+                xmlTag.setType(tag.type().toString());
+                xmlExtract.getTag().add(xmlTag);
+            }
+            xmlExtracts.getExtract().add(xmlExtract);
         }
         StringWriter sw = new StringWriter();
-        Extracts xmlExtracts = new Extracts();
-        xmlExtracts.getExtract().add(xmlExtract);
         marshaller.marshal(xmlExtracts, sw);
         return sw.toString();
     }
 
     public List<RExExtract> unmarshal(final String str) throws JAXBException {
-        Extracts xmlExtracts = (Extracts) unmarshaller.unmarshal(new StringReader(str));
+        Extracts xmlExtracts = (Extracts) unmarshaller.unmarshal(
+            new StringReader(str));
         List<RExExtract> extracts = new ArrayList<RExExtract>(1);
         for (Extract e : xmlExtracts.getExtract()) {
             Identifier identifier = identifiers.ofURL(e.getSource());
-            String sentence = e.getSentence().replaceAll("\n", "")
-                                             .replaceAll("\\s+", " ");
+            String sentence = e.getSentence().replaceAll("\n", "").replaceAll(
+                "\\s+", " ");
             List<RExTag> tags = new ArrayList<RExTag>(4);
             for (final Tag tag : e.getTag()) {
-                tags.add(new RExTag(tag.getStart(), tag.getLength(), tag.getType()));
+                tags.add(new RExTag(tag.getStart(), tag.getLength(),
+                                    tag.getType()));
             }
             extracts.add(new RExExtract(identifier, sentence, tags));
         }
