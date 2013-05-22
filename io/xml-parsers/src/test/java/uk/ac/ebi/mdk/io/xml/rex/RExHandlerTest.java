@@ -30,7 +30,7 @@ import static org.junit.Assert.assertThat;
 /** @author John May */
 public class RExHandlerTest {
 
-    public void testMarshal() throws Exception {
+    @Test public void testMarshal() throws Exception {
         RExExtract extract = new RExExtract(new PubMedIdentifier(12345), "a sentence", Arrays.asList(new RExTag(2, 4, "substrate")));
         String xml = new RExHandler().marshal(Arrays.asList(extract));
         String exp = "<rex:extracts xmlns:rex=\"http://www.bbk.ac.uk/rex/\">\n" +
