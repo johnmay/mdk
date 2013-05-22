@@ -254,7 +254,7 @@ public class MIRIAMLoader {
             return id;
 
         } else {
-            logger.error("missing namespace: " + namespace);
+            logger.warn("missing namespace: " + namespace);
             return IdentifierFactory.EMPTY_IDENTIFIER;
         }
 
