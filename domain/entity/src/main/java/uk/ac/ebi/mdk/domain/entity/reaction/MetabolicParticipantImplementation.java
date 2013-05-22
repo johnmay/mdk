@@ -64,4 +64,17 @@ public class MetabolicParticipantImplementation
     public MetabolicParticipant newInstance() {
         return new MetabolicParticipantImplementation();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(4);
+        if (this.coefficient != null && this.coefficient != 1.0d) {
+            sb.append(this.coefficient.toString()).append(' ');
+        }
+        sb.append(this.molecule);
+        if (this.compartment != null) {
+            sb.append(" [").append(this.compartment.toString()).append("]");
+        }
+        return sb.toString();
+    }
 }
