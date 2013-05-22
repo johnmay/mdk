@@ -18,18 +18,27 @@
 package uk.ac.ebi.mdk.domain.annotation.rex;
 
 import uk.ac.ebi.mdk.domain.annotation.AbstractAnnotation;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-/** @author John May */
+/**
+ * A tagged sentence extracted using Jan's REx text-mining tool.
+ *
+ * @author John May
+ * @see <a href="http://www.biomedcentral.com/1471-2105/13/172">A text-mining
+ *      system for extracting metabolic reactions from full-text articles</a>
+ */
+@Context(Reaction.class)
 @Brief("REx Extract")
-@Description("todo")
+@Description("A sentence extract from literature using the REx tool.")
 public final class RExExtract extends AbstractAnnotation {
 
     private final Identifier   source;
