@@ -52,6 +52,7 @@ import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.Note;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -62,7 +63,9 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.io.xml.rex.RExHandler;
 
+import javax.xml.bind.JAXBException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -96,12 +99,18 @@ public class SBMLIOUtil {
 
     private SBMLSideCompoundHandler sideCompHandler;
     private Boolean sideCompoundHandlerAvailable;
+    private RExHandler handler;
 
     public SBMLIOUtil(EntityFactory factory, int level, int version) {
         this.level = level;
         this.version = version;
         this.factory = factory;
         this.sideCompoundHandlerAvailable = false;
+        try {
+            this.handler = new RExHandler();
+        } catch (JAXBException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     public SBMLIOUtil(EntityFactory factory, int level, int version, SBMLSideCompoundHandler sideCompHandler) {
@@ -110,6 +119,11 @@ public class SBMLIOUtil {
         this.factory = factory;
         this.sideCompHandler = sideCompHandler;
         this.sideCompoundHandlerAvailable = true;
+        try {
+            this.handler = new RExHandler();
+        } catch (JAXBException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
 
@@ -201,6 +215,7 @@ public class SBMLIOUtil {
             term.addResource(xref.getIdentifier().getURN());
         }
 
+
 // causes large slow down in export
 //        if (rxn.getAnnotations().size() > 0) {
 //            String content = "<notes><html xmlns=\"http://www.w3.org/1999/xhtml\">"
@@ -211,6 +226,15 @@ public class SBMLIOUtil {
 
         if (!term.getResources().isEmpty())
             sbmlRxn.addCVTerm(term);
+
+        Collection<RExExtract> extracts = rxn.getAnnotations(RExExtract.class);
+        if(!extracts.isEmpty()) {
+            try {
+                sbmlRxn.getAnnotation().appendNoRDFAnnotation(handler.marshal(extracts));
+            } catch (JAXBException e) {
+                LOGGER.error("Could not convert REx extracts");
+            }
+        }
 
         if (!model.addReaction(sbmlRxn)) {
             // could inform user that the reaction couldn't be added

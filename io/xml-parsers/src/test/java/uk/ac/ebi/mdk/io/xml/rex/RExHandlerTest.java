@@ -32,7 +32,7 @@ public class RExHandlerTest {
 
     public void testMarshal() throws Exception {
         RExExtract extract = new RExExtract(new PubMedIdentifier(12345), "a sentence", Arrays.asList(new RExTag(2, 4, "substrate")));
-        String xml = new RExHandler().marshal(extract);
+        String xml = new RExHandler().marshal(Arrays.asList(extract));
         String exp = "<rex:extracts xmlns:rex=\"http://www.bbk.ac.uk/rex/\">\n" +
             "    <rex:extract source=\"http://identifiers.org/pubmed/12345/\">\n" +
             "        <rex:sentence>a sentence</rex:sentence>\n" +
