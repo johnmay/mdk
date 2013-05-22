@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="4">
+  <model id="model">
+    <listOfSpecies>
+      <species id="pyruvate" name="pyruvate" metaid="_000000001">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#_000000001">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://rdf.openmolecules.net/?InChI=1S/C3H4O3/c1-2(4)3(5)6/h1H3,(H,5,6)/p-1"/>
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species id="acetylcoa" name="acetyl-CoA" metaid="_000000002">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#_000000002">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://rdf.openmolecules.net/?InChI=1S/C23H38N7O17P3S/c1-12(31)51-7-6-25-14(32)4-5-26-21(35)18(34)23(2,3)9-44-50(41,42)47-49(39,40)43-8-13-17(46-48(36,37)38)16(33)22(45-13)30-11-29-15-19(24)27-10-28-20(15)30/h10-11,13,16-18,22,33-34H,4-9H2,1-3H3,(H,25,32)(H,26,35)(H,39,40)(H,41,42)(H2,24,27,28)(H2,36,37,38)/t13-,16-,17-,18+,22-/m1/s1"/>
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species id="acetylphosphate" name="acetyl phosphate" metaid="_000000003">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#_000000003">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://rdf.openmolecules.net/?InChI=1S/C2H5O5P/c1-2(3)7-8(4,5)6/h1H3,(H2,4,5,6)"/>
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+      <species id="acetate" name="acetate" metaid="_000000004">
+        <annotation>
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+            <rdf:Description rdf:about="#_000000004">
+              <bqbiol:is>
+                <rdf:Bag>
+                  <rdf:li rdf:resource="http://rdf.openmolecules.net/?InChI=1S/C2H4O2/c1-2(3)4/h1H3,(H,3,4)/p-1"/>
+                </rdf:Bag>
+              </bqbiol:is>
+            </rdf:Description>
+          </rdf:RDF>
+        </annotation>
+      </species>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="rex1">
+        <listOfReactants>
+          <speciesReference species="pyruvate" />
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="acetylcoa" />
+        </listOfProducts>        
+      </reaction>
+      <reaction id="rex2">
+        <listOfReactants>
+          <speciesReference species="acetylcoa" />
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="acetylphosphate" />
+        </listOfProducts>        
+      </reaction>
+      <reaction id="rex3">
+        <listOfReactants>
+          <speciesReference species="acetylphosphate" />
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="acetate" />
+        </listOfProducts>        
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

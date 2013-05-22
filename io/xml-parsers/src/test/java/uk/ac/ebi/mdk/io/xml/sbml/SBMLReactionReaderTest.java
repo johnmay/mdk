@@ -17,7 +17,6 @@
 
 package uk.ac.ebi.mdk.io.xml.sbml;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
@@ -53,6 +52,19 @@ public class SBMLReactionReaderTest {
                 0).getMolecule();
             Assert.assertFalse(metabolite.getAnnotationsExtending(
                 CrossReference.class).isEmpty());
+        }
+
+        reader.close();
+    }
+
+    @Test
+    public void testCacacetate() throws XMLStreamException, IOException {
+        SBMLReactionReader reader = new SBMLReactionReader(
+            getClass().getResourceAsStream("cacacetate.xml"),
+            DefaultEntityFactory.getInstance(),
+            new AutomaticCompartmentResolver());
+        while (reader.hasNext()) {
+            MetabolicReaction rxn = reader.next();
         }
 
         reader.close();
