@@ -229,7 +229,7 @@ public class MIRIAMLoader {
         if (resources.containsKey(e)) {
             return resources.get(e).newInstance();
         } else {
-            logger.error("No entry found for resource: " + e.getId() + " available: " + resources.keySet());
+            logger.warn("No entry found for resource: " + e.getId() + " available: " + resources.keySet());
             return null;
         }
     }
@@ -248,7 +248,9 @@ public class MIRIAMLoader {
 
         if (namespaces.containsKey(namespace)) {
             Identifier id = getIdentifier(namespaces.get(namespace));
-            if(accession != null && !accession.isEmpty()){
+            if(id == null) {
+                logger.error("null namespace: " + namespace);
+            } else if(accession != null && !accession.isEmpty()){
                 id.setAccession(accession);
             }
             return id;
