@@ -1,0 +1,914 @@
+ID	3.2.1.49
+********************************************************************************
+*                                                                              *
+* Copyrighted by Dietmar Schomburg, Techn. University Braunschweig, GERMANY    *
+* Distributed under the License as stated at http:/www.brenda-enzymes.org      *
+*                                                                              *
+********************************************************************************
+
+PROTEIN
+PR	#1# Gallus gallus   (#1# AdhA fragment <20,21,22>) <20,21,22,36>
+PR	#2# Mus musculus   <26,27>
+PR	#3# Homo sapiens   <1,2,8,9,12,13,15,19,23,30,32,33,37,39,41,44,45>
+PR	#4# Sus scrofa   <11,16>
+PR	#5# Bos taurus   <16,17>
+PR	#6# Aspergillus niger   <25,40,42>
+PR	#7# Streptococcus equinus   <6>
+PR	#8# Bacteroides fragilis   <6>
+PR	#9# Selenomonas ruminantium   <6>
+PR	#10# Megasphaera elsdenii   <6>
+PR	#11# Ruminococcus albus   <6>
+PR	#12# Helix pomatia   <18>
+PR	#13# Butyrivibrio fibrisolvens   <6>
+PR	#14# Clostridium perfringens   <10,29,34,35,38>
+PR	#15# Fibrobacter succinogenes   <6>
+PR	#16# Todarodes pacificus   (#16# IMPDH1 <7>) <7>
+PR	#17# Patella vulgata   <14>
+PR	#18# Lachnospira multipara   <6>
+PR	#19# Katsuwonus pelamis   <4>
+PR	#20# Ruminococcus torques   <24>
+PR	#21# Human immunodeficiency virus 1   <37>
+PR	#22# Ruminococcus flavefaciens   <6>
+PR	#23# Eudiplodinium maggii   <6>
+PR	#24# Acremonium sp.   <3>
+PR	#25# Solenocera melantho   (#25# gene MdF3HIIb <5>) <5>
+PR	#26# Entodinium caudatum   <6>
+PR	#27# Ruminobacter amylophilus   <6>
+PR	#28# Succinivibrio dextrinosolvens   <6>
+PR	#29# Eubacterium ruminantium   <6>
+PR	#30# Epidinium ecaudatum caudatum   <6>
+PR	#31# Eremoplastron bovis   <6>
+PR	#32# Entodinium simplex   <6>
+PR	#33# Arenibacter latericius   <28>
+PR	#34# Clostridium perfringens Q8XNK8 UniProt <31>
+PR	#35# Homo sapiens P17050 UniProt <46>
+PR	#36# Asterina amurensis   <44>
+PR	#37# Architeuthis sp.   <43>
+
+RECOMMENDED_NAME
+RN	alpha-N-acetylgalactosaminidase
+
+
+SYSTEMATIC_NAME
+SN	alpha-N-acetyl-D-galactosaminide N-acetylgalactosaminohydrolase
+
+
+SYNONYMS
+SY	 alpha-acetylgalactosaminidase
+SY	 N-acetyl-alpha-D-galactosaminidase
+SY	 N-acetyl-alpha-galactosaminidase
+SY	 4-nitrophenyl-alpha-N-acetylgalactosaminidase
+SY	 2-acetamido-2-deoxy-alpha-D-galactoside acetamidodeoxygalactohydrolase
+SY	 exo-alpha-N-acetylgalactosaminidase
+SY	#1,35# alpha-NAGAL <36,46>
+SY	#14# alpha-N-acetylgalactosaminidase blood group A2 degrading enzyme
+	<38>
+SY	#3# alpha-galactosidase B <32>
+SY	#3# alpha-GalNAc <32>
+SY	#3# alpha-NaGalase <30,33>
+SY	#3# alpha-NAGA <39>
+SY	#3# NagA <41,45>
+SY	#3# alpha-GalNAcase <44>
+SY	#3,21# NaGalase <37>
+SY	#3,21# envelope glycoprotein gp160 <37>
+SY	#33# alpha-N-galactosaminidase IV <28>
+SY	#36,37# alpha-GalNAcase I <43,44>
+SY	#36,37# alpha-GalNAcase II <43,44>
+
+CAS_REGISTRY_NUMBER
+CR	9075-63-2
+
+REACTION
+RE	cleavage of nonreducing alpha-(1->3)-N-acetylgalactosamine residues
+	from human blood group A and AB mucin glycoproteins, Forssman hapten
+	and blood group A lacto series glycolipids
+ (#1# double-displacement
+	mechanism. First step: an oxygen atom from Asp140 attacks the
+	electrophilic C1 of the hexose ring, cleaving the glycosidic linkage
+	and creating a covalent enzyme-substrate intermediate. The second step
+	involves a nucleophilic attack by a water molecule, which has been
+	deprotonated by Asp201, on the covalent intermediate. <36>; #3# the
+	enzyme exhibits an endo-enzyme activity in addition to an exo-activity
+	<33>; #35# double-displacement, or ping-pong, reaction mechanism and
+	active site structure, overview <46>)
+
+REACTION_TYPE
+RT	hydrolysis of O-glycosyl bond
+
+SOURCE_TISSUE
+ST	#1,3,4,16,17,19,36,37# liver <1,4,7,11,12,13,14,15,21,41,43,44>
+ST	#12,25# hepatopancreas <5,18>
+ST	#21# viral envelope <37>
+ST	#3# embryo <33>
+ST	#3# HEL cell (#3# 299, low levels <33>) <33>
+ST	#3# placenta <41,44>
+ST	#3# fibroblast (#3# low levels, embryonic lung and gingival <33>; #3#
+	from a patient with Fabry disease <41>) <8,33,41>
+ST	#3# kidney <41>
+ST	#3# heart <41>
+ST	#3# lung <33,37>
+ST	#3# lymphocyte <9>
+ST	#3# leukocyte <2,9>
+ST	#3# Hep-G2 cell <30>
+ST	#3# serum (#3# specific enzymatic activity of serum
+	alpha-N-acetylgalactosaminidase is significantly increased in stage III
+	melanoma patients, but not in early stages <45>) <37,45>
+ST	#3# blood plasma <39,41>
+ST	#3# melanoma cell (#3# cutaneous melanoma, specific enzymatic activity
+	of serum alpha-N-acetylgalactosaminidase is significantly increased in
+	stage III melanoma patients, but not in early stages <45>) <45>
+ST	#3# plasma <39>
+ST	#3# keratinocyte (#3# low levels <33>) <33>
+ST	#3# mononuclear cell (#3# peripheral blood, inducible enzyme <37>) <37>
+ST	#3# lymphoid tissue <9>
+ST	#3# B-lymphocyte (#3# inducible enzyme <37>) <37>
+ST	#3# B16-F10 cell <45>
+ST	#3# HCT-116 cell <30>
+ST	#3# carcinoma (#3# high levels, salivary gland and gingival <33>) <33>
+ST	#3# Chang liver cell <30>
+ST	#36# alimentary canal <44>
+ST	#5# spleen <17>
+
+LOCALIZATION
+LO	#3# membrane <37>
+LO	#3,4,35# lysosome <16,39,46>
+LO	#3,6# extracellular (#3# serum enzyme <45>) <41,42,45>
+
+NATURAL_SUBSTRATE_PRODUCT
+NSP	#14# blood group A glycoconjugate + H2O = ? (#14#
+	alpha-N-acetylgalactosaminidase blood group A2 degrading activity,
+	substrate from human erythrocytes and plasma <38>) <38>
+NSP	#21# serum vitamin D3-binding protein + H2O = ? (#21# i.e. Gc protein,
+	the human substrate is the precursor of the principal macrophage
+	activating factor, MAF, the deglycosylated prrecursor cannot be
+	converted, which leads to immunosuppression <37>) <37>
+NSP	#3,21,35,36# More = ? (#3# enzyme deficiency, due to missense mutations
+	at residue R329 causing structural changes in the enzyme leading to
+	differing substrate specificity, causes the Kanzaki disease, an
+	autosomal recessine storage disorder with accumulation of
+	GalNAcalpha1-O-Ser/Thr in the lysosome and increased urinary excretion
+	of O-linked sialylglycopeptides, phenotype, overview <39>; #21# the
+	enzyme plays a dual role in regulating both infectivity and
+	immunosuppression <37>; #35# alpha-NAGAL is a lysosomal exoglycosidase
+	that cleaves terminal alpha-N-acetylgalactosamine residues from
+	glycopeptides and glycolipids <46>; #3,36# the enzyme hydrolyzes
+	alpha-N-acetylgalactosyl residues from glycolipids and glycoproteins
+	<44>) {} <37,39,44,46>
+
+SUBSTRATE_PRODUCT
+SP	#1,3# o-nitrophenyl-alpha-N-acetylgalactosaminide + H2O = o-nitrophenol
+	+ alpha-N-acetylgalactosamine <13,20>
+SP	#1,6,20# p-nitrophenyl-alpha-N-acetylgalactosaminide + H2O =
+	p-nitrophenol + alpha-N-acetylgalactosamine <22,24,25>
+SP	#14# o-nitrophenyl-N-acetyl-alpha-D-galactosaminide + H2O =
+	o-nitrophenol + N-acetyl-alpha-D-galactosamine (#14# substrate from the
+	blood type A2 antigen producing H antigen, blood type O <35>) <34,35>
+SP	#14# blood group A glycoconjugate + H2O = ? (#14#
+	alpha-N-acetylgalactosaminidase blood group A2 degrading activity,
+	substrate from human erythrocytes and plasma <38>; #14#
+	alpha-N-acetylgalactosaminidase blood group A2 degrading activity,
+	substrate from human and murine erythrocytes and plasma <38>) <38>
+SP	#14# 4-nitrophenyl-N-acetyl-alpha-D-galactosamide + H2O = 4-nitrophenol
+	+ N-acetyl-alpha-D-galactosamine <38>
+SP	#14,34# p-nitrophenyl-N-acetyl-alpha-D-galactosaminide + H2O =
+	p-nitrophenol + N-acetyl-alpha-D-galactosamine <31,34,35>
+SP	#19# ovine submaxillary asialoglycoprotein + H2O = ? <4>
+SP	#3# p-nitrophenyl-2-deoxy-alpha-D-galactopyranoside + H2O =
+	p-nitrophenol + 2-deoxy-alpha-D-galactopyranose <1>
+SP	#3# 4-methylumbelliferyl-alpha-D-galactopyranoside + H2O =
+	4-methylumbelliferone + alpha-D-galactopyranose (#3# substrate of
+	engineered enzyme mutant S188E/A191L, not of the wild-type enzyme <41>)
+	<12,41>
+SP	#3# globotriaosylceramide + H2O = ? (#3# wild-type and engineered
+	mutant enzymes <41>) <41>
+SP	#3# p-nitrophenyl
+	2-acetamide-2-deoxy-3-O-(beta-D-galactopyranosyl)-alpha-D
+	galactopyranoside + H2O = p-nitrophenol +
+	2-acetamide-2-deoxy-3-O-(beta-D-galactopyranosyl)-alpha-D
+	galactopyranoside <33>
+SP	#3# p-nitrophenyl alpha-D-galactopyranoside + H2O = p-nitrophenol +
+	alpha-D-galactopyranose <33>
+SP	#3# p-nitrophenyl N-acetyl-alpha-D-galactosaminide + H2O =
+	p-nitrophenol + N-acetyl-alpha-D-galactosamine <33>
+SP	#3# p-nitrophenyl-alpha-N-acetyl-D-galactoaminide + H2O = p-nitrophenol
+	+ alpha-N-acetyl-D-galactosamine (#3# the Hep-G2 cell lysate hydrolyzes
+	the exo-type substrate <30>) <30>
+SP	#3# 4-methylumbelliferyl-alpha-D-galactosaminide + H2O =
+	4-methylumbelliferone + alpha-D-galactosamine <39>
+SP	#3# GalNAc-alpha1-O-Ser + H2O = ? <39>
+SP	#3# GalNAc-alpha1-O-Thr + H2O = ? <39>
+SP	#3# p-nitrophenyl N-acetyl-alpha-D-galactosaminide + H2O =
+	p-nitrophenol + N-acetyl-D-galactosamine <37>
+SP	#3,21# serum vitamin D3-binding protein + H2O = ? (#21# i.e. Gc
+	protein, the human substrate is the precursor of the principal
+	macrophage activating factor, MAF, the deglycosylated prrecursor cannot
+	be converted, which leads to immunosuppression <37>; #3,21# i.e. Gc
+	protein, human substrate, deglycosylation of the substrate <37>) <37>
+SP	#3,35,37# 4-nitrophenyl alpha-D-N-acetylgalactosaminide + H2O =
+	4-nitrophenol + N-acetyl-D-galactosamine (#35# substrate binding and
+	active site structure, active-site interactions and ligand binding,
+	overview. Inactive enzyme conformation, overview <46>) <43,45,46>
+SP	#3,36#
+	GalNAc-alpha-1,3-GalNAc-beta-1,3-Gal-alpha-1,4-Gal-beta-1,4-Glc-beta-1
+	1-ceramide + H2O = alpha-N-acetylgalactosamine +
+	GalNAc-beta-1,3-Gal-alpha-1,4-Gal-beta-1,4-Glc-beta-1,1-ceramide (#3#
+	i.e. Forssman hapten glycolipid <44>; #36# i.e. Forssman hapten
+	glycolipid, production of globoside by both isozymes <44>) <44>
+SP	#3,4,20# Forssman hapten + H2O = ? <11,13,24>
+SP	#3,6,14,21,35,36# More = ? (#3# Gal-beta-GalNAc-alpha-PNP is no
+	substrate for Hep-G2 cell lysate, the enzyme of tumor cell lysate
+	reduces the macrophage activing potency of GcMAF <30>; #14# the enzyme
+	hydrolyzes the terminal N-actyl-alpha-D-galactosamine from the blood
+	type A2 antigen producing H antigen, blood type O <29>; #3# the enzyme
+	inactivates the macrophage activing factor produced from Gc protein and
+	this results in reduced phagocytic activity and superoxide-generation
+	capacity of monocytes/macrophages <33>; #3# the enzyme is highly
+	selective for terminal N-acetylgalactosamine residues <32>; #14# the
+	enzyme is highly selective for terminal N-acetylgalactosamine residues,
+	sugars other than N-acetyl-alpha-D-galactosaminide are no substrates
+	<35>; #14# the enzyme is highly selective for terminal
+	N-acetylgalactosamine residues, sugars other than
+	N-acetyl-alpha-D-galactosaminide are not substrates. the enzyme
+	degrades blood A epitope <34>; #3# enzyme deficiency, due to missense
+	mutations at residue R329 causing structural changes in the enzyme
+	leading to differing substrate specificity, causes the Kanzaki disease,
+	an autosomal recessine storage disorder with accumulation of
+	GalNAcalpha1-O-Ser/Thr in the lysosome and increased urinary excretion
+	of O-linked sialylglycopeptides, phenotype, overview <39>; #21# the
+	enzyme plays a dual role in regulating both infectivity and
+	immunosuppression <37>; #21# the HIV-1 viral envelope glycoprotein
+	gp160 shows alpha-N-galactosaminidase activity <37>; #35# alpha-NAGAL
+	is a lysosomal exoglycosidase that cleaves terminal
+	alpha-N-acetylgalactosamine residues from glycopeptides and glycolipids
+	<46>; #3,36# the enzyme hydrolyzes alpha-N-acetylgalactosyl residues
+	from glycolipids and glycoproteins <44>; #3# Ser188 and Ala191 play
+	important roles in the recognition of an N-acetylgalactosamine residue
+	in NAGA <41>; #35# the enzyme also shows activity with 4-nitrophenyl
+	alpha-D-galactosaminide <46>; #6# the enzyme glycosylizes free serine
+	and threonine residues in the native and the
+	N-tert-butoxycarbonyl-protected analogue protein to gain the Tn
+	antigen. The enzyme catalyzes glycosylations yielding to a series of
+	2-acetamido-2-deoxy-alpha-D-galactobiosides using
+	2-acetamido-2-deoxy-D-galactopyranose as a glycosyl donor,
+	identification of isomers alpha-D-GalpNAc-1,6-D-GalpNAc,
+	alpha-D-GalpNAc-1,3-D-GalpNAc, and alpha-D-GalpNAc-1,6-D-GalfNAc <42>)
+	{} <29,30,32,33,34,35,37,39,41,42,44,46>
+SP	#33# p-nitrophenyl-alpha-N-acetyl-D-galactosaminide + H2O =
+	p-nitrophenol + alpha-N-acetyl-D-galactosamine <28>
+SP	#5# phenyl-alpha-N-acetylglucosaminide + H2O = N-acetylgalactosamine +
+	phenol <17>
+SP	#6# 2-nitrophenyl-alpha-N-acetylgalactosaminide + H2O = 2-nitrophenol +
+	alpha-N-acetylgalactosamine (#6# enzyme acts with retention of the
+	anomeric configuration <40>) {?} <40>
+
+TURNOVER_NUMBER
+TN	#35# 16.3 {4-nitrophenyl alpha-D-N-acetylgalactosaminide}  (#35#
+	recombinant wild-type enzyme <46>) <46>
+TN	#35# 17.1 {4-nitrophenyl alpha-D-N-acetylgalactosaminide}  (#35#
+	recombinant mutant N201Q <46>) <46>
+
+KM_VALUE
+KM	#1# 2.4 {o-nitrophenyl-alpha-N-acetylgalactosaminide}  <20>
+KM	#1,25# 0.8 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  <5,22>
+KM	#1,3,4,35# -999 {more}  (#35# kinetics, recombinant wild-type and
+	mutant enzymes <46>) <11,12,19,20,33,46>
+KM	#14# 0.77 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  <10>
+KM	#14# 1.1 {p-nitrophenyl-N-acetyl-alpha-D-galactosaminide}  (#14# pH
+	6.5, 37°C, recombinant enzyme <35>) <35>
+KM	#14# 1.35 {p-nitrophenyl-N-acetyl-alpha-D-galactosaminide}  (#14# pH
+	7.0, 37°C <34>) <34>
+KM	#14# 1.58 {o-nitrophenyl-N-acetyl-alpha-D-galactosaminide}  (#14# pH
+	7.0, 37°C <34>) <34>
+KM	#14# 1.62 {o-nitrophenyl-N-acetyl-alpha-D-galactosaminide}  (#14# pH
+	6.5, 37°C, recombinant enzyme <35>) <35>
+KM	#16# 3.33 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  (#16#
+	isoenzyme I <7>) <7>
+KM	#16# 1.55 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  (#16#
+	isoenzyme II <7>) <7>
+KM	#17# 0.6 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  <14>
+KM	#17# 0.036 {Forssman hapten}  <14>
+KM	#19# 0.05 {ovine submaxillary asialoglycoprotein}  <4>
+KM	#19# 4.2 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  <4>
+KM	#20# 2.2-5.8 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  (#20# three
+	isoforms <24>) <24>
+KM	#21# 4.83 {serum vitamin D3-binding protein}  (#21# pH 4.3, 37°C <37>)
+	<37>
+KM	#24# 1.3 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  <3>
+KM	#3# 1.3 {o-nitrophenyl-alpha-N-acetylgalactosaminide}  <13>
+KM	#3# 7 {N-acetyl-alpha-D-galactosaminide}  <23>
+KM	#3# 2.4 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  <9>
+KM	#3# 0.59 {Forssman hapten}  <13>
+KM	#3# 6.8 {4-methylumbelliferyl-alpha-D-galactopyranoside}  <12,13>
+KM	#3# 8.8 {o-nitrophenyl-alpha-D-fucopyranoside}  <1>
+KM	#3# 1.27 {p-nitrophenyl N-acetyl-alpha-D-galactosaminide}  (#3# enzyme
+	from HIV patient serum, at pH 6.1 <37>) <37>
+KM	#3# 1.27 {serum vitamin D3-binding protein}  (#3# pH 6.1, 37°C <37>)
+	<37>
+KM	#3# 14.7 {p-nitrophenyl-2-deoxy-alpha-D-galactopyranoside}  <1>
+KM	#3# 1.79
+	{GalNAc-alpha-1,3-GalNAc-beta-1,3-Gal-alpha-1,4-Gal-beta-1,4-Glc-beta-1
+	1-ceramide}  (#3# pH 4.2, 37°C <44>) <44>
+KM	#3# 4.83 {p-nitrophenyl N-acetyl-alpha-D-galactosaminide}  (#3#
+	constitutive lung enzyme, at pH 4.3 <37>) <37>
+KM	#33# 0.38 {p-nitrophenyl-alpha-N-acetyl-D-galactosaminide}  (#33# pH
+	7.2, 36°C <28>) <28>
+KM	#35# 0.089 {4-nitrophenyl alpha-D-N-acetylgalactosaminide}  (#35#
+	recombinant mutant N201Q <46>) <46>
+KM	#35# 0.07 {4-nitrophenyl alpha-D-N-acetylgalactosaminide}  (#35#
+	recombinant wild-type enzyme <46>) <46>
+KM	#36# 1.04
+	{GalNAc-alpha-1,3-GalNAc-beta-1,3-Gal-alpha-1,4-Gal-beta-1,4-Glc-beta-1
+	1-ceramide}  (#36# pH 4.2, 37°C, isozyme alpha-GalNAcase I <44>) <44>
+KM	#36# 3.97
+	{GalNAc-alpha-1,3-GalNAc-beta-1,3-Gal-alpha-1,4-Gal-beta-1,4-Glc-beta-1
+	1-ceramide}  (#36# pH 4.2, 37°C, isozyme alpha-GalNAcase II <44>) <44>
+KM	#4# 2.5 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  <11>
+KM	#4# 6.6 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  <16>
+KM	#5# 50 {phenyl-alpha-N-acetylglucosaminide}  <17>
+KM	#6# 0.23 {p-nitrophenyl-alpha-N-acetylgalactosaminide}  <25>
+KM	#6# 0.73 {2-nitrophenyl-alpha-N-acetylgalactosaminide}  (#6# pH 3.0,
+	35°C <40>) <40>
+
+PH_OPTIMUM
+PHO	#1# 3.7 <20,22>
+PHO	#14# 6.5 (#14# assay at <38>) <38>
+PHO	#14# 6.5-7 (#14# recombinant enzyme <35>) <34,35>
+PHO	#16# 2.7-3.5 (#16# isoenzyme I,
+	p-nitrophenyl-alpha-N-acetylgalactosaminide <7>) <7>
+PHO	#17,25# 3.8 (#17,25# p-nitrophenyl-alpha-N-acetylgalactosaminide
+	<5,14>) <5,14>
+PHO	#19# 4 (#19# p-nitrophenyl-alpha-N-acetylgalactosaminide <4>) <4>
+PHO	#20# 5.8-6.8 (#20# three isoforms <24>) <24>
+PHO	#24# 4-4.5 (#24# p-nitrophenyl-alpha-N-acetylgalactosaminide <3>) <3>
+PHO	#3# 4.8 (#3# 4-methylumbelliferyl-alpha-galactopyranoside <12>) <12>
+PHO	#3# 4.5 (#3# 4-methylumbelliferyl-alpha-galactopyranoside <2>; #3#
+	N-acetyl-alpha-D-galactosaminide <23>) <2,23>
+PHO	#3# 6.1 (#3# enzyme from HIV patient serum <37>) <37>
+PHO	#3# 4-6.8 <33>
+PHO	#3,14# 6 (#3# assay at <45>; #14#
+	p-nitrophenyl-alpha-N-acetylgalactosaminide <10>) <10,45>
+PHO	#3,16# 4.2 (#16# isoenzyme II,
+	p-nitrophenyl-alpha-N-acetylgalactosaminide <7>) <7,44>
+PHO	#3,21# 4.3 (#3# constitutive lung enzyme <37>) <37>
+PHO	#3,4# -999 (#3# other substrates <12>; #4# more values of isoenzymes
+	<16>) <12,16>
+PHO	#33# 7-8 (#33# pH 7.2, 36°C <28>) <28>
+PHO	#36# 3 (#36# isozyme alpha-GalNAcase II <44>) <44>
+PHO	#36# 3.5 (#36# isozyme alpha-GalNAcase I <44>) <44>
+PHO	#4# 3.9 (#4# forssman hapten <11>) <11>
+PHO	#4,5# 4.3-4.7 (#4,5# p-nitrophenyl-alpha-N-acetylgalactosaminide
+	<11,16>) <11,16>
+PHO	#6# 1.8 <40>
+PHO	#6# 2.6-3.2 <25>
+
+PH_RANGE
+PHR	#14# 6-8 (#14# 27% decline in activity from pH 6.0-8.0 with no apparent
+	optimum <29>) <29>
+PHR	#14# 6.4-7 <38>
+PHR	#19# 4-7 (#19# not active above,
+	p-nitrophenyl-alpha-N-acetylgalactosaminide <4>) <4>
+PHR	#20# 5-9.5 <24>
+PHR	#24# 2.5-8 (#24# p-nitrophenyl-alpha-N-acetylgalactosaminide <3>) <3>
+PHR	#3# 3-8 (#3# below pH 3.6 the activity declines rapidly and at pH 3.0
+	retains about 1% of the orginal activity, above pH 7.5 the activity
+	declines rapidly and at pH 8.0 retains about 4% of the orginal activity
+	<33>) <33>
+
+SPECIFIC_ACTIVITY
+SA	#1# 51.2 (#1# recombinant enzyme <22>) <22>
+SA	#1# 56.4 (#1# native enzyme <22>) <22>
+SA	#14# 84.11 <35>
+SA	#14# 43.92 <34>
+SA	#14# 84110.0 (#14# purified recombinant enzyme <38>) <38>
+SA	#3# 4.5 (#3# purified placental enzyme <44>) <44>
+SA	#3# 0.012 (#3# cell extract of salivary gland carcinoma <33>) <33>
+SA	#3# 0.0004 (#3# cell extract of embryonic lung fibroblast <33>) <33>
+SA	#3# 0.0021 (#3# pH 5.0, Hep-G2 cell <30>) <30>
+SA	#3# 0.005 (#3# cell extract of gingival carcinoma <33>) <33>
+SA	#3# 0.0026 (#3# pH 5.0, HCT116 cell <30>) <30>
+SA	#3# 8.33 (#3# purified recombinant enzyme mutant <41>) <41>
+SA	#3# 0.0002 (#3# cell extract of gingival keratinocyte <33>) <33>
+SA	#3# 0.0012 (#3# pH 5.0, Chang liver cell <30>) <30>
+SA	#3# 0.0003 (#3# cell extract of gingival fibroblast <33>) <33>
+SA	#3# 2279.0 (#3# purified fraction from salivary gland carcinoma <33>)
+	<33>
+SA	#3,7,8,9,10,11,13,15,18,21,22,23,26,27,28,29,30,31,32,33# -999.0 (#26#
+	list of rumen bacteria and protozoa <6>) <6,28,32,37,39>
+SA	#36# 24.2 (#36# purified isozyme alpha-GalNAcase II <44>) <44>
+SA	#36# 19.56 (#36# purified isozyme alpha-GalNAcase I <44>) <44>
+SA	#6# 33.5 (#6# pH 3.0, 35°C <40>) <40>
+
+TEMPERATURE_OPTIMUM
+TO	#3,14,21,36# 37 (#3,21,36# assay at <37,44,45>) <10,23,37,38,44,45>
+TO	#6# 55 <40>
+
+ACTIVATING_COMPOUND
+AC	#21# Trypsin (#21# the enzyme needs to be proteolytically activated,
+	activation of the enzyme by trypsin <37>) <37>
+AC	#3# more (#3# the enzyme is inducible in patients peripheral blood
+	mononuclear cells by HIV-1 provirus-inducing agent, overview <37>) <37>
+
+INHIBITORS
+IN	#3# D-glucose <44>
+IN	#3# K+ <44>
+IN	#3# Mg2+ <44>
+IN	#3# Mn2+ <44>
+IN	#3# N-acetyl-D-glucosamine <44>
+IN	#3# Na+ <44>
+IN	#3# SDS <2>
+IN	#3# Zn2+ <44>
+IN	#3,16,17,25,36# Ag+ (#16# isoenzyme II <7>; #36# moderate inhibition of
+	isozyme alpha-GalNAcase I, strong inhibition of isozyme alpha-GalNAcase
+	II <44>) <2,5,7,14,44>
+IN	#3,16,17,25,36# D-galactose (#16# isoenzyme I <7>; #36# about 10%
+	inhibition of isozymes alpha-GalNAcase I and isozyme alpha-GalNAcase II
+	<44>) <5,7,14,23,44>
+IN	#3,16,20# Cu2+ (#16# isoenzyme II <7>) <2,7,24,44>
+IN	#3,33# Ca2+ (#33# 1 mM, complete loss of activity <28>) <28,44>
+IN	#3,36# N-Acetyl-D-galactosamine (#36# 57% and 62% inhibition of isozyme
+	alpha-GalNAcase I and isozyme alpha-GalNAcase II <44>) <44>
+IN	#3,6,14,16,17,20,24,36# Hg2+ (#16# isoenzyme II <7>; #6# 10 mM, 12%
+	residual activity <40>; #36# slight inhibition of isozyme
+	alpha-GalNAcase I, strong inhibition of isozyme alpha-GalNAcase II
+	<44>) <3,7,10,14,24,40,44>
+IN	#33# Acetylimidazole (#33# 5 mM, 30% of original activity <28>) <28>
+IN	#33# carbodiimide (#33# 1.8 mM, complete loss of activity <28>) <28>
+IN	#33# Diethylpyrocarbonate (#33# 2 mM, 60% of original activity <28>)
+	<28>
+IN	#33# N-Bromosuccinimide (#33# 1.8 mM, complete loss of activity <28>)
+	<28>
+IN	#33# N-ethylmaleimide (#33# 1.8 mM, 60% of original activity <28>) <28>
+IN	#33# p-chloromercuribenzoate (#33# 1.8 mM, complete loss of activity
+	<28>) <28>
+IN	#33# 2,2'-dianisidine (#33# 2 mM, 70% of original activity <28>) <28>
+IN	#4# Fe2+ <16>
+IN	#4,16,17,25# N-acetylgalactosamine <5,7,14,16>
+IN	#6# Pb2+ (#6# 10 mM, 30% residual activity <40>) <40>
+IN	#6,36# more (#6# not inhibitory: Ca2+, Mg2+, Mn2+, Ag+ <40>; #36# no
+	inhibition by D-glucose, N-acetyl-D-glucosamine, and Mn2+ <44>) <40,44>
+
+METALS_IONS
+ME	#33,36# Mg2+ (#33# activates <28>; #36# slight activation of both
+	isozymes <44>) <28,44>
+ME	#36# Ca2+ (#36# slight activation of both isozymes <44>) <44>
+ME	#36# Cu2+ (#36# slight activation of both isozymes <44>) <44>
+ME	#36# K+ (#36# slight activation of both isozymes <44>) <44>
+ME	#36# Na+ (#36# slight activation of both isozymes <44>) <44>
+ME	#36# Zn2+ (#36# slight activation of both isozymes <44>) <44>
+
+MOLECULAR_WEIGHT
+MW	#19# 80000 (#19# pH 4.2, gel filtration <4>) <4>
+MW	#19,36# 40000 (#19# pH 7.2, gel filtration <4>; #36# isozyme
+	alpha-GalNAcase II, gel filtration <44>) <4,44>
+MW	#24,25# 55000 (#24# gel filtration <3>) <3,5>
+MW	#3# 48000 (#3# gel filtration <8>) <8>
+MW	#33# 84000 (#33# gel filtration <28>) <28>
+MW	#36# 430000 (#36# about, isozyme alpha-GalNAcase I, gel filtration
+	<44>) <44>
+MW	#4# 102000 (#4# gel filtration <11>) <11>
+MW	#6# 115000 (#6# non-denaturating polyacrylamide gel electrophoresis
+	<25>) <25>
+MW	#6# 440000 (#6# gel filtration <40>) <40>
+
+POSTTRANSLATIONAL_MODIFICATION
+PM	#3,4,6,35# glycoprotein (#3# precursor is processed to the mature
+	protein <8>; #4# 7.0% neutral sugars <11>; #6# enzyme may be
+	deglycosylated without loss of activity <40>; #35# the enzyme contains
+	five N-linked glycosylation sites. The N201 glycosylation is critical
+	for enzyme stability and activity <46>) <8,11,40,46>
+
+SUBUNITS
+SU	#1,20# multimer (#1# x * 49100, SDS-PAGE <20>; #20# 160000-200000,
+	SDS-PAGE, three isoforms <24>) <20,24>
+SU	#1,24,36# monomer (#24# 57000, SDS-PAGE <3>; #1# 43000, SDS-PAGE <22>;
+	#36# 1 * 43000, isozyme alpha-GalNAcase II, SDS-PAGE <44>) <3,22,44>
+SU	#17# tetramer (#17# 4 * 50000, SDS-PAGE <14>) <14>
+SU	#3,14,34# ? (#3# x * 48000, SDS-PAGE <33>; #34# x * 70000, SDS-PAGE
+	<31>; #14# x * 719600, denatured recombinant enzyme, x * 724200, native
+	recombinant enzyme, SDS-PAGE <35>; #14# x * 72100 Da, SDS-PAGE <34>;
+	#3# x * 46000, native enzyme, SDS-PAGE <44>) <31,33,34,35,44>
+SU	#3,37# More (#3# study of oligosaccharide structure, the first five:
+	N124, N177, N201, N359 and N385, of six potential N-glycosylation sites
+	are occupied <32>; #37# isozyme alpha-GalNAcase I and alpha-GalNAcase
+	II peptide mapping and amino acid sequence comparisons, overview <43>)
+	<32,43>
+SU	#35# homodimer (#35# alpha-NAGAL is a homodimer with each monomer
+	divided into two domains. Domain 1 forms a (beta/alpha)8 barrel, and
+	domain 2 contains eight antiparallel beta strands in two beta sheets
+	<46>) <46>
+SU	#36# polymer (#36# x * 47000, isozyme alpha-GalNAcase I, SDS-PAGE <44>)
+	<44>
+SU	#4,19# dimer (#19# 2 * 35000, monomers associate to dimers at pH 4.2,
+	SDS-PAGE <4>; #4# 2 * 52000, probably two subunits with identical
+	molecular weight, SDS-PAGE <11>) <4,11>
+SU	#6# hexamer (#6# 6 * 76000, SDS-PAGE <40>) <40>
+
+PI_VALUE
+PI	#3,6# 4.8 (#6# isoelectric focusing <40>; #3# purified enzyme,
+	isoelectric focusing <44>) <40,44>
+PI	#35# 4.58 (#35# recombinant enzyme <46>) <46>
+PI	#36# 4.4 (#36# purified isozyme alpha-GalNAcase I, isoelectric focusing
+	<44>) <44>
+PI	#36# 7.1 (#36# purified isozyme alpha-GalNAcase II <44>) <44>
+
+APPLICATION
+AP	#3# biotechnology (#3# use of a modified
+	alpha-N-acetylgalactosaminidase in the development of enzyme
+	replacement therapy for Fabry disease <41>) <41>
+AP	#3,14,33# medicine (#14# potential application in the field of
+	erythrocyte conversion technology <34>; #3# the enzyme can be employed
+	as a diagnostic/prognostic tool for patients with salivary gland
+	adenocarcima <33>; #33# The enzyme is able to remove at neutral pH
+	alpha-1,3-bound residues of N-acetylgalactosamine from glycoproteins of
+	blood group A-substances and A-erythrocytes, converting them into 0
+	group substances <28>; #14# the enzyme may be useful for enzymic
+	conversion of type A2 to universally transfusable type O red blood
+	cells, potential application in the field of solid organ
+	transplantation <29>; #3# use of a modified
+	alpha-N-acetylgalactosaminidase in the development of enzyme
+	replacement therapy for Fabry disease <41>) <28,29,33,34,41>
+
+ENGINEERING
+EN	#3# N124Q (#3# 35% activity in comparison to 100% activity of wild-type
+	enzyme <32>) <32>
+EN	#3# N177Q (#3# 48% activity in comparison to 100% activity of wild-type
+	enzyme <32>) <32>
+EN	#3# N359Q (#3# 57% activity in comparison to 100% activity of wild-type
+	enzyme <32>) <32>
+EN	#3# N385Q (#3# 4% activity in comparison to 100% activity of wild-type
+	enzyme <32>) <32>
+EN	#3# S188E/A191L (#3# Ser188 and Ala191 play important roles in the
+	recognition of an N-acetylgalactosamine residue in NAGA, while lu203
+	and Leu206 play important roles in the recognition of a galactose
+	residue in GLA. Construction of a modified
+	alpha-N-acetylgalactosaminidase with alpha-galactosidase A-like
+	substrate specificity. The enzyme acquires the ability to catalyze the
+	degradation of 4-methylumbelliferyl-alpha-D-galactopyranoside, but
+	retaines the wild-type NAGAs stability, overview <41>) <41>
+EN	#3,35# N201Q (#3# 28% activity in comparison to 100% activity of
+	wild-type enzyme <32>; #35# site-directed mutagenesis, one of the
+	proteins with the third N-linked carbohydrate attachment site is
+	removed <46>) <32,46>
+EN	#3,35# R329W (#3# site-specific mutagenesis, construction of the
+	naturally occurring mutation at R329 in Kanzaki disease, more severe
+	phenotype compared to R329Q <39>; #3# mutation results in protein
+	instability <39>; #35# a naturally occuring Schindler disease and/or
+	Kanzaki disease mutation <46>) <39,46>
+EN	#3,35# R329Q (#3# site-specific mutagenesis, construction of the
+	naturally occurring mutation at R329 in Kanzaki disease, less severe
+	phenotype compared to R329W <39>; #3# mutation results in protein
+	instability <39>; #35# a naturally occuring Schindler disease and/or
+	Kanzaki disease mutation <46>) <39,46>
+EN	#35# more (#35# construction of mutants of each of the five N-linked
+	glycosylation sites <46>) <46>
+EN	#35# D217N (#35# a naturally occuring Schindler disease and/or Kanzaki
+	disease mutation <46>) <46>
+EN	#35# S160C (#35# a naturally occuring Schindler disease and/or Kanzaki
+	disease mutation <46>) <46>
+EN	#35# E193X (#35# a naturally occuring Schindler disease and/or Kanzaki
+	disease mutation <46>) <46>
+EN	#35# E325K (#35# a naturally occuring Schindler disease and/or Kanzaki
+	disease mutation <46>) <46>
+EN	#35# E367K (#35# a naturally occuring Schindler disease and/or Kanzaki
+	disease mutation <46>) <46>
+
+CLONED
+CL	#1# (expression in yeast Pichia pastoris) <22>
+CL	#1# (expression in bacteria, rabbit reticulocyte lysate and yeast) <21>
+CL	#2# (expression in Cos-1 cells) <27>
+CL	#2# (expression in B-lymphoblast cell line) <26>
+CL	#3# (expression in Chines hamster ovary cells) <32>
+CL	#3# (expression of the engineered enzyme in CHO cells) <41>
+CL	#14# (expression of aagA gene in Escherichia coli, resulting in
+	recombinants exhibiting high-level expression of the expected activity)
+	<31>
+CL	#14# (the gene encoding the clostridial enzyme is cloned in an
+	Escherichia coli T7 expression system) <35>
+CL	#35# (expression in CHO and COS-1 cells. Expression of wild-type and
+	mutant enzymes in Escherichia coli as insoluble proteins, and in
+	Kluyveromyces lactis as soluble hyperglycosylated proteins. Expression
+	of wild-type and mutant enzymes in Trichoplusia ni Tn5 insect cells
+	using the baculovirus transfection system leads to suitable proteins)
+	<46>
+
+CRYSTALLIZATION
+CR	#1# (X-ray crystallography) <36>
+CR	#35# (purified recombinant wild-type and mutant enzymes in complexes
+	with two catalytic products, the alpha-galactose and alpha-GalNAc
+	monosaccharides, and a covalent intermediate bound in the enzyme active
+	site, X-ray diffraction structure determination and analysis at 1.9 A
+	resolution) <46>
+
+PURIFICATION
+PU	#3# <8,12,13>
+PU	#3# (enzyme from salivary gland cells) <33>
+PU	#3# (enzyme mutant from cell culture by dialysis, ammonium sulfate
+	fractionation, hydrophobic interaction, cation exchange, and anion
+	exchange chromatography) <41>
+PU	#3# (native enzyme from placenta by 4-aminophenyl
+	thio-beta-D-galactose-ceramide hexoside-resin affinity) <44>
+PU	#4# <11>
+PU	#4# (partially) <16>
+PU	#5# <17>
+PU	#5# (partially) <16>
+PU	#6# <40>
+PU	#6# (native enzyme) <42>
+PU	#12# <18>
+PU	#14# <10,34>
+PU	#14# (recombinant enzyme) <35>
+PU	#16# <7>
+PU	#17# <14>
+PU	#19# <4>
+PU	#24# <3>
+PU	#25# <5>
+PU	#33# <28>
+PU	#36# (native isozymes alpha-GalNAcase I and II are isolated from liver
+	homogenate by ammonium sulfate fractionation and separated from each
+	other by gel filtration. Then they are further individually purified by
+	cation exchange chromatography and gel filtration, and additionally by
+	hydroxylapatite chromatography for isozyme alpha-GalNAcase II. Isozyme
+	alpha-GalNAcase I is purified 440fold, isozyme alpha-GalNAcase II
+	544fold) <44>
+PU	#37# (native isozymes alpha-GalNAcase I and alpha-GalNAcase II from
+	liver) <43>
+
+PH_STABILITY
+PHS	#14# 5-8 <35>
+PHS	#16# 4.5-5.5 (#16# isoenzyme I <7>) <7>
+PHS	#16# 4.5-6.5 (#16# isoenzyme II <7>) <7>
+PHS	#17# 3.6-6.8 <14>
+PHS	#19# 4-6 <4>
+PHS	#20# 4.5-9.5 <24>
+PHS	#24# 6-7.5 <3>
+PHS	#25# 3-7.5 <5>
+PHS	#3# -999 (#3# comparison of activity at pH 5.0, 6.0 and 7.0 from Hep-G2
+	cells, HCT116 cells and Chang liver cells <30>) <30>
+PHS	#3# 3.5-8.5 (#3# purified enzyme, stable at 4°C <44>) <44>
+PHS	#36# 2.7-4.5 (#36# purified isozyme alpha-GalNAcase I, stable at 4°C
+	<44>) <44>
+PHS	#36# 2.3-6.5 (#36# purified isozyme alpha-GalNAcase II, stable at 4°C
+	<44>) <44>
+PHS	#6# 2.5-8 <25>
+PHS	#6# 1.5-4 <40>
+
+STORAGE_STABILITY
+SS	#14# (4°C, 12 months) <34>
+SS	#19# (0°C, sodium citrate buffer, bovine serum albumin, 2 weeks,  pH
+	4.2) <4>
+SS	#20# (4°C, enzyme separation buffer containing 3 mM sodium azide,
+	25-31 months) <24>
+SS	#24# (0°C, 1 month) <3>
+SS	#3# (-20°C, acidified plasma, at least one year) <23>
+SS	#3,14,19# (-20°C, lyophilized, several years) <4,8,10>
+SS	#33# (20°C, stable for 1 week) <28>
+SS	#33# (4°C, sterile condition, stable for any length of time) <28>
+SS	#35# (the purified wild-type and N201Q mutant proteins expressed in
+	insect cells retain nearly full activity for months at 4°C, but the
+	CHO-expressed material loses most of its activity within 72 h) <46>
+SS	#4,12# (-20°C, 6 months) <11,18>
+SS	#6# (4°C, pH 1.5-4.0, stable for several months) <40>
+SS	#6# (-20°C, about 5% loss of activity) <40>
+
+TEMPERATURE_STABILITY
+TS	#14# 4-45 <35>
+TS	#14# 4-37 (#14# the enzyme hydrolyses A2 epitopes at 4°C with 42% of
+	the efficiency of that at 37°C <29>) <29>
+TS	#14# 4-24 (#14# active and stable at <38>) <38>
+TS	#3# 42 (#3# comparison of stability at 42°C of mutant and wild-type
+	enzymes <32>) <32>
+TS	#3# 45 (#3# 55% loss of activity after 10 min <33>) <33>
+TS	#3,17,19,24,25# 40 (#24# not stable above <3>; #3# 40% loss of activity
+	after 30 min <33>) <3,4,5,14,33>
+TS	#3,36# 37 (#3# stable for 6 h in 0.05 sodium citrate buffer, pH 4.2
+	<33>; #36# pH 4.0,m 60 min, purified isozyme alpha-GalNAcase I shows
+	50% remaining activity, purified isozyme alpha-GalNAcase II 92% <44>;
+	#3# purified enzyme, 60 min, pH 4.0, 98% activity remaining <44>)
+	<33,44>
+TS	#33# -999 (#33# the enzyme does not withstand freezing <28>) <28>
+TS	#6# 35 (#6# stable for at least 3 days <40>) <40>
+TS	#6,16,33# 50 (#6# not stable above <25>; #16# isoenzyme I stable for 30
+	min, isoenzyme II loses activity <7>; #33# at heating during 30 min
+	retains 100% of the activity <28>) <7,25,28>
+TS	#6,20# 55 (#20# not stable above <24>; #6# 5 h, 50% loss of activity
+	<40>) <24,40>
+
+REFERENCE
+RF	<1> Dean, K.J.; Sweeley, C.C.: Studies on human liver
+	alpha-galactosidases. III. Partial characterization of
+	carbohydrate-binding specificities. J. Biol. Chem. (1979) 254,
+	10006-10010. {Pubmed:226533}
+RF	<2> Salvayre, R.; Maret, A.; Negre, A.; Douste-Blazy, L.: Properties of
+	multiple molecular forms of alpha-galactosidase and
+	alpha-N-acetylgalactosaminidase from normal and fabry leukocytes. Eur.
+	J. Biochem. (1979) 100, 377-383. {Pubmed:41709}
+RF	<3> Kadowaki, S.; Ueda, T.; Yamamoto, K.; Kumagai, H.; Tochikura, T.:
+	Isolation and characterization of a blood group A substance-degrading
+	alpha-N-acetylgalactosaminidase from an Acremonium sp.. Agric. Biol.
+	Chem. (1989) 53, 111-120. {Pubmed:}
+RF	<4> Nakagawa, H.; Asakawa, M.; Enomoto, N.: Purification and
+	characterization of alpha-N-acetylgalactosaminidase from skipjack
+	liver. J. Biochem. (1987) 101, 855-862. {Pubmed:3611044}
+RF	<5> Chien, S.F.: Purification and characterization of
+	alpha-N-acetylgalactosaminidase from shrimp hepatopancreas. J. Chin.
+	Biochem. Soc. (1986) 15, 86-96. {Pubmed:}
+RF	<6> Williams, A.G.; Withers, S.E.; Coleman, G.S.: Glycoside hydrolase
+	of rumen bacteria and protozoa. Curr. Microbiol. (1984) 10, 287-294.
+	{Pubmed:}
+RF	<7> Itoh, T.; Uda, Y.: alpha-N-Acetylgalactosaminidase from squid
+	liver: purification and characterization of two enzymes. J. Biochem.
+	(1984) 95, 959-970. {Pubmed:6746602}
+RF	<8> Sweeley, C.C.; Ledonne, N.C.; Robbins, P.W.: Post-translational
+	processing reactions involved in the biosynthesis of lysosomal
+	alpha-N-acetylgalactosaminidase in cultured human fibroblasts. Arch.
+	Biochem. Biophys. (1983) 223, 158-165. {Pubmed:6859854}
+RF	<9> Salvayre, R.; Negre, A.; Maret, A.; Lenoir, G.; Douste-Blazy, L.:
+	Separation and properties of molecular forms of alpha-galactosidase and
+	alpha-N-acetylgalactosaminidase from blood lymphocytes and lymphoid
+	cell lines transformed by Epstein-Barr virus. Biochim. Biophys. Acta
+	(1981) 659, 445-456. {Pubmed:6266491}
+RF	<10> Levy, G.N.; Aminoff, D.: Purification and properties of
+	alpha-N-acetylgalactosaminidase from Clostridium perfringens. J. Biol.
+	Chem. (1980) 255, 11737-11742. {Pubmed:6254979}
+RF	<11> Sung, S.S.J.; Sweely, C.C.: Purification and partial
+	characterization of porcine liver alpha-N-acetylgalactosaminidase. J.
+	Biol. Chem. (1980) 255, 6589-6594. {Pubmed:7391035}
+RF	<12> Dean, K.J.; Sweeley, C.C.: Studies on human liver
+	alpha-galactosidases. II. Purification and enzymatic properties of
+	alpha-galactosidase B (alpha-N-acetylgalactosaminidase). J. Biol. Chem.
+	(1979) 254, 10001-10005. {Pubmed:226532}
+RF	<13> Dean, K.J.; Sung, S.S.J.; Sweeley, C.C.: The identification of
+	alpha-galactosidase B from human liver as an
+	alpha-N-acetylgalactosaminidase. Biochem. Biophys. Res. Commun. (1977)
+	77, 1411-1417. {Pubmed:901541}
+RF	<14> Uda, Y.; Li, S.C.; Li, Y.T.: alpha-N-Acetylgalactosaminidase from
+	the limpet, Patella vulgata. J. Biol. Chem. (1977) 252, 5194-5200.
+	{Pubmed:18458}
+RF	<15> Callahan, J.W.; Lassila, E.L.; den Tandt, W.; Philippart, M.:
+	alpha-N-Acetylgalactosaminidase: isolation, properties and distribution
+	of the human enzyme. Biochem. Med. (1973) 7, 424-431. {Pubmed:4715567}
+RF	<16> Weissmann, B.; Hinrichsen, D.F.: Mammalian
+	alpha-acetylgalactosaminidase. Occurrence, partial purification, and
+	action on linkages in submaxillary mucins. Biochemistry (1969) 8,
+	2034-2043. {Pubmed:5785223}
+RF	<17> Werries, E.; Wollek, E.; Gottschalk, A.; Buddecke, E.: Separation
+	of N-acetyl-alpha-glucosaminidase and N-acetyl-alpha-galactosaminidase
+	from ox spleen. Cleavage of the O-glycosidic linkage between
+	carbohydrate and polypeptide in ovine and bovine submaxillary
+	glycoprotein by N-acetyl-alpha-galactosaminidase. Eur. J. Biochem.
+	(1969) 10, 445-449. {Pubmed:5348072}
+RF	<18> Tuppy, H.; Staudenbauer, W.L.: The action on soluble blood group A
+	substances of an alpha-N-acetylgalactosaminidase from Helix pomatia.
+	Biochemistry (1966) 5, 1742-1747. {Pubmed:6006833}
+RF	<19> Yagi, F.; Eckhardt, A.E.; Goldstein, I.J.: Gycosidases of Ehrlich
+	ascites tumor cells and ascitic fluid-purification and substrate
+	specificity of alpha-N-acetylgalactosaminidase and alpha-galactosidase:
+	comparison with coffee bean alpha galactosidase. Arch. Biochem.
+	Biophys. (1990) 280, 61-67. {Pubmed:2162155}
+RF	<20> Hata, J.; Dhar, M.; Mitra, M.; Harmata, M.; Haibach, P.; Sun, P.;
+	Smith, D.: Purification and characterization of
+	N-acetyl-alpha-D-galactosaminidase from Gallus domesticus. Biochem.
+	Int. (1992) 28, 77-86. {Pubmed:1445396}
+RF	<21> Zhu, A.; Goldstein, J.: Cloning and characterization of a cDNA
+	encoding chicken liver alpha-N-acetylgalactosaminidase. Gene (1993)
+	137, 309-314. {Pubmed:8299964}
+RF	<22> Zhu, A.; Monahan c.; Wang Z.; Goldstein J.: Expression,
+	purification and characterization of recombinant
+	alpha-N-acetylgalactosaminidase produced in the yeast Pichia pastoris.
+	Protein Expr. Purif. (1996) 8, 456-462. {Pubmed:8954893}
+RF	<23> Den Tandt, W.R.; Scharpe, S.: Micromethod for the fluorimetric
+	determination of plasma N-acetyl-alpha-galactosaminidase and study of
+	some of its characteristics. Enzyme Protein (1996) 49, 273-280.
+	{Pubmed:9252785}
+RF	<24> Hoskins, L.C.; Boulding, E.T.; Larson G.: Purification and
+	characterization of blood group A-degrading isoforms of
+	alpha-N-acetylgalactosaminidase from Ruminococcus torques strain IX-70.
+	J. Biol. Chem. (1997) 272, 7932-7939. {Pubmed:9065462}
+RF	<25> Naundorf, A.; Ajisaka, K.: Purification of
+	alpha-N-acetylgalactosaminidase from Aspergillus niger and its use in
+	the synthesis of GalNAc-alpha-(1 O)-serine. Enzyme Microb. Technol.
+	(1999) 25, 483-488. {Pubmed:}
+RF	<26> Hermann, T.; Schindler, D.; Tabe, H.; Onadera, O.; Igarashi, S.;
+	Polack, A.; Zehnpfennig, D.; Tsuji S.: Molecular cloning, structural
+	organization, sequence, chromosomal assignment, and expression of the
+	mouse alpha-N-acetylgalactosaminidase gene. Gene (1998) 211, 205-214.
+	{Pubmed:9602128}
+RF	<27> Wang, A.M.; Ioannou, Y.A.; Zeidner, K.M.; Desnick, R.J.: Murine
+	alpha-N-acetylgalactosaminidase: Isolation and expression of a
+	full-lenght cDNA and genomic organization: further evidence of an alpha
+	galactosidase gene family. Mol. Genet. Metab. (1998) 65, 165-173.
+	{Pubmed:9787108}
+RF	<28> Bakunina, I.Y.; Kuhlmann, R.A.; Likhosherstov, L.M.; Martynova,
+	M.D.; Nedashkovskaya, O.I.; Mikhailov, V.V.; Elyakova, L.A.:
+	Alpha-N-acetylgalactosaminidase from marine bacterium Arenibacter
+	latericius KMM 426T removing blood type specificity of A-erythrocytes.
+	Biochemistry (2002) 67, 689-695. {Pubmed:12126478}
+RF	<29> Hsieh, H.Y.; Smith, D.: Clostridium perfringens
+	alpha-N-acetylgalactosaminidase blood group A2-degrading activity.
+	Biotechnol. Appl. Biochem. (2003) 37, 157-163. {Pubmed:12630904}
+RF	<30> Mohamad, S.B.; Nagasawa, H.; Uto, Y.; Hori, H.: Tumor cell
+	alpha-N-acetylgalactosaminidase activity and its involvement in
+	GcMAF-related macrophage activation. Comp. Biochem. Physiol. A (2002)
+	132, 1-8. {Pubmed:12062184}
+RF	<31> Calcutt, M.J.; Hsieh, H.Y.; Chapman, L.F.; Smith, D.S.:
+	Identification, molecular cloning and expression of an
+	alpha-N-acetylgalactosaminidase gene from Clostridium perfringens. FEMS
+	Microbiol. Lett. (2002) 214, 77-80. {Pubmed:12204375}
+RF	<32> Ohta, M.; Ohnishi, T.; Ioannou, Y.A.; Hodgson, M.E.; Matsuura, F.;
+	Desnick, R.J.: Human alpha-N-acetylgalactosaminidase: site occupancy
+	and structure of N-linked oligosaccharides. Glycobiology (2000) 10,
+	251-261. {Pubmed:10704524}
+RF	<33> Matsuura, T.; Uematsu, T.; Yamaoka, M.; Furusawa, K.: Effect of
+	salivary gland adenocarcinoma cell-derived
+	alpha-N-acetylgalactosaminidase on the bioactivity of macrophage
+	activating factor. Int. J. Oncol. (2004) 24, 521-528. {Pubmed:14767536}
+RF	<34> Hsieh, H.Y.; Mitra, M.; Wells, D.C.; Smith, D.: Purification and
+	characterization of alpha-N-acetylgalactosaminidase from Clostridium
+	perfringens. IUBMB Life (2000) 50, 91-97. {Pubmed:11185964}
+RF	<35> Hsieh, H.Y.; Calcutt, M.J.; Chapman, L.F.; Mitra, M.; Smith, D.S.:
+	Purification and characterization of a recombinant
+	alpha-N-acetylgalactosaminidase from Clostridium perfringens. Protein
+	Expr. Purif. (2003) 32, 309-316. {Pubmed:14965778}
+RF	<36> Garman, S.C.; Hannick, L.; Zhu, A.; Garboczi, D.N.: The 1.9 A
+	structure of alpha-N-acetylgalactosaminidase: molecular basis of
+	glycosidase deficiency diseases. Structure (2002) 10, 425-434.
+	{Pubmed:12005440}
+RF	<37> Yamamoto, N.: Pathogenic significance of
+	alpha-N-acetylgalactosaminidase activity found in the envelope
+	glycoprotein gp160 of human immunodeficiency virus Type 1. AIDS Res.
+	Hum. Retroviruses (2006) 22, 262-271. {Pubmed:16545013}
+RF	<38> Hsieh, H.; Chapman, L.F.; Calcutt, M.J.; Mitra, M.; Smith, D.S.:
+	Recombinant Clostridium perfringens alpha-N-acetylgalactosaminidase
+	blood group A2 degrading activity. Artif. Cells Blood Substit. Immobil.
+	Biotechnol. (2005) 33, 187-199. {Pubmed:15960079}
+RF	<39> Kanekura, T.; Sakuraba, H.; Matsuzawa, F.; Aikawa, S.; Doi, H.;
+	Hirabayashi, Y.; Yoshii, N.; Fukushige, T.; Kanzaki, T.: Three
+	dimensional structural studies of alpha-N-acetylgalactosaminidase
+	(alpha-NAGA) in alpha-NAGA deficiency (Kanzaki disease): different gene
+	mutations cause peculiar structural changes in alpha-NAGAs resulting in
+	different substrate specificities and clinical phenotypes. J. Dermatol.
+	Sci. (2005) 37, 15-20. {Pubmed:15619430}
+RF	<40> Weignerova, L.; Filipi, T.; Manglova, D.; Kren, V.: Induction,
+	purification and characterization of alpha-N-acetylgalactosaminidase
+	from Aspergillus niger. Appl. Microbiol. Biotechnol. (2008) 79,
+	769-774. {Pubmed:18443780}
+RF	<41> Tajima, Y.; Kawashima, I.; Tsukimura, T.; Sugawara, K.; Kuroda,
+	M.; Suzuki, T.; Togawa, T.; Chiba, Y.; Jigami, Y.; Ohno, K.; Fukushige,
+	T.; Kanekura, T.; Itoh, K.; Ohashi, T.; Sakuraba, H.: Use of a modified
+	alpha-N-acetylgalactosaminidase in the development of enzyme
+	replacement therapy for Fabry disease. Am. J. Hum. Genet. (2009) 85,
+	569-580. {Pubmed:19853240}
+RF	<42> Weignerova¡, L.; Pelantova¡, H.; Manglova¡, D.; Michalkova¡,
+	K.; Kren, V.: Condensation reactions catalyzed by
+	alpha-N-acetylgalactosaminidase from Aspergillus niger yielding
+	alpha-N-acetylgalactosaminides. Biocatal. Biotransform. (2010) 28,
+	150-155. {Pubmed:}
+RF	<43> Sadik, G.; or Rashid, M.H.; Itoh-Nashida, T.; Ishii, K.; Sato, Y.;
+	Shiraishi, T.; Uda, Y.: Chemical and immunological characterization of
+	the two alpha-N-acetylgalactosaminidases from squid liver. Biol. Pharm.
+	Bull. (2009) 32, 1469-1472. {Pubmed:19652392}
+RF	<44> Harun-Or-Rashid, M.; Matsuzawa, T.; Satoh, Y.; Shiraishi, T.;
+	Ando, M.; Sadik, G.; Uda, Y.: Purification and characterization of
+	alpha-N-acetylgalactosaminidases I and II from the starfish Asterina
+	amurensis. Biosci. Biotechnol. Biochem. (2010) 74, 256-261.
+	{Pubmed:20139603}
+RF	<45> Greco, M.; Mitri, M.D.; Chiriaco, F.; Leo, G.; Brienza, E.;
+	Maffia, M.: Serum proteomic profile of cutaneous malignant melanoma and
+	relation to cancer progression: association to tumor derived
+	alpha-N-acetylgalactosaminidase activity. Cancer Lett. (2009) 283,
+	222-229. {Pubmed:19394758}
+RF	<46> Clark, N.E.; Garman, S.C.: The 1.9 A structure of human
+	alpha-N-acetylgalactosaminidase: The molecular basis of Schindler and
+	Kanzaki diseases. J. Mol. Biol. (2009) 393, 435-447. {Pubmed:19683538}
+
+ACTIVATING_COMPOUND
+AC	#21# Trypsin (#21# the enzyme needs to be proteolytically activated,
+	activation of the enzyme by trypsin <37>) <37>
+AC	#3# more (#3# the enzyme is inducible in patients peripheral blood
+	mononuclear cells by HIV-1 provirus-inducing agent, overview <37>) <37>
+
+PI_VALUE
+PI	#3,6# 4.8 (#6# isoelectric focusing <40>; #3# purified enzyme,
+	isoelectric focusing <44>) <40,44>
+PI	#35# 4.58 (#35# recombinant enzyme <46>) <46>
+PI	#36# 4.4 (#36# purified isozyme alpha-GalNAcase I, isoelectric focusing
+	<44>) <44>
+PI	#36# 7.1 (#36# purified isozyme alpha-GalNAcase II <44>) <44>
+
+///
+ID	3.2.1.5 (deleted)
+********************************************************************************
+*                                                                              *
+* Copyrighted by Dietmar Schomburg, Techn. University Braunschweig, GERMANY    *
+* Distributed under the License as stated at http:/www.brenda-enzymes.org      *
+*                                                                              *
+********************************************************************************
+
+RECOMMENDED_NAME
+RN	licheninase
+
+
+SYSTEMATIC_NAME
+SN	
+
+
+///
