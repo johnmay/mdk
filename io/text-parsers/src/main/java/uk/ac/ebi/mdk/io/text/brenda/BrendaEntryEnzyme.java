@@ -33,7 +33,6 @@ public class BrendaEntryEnzyme {
     private String recommendedName;
     private List<Reaction> reac;
     private Map<String, Integer> comment; // for comments and citations
-    private List<String> protDummyIDs;
     private Map<String, BrendaProtein> brendaProteins;
     private Map<String, Citation> citationsObj;
     private String ecComment;
@@ -62,7 +61,6 @@ public class BrendaEntryEnzyme {
         tissue2citations = new HashMap<Integer, List<Citation>>();
         localization2citations = new HashMap<Integer, List<Citation>>();
         substrateProductRxns = new ArrayList<Reaction>();
-        protDummyIDs = new ArrayList<String>();
 
         brendaProteins = new HashMap<String, BrendaProtein>();
     }
@@ -377,7 +375,6 @@ public class BrendaEntryEnzyme {
     }
 
     public void addProtDummyID(String dummyID) {
-        //this.protDummyIDs.add(dummyID);
         this.brendaProteins.put(dummyID, new BrendaProtein());
     }
 
@@ -477,6 +474,18 @@ public class BrendaEntryEnzyme {
         private void addNatSubProdRxn(Reaction r) {
             if(!this.nspReactions.contains(r))
                 this.nspReactions.add(r);
+        }
+
+        @Override
+        public String toString() {
+            return "BrendaProtein{" +
+                    "dummyId='" + dummyId + '\'' +
+                    ", citationKeys=" + citationKeys +
+                    ", localizations=" + localizations +
+                    ", sourceTissues=" + sourceTissues +
+                    ", nspReactions=" + nspReactions +
+                    ", crossRefs=" + crossRefs +
+                    '}';
         }
     }
 }

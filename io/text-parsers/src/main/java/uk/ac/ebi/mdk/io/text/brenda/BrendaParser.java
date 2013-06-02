@@ -15,17 +15,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package uk.ac.ebi.mdk.io.text.brenda;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.FileReader;
 
 /**
+ * The BRENDA parser was built for the text file that can be downloaded from BRENDA at
+ * http://www.brenda-enzymes.info/brenda_download/
+ * after registration.
+ *
+ * Once initialized with an inputstream or a path to a file, and a species (as it is written in the BRENDA file), enzyme
+ * entries for the organism are obtained iteratively through the {@link #next()} method. From the
+ * {@link BrendaEntryEnzyme} object, small molecules, reactions, enzyme cross references, and tissues/cell types
+ * associations can be obtained (as free text).
+ * The reactions are obtained from the NSP (Natural Substrate Product) type of reaction record.
+ *
+ * This parser's output can be used with the BRENDA Tissue Ontology (BTO) to resolve free text tissues/cell types into
+ * an identifier in the BTO.
  *
  * @author pmoreno
  */
@@ -36,30 +46,49 @@ public class BrendaParser {
     private BrendaEntryEnzyme enzyme;
     private SN_RNLineParser snrnlp;
 
-    public BrendaParser(String path, String specie) throws IOException {
-        this.reader = new BufferedReader(new FileReader(path));
-        this.specie = specie;
+    /**
+     * Constructor which relies on an inputstream providing the BRENDA Download file. The provided species name should
+     * be written as it is written in the "PR" lines of the BRENDA Download file.
+     *
+     * @param dataStream providing data from a BRENDA Download file.
+     * @param species the organism name as written in the BRENDA Download file.
+     */
+    public BrendaParser(InputStream dataStream, String species) {
+        this.reader = new BufferedReader(new InputStreamReader(dataStream));
+        this.specie = species;
 
         this.snrnlp = new SN_RNLineParser(reader);
-        /*int lineNum=1244343;
-        int current=1;
-        while(current<lineNum) {
-        this.reader.readLine();
-        current++;
-         *
-         * There was a DOS carriage return ^M on line 1246543
-        }*/
     }
 
-    private void init() {
+    /**
+     * Constructor which relies on an file path pointing to the BRENDA Download file. The provided species name should
+     * be written as it is written in the "PR" lines of the BRENDA Download file.
+     *
+     * @param path to a BRENDA Download file.
+     * @param species the organism name as written in the BRENDA Download file.
+     * @throws IOException
+     */
+    public BrendaParser(String path, String species) throws IOException {
+        this.reader = new BufferedReader(new FileReader(path));
+        this.specie = species;
+
+        this.snrnlp = new SN_RNLineParser(reader);
     }
 
+
+    /**
+     * Moves the parser one complete Enzyme record forward (the BRENDA Download file is the collection of all the enzyme
+     * records in the database, which spans all the organisms at once), and retrieves the next enzyme record, from where
+     * other types of data can be retrieved.
+     *
+     * @return a {@link BrendaEntryEnzyme} containing enzyme, small molecules, reactions, tissues, and other elements.
+     * @throws IOException
+     */
     public BrendaEntryEnzyme next() throws IOException {
         String line = this.reader.readLine();
 
 
         boolean foundSpecie = false;
-        //List<String> numIdentifiersOfProts = new ArrayList<String>();
 
 
         while (line != null) {
@@ -210,11 +239,7 @@ public class BrendaParser {
             } else if (line.startsWith("///")) {
                 if (foundSpecie) {
                     foundSpecie = false;
-
-
                     return this.enzyme;
-
-
                 } else {
                     this.enzyme = new BrendaEntryEnzyme();
                     line = this.reader.readLine();
@@ -223,8 +248,6 @@ public class BrendaParser {
                 }
             } else {
                 line = this.reader.readLine();
-
-
             }
         }
 
