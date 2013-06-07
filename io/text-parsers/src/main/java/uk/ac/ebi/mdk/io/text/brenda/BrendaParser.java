@@ -254,4 +254,8 @@ public class BrendaParser {
         return null;
 
     }
+
+    public void close() throws IOException {
+        this.reader.close();
+    }
 }

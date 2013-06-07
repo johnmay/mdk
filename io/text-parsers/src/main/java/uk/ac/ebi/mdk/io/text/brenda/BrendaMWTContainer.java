@@ -75,13 +75,20 @@ public class BrendaMWTContainer {
             }
             line = reader.readLine();
         }
+        reader.close();
     }
 
+    /**
+     * Produces a list of identifiers for the given free text name of the tissue or location.
+     *
+     * @param query
+     * @return
+     */
     public List<String> getIDsForName(String query) {
         if(name2BrendaTissueOntID.containsKey(query.toLowerCase().trim()))
             return name2BrendaTissueOntID.get(query.toLowerCase().trim());
         else
-            return null;
+            return new ArrayList<String>();
     }
 
     private void addToHash(String key, String value) {
