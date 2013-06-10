@@ -18,6 +18,7 @@ package uk.ac.ebi.mdk.service.query;
 
 import org.apache.axis.client.Call;
 import org.apache.axis.client.Service;
+import org.apache.log4j.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.rpc.ServiceException;
 import java.net.MalformedURLException;
@@ -43,6 +44,8 @@ import java.rmi.RemoteException;
 public class BRENDAWebService {
 
     private final Service service;
+    private static final String DOMAIN = "http://soapinterop.org/";
+    private static final Logger LOGGER = Logger.getLogger(BRENDAWebService.class);
 
     public BRENDAWebService() {
         service = new Service();
@@ -60,22 +63,28 @@ public class BRENDAWebService {
         Call call = (Call) service.createCall();
         String endpoint = "http://www.brenda-enzymes.org/soap2/brenda_server.php";
         call.setTargetEndpointAddress( new java.net.URL(endpoint) );
-        call.setOperationName(new QName("http://soapinterop.org/", methodName));
+        call.setOperationName(new QName(DOMAIN, methodName));
         return call;
     }
 
     /**
-     * Given a BRENDA ligand (chemical entity) name, it produces the BRENDA Ligand ID if the name is found in BRENDA.
+     * Given a BRENDA ligand (chemical entity) name, it produces the BRENDA Ligand ID (group id) if the name is found in BRENDA.
      * @param ligandName
-     * @return
-     * @throws RemoteException
-     * @throws MalformedURLException
-     * @throws ServiceException
+     * @return the ligand id (group id) or null if there are any errors.
      */
-    public String getLigandStructureID(String ligandName) throws RemoteException, MalformedURLException, ServiceException {
+    public String getLigandStructureID(String ligandName) {
+        String resultString = null;
+        try {
         String methodName = "getLigandStructureIdByCompoundName";
         Call call = getNewCall(methodName);
-        String resultString = (String) call.invoke( new Object[] {ligandName} );
+        resultString = (String) call.invoke( new Object[] {ligandName} );
+        } catch (RemoteException e) {
+            LOGGER.debug("RemoteException occurred while invoking getLigandStructureIdByCompoundName", e);
+        } catch (MalformedURLException e) {
+            LOGGER.debug("MalformedURLException occurred while invoking getLigandStructureIdByCompoundName", e);
+        } catch (ServiceException e) {
+            LOGGER.debug("ServiceException occurred while invoking getLigandStructureIdByCompoundName", e);
+        }
         return resultString;
     }
 
