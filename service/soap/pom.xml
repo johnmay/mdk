@@ -14,6 +14,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>axis</groupId>
             <artifactId>axis</artifactId>
             <version>1.4</version>
@@ -52,6 +58,12 @@
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-inchi</artifactId>
             <version>${cdk.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
