@@ -30,37 +30,36 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /** @author John May */
-public class MnxRefCompoundInputTest {
+public class MnxRefReactionInputTest {
 
     @Test(expected = NullPointerException.class)
     public void constructor_null_file() throws IOException {
-        new MnxRefCompoundInput(null, File.createTempFile("tmp", ""));
+        new MnxRefReactionInput(null, File.createTempFile("tmp", ""));
     }
 
     @Test(expected = NullPointerException.class)
     public void constructor_file_null() throws IOException {
-        new MnxRefCompoundInput(File.createTempFile("tmp", ""), null);
+        new MnxRefReactionInput(File.createTempFile("tmp", ""), null);
     }
 
     @Test
-    public void xrefs() throws IOException {
-        MnxRefCompoundInput in = new MnxRefCompoundInput(reader("chem_prop.tsv"),
-                                                         reader("chem_xref.tsv"));
-        Optional<MnxRefCompound> o = in.entry("MNXM22074");
+    public void entryById() throws IOException {
+        MnxRefReactionInput in = new MnxRefReactionInput(reader("reac_prop.tsv"),
+                                                         reader("reac_xref.tsv"));
+        Optional<MnxRefReaction> o = in.entry("MNXR5");
         assertTrue(o.isPresent());
-        MnxRefCompound c = o.get();
+        MnxRefReaction c = o.get();
 
-
-        assertThat(c.id(), is("MNXM22074"));
-        assertThat(c.name(), is("thymidine-dimer-containing DNA"));
-        assertThat(c.source(), is("brenda:BG95541"));
+        assertThat(c.id(), is("MNXR5"));
+        assertThat(c.equation(), is("1 MNXM1399 = 1 MNXM1399"));
+        assertThat(c.source(), is("bigg:11DOCRTSLtm"));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void invalidId() throws IOException {
-        MnxRefCompoundInput in = new MnxRefCompoundInput(reader("chem_prop.tsv"),
-                                                         reader("chem_xref.tsv"));
-        Optional<MnxRefCompound> o = in.entry("WAT!");
+    public void entryById_invalid() throws IOException {
+        MnxRefReactionInput in = new MnxRefReactionInput(reader("reac_prop.tsv"),
+                                                         reader("reac_xref.tsv"));
+        Optional<MnxRefReaction> o = in.entry("WAT!");
     }
 
     Reader reader(String path) {
