@@ -1,0 +1,235 @@
+### MNXref Version 18/02/2013 ###
+#
+#FILE:	chem_xref.tsv
+#
+#RESOURCE:	ChEBI
+#PREFIX:	chebi
+#URL:	http://www.ebi.ac.uk/chebi/
+#VERSION:	ChEBI Release version 100
+#LICENSE:	All data in ChEBI is non-proprietary or is derived from a non-proprietary 
+#	source. It is thus freely accessible and available to anyone. 
+#	(http://www.ebi.ac.uk/chebi/aboutChebiForward.do) 
+#
+#RESOURCE:	KEGG
+#PREFIX:	kegg
+#URL:	http://www.kegg.jp
+#VERSION:	11/02/2013
+#LICENSE:	Academic users may freely use the KEGG website and may also freely link 
+#	to the KEGG website. 
+#	Non-academic users may use the KEGG website as end users for non-commercial purposes, 
+#	but any other use requires a license agreement. 
+#	Academic users who utilize KEGG for providing academic services are requested 
+#	to obtain a KEGG FTP subscription for organizational use, which includes a proper 
+#	license agreement. 
+#	Non-academic users and Academic users intending to use KEGG for commercial purposes 
+#	are requested to obtain a license agreement through KEGG's exclusive licensing 
+#	agent, Pathway Solutions. 
+#	(http://www.kegg.jp/kegg/legal.html) 
+#
+#RESOURCE:	MetaCyc
+#PREFIX:	metacyc
+#URL:	http://metacyc.org
+#VERSION:	Version 16.5
+#LICENSE:	MetaCyc data are free and open for all users. 
+#	(http://biocyc.org/download.shtml) 
+#
+#RESOURCE:	UniPathway
+#PREFIX:	upa
+#URL:	http://www.unipathway.org
+#VERSION:	UniPathway Release 2012_04
+#LICENSE:	All data in UniPathway is freely accessible and available for anyone to 
+#	use. 
+#
+#RESOURCE:	The Seed
+#PREFIX:	seed
+#URL:	http://www.theseed.org
+#VERSION:	12/02/2013
+#LICENSE:	All tools and datasets that make up the SEED are in the public domain. 
+#	(http://www.theseed.org/wiki/DownloadPage) 
+#
+#RESOURCE:	BiGG
+#PREFIX:	bigg
+#URL:	http://bigg.ucsd.edu
+#VERSION:	10/12/2012
+#LICENSE:	Permission to use, copy, modify and distribute any part of this BiGG Database 
+#	for educational, research and non-profit purposes, without fee, and without a 
+#	written agreement is granted, provided that the above copyright notice, this paragraph 
+#	and the following three paragraphs appear in all copies. 
+#	Those desiring to incorporate this BiGG database into commercial products or use 
+#	for commercial purposes should contact the Technology Transfer & Intellectual 
+#	Property Services, University of California, San Diego, 9500 Gilman Drive, Mail 
+#	Code 0910, La Jolla, CA 92093-0910, Ph: (858) 534-5815, FAX: (858) 534-7345, e-mail:invent@ucsd.edu. 
+#	IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT, 
+#	INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, 
+#	ARISING OUT OF THE USE OF THIS BIGG DATABASE, EVEN IF THE UNIVERSITY OF CALIFORNIA 
+#	HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+#	THE BIGG DATABASE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF 
+#	CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, 
+#	OR MODIFICATIONS. THE UNIVERSITY OF CALIFORNIA MAKES NO REPRESENTATIONS AND EXTENDS 
+#	NO WARRANTIES OF ANY KIND, EITHER IMPLIED OR EXPRESS, INCLUDING, BUT NOT LIMITED 
+#	TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, 
+#	OR THAT THE USE OF THE BIGG DATABASE WILL NOT INFRINGE ANY PATENT, TRADEMARK OR 
+#	OTHER RIGHTS. 
+#	(http://bigg.ucsd.edu/) 
+#
+#RESOURCE:	BioPath
+#PREFIX:	biopath
+#URL:	http://www.molecular-networks.com/biopath
+#VERSION:	12/02/2013
+#LICENSE:	Academic users may use BioPath without paying any license fee. 
+#	Any users intending to use the BioPath database for commercial purposes have to 
+#	obtain a license. 
+#	(http://www.molecular-networks.com/node/2) 
+#
+#RESOURCE:	LipidMaps
+#PREFIX:	lipidmaps
+#URL:	http://www.lipidmaps.org
+#VERSION:	12/02/2013
+#LICENSE:	http://www.lipidmaps.org 
+#
+#RESOURCE:	HMDB
+#PREFIX:	hmdb
+#URL:	http://www.hmdb.ca
+#VERSION:	05/07/2012
+#LICENSE:	HMDB is offered to the public as a freely available resource. 
+#	Use and re-distribution of the data, in whole or in part, for commercial purposes 
+#	requires explicit permission of the authors and explicit acknowledgment of the 
+#	source material (HMDB) and the original publication. 
+#	(http://www.hmdb.ca/about) 
+#
+#RESOURCE:	Reactome
+#PREFIX:	reactome
+#URL:	http://www.reactome.org
+#VERSION:	12/02/2013
+#LICENSE:	Reactome is a free and open-source project, and you are free to download 
+#	Reactome software and data. 
+#	 The contents of Reactome are copyright (c) 2003-2010 Cold Spring Harbor Laboratory 
+#	(CSHL), Ontario Institute for Cancer Research (OICR) and the European Bioinformatics 
+#	Institute (EBI). 
+#	 The software and information contents are distributed under the terms of the 
+#	Creative Commons Attribution 3.0 Unported License, which grants parties the non-exclusive 
+#	right to use, distribute and create derivative works based on Reactome, provided 
+#	that the software and information is correctly attributed to CSHL, OICR and EBI. 
+#	(http://www.reactome.org/static_wordpress/license-agreement/) 
+#
+#RESOURCE:	BRENDA
+#PREFIX:	brenda
+#URL:	http://www.brenda-enzymes.org
+#VERSION:	12/02/2013
+#LICENSE:	Access to information contained in BRENDA is granted free of charge. 
+#	Any inclusion of BRENDA components into other data bases, or redistribution of 
+#	BRENDA requires a license 
+#	(http://www.brenda-enzymes.org/information/copy.php4) 
+#
+#
+#XREF	MNX_ID	Evidence	Description
+bigg:10fthf	MNXM237	inferred	10-Formyltetrahydrofolate
+bigg:10fthf5glu	MNXM3428	identity	10-formyltetrahydrofolate-[Glu](5)
+bigg:10fthf6glu	MNXM3429	identity	10-formyltetrahydrofolate-[Glu](6)
+bigg:10fthf7glu	MNXM5422	identity	10-formyltetrahydrofolate-[Glu](7)
+bigg:11-cis-retfa	MNXM7351	identity	fatty acid 11-cis-retinol
+bigg:11docrtsl	MNXM1399	inferred	11-Deoxycortisol
+bigg:11docrtstrn	MNXM849	inferred	11-Deoxycorticosterone
+bigg:12HPET	MNXM13989	identity	12-Hydroperoxyeicosa-5,8,10,14-tetraenoate
+bigg:12RHPET	MNXM13994	identity	12R-Hydroperoxyeicosatetraenoate
+bigg:12dgr120	MNXM4939	identity	1,2-Diacyl-sn-glycerol (didodecanoyl, n-C12:0)
+bigg:12dgr140	MNXM2902	identity	1,2-Diacyl-sn-glycerol (ditetradecanoyl, n-C14:0)
+bigg:12dgr141	MNXM4940	identity	1,2-Diacyl-sn-glycerol (ditetradec-7-enoyl, n-C14:1)
+bigg:12dgr160	MNXM3132	identity	1,2-Diacyl-sn-glycerol (dihexadecanoyl, n-C16:0)
+bigg:12dgr161	MNXM3774	identity	1,2-Diacyl-sn-glycerol (dihexadec-9-enoyl, n-C16:1)
+bigg:12dgr180	MNXM4217	identity	1,2-Diacyl-sn-glycerol (dioctadecanoyl, n-C18:0)
+bigg:12dgr181	MNXM3775	identity	1,2-Diacyl-sn-glycerol (dioctadec-11-enoyl, n-C18:1)
+bigg:12dgr_HP	MNXM9526	identity	1,2-Diacylglycerol Hp specific
+bigg:12dgr_SA	MNXM2586	identity	1,2-Daicylglycerol (Saureus)
+bigg:12dgr_SC	MNXM1012	identity	1,2-Diacylglycerol, yeast-specific
+bigg:12harachd	MNXM13977	identity	12 hydroxy arachidonic acid
+bigg:12ppd-S	MNXM1255	inferred	(S)-Propane-1,2-diol
+bigg:13-cis-oretn	MNXM6640	identity	13-cis-oxo-retinoic acid
+bigg:13-cis-retn	MNXM4251	identity	13-cis-retinoate
+bigg:13-cis-retnglc	MNXM8018	identity	13-cis-retinoyl glucuronide
+bigg:13dampp	MNXM350	inferred	1,3-Diaminopropane
+bigg:13dpg	MNXM261	inferred	3-Phospho-D-glyceroyl phosphate
+bigg:15HPET	MNXM2314	inferred	15-Hydroperoxyeicosatetraenoic acid
+bigg:15dap	MNXM943	inferred	1,5-Diaminopentane
+bigg:17ahprgnlone	MNXM531	inferred	17alpha-Hydroxypregnenolone
+bigg:17ahprgstrn	MNXM347	inferred	17alpha-Hydroxyprogesterone
+bigg:18harachd	MNXM14054	identity	18 hydroxy arachidonic acid
+bigg:1Dgali	MNXM878	inferred	1-alpha-D-Galactosyl-myo-inositol
+bigg:1a2425thvitd2	MNXM9596	identity	1-alpha,24R,25-Trihydroxyvitamin D2
+bigg:1a2425thvitd3	MNXM14060	inferred	1-alpha,24R,25-Trihydroxyvitamin D3
+bigg:1a25dhvitd2	MNXM9598	identity	1-alpha,25-Dihydroxyvitamin D2
+bigg:1a25dhvitd3	MNXM9599	identity	1-alpha,25-Dihydroxyvitamin D3
+bigg:1agpe120	MNXM6597	identity	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C12:0)
+bigg:1agpe140	MNXM6598	identity	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:0)
+bigg:1agpe141	MNXM6599	identity	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:1)
+bigg:1agpe160	MNXM6600	identity	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:0)
+bigg:1agpe161	MNXM6601	identity	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:1)
+bigg:1agpe180	MNXM9583	identity	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:0)
+bigg:1agpe181	MNXM9584	identity	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:1)
+bigg:1agpg120	MNXM6602	identity	1-Acyl-sn-glycero-3-phosphoglycerol (n-C12:0)
+bigg:1agpg140	MNXM6603	identity	1-Acyl-sn-glycero-3-phosphoglycerol (n-C14:0)
+bigg:1agpg141	MNXM6604	identity	1-Acyl-sn-glycero-3-phosphoglycerol (n-C14:1)
+bigg:1agpg160	MNXM6605	identity	1-Acyl-sn-glycero-3-phosphoglycerol (n-C16:0)
+bigg:1agpg161	MNXM6606	identity	1-Acyl-sn-glycero-3-phosphoglycerol (n-C16:1)
+bigg:1agpg180	MNXM6607	identity	1-Acyl-sn-glycero-3-phosphoglycerol (n-C18:0)
+bigg:1agpg181	MNXM6608	identity	1-Acyl-sn-glycero-3-phosphoglycerol (n-C18:1)
+bigg:1ddecg3p	MNXM4232	identity	1-dodecanoyl-sn-glycerol 3-phosphate
+bigg:1glyc_hs	MNXM13807	identity	1 acyl phosphoglycerol
+bigg:1hdec9eg3p	MNXM4233	identity	1-hexadec-9-enoyl-sn-glycerol 3-phosphate
+bigg:1hdecg3p	MNXM2763	identity	1-hexadecanoyl-sn-glycerol 3-phosphate
+bigg:1mncam	MNXM2172	inferred	1-Methylnicotinamide
+bigg:1mpyr	MNXM1615	inferred	1-Methylpyrrolinium
+bigg:1msg3p	MNXM6039	identity	1-Acyl-sn-glycerol 3-phosphate (branched C19:0)
+bigg:1odec11eg3p	MNXM4240	identity	1-octadec-11-enoyl-sn-glycerol 3-phosphate
+bigg:1odecg3p	MNXM3425	identity	1-octadecanoyl-sn-glycerol 3-phosphate
+bigg:1p2cbxl	MNXM957	inferred	1-Pyrroline-2-carboxylate
+bigg:1p3h5c	MNXM848	inferred	L-1-Pyrroline-3-hydroxy-5-carboxylate
+bigg:1pipdn2c	MNXM911	inferred	delta1-Piperideine-2-carboxylate
+bigg:1pyr5c	MNXM301	inferred	1-Pyrroline-5-carboxylate
+bigg:1tdec7eg3p	MNXM4245	identity	1-tetradec-7-enoyl-sn-glycerol 3-phosphate
+bigg:1tdecg3p	MNXM3426	identity	1-tetradecanoyl-sn-glycerol 3-phosphate
+bigg:20ahchsterol	MNXM3824	inferred	20alpha-hydroxy cholesterol
+bigg:23camp	MNXM2598	inferred	2',3'-Cyclic AMP
+bigg:23ccmp	MNXM3148	inferred	2',3'-Cyclic CMP
+bigg:23cgmp	MNXM3149	inferred	2',3'-Cyclic GMP
+bigg:23cump	MNXM3150	inferred	2',3'-Cyclic UMP
+bigg:23dappa	MNXM1798	inferred	2,3-diaminopropionate
+bigg:23ddhb	MNXM1977	inferred	2,3-Dihydro-2,3-dihydroxybenzoate
+bigg:23dhb	MNXM455	inferred	2,3-Dihydroxybenzoate
+bigg:23dhba	MNXM1978	inferred	(2,3-Dihydroxybenzoyl)adenylate
+bigg:23dhbzs	MNXM1487	inferred	2,3-dihydroxybenzoylserine
+bigg:23dhdp	MNXM807	inferred	2,3-Dihydrodipicolinate
+bigg:23dhmb	MNXM734	inferred	(R)-2,3-Dihydroxy-3-methylbutanoate
+bigg:23dhmp	MNXM1202	inferred	(R)-2,3-Dihydroxy-3-methylpentanoate
+bigg:23doguln	MNXM958	inferred	2,3-Dioxo-L-gulonate
+bigg:23dpg	MNXM892	inferred	2,3-Disphospho-D-glycerate
+bigg:2425dhvitd2	MNXM6764	identity	24R,25-Dihyoxyvitamin D2
+bigg:2425dhvitd3	MNXM6005	inferred	24R,25-Dihydroxyvitamin D3
+bigg:24dab	MNXM840	inferred	L-2,4-Diaminobutanoate
+bigg:24nph	MNXM1982	inferred	2,4 dihydroxy nitrophenol
+bigg:25aics	MNXM607	inferred	(S)-2-[5-Amino-1-(5-phospho-D-ribosyl)imidazole-4-carboxamido]succinate
+bigg:25dhpp	MNXM648	inferred	2,5-Diamino-6-hydroxy-4-(5'-phosphoribosylamino)-pyrimidine
+bigg:25dkglcn	MNXM936	inferred	2,5-diketo-D-gluconate
+bigg:25drapp	MNXM648	inferred	2,5-Diamino-6-(ribosylamino)-4-(3H)-pyrimidinone 5'-phosphate
+bigg:25hvitd2	MNXM4976	identity	25-Hydroxyvitamin D2
+bigg:25hvitd3	MNXM812	inferred	25-Hydroxyvitamin D3
+bigg:26dap-LL	MNXM644	inferred	LL-2,6-Diaminoheptanedioate
+bigg:26dap-M	MNXM529	inferred	meso-2,6-Diaminoheptanedioate
+bigg:2a3pp	MNXM5455	inferred	2-Amino-3-phosphonopropanoate
+bigg:2agpe120	MNXM3445	identity	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C12:0)
+bigg:2agpe140	MNXM3446	identity	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:0)
+bigg:2agpe141	MNXM3447	identity	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:1)
+bigg:2agpe160	MNXM2774	identity	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:0)
+bigg:2agpe161	MNXM3448	identity	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:1)
+bigg:2agpe180	MNXM3158	identity	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:0)
+bigg:2agpe181	MNXM3449	identity	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:1)
+bigg:2agpg120	MNXM3450	identity	2-Acyl-sn-glycero-3-phosphoglycerol (n-C12:0)
+bigg:2agpg140	MNXM3451	identity	2-Acyl-sn-glycero-3-phosphoglycerol (n-C14:0)
+bigg:2agpg141	MNXM3452	identity	2-Acyl-sn-glycero-3-phosphoglycerol (n-C14:1)
+bigg:2agpg160	MNXM2920	identity	2-Acyl-sn-glycero-3-phosphoglycerol (n-C16:0)
+bigg:2agpg161	MNXM3453	identity	2-Acyl-sn-glycero-3-phosphoglycerol (n-C16:1)
+bigg:2agpg180	MNXM3454	identity	2-Acyl-sn-glycero-3-phosphoglycerol (n-C18:0)
+bigg:2agpg181	MNXM3455	identity	2-Acyl-sn-glycero-3-phosphoglycerol (n-C18:1)
+bigg:2ahbut	MNXM1010	inferred	(S)-2-Aceto-2-hydroxybutanoate
+bigg:2ahhmd	MNXM1160	identity	2-Amino-4-hydroxy-6-hydroxymethyl-7,8-dihydropteridine diphosphate
+bigg:2ahhmp	MNXM937	inferred	2-Amino-4-hydroxy-6-hydroxymethyl-7,8-dihydropteridine
