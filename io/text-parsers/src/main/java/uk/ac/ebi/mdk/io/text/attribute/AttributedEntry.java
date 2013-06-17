@@ -87,6 +87,13 @@ public class AttributedEntry<K extends Enum, V> {
         return map.containsKey(key);
     }
 
+    /**
+     * Produces the first element within the collection for the given key (the collection is backed with an array,
+     * so the order is respected).
+     *
+     * @param key
+     * @return V the first element in the collection for that key.
+     */
     public V getFirst(K key) {
         return get(key).iterator().next();
     }
