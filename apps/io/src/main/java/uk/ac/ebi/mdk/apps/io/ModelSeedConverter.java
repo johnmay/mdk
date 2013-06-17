@@ -19,6 +19,9 @@ package uk.ac.ebi.mdk.apps.io;
 
 import org.apache.commons.cli.Option;
 import uk.ac.ebi.mdk.apps.CommandLineMain;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.Synonym;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -30,16 +33,21 @@ import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
+import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicReactionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
+import uk.ac.ebi.mdk.domain.observation.Observation;
+import uk.ac.ebi.mdk.io.text.seed.ModelSeedCompound;
+import uk.ac.ebi.mdk.io.text.seed.ModelSeedCompoundInput;
 import uk.ac.ebi.mdk.io.text.seed.ModelSeedReaction;
 import uk.ac.ebi.mdk.io.text.seed.ModelSeedReactionInput;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,14 +61,18 @@ public final class ModelSeedConverter extends CommandLineMain {
 
     @Override
     public void setupOptions() {
-        add(new Option("i", true, "input (TSV) from model-SEED"));
+        add(new Option("r", true, "reactions (TSV) from model-SEED"));
+        add(new Option("c", true, "compounds (TSV) from model-SEED"));
         add(new Option("o", true, "output model"));
     }
 
     @Override public void process() {
         try {
+
+            loadMetabolites();
+
             List<ModelSeedReaction> rxns = ModelSeedReactionInput
-                    .fromPath(getFile("i").getPath());
+                    .fromPath(getFile("r").getPath());
 
             Reconstruction recon = entities.newReconstruction();
             recon.setIdentifier(new ReconstructionIdentifier("model-SEED"));
@@ -71,7 +83,7 @@ public final class ModelSeedConverter extends CommandLineMain {
                 try {
                     recon.addReaction(reaction(rxn));
                 } catch (Exception e) {
-                    System.out.println(rxn.equation());
+                    System.out.println(e.getMessage() + ": " + rxn.equation());
                 }
             }
 
@@ -87,7 +99,35 @@ public final class ModelSeedConverter extends CommandLineMain {
         new ModelSeedConverter().process(args);
     }
 
-    public MetabolicReaction reaction(ModelSeedReaction modelSEEDRxn) {
+    private static String normalise(String name) {
+        return name.replaceAll("\\s+", "").toLowerCase(Locale.ENGLISH);
+    }
+
+    private void loadMetabolites() throws IOException {
+        List<ModelSeedCompound> cpds = ModelSeedCompoundInput
+                .fromPath(getFile("c")
+                                  .getPath());
+        for (ModelSeedCompound cpd : cpds) {
+            Metabolite m = entities.metabolite();
+            m.setIdentifier(BasicChemicalIdentifier.nextIdentifier());
+            m.setAbbreviation(cpd.id());
+            m.setName(cpd.name());
+            for (String synonym : cpd.synonyms())
+                m.addAnnotation(new Synonym(synonym));
+            m.addAnnotation(new MolecularFormula(cpd.formula()));
+
+            for (String cid : cpd.keggIds()) {
+                if (cid.startsWith("C"))
+                    m.addAnnotation(new KEGGCrossReference<Observation>(new KEGGCompoundIdentifier(cid)));
+            }
+
+            metabolites.put(normalise(cpd.name()), m);
+            for (String synonym : cpd.synonyms())
+                metabolites.put(normalise(synonym), m);
+        }
+    }
+
+    private MetabolicReaction reaction(ModelSeedReaction modelSEEDRxn) {
         String equation = modelSEEDRxn.equation();
         MetabolicReaction rxn = new MetabolicReactionImpl(BasicReactionIdentifier
                                                                   .nextIdentifier(),
@@ -104,15 +144,16 @@ public final class ModelSeedConverter extends CommandLineMain {
                 rxn.addProduct(participant(r));
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println("Could not parse reaction equation: '" + rxn.getAbbreviation() + "'");
+            System.err.println("Could not parse reaction equation: '" + rxn
+                    .getAbbreviation() + "'");
         }
         return rxn;
     }
 
-    Pattern coefficient = Pattern.compile("^\\((\\d+(?:\\.\\d+)?)\\)");
+    Pattern coefficient = Pattern.compile("^(\\(?\\d+(?:\\.\\d+)?\\)?)");
     Pattern compartment = Pattern.compile("\\[([A-z])\\]");
 
-    public MetabolicParticipant participant(String str) {
+    private MetabolicParticipant participant(String str) {
 
         double coef = 1d;
         String comp = "";
@@ -122,12 +163,14 @@ public final class ModelSeedConverter extends CommandLineMain {
         Matcher coefMatcher = coefficient.matcher(str);
         if (coefMatcher.find()) {
             String coefStr = coefMatcher.group(1);
-            str = str.substring(coefStr.length() + 2).trim();
+            str = str.substring(coefStr.length()).trim();
+            if (coefStr.charAt(0) == '(')
+                coefStr = coefStr.substring(1, coefStr.length() - 1);
             coef = Double.parseDouble(coefStr);
         }
-        String name = str.substring(1, str.length() - 1);
+        String name = str.trim().substring(1, str.length() - 1);
         Matcher matcher = compartment.matcher(str);
-        if (matcher.find()) {
+        if (matcher.find() && matcher.end() == str.length() - 1) {
             comp = matcher.group(1);
             name = name.substring(0, matcher.start() - 1);
         }
@@ -137,7 +180,7 @@ public final class ModelSeedConverter extends CommandLineMain {
                                                       compartment(comp, str));
     }
 
-    public Compartment compartment(String compartment, String name) {
+    private Compartment compartment(String compartment, String name) {
         if (compartment.isEmpty())
             return Organelle.CYTOPLASM;
         char c = compartment.charAt(0);
@@ -170,13 +213,15 @@ public final class ModelSeedConverter extends CommandLineMain {
         }
     }
 
-    public Metabolite metabolite(String name) {
-        Metabolite m = metabolites.get(name);
+    private Metabolite metabolite(String name) {
+        Metabolite m = metabolites.get(normalise(name));
         if (m == null) {
+            System.out
+                  .println("no previously loaded metabloite by name: " + name);
             m = new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(),
                                    name,
                                    name);
-            metabolites.put(name, m);
+            metabolites.put(normalise(name), m);
         }
         return m;
     }

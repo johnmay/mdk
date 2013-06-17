@@ -73,17 +73,18 @@ public final class ModelSeedCompoundInput implements Closeable {
             return null;
 
         String id = row[ID];
-        String names = row[NAME];
+        String names = row[NAME].replaceAll("<br>", " ").trim();
         String formula = row[FORMULA];
-        String mass = row[MASS];
-        String keggId = row[KEGG_ID];
-        List<String> synonyms = Lists.newArrayList(names.split(","));
+        String mass = row[MASS].trim();
+        String keggId = row[KEGG_ID].trim();
+        List<String> synonyms = Lists.newArrayList(names.split(", "));
 
         return new ModelSeedCompound(id, synonyms.remove(0),
                                      Sets.newHashSet(synonyms),
                                      formula,
                                      Sets.newHashSet(keggId.split(",")),
-                                     Double.parseDouble(mass));
+                                     mass.isEmpty() ? 0
+                                                    : Double.parseDouble(mass));
 
     }
 
