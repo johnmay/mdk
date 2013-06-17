@@ -30,7 +30,7 @@ import java.util.Set;
  * @see KeggFlatfile
  * @see <a href="http://www.kegg.jp/kegg/rest/dbentry.html">DB Entry Format</a>
  */
-enum KEGGReactionField implements KEGGField {
+public enum KEGGReactionField implements KEGGField {
     ENTRY,
     NAME,
     DEFINITION,
