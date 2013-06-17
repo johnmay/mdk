@@ -45,6 +45,7 @@ import uk.ac.ebi.mdk.io.text.seed.ModelSeedReaction;
 import uk.ac.ebi.mdk.io.text.seed.ModelSeedReactionInput;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -137,10 +138,11 @@ public final class ModelSeedConverter extends CommandLineMain {
             String[] sides = equation.split("<=>|=>|<=");
             String substrate = sides[0];
             String products = sides[1];
-            for (String s : substrate.trim().split(" \\+ ")) {
+
+            for (String s : splitParticipants(substrate)) {
                 rxn.addReactant(participant(s));
             }
-            for (String r : products.trim().split(" \\+ ")) {
+            for (String r : splitParticipants(products)) {
                 rxn.addProduct(participant(r));
             }
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -154,6 +156,7 @@ public final class ModelSeedConverter extends CommandLineMain {
     Pattern compartment = Pattern.compile("\\[([A-z])\\]");
 
     private MetabolicParticipant participant(String str) {
+
 
         double coef = 1d;
         String comp = "";
@@ -178,6 +181,28 @@ public final class ModelSeedConverter extends CommandLineMain {
         return new MetabolicParticipantImplementation(metabolite(name),
                                                       coef,
                                                       compartment(comp, str));
+    }
+
+    private static List<String> splitParticipants(String reactionSide) {
+        StringBuilder sb = new StringBuilder();
+        List<String> participants = new ArrayList<String>();
+        boolean inCompound = false;
+        for (int i = 0; i < reactionSide.length(); i++) {
+            char c = reactionSide.charAt(i);
+            if (c == '|') {
+                sb.append(c);
+                if (inCompound) {
+                    participants.add(sb.toString());
+                    sb = new StringBuilder();
+                }
+                inCompound = !inCompound;
+            } else if (inCompound) {
+                sb.append(reactionSide.charAt(i));
+            } else if (c != '+' && (c != ' ' || sb.length() > 0)) {
+                sb.append(reactionSide.charAt(i));
+            }
+        }
+        return participants;
     }
 
     private Compartment compartment(String compartment, String name) {
