@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,37 +41,43 @@ import java.util.regex.Pattern;
  *
  * @author pmoreno
  */
-public class BrendaMWTContainer {
+public class BrendaTissueMap {
 
     private BufferedReader reader;
-    private HashMap<String,List<String>> name2BrendaTissueOntID;
-    private Pattern idNamePattern;
+    private Map<String,List<String>> name2BrendaTissueOntID;
     private Pattern idTabNameSimplePattern;
 
-    public BrendaMWTContainer(InputStream stream) {
+    /**
+     * Loads the tissue/location curated map from a stream.
+     *
+     * @param stream
+     */
+    public BrendaTissueMap(InputStream stream) {
         reader = new BufferedReader(new InputStreamReader(stream));
         this.init();
     }
 
-    public BrendaMWTContainer(String path) throws FileNotFoundException {
+    /**
+     * Loads the tissue/location curated map from a file in the the specified path.
+     *
+     * @param path
+     * @throws FileNotFoundException
+     */
+    public BrendaTissueMap(String path) throws FileNotFoundException {
         reader = new BufferedReader(new FileReader(path));
         this.init();
     }
 
     private void init() {
         name2BrendaTissueOntID = new HashMap<String, List<String>>();
-        idNamePattern = Pattern.compile("p1=\\\"(\\d+)\\\">(.+)</t>");
         idTabNameSimplePattern = Pattern.compile("^(.+:\\d+)\\t([^\\t]+)");
     }
 
     public void load() throws IOException {
         String line = reader.readLine();
         while(line!=null) {
-            Matcher idNameMatcher = idNamePattern.matcher(line);
             Matcher idTabNameMatcher = idTabNameSimplePattern.matcher(line);
-            if(idNameMatcher.find()) {
-                this.addToHash(idNameMatcher.group(2).toLowerCase().trim(), idNameMatcher.group(1));
-            } else if(idTabNameMatcher.find()) {
+            if(idTabNameMatcher.find()) {
                 this.addToHash(idTabNameMatcher.group(2).toLowerCase().trim(), idTabNameMatcher.group(1));
             }
             line = reader.readLine();
@@ -81,8 +88,8 @@ public class BrendaMWTContainer {
     /**
      * Produces a list of identifiers for the given free text name of the tissue or location.
      *
-     * @param query
-     * @return
+     * @param query the tissue or location free text as it appears in the BRENDA files
+     * @return a list of BTO or other ontologies identifiers matching that free text, or an empty list with no results.
      */
     public List<String> getIDsForName(String query) {
         if(name2BrendaTissueOntID.containsKey(query.toLowerCase().trim()))
