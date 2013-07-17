@@ -59,6 +59,7 @@ import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.Note;
 import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.rex.RExCompound;
 import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
@@ -238,11 +239,12 @@ public class SBMLIOUtil {
             sbmlRxn.addCVTerm(term);
 
         Collection<RExExtract> extracts = rxn.getAnnotations(RExExtract.class);
-        if (!extracts.isEmpty()) {
+        Collection<RExCompound> compounds = rxn.getAnnotations(RExCompound.class);
+        if(!extracts.isEmpty() && !compounds.isEmpty()) {
             try {
-                sbmlRxn.getAnnotation().appendNoRDFAnnotation(handler.marshal(extracts));
+                sbmlRxn.getAnnotation().appendNoRDFAnnotation(handler.marshal(extracts, compounds));
             } catch (JAXBException e) {
-                LOGGER.error("Could not convert REx extracts");
+                LOGGER.error("Could not convert REx extracts and compounds");
             }
         }
 
