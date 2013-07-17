@@ -17,24 +17,23 @@
 
 package uk.ac.ebi.mdk.io.xml.rex;
 
-import uk.ac.bbk.rex.Extract;
-import uk.ac.bbk.rex.Extracts;
-import uk.ac.bbk.rex.Tag;
+import org.xml.sax.InputSource;
+import uk.ac.bbk.rex.*;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.annotation.rex.RExAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.rex.RExCompound;
 import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.annotation.rex.RExTag;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
+import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /** @author John May */
 public class RExHandler {
@@ -46,7 +45,7 @@ public class RExHandler {
     IdentifierFactory identifiers;
 
     public RExHandler() throws JAXBException {
-        this.context = JAXBContext.newInstance(Extracts.class);
+        this.context = JAXBContext.newInstance(Rex.class);
         this.unmarshaller = context.createUnmarshaller();
         this.marshaller = context.createMarshaller();
         this.identifiers = DefaultIdentifierFactory.getInstance();
@@ -54,9 +53,11 @@ public class RExHandler {
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
     }
 
-    public String marshal(final Collection<RExExtract> extracts) throws
-                                                                 JAXBException {
-        Extracts xmlExtracts = new Extracts();
+    public String marshal(final Collection<RExExtract> extracts, final Collection<RExCompound> compounds)
+            throws JAXBException {
+        Rex rex = new Rex();
+        rex.setExtracts(new Extracts());
+
         for (RExExtract extract : extracts) {
             final Extract xmlExtract = new Extract();
             xmlExtract.setSentence(extract.sentence());
@@ -68,18 +69,38 @@ public class RExHandler {
                 xmlTag.setType(tag.type().toString());
                 xmlExtract.getTag().add(xmlTag);
             }
-            xmlExtracts.getExtract().add(xmlExtract);
+            rex.getExtracts().getExtract().add(xmlExtract);
         }
+
+        rex.setComponents(new Components());
+        rex.getComponents().setReactants(new Compounds());
+        rex.getComponents().setProducts(new Compounds());
+
+        for(RExCompound rexCompound : compounds)
+        {
+            Compound c = rexCompoundToCompound(rexCompound);
+
+            if(rexCompound.getType() == RExCompound.Type.SUBSTRATE)
+            {
+                rex.getComponents().getReactants().getCompound().add(c);
+            }
+            else if(rexCompound.getType() == RExCompound.Type.PRODUCT)
+            {
+                rex.getComponents().getProducts().getCompound().add(c);
+            }
+        }
+
         StringWriter sw = new StringWriter();
-        marshaller.marshal(xmlExtracts, sw);
+        marshaller.marshal(rex, sw);
         return sw.toString();
     }
 
-    public List<RExExtract> unmarshal(final String str) throws JAXBException {
-        Extracts xmlExtracts = (Extracts) unmarshaller.unmarshal(
-            new StringReader(str));
+    public RExAnnotation unmarshal(final String str) throws JAXBException {
+        //Rex rex = (Rex) unmarshaller.unmarshal(new StringReader(str));
+        JAXBElement<Rex> root = unmarshaller.unmarshal(new StreamSource(new StringReader(str)), Rex.class);
+        Rex rex = root.getValue();
         List<RExExtract> extracts = new ArrayList<RExExtract>(1);
-        for (Extract e : xmlExtracts.getExtract()) {
+        for (Extract e : rex.getExtracts().getExtract()) {
             Identifier identifier = identifiers.ofURL(e.getSource());
             String sentence = e.getSentence().replaceAll("\n", "").replaceAll(
                 "\\s+", " ");
@@ -90,6 +111,75 @@ public class RExHandler {
             }
             extracts.add(new RExExtract(identifier, sentence, tags));
         }
-        return extracts;
+
+        List<RExCompound> compounds = new ArrayList<RExCompound>();
+        for(Compound c : rex.getComponents().getReactants().getCompound())
+        {
+            compounds.add(new RExCompound(c.getId(),
+                                          RExCompound.Type.SUBSTRATE,
+                                          c.isIsInSeed(),
+                                          c.isIsInBranch(),
+                                          pathwaysToStrings(c.getAlternativePathways().getPathway()),
+                                          pathwaysToStrings(c.getOtherPathways().getPathway()),
+                                          c.getExtraction(),
+                                          c.getRelevance()));
+        }
+
+        for(Compound c : rex.getComponents().getProducts().getCompound())
+        {
+            compounds.add(new RExCompound(c.getId(),
+                                          RExCompound.Type.PRODUCT,
+                                          c.isIsInSeed(),
+                                          c.isIsInBranch(),
+                                          pathwaysToStrings(c.getAlternativePathways().getPathway()),
+                                          pathwaysToStrings(c.getOtherPathways().getPathway()),
+                                          c.getExtraction(),
+                                          c.getRelevance()));
+        }
+
+        return new RExAnnotation(extracts, compounds);
+    }
+
+    private List<String> pathwaysToStrings(List<Pathway> pathways)
+    {
+        List<String> ids = new ArrayList<String>();
+        for(Pathway pathway : pathways)
+        {
+            ids.add(pathway.getId());
+        }
+
+        return ids;
+    }
+
+    private List<Pathway> stringsToPathways(List<String> ids)
+    {
+        List<Pathway> pathways = new ArrayList<Pathway>();
+        for(String id : ids)
+        {
+            Pathway pathway = new Pathway();
+            pathway.setId(id);
+            pathways.add(pathway);
+        }
+
+        return pathways;
+    }
+
+    private Compound rexCompoundToCompound(RExCompound rexCompound)
+    {
+        Compound compound = new Compound();
+        compound.setId(rexCompound.getID());
+        compound.setIsInSeed(rexCompound.isInSeed());
+        compound.setIsInBranch(rexCompound.isInBranch());
+
+        compound.setAlternativePathways(new Pathways());
+        compound.getAlternativePathways().getPathway().addAll(stringsToPathways(rexCompound.getAlternativePathways()));
+
+        compound.setOtherPathways(new Pathways());
+        compound.getOtherPathways().getPathway().addAll(stringsToPathways(rexCompound.getOtherPathways()));
+
+        compound.setExtraction(rexCompound.getExtraction());
+        compound.setRelevance(rexCompound.getRelevance());
+
+        return compound;
     }
 }
