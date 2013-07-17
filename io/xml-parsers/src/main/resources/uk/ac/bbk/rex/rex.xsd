@@ -22,39 +22,78 @@
             elementFormDefault="qualified"
             attributeFormDefault="unqualified">
 
-  <xsd:element name="extracts">
-    <xsd:complexType>
-      <xsd:sequence>
-        <xsd:element name="extract" type="extract" minOccurs="1"
-                     maxOccurs="unbounded"/>
-      </xsd:sequence>
+    <xsd:element name="rex">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="extracts" type="extracts" minOccurs="1" maxOccurs="1"/>
+                <xsd:element name="components" type="components" minOccurs="1" maxOccurs="1"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name='extracts'>
+        <xsd:sequence>
+            <xsd:element name="extract" type="extract" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
     </xsd:complexType>
-  </xsd:element>
 
-  <xsd:complexType name="extract">
-    <xsd:sequence>
-      <xsd:element name="sentence" type="xsd:string" minOccurs="1"
-                   maxOccurs="1"/>
-      <xsd:element name="tag" type="tag" minOccurs="0"
-                   maxOccurs="unbounded"/>
-    </xsd:sequence>
-    <xsd:attribute name="source" type="xsd:string"/>
-  </xsd:complexType>
+    <xsd:complexType name="extract">
+        <xsd:sequence>
+            <xsd:element name="sentence" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="tag" type="tag" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="source" type="xsd:string"/>
+    </xsd:complexType>
 
-  <xsd:complexType name="tag">
-    <xsd:attribute name="type" type="xsd:string" use="required"/>
-    <xsd:attribute name="start" type="xsd:int" use="required"/>
-    <xsd:attribute name="length" type="xsd:int" use="required"/>
-    <xsd:attribute name="metaid" type="xsd:string" use="optional"/>
-  </xsd:complexType>
+    <xsd:complexType name="tag">
+        <xsd:attribute name="type" type="xsd:string" use="required"/>
+        <xsd:attribute name="start" type="xsd:int" use="required"/>
+        <xsd:attribute name="length" type="xsd:int" use="required"/>
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
+    </xsd:complexType>
 
-  <xsd:simpleType name="type">
-    <xsd:restriction base="xsd:string">
-      <xsd:enumeration value="substrate"/>
-      <xsd:enumeration value="product"/>
-      <xsd:enumeration value="action"/>
-      <xsd:enumeration value="modifier"/>
-    </xsd:restriction>
-  </xsd:simpleType>
+    <xsd:simpleType name="type">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="substrate"/>
+            <xsd:enumeration value="product"/>
+            <xsd:enumeration value="action"/>
+            <xsd:enumeration value="modifier"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="components">
+        <xsd:sequence>
+            <xsd:element name="reactants" type="compounds" minOccurs="1" maxOccurs="1" />
+            <xsd:element name="products" type="compounds" minOccurs="1" maxOccurs="1" />
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:complexType name="compounds">
+        <xsd:sequence>
+            <xsd:element name="compound" type="compound" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="compound">
+        <xsd:sequence>
+            <xsd:element name="alternativePathways" type="pathways" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="otherPathways" type="pathways" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
+        <xsd:attribute name="isInSeed" type="xsd:boolean" use="required"/>
+        <xsd:attribute name="isInBranch" type="xsd:boolean" use="required"/>
+        <xsd:attribute name="extraction" type="xsd:double" use="required"/>
+        <xsd:attribute name="relevance" type="xsd:double" use="optional"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="pathways">
+        <xsd:sequence>
+            <xsd:element name="pathway" type="pathway" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="pathway">
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
+    </xsd:complexType>
 
 </xsd:schema>
