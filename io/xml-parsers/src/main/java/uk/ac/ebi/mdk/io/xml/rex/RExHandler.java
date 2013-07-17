@@ -64,6 +64,7 @@ public class RExHandler {
             xmlExtract.setSource(extract.source().getResolvableURL());
             for (final RExTag tag : extract.tags()) {
                 Tag xmlTag = new Tag();
+                xmlTag.setId(tag.id());
                 xmlTag.setStart(tag.start());
                 xmlTag.setLength(tag.length());
                 xmlTag.setType(tag.type().toString());
@@ -106,7 +107,7 @@ public class RExHandler {
                 "\\s+", " ");
             List<RExTag> tags = new ArrayList<RExTag>(4);
             for (final Tag tag : e.getTag()) {
-                tags.add(new RExTag(tag.getStart(), tag.getLength(),
+                tags.add(new RExTag(tag.getId(), tag.getStart(), tag.getLength(),
                                     tag.getType()));
             }
             extracts.add(new RExExtract(identifier, sentence, tags));
