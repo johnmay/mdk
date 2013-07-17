@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="4">
+    <model id="model">
+        <listOfCompartments>
+            <compartment id="c" name="cytoplasm" metaid="_3c5af4ff_5bc4_43b0_a6eb_56cce68659f0">
+                <annotation>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                        <rdf:Description rdf:about="#_3c5af4ff_5bc4_43b0_a6eb_56cce68659f0">
+                            <bqbiol:is>
+                                <rdf:Bag>
+                                    <rdf:li rdf:resource="urn:miriam:obo.go:GO%3A0005737" />
+                                </rdf:Bag>
+                            </bqbiol:is>
+                        </rdf:Description>
+                    </rdf:RDF>
+                </annotation>
+            </compartment>
+            <compartment id="e" name="extracellular" metaid="_08891cd6_1b92_4918_86c6_4c6be928f45c">
+                <annotation>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/">
+                        <rdf:Description rdf:about="#_08891cd6_1b92_4918_86c6_4c6be928f45c">
+                            <bqbiol:is>
+                                <rdf:Bag>
+                                    <rdf:li rdf:resource="urn:miriam:obo.go:GO%3A0005576" />
+                                </rdf:Bag>
+                            </bqbiol:is>
+                        </rdf:Description>
+                    </rdf:RDF>
+                </annotation>
+            </compartment>
+        </listOfCompartments>
+        <listOfSpecies>
+            <species id="mol1" name="arginine" metaid="_000000001">
+                <annotation>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+                        <rdf:Description rdf:about="#_000000001">
+                            <bqbiol:is>
+                                <rdf:Bag>
+                                    <rdf:li rdf:resource="http://rdf.openmolecules.net/?InChI=1S/C6H14N4O2/c7-4(5(11)12)2-1-3-10-6(8)9/h4H,1-3,7H2,(H,11,12)(H4,8,9,10)" />
+                                </rdf:Bag>
+                            </bqbiol:is>
+                        </rdf:Description>
+                    </rdf:RDF>
+                </annotation>
+            </species>
+            <species id="mol2" name="agmatine" metaid="_000000002">
+                <annotation>
+                    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
+                        <rdf:Description rdf:about="#_000000002">
+                            <bqbiol:is>
+                                <rdf:Bag>
+                                    <rdf:li rdf:resource="http://rdf.openmolecules.net/?InChI=1S/C5H14N4/c6-3-1-2-4-9-5(7)8/h1-4,6H2,(H4,7,8,9)" />
+                                </rdf:Bag>
+                            </bqbiol:is>
+                        </rdf:Description>
+                    </rdf:RDF>
+                </annotation>
+            </species>
+        </listOfSpecies>
+        <listOfReactions>
+            <reaction id="rxn1">
+                <annotation>
+                    <rex:rex xmlns:rex="http://www.bbk.ac.uk/rex/">
+                        <rex:extracts>
+                            <rex:extract source="0000000">
+                                <rex:sentence>Arginine is converted to agmatine.</rex:sentence>
+                                <rex:tag type="substrate" start="0" length="8" id="mol1" />
+                                <rex:tag type="product" start="25" length="8" id="mol2" />
+                            </rex:extract>
+                        </rex:extracts>
+                        <rex:components>
+                            <rex:reactants>
+                                <rex:compound id="mol1" isInSeed="true" isInBranch="false" extraction="10.0" relevance="5.0">
+                                    <rex:alternativePathways>
+                                        <rex:pathway id="META000" />
+                                        <rex:pathway id="META001" />
+                                    </rex:alternativePathways>
+                                    <rex:otherPathways>
+                                        <rex:pathway id="META002" />
+                                    </rex:otherPathways>
+                                </rex:compound>
+                            </rex:reactants>
+                            <rex:products>
+                                <rex:compound id="mol2" isInSeed="true" isInBranch="false" extraction="10.0" relevance="5.0">
+                                    <rex:alternativePathways>
+                                        <rex:pathway id="META000" />
+                                        <rex:pathway id="META001" />
+                                    </rex:alternativePathways>
+                                    <rex:otherPathways>
+                                        <rex:pathway id="META002" />
+                                    </rex:otherPathways>
+                                </rex:compound>
+                            </rex:products>
+                        </rex:components>
+                    </rex:rex>
+                </annotation>
+                <listOfReactants>
+                    <speciesReference species="mol1" />
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="mol2" />
+                </listOfProducts>
+            </reaction>
+        </listOfReactions>
+    </model>
+</sbml>

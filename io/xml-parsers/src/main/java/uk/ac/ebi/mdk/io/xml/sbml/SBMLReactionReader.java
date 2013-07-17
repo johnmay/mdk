@@ -53,6 +53,7 @@ import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.Note;
+import uk.ac.ebi.mdk.domain.annotation.rex.RExAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -222,7 +223,9 @@ public class SBMLReactionReader {
         String nonRDFAnnotation = sbmlReaction.getAnnotation().getNonRDFannotation();
         if (nonRDFAnnotation != null && nonRDFAnnotation.contains("http://www.bbk.ac.uk/rex")) {
             try {
-                reaction.addAnnotations(rExHandler.unmarshal(nonRDFAnnotation));
+                RExAnnotation rex = rExHandler.unmarshal(nonRDFAnnotation);
+                reaction.addAnnotations(rex.getExtracts());
+                reaction.addAnnotations(rex.getCompounds());
             } catch (JAXBException e) {
                 LOGGER.error(e);
             }

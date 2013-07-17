@@ -73,12 +73,12 @@ public class SBMLReactionReaderTest {
     @Test
     public void inputOfREx() throws XMLStreamException, IOException {
         SBMLReactionReader reader = new SBMLReactionReader(
-            getClass().getResourceAsStream("single-species+REx.xml"),
+            getClass().getResourceAsStream("rex.xml"),
             DefaultEntityFactory.getInstance(),
             new AutomaticCompartmentResolver());
         while (reader.hasNext()) {
             MetabolicReaction reaction = reader.next();
-            Assert.assertThat(reaction.getAnnotations().size(), is(1));
+            Assert.assertThat(reaction.getAnnotations().size(), is(3));
         }
 
         reader.close();
