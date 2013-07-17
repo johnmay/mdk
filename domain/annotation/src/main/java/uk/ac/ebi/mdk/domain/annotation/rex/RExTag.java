@@ -22,6 +22,7 @@ import java.util.Locale;
 /** @author John May */
 public class RExTag {
 
+    private final String id;
     private final int start, length;
     private final Type type;
 
@@ -37,16 +38,23 @@ public class RExTag {
 
     }
 
-    public RExTag(int start, int length, Type type) {
+    public RExTag(String id, int start, int length, Type type) {
+        this.id = id;
         this.start = start;
         this.length = length;
         this.type = type;
     }
 
-    public RExTag(int start, int length, String type) {
+    public RExTag(String id, int start, int length, String type) {
+        this.id = id;
         this.start = start;
         this.length = length;
         this.type = Type.valueOf(type.toUpperCase(Locale.ENGLISH));
+    }
+
+    public String id()
+    {
+        return id;
     }
 
     public int start() {

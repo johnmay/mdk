@@ -61,24 +61,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class RExHandlerTest {
 
-    /*
     @Test
-    public void testMarshal() throws Exception
-    {
-        RExExtract extract = new RExExtract(new PubMedIdentifier(12345), "a sentence", Arrays.asList(new RExTag(2, 4, "substrate")));
-        String xml = new RExHandler().marshal(Arrays.asList(extract));
-        String exp = "<rex:extracts xmlns:rex=\"http://www.bbk.ac.uk/rex/\">\n" +
-            "    <rex:extract source=\"http://identifiers.org/pubmed/12345/\">\n" +
-            "        <rex:sentence>a sentence</rex:sentence>\n" +
-            "        <rex:tag type=\"substrate\" start=\"2\" length=\"4\"/>\n" +
-            "    </rex:extract>\n" +
-            "</rex:extracts>";
-        assertThat(xml, is(exp));
-    }
-    */
-
-    @Test
-    public void marshalTest() throws XMLStreamException, JAXBException, ParserConfigurationException, IOException, SAXException, TransformerException {
+    public void marshalUnmarshalTest() throws XMLStreamException, JAXBException, ParserConfigurationException, IOException, SAXException, TransformerException {
         String sbml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<sbml xmlns=\"http://www.sbml.org/sbml/level2\" level=\"2\" version=\"4\">\n" +
                 "\t<model id=\"model\">\n" +
