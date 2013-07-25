@@ -22,6 +22,9 @@
 
 package uk.ac.ebi.mdk.io.text.brenda;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -29,9 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,9 +44,13 @@ import java.util.regex.Pattern;
  */
 public class BrendaTissueMap {
 
+    public static final String NOMAPPING = "NOMAPPING";
+
     private BufferedReader reader;
-    private Map<String,List<String>> name2BrendaTissueOntID;
+    private Multimap<String,String> name2BrendaTissueOntID;
     private Pattern idTabNameSimplePattern;
+    private Pattern idTabNameNotMappedPattern;
+    private Boolean useNotMappped = false;
 
     /**
      * Loads the tissue/location curated map from a stream.
@@ -55,6 +60,16 @@ public class BrendaTissueMap {
     public BrendaTissueMap(InputStream stream) {
         reader = new BufferedReader(new InputStreamReader(stream));
         this.init();
+    }
+
+    /**
+     * Set to true to use NOMAPPING entries in the tissue/location curated map. This is useful for the preloading, but
+     * not the actual loading to the database.
+     *
+     * @param useNotMappped
+     */
+    public void setUseNotMapped(Boolean useNotMappped) {
+        this.useNotMappped = useNotMappped;
     }
 
     /**
@@ -69,8 +84,10 @@ public class BrendaTissueMap {
     }
 
     private void init() {
-        name2BrendaTissueOntID = new HashMap<String, List<String>>();
+        name2BrendaTissueOntID = HashMultimap.create();
+        // this patterns ignores those that don't have a mapping, which is useful for loading to the database.
         idTabNameSimplePattern = Pattern.compile("^(.+:\\d+)\\t([^\\t]+)");
+        idTabNameNotMappedPattern = Pattern.compile("^"+NOMAPPING+"\\t([^\\t]+)");
     }
 
     public void load() throws IOException {
@@ -78,7 +95,11 @@ public class BrendaTissueMap {
         while(line!=null) {
             Matcher idTabNameMatcher = idTabNameSimplePattern.matcher(line);
             if(idTabNameMatcher.find()) {
-                this.addToHash(idTabNameMatcher.group(2).toLowerCase().trim(), idTabNameMatcher.group(1));
+                this.name2BrendaTissueOntID.put(idTabNameMatcher.group(2).toLowerCase().trim(), idTabNameMatcher.group(1));
+            } else if(useNotMappped) {
+                Matcher notMappedMatcher = idTabNameNotMappedPattern.matcher(line);
+                if(notMappedMatcher.find())
+                    this.name2BrendaTissueOntID.put(notMappedMatcher.group(1),NOMAPPING);
             }
             line = reader.readLine();
         }
@@ -93,20 +114,9 @@ public class BrendaTissueMap {
      */
     public List<String> getIDsForName(String query) {
         if(name2BrendaTissueOntID.containsKey(query.toLowerCase().trim()))
-            return name2BrendaTissueOntID.get(query.toLowerCase().trim());
+            return new ArrayList<String>(name2BrendaTissueOntID.get(query.toLowerCase().trim()));
         else
             return new ArrayList<String>();
-    }
-
-    private void addToHash(String key, String value) {
-        List<String> toAdd;
-        if(this.name2BrendaTissueOntID.containsKey(key))
-            toAdd = this.name2BrendaTissueOntID.get(key);
-        else {
-            toAdd = new ArrayList<String>();
-            this.name2BrendaTissueOntID.put(key, toAdd);
-        }
-        toAdd.add(value);
     }
 
 }
