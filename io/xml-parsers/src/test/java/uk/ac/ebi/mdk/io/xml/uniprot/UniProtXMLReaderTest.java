@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.Assert;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtCrossreferenceMarshal;
 import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtHostOrganismMarshal;
@@ -35,6 +36,7 @@ import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -68,10 +70,16 @@ public class UniProtXMLReaderTest  {
 
         Assert.assertEquals(24, productList.size());
 
-        Assert.assertEquals(1, productList.get(15).getAnnotations(CrossReference.class).size());
+        // this record probably has two additional accessions, which raises the number of cross references
+        // from 1 to 3.
+        Assert.assertEquals(3, productList.get(15).getAnnotations(CrossReference.class).size());
         Assert.assertNotNull(productList.get(15).getAnnotations(CrossReference.class).iterator().next().getIdentifier());
-        Assert.assertEquals(ECNumber.class, productList.get(15).getAnnotations(CrossReference.class).iterator().next().getIdentifier().getClass());
-        Assert.assertEquals(new ECNumber("4.4.1.14"), productList.get(15).getAnnotations(CrossReference.class).iterator().next().getIdentifier());
+        Iterator<CrossReference> identifiersIt = productList.get(15).getAnnotations(CrossReference.class).iterator();
+        identifiersIt.next();
+        identifiersIt.next();
+        Identifier identEC = identifiersIt.next().getIdentifier();
+        Assert.assertEquals(ECNumber.class, identEC.getClass());
+        Assert.assertEquals(new ECNumber("4.4.1.14"), identEC);
 
         Assert.assertEquals(1, productList.get(21).getAnnotations(CrossReference.class).size());
         Assert.assertNotNull(productList.get(21).getAnnotations(CrossReference.class).iterator().next().getIdentifier());

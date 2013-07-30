@@ -18,9 +18,11 @@
 package uk.ac.ebi.mdk.io.xml.uniprot.marshal;
 
 import org.apache.log4j.Logger;
-import org.codehaus.stax2.XMLStreamReader2;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.identifier.SwissProtIdentifier;
 import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
+import uk.ac.ebi.mdk.domain.identifier.UniProtIdentifier;
+import uk.ac.ebi.mdk.domain.observation.Observation;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -45,7 +47,16 @@ public class UniProtIdentifierMarhsal implements UniProtXMLMarshal {
     @Override
     public void marshal(XMLStreamReader reader, ProteinProduct product) throws XMLStreamException {
         if( reader.next() == XMLEvent.CHARACTERS){
-            product.setIdentifier(new SwissProtIdentifier(reader.getText()));
+            if(product.getIdentifier()==null)
+                product.setIdentifier(new SwissProtIdentifier(reader.getText()));
+            else {
+                /**
+                 * this handles cases where the entry has multiple accessions. This also avoids rewriting the main
+                 * accession by the following ones, which are normally secondary or obsolete.
+                 */
+                product.addAnnotation(
+                        new CrossReference<UniProtIdentifier,Observation>(new SwissProtIdentifier(reader.getText())));
+            }
         }
     }
 }
