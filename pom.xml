@@ -22,7 +22,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>uk.ac.ebi.mdk</groupId>
   <artifactId>mdk</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.5.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>mdk</name>
   <modules>

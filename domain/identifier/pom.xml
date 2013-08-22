@@ -22,11 +22,11 @@
     <parent>
         <artifactId>mdk-domain</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.4.1-SNAPSHOT</version>
+        <version>1.5.0-SNAPSHOT</version>
     </parent>
     <groupId>uk.ac.ebi.mdk</groupId>
     <artifactId>mdk-domain-identifier</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.5.0-SNAPSHOT</version>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/resource</url>
 
     <properties>
