@@ -357,7 +357,7 @@ public class PeptideFactory {
             try {
                 InputStream stream = getClass().getResourceAsStream(resource);
                 MDLV2000Reader reader = new MDLV2000Reader(stream);
-                this.molecule = SilentChemObjectBuilder.getInstance().newInstance(IMolecule.class);
+                this.molecule = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
                 reader.read(molecule);
                 AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
             } catch (Exception ex) {

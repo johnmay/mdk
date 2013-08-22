@@ -20,15 +20,14 @@ import java.io.StringReader;
 import net.sf.jniinchi.INCHI_RET;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.Molecule;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.inchi.InChIToStructure;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV3000Reader;
+import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.tools.AtomTypeTools;
 import uk.ac.ebi.mdk.domain.identifier.InChI;
 
@@ -74,7 +73,7 @@ public class CDKMoleculeBuilder {
     public IAtomContainer build( InChI inchi , String molFile ) {
 
         // Todo smiles
-        IMolecule molecule = null;
+        IAtomContainer molecule = null;
 
         if ( inchi.getInchi() != null ) {
             molecule = buildFromInChI( inchi );
@@ -111,7 +110,7 @@ public class CDKMoleculeBuilder {
      * @param inchi
      * @return
      */
-    public IMolecule buildFromInChI( InChI inchi ) {
+    public IAtomContainer buildFromInChI( InChI inchi ) {
 
         try {
             InChIToStructure inchiToStructure =
@@ -134,7 +133,7 @@ public class CDKMoleculeBuilder {
             }
 
             IAtomContainer result = inchiToStructure.getAtomContainer();
-            IMolecule molecule = new Molecule( result );
+            IAtomContainer molecule = new AtomContainer( result );
             return molecule;
 
         } catch ( CDKException ex ) {
@@ -150,9 +149,9 @@ public class CDKMoleculeBuilder {
      * @param reader
      * @return
      */
-    public IMolecule buildFromMolFileV2000( MDLV2000Reader reader ) {
+    public IAtomContainer buildFromMolFileV2000( MDLV2000Reader reader ) {
 
-        Molecule template = new Molecule();
+        IAtomContainer template = new AtomContainer();
 
         try {
             return reader.read( template );
@@ -168,8 +167,8 @@ public class CDKMoleculeBuilder {
      * @param reader
      * @return
      */
-    public IMolecule buildFromMolFileV3000( MDLV3000Reader reader ) {
-        Molecule template = new Molecule();
+    public IAtomContainer buildFromMolFileV3000( MDLV3000Reader reader ) {
+        IAtomContainer template = new AtomContainer();
         try {
             return reader.read( template );
         } catch ( CDKException ex ) {

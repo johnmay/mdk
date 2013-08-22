@@ -61,8 +61,8 @@ public class StdInChIGenerator {
         }
         MDLV2000Reader r = new MDLV2000Reader( new FileReader( tmpFileName + ".mol" ) );
         try {
-            IAtomContainer mol = ( IMolecule ) r.read( SilentChemObjectBuilder.getInstance().newInstance(
-                    Molecule.class ) );
+            IAtomContainer mol = ( IAtomContainer ) r.read( SilentChemObjectBuilder.getInstance().newInstance(
+                    IAtomContainer.class ) );
             r.close();
             deleteTmpDirAndFiles( tmpDir );
             return mol;
