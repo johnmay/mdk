@@ -139,7 +139,7 @@ public class ReconstructionDataReader_0_9
             identifierInput.read(); // chromosome id -> we lose the number
 
 
-            Chromosome chromosome = recon.getGenome().createChromosome(i + 1, seq);
+            Chromosome chromosome = recon.genome().createChromosome(i + 1, seq);
             chromosome.addAll(genes);
         }
     }

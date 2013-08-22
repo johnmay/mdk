@@ -71,10 +71,6 @@ public class ReactionAssociationTest {
 
     }
 
-    @Test
-    public void testAdd_Null(){
-        new ReactionList().add(null); // should not fail
-    }
 
     @Test
     public void testAdd() {

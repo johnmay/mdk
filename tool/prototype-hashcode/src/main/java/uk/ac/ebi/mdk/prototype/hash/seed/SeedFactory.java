@@ -54,7 +54,7 @@ import java.util.*;
 public class SeedFactory {
 
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(SeedFactory.class);
-    private Map<Class<? extends AtomSeed>, AtomSeed> methods = new HashMap();
+    private Map<Class<? extends AtomSeed>, AtomSeed> methods = new HashMap<Class<? extends AtomSeed>, AtomSeed>();
 
     private SeedFactory() {
 

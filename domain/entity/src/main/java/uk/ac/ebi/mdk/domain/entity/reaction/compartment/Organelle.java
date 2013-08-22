@@ -43,7 +43,6 @@ public enum Organelle implements Compartment {
     CYTOPLASM(                  "c", "cytoplasm", 1,             "GO:0005737", "In", "Cytosol", "Cytoplasm Matrix", "Internal_Species", "Cell"),
 
 
-    @Deprecated  // periplasm is a general term
     PERIPLASM(                  "p", "periplasm", 2,             "GO:0042597", "periplasmic space"),
 
     OUTER_MEMBRANE_PERIPLASM(   "ombp", "outer membrane-bounded periplasmic space", 19,

@@ -87,6 +87,7 @@ public class HandlerBuilder {
      * @return self-reference
      * @see NameAnnotator
      */
+    @SuppressWarnings("unchecked")
     public HandlerBuilder withNameResolution() {
         if (services.hasService(type, PreferredNameAccess.class)) {
             return with(new NameAnnotator(services.getService(type, PreferredNameAccess.class)));
@@ -100,6 +101,7 @@ public class HandlerBuilder {
      * @return self-reference
      * @see StructureAnnotator
      */
+    @SuppressWarnings("unchecked")
     public HandlerBuilder withStructureResolution() {
         if (services.hasService(type, StructureService.class)) {
             return with(new StructureAnnotator(services.getService(type, StructureService.class)));

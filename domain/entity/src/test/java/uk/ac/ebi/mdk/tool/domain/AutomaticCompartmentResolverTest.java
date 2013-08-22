@@ -17,7 +17,7 @@
 
 package uk.ac.ebi.mdk.tool.domain;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;

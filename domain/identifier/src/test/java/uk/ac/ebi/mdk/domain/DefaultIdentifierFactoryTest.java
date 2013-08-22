@@ -21,8 +21,8 @@
  */
 package uk.ac.ebi.mdk.domain;
 
-import junit.framework.Assert;
 import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;

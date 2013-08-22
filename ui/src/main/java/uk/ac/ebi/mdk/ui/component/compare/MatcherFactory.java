@@ -47,6 +47,7 @@ public class MatcherFactory {
         return MatcherFactoryHolder.INSTANCE;
     }
 
+    @SuppressWarnings("unchecked")
     private MatcherFactory() {
 
         add(new MatcherDescription<Metabolite>("Cross-reference",

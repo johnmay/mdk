@@ -681,6 +681,7 @@ public class MolecularHashFactoryTest {
     }
 
     @Ignore
+    @SuppressWarnings("unchecked")
     public void testChEBI() throws IOException, CDKException {
         List<IAtomContainer> containers = readSDF(new FileInputStream("/Users/johnmay/Databases/chebi/ChEBI_lite.sdf"), 20000);
 

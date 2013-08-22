@@ -42,9 +42,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-/**
- * @author John May
- */
+/** @author John May */
 public class HashClashes {
 
     @Test
@@ -116,7 +114,8 @@ public class HashClashes {
      * @throws IOException
      * @throws CDKException
      */
-    @Test
+    @Test 
+    @SuppressWarnings("unchecked")
     public void testUnspecifiedDoubleBond() throws IOException, CDKException {
 
         List<IAtomContainer> containers = MolecularHashFactoryTest
@@ -146,6 +145,7 @@ public class HashClashes {
      * @throws CDKException
      */
     @Test
+    @SuppressWarnings("unchecked")
     public void testEZMismatch() throws IOException, CDKException {
 
         List<IAtomContainer> containers = MolecularHashFactoryTest
@@ -174,6 +174,7 @@ public class HashClashes {
      * @throws CDKException
      */
     @Test
+    @SuppressWarnings("unchecked")
     public void testDiatomic() throws IOException, CDKException {
 
         List<IAtomContainer> containers = MolecularHashFactoryTest

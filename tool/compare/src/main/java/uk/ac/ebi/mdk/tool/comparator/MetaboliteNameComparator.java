@@ -40,6 +40,7 @@ public final class MetaboliteNameComparator
      * @inheritDoc
      */
     @Override
+    @Deprecated
     protected int internalComparator(Metabolite s, Metabolite s1) {
        return compare(s, s1);
     }

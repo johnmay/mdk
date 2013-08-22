@@ -25,17 +25,16 @@ package uk.ac.ebi.mdk.domain.entity;
 import uk.ac.ebi.caf.utility.preference.type.FilePreference;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.collection.EntityCollection;
-import uk.ac.ebi.mdk.domain.entity.collection.GenomeImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.Genome;
+import uk.ac.ebi.mdk.domain.entity.collection.GenomeImpl;
 import uk.ac.ebi.mdk.domain.entity.collection.Metabolome;
 import uk.ac.ebi.mdk.domain.entity.collection.MetabolomeImpl;
-import uk.ac.ebi.mdk.domain.entity.collection.ProductCollection;
 import uk.ac.ebi.mdk.domain.entity.collection.Proteome;
 import uk.ac.ebi.mdk.domain.entity.collection.Reactome;
 import uk.ac.ebi.mdk.domain.entity.collection.ReactomeImpl;
+import uk.ac.ebi.mdk.domain.entity.reaction.BiochemicalReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
-import uk.ac.ebi.mdk.domain.entity.reaction.BiochemicalReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
@@ -68,15 +67,7 @@ public class ReconstructionImpl
         extends AbstractAnnotatedEntity
         implements Externalizable, Reconstruction {
 
-    private static final org.apache.log4j.Logger logger = org.apache
-            .log4j
-            .Logger
-            .getLogger(
-                    ReconstructionImpl.class);
-
-    /**
-     * Hash map of entities and their UUIDs
-     */
+    /** Hash map of entities and their UUIDs */
     private final Map<UUID, Entity> entities = new HashMap<UUID, Entity>(10000);
 
     /**
@@ -85,19 +76,13 @@ public class ReconstructionImpl
      */
     private final AssociationMap gpr = AssociationMap.create(2000);
 
-    /**
-     * Gene to Gene Product association
-     */
+    /** Gene to Gene Product association */
     private final AssociationMap ggp = AssociationMap.create(2000);
 
-    /**
-     * Metabolite to Reaction association
-     */
+    /** Metabolite to Reaction association */
     private final AssociationMap mrx = AssociationMap.create(2000);
 
-    /**
-     * old fields below here
-     */
+    /** old fields below here */
 
     private static final String DATA_FOLDER_NAME = "data";
 
@@ -105,9 +90,7 @@ public class ReconstructionImpl
 
     private static final String GENE_PRODUCTS_FILE_NAME = "serialized-gene-projects.java-bin";
 
-    public static final String BASE_TYPE = "Reconstruction";
     // main container for the project on the file system
-
     private File container;
 
     private Taxonomy taxonomy; // could be under a generic ReconstructionContents class but this is already used as an enum
@@ -148,7 +131,7 @@ public class ReconstructionImpl
     public ReconstructionImpl(Identifier identifier, String abbreviation, String name) {
         super(identifier, abbreviation, name);
         reactome = new ReactomeImpl(this);
-        metabolome =  new MetabolomeImpl(this);
+        metabolome = new MetabolomeImpl(this);
         proteome = new ProteomeImpl(this);
         genome = new GenomeImpl(this);
         subsets = new ArrayList<EntityCollection>();
@@ -172,11 +155,7 @@ public class ReconstructionImpl
         return new ReconstructionImpl();
     }
 
-    /**
-     * Access the taxonmy of this reconstruction
-     *
-     * @return
-     */
+
     public Taxonomy getTaxonomy() {
         return taxonomy;
     }
@@ -203,6 +182,8 @@ public class ReconstructionImpl
      *
      * @return The genome associated with the reconstruction
      */
+    @Deprecated
+    @Override
     public Genome getGenome() {
         return genome;
     }
@@ -215,7 +196,7 @@ public class ReconstructionImpl
     /**
      * Access a collection of all the genes in the reconstruction. Adding genes
      * to this collection will not add them to the reconstruction. See {@see
-     * Chromosome} and {@se Genome} for how to add genes.
+     * Chromosome} and {@see Genome} for how to add genes.
      *
      * @return All genes currently in the reconstruction
      */
@@ -225,21 +206,21 @@ public class ReconstructionImpl
 
 
     /**
-     * Access to the gene proteome associated with the reconstruction as {@see
-     * ProductCollection}. The gene product collection contains a mix of
-     * Protein, Ribosomal RNA and Transfer RNA proteome
+     * Access to the gene proteome associated with the reconstruction as. The
+     * gene product collection contains a mix of Protein, Ribosomal RNA and
+     * Transfer RNA proteome
      *
-     * @return
+     * @deprecated use {@link #proteome()}
      */
     @Deprecated
-    public ProductCollection getProducts() {
+    public Collection<GeneProduct> getProducts() {
         throw new UnsupportedOperationException("use getProteome()");
     }
 
     /**
      * Add a product to the reconstruction
      *
-     * @param product
+     * @param product new product
      */
     public void addProduct(GeneProduct product) {
         proteome.add(product);
@@ -257,57 +238,40 @@ public class ReconstructionImpl
         return reactome;
     }
 
-    /**
-     * @deprecated use {@link #reactome}
-     */
+    /** @deprecated use {@link #reactome} */
     @Deprecated
     public Reactome getReactome() {
         return reactome;
     }
 
-    /**
-     * Use reconstruction.proteome();
-     *
-     * @return
-     */
+
     @Deprecated
     public Proteome getProteome() {
         return proteome;
     }
-
-    /**
-     * Access the collection of metabolites for this reconstruction
-     *
-     * @return
-     */
+ 
+    @Deprecated
+    @Override
     public Metabolome getMetabolome() {
         return metabolome;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public Proteome proteome() {
         return proteome;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public Reactome reactome() {
         return reactome;
     }
 
-   /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public Metabolome metabolome() {
         return metabolome;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public Genome genome() {
         return genome;
     }
@@ -321,7 +285,7 @@ public class ReconstructionImpl
      */
     public void addReaction(MetabolicReaction reaction) {
 
-        if(reaction instanceof BiochemicalReaction){
+        if (reaction instanceof BiochemicalReaction) {
             addReaction((BiochemicalReaction) reaction);
             return;
         }
@@ -336,10 +300,11 @@ public class ReconstructionImpl
             addMetabolite(p.getMolecule());
         }
     }
-    
+
     /**
-     * Add a new biochemical reaction to the reconstruction. Note this method does
-     * not check for duplications. Gene product modifier associations are added.
+     * Add a new biochemical reaction to the reconstruction. Note this method
+     * does not check for duplications. Gene product modifier associations are
+     * added.
      *
      * @param reaction a new reaction
      */
@@ -349,7 +314,7 @@ public class ReconstructionImpl
         for (GeneProduct geneProduct : reaction.getModifiers()) {
             associate(geneProduct, metRxn);
         }
-    }    
+    }
 
 
     /**
@@ -407,9 +372,7 @@ public class ReconstructionImpl
         return associations;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public void remove(Metabolite m) {
 
@@ -426,26 +389,20 @@ public class ReconstructionImpl
         metabolome.remove(m);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public void remove(MetabolicReaction r) {
-        getReactome().remove(r);
+        reactome().remove(r);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public void remove(Gene gene) {
         ggp.clear(gene);
         this.genome.remove(gene);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public void remove(GeneProduct product) {
         proteome.remove(product);
@@ -462,9 +419,6 @@ public class ReconstructionImpl
     }
 
 
-    /**
-     * @inheritDoc
-     */
     @Override
     public ReconstructionIdentifier getIdentifier() {
         return (ReconstructionIdentifier) super.getIdentifier();
@@ -509,46 +463,34 @@ public class ReconstructionImpl
         ggp.dissociate(gene, product);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public void associate(GeneProduct product, Reaction reaction) {
         gpr.associate(product, reaction);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public void dissociate(GeneProduct product, Reaction reaction) {
         gpr.dissociate(product, reaction);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public void associate(Metabolite metabolite, Reaction reaction) {
         mrx.associate(metabolite, reaction);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public void dissociate(Metabolite metabolite, Reaction reaction) {
         mrx.dissociate(metabolite, reaction);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public String toString() {
         return getAccession();
     }
 
 
-    /**
-     * Holding methods (likely to change) *
-     */
+    /** Holding methods (likely to change) * */
     public void setMatrix(StoichiometricMatrix matrix) {
         this.matrix = matrix;
     }
@@ -584,9 +526,7 @@ public class ReconstructionImpl
     }
 
 
-    /**
-     * Loads a reconstruction from a given container
-     */
+    /** Loads a reconstruction from a given container */
     //    public static ReconstructionImpl load(File container) throws IOException, ClassNotFoundException {
     //
     //        File file = new File(container, "recon.extern.gzip");
@@ -734,6 +674,7 @@ public class ReconstructionImpl
         return entities.remove(entity.uuid()) != null;
     }
 
+    @SuppressWarnings("unchecked")
     @Override public <E extends Entity> E entity(UUID uuid) {
         return (E) entities.get(uuid);
     }

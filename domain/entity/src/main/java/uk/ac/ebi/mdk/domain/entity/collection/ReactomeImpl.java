@@ -100,6 +100,7 @@ public final class ReactomeImpl implements Reactome {
     /**
      * @inheritDoc
      */
+    @Deprecated
     @Override public Collection<MetabolicReaction> getReactions(Metabolite m) {
         return participatesIn(m);
     }

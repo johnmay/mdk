@@ -32,17 +32,17 @@ import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
+import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
+import uk.ac.ebi.mdk.prototype.hash.seed.StereoSeed;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.ServiceManager;
 import uk.ac.ebi.mdk.service.query.name.NameService;
 import uk.ac.ebi.mdk.service.query.name.PreferredNameService;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
 import uk.ac.ebi.mdk.tool.MappedEntityAligner;
-import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.ChargeSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.StereoSeed;
 import uk.ac.ebi.mdk.tool.match.EntityAligner;
 import uk.ac.ebi.mdk.tool.match.EntityMatcher;
 import uk.ac.ebi.mdk.tool.match.MetaboliteHashCodeMatcher;
@@ -129,7 +129,8 @@ public class Align extends CommandLineMain {
 
             for (EntityMatcher<Metabolite, ?> matcher : matchers) {
 
-                Set<Identifier> matched = new HashSet<Identifier>(identifiers.size());
+                Set<Identifier> matched = new HashSet<Identifier>(identifiers
+                                                                          .size());
 
                 aligner.push(matcher);
 
@@ -169,6 +170,7 @@ public class Align extends CommandLineMain {
     }
 
 
+    @SuppressWarnings("unchecked")
     public List<EntityMatcher<Metabolite, ?>> getMatchers() {
         return new ArrayList<EntityMatcher<Metabolite, ?>>(Arrays.asList(
                 new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
@@ -191,6 +193,7 @@ public class Align extends CommandLineMain {
     }
 
 
+    @SuppressWarnings("unchecked")
     public Metabolite build(Identifier identifier) {
 
         if (queryCache.containsKey(identifier)) {
@@ -199,18 +202,21 @@ public class Align extends CommandLineMain {
 
         ServiceManager manager = DefaultServiceManager.getInstance();
 
-        Metabolite metabolite = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
+        Metabolite metabolite = DefaultEntityFactory.getInstance()
+                                                    .newInstance(Metabolite.class);
 
         metabolite.setIdentifier(identifier);
 
         if (manager.hasService(identifier, StructureService.class)) {
 
-            StructureService service = manager.getService(identifier, StructureService.class);
+            StructureService service = manager
+                    .getService(identifier, StructureService.class);
 
             IAtomContainer container = service.getStructure(identifier);
 
             if (container.getAtomCount() != 0) {
-                metabolite.addAnnotation(new AtomContainerAnnotation(container));
+                metabolite
+                        .addAnnotation(new AtomContainerAnnotation(container));
             }
 
         } else {
@@ -238,7 +244,8 @@ public class Align extends CommandLineMain {
         // preferred name
         if (manager.hasService(identifier, PreferredNameService.class)) {
 
-            PreferredNameService service = manager.getService(identifier, PreferredNameService.class);
+            PreferredNameService service = manager
+                    .getService(identifier, PreferredNameService.class);
 
             metabolite.setName(service.getPreferredName(identifier));
 
@@ -251,7 +258,8 @@ public class Align extends CommandLineMain {
         // synonyms
         if (manager.hasService(identifier, NameService.class)) {
 
-            NameService<Identifier> service = manager.getService(identifier, NameService.class);
+            NameService<Identifier> service = manager
+                    .getService(identifier, NameService.class);
 
             for (String name : service.getNames(identifier)) {
                 metabolite.addAnnotation(new Synonym(name));
@@ -282,7 +290,8 @@ public class Align extends CommandLineMain {
         try {
 
             reader = new IteratingMDLReader(new FileInputStream(getFile("r")),
-                                            SilentChemObjectBuilder.getInstance(),
+                                            SilentChemObjectBuilder
+                                                    .getInstance(),
                                             true);
 
             while (reader.hasNext()) {
@@ -292,14 +301,18 @@ public class Align extends CommandLineMain {
                 String id = (String) container.getProperty(idProperty);
                 id = id != null ? id : "Unknown Id";
 
-                Metabolite metabolite = DefaultEntityFactory.getInstance().newInstance(Metabolite.class);
+                Metabolite metabolite = DefaultEntityFactory.getInstance()
+                                                            .newInstance(Metabolite.class);
 
-                Identifier identifier = DefaultIdentifierFactory.getInstance().ofName(idSource, id);
-                if(identifier == IdentifierFactory.EMPTY_IDENTIFIER)
-                    System.err.println("could not find identifier for name: " + idSource);
+                Identifier identifier = DefaultIdentifierFactory.getInstance()
+                                                                .ofName(idSource, id);
+                if (identifier == IdentifierFactory.EMPTY_IDENTIFIER)
+                    System.err
+                          .println("could not find identifier for name: " + idSource);
                 metabolite.setIdentifier(identifier);
 
-                metabolite.addAnnotation(new AtomContainerAnnotation(container));
+                metabolite
+                        .addAnnotation(new AtomContainerAnnotation(container));
 
                 // adds preferred names and synonyms
                 assignNames(metabolite);
@@ -343,7 +356,7 @@ public class Align extends CommandLineMain {
             String line = "";
             while ((line = reader.readLine()) != null) {
                 Identifier identifier = idFactory.ofName(source, line.trim());
-                if(identifier != IdentifierFactory.EMPTY_IDENTIFIER)
+                if (identifier != IdentifierFactory.EMPTY_IDENTIFIER)
                     identifiers.add(identifier);
             }
 

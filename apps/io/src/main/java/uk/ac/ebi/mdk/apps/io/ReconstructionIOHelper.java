@@ -101,7 +101,7 @@ public class ReconstructionIOHelper {
         File observations = new File(reconstruction.getContainer(), "entity-observations");
         File info = new File(reconstruction.getContainer(), "info.properties");
 
-        Version version = IOConstants.VERSION;
+        Version version = IOConstants.CURRENT;
 
         Properties properties = new Properties();
 
@@ -161,7 +161,7 @@ public class ReconstructionIOHelper {
         String stringVersion = properties.getProperty("chemet.version");
         in.close();
 
-        Version version = stringVersion == null ? IOConstants.VERSION
+        Version version = stringVersion == null ? IOConstants.CURRENT
                                                 : new Version(stringVersion);
 
         // open data input stream

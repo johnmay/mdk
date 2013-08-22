@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.mdk.tool.match;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;

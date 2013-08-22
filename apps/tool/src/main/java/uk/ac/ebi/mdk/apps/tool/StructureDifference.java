@@ -64,27 +64,28 @@ public class StructureDifference {
 
     }
 
+    @SuppressWarnings("unchecked")
     public static Integer getNonStereoHash(IAtomContainer container) {
         return MolecularHashFactory.getInstance().getHash(container, SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
                                                                                                         ConnectedAtomSeed.class,
                                                                                                         BondOrderSumSeed.class
                                                                                                        )).hash;
     }
-
+    
+    @SuppressWarnings("unchecked")
     public static Integer getNonChargeHash(IAtomContainer container) {
 
 
         return MolecularHashFactory.getInstance().getHash(container, SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
                                                                                                         ConnectedAtomSeed.class,
-                                                                                                        BondOrderSumSeed.class,
-                                                                                                        StereoSeed.class
+                                                                                                        BondOrderSumSeed.class
                                                                                                        )).hash;
     }
 
+    @SuppressWarnings("unchecked")
     public static Integer getFullHash(IAtomContainer container) {
         return MolecularHashFactory.getInstance().getHash(container, SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
                                                                                                         BondOrderSumSeed.class,
-                                                                                                        StereoSeed.class,
                                                                                                         ConnectedAtomSeed.class,
                                                                                                         ChargeSeed.class)).hash;
 

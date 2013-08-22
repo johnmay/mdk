@@ -142,6 +142,7 @@ public class ExplicitHyrdrogenHashing {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testTopologicalImplicitExplicitHashing() throws IOException,
                                                                 CDKException {
 

@@ -30,7 +30,6 @@ import org.openscience.cdk.interfaces.ISingleElectron;
  * @author johnmay
  * @see IAtomContainer#getSingleElectron(int)
  */
-@Deprecated
 public class BooleanRadicalSeed implements AtomSeed {
 
     /*

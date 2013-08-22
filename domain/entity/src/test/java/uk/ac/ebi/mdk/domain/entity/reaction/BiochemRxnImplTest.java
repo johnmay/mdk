@@ -211,6 +211,7 @@ public class BiochemRxnImplTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testAddAnnotations() throws Exception {
         MetabolicReaction mock = mock(MetabolicReaction.class);
         MetabolicReaction rxn  = new BiochemRxnImpl(mock);
@@ -447,6 +448,7 @@ public class BiochemRxnImplTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testAddModifier() throws Exception {
         Collection modifiers = mock(Collection.class);
         BiochemicalReaction rxn = new BiochemRxnImpl(mock(MetabolicReaction.class), modifiers);
@@ -457,6 +459,7 @@ public class BiochemRxnImplTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testRemoveModifiers() throws Exception {
         Collection modifiers = mock(Collection.class);
         BiochemicalReaction rxn = new BiochemRxnImpl(mock(MetabolicReaction.class), modifiers);
@@ -467,6 +470,7 @@ public class BiochemRxnImplTest {
     }
 
     @Test(expected = UnsupportedOperationException.class)
+    @SuppressWarnings("unchecked")
     public void testEncapsulatedModifiers() throws Exception {
         Collection modifiers = mock(Collection.class);
         BiochemicalReaction rxn = new BiochemRxnImpl(mock(MetabolicReaction.class), modifiers);

@@ -45,37 +45,33 @@ public interface Reconstruction extends AnnotatedEntity {
 
     public File defaultLocation();
 
-    /**
-     * @deprecated use {@link #genome()}}
-     */
+    /** @deprecated use {@link #genome()}} */
     @Deprecated
     public Genome getGenome();
 
-    /**
-     * @deprecated use {@link #reactome()}}
-     */
+    /** @deprecated use {@link #reactome()}} */
     @Deprecated
     public Reactome getReactome();
 
-    /**
-     * @deprecated use {@link #metabolome()}
-     */
+    /** @deprecated use {@link #metabolome()} */
     @Deprecated
     public Metabolome getMetabolome();
 
+    /**
+     * Access the metabolome of the reconstruction. The metabolome contains all
+     * metabolism involved in the reconstruction.
+     *
+     * @return this reconstructions metabolome
+     */
     public Metabolome metabolome();
 
     public Genome genome();
 
-    /**
-     * @deprecated use {@link #proteome()}
-     */
+    /** @deprecated use {@link #proteome()} */
     @Deprecated
     public Collection<GeneProduct> getProducts();
 
-    /**
-     * @deprecated use {@link #proteome()}
-     */
+    /** @deprecated use {@link #proteome()} */
     @Deprecated
     public Proteome getProteome();
 
@@ -143,10 +139,10 @@ public interface Reconstruction extends AnnotatedEntity {
     public Proteome proteome();
 
     /**
-     * Reactome of the reconstruction
+     * Access the reactome of the reconstruction. The metabolome contains all
+     * reactions involved in the reconstruction.
      *
-     * @return the reactome
-     * @see Reactome
+     * @return this reconstructions reactome
      */
     public Reactome reactome();
 

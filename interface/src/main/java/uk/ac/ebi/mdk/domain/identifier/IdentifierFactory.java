@@ -137,7 +137,7 @@ public interface IdentifierFactory {
 
         @Override
         public Collection<String> getSynonyms() {
-            return Collections.EMPTY_SET;
+            return Collections.emptyList();
         }
 
         @Override
@@ -192,7 +192,7 @@ public interface IdentifierFactory {
      *
      * @param url the url
      *
-     * @return
+     * @return the identifier for the given URL
      */
     Identifier ofURL(String url);
 }
