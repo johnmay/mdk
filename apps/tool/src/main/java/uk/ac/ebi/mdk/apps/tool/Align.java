@@ -22,7 +22,7 @@ import org.apache.commons.cli.Option;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.mdk.apps.CommandLineMain;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
@@ -286,10 +286,10 @@ public class Align extends CommandLineMain {
         String idProperty = get("i", "na");
         String idSource = get("rs", "na");
 
-        IteratingMDLReader reader = null;
+        IteratingSDFReader reader = null;
         try {
 
-            reader = new IteratingMDLReader(new FileInputStream(getFile("r")),
+            reader = new IteratingSDFReader(new FileInputStream(getFile("r")),
                                             SilentChemObjectBuilder
                                                     .getInstance(),
                                             true);
