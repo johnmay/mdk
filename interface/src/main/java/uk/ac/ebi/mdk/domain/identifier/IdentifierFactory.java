@@ -121,6 +121,7 @@ public interface IdentifierFactory {
         }
 
         @Override
+        @Deprecated
         public String getResolvableURL() {
             return null;
         }

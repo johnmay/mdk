@@ -68,7 +68,7 @@ public class ChemicalNameSearch extends CommandLineMain {
         add(new Option("g", "greedy", false, "Greedy Service searching (multiple services only)"));
     }
 
-
+    @SuppressWarnings("unchecked")
     public void testMultiple() {
 
         System.out.println("Testing multiple");
@@ -139,6 +139,7 @@ public class ChemicalNameSearch extends CommandLineMain {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process() {
 
         loadNames();
@@ -316,7 +317,6 @@ public class ChemicalNameSearch extends CommandLineMain {
                     writer.write(buffer.toString() + "\n");
                 }
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
         }
@@ -325,7 +325,6 @@ public class ChemicalNameSearch extends CommandLineMain {
         try {
             if (writer != null) writer.close();
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
         System.out.println("Written unmatched results to :" + file);
@@ -384,8 +383,7 @@ public class ChemicalNameSearch extends CommandLineMain {
                 System.err.println(e.getMessage());
             } finally {
                 try {
-                    if (reader != null)
-                        reader.close();
+                    reader.close();
                 } catch (IOException e) {
                     System.err.println(e.getMessage());
                 }

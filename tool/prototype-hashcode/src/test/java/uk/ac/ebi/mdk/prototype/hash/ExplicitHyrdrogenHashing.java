@@ -148,28 +148,23 @@ public class ExplicitHyrdrogenHashing {
 
         List<IAtomContainer> containers = readSDF(getClass(), "topological-explicit-implicit-hashing.sdf", -1);
 
-        MolecularHashFactory hasher = new MolecularHashFactory();
+        MolecularHashFactory deproOff = new MolecularHashFactory(4, false);
+        MolecularHashFactory deproOn= new MolecularHashFactory(4, true);
         SeedFactory seedFactory = SeedFactory.getInstance();
 
         Collection<AtomSeed> seeds = seedFactory
                 .getSeeds(NonNullAtomicNumberSeed.class);
 
-        hasher.setDepth(4);
-
         IAtomContainer explicit = containers.get(0);
         IAtomContainer implicit = containers.get(1);
 
-        hasher.setDeprotonate(false);
-
         assertThat("implicit and explicit hashes were equal (ignore not set)",
-                   hasher.getHash(explicit, seeds).hash,
-                   is(not(hasher.getHash(implicit, seeds).hash)));
-
-        hasher.setDeprotonate(true);
+                   deproOff.getHash(explicit, seeds).hash,
+                   is(not(deproOff.getHash(implicit, seeds).hash)));
 
         assertThat("implicit and explicit hashes were not equal (ignore set)",
-                   hasher.getHash(explicit, seeds).hash,
-                   is(hasher.getHash(implicit, seeds).hash));
+                   deproOn.getHash(explicit, seeds).hash,
+                   is(deproOn.getHash(implicit, seeds).hash));
 
 
     }

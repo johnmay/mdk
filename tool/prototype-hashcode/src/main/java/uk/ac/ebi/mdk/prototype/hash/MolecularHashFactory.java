@@ -109,6 +109,10 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
     public MolecularHashFactory(int depth) {
         this(DEFAULT_SEEDS, depth, false);
     }
+    
+    public MolecularHashFactory(int depth, boolean deprotnate) {
+        this(DEFAULT_SEEDS, depth, deprotnate);
+    }
 
     public MolecularHashFactory(Class<? extends AtomSeed>... seeds) {
         this(SeedFactory.getInstance()

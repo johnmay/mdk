@@ -20,7 +20,7 @@ import java.util.Comparator;
 
 /**
  * Super class to derive linked comparators.
- * @deprecated use the composable ComparatorConjunction
+ * deprecated - use the composable ComparatorConjunction
  */
 public abstract class AbstractLinkedComparator<S> implements Comparator<S> {
     
@@ -39,7 +39,7 @@ public abstract class AbstractLinkedComparator<S> implements Comparator<S> {
     }
 
     /**
-     * @deprecated composition > inheritance in this case
+     * deprecated - composition > inheritance in this case
      */
     protected abstract int internalComparator(S s, S s1);
 }

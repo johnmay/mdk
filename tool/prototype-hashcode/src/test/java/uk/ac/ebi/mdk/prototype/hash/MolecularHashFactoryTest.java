@@ -258,10 +258,8 @@ public class MolecularHashFactoryTest {
 
         List<IAtomContainer> containers = readSDF("aldehydo-lyxoses.sdf");
 
-        MolecularHashFactory factory = MolecularHashFactory.getInstance();
-        factory.setDeprotonate(true);
-        factory.setDepth(4);
-
+        MolecularHashFactory factory = new MolecularHashFactory(4, true);
+        
         assertThat("aldehydo-D-lyxose and L-arabinitol should not be equal",
                    factory.getHash(containers.get(0)).hash,
                    is(not(factory.getHash(containers.get(1)).hash)));
@@ -271,8 +269,6 @@ public class MolecularHashFactoryTest {
         assertThat("aldehydo-L-lyxose and L-arabinitol should be equal (by this test)",
                    factory.getHash(containers.get(1)).hash,
                    is(factory.getHash(containers.get(2)).hash));
-
-        factory.setDeprotonate(false);
 
     }
 
@@ -516,21 +512,20 @@ public class MolecularHashFactoryTest {
 
         List<IAtomContainer> containers = readSDF(getClass(), "aldohexoses.sdf", 2);
 
-        MolecularHashFactory factory = MolecularHashFactory.getInstance();
-        factory.setDepth(4);
-        factory.setDeprotonate(true);
-
+        MolecularHashFactory factory = new MolecularHashFactory(4, true);
+        
         MolecularHash idose = factory.getHash(containers.get(0));
         MolecularHash altrose = factory.getHash(containers.get(1));
 
         assertThat("D-idose and D-altrose molecules hashed to the same value (including hydrogens)",
                    idose.hash, is(not(altrose.hash)));
 
-        factory.setDeprotonate(false);
+        
 
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testIdose_explicitImplicit() throws IOException, CDKException {
 
         List<IAtomContainer> containers = readSDF(getClass(), "aldohexoses.sdf", 3);
@@ -539,26 +534,25 @@ public class MolecularHashFactoryTest {
                                                 .getSeeds(NonNullAtomicNumberSeed.class,
                                                           NonNullHybridizationSeed.class);
 
-        MolecularHashFactory factory = MolecularHashFactory.getInstance();
-        factory.setDepth(4);
+        MolecularHashFactory factory1 = new MolecularHashFactory(4, false);
+        MolecularHashFactory factory2 = new MolecularHashFactory(4, true);
 
-        MolecularHash explicit = factory.getHash(containers.get(0), seeds);
-        MolecularHash implicit = factory.getHash(containers.get(2), seeds);
+
+        MolecularHash explicit = factory1.getHash(containers.get(0), seeds);
+        MolecularHash implicit = factory1.getHash(containers.get(2), seeds);
 
         assertThat("D-idose with implicit and explicit hydrogens hashed to the same value",
                    explicit.hash, is(not(implicit.hash)));
 
-        factory.setDeprotonate(true);
 
-        MolecularHash explicitIgnore = factory.getHash(containers
+        MolecularHash explicitIgnore = factory2.getHash(containers
                                                                .get(0), seeds);
-        MolecularHash implicitIgnore = factory.getHash(containers
+        MolecularHash implicitIgnore = factory2.getHash(containers
                                                                .get(2), seeds);
 
         assertThat("D-idose with implicit and explicit hydrogens did not hash to the same value",
                    explicitIgnore.hash, is(implicitIgnore.hash));
 
-        factory.setDeprotonate(false);
 
 
     }
