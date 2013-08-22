@@ -49,8 +49,10 @@ public class ReconstructionFileChooser extends JFileChooser {
                 return "Metabolic Reconstruction";
             }
         };
-        addChoosableFileFilter(filter);
-
+        
+        setAcceptAllFileFilterUsed(false);
+        setFileFilter(filter);
+        
         setFileSelectionMode(FILES_AND_DIRECTORIES);
         setFileView(new FileView() {
 
