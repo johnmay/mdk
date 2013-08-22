@@ -85,6 +85,7 @@ public class KEGGReactionService {
 
     }
 
+    @SuppressWarnings("unchecked")
     public Collection<IdentifierReaction<KEGGCompoundIdentifier>> getReaction(ECNumber ec) throws SQLException {
 
         selectOnEC.setString(1, ec.toString());

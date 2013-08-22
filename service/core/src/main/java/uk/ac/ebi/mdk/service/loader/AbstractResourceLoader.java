@@ -107,6 +107,7 @@ public abstract class AbstractResourceLoader
      * @inheritDoc
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends ResourceLocation> T getLocation(String key) throws
                                                                   MissingLocationException {
         if (locationMap.containsKey(key)) {

@@ -122,6 +122,7 @@ public class TransportReactionUtil {
         return getClassification(getMappings(rxn));
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean isTransport(Reaction<? extends CompartmentalisedParticipant<?, ?, Compartment>> rxn) {
         Set uniqueCompartments = new HashSet();
         for (CompartmentalisedParticipant p : rxn.getReactants()) {

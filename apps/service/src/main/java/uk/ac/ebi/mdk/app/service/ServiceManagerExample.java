@@ -41,7 +41,7 @@ public class ServiceManagerExample {
 
     private static final Logger LOGGER = Logger.getLogger(ServiceManagerExample.class);
 
-
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
 
         ServiceManager manager = DefaultServiceManager.getInstance();

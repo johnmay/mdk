@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 
 /** @author John May */
 public class KEGGReactionDemo {
-
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         ServiceManager services = DefaultServiceManager.getInstance();
 

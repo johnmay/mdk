@@ -74,7 +74,7 @@ public class HashClashes {
 
         List<IAtomContainer> containers = MolecularHashFactoryTest
                 .readSDF(getClass(), "citronellols.sdf", 2);
-
+        @SuppressWarnings("unchecked")
         Collection<AtomSeed> seeds = SeedFactory.getInstance()
                                                 .getSeeds(NonNullAtomicNumberSeed.class,
                                                           NonNullChargeSeed.class,

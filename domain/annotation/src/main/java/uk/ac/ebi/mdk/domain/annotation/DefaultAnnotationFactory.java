@@ -158,6 +158,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
      * @return List of annotations that can be added to that class which are
      *         intended for new instantiation only
      */
+    @SuppressWarnings("unchecked")
     public List<Annotation> ofContext(Class<? extends AnnotatedEntity> entityClass) {
 
         if (contextMap.containsKey(entityClass)) {
@@ -205,6 +206,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public <A extends Annotation> A ofClass(Class<? extends A> c) {
 
         Annotation annotation = instances.get(c);
@@ -274,6 +276,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public <I extends Identifier> CrossReference<I, Observation> getCrossReference(I identifier) {
 
         CrossReference<I, Observation> xref = (CrossReference<I, Observation>) getCrossReference(
@@ -345,6 +348,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Annotation> Collection<? extends T> getSubclassInstances(Class<T> c) {
 
         Collection<T> instances = new TreeSet<T>(new Comparator<Annotation>() {

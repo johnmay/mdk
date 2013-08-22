@@ -83,7 +83,7 @@ public class ChEBIConnectivityLoader extends AbstractChEBILoader {
     }
 
     private Map<String, Integer> createMap(String[] row) {
-        Map<String, Integer> map = new HashMap();
+        Map<String, Integer> map = new HashMap<String,Integer>();
         for (int i = 0; i < row.length; i++) {
             map.put(row[i], i);
         }

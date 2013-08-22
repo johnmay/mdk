@@ -59,11 +59,13 @@ public class ObservationDataInputStream
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Observation read() throws IOException, ClassNotFoundException {
         return read(readClass());
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Observation read(Class c) throws IOException, ClassNotFoundException {
         ObservationReader reader = getReader(c);
 

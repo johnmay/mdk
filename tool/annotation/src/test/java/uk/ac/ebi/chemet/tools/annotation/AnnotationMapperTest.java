@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
  */
 public class AnnotationMapperTest {
 
-    @Test
+    @Test @SuppressWarnings("unchecked")
     public void inferred() throws Exception {
         List<? extends AnnotatedEntity> es = Arrays
                 .asList(mock(AnnotatedEntity.class),
@@ -93,7 +93,7 @@ public class AnnotationMapperTest {
                 .asList(mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
-
+        @SuppressWarnings("unchecked")
         AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
         IdentifierFactory factory = mock(IdentifierFactory.class);
 
@@ -134,7 +134,7 @@ public class AnnotationMapperTest {
                 .asList(mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
-
+        @SuppressWarnings("unchecked")
         AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
 
         when(accessor.key(Matchers.<AnnotatedEntity>anyObject()))
@@ -162,7 +162,7 @@ public class AnnotationMapperTest {
                 .asList(mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
-
+        @SuppressWarnings("unchecked")
         AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
 
         when(accessor.key(Matchers.<AnnotatedEntity>anyObject()))
@@ -192,7 +192,7 @@ public class AnnotationMapperTest {
                 .asList(mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
-
+        @SuppressWarnings("unchecked")
         AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
 
         when(accessor.key(Matchers.<AnnotatedEntity>anyObject()))
@@ -218,7 +218,7 @@ public class AnnotationMapperTest {
                 .asList(mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class),
                         mock(AnnotatedEntity.class));
-
+        @SuppressWarnings("unchecked")
         AnnotationMapper.KeyAccessor<String> accessor = mock(AnnotationMapper.KeyAccessor.class);
 
         Identifier idMock = mock(Identifier.class);
@@ -249,7 +249,7 @@ public class AnnotationMapperTest {
         when(idMock.isValid()).thenReturn(false);
         when(idFactoryMock.ofName("mock"))
                 .thenReturn(IdentifierFactory.EMPTY_IDENTIFIER);
-
+        @SuppressWarnings("unchecked")
         AnnotationMapper<String> mapper = new AnnotationMapper<String>(Collections
                                                                                .<AnnotatedEntity>emptyList(),
                                                                        mock(AnnotationMapper.KeyAccessor.class),
@@ -262,6 +262,7 @@ public class AnnotationMapperTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testAmbiguous() throws Exception {
 
         Identifier idMock = mock(Identifier.class);

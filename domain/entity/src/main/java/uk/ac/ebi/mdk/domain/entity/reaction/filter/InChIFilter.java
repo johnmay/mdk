@@ -35,6 +35,7 @@ import java.util.Set;
  * @author  johnmay
  * @author  $Author$ (this version)
  */
+@SuppressWarnings("unchecked")
 public class InChIFilter extends AbstractParticipantFilter {
 
     private static final Logger LOGGER = Logger.getLogger( InChIFilter.class );

@@ -112,6 +112,7 @@ public class EntityDataOutputStream
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public void writeData(Entity entity) throws IOException {
 
         if (writeObjectId(entity)) {

@@ -32,11 +32,10 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
  */
 public class CrossReferenceMatcherTest {
 
-    private static final Logger LOGGER = Logger.getLogger(CrossReferenceMatcherTest.class);
-
     private CrossReferenceMatcher<Metabolite> matcher = new CrossReferenceMatcher<Metabolite>();
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testEqual_direct() throws Exception {
 
         Metabolite m1 = DefaultEntityFactory.getInstance().ofClass(Metabolite.class, new BasicChemicalIdentifier("test-1"), "", "");
@@ -52,6 +51,7 @@ public class CrossReferenceMatcherTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testEqual_indirect() throws Exception {
 
         Metabolite m1 = DefaultEntityFactory.getInstance().ofClass(Metabolite.class, new BasicChemicalIdentifier("test-1"), "", "");
@@ -68,6 +68,7 @@ public class CrossReferenceMatcherTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testEqual_indirect_subclass() throws Exception {
 
         Metabolite m1 = DefaultEntityFactory.getInstance().ofClass(Metabolite.class, new BasicChemicalIdentifier("test-1"), "", "");

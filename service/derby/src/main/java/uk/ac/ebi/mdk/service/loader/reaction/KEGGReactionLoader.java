@@ -208,7 +208,7 @@ public class KEGGReactionLoader
         public Map<KEGGField, StringBuilder> readNext() throws IOException {
 
             StringBuilder sb = new StringBuilder(1000);
-
+            @SuppressWarnings("unchecked")
             Map<KEGGField, StringBuilder> map = new EnumMap(KEGGField.class);
 
             String line;

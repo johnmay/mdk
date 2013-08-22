@@ -59,12 +59,14 @@ public class IdentifierDataInputStream
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <I extends Identifier> I read() throws IOException, ClassNotFoundException {
         Class c = readClass();
         return (I) read(c);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <I extends Identifier> I read(Class<I> c) throws IOException, ClassNotFoundException {
         return (I) getReader(c).readIdentifier();
     }

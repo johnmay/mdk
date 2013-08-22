@@ -53,6 +53,7 @@ public class MetaboliteHashCodeMatcherTest {
     private Metabolite m2;
 
 
+    @SuppressWarnings("unchecked")
     public MetaboliteHashCodeMatcherTest() {
         matcher = new MetaboliteHashCodeMatcher();
         comparatorWithCharge = new MetaboliteHashCodeMatcher(SeedFactory.getInstance().getSeeds(ChargeSeed.class,
@@ -71,6 +72,7 @@ public class MetaboliteHashCodeMatcherTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testHashCodeEquality_WithCharge() {
 
         m1.setName("ATP"); // 4-
@@ -92,6 +94,7 @@ public class MetaboliteHashCodeMatcherTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testHashCodeEquality_NoCharge() {
 
         m1.setName("ATP"); // 4-

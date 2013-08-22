@@ -560,6 +560,7 @@ public abstract class AbstractComponentDecorator {
                 }
             }
         }
+        @SuppressWarnings("unchecked")
         private List findOpaque(Component root) {
             List list = new ArrayList();
             if (root.isOpaque() && root instanceof JComponent) {
@@ -574,6 +575,7 @@ public abstract class AbstractComponentDecorator {
             }
             return list;
         }
+        @SuppressWarnings("unchecked")
         private List findDoubleBuffered(Component root) {
             List list = new ArrayList();
             if (root.isDoubleBuffered() && root instanceof JComponent) {
@@ -602,6 +604,7 @@ public abstract class AbstractComponentDecorator {
         }
         
         /** Walk the list of "background" decorators and paint them. */
+        @SuppressWarnings("unchecked")
         public void paint(Graphics g) {
 
             JLayeredPane lp = (JLayeredPane)getComponent();

@@ -59,6 +59,7 @@ public class IdentifierDataOutputStream
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void writeData(Identifier identifier) throws IOException {
         Class c = identifier.getClass();
         getWriter(c).write(identifier);

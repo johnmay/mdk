@@ -60,7 +60,7 @@ import java.util.Map;
 public class ReactionRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(ReactionRenderer.class);
-
+    @SuppressWarnings("unchecked")
     private AtomContainerRenderer renderer =
             new AtomContainerRenderer(
                     Arrays.asList(new BasicSceneGenerator(),

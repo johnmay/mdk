@@ -125,7 +125,7 @@ public class MappedEntityAligner<E extends Entity>
 
     @Override
     public List<E> getMatching(E entity, EntityMatcher matcher) {
-
+        @SuppressWarnings("unchecked")
         Object metric = matcher.calculatedMetric(entity);
         MetricMap map = getMetricMap(matcher);
 
@@ -154,7 +154,7 @@ public class MappedEntityAligner<E extends Entity>
             map = ArrayListMultimap.create(size, 2);
         }
 
-
+        @SuppressWarnings("unchecked")
         public void put(E entity, EntityMatcher m) {
             Object metric = m.calculatedMetric(entity);
             if (metric instanceof Collection) {

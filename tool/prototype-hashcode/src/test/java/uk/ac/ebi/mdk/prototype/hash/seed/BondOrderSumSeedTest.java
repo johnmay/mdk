@@ -67,6 +67,7 @@ public class BondOrderSumSeedTest {
         AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(but1ene);
 
         MolecularHashFactory original = new MolecularHashFactory();
+        @SuppressWarnings("unchecked")
         MolecularHashFactory tweaked = new MolecularHashFactory(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class,
                                                                                                    BondOrderSumSeed.class,
                                                                                                    ConnectedAtomSeed.class),

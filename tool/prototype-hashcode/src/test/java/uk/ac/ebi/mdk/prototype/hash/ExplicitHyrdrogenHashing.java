@@ -118,6 +118,7 @@ public class ExplicitHyrdrogenHashing {
                 .readSDF(getClass(), "ethenediol-permutations.sdf", -1);
 
         // important make sure we don't use connected atom seed when detonated (this should be in a builder
+        @SuppressWarnings("unchecked")
         MolecularHashFactory generator = new MolecularHashFactory(SeedFactory
                                                                           .getInstance()
                                                                           .getSeeds(NonNullAtomicNumberSeed.class),

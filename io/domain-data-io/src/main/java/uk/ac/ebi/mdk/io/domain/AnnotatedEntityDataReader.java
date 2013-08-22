@@ -74,6 +74,7 @@ public class AnnotatedEntityDataReader
         this.entity = entity;
     }
 
+    @SuppressWarnings("unchecked")
     public AnnotatedEntity readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         entity.setRating(enumReader.readEnum());
@@ -85,6 +86,7 @@ public class AnnotatedEntityDataReader
 
     }
 
+    @SuppressWarnings("unchecked")
     public void readAnnotations() throws IOException, ClassNotFoundException {
 
 
@@ -108,6 +110,7 @@ public class AnnotatedEntityDataReader
 
     }
 
+    @SuppressWarnings("unchecked")
     public void readObservations() throws IOException, ClassNotFoundException {
 
         int n = in.readInt();

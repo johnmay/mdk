@@ -140,16 +140,16 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
                       new TransportClassificationNumber(),
                       new KEGGReactionIdentifier()));
 
-    private Map<String, Identifier> synonyms = new HashMap();
+    private Map<String, Identifier> synonyms = new HashMap<String, Identifier>();
 
-    private List<SequenceIdentifier> proteinIdentifiers = new ArrayList(
+    private List<SequenceIdentifier> proteinIdentifiers = new ArrayList<SequenceIdentifier>(
         Arrays.asList(new BasicProteinIdentifier(), new TrEMBLIdentifier(),
                       new SwissProtIdentifier()));
 
     private Set<Identifier> unmapped = new HashSet<Identifier>();
     private Set<Identifier> mapped   = new HashSet<Identifier>();
 
-    private Map<String, SequenceIdentifier> proteinIdMap = new HashMap();
+    private Map<String, SequenceIdentifier> proteinIdMap = new HashMap<String,SequenceIdentifier>();
 
     private List<String> synonymExclusions = Arrays.asList("uniprotkb");
 
@@ -172,7 +172,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
                 Locale.ENGLISH), identifier);
 
             // add to the mapped/unmapped set
-            Set set = identifier.getResource().isMapped() ? mapped : unmapped;
+            Set<Identifier> set = identifier.getResource().isMapped() ? mapped : unmapped;
             set.add(identifier);
 
             synonyms.put(identifier.getShortDescription().toLowerCase(
@@ -271,6 +271,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public <I extends Identifier> I ofClass(Class<I> type) {
         return (I) identifiers.get(type).newInstance();
     }

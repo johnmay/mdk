@@ -78,9 +78,9 @@ public class KGMLReader {
 
     private EntityFactory factory;
 
-    private Collection<KGMLEntry> entires = new ArrayList();
+    private Collection<KGMLEntry> entires = new ArrayList<KGMLEntry>();
 
-    private Collection<KGMLReaction> rxns = new ArrayList();
+    private Collection<KGMLReaction> rxns = new ArrayList<KGMLReaction>();
 
 
     public KGMLReader(EntityFactory factory, InputStream in) throws XMLStreamException {
@@ -115,7 +115,7 @@ public class KGMLReader {
 
 
     public Map<Integer, KGMLEntry> getEntries() {
-        Map<Integer, KGMLEntry> entryMap = new HashMap();
+        Map<Integer, KGMLEntry> entryMap = new HashMap<Integer, KGMLEntry>();
         for (KGMLEntry entry : entires) {
             entryMap.put(entry.getId(), entry);
         }
@@ -145,7 +145,7 @@ public class KGMLReader {
 
 
     public Collection<MetabolicReaction> getReactions() {
-        Collection<MetabolicReaction> reactions = new ArrayList();
+        Collection<MetabolicReaction> reactions = new ArrayList<MetabolicReaction>();
         Map<Integer, Metabolite> metabolites = getMetabolites();
         Map<Integer, KGMLEntry> entries = getEntries();
 
@@ -191,7 +191,7 @@ public class KGMLReader {
     }
 
     public Map<Integer, Metabolite> getMetabolites() {
-        Map<Integer, Metabolite> entryMap = new HashMap();
+        Map<Integer, Metabolite> entryMap = new HashMap<Integer, Metabolite>();
         for (KGMLEntry entry : entires) {
             entryMap.put(entry.getId(), getMetabolite(entry));
         }

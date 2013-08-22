@@ -148,6 +148,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      * @param typeClass
      *
      */
+    @SuppressWarnings("unchecked")
     public void init(Class<? extends M> moleculeClass,
                      Class<? extends R> reactionClass,
                      Class<? extends T> typeClass) {
@@ -281,6 +282,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      * @param m number of reactions
      *
      */
+    @SuppressWarnings("unchecked")
     public void ensure(int n, int m) {
 
         boolean resized = false;
@@ -552,6 +554,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     /**
      * Access to the values for a single reaction
      */
+    @SuppressWarnings("unchecked")
     public T[] getColumn(int j) {
         T[] copy = (T[]) new Object[moleculeCount];
         for (int i = 0; i < moleculeCount; i++) {
@@ -648,6 +651,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     }
 
 
+    @SuppressWarnings("unchecked")
     public T[] getReactionValues(Integer j) {
         List<T> values = new ArrayList<T>();
         for (int i = 0; i < moleculeCount; i++) {
@@ -659,6 +663,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     }
 
 
+    @SuppressWarnings("unchecked")
     public M[] getReactionMolecules(Integer j) {
         List<M> values = new ArrayList<M>();
         for (int i = 0; i < moleculeCount; i++) {

@@ -63,6 +63,7 @@ public class UniProtCrossreferenceMarshal implements UniProtXMLMarshal {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void marshal(XMLStreamReader reader, ProteinProduct product) throws XMLStreamException {
 
         attributes.clear(); // reuse

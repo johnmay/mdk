@@ -134,6 +134,7 @@ public class BasicParticipant<M, S extends Number>
      * @deprecated converting IO of entities to versioned marshalling
      */
     @Deprecated
+    @SuppressWarnings("unchecked")
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         this.molecule = (M) in.readObject();
         this.coefficient = (S) in.readObject();
@@ -164,6 +165,7 @@ public class BasicParticipant<M, S extends Number>
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(Object obj) {
         if (obj == null) {
             LOGGER.debug("Object null");
@@ -211,6 +213,7 @@ public class BasicParticipant<M, S extends Number>
     }
 
 
+    @SuppressWarnings("unchecked")
     public int compareTo(Participant<M, S> o) {
 
         if (this.coefficient != null && o.getCoefficient() != null && this.coefficient instanceof Comparable) {

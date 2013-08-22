@@ -121,7 +121,8 @@ public abstract class AbstractAnimatedIcon extends AnimatedIcon {
         }
         super.registerRepaintArea(c, x, y, w, h);
     }
-    
+
+    @SuppressWarnings("unchecked")
     private static class AnimationUpdater implements ActionListener {
         private WeakReference ref;
         public AnimationUpdater(AbstractAnimatedIcon icon) {

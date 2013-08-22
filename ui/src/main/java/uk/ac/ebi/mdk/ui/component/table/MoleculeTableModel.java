@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class MoleculeTableModel extends DefaultTableModel {
 
-    private List<Metabolite> metabolites = new ArrayList();
+    private List<Metabolite> metabolites = new ArrayList<Metabolite>();
 
     private List<EntityValueAccessor> columns = new ArrayList<EntityValueAccessor>();
 
@@ -79,7 +79,7 @@ public class MoleculeTableModel extends DefaultTableModel {
 
 
     public Collection<Metabolite> getEntities(int[] index) {
-        List<Metabolite> aggregateList = new ArrayList();
+        List<Metabolite> aggregateList = new ArrayList<Metabolite>();
         for (int i : index) {
             aggregateList.add(metabolites.get(i));
         }

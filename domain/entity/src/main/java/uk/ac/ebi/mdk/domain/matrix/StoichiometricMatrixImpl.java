@@ -171,6 +171,7 @@ public abstract class StoichiometricMatrixImpl<M, R>
     /**
      * Create a new composite of s1 and s2
      */
+    @SuppressWarnings("unchecked")
     public StoichiometricMatrix merge(StoichiometricMatrix<M, R> s1,
                                       StoichiometricMatrix<M, R> s2) {
 

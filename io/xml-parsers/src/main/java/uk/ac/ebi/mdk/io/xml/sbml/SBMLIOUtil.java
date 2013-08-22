@@ -359,6 +359,7 @@ public class SBMLIOUtil {
         return species;
     }
 
+    @SuppressWarnings("unchecked")
     private Set<String> notes(AnnotatedEntity e, Collection<Class> cs) {
         Set<String> notes = new TreeSet<String>();
         for (Class c : cs) {

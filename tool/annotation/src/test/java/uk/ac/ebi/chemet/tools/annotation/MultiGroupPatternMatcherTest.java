@@ -37,6 +37,7 @@ public class MultiGroupPatternMatcherTest {
 
 
     @Test(expected = IllegalArgumentException.class)
+    @SuppressWarnings("unchecked")
     public void testConstruction_nullClass() {
         new MultiGroupPatternMatcher(null, Pattern.compile(""), 0);
     }

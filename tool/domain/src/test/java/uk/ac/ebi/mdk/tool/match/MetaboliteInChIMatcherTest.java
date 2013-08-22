@@ -62,6 +62,7 @@ public class MetaboliteInChIMatcherTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testInChIEquality() {
 
         m1.setName("ATP"); // 4-
@@ -95,6 +96,7 @@ public class MetaboliteInChIMatcherTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testInChIEquality_Connectivity() {
 
         m1.setName("ATP"); // 4-

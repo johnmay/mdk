@@ -80,15 +80,18 @@ public class DefaultEntityFactory implements EntityFactory {
     }
 
     /** @inheritDoc */
+    @SuppressWarnings("unchecked")
     public <E extends Entity> E newInstance(Class<E> c) {
         return (E) entites.get(c).newInstance();
     }
 
+    @SuppressWarnings("unchecked")
     public <E extends Entity> E ofClass(Class<E> c) {
         return (E) entites.get(c).newInstance();
     }
 
     /** @inheritDoc */
+    @SuppressWarnings("unchecked")
     public <E extends Entity> E newInstance(Class<E> c, Identifier identifier, String name, String abbr) {
 
         E entity = (E) entites.get(c).newInstance();
@@ -102,6 +105,7 @@ public class DefaultEntityFactory implements EntityFactory {
     }
 
     /** @inheritDoc */
+    @SuppressWarnings("unchecked")
     public <E extends Entity> E ofClass(Class<E> c, Identifier identifier, String name, String abbr) {
 
         E entity = (E) entites.get(c).newInstance();
@@ -116,6 +120,7 @@ public class DefaultEntityFactory implements EntityFactory {
 
 
     /** @inheritDoc */
+    @SuppressWarnings("unchecked")
     public final Class<? extends Entity> getEntityClass(Class<? extends Entity> c) {
 
         if (c.isInterface() && Entity.class.isAssignableFrom(c)) {
@@ -151,14 +156,16 @@ public class DefaultEntityFactory implements EntityFactory {
     }
 
 
+    @SuppressWarnings("unchecked")
     private Class<? extends Entity> getSuperClass(Class<? extends Entity> c) {
         if (c.isInterface()) {
             return (Class<? extends Entity>) c.getInterfaces()[0]; // can only have one
         }
-        return (Class<? extends Entity>) c.getSuperclass();
+        return c.getSuperclass();
     }
 
 
+    @SuppressWarnings("unchecked")
     public Class<? extends Entity> getClass(String className) {
 
         for (Class<? extends Entity> entityClass : entites.keySet()) {

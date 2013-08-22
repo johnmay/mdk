@@ -50,6 +50,7 @@ public class EntitySet<E>
      *
      * @return List of only that class type
      */
+    @SuppressWarnings("unchecked")
     public <T> List<T> get(Class<T> clazz) {
         List<T> subset = new ArrayList<T>();
 

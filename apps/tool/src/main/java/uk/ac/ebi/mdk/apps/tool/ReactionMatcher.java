@@ -65,6 +65,7 @@ public class ReactionMatcher
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Set<MetabolicReaction> calculatedMetric(MetabolicReaction entity) {
 
         List<List<Metabolite>> lists = new ArrayList<List<Metabolite>>();

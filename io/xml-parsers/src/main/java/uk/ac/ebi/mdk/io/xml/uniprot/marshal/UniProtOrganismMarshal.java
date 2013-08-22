@@ -55,6 +55,7 @@ public final class UniProtOrganismMarshal implements UniProtXMLMarshal {
      *
      * @param factory entity factory
      */
+    @SuppressWarnings("unchecked")
     public UniProtOrganismMarshal(DefaultIdentifierFactory factory) {
         this.factory = factory;
         this.crossRefMarshal = new UniProtCrossreferenceMarshal(this.factory, Taxonomy.class);

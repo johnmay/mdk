@@ -89,7 +89,7 @@ public class MetaboliteComparison {
         }
 
 
-        List<IAtomContainer> structures = new ArrayList();
+        List<IAtomContainer> structures = new ArrayList<IAtomContainer>();
 
         Object[][] data = new Object[map.keySet().size()][recons.length];
         int i = 0;
@@ -112,7 +112,7 @@ public class MetaboliteComparison {
 
                     case NAME:
 
-                        List<String> names = new ArrayList();
+                        List<String> names = new ArrayList<String>();
                         if (sub.containsKey(recon)) {
                             for (Metabolite m : sub.get(recon)) {
                                 names.add(m.getName());
@@ -124,7 +124,7 @@ public class MetaboliteComparison {
 
                     case ABBREVIATION:
 
-                        List<String> abbrv = new ArrayList();
+                        List<String> abbrv = new ArrayList<String>();
                         if (sub.containsKey(recon)) {
                             for (Metabolite m : sub.get(recon)) {
                                 abbrv.add(m.getAbbreviation());
@@ -136,7 +136,7 @@ public class MetaboliteComparison {
 
                     case STRUCTURE:
 
-                        List<AtomContainerAnnotation> structure = new ArrayList();
+                        List<AtomContainerAnnotation> structure = new ArrayList<AtomContainerAnnotation>();
                         if (sub.containsKey(recon)) {
                             for (Metabolite m : sub.get(recon)) {
                                 if (m.hasStructure()) {

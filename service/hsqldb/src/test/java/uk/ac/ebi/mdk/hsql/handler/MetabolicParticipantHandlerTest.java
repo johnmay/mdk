@@ -36,6 +36,7 @@ import static org.mockito.Mockito.*;
 public class MetabolicParticipantHandlerTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testHandle_Compartment() throws Exception {
         EntityFactory factory = mock(EntityFactory.class);
         CompartmentResolver resolver = mock(CompartmentResolver.class);
@@ -57,6 +58,7 @@ public class MetabolicParticipantHandlerTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testHandle_Annotator() throws Exception {
         EntityFactory factory = mock(EntityFactory.class);
         CompartmentResolver resolver = mock(CompartmentResolver.class);

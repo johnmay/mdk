@@ -420,6 +420,7 @@ public class MolecularHashFactoryTest {
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
         // need to seed better seeds
+        @SuppressWarnings("unchecked")
         Collection<AtomSeed> seeds = SeedFactory.getInstance()
                                                 .getSeeds(NonNullAtomicNumberSeed.class,
                                                           ConnectedAtomSeed.class);
@@ -471,6 +472,7 @@ public class MolecularHashFactoryTest {
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
 
+        @SuppressWarnings("unchecked")
         Collection<AtomSeed> seeds = SeedFactory.getInstance()
                                                 .getSeeds(NonNullAtomicNumberSeed.class,
                                                           ConnectedAtomSeed.class,

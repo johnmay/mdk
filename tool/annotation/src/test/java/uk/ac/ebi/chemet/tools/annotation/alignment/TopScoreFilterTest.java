@@ -48,6 +48,7 @@ public class TopScoreFilterTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testSingleHighScore() throws Exception {
 
         Collection<Annotation> annotations = Arrays.asList(create("1.1.1.1", 500, 550, 450),
@@ -64,6 +65,7 @@ public class TopScoreFilterTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMultipleHighScores() throws Exception {
 
         Collection<Annotation> annotations = Arrays.asList(create("1.1.1.1", 500, 550, 450),

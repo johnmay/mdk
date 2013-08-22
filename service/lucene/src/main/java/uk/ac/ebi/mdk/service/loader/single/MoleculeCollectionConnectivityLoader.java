@@ -131,7 +131,7 @@ public class MoleculeCollectionConnectivityLoader extends AbstractSingleIndexRes
 
     @Override
     public void update() throws IOException {
-        LinkedList<Document> docs = new LinkedList();
+        LinkedList<Document> docs = new LinkedList<Document>();
         MoleculeConnectivity entry;
         int counter=0;
         while (molIterator.hasNext()) {

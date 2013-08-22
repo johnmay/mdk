@@ -67,7 +67,7 @@ public class DrugBankEntryParser {
     
     private DrugBankEntry entry;
     
-    private Map<String, String> qualifiers = new HashMap();
+    private Map<String, String> qualifiers = new HashMap<String, String>();
     private final XMLStreamReader2 xmlr;
 
     private void parseDrugbankId(XMLStreamReader2 xmlr) throws XMLStreamException {

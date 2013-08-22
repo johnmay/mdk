@@ -36,6 +36,7 @@ import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class UniProtXMLReaderTest  {
         UniProtXMLReader reader = new UniProtXMLReader(in, DefaultEntityFactory.getInstance());
 
         reader.addMarshal(new UniProtIdentifierMarhsal());
-        reader.addMarshal(new UniProtCrossreferenceMarshal(DefaultIdentifierFactory.getInstance(), ECNumber.class));
+        reader.addMarshal(new UniProtCrossreferenceMarshal(DefaultIdentifierFactory.getInstance(), Collections.<Class<? extends Identifier>>singleton(ECNumber.class)));
 
         List<ProteinProduct> productList = new ArrayList<ProteinProduct>();
         

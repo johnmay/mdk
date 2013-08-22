@@ -54,6 +54,7 @@ public final class UniProtHostOrganismMarshal implements UniProtXMLMarshal {
      * @param skip    if true, it will skip adding the detected NCBI Taxonomy
      *                identifier to the Annotations of the protein.
      */
+    @SuppressWarnings("unchecked")
     public UniProtHostOrganismMarshal(DefaultIdentifierFactory factory, Boolean skip) {
         this.skip = skip;
         this.crossRefMarshal = new UniProtCrossreferenceMarshal(factory, Taxonomy.class);

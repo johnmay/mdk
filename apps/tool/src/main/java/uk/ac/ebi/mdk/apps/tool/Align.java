@@ -99,7 +99,7 @@ public class Align extends CommandLineMain {
 
         List<Identifier> identifiers = getIdentifiers();
         List<EntityMatcher<Metabolite, ?>> matchers = getMatchers();
-        List<Metabolite> reference = Collections.EMPTY_LIST;
+        List<Metabolite> reference = Collections.emptyList();
 
         System.out.println("Loading reference:");
         {
@@ -235,7 +235,7 @@ public class Align extends CommandLineMain {
 
     }
 
-
+    @SuppressWarnings("unchecked")
     public void assignNames(Metabolite metabolite) {
 
         ServiceManager manager = DefaultServiceManager.getInstance();

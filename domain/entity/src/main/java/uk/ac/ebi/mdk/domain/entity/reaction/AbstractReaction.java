@@ -181,6 +181,7 @@ public class AbstractReaction<P extends Participant>
      *
      * @return Fixed size array of reactants of class 'M'
      */
+    @SuppressWarnings("unchecked")
     public List getReactantMolecules() {
         List molecules = new ArrayList();
         for (Participant p : getReactantParticipants()) {
@@ -260,6 +261,7 @@ public class AbstractReaction<P extends Participant>
      *
      * @return Fixed size array of products of class 'M'
      */
+    @SuppressWarnings("unchecked")
     public List getProductMolecules() {
         List molecules = new ArrayList();
         for (Participant p : getProductParticipants()) {
@@ -332,6 +334,7 @@ public class AbstractReaction<P extends Participant>
      * @return shallow copy combined list of all coefficients (ordered reactant,
      *         product)
      */
+    @SuppressWarnings("unchecked")
     public List getAllReactionCoefficients() {
         List allMolecules = new ArrayList(getReactantStoichiometries());
         allMolecules.addAll(getProductStoichiometries());
@@ -401,7 +404,7 @@ public class AbstractReaction<P extends Participant>
      */
     public void transpose() {
         // transpose all the lists
-        List tmp = reactants;
+        List<P> tmp = reactants;
         reactants = products;
         products = tmp;
     }

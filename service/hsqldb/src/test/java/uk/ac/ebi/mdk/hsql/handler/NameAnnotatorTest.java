@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
 public class NameAnnotatorTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testApply() throws Exception {
         Metabolite m = mock(Metabolite.class);
         PreferredNameAccess<Identifier> access = mock(PreferredNameAccess.class);

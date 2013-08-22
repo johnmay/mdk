@@ -112,6 +112,7 @@ public class LuceneServiceManager
      * @inheritDoc
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifier, Class<? extends S> c) {
 
         for (QueryService service : services.get(identifier)) {
@@ -125,11 +126,13 @@ public class LuceneServiceManager
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<? extends S> serviceClass) {
         return hasService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <S extends QueryService<I>, I extends Identifier> S getService(I identifier, Class<? extends S> serviceClass) {
         return getService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
@@ -164,6 +167,7 @@ public class LuceneServiceManager
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public <S extends QueryService<I>,
             I extends Identifier> S getService(Class<I> identifier, Class... classes) {
 

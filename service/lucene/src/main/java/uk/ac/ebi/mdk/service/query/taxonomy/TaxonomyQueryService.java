@@ -26,6 +26,7 @@ import uk.ac.ebi.mdk.service.query.name.NameService;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * TaxonmyQueryService - 23.02.2012 <br/>
@@ -64,7 +65,7 @@ public class TaxonomyQueryService
         }catch (Exception ex){
             ex.printStackTrace();
         }
-        return Arrays.asList();
+        return Collections.emptyList();
     }
 
     private Collection<Taxonomy> setup(Collection<Taxonomy> identifiers) {

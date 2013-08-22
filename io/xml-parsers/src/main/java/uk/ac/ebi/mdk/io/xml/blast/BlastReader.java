@@ -72,8 +72,8 @@ import java.util.Map;
 public class BlastReader {
 
     private static final Logger LOGGER = Logger.getLogger(BlastReader.class);
-    public Collection<Integer> supportedFormats = new HashSet();
-    private Map<String, Integer> columnMap = new HashMap();
+    public Collection<Integer> supportedFormats = new HashSet<Integer>();
+    private Map<String, Integer> columnMap = new HashMap<String,Integer>();
 
     public BlastReader() {
         supportedFormats.add(5); // xml

@@ -41,6 +41,7 @@ package uk.ac.ebi.mdk.tool.resolve;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -100,7 +101,7 @@ public abstract class AbstractEncoder
 
         String[] fragments = string.split("\\s+");
 
-        TreeSet textFragments = new TreeSet();
+        Set<String> textFragments = new TreeSet<String>();
         StringBuilder digits = new StringBuilder();
 
         for( String fragment : fragments ) {

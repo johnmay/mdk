@@ -31,6 +31,7 @@ import static org.mockito.Mockito.*;
 public class StructureAnnotatorTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testApply() throws Exception {
         Metabolite m = mock(Metabolite.class);
         StructureService<Identifier> access = mock(StructureService.class);
@@ -44,6 +45,7 @@ public class StructureAnnotatorTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testApply_empty() throws Exception {
         Metabolite m = mock(Metabolite.class);
         StructureService<Identifier> access = mock(StructureService.class);

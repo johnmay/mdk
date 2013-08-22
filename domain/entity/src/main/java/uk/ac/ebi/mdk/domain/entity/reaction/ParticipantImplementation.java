@@ -84,7 +84,7 @@ public class ParticipantImplementation<M, S extends Number, C> extends BasicPart
     }
 
     @Deprecated
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    @SuppressWarnings("unchecked") public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         this.molecule = (M) in.readObject();
         this.coefficient = (S) in.readObject();
         this.compartment = (C) in.readObject();
@@ -106,7 +106,7 @@ public class ParticipantImplementation<M, S extends Number, C> extends BasicPart
 
 
     @Override
-    public boolean equals(Object obj) {
+    @SuppressWarnings("unchecked") public boolean equals(Object obj) {
         if (obj == null) {
             LOGGER.debug("Object null");
             return false;
@@ -157,7 +157,7 @@ public class ParticipantImplementation<M, S extends Number, C> extends BasicPart
     }
 
 
-    public int compareTo(Participant<M, S> o) {
+    @SuppressWarnings("unchecked") public int compareTo(Participant<M, S> o) {
 
 
 
