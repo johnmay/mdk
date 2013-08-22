@@ -156,12 +156,13 @@ public class DefaultEntityFactory implements EntityFactory {
     }
 
 
+
     @SuppressWarnings("unchecked")
     private Class<? extends Entity> getSuperClass(Class<? extends Entity> c) {
-        if (c.isInterface()) {
-            return (Class<? extends Entity>) c.getInterfaces()[0]; // can only have one
+        if (c.isInterface()) {            
+            return (Class < ?extends Entity>) c.getInterfaces()[0]; // can only have one            
         }
-        return c.getSuperclass();
+        return (Class<? extends Entity>) c.getSuperclass();
     }
 
 

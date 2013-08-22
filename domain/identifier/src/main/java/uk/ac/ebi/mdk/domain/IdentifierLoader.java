@@ -99,6 +99,7 @@ public class IdentifierLoader
 
     /** @inheritDoc */
     @Override
+    @SuppressWarnings("unchecked")
     public String getShortDescription(Class c) {
 
         int mir = getMIR(c);

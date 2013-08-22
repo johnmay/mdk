@@ -67,6 +67,7 @@ public class IdentifierEditor extends JComponent {
         this(new ArrayList<Class<? extends Identifier>>());
     }
 
+    @SuppressWarnings("unchecked")
     public IdentifierEditor(Collection<Class<? extends Identifier>> identifiers) {
 
         setLayout(new FormLayout("pref, 4dlu, pref", "p"));
@@ -183,6 +184,7 @@ public class IdentifierEditor extends JComponent {
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Identifier getIdentifier() {
 
         String accession    = field.getText().trim();

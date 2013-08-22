@@ -44,6 +44,7 @@ public class FormulaCellRender
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public JLabel getComponent(JTable table, Object value, int row, int column) {
 
         // need more space to show sub script

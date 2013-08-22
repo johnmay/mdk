@@ -165,6 +165,7 @@ public class AbstractReaction<P extends Participant>
     //     * Accessor for all the reactant coefficients of the reaction
     //     * @return Fixed size array of reactant coefficients
     //     */
+    @SuppressWarnings("unchecked")
     public List getReactantStoichiometries() {
         List coefficients = new ArrayList();
         for (P p : getReactantParticipants()) {
@@ -246,6 +247,7 @@ public class AbstractReaction<P extends Participant>
     //     * Accessor for all the product coefficients of the reaction
     //     * @return Fixed size array of coefficients
     //     */
+    @SuppressWarnings("unchecked")
     public List getProductStoichiometries() {
         List coefficients = new ArrayList();
         for (P p : getProductParticipants()) {
@@ -308,6 +310,7 @@ public class AbstractReaction<P extends Participant>
      * @return shallow copy combined list of all products (ordered reactant,
      *         product)
      */
+    @SuppressWarnings("unchecked")
     public List getAllReactionMolecules() {
         List allMolecules = new ArrayList(getReactantMolecules());
         allMolecules.addAll(getProductMolecules());
@@ -523,6 +526,7 @@ public class AbstractReaction<P extends Participant>
             return false;
         }
 
+        @SuppressWarnings("unchecked")
         final AbstractReaction<P> other = (AbstractReaction<P>) obj;
 
 

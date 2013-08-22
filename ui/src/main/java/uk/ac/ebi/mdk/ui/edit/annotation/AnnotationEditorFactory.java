@@ -79,6 +79,7 @@ public class AnnotationEditorFactory {
     }
 
 
+    @SuppressWarnings("unchecked")
     private AnnotationEditorFactory() {
         editors.put(StringAnnotation.class, new StringAnnotationEditor());
         editors.put(CrossReference.class, new CrossReferenceEditor());
@@ -169,6 +170,7 @@ public class AnnotationEditorFactory {
         public AnnotationTableCellEditor() {
         }
 
+        @SuppressWarnings("unchecked")
         public JComponent getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
             if (value instanceof Annotation) {

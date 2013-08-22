@@ -56,7 +56,7 @@ public class KEGGReactionService {
         statement.execute();
 
         ResultSet rs = statement.getResultSet();
-
+        @SuppressWarnings("unchecked")
         IdentifierReaction<KEGGCompoundIdentifier> rxn = factory.newInstance(IdentifierReaction.class);
 
 
@@ -65,9 +65,9 @@ public class KEGGReactionService {
             Double coefficient = rs.getDouble(1);
             String cpd = rs.getString(2);
             String ec = rs.getString(3);
-
+            @SuppressWarnings("unchecked")
             Participant<KEGGCompoundIdentifier, Double> base = factory.newInstance(Participant.class);
-
+            @SuppressWarnings("unchecked")
             Participant<KEGGCompoundIdentifier, Double> p = (Participant<KEGGCompoundIdentifier, Double>) base.newInstance();
             p.setMolecule(new KEGGCompoundIdentifier(cpd));
 
