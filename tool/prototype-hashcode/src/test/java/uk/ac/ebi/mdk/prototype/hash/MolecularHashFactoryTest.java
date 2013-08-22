@@ -34,7 +34,7 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IAtomType;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.io.SDFWriter;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.number.XORShift;
 import org.openscience.cdk.parity.SP2Parity2DCalculator;
 import org.openscience.cdk.parity.component.IntStereoIndicator;
@@ -782,7 +782,7 @@ public class MolecularHashFactoryTest {
 
         List<IAtomContainer> containers = new ArrayList<IAtomContainer>(n > 0 ? n : 100);
 
-        IteratingMDLReader reader = new IteratingMDLReader(in,
+        IteratingSDFReader reader = new IteratingSDFReader(in,
                                                            DefaultChemObjectBuilder
                                                                    .getInstance(),
                                                            true);

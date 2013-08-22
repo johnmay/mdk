@@ -19,7 +19,7 @@ package uk.ac.ebi.mdk.domain.annotation;
 
 import net.sf.jniinchi.INCHI_RET;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.Molecule;
+import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.inchi.InChIGenerator;
 import org.openscience.cdk.inchi.InChIGeneratorFactory;
@@ -115,7 +115,7 @@ public class AtomContainerAnnotation
 
             super.readExternal(in);
             MDLV2000Reader reader = new MDLV2000Reader(new StringReader(in.readUTF()));
-            molecule = new Molecule();
+            molecule = new AtomContainer();
             reader.read(molecule);
             reader.close();
 

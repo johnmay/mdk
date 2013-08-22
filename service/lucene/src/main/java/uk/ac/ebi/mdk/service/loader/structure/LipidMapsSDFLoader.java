@@ -20,7 +20,7 @@ package uk.ac.ebi.mdk.service.loader.structure;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.mdk.service.ResourceLoader;
 import uk.ac.ebi.mdk.service.index.KeywordNIOIndex;
@@ -70,7 +70,7 @@ public class LipidMapsSDFLoader extends AbstractSingleIndexResourceLoader {
             if(!name.endsWith("FinalAll.sdf"))
                 continue;
 
-            IteratingMDLReader reader = new IteratingMDLReader(in,
+            IteratingSDFReader reader = new IteratingSDFReader(in,
                                                                SilentChemObjectBuilder.getInstance(),
                                                                true);
             int count = 0;

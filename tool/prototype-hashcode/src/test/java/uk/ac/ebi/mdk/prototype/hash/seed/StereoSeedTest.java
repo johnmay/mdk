@@ -30,7 +30,6 @@ import org.junit.Test;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.mdk.prototype.hash.TestMoleculeFactory;
 import uk.ac.ebi.mdk.prototype.hash.MolecularHashFactory;
@@ -133,18 +132,18 @@ public class StereoSeedTest {
     @Ignore("new stereo parity")
     public void testStereoAlteration() throws CDKException, IOException {
 
-        IMolecule mol1, mol2 = null;
+        IAtomContainer mol1, mol2 = null;
 
         {
             InputStream stream = getClass().getResourceAsStream("C00129.mol");
             MDLV2000Reader reader = new MDLV2000Reader(stream);
-            mol1 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+            mol1 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
             reader.close();
         }
         {
             InputStream stream = getClass().getResourceAsStream("C00235.mol");
             MDLV2000Reader reader = new MDLV2000Reader(stream);
-            mol2 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class));
+            mol2 = reader.read(DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
             reader.close();
         }
         Assert.assertNotNull("Failed to loaded C00129.mol from resource", mol1);

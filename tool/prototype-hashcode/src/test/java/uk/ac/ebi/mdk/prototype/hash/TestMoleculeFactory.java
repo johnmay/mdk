@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -127,7 +126,7 @@ public class TestMoleculeFactory {
 
     public static IAtomContainer loadMol(InputStream stream, String name, Boolean convertHydrogens) {
         MDLV2000Reader mol2Reader = new MDLV2000Reader(stream);
-        IMolecule molecule = DefaultChemObjectBuilder.getInstance().newInstance(IMolecule.class);
+        IAtomContainer molecule = DefaultChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
         try {
             mol2Reader.read(molecule);
             molecule.setID(name);

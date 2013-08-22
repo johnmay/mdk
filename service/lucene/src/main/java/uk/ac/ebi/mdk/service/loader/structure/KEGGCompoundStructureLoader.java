@@ -18,9 +18,10 @@
 package uk.ac.ebi.mdk.service.loader.structure;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.Molecule;
+import org.openscience.cdk.silent.AtomContainer;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.silent.AtomContainer;
 import uk.ac.ebi.mdk.service.index.structure.KEGGCompoundStructureIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.writer.DefaultStructureIndexWriter;
@@ -82,7 +83,7 @@ public class KEGGCompoundStructureLoader extends AbstractSingleIndexResourceLoad
 
             try {
                 mdlReader.setReader(in);
-                IAtomContainer molecule = mdlReader.read(new Molecule());
+                IAtomContainer molecule = mdlReader.read(new AtomContainer());
                 writer.write(name.substring(0, 6), molecule);
                 mdlReader.close();
             } catch (Exception ex) {

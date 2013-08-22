@@ -94,7 +94,7 @@ public class KEGGCompoundStructureServiceTest {
 
                 Collection<? extends KEGGCompoundIdentifier> results = service.structureSearch(e.getValue(), true);
 
-                BitSet query = new Fingerprinter().getFingerprint(structure);
+                BitSet query = new Fingerprinter().getBitFingerprint(structure).asBitSet();
                 Collection<Float> coefs = getCoefficients(query, results, service);
 
                 if (!results.iterator().next().equals(identifier)) {
@@ -127,7 +127,7 @@ public class KEGGCompoundStructureServiceTest {
         List<Float> coefs = new ArrayList<Float>();
         Fingerprinter fp = new Fingerprinter();
         for (KEGGCompoundIdentifier id : ids) {
-            coefs.add(Tanimoto.calculate(query, fp.getFingerprint(service.getStructure(id))));
+            coefs.add(Tanimoto.calculate(query, fp.getBitFingerprint(service.getStructure(id)).asBitSet()));
         }
         return coefs;
     }

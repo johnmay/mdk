@@ -117,7 +117,7 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
     public Collection<I> structureSearch(IAtomContainer molecule, boolean approximate) {
         LOGGER.error("Approximate variable not used!");
         try {
-            return searchStructure(fingerprinter.getFingerprint(molecule), approximate, false);
+            return searchStructure(fingerprinter.getBitFingerprint(molecule).asBitSet(), approximate, false);
         } catch (CDKException ex) {
             return new ArrayList<I>();
         }
@@ -126,7 +126,7 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
     @Override
     public Collection<I> substructureSearch(IAtomContainer molecule) {
         try {
-            return searchStructure(fingerprinter.getFingerprint(molecule), true, true);
+            return searchStructure(fingerprinter.getBitFingerprint(molecule).asBitSet(), true, true);
         } catch (CDKException ex) {
             return new ArrayList<I>();
         }

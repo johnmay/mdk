@@ -19,8 +19,10 @@ package uk.ac.ebi.mdk.service.loader.structure;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.CDKConstants;
-import org.openscience.cdk.interfaces.IMolecule;
-import org.openscience.cdk.io.iterator.IteratingMDLReader;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
+import org.openscience.cdk.io.iterator.IteratingSDFReader;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import uk.ac.ebi.mdk.service.index.structure.HMDBStructureIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
@@ -73,7 +75,7 @@ public class HMDBStructureLoader
         ResourceFileLocation location = getLocation("HMDB SDF");
 
         // reader the sdf
-        IteratingMDLReader sdf = new IteratingMDLReader(location.open(), SilentChemObjectBuilder.getInstance());
+        IteratingSDFReader sdf = new IteratingSDFReader(location.open(), SilentChemObjectBuilder.getInstance());
         DefaultStructureIndexWriter writer = new DefaultStructureIndexWriter(getIndex());
         sdf.setSkip(true);
 
@@ -81,7 +83,7 @@ public class HMDBStructureLoader
 
         while (!isCancelled() && sdf.hasNext()) {
 
-            IMolecule molecule = (IMolecule) sdf.next();
+            IAtomContainer molecule = sdf.next();
             Object title = molecule.getProperty(CDKConstants.TITLE);
             Object id = molecule.getProperty("HMDB_ID");
 

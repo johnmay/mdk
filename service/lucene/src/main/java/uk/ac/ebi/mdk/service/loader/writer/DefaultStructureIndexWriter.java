@@ -104,7 +104,7 @@ public class DefaultStructureIndexWriter extends AbstractIndexWriter {
 
     public BitSet getFingerprint(IAtomContainer molecule){
         try {
-            return molecule.getAtomCount() < threshold ? fingerprinter.getFingerprint(molecule) : new BitSet();
+            return molecule.getAtomCount() < threshold ? fingerprinter.getBitFingerprint(molecule).asBitSet() : new BitSet();
         } catch (CDKException ex){
             LOGGER.warn("Fingerprint was not calculated for molecule: " + molecule );
             return new BitSet();
