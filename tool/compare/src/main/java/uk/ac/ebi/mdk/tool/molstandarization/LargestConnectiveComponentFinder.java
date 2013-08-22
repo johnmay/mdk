@@ -42,10 +42,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.MoleculeSet;
+import org.openscience.cdk.AtomContainerSet;
 import org.openscience.cdk.graph.ConnectivityChecker;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 
 /**
  * @name    LargestConnectiveComponentFinder
@@ -63,11 +63,11 @@ public class LargestConnectiveComponentFinder {
     
     public ConnectiveComponents processMolecule(IAtomContainer mol) {
         if(!ConnectivityChecker.isConnected(mol)) {
-            IMoleculeSet comps = ConnectivityChecker.partitionIntoMolecules(mol);
+            IAtomContainerSet comps = ConnectivityChecker.partitionIntoMolecules(mol);
             ConnectiveComponents res = new ConnectiveComponents(comps);
             return res;
         }
-        IMoleculeSet molSetSingleton = new MoleculeSet();
+        IAtomContainerSet molSetSingleton = new AtomContainerSet();
         molSetSingleton.addAtomContainer(mol);
         return new ConnectiveComponents(molSetSingleton);
     }

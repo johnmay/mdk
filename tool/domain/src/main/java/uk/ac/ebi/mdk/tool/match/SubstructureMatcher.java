@@ -169,7 +169,7 @@ public class SubstructureMatcher extends AbstractMatcher<Metabolite, Map<BitSet,
 
             try {
 
-                map.put(fingerprinter.getFingerprint(cleaned), original);
+                map.put(fingerprinter.getBitFingerprint(cleaned).asBitSet(), original);
 
             } catch (CDKException ex) {
                 LOGGER.debug("Unable to calculate fingerprint for a structure in entity " + entity.getIdentifier(), ex);

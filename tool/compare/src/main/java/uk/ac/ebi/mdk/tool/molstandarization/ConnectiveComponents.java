@@ -42,7 +42,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.interfaces.IMoleculeSet;
+import org.openscience.cdk.interfaces.IAtomContainerSet;
 import uk.ac.ebi.mdk.tool.comparator.AtomCountComparator;
 
 /**
@@ -59,7 +59,7 @@ public class ConnectiveComponents {
     private final List<IAtomContainer>       components = new ArrayList<IAtomContainer>();
     private final Comparator<IAtomContainer> comparator = Collections.reverseOrder(new AtomCountComparator());
 
-    public ConnectiveComponents(IMoleculeSet mols) {
+    public ConnectiveComponents(IAtomContainerSet mols) {
         for (IAtomContainer mol : mols.atomContainers()) {
             if (mol == null) {
                 continue;

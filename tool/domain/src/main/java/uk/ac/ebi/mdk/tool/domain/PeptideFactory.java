@@ -24,7 +24,6 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IMolecule;
 import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.silent.Atom;
 import org.openscience.cdk.silent.Bond;
@@ -71,7 +70,8 @@ public class PeptideFactory {
                                                                      IOException,
                                                                      CDKException,
                                                                      Exception {
-        IAtomContainer peptide = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
+        IAtomContainer peptide = SilentChemObjectBuilder.getInstance()
+                                                        .newInstance(IAtomContainer.class);
 
 
         IAtomContainer prev = aminoacids[0].copyOf();
@@ -98,7 +98,8 @@ public class PeptideFactory {
                 peptide.add(next);
 
                 IAtom cTerminal = aminoacids[i].cTerminalAtom(prev);
-                IAtom nTerminal = removeAtom(peptide, aminoacids[i + 1].nTerminalAtom(next));
+                IAtom nTerminal = removeAtom(peptide, aminoacids[i + 1]
+                        .nTerminalAtom(next));
 
                 // align next with prev
                 Point2d cCoordinate = cTerminal.getPoint2d();
@@ -118,8 +119,10 @@ public class PeptideFactory {
                 IAtom oxygen = new Atom("O");
                 peptide.addAtom(oxygen);
                 peptide.addBond(new Bond(oxygen,
-                                         removeAtom(peptide, aminoacids[i].cTerminalAtom(prev))));
-                oxygen.setPoint2d(aminoacids[i].cTerminalAtom(prev).getPoint2d());
+                                         removeAtom(peptide, aminoacids[i]
+                                                 .cTerminalAtom(prev))));
+                oxygen.setPoint2d(aminoacids[i].cTerminalAtom(prev)
+                                               .getPoint2d());
             }
 
             prev = next;
@@ -165,7 +168,8 @@ public class PeptideFactory {
                                                                   Exception {
 
         Metabolite m = factory.newInstance(Metabolite.class,
-                                           BasicChemicalIdentifier.nextIdentifier(),
+                                           BasicChemicalIdentifier
+                                                   .nextIdentifier(),
                                            generateName(aminoacids),
                                            generateAbbreviation(aminoacids));
 
@@ -357,9 +361,11 @@ public class PeptideFactory {
             try {
                 InputStream stream = getClass().getResourceAsStream(resource);
                 MDLV2000Reader reader = new MDLV2000Reader(stream);
-                this.molecule = SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class);
+                this.molecule = SilentChemObjectBuilder.getInstance()
+                                                       .newInstance(IAtomContainer.class);
                 reader.read(molecule);
-                AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
+                AtomContainerManipulator
+                        .percieveAtomTypesAndConfigureUnsetProperties(molecule);
             } catch (Exception ex) {
                 LOGGER.error("Could not load amino acid "
                                      + name() + ": " + ex.getMessage());
@@ -368,17 +374,21 @@ public class PeptideFactory {
 
             displayName = name().replaceAll("_", "-");
             displayName = name().equals("GLY")
-                          ? displayName.substring(0, 1) + displayName.substring(1).toLowerCase()
-                          : displayName.substring(0, 3) + displayName.substring(3).toLowerCase();
+                          ? displayName.substring(0, 1) + displayName
+                    .substring(1).toLowerCase()
+                          : displayName.substring(0, 3) + displayName
+                                  .substring(3).toLowerCase();
 
 
             String stereo = displayName.substring(0, 1).toLowerCase();
             String code = name().equals("GLY") ? "gly"
-                                               : displayName.substring(2, 5).toLowerCase();
+                                               : displayName.substring(2, 5)
+                                                            .toLowerCase();
 
             pattern =
                     name().equals("GLY") ? Pattern.compile("(?:" + code + ")-?")
-                                         : Pattern.compile("(?:" + stereo + "-" + code + "|" + code + ")-?");
+                                         : Pattern
+                            .compile("(?:" + stereo + "-" + code + "|" + code + ")-?");
 
         }
 
@@ -414,8 +424,10 @@ public class PeptideFactory {
             for (int i = 0; i < bonds.length; i++) {
                 IBond bond = src.getBond(i);
                 bonds[i] = builder.newInstance(IBond.class,
-                                               atoms[src.getAtomNumber(bond.getAtom(0))],
-                                               atoms[src.getAtomNumber(bond.getAtom(1))],
+                                               atoms[src
+                                                       .getAtomNumber(bond.getAtom(0))],
+                                               atoms[src
+                                                       .getAtomNumber(bond.getAtom(1))],
                                                bond.getOrder());
                 bonds[i].setStereo(bond.getStereo());
             }
