@@ -527,8 +527,8 @@ public class MolecularHashFactoryTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
-    public void testIdose_explicitImplicit() throws IOException, CDKException {
+     @SuppressWarnings("unchecked")
+     public void testIdose_explicitImplicit() throws IOException, CDKException {
 
         List<IAtomContainer> containers = readSDF(getClass(), "aldohexoses.sdf", 3);
 
@@ -548,9 +548,42 @@ public class MolecularHashFactoryTest {
 
 
         MolecularHash explicitIgnore = factory2.getHash(containers
-                                                               .get(0), seeds);
+                                                                .get(0), seeds);
         MolecularHash implicitIgnore = factory2.getHash(containers
-                                                               .get(2), seeds);
+                                                                .get(2), seeds);
+
+        assertThat("D-idose with implicit and explicit hydrogens did not hash to the same value",
+                   explicitIgnore.hash, is(implicitIgnore.hash));
+
+
+
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void butanols() throws IOException, CDKException {
+
+        List<IAtomContainer> containers = readSDF(getClass(), "butan-2-ols.sdf", 2);
+
+        Collection<AtomSeed> seeds = SeedFactory.getInstance()
+                                                .getSeeds(NonNullAtomicNumberSeed.class,
+                                                          NonNullHybridizationSeed.class);
+
+        MolecularHashFactory factory1 = new MolecularHashFactory(4, false);
+        MolecularHashFactory factory2 = new MolecularHashFactory(4, true);
+
+
+        MolecularHash explicit = factory1.getHash(containers.get(0), seeds);
+        MolecularHash implicit = factory1.getHash(containers.get(1), seeds);
+
+        assertThat("D-idose with implicit and explicit hydrogens hashed to the same value",
+                   explicit.hash, is(not(implicit.hash)));
+
+
+        MolecularHash explicitIgnore = factory2.getHash(containers
+                                                                .get(0), seeds);
+        MolecularHash implicitIgnore = factory2.getHash(containers
+                                                                .get(1), seeds);
 
         assertThat("D-idose with implicit and explicit hydrogens did not hash to the same value",
                    explicitIgnore.hash, is(implicitIgnore.hash));

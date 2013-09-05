@@ -71,6 +71,34 @@ public class ExplicitHyrdrogenHashing {
     }
 
     @Test
+    public void butan2ols() throws IOException, CDKException {
+
+        List<IAtomContainer> containers = readSDF(getClass(), "butan-2-ols.sdf", -1);
+
+        HashGenerator<Long> specific = new HashGeneratorMaker().chiral()
+                                                               .build();
+        HashGenerator<Integer> nonspecific = new HashGeneratorMaker().chiral()
+                                                                     .buildWithMask(HashGeneratorMaker.EXPLICT_HYDROGEN_MASK);
+
+
+        IAtomContainer explicit = containers.get(0);
+        IAtomContainer implicit = containers.get(1);
+
+
+        assertThat("implicit and explicit hashes were equal (ignore not set)",
+                   specific.generate(explicit),
+                   is(not(specific.generate(implicit))));
+
+
+        System.out.println("testing ignore: ");
+        assertThat("implicit and explicit hashes were not equal (ignore set)",
+                   nonspecific.generate(explicit),
+                   is(nonspecific.generate(implicit)));
+
+
+    }
+
+    @Test
     public void testExpImpInositols() throws Exception {
         List<IAtomContainer> inositols = readSDF(getClass(), "inositol-variants.sdf", -1);
 
