@@ -17,8 +17,8 @@
 
 package org.openscience.cdk;
 
-import org.openscience.cdk.hash.graph.AdjacencyList;
-import org.openscience.cdk.hash.graph.Graph;
+import org.openscience.cdk.hash_mdk.graph.AdjacencyList;
+import org.openscience.cdk.hash_mdk.graph.Graph;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.number.Counter;
 import org.openscience.cdk.number.DoubleCounter;

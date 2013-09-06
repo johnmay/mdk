@@ -17,10 +17,9 @@
 
 package org.openscience.cdk;
 
-import org.openscience.cdk.hash.graph.Graph;
+import org.openscience.cdk.hash_mdk.graph.Graph;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.number.PseudoRandomNumber;
-import org.openscience.cdk.number.XORShift;
 import org.openscience.cdk.number.XORShift64;
 import org.openscience.cdk.parity.locator.StereoComponentProvider;
 import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;

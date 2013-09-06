@@ -17,7 +17,7 @@
 
 package org.openscience.cdk.parity.component;
 
-import org.openscience.cdk.hash.graph.Graph;
+import org.openscience.cdk.hash_mdk.graph.Graph;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.parity.ParityCalculator;
 import org.openscience.cdk.parity.SP3Parity2DCalculator;

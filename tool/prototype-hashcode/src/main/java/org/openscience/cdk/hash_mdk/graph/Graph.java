@@ -15,20 +15,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openscience.cdk.hash;
+package org.openscience.cdk.hash_mdk.graph;
 
-import org.openscience.cdk.parity.component.StereoComponent;
-
-import java.util.BitSet;
+import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
- * Describes a hash generator which cycles over the connections and includes
- * invariant information of the neighbours
+ * Fast molecule is a restructure immutable molecule that allows quicker queries
+ * and graph traversal.
  *
  * @author John May
  */
-public interface AtomHashCycleGenerator extends AtomHashGenerator {
+public interface Graph {
 
-    Long[] combined(int[][] connections, Long[] invariants, StereoComponent<Long> stereo, BitSet reducible);
+    public IAtomContainer container();
+
+    /**
+     * Provides the indices of vertices which are adjacent to the given index.
+     *
+     * @param i an atom index
+     * @return adjacent indices
+     */
+    public int[] neighbors(int i);
+
+    public boolean adjacent(int i, int j);
+
+    public int n();
+
+    public IAtom getVertexValue(int i);
+
+    public int getBondOrderSum(int i);
+
+    public Edge getEdgeValue(int i, int j);
+
+    public Edge getEdgeAtIndex(int i, int j);
 
 }

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openscience.cdk.hash;
+package org.openscience.cdk.hash_mdk;
 
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.parity.component.StereoComponent;
@@ -33,9 +33,9 @@ import java.util.Map;
 public class PerturbedAtomHashGenerator extends AbstractHashGenerator
         implements AtomHashGenerator {
 
-    private final BasicAtomHashGenerator basic;
-    protected final AtomHashGenerator seedGenerator;
-    private final StereoComponentProvider<Long> stereoComponentProvider;
+    private final   BasicAtomHashGenerator        basic;
+    protected final AtomHashGenerator             seedGenerator;
+    private final   StereoComponentProvider<Long> stereoComponentProvider;
     public static int perturbedCount = 0;
 
     public PerturbedAtomHashGenerator(AtomHashGenerator seedGenerator, StereoComponentProvider<Long> stereo, int depth) {

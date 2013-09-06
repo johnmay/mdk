@@ -17,7 +17,7 @@
 
 package org.openscience.cdk;
 
-import org.openscience.cdk.hash.graph.Graph;
+import org.openscience.cdk.hash_mdk.graph.Graph;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.number.PseudoRandomNumber;
@@ -25,7 +25,6 @@ import org.openscience.cdk.number.XORShift;
 import org.openscience.cdk.parity.locator.StereoComponentProvider;
 import uk.ac.ebi.mdk.prototype.hash.seed.MaskedSeed;
 
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 

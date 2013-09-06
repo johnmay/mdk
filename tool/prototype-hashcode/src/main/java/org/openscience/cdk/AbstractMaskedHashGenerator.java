@@ -17,9 +17,8 @@
 
 package org.openscience.cdk;
 
-import org.openscience.cdk.hash.graph.AdjacencyList;
-import org.openscience.cdk.hash.graph.Graph;
-import org.openscience.cdk.interfaces.IAtom;
+import org.openscience.cdk.hash_mdk.graph.AdjacencyList;
+import org.openscience.cdk.hash_mdk.graph.Graph;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.number.Counter;
 import org.openscience.cdk.number.DoubleCounter;
@@ -31,7 +30,6 @@ import org.openscience.cdk.parity.component.StereoComponentAggregator;
 import org.openscience.cdk.parity.locator.EmptyStereoProvider;
 import org.openscience.cdk.parity.locator.StereoComponentProvider;
 import uk.ac.ebi.mdk.prototype.hash.HashGenerator;
-import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.MaskedSeed;
 
 import java.util.ArrayList;

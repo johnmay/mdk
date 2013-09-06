@@ -15,24 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openscience.cdk.hash;
+package org.openscience.cdk.hash_mdk;
 
-import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.parity.component.StereoComponent;
+
+import java.util.BitSet;
 
 /**
- * Describes a hash generator which produces a single ensemble hash code for a
- * given molecule.
+ * Describes a hash generator which cycles over the connections and includes
+ * invariant information of the neighbours
  *
  * @author John May
  */
-public interface MoleculeHashGenerator {
+public interface AtomHashCycleGenerator extends AtomHashGenerator {
 
-    /**
-     * Generate a hash value for a given container.
-     *
-     * @param container the container hash
-     * @return atom hash codes
-     */
-    public long generate(IAtomContainer container);
+    Long[] combined(int[][] connections, Long[] invariants, StereoComponent<Long> stereo, BitSet reducible);
 
 }

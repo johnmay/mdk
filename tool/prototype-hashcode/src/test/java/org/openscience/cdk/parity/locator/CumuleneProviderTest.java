@@ -18,7 +18,7 @@
 package org.openscience.cdk.parity.locator;
 
 import org.junit.Test;
-import org.openscience.cdk.hash.graph.AdjacencyList;
+import org.openscience.cdk.hash_mdk.graph.AdjacencyList;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;

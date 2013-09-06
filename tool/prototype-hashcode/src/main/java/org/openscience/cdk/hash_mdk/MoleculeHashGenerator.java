@@ -15,37 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openscience.cdk.hash.graph;
+package org.openscience.cdk.hash_mdk;
+
+import org.openscience.cdk.interfaces.IAtomContainer;
 
 /**
- * Edge/Bond
+ * Describes a hash generator which produces a single ensemble hash code for a
+ * given molecule.
+ *
  * @author John May
  */
-public interface Edge {
+public interface MoleculeHashGenerator {
 
     /**
-     * order of this edge, 1,2,3,4
-     * @return
-     */
-    public int order();
-
-    /*
-     * whether the edge is a query edge
-     */
-    public boolean isQuery();
-
-    /**
-     * Indicates the blane of the edge tip (+1: above plane, -1: below plane)
+     * Generate a hash value for a given container.
      *
-     * @return
+     * @param container the container hash
+     * @return atom hash codes
      */
-    public int plane();
-
-    /**
-     * Flip this bond i.e c1 -> c2 to be c2 -> c3 this is mainly used for stereo
-     * wedge/hatch bonds.
-     * @return
-     */
-    public Edge flip();
+    public long generate(IAtomContainer container);
 
 }

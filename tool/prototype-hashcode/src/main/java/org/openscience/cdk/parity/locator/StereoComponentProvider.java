@@ -17,11 +17,10 @@
 
 package org.openscience.cdk.parity.locator;
 
-import org.openscience.cdk.hash.graph.Graph;
+import org.openscience.cdk.hash_mdk.graph.Graph;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.parity.component.StereoComponent;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 

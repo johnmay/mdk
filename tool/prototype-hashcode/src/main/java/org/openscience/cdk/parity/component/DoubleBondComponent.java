@@ -17,7 +17,7 @@
 
 package org.openscience.cdk.parity.component;
 
-import org.openscience.cdk.hash.graph.Graph;
+import org.openscience.cdk.hash_mdk.graph.Graph;
 
 import java.util.Arrays;
 import java.util.concurrent.Callable;

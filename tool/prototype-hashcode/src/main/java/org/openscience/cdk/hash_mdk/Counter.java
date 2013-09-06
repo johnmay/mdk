@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openscience.cdk.hash;
+package org.openscience.cdk.hash_mdk;
 
 import uk.ac.ebi.mdk.prototype.hash.util.MutableInt;
 
