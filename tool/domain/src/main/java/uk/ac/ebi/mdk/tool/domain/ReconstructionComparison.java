@@ -41,27 +41,16 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.geometry.GeometryTools;
-import org.openscience.cdk.hash.MoleculeHashGenerator;
+import org.openscience.cdk.hash_mdk.MoleculeHashGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
-import uk.ac.ebi.mdk.prototype.hash.HashGenerator;
-import uk.ac.ebi.mdk.prototype.hash.HashGeneratorMaker;
-import uk.ac.ebi.mdk.prototype.hash.MolecularHash;
-import uk.ac.ebi.mdk.prototype.hash.MolecularHashFactory;
-import uk.ac.ebi.mdk.prototype.hash.seed.AtomSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.BondOrderSumSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
-import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
 
 import java.security.InvalidParameterException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 
 /**
