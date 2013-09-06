@@ -97,7 +97,7 @@ public class SMILES
         try{
             atomContainer = new AtomContainer(SMILES_PARSER.parseSmiles(getValue()));
         } catch (CDKException ex){
-            LOGGER.error("Could not parse SMILES ", ex);
+            LOGGER.error("Could not parse SMILES: " + getValue(), ex);
             atomContainer = new AtomContainer();
         }
 
