@@ -25,20 +25,24 @@ import com.google.common.collect.Multimap;
 import org.apache.commons.cli.Option;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.hash.HashGeneratorMaker;
 import org.openscience.cdk.hash.MoleculeHashGenerator;
 import uk.ac.ebi.mdk.apps.CommandLineMain;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
-import uk.ac.ebi.mdk.prototype.hash.HashGeneratorMaker;
+import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
 import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.UUID;
 
@@ -49,9 +53,10 @@ import java.util.UUID;
  */
 public final class SuggestExchangeMetabolites extends CommandLineMain {
 
-    private MoleculeHashGenerator generator = new HashGeneratorMaker()
-            .withDepth(8)
-            .buildNew();
+    private MoleculeHashGenerator generator = new HashGeneratorMaker().depth(8)
+                                                                      .elemental()
+                                                                      .molecular();
+    private EntityFactory         entities  = DefaultEntityFactory.getInstance();
 
     public static void main(String[] args) {
         Logger.getRootLogger().setLevel(Level.ERROR);
@@ -63,6 +68,8 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
                        "reconstruction to suggest exchange for"));
         add(new Option("r", "reference", true,
                        "reference reconstruction to get suggestions from"));
+        add(new Option("o", "output", true,
+                       "output reconstruction with potential exchange reactions"));
     }
 
     @Override public void process() {
@@ -71,6 +78,8 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
         Reconstruction input = read(getFile("input"));
         Reconstruction reference = read(getFile("reference"));
         System.out.println("done");
+
+        System.out.println("Using " + reference.getIdentifier() + " to find transport reactions in " + input.getIdentifier());
 
         // find compounds which are exchange in the 'reference' and list
         // - those which are exchanged and present the input
@@ -91,20 +100,25 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
             }
         }
 
+        Reconstruction output = entities.newReconstruction();
+        output.setIdentifier(new ReconstructionIdentifier(input.getIdentifier().getAccession() + "-" + reference.getIdentifier().getAccession() + "-ex"));
+        output.setTaxonomy(input.getTaxonomy());
+
         CSVWriter csv = new CSVWriter(new OutputStreamWriter(System.out), ',', '"');
 
-
+        // for each metabolite from the input we check if the compound is
+        // exchanged in the reference - if it is exchanged we print the information
+        // on the exchange reactions
         for (final Metabolite metabolite : input.metabolome()) {
             for (ChemicalStructure structure : metabolite.getStructures()) {
                 long hashCode = generator.generate(structure.getStructure());
                 if (index.containsKey(hashCode)) {
                     for (Metabolite refMetabolite : index.get(hashCode)) {
-                        for (MetabolicReaction rxn : exchanged
-                                .get(refMetabolite)) {
+                        for (MetabolicReaction rxn : exchanged.get(refMetabolite)) {
                             csv.writeNext(new String[]{metabolite.toString(),
                                                        Integer.toString(occurences[metaboliteIdx.get(metabolite.uuid())]),
                                                        rxn.toString()});
-
+                            output.addReaction(rxn);
                         }
                     }
                 }
@@ -113,7 +127,14 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
 
         try {
             csv.flush();
-            csv.close();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+
+        try {
+            System.out.println("Writing reconstruction exchange reactions: " + output.getContainer());            
+            ReconstructionIOHelper.write(output, output.getContainer());
+
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
@@ -140,7 +161,6 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
      * reactions in which they are exchanged.
      *
      * @param reconstruction reconstruction instance
-     *
      * @return exchanged metabolites
      */
     private Multimap<Metabolite, MetabolicReaction> exchanged(final Reconstruction reconstruction) {
@@ -159,9 +179,7 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
      * Read a reconstruction for the given file name.
      *
      * @param f a file
-     *
      * @return read reconstruction
-     *
      * @throws IllegalArgumentException thrown if there was a problem reading
      *                                  the reconstruction
      */
