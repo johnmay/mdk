@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 @IdPattern("^(?:META:[A-z0-9]+)|(?:[A-z0-9]+)$")
 public final class MetaCycIdentifier extends BioCycChemicalIdentifier {
 
-    private static final Pattern PREFIX = Pattern.compile("^META:([A-z0-9])+$");
+    private static final Pattern PREFIX = Pattern.compile("^META:([-+A-z0-9])+$");
     private static final IdentifierMetaInfo DESCRIPTION = IDENTIFIER_LOADER.getMetaInfo(MetaCycIdentifier.class);
 
     public MetaCycIdentifier() {
