@@ -78,7 +78,7 @@
             <version>${cdk.version}</version>
         </dependency>
         <dependency>
-            <artifactId>cdk-data</artifactId>
+            <artifactId>cdk-silent</artifactId>
             <groupId>org.openscience.cdk</groupId>
             <version>${cdk.version}</version>
         </dependency>
