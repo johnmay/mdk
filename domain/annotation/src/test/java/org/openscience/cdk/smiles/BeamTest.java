@@ -10,17 +10,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /** @author John May */
-public class SmilesTest {
+public class BeamTest {
 
     @Test
     public void read_benzene() throws Exception {
-        IAtomContainer m = Smiles.read("C1=CC=CC=C1");
+        IAtomContainer m = Beam.fromSMILES("C1=CC=CC=C1");
         assertThat(m.getAtomCount(), is(6));
     }
 
     @Test
     public void read_invalid() throws Exception {
-        IAtomContainer m = Smiles.read("CCC[ACP]");
+        IAtomContainer m = Beam.fromSMILES("CCC[ACP]");
         assertThat(m.getAtomCount(), is(0));
     }
 
@@ -32,6 +32,6 @@ public class SmilesTest {
         m.getAtom(0).setImplicitHydrogenCount(2);
         m.getAtom(1).setImplicitHydrogenCount(2);
         m.addBond(0, 1, IBond.Order.DOUBLE);
-        assertThat(Smiles.write(m), is("C=C"));
+        assertThat(Beam.toSMILES(m), is("C=C"));
     }
 }

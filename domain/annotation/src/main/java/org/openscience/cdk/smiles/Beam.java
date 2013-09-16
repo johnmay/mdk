@@ -28,7 +28,7 @@ import uk.ac.ebi.beam.Graph;
  *
  * @author John May
  */
-public final class Smiles {
+public final class Beam {
 
     private static final IChemObjectBuilder builder  = SilentChemObjectBuilder.getInstance();
     private static final BeamToCDK          fromBeam = new BeamToCDK(builder);
@@ -41,7 +41,7 @@ public final class Smiles {
      * @param smi SMILES string
      * @return a molecule (empty if a parse exception occurred)
      */
-    public static IAtomContainer read(String smi) {
+    public static IAtomContainer fromSMILES(String smi) {
         try {
             Graph g = Graph.fromSmiles(smi);
             return fromBeam.toAtomContainer(g);
@@ -57,7 +57,7 @@ public final class Smiles {
      * @param m molecule
      * @return a molecule (empty if a parse exception occurred)
      */
-    public static String write(IAtomContainer m) {
+    public static String toSMILES(IAtomContainer m) {
         try {
             return Functions.collapse(toBeam.toBeamGraph(m)).toSmiles();
         } catch (Exception e) {
