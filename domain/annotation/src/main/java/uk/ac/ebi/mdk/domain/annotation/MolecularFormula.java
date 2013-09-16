@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.DefaultChemObjectBuilder;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.interfaces.IMolecularFormula;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.domain.DefaultLoader;
 import uk.ac.ebi.mdk.domain.MetaInfo;
@@ -93,8 +94,13 @@ public class MolecularFormula
      */
     public IMolecularFormula getFormula() {
         if (formula == null) {
-            IChemObjectBuilder builder = DefaultChemObjectBuilder.getInstance();
-            this.formula = MolecularFormulaManipulator.getMolecularFormula(getValue(), builder);
+            IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+            try {
+                this.formula = MolecularFormulaManipulator.getMolecularFormula(getValue(), builder);
+            } catch (Exception e) {
+                // empty formula
+                this.formula = builder.newInstance(IMolecularFormula.class);
+            }
         }
         return formula;
     }
@@ -130,7 +136,11 @@ public class MolecularFormula
      */
     public String toHTML() {
         if (html == null || html.isEmpty()) {
-            this.html = MolecularFormulaManipulator.getHTML(getFormula());
+            IMolecularFormula formula = getFormula();
+            if (formula.getIsotopeCount() == 0 && !getValue().isEmpty())
+                this.html = getValue() + " (invalid)";
+            else
+                this.html = MolecularFormulaManipulator.getHTML(formula);
         }
         return html;
     }
