@@ -18,11 +18,8 @@
 package uk.ac.ebi.mdk.domain.annotation;
 
 import org.apache.log4j.Logger;
-import org.openscience.cdk.AtomContainer;
-import org.openscience.cdk.DefaultChemObjectBuilder;
-import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.silent.SilentChemObjectBuilder;
+import org.openscience.cdk.smiles.Beam;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.smiles.SmilesParser;
 import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractStringAnnotation;
@@ -91,25 +88,12 @@ public class SMILES
     }
     
     private IAtomContainer parseSMILES(){
-        if(SMILES_PARSER == null){
-            SMILES_PARSER = new SmilesParser(SilentChemObjectBuilder.getInstance());
-        }
-        try{
-            atomContainer = new AtomContainer(SMILES_PARSER.parseSmiles(getValue()));
-        } catch (CDKException ex){
-            LOGGER.error("Could not parse SMILES: " + getValue(), ex);
-            atomContainer = new AtomContainer();
-        }
-
-        return atomContainer;
+        return atomContainer = Beam.fromSMILES(getValue());
     }
 
     public void setStructure(IAtomContainer structure) {
         this.atomContainer = structure;
-        if(SMILES_GENERATOR == null){
-            SMILES_GENERATOR = new SmilesGenerator();
-        }
-        setValue(SMILES_GENERATOR.createSMILES(structure));
+        setValue(Beam.toSMILES(structure));
     }
 
     @Override
