@@ -219,17 +219,6 @@ public class StructuralValidity {
             otherCharge += atom.getFormalCharge();
         }
         Double chargeDifference = charge.getValue() - otherCharge;
-        
-//        try {
-//            CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance()).addImplicitHydrogens(molecule);
-//        } catch (CDKException ex) {
-//            try {
-//                AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
-//                CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance()).addImplicitHydrogens(molecule);
-//            } catch (CDKException ex1) {
-//                LOGGER.error("Unable to add implicit hydrogens " + ex.getMessage());
-//            }
-//        }
 
         // complete correctness
         IMolecularFormula query   = formula.getFormula();
