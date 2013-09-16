@@ -46,7 +46,7 @@
   </licenses>
 
   <properties>
-    <cdk.version>1.5.3</cdk.version>
+    <cdk.version>1.5.3+-SNAPSHOT</cdk.version>
     <caf.version>0.8.6-SNAPSHOT</caf.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <github.global.server>github</github.global.server>

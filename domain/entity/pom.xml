@@ -83,6 +83,13 @@
             <version>${cdk.version}</version>
         </dependency>
 
+        <!-- temporary module until patched in CDK -->
+        <dependency>
+            <artifactId>cdk-smiles</artifactId>
+            <groupId>org.openscience.cdk</groupId>
+            <version>${cdk.version}</version>
+        </dependency>
+
 
         <!-- BioJava  -->
         <dependency>
