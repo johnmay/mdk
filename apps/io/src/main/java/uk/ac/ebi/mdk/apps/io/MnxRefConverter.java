@@ -4,7 +4,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.annotation.Charge;
+import uk.ac.ebi.mdk.domain.annotation.ExactMass;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
 import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
@@ -53,7 +56,7 @@ public final class MnxRefConverter {
     private final Logger logger = Logger.getLogger(getClass());
 
     // turn on/off chemical xref and structure loading
-    private final boolean loadXref = false, loadStructures = false;
+    private final boolean loadXref = true, loadStructures = true;
 
     // keep track of issues such as xrefs we didn't add
     private Set<String> issues = new HashSet<String>();
@@ -294,12 +297,12 @@ public final class MnxRefConverter {
         m.setAbbreviation(cpd.id());
         m.setName(cpd.name());
 
-//        if (!cpd.formula().isEmpty())
-//            m.addAnnotation(new MolecularFormula(cpd.formula()));
-//        if (cpd.charge() != 0)
-//            m.addAnnotation(new Charge((double) cpd.charge()));
-//        if (cpd.mass() != 0)
-//            m.addAnnotation(new ExactMass((float) cpd.mass()));
+        if (!cpd.formula().isEmpty())
+            m.addAnnotation(new MolecularFormula(cpd.formula()));
+        if (cpd.charge() != 0)
+            m.addAnnotation(new Charge((double) cpd.charge()));
+        if (cpd.mass() != 0)
+            m.addAnnotation(new ExactMass((float) cpd.mass()));
 
         if (loadStructures && !cpd.inchi().isEmpty())
             m.addAnnotation(new InChI(cpd.inchi()));
