@@ -18,6 +18,7 @@ package uk.ac.ebi.mdk.ui.render.reaction;
 
 import com.google.common.collect.BiMap;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.geometry.GeometryTools;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
@@ -266,11 +267,9 @@ public class ReactionRenderer {
         g2.drawString(compartment, (int) bounds.getWidth() - compartmentWidth, compartmentHeight);
 
 
-        if (metabolite.hasStructure()) {
-            IAtomContainer atomContainer = metabolite.getStructures().iterator().next().
-                    getStructure();
-
-            renderer.paint(atomContainer, new AWTDrawVisitor(g2), bounds, true);
+        IAtomContainer container = null;
+        if (metabolite.hasStructure() && GeometryTools.has2DCoordinates(container = metabolite.getStructures().iterator().next().getStructure())) {            
+            renderer.paint(container, new AWTDrawVisitor(g2), bounds, true);
             g2.dispose();
         } else {
             g2.setColor(Color.LIGHT_GRAY);
