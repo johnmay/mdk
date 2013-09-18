@@ -123,10 +123,13 @@ public class EntityDataOutputStream
 
             writer.write(entity);                                  // entity specifics
             if (entity instanceof AnnotatedEntity) {
-                annotatedEntityWriter
-                        .write((AnnotatedEntity) entity); // annotations and observations
-                entityWriter
-                        .write(entity);                            // name, abbr and id
+                try {
+                    annotatedEntityWriter.write((AnnotatedEntity) entity); // annotations and observations                
+                    entityWriter.write(entity);                            // name, abbr and id
+                } catch (IOException e) {
+                    throw new IOException("Could not write data for " + entity.getAccession() + " " + entity.getName(),
+                                          e);
+                }
             }
 
         }

@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.io.cdk;
 
+import org.openscience.cdk.CDKConstants;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -84,6 +85,9 @@ public class AtomContainerWriter {
             out.writeInt(mol.getAtomNumber(a1));
             out.writeInt(mol.getAtomNumber(a2));
 
+            if (bond.getOrder() == null)
+                throw new IOException("structure had undefined bond order (null)");
+            
             // XXX: ordinal may change
             out.writeByte(bond.getOrder().ordinal());
             out.writeByte(bond.getStereo().ordinal());
