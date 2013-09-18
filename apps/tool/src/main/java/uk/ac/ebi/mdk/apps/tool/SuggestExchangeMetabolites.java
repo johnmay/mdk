@@ -25,8 +25,10 @@ import com.google.common.collect.Multimap;
 import org.apache.commons.cli.Option;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.hash.HashGeneratorMaker;
 import org.openscience.cdk.hash.MoleculeHashGenerator;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.apps.CommandLineMain;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
@@ -54,7 +56,7 @@ import java.util.UUID;
 public final class SuggestExchangeMetabolites extends CommandLineMain {
 
     private MoleculeHashGenerator generator = new HashGeneratorMaker().depth(8)
-                                                                      .elemental()
+                                                                      .elemental()                                                                          
                                                                       .molecular();
     private EntityFactory         entities  = DefaultEntityFactory.getInstance();
 
@@ -117,6 +119,8 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
                         for (MetabolicReaction rxn : exchanged.get(refMetabolite)) {
                             csv.writeNext(new String[]{metabolite.toString(),
                                                        Integer.toString(occurences[metaboliteIdx.get(metabolite.uuid())]),
+                                                       rxn.getAccession(),
+                                                       rxn.getAbbreviation(),
                                                        rxn.toString()});
                             output.addReaction(rxn);
                         }
@@ -139,10 +143,17 @@ public final class SuggestExchangeMetabolites extends CommandLineMain {
             System.err.println(e.getMessage());
         }
     }
+    
+    private static final void perceiveAtomTypes(Reconstruction reconstruction) throws CDKException {        
+        for (Metabolite m : reconstruction.metabolome()) {
+            for (ChemicalStructure cs : m.getStructures()) {
+                AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(cs.getStructure());
+            }
+        }
+    }
 
     private Multimap<Long, Metabolite> index(final Set<Metabolite> metabolites) {
-        Multimap<Long, Metabolite> index = HashMultimap.create(metabolites
-                                                                       .size(), 2);
+        Multimap<Long, Metabolite> index = HashMultimap.create(metabolites.size(), 2);
         for (final Metabolite metabolite : metabolites) {
             for (ChemicalStructure structure : metabolite.getStructures()) {
                 long hashCode = generator.generate(structure.getStructure());
