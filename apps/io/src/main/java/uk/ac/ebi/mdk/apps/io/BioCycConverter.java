@@ -17,19 +17,34 @@
 
 package uk.ac.ebi.mdk.apps.io;
 
-import org.apache.log4j.Logger;
 import org.openscience.cdk.Isotope;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.io.MDLV2000Reader;
+import org.openscience.cdk.isomorphism.matchers.IQueryAtomContainer;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
-import uk.ac.ebi.mdk.domain.annotation.*;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
+import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
+import uk.ac.ebi.mdk.domain.annotation.MolecularFormula;
+import uk.ac.ebi.mdk.domain.annotation.Synonym;
+import uk.ac.ebi.mdk.domain.annotation.SystematicName;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
-import uk.ac.ebi.mdk.domain.entity.*;
-import uk.ac.ebi.mdk.domain.entity.reaction.*;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.EntityFactory;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.domain.entity.Reaction;
+import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
@@ -44,11 +59,18 @@ import uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader;
 import uk.ac.ebi.mdk.io.text.biocyc.CompoundAttribute;
 import uk.ac.ebi.mdk.io.text.biocyc.ReactionAttribute;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,16 +92,23 @@ public class BioCycConverter {
     private File   root;
     private File   data;
     private String name;
-    private String organism;
+    private String bioCycPrefix;
 
     private Reconstruction reconstruction;
 
-    public BioCycConverter(File root, String name, String organism) {
+    /**
+     * Create a BioCyc converter for the BioCyC PGDB at 'root'.
+     *
+     * @param root          location of the PDGB
+     * @param name          name of the reconstruction
+     * @param bioCycPrefix prefix for the BioCyc identifier (e.g. META = MetaCyc)
+     */
+    public BioCycConverter(File root, String name, String bioCycPrefix) {
 
         this.root = root;
         this.name = name;
         this.data = new File(root, "data");
-        this.organism = organism;
+        this.bioCycPrefix = bioCycPrefix;
 
         reconstruction = create();
 
@@ -108,13 +137,14 @@ public class BioCycConverter {
 
         File compounds = new File(root, "data/compounds.dat");
         BioCycDatReader<CompoundAttribute> reader = new BioCycDatReader<CompoundAttribute>(new FileInputStream(compounds),
-                                                     CompoundAttribute.values());
+                                                                                           CompoundAttribute.values());
 
 
         while (reader.hasNext()) {
             Metabolite m = dat2Metabolite(reader.next());
             reconstruction.addMetabolite(m);
-            metaboliteMap.put(m.getAccession(), m);
+            String id = m.getAccession();
+            metaboliteMap.put(id.substring(id.indexOf(":") + 1), m);
         }
 
         reader.close();
@@ -125,7 +155,7 @@ public class BioCycConverter {
 
         File compounds = new File(root, "data/classes.dat");
         BioCycDatReader<CompoundAttribute> reader = new BioCycDatReader<CompoundAttribute>(new FileInputStream(compounds),
-                                                     CompoundAttribute.values());
+                                                                                           CompoundAttribute.values());
 
 
         while (reader.hasNext()) {
@@ -146,27 +176,53 @@ public class BioCycConverter {
 
         MDLV2000Reader reader = new MDLV2000Reader();
 
+        System.out.print("loading structures...");
+        
         for (Metabolite metabolite : reconstruction.metabolome()) {
 
             String accession = metabolite.getAccession();
+            
             if (map.containsKey(accession)) {
 
                 try {
                     reader.setReader(new FileReader(map.remove(accession)));
                     IAtomContainer atomContainer = reader.read(SilentChemObjectBuilder.getInstance().newInstance(IAtomContainer.class));
                     if (atomContainer.getAtomCount() > 0) {
-                        metabolite.addAnnotation(new AtomContainerAnnotation(atomContainer));
+                        if (atomContainer instanceof IQueryAtomContainer) {
+                            System.err.println("Skipping chemical structure (query structure): " + accession);
+                        } else if (hasNullBond(atomContainer)) {
+                            System.err.println("Skipping chemical structure (null bond order): " + accession);
+                        } else {
+                            metabolite.addAnnotation(new AtomContainerAnnotation(atomContainer));
+                        }
                     }
                 } catch (CDKException e) {
                     System.err.println(e.getMessage());
+                } finally {
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        System.err.println(e.getMessage());
+                    }
                 }
 
             }
 
         }
+        System.out.println("done");
 
         System.out.println(map.keySet().size() + " structures were not injected");
+        if (map.size() < 1000)
+            System.out.println(map.keySet());
 
+    }
+    
+    // filter out problematic structures (null bond order in this case)
+    static boolean hasNullBond(IAtomContainer m) {
+        for (IBond b : m.bonds())
+            if (b.getOrder() == null)
+                return true;
+        return false;
     }
 
     public void importReactions() throws IOException {
@@ -180,7 +236,7 @@ public class BioCycConverter {
 
         File reactions = new File(root, "data/reactions.dat");
         BioCycDatReader<ReactionAttribute> reader = new BioCycDatReader<ReactionAttribute>(new FileInputStream(reactions),
-                                                                        ReactionAttribute.values());
+                                                                                           ReactionAttribute.values());
 
 
         while (reader.hasNext()) {
@@ -188,7 +244,7 @@ public class BioCycConverter {
             reconstruction.addReaction(reaction);
         }
 
-        Map<Identifier,Reaction> idToReaction = new HashMap<Identifier, Reaction>();
+        Map<Identifier, Reaction> idToReaction = new HashMap<Identifier, Reaction>();
 
         System.out.println("Duplicate reaction identifiers:");
         for (Reaction reaction : reconstruction.reactome()) {
@@ -224,14 +280,15 @@ public class BioCycConverter {
 
         if (files.length == 1) {
             molRoot = files[0];
-        } else {
+        }
+        else {
             throw new IllegalArgumentException("no directory of molecule '.mol'");
         }
 
         Map<String, File> map = new HashMap<String, File>();
 
         for (File mol : molRoot.listFiles(molFilter)) {
-            map.put(mol.getName().substring(0, mol.getName().lastIndexOf(".mol")), mol);
+            map.put(bioCycPrefix + ":" + mol.getName().substring(0, mol.getName().lastIndexOf(".mol")), mol);
         }
 
         return map;
@@ -243,7 +300,7 @@ public class BioCycConverter {
         Metabolite m = DefaultEntityFactory.getInstance().ofClass(Metabolite.class);
 
         // basic info
-        m.setIdentifier(new BioCycChemicalIdentifier(organism, entry.getFirst(CompoundAttribute.UNIQUE_ID)));
+        m.setIdentifier(new BioCycChemicalIdentifier(bioCycPrefix, entry.getFirst(CompoundAttribute.UNIQUE_ID)));
         m.setName(clean(entry.getFirst(CompoundAttribute.COMMON_NAME, "unnamed entity")));
         m.setAbbreviation(clean(entry.getFirst(CompoundAttribute.ABBREV_NAME, m.getName())));
 
@@ -378,17 +435,19 @@ public class BioCycConverter {
 
         // create a new one
         Metabolite m = DefaultEntityFactory.getInstance().ofClass(Metabolite.class);
-        m.setIdentifier(new BioCycChemicalIdentifier(organism, uid));
+        m.setIdentifier(new BioCycChemicalIdentifier(bioCycPrefix, uid));
         m.setAbbreviation("n/a");
         m.setName("unnamed metabolite");
 
-        metaboliteMap.put(m.getAccession(), m);
+        metaboliteMap.put(uid, m);
 
         return m;
 
     }
 
-    private static Collection<Annotation> getCrossReferences(Collection<String> dblinks) {
+    private Set<String> unknownResources = new HashSet<String>();
+
+    private Collection<Annotation> getCrossReferences(Collection<String> dblinks) {
         Collection<Annotation> annotations = new ArrayList<Annotation>();
         for (String dblink : dblinks) {
             Annotation annotation = getCrossReference(dblink);
@@ -398,7 +457,7 @@ public class BioCycConverter {
         return annotations;
     }
 
-    private static Annotation getCrossReference(String dblink) {
+    private Annotation getCrossReference(String dblink) {
 
         Matcher matcher = DB_LINK.matcher(dblink);
         if (matcher.find()) {
@@ -411,13 +470,22 @@ public class BioCycConverter {
             if (ID_FACTORY.hasSynonym(resource)) {
                 return DefaultAnnotationFactory.getInstance().getCrossReference(
                         ID_FACTORY.ofSynonym(resource, accession));
-            } else {
-                System.err.println("No synonym found for resource " + resource);
+            }
+            else {
+                unknownResources.add(resource);
+                
             }
 
         }
 
         return null;
+    }
+    
+    private void describeErrors() {
+        System.err.println("The following resources were unknown (or ambiguous)");
+        for (String resource : unknownResources) {
+            System.err.println(" - " + resource);
+        }
     }
 
     private static IMolecularFormula getFormula(Collection<String> formulaParts) {
@@ -514,6 +582,8 @@ public class BioCycConverter {
         converter.importClasses();
         converter.importReactions();
         converter.importMetaboliteStructures();
+        
+        converter.describeErrors();
 
         long start = System.currentTimeMillis();
         ReconstructionIOHelper.write(converter.reconstruction, converter.reconstruction.getContainer());
