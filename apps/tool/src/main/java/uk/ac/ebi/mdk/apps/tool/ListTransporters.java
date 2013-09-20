@@ -34,7 +34,7 @@ public class ListTransporters extends CommandLineMain {
                     .read(getFile("i"));
             for(MetabolicReaction r : reconstruction.reactome()){
                 if(TransportReactionUtil.isTransport(r)){
-                    System.out.println(r);
+                    System.out.println(r.getAccession() + "\t" + r);
                 }
             }
         } catch (IOException e) {
