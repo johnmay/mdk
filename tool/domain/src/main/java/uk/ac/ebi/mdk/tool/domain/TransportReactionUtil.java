@@ -24,13 +24,17 @@ import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.CompartmentalisedParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 /**
@@ -69,6 +73,27 @@ public class TransportReactionUtil {
     }
 
     ;
+    
+    public static String compartmentsAsString(Reaction<CompartmentalisedParticipant<?, ?, Compartment>> reaction) {
+        Set<Compartment> compartments = compartments(reaction);
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        for (Compartment compartment : compartments) {
+            if (sb.length() > 1)
+                sb.append(", ");
+            sb.append(compartment.getAbbreviation());
+        }
+        sb.append("}");
+        return sb.toString().intern();
+    }
+    
+    public static Set<Compartment> compartments(Reaction<CompartmentalisedParticipant<?, ?, Compartment>> reaction) {
+        SortedSet<Compartment> compartments = new TreeSet<Compartment>();
+        for(CompartmentalisedParticipant<?,?,Compartment> c : reaction.getParticipants()) {
+            compartments.add(c.getCompartment());
+        }
+        return compartments;
+    } 
 
 
     /**
