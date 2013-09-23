@@ -1,5 +1,7 @@
 package uk.ac.ebi.mdk.apps.tool;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.fingerprint.FingerprinterTool;
 import org.openscience.cdk.fingerprint.IFingerprinter;
@@ -8,11 +10,14 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.isomorphism.UniversalIsomorphismTester;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
+import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Utility for helping to do subtructure matches. Given a set of structure one
@@ -22,12 +27,13 @@ import java.util.Map;
  */
 public class SubstructureSet {
 
-    private final IFingerprinter              fpr;
-    private final Map<BitSet, IAtomContainer> map;
+    private final IFingerprinter fpr;
+    private final Multimap<IAtomContainer, Metabolite> lookup     = HashMultimap.create();
+    private final Multimap<BitSet, IAtomContainer>     structures = HashMultimap.create();
 
-    public SubstructureSet(IFingerprinter fpr, List<IAtomContainer> ms) throws CDKException {
+    public SubstructureSet(IFingerprinter fpr, Collection<Metabolite> ms) throws CDKException {
         this.fpr = fpr;
-        this.map = index(ms);
+        index(ms);
     }
 
     /**
@@ -37,22 +43,34 @@ public class SubstructureSet {
      * @return the molecule is matched
      * @throws CDKException fingerprint exception
      */
-    public boolean contains(IAtomContainer m) throws CDKException {
+    public Collection<Metabolite> matching(IAtomContainer m) {
 
-        // safer to just do the atom-typing :(
-        AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(m);
+        try {
 
-        BitSet fp = fpr.getBitFingerprint(m).asBitSet();
+            // safer to just do the atom-typing :(
+            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(m);
 
-        UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+            BitSet fp = fpr.getBitFingerprint(m).asBitSet();
 
-        for (Map.Entry<BitSet, IAtomContainer> e : map.entrySet()) {
-            if (FingerprinterTool.isSubset(fp, e.getKey()) && uit.isSubgraph(m, e.getValue())) {
-                return true;
+            UniversalIsomorphismTester uit = new UniversalIsomorphismTester();
+
+            List<Metabolite> matches = new ArrayList<Metabolite>();
+            
+            for (BitSet s : structures.keySet()) {
+                if (FingerprinterTool.isSubset(fp, s)) {
+                    for (IAtomContainer candidate : structures.get(s)) {
+                        if (uit.isSubgraph(m, candidate)) {
+                            matches.addAll(lookup.get(candidate));  
+                        }
+                    }
+                }
             }
-        }
 
-        return false;
+            return matches;
+        } catch (CDKException e) {
+            System.err.println("CDK had a problem: " + e);
+            return Collections.emptyList();
+        }
     }
 
     /**
@@ -63,19 +81,16 @@ public class SubstructureSet {
      * @return fingperpints for the molecules
      * @throws CDKException
      */
-    private Map<BitSet, IAtomContainer> index(List<IAtomContainer> ms) throws CDKException {
-
-        Map<BitSet, IAtomContainer> fps = new HashMap<BitSet, IAtomContainer>(ms.size());
-
-        for (IAtomContainer m : ms) {
-            m = prepareForFPMatch(m);
-            AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(m);
-            if (fps.put(fpr.getBitFingerprint(m).asBitSet(), m) != null)
-                System.err.println("replacing existing fingerprint!");
+    private void index(Collection<Metabolite> ms) throws CDKException {
+        for (Metabolite m : ms) {
+            for (ChemicalStructure cs : m.getStructures()) {
+                IAtomContainer container = cs.getStructure();
+                container = prepareForFPMatch(container);
+                AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(container);
+                structures.put(fpr.getBitFingerprint(container).asBitSet(), container);
+                lookup.put(container, m);
+            }
         }
-
-        return fps;
-
     }
 
     /**
