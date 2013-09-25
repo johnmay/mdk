@@ -85,7 +85,10 @@ public abstract class StoichiometricMatrixImpl<M, R>
     public Boolean isReversible(Integer j) {
         return reversibilityMap.get(j);
     }
-
+    
+    public Boolean setReversible(Integer j, boolean reversible) {
+        return reversibilityMap.put(j, reversible);
+    }
 
     @Override
     public Double get(int i, int j) {
