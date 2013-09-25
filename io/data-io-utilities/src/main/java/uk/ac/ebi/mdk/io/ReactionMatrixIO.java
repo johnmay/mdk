@@ -35,11 +35,14 @@ package uk.ac.ebi.mdk.io;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
+import com.google.common.base.Joiner;
 import org.apache.commons.lang.mutable.MutableInt;
 import uk.ac.ebi.mdk.domain.identifier.InChI;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,17 +141,21 @@ public class ReactionMatrixIO {
 
             // add the reactions
             for (int j = 0; j < reactionNames.length; j++) {
-                HashMap<String, Double> molValueMap = new HashMap<String, Double>();
+                
+                List<String> molecules    = new ArrayList<String>();
+                List<Double> coefficients = new ArrayList<Double>();
+                
                 for (int i = 0; i < molNames.length; i++) {
                     String value = matrix.get(i + 1)[j + 1];
                     // if the value isn't empty
-                    if (value.isEmpty() == false) {
-                        molValueMap.put(molNames[i], Double.parseDouble(value));
+                    if (value.isEmpty() == false && !value.equals("0.0") &&  !value.equals("0")) {
+                        molecules.add(molNames[i]);
+                        coefficients.add(Double.parseDouble(value));
                     }
                 }
                 s.addReaction(reactionNames[j],
-                              molValueMap.keySet().toArray(new String[0]),
-                              molValueMap.values().toArray(new Double[0]));
+                              molecules.toArray(new String[0]),
+                              coefficients.toArray(new Double[0]));
             }
 
 
