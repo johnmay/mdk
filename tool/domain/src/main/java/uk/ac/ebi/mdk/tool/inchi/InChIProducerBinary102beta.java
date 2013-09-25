@@ -60,10 +60,6 @@ public class InChIProducerBinary102beta extends AbstractInChIProducer implements
             return null;
         }
         File tmpDir = Files.createTempDir();
-        if (!tmpDir.mkdir()) {
-            logger.error("Cannot create temporary directory");
-            return null;
-        }
         String tmpMolFile = tmpDir.getAbsolutePath() + File.separator + "fileInChiFromCDKMol";        
         MDLV2000Writer w;
         try {
