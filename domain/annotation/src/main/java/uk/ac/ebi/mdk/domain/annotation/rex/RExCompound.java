@@ -19,9 +19,9 @@ public class RExCompound extends AbstractAnnotation
 {
     private final String id;
     private final Type type;
-    private final boolean isInSeed, isInBranch;
+    private final boolean isInBRENDA, isInSeed, isInBranch;
     private final List<String> alternativePathways, otherPathways;
-    private final double extraction, relevance;
+    private double extraction, relevance;
 
     public static enum Type {
         SUBSTRATE,
@@ -35,11 +35,12 @@ public class RExCompound extends AbstractAnnotation
 
     public RExCompound()
     {
-        this(null, null, false, false, Collections.<String>emptyList(), Collections.<String>emptyList(), 0, 0);
+        this(null, null, false, false, false, Collections.<String>emptyList(), Collections.<String>emptyList(), 0, 0);
     }
 
     public RExCompound(String id,
                        Type type,
+                       boolean isInBRENDA,
                        boolean isInSeed,
                        boolean isInBranch,
                        List<String> alternativePathways,
@@ -49,6 +50,7 @@ public class RExCompound extends AbstractAnnotation
     {
         this.id = id;
         this.type = type;
+        this.isInBRENDA = isInBRENDA;
         this.isInSeed = isInSeed;
         this.isInBranch = isInBranch;
         this.alternativePathways = alternativePathways;
@@ -65,6 +67,11 @@ public class RExCompound extends AbstractAnnotation
     public Type getType()
     {
         return type;
+    }
+
+    public boolean isInBRENDA()
+    {
+        return isInBRENDA;
     }
 
     public boolean isInSeed()
@@ -87,9 +94,19 @@ public class RExCompound extends AbstractAnnotation
         return otherPathways;
     }
 
+    public void setExtraction(double score)
+    {
+        extraction = score;
+    }
+
     public double getExtraction()
     {
         return extraction;
+    }
+
+    public void setRelevance(double score)
+    {
+        relevance = score;
     }
 
     public double getRelevance()
