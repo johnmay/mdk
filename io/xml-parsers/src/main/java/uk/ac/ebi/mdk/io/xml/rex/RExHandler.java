@@ -62,6 +62,7 @@ public class RExHandler {
             final Extract xmlExtract = new Extract();
             xmlExtract.setSentence(extract.sentence());
             xmlExtract.setSource(extract.source().getResolvableURL());
+            xmlExtract.setIsInCorrectOrganism(extract.isInCorrectOrganism());
             for (final RExTag tag : extract.tags()) {
                 Tag xmlTag = new Tag();
                 xmlTag.setId(tag.id());
@@ -110,7 +111,7 @@ public class RExHandler {
                 tags.add(new RExTag(tag.getId(), tag.getStart(), tag.getLength(),
                                     tag.getType()));
             }
-            extracts.add(new RExExtract(identifier, sentence, tags));
+            extracts.add(new RExExtract(identifier, sentence, tags, e.isIsInCorrectOrganism()));
         }
 
         List<RExCompound> compounds = new ArrayList<RExCompound>();
@@ -118,6 +119,7 @@ public class RExHandler {
         {
             compounds.add(new RExCompound(c.getId(),
                                           RExCompound.Type.SUBSTRATE,
+                                          c.isIsInBRENDA(),
                                           c.isIsInSeed(),
                                           c.isIsInBranch(),
                                           pathwaysToStrings(c.getAlternativePathways().getPathway()),
@@ -130,6 +132,7 @@ public class RExHandler {
         {
             compounds.add(new RExCompound(c.getId(),
                                           RExCompound.Type.PRODUCT,
+                                          c.isIsInBRENDA(),
                                           c.isIsInSeed(),
                                           c.isIsInBranch(),
                                           pathwaysToStrings(c.getAlternativePathways().getPathway()),
@@ -169,6 +172,7 @@ public class RExHandler {
     {
         Compound compound = new Compound();
         compound.setId(rexCompound.getID());
+        compound.setIsInBRENDA(rexCompound.isInBRENDA());
         compound.setIsInSeed(rexCompound.isInSeed());
         compound.setIsInBranch(rexCompound.isInBranch());
 

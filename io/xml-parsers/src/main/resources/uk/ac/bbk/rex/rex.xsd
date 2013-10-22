@@ -43,6 +43,7 @@
             <xsd:element name="tag" type="tag" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
         <xsd:attribute name="source" type="xsd:string"/>
+        <xsd:attribute name="isInCorrectOrganism" type="xsd:boolean"/>
     </xsd:complexType>
 
     <xsd:complexType name="tag">
@@ -80,6 +81,7 @@
             <xsd:element name="otherPathways" type="pathways" minOccurs="0" maxOccurs="1" />
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:string" use="required"/>
+        <xsd:attribute name="isInBRENDA" type="xsd:boolean" use="required"/>
         <xsd:attribute name="isInSeed" type="xsd:boolean" use="required"/>
         <xsd:attribute name="isInBranch" type="xsd:boolean" use="required"/>
         <xsd:attribute name="extraction" type="xsd:double" use="required"/>
