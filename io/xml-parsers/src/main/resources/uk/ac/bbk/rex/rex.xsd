@@ -44,6 +44,7 @@
         </xsd:sequence>
         <xsd:attribute name="source" type="xsd:string"/>
         <xsd:attribute name="isInCorrectOrganism" type="xsd:boolean"/>
+        <xsd:attribute name="totalSeedMetabolitesInSource" type="xsd:int" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="tag">

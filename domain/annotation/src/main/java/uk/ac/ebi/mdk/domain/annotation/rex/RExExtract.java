@@ -45,17 +45,20 @@ public final class RExExtract extends AbstractAnnotation {
     private final String       sentence;
     private final List<RExTag> tags;
     private final boolean isInCorrectOrganism;
+    private final int totalSeedMetabolitesInSource;
 
     public RExExtract() {
         this(IdentifierFactory.EMPTY_IDENTIFIER, "",
-             Collections.<RExTag>emptyList(), false);
+             Collections.<RExTag>emptyList(), false, 0);
     }
 
-    public RExExtract(Identifier source, String sentence, List<RExTag> tags, boolean isInCorrectOrganism) {
+    public RExExtract(Identifier source, String sentence, List<RExTag> tags, boolean isInCorrectOrganism,
+                      int totalSeedMetabolitesInSource) {
         this.source = source;
         this.sentence = sentence;
         this.tags = tags;
         this.isInCorrectOrganism = isInCorrectOrganism;
+        this.totalSeedMetabolitesInSource = totalSeedMetabolitesInSource;
     }
 
     public Identifier source() {
@@ -73,6 +76,11 @@ public final class RExExtract extends AbstractAnnotation {
     public boolean isInCorrectOrganism()
     {
         return isInCorrectOrganism;
+    }
+
+    public int totalSeedMetabolitesInSource()
+    {
+        return totalSeedMetabolitesInSource;
     }
 
     @Override public RExExtract newInstance() {
