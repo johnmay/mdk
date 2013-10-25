@@ -63,6 +63,7 @@ public class RExHandler {
             xmlExtract.setSentence(extract.sentence());
             xmlExtract.setSource(extract.source().getResolvableURL());
             xmlExtract.setIsInCorrectOrganism(extract.isInCorrectOrganism());
+            xmlExtract.setTotalSeedMetabolitesInSource(extract.totalSeedMetabolitesInSource());
             for (final RExTag tag : extract.tags()) {
                 Tag xmlTag = new Tag();
                 xmlTag.setId(tag.id());
@@ -111,7 +112,8 @@ public class RExHandler {
                 tags.add(new RExTag(tag.getId(), tag.getStart(), tag.getLength(),
                                     tag.getType()));
             }
-            extracts.add(new RExExtract(identifier, sentence, tags, e.isIsInCorrectOrganism()));
+            extracts.add(new RExExtract(identifier, sentence, tags, e.isIsInCorrectOrganism(),
+                    e.getTotalSeedMetabolitesInSource()));
         }
 
         List<RExCompound> compounds = new ArrayList<RExCompound>();
