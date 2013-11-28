@@ -27,6 +27,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -60,8 +61,8 @@ public class BondOrderSumSeedTest {
         IAtomContainer but1ene = TestMoleculeFactory.but1ene();
         IAtomContainer butane = TestMoleculeFactory.butane();
 
-        IsotopeFactory.getInstance(butane.getBuilder()).configureAtoms(butane);
-        IsotopeFactory.getInstance(butane.getBuilder()).configureAtoms(but1ene);
+        Isotopes.getInstance().configureAtoms(butane);
+        Isotopes.getInstance().configureAtoms(but1ene);
 
         AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(butane);
         AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(but1ene);

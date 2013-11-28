@@ -25,6 +25,7 @@ package uk.ac.ebi.mdk.prototype.hash.cip.rules;
 import org.openscience.cdk.annotations.TestClass;
 import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.config.IsotopeFactory;
+import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.geometry.cip.ILigand;
 import org.openscience.cdk.geometry.cip.rules.ISequenceSubRule;
 import org.openscience.cdk.tools.ILoggingTool;
@@ -54,9 +55,7 @@ class MassNumberRule implements ISequenceSubRule<ILigand> {
     private void ensureFactory(ILigand ligand) {
         if (factory == null) {
             try {
-                factory = IsotopeFactory.getInstance(
-                        ligand.getCentralAtom().getBuilder()
-                                                    );
+                factory = Isotopes.getInstance();
             } catch (IOException exception) {
                 logger.error("Could not load the IsotopeFactory: " + exception.getMessage());
             }
