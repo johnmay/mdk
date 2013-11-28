@@ -53,6 +53,11 @@ public abstract class ReactionGenerator {
         return new ProtonSymporter(entities, in, out);
     }
 
+    public static ReactionGenerator abc(EntityFactory entities, Compartment in, Compartment out) {
+        return new ABCTransporter(entities, in, out);
+    }
+
+
     /**
      * Utility to create a participant for the given metabolite and compartment.
      * The coefficient default to 1.
@@ -141,7 +146,7 @@ public abstract class ReactionGenerator {
             placeholder = entities.metabolite();
             MetaboliteMaker mm = new MetaboliteMaker(entities);
 
-            Metabolite proton = mm.fromSmiles("H+ proton");
+            Metabolite proton = mm.fromSmiles("[H+] proton");
 
             template.setDirection(Direction.BIDIRECTIONAL);
             template.addReactant(participant(proton, in));
@@ -166,6 +171,112 @@ public abstract class ReactionGenerator {
                 if (p.getMolecule() == placeholder)
                     p.setMolecule(variable);
             }
+            return r;
+        }
+    }
+
+    /**
+     * Defines a reaction to transport a compound using ATP-Binding Cassette
+     */
+    static class ABCTransporter extends ReactionGenerator {
+
+        private final MetabolicReaction template;
+        private final Metabolite        placeholder;
+        private final String suffix = " transport via ATP-Binding Cassette";
+
+        ABCTransporter(EntityFactory entities, Compartment from, Compartment to) {
+            super(entities);
+            template    = entities.reaction();
+            placeholder = entities.metabolite();
+
+            MetaboliteMaker mm = new MetaboliteMaker(entities);
+
+            Metabolite water  = mm.fromSmiles("O water");
+            Metabolite proton = mm.fromSmiles("[H+] proton");
+            Metabolite atp    = mm.fromSmiles("NC1=C2N=CN([C@@H]3O[C@H](COP(O)(=O)OP(O)(O)=O)[C@@H](O)[C@H]3O)C2=NC=N1 ADP");
+            Metabolite adp    = mm.fromSmiles("NC1=C2N=CN([C@@H]3O[C@H](COP(O)(=O)OP(O)(=O)OP(O)(=O)O)[C@@H](O)[C@H]3O)C2=NC=N1 ATP");
+            
+            //  H2O [from] + ATP [from] + {metabolite} [from] → ADP [from] + Phosphate [from] + H+ [from] + {metabolite} [to]
+
+            template.setDirection(Direction.FORWARD);
+            template.addReactant(participant(water, from));
+            template.addReactant(participant(atp, from));
+            template.addReactant(participant(placeholder, from));
+            template.addProduct(participant(proton, from));
+            template.addProduct(participant(adp, from));
+            template.addProduct(participant(placeholder, to));
+        }
+
+        @Override MetabolicReaction generate(Metabolite... variables) {
+            
+            if (variables.length != 1)
+                throw new IllegalArgumentException("Incorrect number of variables, expected 1");
+
+            Metabolite variable1 = variables[0];
+            
+            MetabolicReaction r = cpy(template);
+            r.setIdentifier(BasicReactionIdentifier.nextIdentifier());
+            r.setName(variable1.getName() + suffix);  
+            
+            for (MetabolicParticipant p : r.getReactants())
+                if (p.getMolecule() == placeholder)
+                    p.setMolecule(variable1);
+            
+            for (MetabolicParticipant p : r.getProducts())
+                if (p.getMolecule() == placeholder)
+                    p.setMolecule(variable1);
+            
+            return r;
+        }
+    }
+
+    /**
+     * Phospho-transferase system - note this would be better using substructure
+     * matching to define phosphate attachment point. Currently the phosphatlated
+     * form also needs to be provided.
+     */
+    static class PTSTransporter extends ReactionGenerator {
+
+        private final MetabolicReaction template;
+        private final Metabolite        placeholder1, placeholder2;
+        private final String suffix = " transport via PTS";
+
+        PTSTransporter(EntityFactory entities, Compartment from, Compartment to) {
+            super(entities);
+            template = entities.reaction();
+            placeholder1 = entities.metabolite();
+            placeholder2 = entities.metabolite();
+
+            MetaboliteMaker mm = new MetaboliteMaker(entities);
+
+
+            //  H2O [from] + ATP [from] + {metabolite} [from] → ADP [from] + Phosphate [from] + H+ [from] + {metabolite} [to]
+
+            template.setDirection(Direction.BIDIRECTIONAL);
+            template.addReactant(participant(placeholder1, from));
+            template.addProduct(participant(placeholder2, to));
+        }
+
+        @Override MetabolicReaction generate(Metabolite... variables) {
+
+            if (variables.length != 2)
+                throw new IllegalArgumentException("Incorrect number of variables, expected 2");
+
+            Metabolite variable1 = variables[0];
+            Metabolite variable2 = variables[1];
+
+            MetabolicReaction r = cpy(template);
+            r.setIdentifier(BasicReactionIdentifier.nextIdentifier());
+            r.setName(variable1.getName() + suffix);
+
+            for (MetabolicParticipant p : r.getReactants())
+                if (p.getMolecule() == placeholder1)
+                    p.setMolecule(variable1);
+
+            for (MetabolicParticipant p : r.getProducts())
+                if (p.getMolecule() == placeholder2)
+                    p.setMolecule(variable2);
+
             return r;
         }
     }
