@@ -21,6 +21,7 @@ import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
+import uk.ac.ebi.mdk.tool.transport.LibraryStructure;
 
 /**
  * A utility for creating metabolites from various inputs.
@@ -48,11 +49,11 @@ public final class MetaboliteMaker {
      * @return a metabolite instance
      */
     public Metabolite fromSmiles(String smi) {
-        String[] parts = smi.split("[\t ]");
+        int index = smi.indexOf(' ');
         Metabolite metabolite = entities.metabolite();
         metabolite.setIdentifier(BasicChemicalIdentifier.nextIdentifier());
-        metabolite.setName(parts.length > 0 ? parts[1] : "unamed");
-        metabolite.addAnnotation(new SMILES(parts[0]));
+        metabolite.setName(index >= 0 ? smi.substring(index + 1) : "unnamed");
+        metabolite.addAnnotation(new SMILES(index < 0 ? smi : smi.substring(0, index)));
         return metabolite;
-    }
+    } 
 }
