@@ -39,5 +39,12 @@ public class MetaboliteMakerTest {
         Metabolite metabolite = maker.fromSmiles("CCO");
         assertThat(metabolite.getName(), is(""));
         assertThat(metabolite.getStructures().size(), is(1));
-    }    
+    }
+
+    @Test public void spaceInName() throws Exception {
+        MetaboliteMaker maker = new MetaboliteMaker(DefaultEntityFactory.getInstance());
+        Metabolite metabolite = maker.fromSmiles("CCO an ethanol");
+        assertThat(metabolite.getName(), is("an ethanol"));
+        assertThat(metabolite.getStructures().size(), is(1));
+    }
 }
