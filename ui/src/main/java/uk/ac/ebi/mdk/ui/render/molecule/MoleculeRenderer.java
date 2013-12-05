@@ -60,12 +60,10 @@ public class MoleculeRenderer {
 
     private final StructureDiagramGenerator structureGenerator = new StructureDiagramGenerator();
 
-
     protected MoleculeRenderer() {
         List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
         generators.add(new BasicSceneGenerator());
-        generators.add(new BasicBondGenerator());
-        generators.add(new BasicAtomGenerator());
+        generators.add(new SmoothGenerator(true));
         renderer = new AtomContainerRenderer(generators, new AWTFontManager());
         model = renderer.getRenderer2DModel();
     }

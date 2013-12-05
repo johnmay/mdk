@@ -34,6 +34,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.*;
 import uk.ac.ebi.mdk.tool.domain.MassBalance;
 import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil;
 import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil.Classification;
+import uk.ac.ebi.mdk.ui.render.molecule.SmoothGenerator;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -60,18 +61,17 @@ import java.util.Map;
  */
 public class ReactionRenderer {
 
-    private static final Logger LOGGER = Logger.getLogger(ReactionRenderer.class);
+    private static final Logger                LOGGER   = Logger.getLogger(ReactionRenderer.class);
     @SuppressWarnings("unchecked")
-    private AtomContainerRenderer renderer =
+    private              AtomContainerRenderer renderer =
             new AtomContainerRenderer(
                     Arrays.asList(new BasicSceneGenerator(),
-                                  new BasicBondGenerator(),
-                                  new BasicAtomGenerator()),
+                                  new SmoothGenerator(true)),
                     new AWTFontManager());
 
-    private Map<TransportReactionUtil.Classification, ImageIcon> tClassMap = new EnumMap<TransportReactionUtil.Classification, ImageIcon>(
+    private Map<TransportReactionUtil.Classification, ImageIcon> tClassMap      = new EnumMap<TransportReactionUtil.Classification, ImageIcon>(
             TransportReactionUtil.Classification.class);
-    private Map<MassBalance.BalanceType, ImageIcon> balanceIconMap = new EnumMap<MassBalance.BalanceType, ImageIcon>(
+    private Map<MassBalance.BalanceType, ImageIcon>              balanceIconMap = new EnumMap<MassBalance.BalanceType, ImageIcon>(
             MassBalance.BalanceType.class);
 
 
