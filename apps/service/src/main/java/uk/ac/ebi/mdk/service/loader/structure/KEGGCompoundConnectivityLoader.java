@@ -18,13 +18,16 @@
 package uk.ac.ebi.mdk.service.loader.structure;
 
 import au.com.bytecode.opencsv.CSVReader;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.Molecule;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.index.other.MoleculeCollectionConnectivityIndex;
@@ -32,6 +35,7 @@ import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
 import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
 import uk.ac.ebi.mdk.service.loader.single.MoleculeCollectionConnectivityLoader;
 import uk.ac.ebi.mdk.service.loader.single.MoleculeCollectionConnectivityLoader.MoleculeConnectivity;
+import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
 import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
 import uk.ac.ebi.mdk.service.query.KEGGRestClient;
 import uk.ac.ebi.mdk.service.query.structure.StructureService;
@@ -47,7 +51,6 @@ import uk.ac.ebi.mdk.tool.inchi.InChIResult;
  * @author pmoreno
  * @author $Author$ (this version)
  * @brief ...class description...
- * @deprecated scraping ws, do not use!
  */
 @Deprecated
 public class KEGGCompoundConnectivityLoader extends AbstractSingleIndexResourceLoader {
@@ -60,8 +63,7 @@ public class KEGGCompoundConnectivityLoader extends AbstractSingleIndexResourceL
     /**
      * Constructor for the connectivity loader, which requires a local path to a directory where the MDL files from
      * KEGG are located.
-     * 
-     * @param pathToKEGGMDL
+     *
      * @throws IOException 
      */
     public KEGGCompoundConnectivityLoader() throws IOException {
@@ -70,34 +72,52 @@ public class KEGGCompoundConnectivityLoader extends AbstractSingleIndexResourceL
 //                "List of compounds from KEGG REST Service",
 //                ResourceFileLocation.class,
 //                new RemoteLocation("http://rest.kegg.jp/list/compound"));
+        addRequiredResource("KEGG Mol files",
+                "a directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/compound/mol/C00009.mol)",
+                ResourceDirectoryLocation.class);
     }
 
     
     
     @Override
     public void update() throws IOException {
-//        ResourceFileLocation location = getLocation("KEGG MDL Files");
-//        BufferedReader dir = new BufferedReader(new InputStreamReader(location.open()));
-//
-//        List<MoleculeConnectivity> connectivities = new ArrayList<MoleculeConnectivity>();
-//
-//        KEGGRestClient client = new KEGGRestClient();
-//        InChIProducer inChIProducer = new InChIProducerBinary102beta();
-//
-//        CSVReader reader = new CSVReader(new InputStreamReader(location.open()), '\t', '\0');
-//        String[] line;
-//        while((line = reader.readNext())!=null) {
-//            KEGGCompoundIdentifier identifier = new KEGGCompoundIdentifier(line[0].replaceFirst("cpd:", ""));
-//            InChIResult inchi = inChIProducer.calculateInChI(client.getMDLMol(identifier));
-//            if(inchi!=null) {
-//                String con = InChIConnectivity.getInChIConnectivity(inchi.getInchi());
-//                MoleculeConnectivity connectivity = new MoleculeCollectionConnectivityLoader.MoleculeConnectivity(identifier, con);
-//                connectivities.add(connectivity);
-//            }
-//        }
-//
-//        MoleculeCollectionConnectivityLoader loader = new MoleculeCollectionConnectivityLoader(COLLECTION, connectivities.iterator());
-//        loader.update();
+        ResourceDirectoryLocation location = getLocation("KEGG Mol files");
+
+        List<MoleculeConnectivity> connectivities = new ArrayList<MoleculeConnectivity>();
+
+        InChIProducer inChIProducer = new InChIProducerBinary102beta();
+
+        while (location.hasNext() && !isCancelled()) {
+
+            InputStream in   = location.next();
+            String      name = location.getEntryName();
+
+            // skip non-mol files
+            if (!name.endsWith(".mol"))
+                continue;
+
+            try {
+                Scanner scanner = new Scanner(in, "UTF-8").useDelimiter("\\A");
+                String mdlMol;
+                KEGGCompoundIdentifier identifier = new KEGGCompoundIdentifier(name.replaceFirst(".mol", ""));
+                if (scanner.hasNext()) {
+                    mdlMol = scanner.next();
+                    InChIResult res = inChIProducer.calculateInChI(mdlMol);
+                    if(res!=null) {
+                        String con = InChIConnectivity.getInChIConnectivity(res.getInchi());
+                        MoleculeConnectivity connectivity = new MoleculeConnectivity(identifier,con);
+                        connectivities.add(connectivity);
+                    }
+                }
+
+
+            } catch (Exception ex) {
+                LOGGER.warn("Could not read entry: " + name);
+            }
+        }
+
+        MoleculeCollectionConnectivityLoader loader = new MoleculeCollectionConnectivityLoader(COLLECTION, connectivities.iterator());
+        loader.update();
     }
     
 }
