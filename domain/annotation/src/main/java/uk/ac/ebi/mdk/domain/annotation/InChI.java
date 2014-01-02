@@ -107,7 +107,7 @@ public class InChI
 
         try {
             InChIGeneratorFactory inchiFactory = InChIGeneratorFactory.getInstance();
-            InChIToStructure inchi2structure = inchiFactory.getInChIToStructure(getValue(), SilentChemObjectBuilder.getInstance());
+            InChIToStructure inchi2structure = inchiFactory.getInChIToStructure(getValue().trim(), SilentChemObjectBuilder.getInstance());
             structure = inchi2structure.getAtomContainer();
         } catch (CDKException ex) {
             LOGGER.error("Unable to generate structure from provided inchi: " + ex.getMessage());
@@ -119,6 +119,7 @@ public class InChI
     public void setStructure(IAtomContainer structure) {
         try {
             InChIGeneratorFactory inchiFactory = InChIGeneratorFactory.getInstance();
+            inchiFactory.setIgnoreAromaticBonds(true);
             InChIGenerator inchiGenerator = inchiFactory.getInChIGenerator(structure);
             setValue(inchiGenerator.getInchi());
         } catch (CDKException ex) {
