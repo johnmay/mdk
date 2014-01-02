@@ -99,8 +99,8 @@ public class MetaboliteHashCodeMatcher
 
     @Override
     public Set<Integer> calculatedMetric(Metabolite entity) {
-
-        Set<Integer> hashes = new HashSet<Integer>();
+        
+        Set <Integer> hashes = new HashSet<Integer>();
 
         for (ChemicalStructure annotation : entity.getStructures()) {
             IAtomContainer structure = annotation.getStructure();

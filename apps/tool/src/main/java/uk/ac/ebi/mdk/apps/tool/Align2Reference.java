@@ -22,9 +22,13 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Multimap;
 import org.apache.commons.cli.Option;
 import org.apache.commons.lang.mutable.MutableInt;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.apps.CommandLineMain;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
+import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
@@ -141,22 +145,43 @@ public class Align2Reference extends CommandLineMain {
                                                    StereoSeed.class,
                                                    ConnectedAtomSeed.class,
                                                    ChargeSeed.class));
-        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
-                                                   BondOrderSumSeed.class,
-                                                   ConnectedAtomSeed.class,
-                                                   StereoSeed.class));
-        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
-                                                   BondOrderSumSeed.class,
-                                                   ConnectedAtomSeed.class,
-                                                   ChargeSeed.class));
-        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
-                                                   BondOrderSumSeed.class,
-                                                   ConnectedAtomSeed.class));
-        aligner.push(new NameMatcher<Metabolite>());
-        aligner.push(new NameMatcher<Metabolite>(true, true));
+//        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
+//                                                   BondOrderSumSeed.class,
+//                                                   ConnectedAtomSeed.class,
+//                                                   StereoSeed.class));
+//        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
+//                                                   BondOrderSumSeed.class,
+//                                                   ConnectedAtomSeed.class,
+//                                                   ChargeSeed.class));
+//        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
+//                                                   BondOrderSumSeed.class,
+//                                                   ConnectedAtomSeed.class));
+//        aligner.push(new NameMatcher<Metabolite>());
+//        aligner.push(new NameMatcher<Metabolite>(true, true));
 
         final EntityMatcher<Metabolite, ?> nameMatcher = new NameMatcher<Metabolite>(true, true);
 
+        for (Metabolite m : reference.metabolome()) {
+            for (ChemicalStructure cs : m.getStructures()) {
+                try {
+                    AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(cs.getStructure());
+                } catch (CDKException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+        for (Metabolite m : query.metabolome()) {
+            for (ChemicalStructure cs : m.getStructures()) {
+                try {
+                    AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(cs.getStructure());
+                } catch (CDKException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+        
+        Logger.getRootLogger().setLevel(Level.DEBUG);
+        
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -169,6 +194,8 @@ public class Align2Reference extends CommandLineMain {
                 long start = System.currentTimeMillis();
 
                 for (Metabolite m : query.metabolome()) {
+
+                    System.out.println(m);
 
                     List<Metabolite> matches = aligner.getMatches(m);
                     matched += matches.isEmpty() ? 0 : 1;
