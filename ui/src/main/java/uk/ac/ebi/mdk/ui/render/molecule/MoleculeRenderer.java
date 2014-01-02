@@ -41,6 +41,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.openscience.cdk.geometry.GeometryTools.CoordinateCoverage.FULL;
+
 
 /**
  * MoleculeRenderer – 2011.09.08 <br>
@@ -58,7 +60,7 @@ public class MoleculeRenderer {
 
     private RendererModel model;
 
-    private final StructureDiagramGenerator structureGenerator = new StructureDiagramGenerator();
+    private final StructureDiagramGenerator sdg = new StructureDiagramGenerator();
 
     protected MoleculeRenderer() {
         List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
@@ -66,6 +68,7 @@ public class MoleculeRenderer {
         generators.add(new SmoothGenerator(true));
         renderer = new AtomContainerRenderer(generators, new AWTFontManager());
         model = renderer.getRenderer2DModel();
+        sdg.setUseTemplates(false); // templates currently too slow
     }
 
 
@@ -104,13 +107,20 @@ public class MoleculeRenderer {
         g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(9.0f));
         g2.setFont(g2.getFont().deriveFont(Font.ITALIC));
 
-        if (GeometryTools.has2DCoordinatesNew(container) == 2) {
+        if (GeometryTools.get2DCoordinateCoverage(container) == FULL) {
             renderer.paint(container, new AWTDrawVisitor(g2), bounds, true);
         } else {
-            String unrendered = "No 2D Coordinates";
-            int width = g2.getFontMetrics().stringWidth(unrendered);
-            g2.setColor(Color.RED);
-            g2.drawString(unrendered, bounds.width / 2 - width / 2, bounds.height / 2);
+            try {
+                sdg.setMolecule(container);
+                sdg.generateCoordinates();
+                renderer.paint(sdg.getMolecule(), new AWTDrawVisitor(g2), bounds, true);
+            } catch (Exception e) {
+                LOGGER.error("Could not generate coordinates for depiction", e);
+                String unrendered = "No 2D Coordinates";
+                int width = g2.getFontMetrics().stringWidth(unrendered);
+                g2.setColor(Color.RED);
+                g2.drawString(unrendered, bounds.width / 2 - width / 2, bounds.height / 2);
+            }
         }
 
         g2.dispose();
