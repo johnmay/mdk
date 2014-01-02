@@ -28,6 +28,7 @@ import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.geometry.cip.ILigand;
 import org.openscience.cdk.geometry.cip.rules.ISequenceSubRule;
+import org.openscience.cdk.interfaces.IIsotope;
 import org.openscience.cdk.tools.ILoggingTool;
 import org.openscience.cdk.tools.LoggingToolFactory;
 
@@ -66,7 +67,11 @@ class MassNumberRule implements ISequenceSubRule<ILigand> {
         Integer massNumber = ligand.getLigandAtom().getMassNumber();
         if (massNumber != null) return massNumber;
         if (factory == null) return 0;
-        return factory.getMajorIsotope(ligand.getLigandAtom().getSymbol()).getMassNumber();
+        Integer atomicNumber = ligand.getLigandAtom().getAtomicNumber();
+        if (atomicNumber == null)
+            return 0;
+        IIsotope isotope = factory.getMajorIsotope(atomicNumber);
+        return isotope != null ? isotope.getMassNumber() : 0;
     }
     
 }
