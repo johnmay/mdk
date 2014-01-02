@@ -83,7 +83,7 @@ public class ChiralityCalculator {
 
         List<ILigand> ligands = new ArrayList<ILigand>(getConnected(centralLigand));
 
-        if (!central.getFormalNeighbourCount().equals(4)) {
+        if (central.getFormalNeighbourCount() == null || !central.getFormalNeighbourCount().equals(4)) {
             return 0;
         }
 
