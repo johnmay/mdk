@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.io.cdk;
 
+import org.apache.log4j.Logger;
 import org.openscience.cdk.config.AtomTypeFactory;
 import org.openscience.cdk.exception.NoSuchAtomTypeException;
 import org.openscience.cdk.interfaces.IAtom;
@@ -31,6 +32,7 @@ import org.openscience.cdk.silent.Bond;
 import org.openscience.cdk.silent.PseudoAtom;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.silent.SingleElectron;
+import org.openscience.cdk.stereo.StereoElementFactory;
 import org.openscience.cdk.tools.manipulator.AtomTypeManipulator;
 
 import javax.vecmath.Point2d;
@@ -131,6 +133,12 @@ public class AtomContainerReader {
                 singleElectrons[i].setElectronCount(in.readInt());
                 container.addSingleElectron(singleElectrons[i]);
             }
+        }
+
+        try {
+            container.setStereoElements(StereoElementFactory.using2DCoordinates(container).createAll());
+        } catch (Exception e) {
+            Logger.getLogger(getClass()).warn("Could not define stereo centers for molecule");
         }
 
         return container;
