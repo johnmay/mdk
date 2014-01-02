@@ -113,6 +113,11 @@
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-hash</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-cip</artifactId>
             <version>${cdk.version}</version>
         </dependency>
