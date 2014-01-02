@@ -791,10 +791,13 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
                 && atom.getFormalNeighbourCount() > 2
                 && hasStereoBonds(container, atom)) {
 
+            if (atom.getStereoParity() == null)
+                atom.setStereoParity(0);
+            
             // we don't use the MDL parity and need to adjust if we have hydrogens pressent
-            int p = atom.getFormalNeighbourCount() == 4
-                    ? ParityCalculator.getSP3Parity(atom, container)
-                    : atom.getStereoParity();
+            int p = atom.getFormalNeighbourCount() == 4 || atom.getStereoParity() == 0
+                        ? ParityCalculator.getSP3Parity(atom, container)
+                        : atom.getStereoParity();
             if (p != 0) {
                 if (p == -1)
                     p = 2;
