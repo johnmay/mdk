@@ -35,15 +35,15 @@ public class SubstructureSetTest {
                           hasItem(subs.get(0)));
         Assert.assertThat(ss.matching(Beam.fromSMILES("OC1=CC=C(CC=CC)C=C1")),
                           hasItem(subs.get(0)));
-        
+
         Assert.assertThat(ss.matching(Beam.fromSMILES("CCCCCCN1C=CC=C1")),
-                          hasItem(subs.get(0)));
+                          hasItem(subs.get(2)));
         Assert.assertThat(ss.matching(Beam.fromSMILES("CCCCN1C=CC=C1")),
-                          hasItem(subs.get(0)));
+                          hasItem(subs.get(2)));
         Assert.assertThat(ss.matching(Beam.fromSMILES("CCCCCCN1C=CC=C1")),
-                          hasItem(subs.get(0)));     
+                          hasItem(subs.get(2)));     
         Assert.assertThat(ss.matching(Beam.fromSMILES("C1=CC=CC1C=CCCN1C=CC=C1")),
-                          hasItem(subs.get(0)));   
+                          hasItem(subs.get(2)));   
         
         
         Assert.assertTrue(ss.matching(Beam.fromSMILES("PC1=CC=C(CC=CC)C=C1")).isEmpty());
