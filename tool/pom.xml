@@ -33,6 +33,7 @@
         <module>core</module>
         <module>homology</module>
         <module>prototype-hashcode</module>
+        <module>search-tree</module>
     </modules>
     <artifactId>mdk-tool</artifactId>
 
