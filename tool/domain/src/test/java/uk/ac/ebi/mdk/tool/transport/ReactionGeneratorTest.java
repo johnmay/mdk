@@ -41,6 +41,6 @@ public class ReactionGeneratorTest {
         MetabolicReaction r2 = template.generate(metabolites.fromSmiles("N[C@@H](CC1=CNC2=C1C=CC=C2)C(O)=O tryptophan"));
 
         MatcherAssert.assertThat(r1.toString(), is("proton [c] + tyorsine [c] ⇌ proton [e] + tyorsine [e]"));
-        MatcherAssert.assertThat(r1.toString(), is("proton [c] + tryptophan [c] ⇌ proton [e] + tryptophan [e]"));
+        MatcherAssert.assertThat(r2.toString(), is("proton [c] + tryptophan [c] ⇌ proton [e] + tryptophan [e]"));
     }
 }

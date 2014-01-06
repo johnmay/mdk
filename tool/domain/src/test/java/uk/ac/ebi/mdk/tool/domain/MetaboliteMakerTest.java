@@ -37,7 +37,7 @@ public class MetaboliteMakerTest {
     @Test public void noName() throws Exception {
         MetaboliteMaker maker = new MetaboliteMaker(DefaultEntityFactory.getInstance());
         Metabolite metabolite = maker.fromSmiles("CCO");
-        assertThat(metabolite.getName(), is(""));
+        assertThat(metabolite.getName(), is("unnamed"));
         assertThat(metabolite.getStructures().size(), is(1));
     }
 
