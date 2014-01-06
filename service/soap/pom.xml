@@ -126,12 +126,6 @@
                                     <targetPackage>uk.ac.ebi.ws.jdispatcher</targetPackage>
                                 </mapping>
 
-                                <!-- NCBI -->
-                                <mapping>
-                                    <namespace>http://pubchem.ncbi.nlm.nih.gov/</namespace>
-                                    <targetPackage>gov.nih.nlm.ncbi.pubchem.ws</targetPackage>
-                                </mapping>
-
                                 <mapping>
                                     <namespace>http://www.chemspider.com/</namespace>
                                     <targetPackage>com.chemspider</targetPackage>
