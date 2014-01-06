@@ -77,7 +77,11 @@
             <artifactId>mdk-domain-identifier</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-tool-search-tree</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.openscience.cdk</groupId>
