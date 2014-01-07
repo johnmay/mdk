@@ -31,7 +31,7 @@ import org.openscience.cdk.interfaces.IPseudoAtom;
  *
  * @author John May
  */
-public enum FormulaHash implements MoleculeHashGenerator {
+enum FormulaHash implements MoleculeHashGenerator {
 
     /** Encodes with hydrogen counts. */
     WithHydrogens(true),
