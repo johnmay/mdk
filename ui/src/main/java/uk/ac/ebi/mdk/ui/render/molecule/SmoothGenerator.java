@@ -165,7 +165,7 @@ public class SmoothGenerator implements IGenerator<IAtomContainer> {
                                                                  0)
                                            .createTransformedShape(hydrogenLabel);
 
-            if (atom.getImplicitHydrogenCount() > 1) {
+            if (atom.getImplicitHydrogenCount() != null && atom.getImplicitHydrogenCount() > 1) {
                 Shape hCount = toShape(Integer.toString(atom.getImplicitHydrogenCount()), x, y, scale);
                 hCount = AffineTransform.getScaleInstance(0.6, 0.6)
                                         .createTransformedShape(hCount);
@@ -1243,7 +1243,7 @@ public class SmoothGenerator implements IGenerator<IAtomContainer> {
     static final int NORTH_WEST = 4;
 
     static int hPlacement(IAtomContainer container, double x, double y, IAtom atom, ElementGroup group) {
-        if (atom.getImplicitHydrogenCount() == 0)
+        if (atom.getImplicitHydrogenCount() == null || atom.getImplicitHydrogenCount() == 0)
             return NONE;
         List<IAtom> neighbors = container.getConnectedAtomsList(atom);
         double ux = 0;
