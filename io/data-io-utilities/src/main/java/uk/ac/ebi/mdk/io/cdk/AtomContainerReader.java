@@ -135,6 +135,16 @@ public class AtomContainerReader {
             }
         }
 
+        // sanitise
+        for (IAtom a : container.atoms()) {
+            if (a.getImplicitHydrogenCount() == null)
+                a.setImplicitHydrogenCount(0);
+            if (a.getAtomicNumber() == null)
+                a.setAtomicNumber(0);
+            if (a.getFormalCharge() == null)
+                a.setFormalCharge(0);
+        }
+        
         try {
             container.setStereoElements(StereoElementFactory.using2DCoordinates(container).createAll());
         } catch (Exception e) {
