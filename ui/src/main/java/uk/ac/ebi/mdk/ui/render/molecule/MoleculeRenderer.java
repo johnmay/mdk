@@ -98,9 +98,6 @@ public class MoleculeRenderer {
         BufferedImage img = new BufferedImage(bounds.width, bounds.height,
                                               BufferedImage.TYPE_4BYTE_ABGR);
         Graphics2D g2 = (Graphics2D) img.getGraphics();
-//        structureGenerator.setMolecule(new Molecule(container));
-//        structureGenerator.generateCoordinates();
-//        IMolecule moleculeWithXYZ = structureGenerator.getMolecule();
         g2.setColor(background);
         g2.fill(bounds);
 
@@ -111,7 +108,7 @@ public class MoleculeRenderer {
             renderer.paint(container, new AWTDrawVisitor(g2), bounds, true);
         } else {
             try {
-                sdg.setMolecule(container);
+                sdg.setMolecule(container, false); // clone or not clone?
                 sdg.generateCoordinates();
                 renderer.paint(sdg.getMolecule(), new AWTDrawVisitor(g2), bounds, true);
             } catch (Exception e) {

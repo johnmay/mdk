@@ -17,6 +17,7 @@
 package uk.ac.ebi.mdk.ui.render.table;
 
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 
@@ -51,19 +52,27 @@ public class ChemicalStructureRenderer
     @Override
     @SuppressWarnings("unchecked")
     public JLabel getComponent(JTable table, Object value, int row, int column) {
-        Collection<AtomContainerAnnotation> collection =
-                value instanceof Collection ? (Collection) value : Arrays.asList(
-                        value);
+        Collection collection =
+                value instanceof Collection ? (Collection) value : Arrays.asList(value);
 
         if (table.getColumnModel().getColumn(column).getWidth() != table.getRowHeight(row)) {
             table.setRowHeight(row, table.getColumnModel().getColumn(column).getWidth());
         }
 
+        this.setText(null);
+
         if (collection.iterator().hasNext()) {
             try {
-                AtomContainerAnnotation structure = collection.iterator().next();
+                Object obj = collection.iterator().next();
+                IAtomContainer structure;
+                if (obj instanceof IAtomContainer)
+                    structure = (IAtomContainer) obj;
+                else if (obj instanceof AtomContainerAnnotation)
+                    structure = ((AtomContainerAnnotation) obj).getStructure();
+                else
+                    throw new InternalError("unknown structure type - cannot render: " + obj.getClass());
                 this.setIcon(new ImageIcon(
-                        renderer.getImage(structure.getStructure(),
+                        renderer.getImage(structure,
                                           new Rectangle(0, 0,
                                                         table.getRowHeight(row) - 10,
                                                         table.getRowHeight(row) - 10),
@@ -75,7 +84,6 @@ public class ChemicalStructureRenderer
         } else {
             this.setIcon(null);
         }
-
 
         return this;
     }

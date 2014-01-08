@@ -62,7 +62,7 @@ import java.util.Set;
 /** @author John May */
 public class SmoothGenerator implements IGenerator<IAtomContainer> {
 
-    private final static boolean DISPLAY_TERMINAL_CARBONS = false;
+    private final static boolean DISPLAY_TERMINAL_CARBONS = true;
 
     private final static Font font = new Font("Verdana", Font.PLAIN, 18);
 
@@ -1317,6 +1317,9 @@ public class SmoothGenerator implements IGenerator<IAtomContainer> {
                 db++;
             deg++;
         }
+        
+        if (deg == 0)
+            return true;
 
         if (DISPLAY_TERMINAL_CARBONS && deg == 1)
             return true;
