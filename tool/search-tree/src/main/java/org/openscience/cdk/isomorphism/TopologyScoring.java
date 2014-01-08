@@ -26,7 +26,7 @@ import static org.openscience.cdk.graph.GraphUtil.EdgeToBondMap;
  *
  * @author John May
  */
-final class ValenceScoring {
+final class TopologyScoring {
 
     /** Structure representation. */
     private final IAtomContainer query, target;
@@ -34,12 +34,12 @@ final class ValenceScoring {
     private final EdgeToBondMap bonds1, bonds2;
 
 
-    public ValenceScoring(IAtomContainer query,
-                          IAtomContainer target,
-                          int[][] g1,
-                          int[][] g2,
-                          EdgeToBondMap bonds1,
-                          EdgeToBondMap bonds2) {
+    public TopologyScoring(IAtomContainer query,
+                           IAtomContainer target,
+                           int[][] g1,
+                           int[][] g2,
+                           EdgeToBondMap bonds1,
+                           EdgeToBondMap bonds2) {
         this.query = query;
         this.target = target;
         this.g1 = g1;
