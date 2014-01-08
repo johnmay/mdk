@@ -24,8 +24,6 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.AWTFontManager;
-import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
-import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
@@ -33,7 +31,10 @@ import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,8 +46,7 @@ import static org.openscience.cdk.geometry.GeometryTools.CoordinateCoverage.FULL
 
 
 /**
- * MoleculeRenderer – 2011.09.08 <br>
- * Class description
+ * MoleculeRenderer – 2011.09.08 <br> Class description
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -82,6 +82,11 @@ public class MoleculeRenderer {
         private static final MoleculeRenderer INSTANCE = new MoleculeRenderer();
     }
 
+    public BufferedImage getImage(IAtomContainer molecule, int size) throws CDKException {
+
+        return getImage(molecule, new Rectangle(0, 0, size, size), Color.WHITE);
+
+    }
 
     public BufferedImage getImage(IAtomContainer molecule, Rectangle bounds) throws CDKException {
 
@@ -96,7 +101,7 @@ public class MoleculeRenderer {
 
 
         BufferedImage img = new BufferedImage(bounds.width, bounds.height,
-                                              BufferedImage.TYPE_4BYTE_ABGR);
+                                              BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = (Graphics2D) img.getGraphics();
         g2.setColor(background);
         g2.fill(bounds);
@@ -106,7 +111,8 @@ public class MoleculeRenderer {
 
         if (GeometryTools.get2DCoordinateCoverage(container) == FULL) {
             renderer.paint(container, new AWTDrawVisitor(g2), bounds, true);
-        } else {
+        }
+        else {
             try {
                 sdg.setMolecule(container, false); // clone or not clone?
                 sdg.generateCoordinates();
