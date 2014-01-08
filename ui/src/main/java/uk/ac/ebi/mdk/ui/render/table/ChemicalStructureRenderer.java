@@ -25,6 +25,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -79,8 +80,8 @@ public class ChemicalStructureRenderer
                                           getBackground())));
             } catch (CDKException ex) {
                 System.err.println("Unable to render molecule: " + ex.getMessage());
+                this.setIcon(null);
             }
-
         } else {
             this.setIcon(null);
         }
