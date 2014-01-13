@@ -60,6 +60,6 @@ public class ScorerTest {
     }
 
     double scoreOf(String a, String b) throws Exception {
-        return Scorer.score(smi(a), smi(b));
+        return Scorer.score(smi(a), smi(b)).toDouble();
     }
 }

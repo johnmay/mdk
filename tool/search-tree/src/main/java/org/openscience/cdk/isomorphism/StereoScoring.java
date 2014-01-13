@@ -144,12 +144,7 @@ final class StereoScoring {
                             mismatched / (double) total};
     }
 
-    public enum StereoCompatibility {
-        Matched,
-        Missing,
-        Mismatched,
-        None
-    }
+   
 
     public StereoCompatibility[] compatibility(final int[] mapping) {
 

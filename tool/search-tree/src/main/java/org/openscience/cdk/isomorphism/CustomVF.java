@@ -56,14 +56,14 @@ final class CustomVF extends Pattern {
     }
 
     /** @inheritDoc */
-    @Override public Iterable<int[]> matchAll(final IAtomContainer target) {
+    @Override public Mappings matchAll(final IAtomContainer target) {
         EdgeToBondMap bonds2 = EdgeToBondMap.withSpaceFor(target);
         int[][] g2 = GraphUtil.toAdjList(target, bonds2);
-        return new VFIterable(query, target,
+        return new Mappings(query, target, new VFIterable(query, target,
                               g1, g2,
                               bonds1, bonds2,
                               atomMatcher, bondMatcher,
-                              subgraph);
+                              subgraph));
 
     }
 
