@@ -21,11 +21,12 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import java.awt.Rectangle;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -39,15 +40,23 @@ public class ChemicalStructureRenderer
         extends DefaultRenderer {
 
     private MoleculeRenderer renderer;
-
+    private final boolean highlight;
 
     public ChemicalStructureRenderer() {
-        this(MoleculeRenderer.getInstance());
+        this(false, MoleculeRenderer.getInstance());
     }
 
+    public ChemicalStructureRenderer(boolean highlight) {
+        this(highlight, MoleculeRenderer.getInstance());
+    }
 
     public ChemicalStructureRenderer(MoleculeRenderer renderer) {
+        this(false, MoleculeRenderer.getInstance());
+    }
+
+    public ChemicalStructureRenderer(boolean highlight, MoleculeRenderer renderer) {
         this.renderer = renderer;
+        this.highlight = highlight;
     }
 
     @Override
@@ -77,12 +86,14 @@ public class ChemicalStructureRenderer
                                           new Rectangle(0, 0,
                                                         table.getRowHeight(row) - 10,
                                                         table.getRowHeight(row) - 10),
-                                          getBackground())));
+                                          getBackground(),
+                                          highlight)));
             } catch (CDKException ex) {
                 System.err.println("Unable to render molecule: " + ex.getMessage());
                 this.setIcon(null);
             }
-        } else {
+        }
+        else {
             this.setIcon(null);
         }
 
