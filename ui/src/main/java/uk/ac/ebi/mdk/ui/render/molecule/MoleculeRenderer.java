@@ -73,7 +73,9 @@ public class MoleculeRenderer {
         renderer = new AtomContainerRenderer(generators, new AWTFontManager());
         model = renderer.getRenderer2DModel();
         model.set(HighlightGenerator.HighlightPalette.class,
-                  HighlightGenerator.createPalette(Color.GREEN, Color.ORANGE, Color.RED));
+                  HighlightGenerator.createPalette(new Color(0x57FF7D),
+                                                   new Color(0xFFA762),
+                                                   new Color(0xFF6557)));
         sdg.setUseTemplates(false); // templates currently too slow
     }
 
@@ -120,9 +122,10 @@ public class MoleculeRenderer {
 
         Object idmap = null;
 
-        // remove highlight map
+        // remove highlight map whilst rendering - it will be put in later
         if (!highlighted) {
             idmap = container.getProperty(HighlightGenerator.ID_MAP);
+            container.removeProperty(HighlightGenerator.ID_MAP);
         }
 
         BufferedImage img = new BufferedImage(bounds.width, bounds.height,

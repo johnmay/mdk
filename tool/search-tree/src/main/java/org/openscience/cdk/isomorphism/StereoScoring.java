@@ -157,7 +157,7 @@ final class StereoScoring {
 
             if (queryTypes[u] == null) {
                 if (targetTypes[v] != null)
-                    compatibility[v] = StereoCompatibility.Missing;
+                    compatibility[u] = StereoCompatibility.Missing;
                 continue;
             }
 
@@ -165,31 +165,34 @@ final class StereoScoring {
                 case Tetrahedral:
 
                     if (targetTypes[v] == null) {
-                        compatibility[v] = StereoCompatibility.Missing;
+                        compatibility[u] = StereoCompatibility.Missing;
                         continue;
                     }
 
                     int match = checkTetrahedral(u, mapping);
                     if (match > 0) {
-                        compatibility[v] = StereoCompatibility.Matched;
+                        compatibility[u] = StereoCompatibility.Matched;
                     }
                     else if (match < 0) {
-                        compatibility[v] = StereoCompatibility.Mismatched;
+                        compatibility[u] = StereoCompatibility.Mismatched;
                     }
                     break;
                 case Geometric:
 
                     if (targetTypes[v] == null) {
-                        compatibility[v] = StereoCompatibility.Matched;
+                        compatibility[u] = StereoCompatibility.Matched;
                         continue;
                     }
+                    
+                    if (u > otherIndex(u))
+                        continue;
 
                     match = checkGeometric(u, otherIndex(u), mapping);
                     if (match > 0) {
-                        compatibility[v] = StereoCompatibility.Matched;
+                        compatibility[u] = StereoCompatibility.Matched;
                     }
                     else if (match < 0) {
-                        compatibility[v] = StereoCompatibility.Mismatched;
+                        compatibility[u] = StereoCompatibility.Mismatched;
                     }
 
                     break;
