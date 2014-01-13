@@ -143,7 +143,7 @@ final class StereoScoring {
         return new double[]{matched / (double) total,
                             mismatched / (double) total};
     }
-    
+
     public enum StereoCompatibility {
         Matched,
         Missing,
@@ -156,21 +156,13 @@ final class StereoScoring {
         StereoCompatibility[] compatibility = new StereoCompatibility[mapping.length];
 
         Arrays.fill(compatibility, StereoCompatibility.None);
-        
+
         for (int u = 0; u < mapping.length; u++) {
             int v = mapping[u];
 
             if (queryTypes[u] == null) {
-                if (targetTypes[v] != null) {
-                    if (targetTypes[v] == Type.Geometric) {
-                        IDoubleBondStereochemistry dbs = (IDoubleBondStereochemistry) targetElements[v];
-                        int w = targetMap.get(dbs.getStereoBond().getConnectedAtom(target.getAtom(v)));
-                         compatibility[v] = StereoCompatibility.Missing;
-                    }
-                    else {
-                        compatibility[v] = StereoCompatibility.Missing;
-                    }
-                }
+                if (targetTypes[v] != null)
+                    compatibility[v] = StereoCompatibility.Missing;
                 continue;
             }
 
@@ -185,25 +177,23 @@ final class StereoScoring {
                     int match = checkTetrahedral(u, mapping);
                     if (match > 0) {
                         compatibility[v] = StereoCompatibility.Matched;
-                    } else if (match < 0) {
+                    }
+                    else if (match < 0) {
                         compatibility[v] = StereoCompatibility.Mismatched;
                     }
                     break;
                 case Geometric:
 
-                    if (u > otherIndex(u))
-                        continue;
-
                     if (targetTypes[v] == null) {
-                        compatibility[v] = compatibility[mapping[otherIndex(u)]] 
-                                         = StereoCompatibility.Matched;
+                        compatibility[v] = StereoCompatibility.Matched;
                         continue;
                     }
 
                     match = checkGeometric(u, otherIndex(u), mapping);
                     if (match > 0) {
                         compatibility[v] = StereoCompatibility.Matched;
-                    } else if (match < 0) {
+                    }
+                    else if (match < 0) {
                         compatibility[v] = StereoCompatibility.Mismatched;
                     }
 
