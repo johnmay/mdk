@@ -36,9 +36,8 @@ import static org.openscience.cdk.interfaces.IDoubleBondStereochemistry.Conforma
 /** @author John May */
 public class StructureUtil {
 
-    public static IAtomContainer neutralise(IAtomContainer org) {
-        new Neutralise(org);
-        return org;
+    public static int neutralise(IAtomContainer org) {
+        return new Neutralise(org).correct();
     }
     
     public static IAtomContainer createSubstructure(IAtomContainer org) {

@@ -33,10 +33,9 @@ final class Neutralise {
         this.container = container;
         this.bonds = GraphUtil.EdgeToBondMap.withSpaceFor(container);
         this.graph = GraphUtil.toAdjList(container, bonds);
-        correct();
     }
 
-    private int correct() {
+    int correct() {
         int skipped = 0;
         for (int i = 0; i < container.getAtomCount(); i++) {
             int q = charge(container.getAtom(i));
