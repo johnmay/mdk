@@ -23,13 +23,13 @@ import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 
 /** @author John May */
-public final class Neutralise {
+final class Neutralise {
 
     private final IAtomContainer          container;
     private final GraphUtil.EdgeToBondMap bonds;
     private final int[][]                 graph;
 
-    public Neutralise(IAtomContainer container) {
+    Neutralise(IAtomContainer container) {
         this.container = container;
         this.bonds = GraphUtil.EdgeToBondMap.withSpaceFor(container);
         this.graph = GraphUtil.toAdjList(container, bonds);
