@@ -36,13 +36,15 @@ final class Neutralise {
         correct();
     }
 
-    private void correct() {
+    private int correct() {
+        int skipped = 0;
         for (int i = 0; i < container.getAtomCount(); i++) {
             int q = charge(container.getAtom(i));
-            if (q != 0 && fix(i, q)) {
-                
+            if (q != 0 && !fix(i, q)) {
+                skipped++;    
             }
         }
+        return skipped;
     }
 
     private boolean fix(int v, int q) {
