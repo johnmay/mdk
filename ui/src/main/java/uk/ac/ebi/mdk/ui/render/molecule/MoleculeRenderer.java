@@ -73,9 +73,11 @@ public class MoleculeRenderer {
         renderer = new AtomContainerRenderer(generators, new AWTFontManager());
         model = renderer.getRenderer2DModel();
         model.set(HighlightGenerator.HighlightPalette.class,
-                  HighlightGenerator.createPalette(new Color(0x57FF7D),
+                  HighlightGenerator.createPalette(new Color(0x67FF62),
                                                    new Color(0xFFA762),
-                                                   new Color(0xFF6557)));
+                                                   new Color(0xFF4D5C)));
+        model.set(HighlightGenerator.HighlightRadius.class,
+                  8d);
         sdg.setUseTemplates(false); // templates currently too slow
     }
 

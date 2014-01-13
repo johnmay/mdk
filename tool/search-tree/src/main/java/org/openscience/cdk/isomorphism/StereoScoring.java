@@ -180,7 +180,7 @@ final class StereoScoring {
                 case Geometric:
 
                     if (targetTypes[v] == null) {
-                        compatibility[u] = StereoCompatibility.Matched;
+                        compatibility[u] = StereoCompatibility.Missing;
                         continue;
                     }
                     
@@ -190,9 +190,11 @@ final class StereoScoring {
                     match = checkGeometric(u, otherIndex(u), mapping);
                     if (match > 0) {
                         compatibility[u] = StereoCompatibility.Matched;
+                        compatibility[otherIndex(u)] = StereoCompatibility.Matched;
                     }
                     else if (match < 0) {
                         compatibility[u] = StereoCompatibility.Mismatched;
+                        compatibility[otherIndex(u)] = StereoCompatibility.Mismatched;
                     }
 
                     break;
