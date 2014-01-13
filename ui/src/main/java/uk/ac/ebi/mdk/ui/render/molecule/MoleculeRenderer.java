@@ -25,6 +25,7 @@ import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
+import org.openscience.cdk.renderer.generators.HighlightGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.templates.MoleculeFactory;
@@ -64,10 +65,15 @@ public class MoleculeRenderer {
 
     protected MoleculeRenderer() {
         List<IGenerator<IAtomContainer>> generators = new ArrayList<IGenerator<IAtomContainer>>();
+
         generators.add(new BasicSceneGenerator());
+        generators.add(new HighlightGenerator());
         generators.add(new SmoothGenerator(true));
+
         renderer = new AtomContainerRenderer(generators, new AWTFontManager());
         model = renderer.getRenderer2DModel();
+        model.set(HighlightGenerator.HighlightPalette.class,
+                  HighlightGenerator.createPalette(Color.GREEN, Color.ORANGE, Color.RED));
         sdg.setUseTemplates(false); // templates currently too slow
     }
 
@@ -88,17 +94,36 @@ public class MoleculeRenderer {
 
     }
 
+    public BufferedImage getImage(IAtomContainer molecule, int size, boolean highlight) throws CDKException {
+
+        return getImage(molecule, new Rectangle(0, 0, size, size), Color.WHITE, highlight);
+
+    }
+
     public BufferedImage getImage(IAtomContainer molecule, Rectangle bounds) throws CDKException {
 
         return getImage(molecule, bounds, Color.WHITE);
 
     }
 
-
     public BufferedImage getImage(IAtomContainer container,
                                   Rectangle bounds,
                                   Color background) throws CDKException {
+        return getImage(container, bounds, background, false);
+    }
 
+    public BufferedImage getImage(IAtomContainer container,
+                                  Rectangle bounds,
+                                  Color background,
+                                  boolean highlighted) throws CDKException {
+
+
+        Object idmap = null;
+
+        // remove highlight map
+        if (!highlighted) {
+            idmap = container.getProperty(HighlightGenerator.ID_MAP);
+        }
 
         BufferedImage img = new BufferedImage(bounds.width, bounds.height,
                                               BufferedImage.TYPE_INT_RGB);
@@ -127,6 +152,10 @@ public class MoleculeRenderer {
         }
 
         g2.dispose();
+
+        if (idmap != null) {
+            container.setProperty(HighlightGenerator.ID_MAP, idmap);
+        }
 
         return img;
 
