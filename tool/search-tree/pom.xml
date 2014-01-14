@@ -34,6 +34,16 @@
             <version>${cdk.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-smarts</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-silent</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>14.0.1</version>
@@ -49,19 +59,8 @@
             <artifactId>hamcrest-all</artifactId>
             <version>1.3</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-smiles</artifactId>
-            <version>${cdk.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.openscience.cdk</groupId>
-            <artifactId>cdk-silent</artifactId>
-            <version>${cdk.version}</version>
-            <scope>test</scope>
-        </dependency>
+        </dependency>     
+       
     </dependencies>
 
 </project>
