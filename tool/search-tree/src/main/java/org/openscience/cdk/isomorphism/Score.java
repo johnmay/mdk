@@ -40,6 +40,14 @@ public class Score implements Comparable<Score> {
         this.mapping = mapping;
     }
 
+    public double stereoMatchScore() {
+        return s;
+    }
+
+    public double stereoMismatchScore() {
+        return s_prime;
+    }
+
     @Override public int compareTo(Score that) {
         int cmp;
         if ((cmp = Doubles.compare(this.s_prime, that.s_prime)) != 0)
@@ -59,8 +67,8 @@ public class Score implements Comparable<Score> {
 
     public int[] mapping() {
         return mapping;
-    } 
-    
+    }
+
     public StereoCompatibility[] compatibilities() {
         return new StereoScoring(query, target).compatibility(mapping);
     }
