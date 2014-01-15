@@ -104,7 +104,7 @@ final class StereoScoring {
             switch (queryTypes[u]) {
                 case Tetrahedral:
 
-                    if (targetTypes[v] == null) {
+                    if (targetTypes[v] != Type.Tetrahedral) {
                         missing++;
                         continue;
                     }
@@ -120,7 +120,7 @@ final class StereoScoring {
                     if (u > otherIndex(u))
                         continue;
 
-                    if (targetTypes[v] == null) {
+                    if (targetTypes[v] != Type.Geometric || targetTypes[mapping[otherIndex(u)]] != Type.Geometric) {
                         missing++;
                         continue;
                     }
@@ -179,7 +179,7 @@ final class StereoScoring {
                     break;
                 case Geometric:
 
-                    if (targetTypes[v] == null) {
+                    if (targetTypes[v] == null || targetTypes[mapping[otherIndex(u)]] == null) {
                         compatibility[u] = StereoCompatibility.Missing;
                         continue;
                     }
@@ -195,6 +195,9 @@ final class StereoScoring {
                     else if (match < 0) {
                         compatibility[u] = StereoCompatibility.Mismatched;
                         compatibility[otherIndex(u)] = StereoCompatibility.Mismatched;
+                    } else {
+                        compatibility[u] = StereoCompatibility.Missing;
+                        compatibility[otherIndex(u)] = StereoCompatibility.Missing;    
                     }
 
                     break;
@@ -300,8 +303,11 @@ final class StereoScoring {
         int uLeft = queryMap.get(queryBonds[0].getConnectedAtom(query.getAtom(u1)));
         int uRight = queryMap.get(queryBonds[1].getConnectedAtom(query.getAtom(u2)));
 
-        int vLeft = targetMap.get(targetBonds[0].getConnectedAtom(target.getAtom(v1)));
-        int vRight = targetMap.get(targetBonds[1].getConnectedAtom(target.getAtom(v2)));
+        Integer vLeft = targetMap.get(targetBonds[0].getConnectedAtom(target.getAtom(v1)));
+        Integer vRight = targetMap.get(targetBonds[1].getConnectedAtom(target.getAtom(v2)));
+        
+        if (vLeft == null || vRight == null)
+            return 0;
 
         if (swap) {
             int tmp = vLeft;

@@ -59,6 +59,12 @@ public class StereoScoringTest {
     @Test public void noStereo() throws Exception {
         assertFirstScore("CC=CC", "CC=CC", 1.0, 0);
     }
+    
+    @Test public void dbError() throws Exception {
+        // O/C=C/C=C/C -> OC/C=C/CC
+        assertFirstScore("C(=C\\CCCCCCCC(=O)O)\\CCCCCCCC",
+                         "C(=O)(O)CCCCCC/C=C/C=C/C=C\\CCCCC", 0.0, 0.0);
+    }
 
     private final IChemObjectBuilder bldr   = SilentChemObjectBuilder.getInstance();
     private final SmilesParser       smipar = new SmilesParser(bldr);

@@ -47,6 +47,14 @@ public class Score implements Comparable<Score> {
     public double stereoMismatchScore() {
         return s_prime;
     }
+    
+    public double valenceScore() {
+        return v;
+    }
+    
+    public double connectivityScore() {
+        return x;
+    }
 
     @Override public int compareTo(Score that) {
         int cmp;
