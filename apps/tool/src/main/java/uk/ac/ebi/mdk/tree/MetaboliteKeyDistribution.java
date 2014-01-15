@@ -33,6 +33,7 @@ import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.apps.CommandLineMain;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
+import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
@@ -103,16 +104,20 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
 
         for (Metabolite m : reference.metabolome()) {
             for (ChemicalStructure cs : m.getStructures()) {
-                containers.add(cs.getStructure());
+                // if (cs instanceof SMILES)
+                    containers.add(cs.getStructure());
             }
         }
-
+        
+        String id = reference.getIdentifier().toString();
+        
+        // id += "-smi";
 
         try {
-            CSVWriter csv = new CSVWriter(new FileWriter("/Users/johnmay/desktop/key-generation" + reference.getName() + ".csv"), ',', '\0');
+            CSVWriter csv = new CSVWriter(new FileWriter("/Users/johnmay/desktop/key-generation-" + id + ".csv"), ',', '\0');
 
             csv.writeNext(new String[]{
-                    "bin_size", "freq", "gen_name", "t_ms", "datset", "n_struct", "n_struct_indexed", "n_bins", "avg_per_bin"
+                    "bin_size", "freq", "gen_name", "t_ms", "dataset", "n_struct", "n_struct_indexed", "n_bins", "avg_per_bin"
             });
 
             for (InvGen generator : Arrays.asList(new AtomCount(),
@@ -170,7 +175,7 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
                             e.getValue().toString(),
                             generator.name(),
                             Long.toString(TimeUnit.NANOSECONDS.toMillis(t1 - t0)),
-                            reference.getIdentifier().toString(),
+                            id,
                             Integer.toString(containers.size()),
                             Integer.toString(lookup.size()),                            
                             Integer.toString(lookup.keySet().size()),
@@ -238,7 +243,7 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
         }
 
         @Override public long compute(IAtomContainer container) {
-            return FormulaHash.WithoutHydrogens.generate(container);
+            return FormulaHash.WithHydrogens.generate(container);
         }
     }
 
