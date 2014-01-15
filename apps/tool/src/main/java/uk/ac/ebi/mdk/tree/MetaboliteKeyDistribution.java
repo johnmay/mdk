@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.tree;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.commons.cli.Option;
@@ -24,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.hash.HashGeneratorMaker;
 import org.openscience.cdk.hash.MoleculeHashGenerator;
+import org.openscience.cdk.inchi.InChIGeneratorFactory;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
@@ -35,10 +37,15 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
@@ -91,49 +98,291 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
             System.out.println(TimeUnit.NANOSECONDS.toMillis(t1 - t0) + " ms to atom type");
         }
 
-        long t0 = System.nanoTime();
-        Multimap<Integer, IAtomContainer> lookup = HashMultimap.create();
-        Map<IAtomContainer, Metabolite> metaboliteMap = new HashMap<IAtomContainer, Metabolite>();
 
-        FormulaHash key = FormulaHash.WithHydrogens;
+        List<IAtomContainer> containers = new ArrayList<IAtomContainer>();
 
         for (Metabolite m : reference.metabolome()) {
             for (ChemicalStructure cs : m.getStructures()) {
-                lookup.put(hash2(cs.getStructure()), cs.getStructure());
-                metaboliteMap.put(cs.getStructure(), m);
+                containers.add(cs.getStructure());
             }
         }
-        //MetaboliteAligner aligner = new MetaboliteAligner(reference);
-        long t1 = System.nanoTime();
-        System.out.println(lookup.size() + " (" + lookup.keySet().size() + " bins)" + " " + (lookup.size() / (double) lookup.keySet().size()));
-        System.out.println(TimeUnit.NANOSECONDS.toMillis(t1 - t0) + " ms to index ");
 
 
-        Map<Integer, Integer> freq = new TreeMap<Integer, Integer>();
-        for (Map.Entry<Integer, Collection<IAtomContainer>> map : lookup.asMap().entrySet()) {
-            int n = map.getValue().size();
-            Integer cnt;
-            freq.put(n, (cnt = freq.get(n)) == null ? 1 : 1 + cnt);
+        try {
+            CSVWriter csv = new CSVWriter(new FileWriter("/Users/johnmay/desktop/key-generation" + reference.getName() + ".csv"), ',', '\0');
+
+            csv.writeNext(new String[]{
+                    "bin_size", "freq", "gen_name", "t_ms", "datset", "n_struct", "n_struct_indexed", "n_bins", "avg_per_bin"
+            });
+
+            for (InvGen generator : Arrays.asList(new AtomCount(),
+                                                  new BondCount(),
+                                                  new AtomAndBondCount(),
+                                                  new FormulaWithH(),
+                                                  new FormulaNoH(),
+                                                  new ExtendConHash1(),
+                                                  new ExtendConHash2(),
+                                                  new ExtendConHash3(),
+                                                  new ExtendConHash4(),
+                                                  new ExtendConHash5(),
+                                                  new ExtendConHash6(),
+                                                  new InChI())) {
+
+                int err = 0;
+                List<Long> invs = new ArrayList<Long>();
+                Set<Integer> skip = new HashSet<Integer>();
+                long t0 = System.nanoTime();
+                for (IAtomContainer container : containers) {
+                    try {
+                        invs.add(generator.compute(container));
+                    } catch (Exception e) {
+                        skip.add(invs.size());
+                        invs.add(0L);
+                        err++;
+                    }
+                }
+                long t1 = System.nanoTime();
+
+                // now build lookup
+                Multimap<Long, IAtomContainer> lookup = HashMultimap.create();
+
+                for (int i = 0; i < containers.size(); i++) {
+                    if (skip.contains(i))
+                        continue;
+                    IAtomContainer container = containers.get(i);
+                    Long inv = invs.get(i);
+                    lookup.put(inv, container);
+                }
+
+                System.out.println(lookup.size() + " (" + lookup.keySet().size() + " bins)" + " " + (lookup.size() / (double) lookup.keySet().size()) + " " + err + " errors");
+                System.out.println(TimeUnit.NANOSECONDS.toMillis(t1 - t0) + " ms to index ");
+
+                Map<Integer, Integer> freq = new TreeMap<Integer, Integer>();
+                for (Map.Entry<Long, Collection<IAtomContainer>> map : lookup.asMap().entrySet()) {
+                    int n = map.getValue().size();
+                    Integer cnt;
+                    freq.put(n, (cnt = freq.get(n)) == null ? 1 : 1 + cnt);
+                }
+
+                for (Map.Entry<Integer, Integer> e : freq.entrySet()) {
+                    csv.writeNext(new String[]{
+                            e.getKey().toString(),
+                            e.getValue().toString(),
+                            generator.name(),
+                            Long.toString(TimeUnit.NANOSECONDS.toMillis(t1 - t0)),
+                            reference.getIdentifier().toString(),
+                            Integer.toString(containers.size()),
+                            Integer.toString(lookup.size()),                            
+                            Integer.toString(lookup.keySet().size()),
+                            Double.toString((lookup.size() / (double) lookup.keySet().size()))
+                    });
+                }
+
+            }
+
+            csv.close();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
-
-
-        for (Map.Entry<Integer, Integer> e : freq.entrySet()) {
-            System.out.println(e.getKey() + "," + e.getValue() + "," + "ec-H");
-        }
-
     }
 
+    private interface InvGen {
+        public String name();
 
-    static MoleculeHashGenerator generator = new HashGeneratorMaker().depth(4)
-                                                                     .suppressHydrogens()
-                                                                     .elemental()
-                                                                     .chiral()
-                                                                     .molecular();
+        public long compute(IAtomContainer container);
+    }
 
+    private final class AtomCount implements InvGen {
+        @Override public String name() {
+            return "|V|";
+        }
 
-    static int hash2(IAtomContainer container) {
-        long key = generator.generate(container);
-        return (int) (key ^ key >>> 32);
+        @Override public long compute(IAtomContainer container) {
+            return container.getAtomCount();
+        }
+    }
+
+    private final class BondCount implements InvGen {
+        @Override public String name() {
+            return "|E|";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            return container.getAtomCount();
+        }
+    }
+
+    private final class AtomAndBondCount implements InvGen {
+        @Override public String name() {
+            return "|V|+|E|";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            return (container.getAtomCount() << 16) | container.getBondCount();
+        }
+    }
+
+    private final class FormulaNoH implements InvGen {
+        @Override public String name() {
+            return "formula-h";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            return FormulaHash.WithoutHydrogens.generate(container);
+        }
+    }
+
+    private final class FormulaWithH implements InvGen {
+        @Override public String name() {
+            return "formula+h";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            return FormulaHash.WithoutHydrogens.generate(container);
+        }
+    }
+
+    private final class ExtendConHash1 implements InvGen {
+
+        private final MoleculeHashGenerator generator = new HashGeneratorMaker().depth(4)
+                                                                                .elemental()
+                                                                                .molecular();
+
+        @Override
+
+        public String name() {
+            return "ec-4EsHp";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            return generator.generate(container);
+        }
+    }
+
+    private final class ExtendConHash2 implements InvGen {
+
+        private final MoleculeHashGenerator generator = new HashGeneratorMaker().depth(4)
+                                                                                .elemental()
+                                                                                .suppressHydrogens()
+                                                                                .molecular();
+
+        @Override
+
+        public String name() {
+            return "ec-4Eshp";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            return generator.generate(container);
+        }
+    }
+
+    private final class ExtendConHash3 implements InvGen {
+
+        private final MoleculeHashGenerator generator = new HashGeneratorMaker().depth(4)
+                                                                                .elemental()
+                                                                                .chiral()
+                                                                                .suppressHydrogens()
+                                                                                .molecular();
+
+        @Override
+
+        public String name() {
+            return "ec-4EShp";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            return generator.generate(container);
+        }
+    }
+
+    private final class ExtendConHash4 implements InvGen {
+
+        private final MoleculeHashGenerator generator = new HashGeneratorMaker().depth(16)
+                                                                                .elemental()
+                                                                                .chiral()
+                                                                                .suppressHydrogens()
+                                                                                .molecular();
+
+        @Override
+
+        public String name() {
+            return "ec-16EShp";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            return generator.generate(container);
+        }
+    }
+
+    private final class ExtendConHash5 implements InvGen {
+
+        private final MoleculeHashGenerator generator = new HashGeneratorMaker().depth(32)
+                                                                                .elemental()
+                                                                                .chiral()
+                                                                                .perturbed()
+                                                                                .suppressHydrogens()
+                                                                                .molecular();
+
+        @Override
+
+        public String name() {
+            return "ec-32-all";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            return generator.generate(container);
+        }
+    }
+
+    private final class ExtendConHash6 implements InvGen {
+
+        private final MoleculeHashGenerator generator = new HashGeneratorMaker().depth(16)
+                                                                                .elemental()
+                                                                                .chiral()
+                                                                                .charged()
+                                                                                .radical()
+                                                                                .isotopic()
+                                                                                .orbital()
+                                                                                .perturbed()
+                                                                                .suppressHydrogens()
+                                                                                .molecular();
+
+        @Override
+        public String name() {
+            return "ec-16EShP";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            return generator.generate(container);
+        }
+    }
+
+    private final class InChI implements InvGen {
+
+        InChIGeneratorFactory igf;
+
+        private InChI() {
+            try {
+                igf = InChIGeneratorFactory.getInstance();
+                igf.setIgnoreAromaticBonds(true);
+            } catch (Exception e) {
+                throw new IllegalStateException();
+            }
+        }
+
+        @Override
+        public String name() {
+            return "inchi-key";
+        }
+
+        @Override public long compute(IAtomContainer container) {
+            try {
+                return igf.getInChIGenerator(container).getInchiKey().hashCode();
+            } catch (Exception e) {
+                throw new RuntimeException("catch me");  // quick hack
+            }
+        }
     }
 
     public Reconstruction getReconstruction(String option) {
