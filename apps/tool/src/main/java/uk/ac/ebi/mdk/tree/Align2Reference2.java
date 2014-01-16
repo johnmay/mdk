@@ -24,8 +24,6 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.hash.HashGeneratorMaker;
 import org.openscience.cdk.hash.MoleculeHashGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.isomorphism.Score;
-import org.openscience.cdk.isomorphism.Scorer;
 import org.openscience.cdk.isomorphism.StructureUtil;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import uk.ac.ebi.mdk.apps.CommandLineMain;
@@ -48,7 +46,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
@@ -142,35 +139,46 @@ public class Align2Reference2 extends CommandLineMain {
                                                            .charged()
                                                            .chiral()
                                                            .perturbed()
+                                                           .molecular(); 
+        MoleculeHashGenerator g5 = new HashGeneratorMaker().depth(32)
+                                                           .suppressHydrogens()
+                                                           .elemental()
+                                                           .charged()
+                                                           .radical()
                                                            .molecular();
 
         Encoder encoder = new Encoder(FormulaHash.WithoutHydrogens,
                                       g1,
-                                      g2,
-                                      g3,
-                                      g4);
+                                      g5);
 
         Bin bin = new Bin(structures, encoder, 0, ids);
 
-        int ident = 0, aprx = 0, fp = 0, none = 0;
+        int ident = 0, aprx = 0, aprx_name = 0, aprx_xv_stereo = 0, aprx_xv = 0, fp = 0, none = 0;
 
         Set<Integer> sizes = new TreeSet<Integer>();
 
         File outRoot = new File("/Users/johnmay/Desktop/");
+
+        String prefix = query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "");
+
         File identFile = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-ident.csv");
-        File aprxFile  = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-aprx.csv");  // aproximate matches
-        File noneFile  = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-none.csv");
-        File fpFile    = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-fp.csv");    // false positives (hash)
+        File noneFile = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-none.csv");
+        File fpFile = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-fp.csv");    // false positives (hash)
 
         try {
             CSVWriter identCSV = new CSVWriter(new FileWriter(identFile), ',');
-            CSVWriter aprxCSV  = new CSVWriter(new FileWriter(aprxFile), ',');
-            CSVWriter noneCSV  = new CSVWriter(new FileWriter(noneFile), ',');
-            CSVWriter fpCSV    = new CSVWriter(new FileWriter(fpFile), ',');
+
+            CSVWriter aprxCSV_name = createWriter(outRoot, prefix + "-aprx+names.csv");
+            CSVWriter aprxCSV_vx = createWriter(outRoot, prefix + "-aprx+vx.csv");    // matching valence / connectivity
+            CSVWriter aprxCSV_vx_stereo = createWriter(outRoot, prefix + "-aprx+vx+stereo.csv");    // matching valence / connectivity + valid stereo
+            CSVWriter aprxCSV_other = createWriter(outRoot, prefix + "-aprx.csv");
+
+
+            CSVWriter noneCSV = new CSVWriter(new FileWriter(noneFile), ',');
+            CSVWriter fpCSV = new CSVWriter(new FileWriter(fpFile), ',');
 
             String[] header = new String[]{
                     "query-id",
-                    "sid",
                     "query-name",
                     "query-abrv",
                     "score",
@@ -184,7 +192,8 @@ public class Align2Reference2 extends CommandLineMain {
             };
 
             identCSV.writeNext(header);
-            aprxCSV.writeNext(header);
+            aprxCSV_name.writeNext(header);
+            aprxCSV_other.writeNext(header);
             fpCSV.writeNext(header);
 
             for (Metabolite queryM : query.metabolome()) {
@@ -193,6 +202,9 @@ public class Align2Reference2 extends CommandLineMain {
 
                 List<String[]> rows = new ArrayList<String[]>();
                 int i = 0;
+
+                Results results = new Results();
+
                 for (ChemicalStructure cs : queryM.getStructures()) {
                     i++;
                     Collection<Integer> matched = bin.find(cs.getStructure());
@@ -202,70 +214,101 @@ public class Align2Reference2 extends CommandLineMain {
                         IAtomContainer queryStructure = StructureUtil.suppressHydrogens(cs.getStructure());
                         if (neutralise)
                             StructureUtil.neutralise(queryStructure);
-
-                        Map<Score, Integer> scores = new TreeMap<Score, Integer>();
+//                        Map<Score, Integer> scores = new TreeMap<Score, Integer>();
                         for (Integer id : matched) {
                             IAtomContainer structure = StructureUtil.suppressHydrogens(structures.get(id));
                             if (neutralise)
                                 StructureUtil.neutralise(structure);
-                            Result result = new Result(queryM, metabolites.get(id), queryStructure, structure);
-                            scores.put(Scorer.score(queryStructure, structure), id);
-                        }
-
-                        List<Map.Entry<Score, Integer>> scoreList = new ArrayList<Map.Entry<Score, Integer>>(scores.entrySet());
-                        if (scoreList.get(0).getKey() == Score.MIN_VALUE) {
-                            hasFp = true;
-                            for (Map.Entry<Score, Integer> e : scoreList) {
-                                rows.add(toRow(i, e.getKey(), queryM, cs.getStructure(), metabolites.get(e.getValue()), structures.get(e.getValue())));
+                            try {
+                               results.add(new Result(queryM, metabolites.get(id), queryStructure, structure));
+                            } catch (Exception e) {
+                                System.out.println("could not score: " + smi(queryStructure) + " with " + smi(structure));
+                                e.printStackTrace();
                             }
+//                            scores.put(Scorer.score(queryStructure, structure), id);
                         }
-                        else if (scoreList.get(0).getKey().toDouble() == 1) {
-                            hasIdent = true;
-                            for (Map.Entry<Score, Integer> e : scoreList) {
-                                rows.add(toRow(i, e.getKey(), queryM, cs.getStructure(), metabolites.get(e.getValue()), structures.get(e.getValue())));
+//
+//                        List<Map.Entry<Score, Integer>> scoreList = new ArrayList<Map.Entry<Score, Integer>>(scores.entrySet());
+//                        if (scoreList.get(0).getKey() == Score.MIN_VALUE) {
+//                            hasFp = true;
+//                            for (Map.Entry<Score, Integer> e : scoreList) {
+//                                rows.add(toRow(i, e.getKey(), queryM, cs.getStructure(), metabolites.get(e.getValue()), structures.get(e.getValue())));
+//                            }
+//                        }
+//                        else if (scoreList.get(0).getKey().toDouble() == 1) {
+//                            hasIdent = true;
+//                            for (Map.Entry<Score, Integer> e : scoreList) {
+//                                rows.add(toRow(i, e.getKey(), queryM, cs.getStructure(), metabolites.get(e.getValue()), structures.get(e.getValue())));
+//                            }
+//                        }
+//                        else {
+//                            hasAprx = true;
+//                            for (Map.Entry<Score, Integer> e : scoreList) {
+//                                rows.add(toRow(i, e.getKey(), queryM, cs.getStructure(), metabolites.get(e.getValue()), structures.get(e.getValue())));
+//                            }
+//                        }
+                    }
+                    else {
+                        //rows.add(toRow(1, Score.MIN_VALUE, queryM, cs.getStructure(), null, null));
+                        results.add(new Result(queryM, null, cs.getStructure(), null));
+                    }
+                }
+
+                if (results.hasExactMatch()) {
+                    results.unique().ident().write(identCSV);
+                    ident++;
+                }
+                else if (results.hasAprxMatch()) {
+                    if (results.hasNameMatch()) {
+                        results.nameMatches().unique().write(aprxCSV_name);
+                        aprx_name++;
+                    }
+                    else {
+                        if (results.hasValidConn()) {
+                            results = results.validConnectMatches();
+                            if (results.hasValidStereo()) {
+                                aprx_xv_stereo++;
+                                results.validStereoMatches().unique().write(aprxCSV_vx_stereo);
+                            } else {
+                                aprx_xv++;
+                                results.unique().write(aprxCSV_vx);
                             }
                         }
                         else {
-                            hasAprx = true;
-                            for (Map.Entry<Score, Integer> e : scoreList) {
-                                rows.add(toRow(i, e.getKey(), queryM, cs.getStructure(), metabolites.get(e.getValue()), structures.get(e.getValue())));
-                            }
+                            aprx++;
+                            results.unique().write(aprxCSV_other);
                         }
                     }
-                    else {
-                        rows.add(toRow(1, Score.MIN_VALUE, queryM, cs.getStructure(), null, null));
-                    }
                 }
-                if (hasIdent) {
-                    for (String[] row : rows)
-                        identCSV.writeNext(row);
-                    ident++;
-                }
-                else if (hasAprx) {
-                    for (String[] row : rows)
-                        aprxCSV.writeNext(row);
-                    aprx++;
-                }
-                else if (hasFp) {
-                    fp++;
-                    for (String[] row : rows)
-                        fpCSV.writeNext(row);
-                }
-                else {
-                    none++;
-                    noneCSV.writeNext(toRow(1, Score.MIN_VALUE, queryM, null, null, null));
-                }
+
+//                if (hasIdent) {
+//                    for (String[] row : rows)
+//                        identCSV.writeNext(row);
+//                    ident++;
+//                }
+//                else if (hasAprx) {
+//                    for (String[] row : rows)
+//                        aprxCSV.writeNext(row);
+//                    aprx++;
+//                }
+//                else if (hasFp) {
+//                    fp++;
+//                    for (String[] row : rows)
+//                        fpCSV.writeNext(row);
+//                }
+//                else {
+//                    none++;
+//                    noneCSV.writeNext(toRow(1, Score.MIN_VALUE, queryM, null, null, null));
+//                }
             }
 
-            System.out.println("ident: " + ident + ", aprx:" + aprx + ", fp:" + fp + ", none:" + none);
-
-            System.out.println(identFile.toString());
-            System.out.println(aprxFile.toString());
-            System.out.println(fpFile.toString());
-            System.out.println(noneFile.toString());
+            System.out.println("ident: " + ident + ", aprx:" + aprx + ", aprx (name):" + aprx_name + ", aprx (xvs):" + aprx_xv_stereo + ", aprx (xv):" + aprx_xv + ", fp:" + fp + ", none:" + none);
 
             identCSV.close();
-            aprxCSV.close();
+            aprxCSV_name.close();
+            aprxCSV_vx_stereo.close();
+            aprxCSV_vx.close();
+            aprxCSV_other.close();
             fpCSV.close();
             noneCSV.close();
 
@@ -282,21 +325,8 @@ public class Align2Reference2 extends CommandLineMain {
 
     }
 
-    static String[] toRow(int id, Score score, Metabolite query, IAtomContainer queryAC, Metabolite target, IAtomContainer targetAC) {
-        return new String[]{
-                query.getIdentifier().toString(),
-                Integer.toString(id),
-                query.getName(),
-                query.getAbbreviation(),
-                Double.toString(score.toDouble()),
-                score.toString(),
-                target == null ? "" : target.getIdentifier().toString(),
-                target == null ? "" : target.getName(),
-                target == null ? "" : target.getAbbreviation(),
-                target == null ? "" : Boolean.toString(nameMatch(query.getName(), target.getName())),
-                queryAC == null ? "" : smi(queryAC),
-                targetAC == null ? "" : smi(targetAC),
-        };
+    static CSVWriter createWriter(File root, String path) throws IOException {
+        return new CSVWriter(new FileWriter(new File(root, path)), ',');
     }
 
     static boolean nameMatch(String a, String b) {
