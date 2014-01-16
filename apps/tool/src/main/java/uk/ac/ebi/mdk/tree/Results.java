@@ -25,6 +25,10 @@ final class Results {
     Results() {
         this(new ArrayList<Result>(5));
     }
+    
+    boolean isEmpty() {
+        return results.isEmpty();
+    }
 
     void add(Result result) {
         sorted = false;
@@ -70,10 +74,26 @@ final class Results {
         sort();
         return results.get(0).score().stereoMismatchScore() == 0;
     }
+    
+    boolean hasSingleUnspecCenter() {
+        for (Result result : results) {
+            if (result.hasOneUnspecCentre())
+                return true;
+        }
+        return false;
+    }
 
     void write(CSVWriter csv) {
         for (Result result : results)
             csv.writeNext(result.toRow());
+    }
+    
+    Results singleUnspecCenter() {
+        return new Results(new ArrayList<Result>(Collections2.filter(results, new Predicate<Result>() {
+            @Override public boolean apply(Result result) {
+                return result.hasOneUnspecCentre();
+            }
+        })));
     }
 
     Results validStereoMatches() {

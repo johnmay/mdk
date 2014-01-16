@@ -139,7 +139,7 @@ public class Align2Reference2 extends CommandLineMain {
                                                            .charged()
                                                            .chiral()
                                                            .perturbed()
-                                                           .molecular(); 
+                                                           .molecular();
         MoleculeHashGenerator g5 = new HashGeneratorMaker().depth(32)
                                                            .suppressHydrogens()
                                                            .elemental()
@@ -153,7 +153,7 @@ public class Align2Reference2 extends CommandLineMain {
 
         Bin bin = new Bin(structures, encoder, 0, ids);
 
-        int ident = 0, aprx = 0, aprx_name = 0, aprx_xv_stereo = 0, aprx_xv = 0, fp = 0, none = 0;
+        int ident = 0, aprx = 0, aprx_name = 0, aprx_name_unspec = 0, aprx_xv_stereo = 0, aprx_xv_stereo_unspec = 0, aprx_xv = 0, fp = 0, none = 0;
 
         Set<Integer> sizes = new TreeSet<Integer>();
 
@@ -169,10 +169,11 @@ public class Align2Reference2 extends CommandLineMain {
             CSVWriter identCSV = new CSVWriter(new FileWriter(identFile), ',');
 
             CSVWriter aprxCSV_name = createWriter(outRoot, prefix + "-aprx+names.csv");
+            CSVWriter aprxCSV_name_unspec = createWriter(outRoot, prefix + "-aprx+names+unspec.csv");
             CSVWriter aprxCSV_vx = createWriter(outRoot, prefix + "-aprx+vx.csv");    // matching valence / connectivity
             CSVWriter aprxCSV_vx_stereo = createWriter(outRoot, prefix + "-aprx+vx+stereo.csv");    // matching valence / connectivity + valid stereo
+            CSVWriter aprxCSV_vx_stereo_unspec = createWriter(outRoot, prefix + "-aprx+vx+stereo+unspec.csv");    // matching valence / connectivity + valid stereo
             CSVWriter aprxCSV_other = createWriter(outRoot, prefix + "-aprx.csv");
-
 
             CSVWriter noneCSV = new CSVWriter(new FileWriter(noneFile), ',');
             CSVWriter fpCSV = new CSVWriter(new FileWriter(fpFile), ',');
@@ -193,7 +194,11 @@ public class Align2Reference2 extends CommandLineMain {
 
             identCSV.writeNext(header);
             aprxCSV_name.writeNext(header);
+            aprxCSV_name_unspec.writeNext(header);
             aprxCSV_other.writeNext(header);
+            aprxCSV_vx.writeNext(header);
+            aprxCSV_vx_stereo.writeNext(header);
+            aprxCSV_vx_stereo_unspec.writeNext(header);
             fpCSV.writeNext(header);
 
             for (Metabolite queryM : query.metabolome()) {
@@ -220,36 +225,14 @@ public class Align2Reference2 extends CommandLineMain {
                             if (neutralise)
                                 StructureUtil.neutralise(structure);
                             try {
-                               results.add(new Result(queryM, metabolites.get(id), queryStructure, structure));
+                                results.add(new Result(queryM, metabolites.get(id), queryStructure, structure));
                             } catch (Exception e) {
                                 System.out.println("could not score: " + smi(queryStructure) + " with " + smi(structure));
                                 e.printStackTrace();
                             }
-//                            scores.put(Scorer.score(queryStructure, structure), id);
                         }
-//
-//                        List<Map.Entry<Score, Integer>> scoreList = new ArrayList<Map.Entry<Score, Integer>>(scores.entrySet());
-//                        if (scoreList.get(0).getKey() == Score.MIN_VALUE) {
-//                            hasFp = true;
-//                            for (Map.Entry<Score, Integer> e : scoreList) {
-//                                rows.add(toRow(i, e.getKey(), queryM, cs.getStructure(), metabolites.get(e.getValue()), structures.get(e.getValue())));
-//                            }
-//                        }
-//                        else if (scoreList.get(0).getKey().toDouble() == 1) {
-//                            hasIdent = true;
-//                            for (Map.Entry<Score, Integer> e : scoreList) {
-//                                rows.add(toRow(i, e.getKey(), queryM, cs.getStructure(), metabolites.get(e.getValue()), structures.get(e.getValue())));
-//                            }
-//                        }
-//                        else {
-//                            hasAprx = true;
-//                            for (Map.Entry<Score, Integer> e : scoreList) {
-//                                rows.add(toRow(i, e.getKey(), queryM, cs.getStructure(), metabolites.get(e.getValue()), structures.get(e.getValue())));
-//                            }
-//                        }
                     }
                     else {
-                        //rows.add(toRow(1, Score.MIN_VALUE, queryM, cs.getStructure(), null, null));
                         results.add(new Result(queryM, null, cs.getStructure(), null));
                     }
                 }
@@ -260,16 +243,29 @@ public class Align2Reference2 extends CommandLineMain {
                 }
                 else if (results.hasAprxMatch()) {
                     if (results.hasNameMatch()) {
-                        results.nameMatches().unique().write(aprxCSV_name);
-                        aprx_name++;
+                        if (results.hasSingleUnspecCenter()) {
+                            results.singleUnspecCenter().unique().write(aprxCSV_name_unspec);
+                            aprx_name_unspec++;
+                        }
+                        else {
+                            results.nameMatches().unique().write(aprxCSV_name);
+                            aprx_name++;
+                        }
                     }
                     else {
                         if (results.hasValidConn()) {
                             results = results.validConnectMatches();
                             if (results.hasValidStereo()) {
-                                aprx_xv_stereo++;
-                                results.validStereoMatches().unique().write(aprxCSV_vx_stereo);
-                            } else {
+                                if (results.hasSingleUnspecCenter()) {
+                                    results.singleUnspecCenter().unique().write(aprxCSV_vx_stereo_unspec);
+                                    aprx_xv_stereo_unspec++;
+                                }
+                                else {
+                                    aprx_xv_stereo++;
+                                    results.validStereoMatches().unique().write(aprxCSV_vx_stereo);
+                                }
+                            }
+                            else {
                                 aprx_xv++;
                                 results.unique().write(aprxCSV_vx);
                             }
@@ -279,30 +275,15 @@ public class Align2Reference2 extends CommandLineMain {
                             results.unique().write(aprxCSV_other);
                         }
                     }
+                } else {
+                    if (results.isEmpty())
+                        results.add(new Result(queryM, null, null, null));
+                    results.unique().write(noneCSV);
+                    none++;
                 }
-
-//                if (hasIdent) {
-//                    for (String[] row : rows)
-//                        identCSV.writeNext(row);
-//                    ident++;
-//                }
-//                else if (hasAprx) {
-//                    for (String[] row : rows)
-//                        aprxCSV.writeNext(row);
-//                    aprx++;
-//                }
-//                else if (hasFp) {
-//                    fp++;
-//                    for (String[] row : rows)
-//                        fpCSV.writeNext(row);
-//                }
-//                else {
-//                    none++;
-//                    noneCSV.writeNext(toRow(1, Score.MIN_VALUE, queryM, null, null, null));
-//                }
             }
 
-            System.out.println("ident: " + ident + ", aprx:" + aprx + ", aprx (name):" + aprx_name + ", aprx (xvs):" + aprx_xv_stereo + ", aprx (xv):" + aprx_xv + ", fp:" + fp + ", none:" + none);
+            System.out.println("ident: " + ident + ", aprx:" + aprx + ", aprx (name):" + aprx_name + ", aprx (name+1unspec):" + aprx_name_unspec + ", aprx(vxs+unspec) " + aprx_xv_stereo_unspec + ", aprx (xvs):" + aprx_xv_stereo + ", aprx (xv):" + aprx_xv + ", fp:" + fp + ", none:" + none);
 
             identCSV.close();
             aprxCSV_name.close();

@@ -22,27 +22,39 @@ package org.openscience.cdk.isomorphism;
  * target.
  */
 public enum StereoCompatibility {
-    SameTetrahedralConfig(Type.Same),
-    UnspecifiedTetrahedralInQuery(Type.Unspecified),
-    UnspecifiedTetrahedralInTarget(Type.Unspecified),
-    DifferentTetrahedralConfig(Type.Different),
-    SameGeometricConfig(Type.Same),
-    UnspecifiedGeometricInQuery(Type.Unspecified),
-    UnspecifiedGeometricInTarget(Type.Unspecified),
-    DifferentGeometricConfig(Type.Different),
-    None(Type.None);
+    SameTetrahedralConfig(Type.Tetrahedral, State.Same),
+    UnspecifiedTetrahedralInQuery(Type.Tetrahedral,State.Unspecified),
+    UnspecifiedTetrahedralInTarget(Type.Tetrahedral,State.Unspecified),
+    DifferentTetrahedralConfig(Type.Tetrahedral,State.Different),
+    SameGeometricConfig(Type.Geometric, State.Same),
+    UnspecifiedGeometricInQuery(Type.Geometric, State.Unspecified),
+    UnspecifiedGeometricInTarget(Type.Geometric, State.Unspecified),
+    DifferentGeometricConfig(Type.Geometric, State.Different),
+    None(Type.None, State.None);
 
-    private final Type type;
+    private final Type  type;
+    private final State state;
 
-    private StereoCompatibility(Type type) {
+    private StereoCompatibility(Type type, State state) {
         this.type = type;
+        this.state = state;
     }
 
-    Type type() {
+    public State state() {
+        return state;
+    }
+
+    public Type type() {
         return type;
     }
 
-    static enum Type {
+    public static enum Type {
+        Tetrahedral,
+        Geometric,
+        None
+    }
+
+    public static enum State {
         Same,
         Different,
         Unspecified,

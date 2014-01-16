@@ -4,6 +4,7 @@ import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.isomorphism.Score;
 import org.openscience.cdk.isomorphism.Scorer;
+import org.openscience.cdk.isomorphism.StereoCompatibility;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import uk.ac.ebi.mdk.domain.annotation.Synonym;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
@@ -33,6 +34,26 @@ final class Result implements Comparable<Result> {
     
     boolean hasUndefStereo() {
         return score.stereoMatchScore() < 1;
+    }
+    
+    boolean hasOneUnspecCentre() {
+        StereoCompatibility[] compatibilities = score.compatibilities();
+        int count = 0;
+        for (int i = 0; i < compatibilities.length; i++) {
+            StereoCompatibility compatibility = compatibilities[i];
+            if (compatibility.state() == StereoCompatibility.State.Different) {
+                return false;
+            }
+            if (compatibility.state() == StereoCompatibility.State.Unspecified) {
+                if (compatibility.type() == StereoCompatibility.Type.Geometric)
+                    return false;
+                if (compatibility.type() == StereoCompatibility.Type.Tetrahedral)
+                    count++;
+                if (count > 1)
+                    return false;
+            }
+        }
+        return count == 1;
     }
     
     Metabolite query() {

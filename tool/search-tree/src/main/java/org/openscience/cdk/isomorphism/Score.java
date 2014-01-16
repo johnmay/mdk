@@ -78,6 +78,8 @@ public class Score implements Comparable<Score> {
     }
 
     public StereoCompatibility[] compatibilities() {
+        if (target == null)
+            return new StereoCompatibility[0];
         return new StereoScoring(query, target).compatibility(mapping);
     }
 
