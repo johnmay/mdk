@@ -156,8 +156,12 @@ final class StereoScoring {
             int v = mapping[u];
 
             if (queryTypes[u] == null) {
-                if (targetTypes[v] != null)
-                    compatibility[u] = StereoCompatibility.Missing;
+                if (targetTypes[v] != null) {
+                    if (targetTypes[v] == Type.Tetrahedral)
+                        compatibility[u] = StereoCompatibility.UnspecifiedTetrahedralInQuery;
+                    else if(targetTypes[v] == Type.Geometric)
+                        compatibility[u] = StereoCompatibility.UnspecifiedGeometricInQuery;
+                }
                 continue;
             }
 
@@ -165,22 +169,24 @@ final class StereoScoring {
                 case Tetrahedral:
 
                     if (targetTypes[v] == null) {
-                        compatibility[u] = StereoCompatibility.Missing;
+                        compatibility[u] = StereoCompatibility.UnspecifiedTetrahedralInQuery;
                         continue;
                     }
 
                     int match = checkTetrahedral(u, mapping);
                     if (match > 0) {
-                        compatibility[u] = StereoCompatibility.Matched;
+                        compatibility[u] = StereoCompatibility.SameTetrahedralConfig;
                     }
                     else if (match < 0) {
-                        compatibility[u] = StereoCompatibility.Mismatched;
+                        compatibility[u] = StereoCompatibility.DifferentTetrahedralConfig;
+                    } else {
+                        compatibility[u] = StereoCompatibility.UnspecifiedTetrahedralInTarget;
                     }
                     break;
                 case Geometric:
 
                     if (targetTypes[v] == null || targetTypes[mapping[otherIndex(u)]] == null) {
-                        compatibility[u] = StereoCompatibility.Missing;
+                        compatibility[u] = StereoCompatibility.UnspecifiedGeometricInTarget;
                         continue;
                     }
                     
@@ -189,15 +195,15 @@ final class StereoScoring {
 
                     match = checkGeometric(u, otherIndex(u), mapping);
                     if (match > 0) {
-                        compatibility[u] = StereoCompatibility.Matched;
-                        compatibility[otherIndex(u)] = StereoCompatibility.Matched;
+                        compatibility[u] = StereoCompatibility.SameGeometricConfig;
+                        compatibility[otherIndex(u)] = StereoCompatibility.SameGeometricConfig;
                     }
                     else if (match < 0) {
-                        compatibility[u] = StereoCompatibility.Mismatched;
-                        compatibility[otherIndex(u)] = StereoCompatibility.Mismatched;
+                        compatibility[u] = StereoCompatibility.DifferentGeometricConfig;
+                        compatibility[otherIndex(u)] = StereoCompatibility.DifferentGeometricConfig;
                     } else {
-                        compatibility[u] = StereoCompatibility.Missing;
-                        compatibility[otherIndex(u)] = StereoCompatibility.Missing;    
+                        compatibility[u] = StereoCompatibility.UnspecifiedGeometricInTarget;
+                        compatibility[otherIndex(u)] = StereoCompatibility.UnspecifiedGeometricInTarget;    
                     }
 
                     break;

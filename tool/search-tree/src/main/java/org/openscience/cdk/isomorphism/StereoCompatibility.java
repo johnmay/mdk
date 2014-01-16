@@ -17,9 +17,35 @@
 
 package org.openscience.cdk.isomorphism;
 
+/**
+ * Determines how well the stereochemistry matched / mismatched in the query and
+ * target.
+ */
 public enum StereoCompatibility {
-        Matched,
-        Missing,
-        Mismatched,
+    SameTetrahedralConfig(Type.Same),
+    UnspecifiedTetrahedralInQuery(Type.Unspecified),
+    UnspecifiedTetrahedralInTarget(Type.Unspecified),
+    DifferentTetrahedralConfig(Type.Different),
+    SameGeometricConfig(Type.Same),
+    UnspecifiedGeometricInQuery(Type.Unspecified),
+    UnspecifiedGeometricInTarget(Type.Unspecified),
+    DifferentGeometricConfig(Type.Different),
+    None(Type.None);
+
+    private final Type type;
+
+    private StereoCompatibility(Type type) {
+        this.type = type;
+    }
+
+    Type type() {
+        return type;
+    }
+
+    static enum Type {
+        Same,
+        Different,
+        Unspecified,
         None
     }
+}
