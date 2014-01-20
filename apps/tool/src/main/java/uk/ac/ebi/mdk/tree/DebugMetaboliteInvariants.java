@@ -20,6 +20,7 @@ package uk.ac.ebi.mdk.tree;
 import org.openscience.cdk.hash.HashGeneratorMaker;
 import org.openscience.cdk.hash.MoleculeHashGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.isomorphism.Scorer;
 import org.openscience.cdk.smiles.SmilesGenerator;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
@@ -39,10 +40,13 @@ public class DebugMetaboliteInvariants {
         Reconstruction model = ReconstructionIOHelper.read(new File("/Users/johnmay/models/metingear/iJR904-structured-2013.mr"));
         Reconstruction refdb = ReconstructionIOHelper.read(new File("/Users/johnmay/models/reference-db/MetaCyc-16.mr"));
 
-        Metabolite query  = model.metabolome().ofName("D-glucuronate").iterator().next();
-        Metabolite target = refdb.metabolome().ofName("β-D-glucuronate").iterator().next();
+        Metabolite query  = model.metabolome().ofName("Heme O").iterator().next();
+        Metabolite target = refdb.metabolome().ofName("heme o").iterator().next();
 
         System.out.println(query + " -> " + refdb);
+        
+        if (target.getStructures().isEmpty())
+            System.out.println("target had no structures");
 
 
         MoleculeHashGenerator g1 = new HashGeneratorMaker().depth(4)
@@ -85,6 +89,7 @@ public class DebugMetaboliteInvariants {
                 for (int lvl = 0; lvl < encoder.levels(); lvl++) {
                     System.out.println(lvl + ": " + toPrettyHex(encoder.generate(qAc, lvl)) + " == " + toPrettyHex(encoder.generate(tAc, lvl)));
                 }
+                System.out.println(Scorer.score(qAc, tAc));
             }
         }
 

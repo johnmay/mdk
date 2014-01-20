@@ -21,7 +21,7 @@ final class Result implements Comparable<Result> {
         this.t     = t;
         this.qAc   = qAc;
         this.tAc   = tAc;
-        this.score = t != null ? Scorer.score(qAc, tAc) : Score.MIN_VALUE;
+        this.score = qAc != null && tAc != null ? Scorer.score(qAc, tAc) : Score.MIN_VALUE;
     }
     
     boolean hasWrongStereo() {

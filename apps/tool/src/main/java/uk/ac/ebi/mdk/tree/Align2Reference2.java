@@ -165,6 +165,8 @@ public class Align2Reference2 extends CommandLineMain {
         File noneFile = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-none.csv");
         File fpFile = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-fp.csv");    // false positives (hash)
 
+        MetaboliteNameIndex nameIndex = new MetaboliteNameIndex(reference, true);
+        
         try {
             CSVWriter identCSV = new CSVWriter(new FileWriter(identFile), ',');
 
@@ -276,6 +278,9 @@ public class Align2Reference2 extends CommandLineMain {
                         }
                     }
                 } else {
+                    for (Metabolite target : nameIndex.ofName(queryM.getName())) {
+                        results.add(new Result(queryM, target, null, null));
+                    }
                     if (results.isEmpty())
                         results.add(new Result(queryM, null, null, null));
                     results.unique().write(noneCSV);
