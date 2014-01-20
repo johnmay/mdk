@@ -96,16 +96,36 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
     private DefaultAnnotationFactory() {
 
         for (Annotation annotation : Arrays.asList(
-            new AtomContainerAnnotation(), new MolecularFormula(),
-            new AuthorAnnotation(), new CrossReference(), new Classification(),
-            new EnzymeClassification(), new ChEBICrossReference(),
-            new KEGGCrossReference(), new Subsystem(),
-            new ExecutableParameter(), new FileParameter(), new Parameter(),
-            new Synonym(), new SystematicName(), new Locus(), new Citation(),
-            new FluxLowerBound(), new FluxUpperBound(), new Source(),
-            new ExactMass(), new SMILES(), new InChI(), new Charge(),
-            new GibbsEnergy(), new Note(), Lumped.getInstance(),
-            ACPAssociated.getInstance(), new RExExtract(), new PrimaryName()
+                new AtomContainerAnnotation(),
+                new MolecularFormula(),
+                new AuthorAnnotation(), 
+                new CrossReference(),
+                new Classification(),
+                new EnzymeClassification(), 
+                new ChEBICrossReference(),
+                new KEGGCrossReference(), 
+                new Subsystem(),
+                new ExecutableParameter(),
+                new FileParameter(),
+                new Parameter(),
+                new Synonym(),
+                new SystematicName(),
+                new Locus(),
+                new Citation(),
+                new FluxLowerBound(),
+                new FluxUpperBound(),
+                new Source(),
+                new ExactMass(),
+                new SMILES(),
+                new InChI(),
+                new Molfile(),
+                new Charge(),
+                new GibbsEnergy(),
+                new Note(),
+                Lumped.getInstance(),
+                ACPAssociated.getInstance(),
+                new RExExtract(),
+                new PrimaryName()
             )) {
 
             instances.put(annotation.getClass(), annotation);
