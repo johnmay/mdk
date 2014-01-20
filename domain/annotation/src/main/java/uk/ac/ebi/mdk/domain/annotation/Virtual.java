@@ -28,7 +28,7 @@ import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 
 /**
- * Lumped - 20.03.2012 <br/>
+ * Virtual - 20.03.2012 <br/>
  * <p/>
  * Serves to mark metabolites that are lumped/average composition and not 'real' entities
  *
@@ -38,25 +38,25 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
  */
 @Unique
 @Context(value = {Metabolite.class, MetabolicReaction.class})
-@Brief("Lumped")
+@Brief("Virtual")
 @Description("Indicate that a metabolite or reactions is not a discrete entity and rather it is " +
                      "an average of many entities. It is common practise to include such metabolites" +
                      "as DNA/RNA/Fatty Acid Composition in biomass reactions")
 
-public class Lumped extends AbstractAnnotation
+public class Virtual extends AbstractAnnotation
         implements Flag {
 
     // the number of atom's at which a metabolite "may" be lumped
     private static final int LUMPED_THRESHOLD = 500;
 
-    private Lumped() {
+    private Virtual() {
     }
 
     private static class LumpedHolder {
-        private static Lumped INSTANCE = new Lumped();
+        private static Virtual INSTANCE = new Virtual();
     }
 
-    public static Lumped getInstance() {
+    public static Virtual getInstance() {
         return LumpedHolder.INSTANCE;
     }
 
@@ -94,7 +94,7 @@ public class Lumped extends AbstractAnnotation
     }
 
     @Override
-    public Lumped newInstance() {
+    public Virtual newInstance() {
         return LumpedHolder.INSTANCE;
     }
 }
