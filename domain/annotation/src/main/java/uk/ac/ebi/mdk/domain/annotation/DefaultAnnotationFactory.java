@@ -105,7 +105,8 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
             new FluxLowerBound(), new FluxUpperBound(), new Source(),
             new ExactMass(), new SMILES(), new InChI(), new Charge(),
             new GibbsEnergy(), new Note(), Lumped.getInstance(),
-            ACPAssociated.getInstance(), new RExExtract())) {
+            ACPAssociated.getInstance(), new RExExtract(), new PrimaryName()
+            )) {
 
             instances.put(annotation.getClass(), annotation);
 

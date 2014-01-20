@@ -20,44 +20,39 @@ package uk.ac.ebi.mdk.domain.annotation;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractStringAnnotation;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
-import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.lang.annotation.Description;
+import uk.ac.ebi.mdk.lang.annotation.Unique;
 
 
 /**
- * SynonymAnnotation - 2011.10.24 <br>
- * An annotation of a synonym/alternate name
+ * The primary name for an annotation.
  *
  * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$ : Last Changed $Date$
  */
 @Context
-@Brief("Synonym")
+@Brief("Primary Name")
 @Description("An alternative name for this entity")
-public class Synonym extends AbstractStringAnnotation implements Name {
+@Unique
+public class PrimaryName extends AbstractStringAnnotation implements Name {
 
-    private static final Logger LOGGER = Logger.getLogger(Synonym.class);
-
-
-    public Synonym() {
+    public PrimaryName() {
     }
 
-
-    public Synonym(String synonym) {
-        super(synonym);
+    public PrimaryName(String name) {
+        super(name);
     }
 
     @Override public String name() {
         return getValue();
     }
 
-    public Synonym newInstance() {
-        return new Synonym();
+    public PrimaryName newInstance() {
+        return new PrimaryName();
     }
 
 
-    public Synonym getInstance(String synonym) {
-        return new Synonym(synonym);
+    public PrimaryName getInstance(String synonym) {
+        return new PrimaryName(synonym);
     }
 }

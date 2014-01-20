@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013. EMBL, European Bioinformatics Institute
+ * Copyright (c) 2014. EMBL, European Bioinformatics Institute
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,32 +17,18 @@
 
 package uk.ac.ebi.mdk.domain.annotation;
 
-import uk.ac.ebi.mdk.lang.annotation.Brief;
-import uk.ac.ebi.mdk.lang.annotation.Context;
-import uk.ac.ebi.mdk.lang.annotation.Description;
-
 /**
+ * Defines an annotation that holds a name of an entity.
+ *
  * @author John May
  */
-@Context
-@Brief("Systematic Name")
-@Description("A systematic name for an entity")
-public class SystematicName extends Synonym implements Name {
+public interface Name {
 
-    public SystematicName() {
-    }
+    /**
+     * Access the name of the entity held by this annotation.
+     * 
+     * @return the entity name
+     */
+    String name();
 
-    public SystematicName(String name) {
-        super(name);
-    }
-
-    @Override
-    public SystematicName newInstance() {
-        return new SystematicName();
-    }
-
-    @Override
-    public SystematicName getInstance(String name) {
-        return new SystematicName(name);
-    }
 }
