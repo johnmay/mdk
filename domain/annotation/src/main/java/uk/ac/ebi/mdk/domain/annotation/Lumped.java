@@ -43,20 +43,20 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
                      "an average of many entities. It is common practise to include such metabolites" +
                      "as DNA/RNA/Fatty Acid Composition in biomass reactions")
 
-public class Virtual extends AbstractAnnotation
+public class Lumped extends AbstractAnnotation
         implements Flag {
 
     // the number of atom's at which a metabolite "may" be lumped
     private static final int LUMPED_THRESHOLD = 500;
 
-    private Virtual() {
+    private Lumped() {
     }
 
     private static class LumpedHolder {
-        private static Virtual INSTANCE = new Virtual();
+        private static Lumped INSTANCE = new Lumped();
     }
 
-    public static Virtual getInstance() {
+    public static Lumped getInstance() {
         return LumpedHolder.INSTANCE;
     }
 
@@ -94,7 +94,7 @@ public class Virtual extends AbstractAnnotation
     }
 
     @Override
-    public Virtual newInstance() {
+    public Lumped newInstance() {
         return LumpedHolder.INSTANCE;
     }
 }

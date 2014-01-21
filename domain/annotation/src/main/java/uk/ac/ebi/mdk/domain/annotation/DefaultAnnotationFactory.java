@@ -122,7 +122,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
                 new Charge(),
                 new GibbsEnergy(),
                 new Note(),
-                Virtual.getInstance(),
+                Lumped.getInstance(),
                 ACPAssociated.getInstance(),
                 new RExExtract(),
                 new PrimaryName()
