@@ -57,4 +57,8 @@ public final class MatchedEntity extends AbstractObservation {
     @Override public MatchedEntity getInstance() {
         return new MatchedEntity(null, null);
     }
+
+    @Override public String toString() {
+        return entityId.toString() + " (" + reconId.getAccession() + ")";
+    }
 }
