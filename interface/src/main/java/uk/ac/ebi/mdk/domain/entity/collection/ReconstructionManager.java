@@ -18,13 +18,14 @@
 package uk.ac.ebi.mdk.domain.entity.collection;
 
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Manage reconstructions.
+ *
  * @author johnmay
  */
 public interface ReconstructionManager {
@@ -33,19 +34,22 @@ public interface ReconstructionManager {
 
     /**
      * Is the manager empty?
+     *
      * @return whether there are no reconstructions present
      */
     public boolean isEmpty();
 
     /**
      * The active reconstruction, or null if no reconstruction is active
+     *
      * @return the active reconstruction
      */
     public Reconstruction active();
 
     /**
-     * Activate the provided reconstruction, if no reconstruction is provided
-     * it is added to the list of reconstructions.
+     * Activate the provided reconstruction, if no reconstruction is provided it
+     * is added to the list of reconstructions.
+     *
      * @param reconstruction a reconstruction to activate
      */
     public void activate(Reconstruction reconstruction);
@@ -53,15 +57,24 @@ public interface ReconstructionManager {
     /**
      * Add a reconstruction without making it the active project
      *
-     * @param reconstruction  the reconstruction to add
+     * @param reconstruction the reconstruction to add
      */
     public void add(Reconstruction reconstruction);
 
+    /**
+     * Get the first reconstruction with the specified identifier. If no
+     * reconstruction is found null is returned.
+     *
+     * @param identifier recon id
+     * @return a loaded recon that had the provided identifier
+     */
+    public Reconstruction get(Identifier identifier);
 
     public boolean remove(Reconstruction reconstruction);
 
     /**
      * Recently opened/saved reconstructions specified by their system path
+     *
      * @return list of paths
      */
     public List<String> recent();

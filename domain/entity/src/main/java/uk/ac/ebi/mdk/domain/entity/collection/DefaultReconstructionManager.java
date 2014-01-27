@@ -20,6 +20,7 @@ package uk.ac.ebi.mdk.domain.entity.collection;
 import uk.ac.ebi.caf.utility.preference.type.ListPreference;
 import uk.ac.ebi.mdk.domain.DomainPreferences;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -88,6 +89,15 @@ public class DefaultReconstructionManager implements ReconstructionManager {
 
     public boolean isEmpty() {
         return reconstructions.isEmpty();
+    }
+
+    @Override public Reconstruction get(Identifier identifier) {
+        for (Reconstruction recon : reconstructions()) {
+            if (recon.getIdentifier().equals(identifier)) {
+                return recon;
+            }
+        }
+        return null;
     }
 
     @Override
