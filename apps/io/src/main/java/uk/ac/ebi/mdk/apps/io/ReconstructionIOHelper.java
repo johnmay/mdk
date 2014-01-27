@@ -135,8 +135,6 @@ public class ReconstructionIOHelper {
                                                                annotationOutput,
                                                                observationOutput);
 
-        System.out.println(version);
-
         long start = System.currentTimeMillis();
         entityOutput.write(reconstruction);
         long end = System.currentTimeMillis();

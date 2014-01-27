@@ -236,11 +236,6 @@ public class Align2Reference2 extends CommandLineMain {
                     }
                 }
                 
-                String name = query.getContainer().getPath();
-                String base = name.substring(0, name.lastIndexOf('.'));
-                System.out.println("Writing... " + base + "-matched.mr");
-                ReconstructionIOHelper.write(query, new File(base + "-matched.mr"));
-                
 
 //                if (results.hasExactMatch()) {
 //                    results = results.unique().ident();
@@ -300,6 +295,11 @@ public class Align2Reference2 extends CommandLineMain {
 //                }
             }
 
+            String name = query.getContainer().getPath();
+            String base = name.substring(0, name.lastIndexOf('.'));
+            System.out.println("Writing... " + base + "-matched.mr");
+            ReconstructionIOHelper.write(query, new File(base + "-matched.mr"));
+            
             System.out.println(counter);
 
             System.out.println("ident: " + ident + ", aprx:" + aprx + ", aprx (name):" + aprx_name + ", aprx (name+1unspec):" + aprx_name_unspec + ", aprx(vxs+unspec) " + aprx_xv_stereo_unspec + ", aprx (xvs):" + aprx_xv_stereo + ", aprx (xv):" + aprx_xv + ", fp:" + fp + ", none:" + none);
