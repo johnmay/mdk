@@ -24,6 +24,8 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.AWTFontManager;
+import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
+import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.HighlightGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
@@ -73,9 +75,9 @@ public class MoleculeRenderer {
         renderer = new AtomContainerRenderer(generators, new AWTFontManager());
         model = renderer.getRenderer2DModel();
         model.set(HighlightGenerator.HighlightPalette.class,
-                  HighlightGenerator.createPalette(new Color(0x67FF62),
-                                                   new Color(0xFFA762),
-                                                   new Color(0xFF4D5C)));
+                  HighlightGenerator.createPalette(new Color(0xBB67FF62, true),
+                                                   new Color(0xBB4C8BFF, true),
+                                                   new Color(0xBBFF2A2F, true)));
         model.set(HighlightGenerator.HighlightRadius.class,
                   8d);
         sdg.setUseTemplates(false); // templates currently too slow
