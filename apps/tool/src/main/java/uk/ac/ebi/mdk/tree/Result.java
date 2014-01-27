@@ -17,26 +17,30 @@ final class Result implements Comparable<Result> {
     private final Score score;
 
     Result(Metabolite q, Metabolite t, IAtomContainer qAc, IAtomContainer tAc) {
-        this.q     = q;
-        this.t     = t;
-        this.qAc   = qAc;
-        this.tAc   = tAc;
+        this.q = q;
+        this.t = t;
+        this.qAc = qAc;
+        this.tAc = tAc;
         this.score = qAc != null && tAc != null ? Scorer.score(qAc, tAc) : Score.MIN_VALUE;
     }
-    
+
     boolean hasWrongStereo() {
         return score.stereoMismatchScore() > 0;
     }
-    
+
     boolean hasNameMatch() {
         return t != null && (nameMatch(q.getName(), t.getName()) || synonymMatch());
     }
-    
-    boolean hasUndefStereo() {
+
+    boolean hasMissingStereo() {
+        if (score.valenceScore() < 1 || score.connectivityScore() < 1)
+            return false;
         return score.stereoMatchScore() < 1;
     }
-    
+
     boolean hasOneUnspecCentre() {
+        if (score.valenceScore() < 1 || score.connectivityScore() < 1)
+            return false;
         StereoCompatibility[] compatibilities = score.compatibilities();
         int count = 0;
         for (int i = 0; i < compatibilities.length; i++) {
@@ -56,28 +60,44 @@ final class Result implements Comparable<Result> {
         return count == 1;
     }
     
+    int unspecType() {
+        
+        StereoCompatibility[] compatibilities = score.compatibilities();
+        int count = 0;
+        for (int i = 0; i < compatibilities.length; i++) {
+            StereoCompatibility compatibility = compatibilities[i];
+            if (compatibility.state() == StereoCompatibility.State.Different) {
+                return 0;
+            }
+            if (compatibility == StereoCompatibility.UnspecifiedTetrahedralInQuery)
+                return -1;
+            else if (compatibility == StereoCompatibility.UnspecifiedGeometricInTarget)
+                return +1;            
+        }
+        return 0;
+    }
+
     Metabolite query() {
         return q;
     }
-    
+
     Metabolite target() {
         return t;
     }
-    
+
     Score score() {
         return score;
     }
-    
-    String[] toRow() {
+
+    String[] toRow(Results.Classificiation classificiation) {
         return new String[]{
                 q.getIdentifier().toString(),
                 q.getName(),
-                q.getAbbreviation(),
+                classificiation.toString(),
                 Double.toString(score.toDouble()),
                 score.toString(),
                 t == null ? "" : t.getIdentifier().toString(),
                 t == null ? "" : t.getName(),
-                t == null ? "" : t.getAnnotationsExtending(Synonym.class).toString(),
                 t == null ? "" : Boolean.toString(synonymMatch()),
                 t == null ? "" : Boolean.toString(nameMatch(q.getName(), t.getName())),
                 qAc == null ? "" : smi(qAc),
@@ -98,7 +118,7 @@ final class Result implements Comparable<Result> {
         b = b.toLowerCase().replaceAll("[- ,(){}\\[\\]]", "");
         return a.equals(b);
     }
-    
+
     boolean synonymMatch() {
         String name = q.getName();
         for (Synonym synonym : t.getAnnotations(Synonym.class)) {

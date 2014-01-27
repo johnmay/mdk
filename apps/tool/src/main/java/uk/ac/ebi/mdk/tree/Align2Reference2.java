@@ -19,6 +19,7 @@ package uk.ac.ebi.mdk.tree;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import org.apache.commons.cli.Option;
+import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.hash.HashGeneratorMaker;
@@ -38,9 +39,11 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -161,59 +164,41 @@ public class Align2Reference2 extends CommandLineMain {
 
         String prefix = query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "");
 
-        File identFile = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-ident.csv");
-        File noneFile = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-none.csv");
-        File fpFile = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + "-fp.csv");    // false positives (hash)
+        File output = new File(outRoot, query.getIdentifier() + "-" + reference.getIdentifier() + (neutralise ? "-neu" : "") + ".csv");
 
         MetaboliteNameIndex nameIndex = new MetaboliteNameIndex(reference, true);
+
+        Map<Results.Classificiation, MutableInt> counter = new HashMap<Results.Classificiation, MutableInt>();
+        for (Results.Classificiation classificiation : Results.Classificiation.values()) {
+            counter.put(classificiation, new MutableInt(0));
+        }
         
         try {
-            CSVWriter identCSV = new CSVWriter(new FileWriter(identFile), ',');
+            CSVWriter csv = new CSVWriter(new FileWriter(output), ',');
 
-            CSVWriter aprxCSV_name = createWriter(outRoot, prefix + "-aprx+names.csv");
-            CSVWriter aprxCSV_name_unspec = createWriter(outRoot, prefix + "-aprx+names+unspec.csv");
-            CSVWriter aprxCSV_vx = createWriter(outRoot, prefix + "-aprx+vx.csv");    // matching valence / connectivity
-            CSVWriter aprxCSV_vx_stereo = createWriter(outRoot, prefix + "-aprx+vx+stereo.csv");    // matching valence / connectivity + valid stereo
-            CSVWriter aprxCSV_vx_stereo_unspec = createWriter(outRoot, prefix + "-aprx+vx+stereo+unspec.csv");    // matching valence / connectivity + valid stereo
-            CSVWriter aprxCSV_other = createWriter(outRoot, prefix + "-aprx.csv");
-
-            CSVWriter noneCSV = new CSVWriter(new FileWriter(noneFile), ',');
-            CSVWriter fpCSV = new CSVWriter(new FileWriter(fpFile), ',');
 
             String[] header = new String[]{
                     "query-id",
                     "query-name",
-                    "query-abrv",
+                    "classification",
                     "score",
                     "score.components",
                     "target-id",
                     "target-name",
-                    "target-abrv",
                     "name-matches",
+                    "syn-matches",
                     "query-smi",
                     "target-smi"
             };
 
-            identCSV.writeNext(header);
-            aprxCSV_name.writeNext(header);
-            aprxCSV_name_unspec.writeNext(header);
-            aprxCSV_other.writeNext(header);
-            aprxCSV_vx.writeNext(header);
-            aprxCSV_vx_stereo.writeNext(header);
-            aprxCSV_vx_stereo_unspec.writeNext(header);
-            fpCSV.writeNext(header);
+            csv.writeNext(header);
+       
 
             for (Metabolite queryM : query.metabolome()) {
-
-                boolean hasIdent = false, hasAprx = false, hasFp = false;
-
-                List<String[]> rows = new ArrayList<String[]>();
-                int i = 0;
 
                 Results results = new Results();
 
                 for (ChemicalStructure cs : queryM.getStructures()) {
-                    i++;
                     Collection<Integer> matched = bin.find(cs.getStructure());
 
                     if (matched.size() < containers.size()) {
@@ -226,6 +211,7 @@ public class Align2Reference2 extends CommandLineMain {
                             IAtomContainer structure = StructureUtil.suppressHydrogens(structures.get(id));
                             if (neutralise)
                                 StructureUtil.neutralise(structure);
+
                             try {
                                 results.add(new Result(queryM, metabolites.get(id), queryStructure, structure));
                             } catch (Exception e) {
@@ -238,65 +224,74 @@ public class Align2Reference2 extends CommandLineMain {
                         results.add(new Result(queryM, null, cs.getStructure(), null));
                     }
                 }
+                
+                // counter.get(results.classify()).increment();
+                
+                results.write(csv);
 
-                if (results.hasExactMatch()) {
-                    results.unique().ident().write(identCSV);
-                    ident++;
-                }
-                else if (results.hasAprxMatch()) {
-                    if (results.hasNameMatch()) {
-                        if (results.hasSingleUnspecCenter()) {
-                            results.singleUnspecCenter().unique().write(aprxCSV_name_unspec);
-                            aprx_name_unspec++;
-                        }
-                        else {
-                            results.nameMatches().unique().write(aprxCSV_name);
-                            aprx_name++;
-                        }
-                    }
-                    else {
-                        if (results.hasValidConn()) {
-                            results = results.validConnectMatches();
-                            if (results.hasValidStereo()) {
-                                if (results.hasSingleUnspecCenter()) {
-                                    results.singleUnspecCenter().unique().write(aprxCSV_vx_stereo_unspec);
-                                    aprx_xv_stereo_unspec++;
-                                }
-                                else {
-                                    aprx_xv_stereo++;
-                                    results.validStereoMatches().unique().write(aprxCSV_vx_stereo);
-                                }
-                            }
-                            else {
-                                aprx_xv++;
-                                results.unique().write(aprxCSV_vx);
-                            }
-                        }
-                        else {
-                            aprx++;
-                            results.unique().write(aprxCSV_other);
-                        }
-                    }
-                } else {
-                    for (Metabolite target : nameIndex.ofName(queryM.getName())) {
-                        results.add(new Result(queryM, target, null, null));
-                    }
-                    if (results.isEmpty())
-                        results.add(new Result(queryM, null, null, null));
-                    results.unique().write(noneCSV);
-                    none++;
-                }
+//                if (results.hasExactMatch()) {
+//                    results = results.unique().ident();
+//                    if (results.size() > 1) {
+//                        results.write(new CSVWriter(new PrintWriter(System.out), '\t'));
+//                    }
+//                    ident++;
+//                }
+//                else if (results.hasAprxMatch()) {
+//                    if (results.hasNameMatch()) {
+//                        if (results.hasSingleUnspecCenter()) {
+//                            results = results.singleUnspecCenter().unique();
+//                            if(results.size() > 1) {
+//                                CSVWriter csv = new CSVWriter(new PrintWriter(System.out), '\t');
+//                                results.write(csv);
+//                                csv.flush();
+//                            }
+//                            results.write(aprxCSV_name_unspec);
+//                            aprx_name_unspec++;
+//                        }
+//                        else {
+//                            results.nameMatches().unique().write(aprxCSV_name);
+//                            aprx_name++;
+//                        }
+//                    }
+//                    else {
+//                        if (results.hasValidConn()) {
+//                            results = results.validConnectMatches();
+//                            if (results.hasMissingStereo()) {
+//                                if (results.hasSingleUnspecCenter()) {
+//                                    results.singleUnspecCenter().unique().write(aprxCSV_vx_stereo_unspec);
+//                                    aprx_xv_stereo_unspec++;
+//                                }
+//                                else {
+//                                    aprx_xv_stereo++;
+//                                    results.validStereoMatches().unique().write(aprxCSV_vx_stereo);
+//                                }
+//                            }
+//                            else {
+//                                aprx_xv++;
+//                                results.unique().write(aprxCSV_vx);
+//                            }
+//                        }
+//                        else {
+//                            aprx++;
+//                            results.unique().write(aprxCSV_other);
+//                        }
+//                    }
+//                } else {
+//                    for (Metabolite target : nameIndex.ofName(queryM.getName())) {
+//                        results.add(new Result(queryM, target, null, null));
+//                    }
+//                    if (results.isEmpty())
+//                        results.add(new Result(queryM, null, null, null));
+//                    results.unique().write(noneCSV);
+//                    none++;
+//                }
             }
+
+            System.out.println(counter);
 
             System.out.println("ident: " + ident + ", aprx:" + aprx + ", aprx (name):" + aprx_name + ", aprx (name+1unspec):" + aprx_name_unspec + ", aprx(vxs+unspec) " + aprx_xv_stereo_unspec + ", aprx (xvs):" + aprx_xv_stereo + ", aprx (xv):" + aprx_xv + ", fp:" + fp + ", none:" + none);
 
-            identCSV.close();
-            aprxCSV_name.close();
-            aprxCSV_vx_stereo.close();
-            aprxCSV_vx.close();
-            aprxCSV_other.close();
-            fpCSV.close();
-            noneCSV.close();
+            csv.close();
 
         } catch (IOException e) {
             System.err.println(e);
