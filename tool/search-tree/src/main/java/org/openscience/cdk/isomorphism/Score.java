@@ -18,6 +18,7 @@
 package org.openscience.cdk.isomorphism;
 
 import com.google.common.primitives.Doubles;
+import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
 /** @author John May */
@@ -54,6 +55,25 @@ public class Score implements Comparable<Score> {
     
     public double connectivityScore() {
         return x;
+    }
+    
+    public double hydrogenScore() {
+        int queryCount = countHydrogens(query);
+        int targetCount = countHydrogens(target);
+        if (targetCount == 0)
+            return queryCount == 0 ? 1 : 0;
+        else
+            return Math.min(queryCount, targetCount) / Math.max(queryCount, targetCount);    
+    }
+    
+    private static int countHydrogens(IAtomContainer container) {
+        int sum = 0;
+        for (IAtom atom : container.atoms()) {
+            if (atom.getAtomicNumber() == 1)
+                sum++;
+            sum += atom.getImplicitHydrogenCount();
+        }
+        return sum;
     }
 
     @Override public int compareTo(Score that) {
