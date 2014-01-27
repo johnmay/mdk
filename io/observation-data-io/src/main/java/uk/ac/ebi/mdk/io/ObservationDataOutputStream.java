@@ -19,9 +19,11 @@ package uk.ac.ebi.mdk.io;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
-import uk.ac.ebi.mdk.io.observation.LocalAlignmentWriter;
+import uk.ac.ebi.mdk.domain.observation.MatchedEntity;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.io.observation.LocalAlignmentWriter;
+import uk.ac.ebi.mdk.io.observation.MatchedEntityWriter;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -29,9 +31,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 
 /**
- * ObservationDataInputStream - 08.03.2012 <br/>
- * <p/>
- * Class descriptions.
+ * ObservationDataInputStream - 08.03.2012 <br/> <p/> Class descriptions.
  *
  * @author johnmay
  * @author $Author$ (this version)
@@ -46,8 +46,7 @@ public class ObservationDataOutputStream
     private DataOutputStream out;
 
     /**
-     * Create a new observation input stream for the specified
-     * version.
+     * Create a new observation input stream for the specified version.
      *
      * @param out stream to write too
      * @param v   version
@@ -64,13 +63,14 @@ public class ObservationDataOutputStream
 
         // default writers
         add(LocalAlignment.class, new LocalAlignmentWriter(this.out));
+        add(MatchedEntity.class, new MatchedEntityWriter(new IdentifierDataOutputStream(this.out, v)));
+
     }
 
     /**
      * Write the class and it's object data to the output stream.
      *
      * @param observation
-     *
      * @throws IOException
      */
     public void write(Observation observation) throws IOException {
@@ -82,12 +82,11 @@ public class ObservationDataOutputStream
     }
 
     /**
-     * Write the object data for the specified observation to the
-     * output stream. The written observation should be read with
-     * {@see ObservationDataInputStream.read(Class)}
+     * Write the object data for the specified observation to the output stream.
+     * The written observation should be read with {@see
+     * ObservationDataInputStream.read(Class)}
      *
      * @param observation
-     *
      * @throws IOException
      */
     @SuppressWarnings("unchecked")
@@ -106,19 +105,17 @@ public class ObservationDataOutputStream
 
         out.writeInt(observations.size());
 
-        for(Observation observation : observations) {
+        for (Observation observation : observations) {
             write(observation);
         }
 
     }
 
     /**
-     * Access the writer for the provided class. This method will
-     * fetch a writer for the appropriate version the output stream
-     * was initialised with.
+     * Access the writer for the provided class. This method will fetch a writer
+     * for the appropriate version the output stream was initialised with.
      *
      * @param c class to get the writer for
-     *
      * @return
      */
     public ObservationWriter getWriter(Class c) {

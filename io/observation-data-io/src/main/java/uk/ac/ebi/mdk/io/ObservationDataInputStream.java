@@ -20,9 +20,12 @@ package uk.ac.ebi.mdk.io;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.caf.utility.version.VersionMap;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.domain.observation.MatchedEntity;
 import uk.ac.ebi.mdk.io.observation.LocalAlignmentReader;
 import uk.ac.ebi.mdk.domain.observation.Observation;
 import uk.ac.ebi.mdk.domain.observation.sequence.LocalAlignment;
+import uk.ac.ebi.mdk.io.observation.MatchedEntityReader;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -55,6 +58,7 @@ public class ObservationDataInputStream
 
         // default readers
         add(LocalAlignment.class, new LocalAlignmentReader(this.in));
+        add(MatchedEntity.class, new MatchedEntityReader(new IdentifierDataInputStream(this.in, v)));
 
     }
 

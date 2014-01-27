@@ -33,8 +33,16 @@ final class Results {
         this(new ArrayList<Result>(5));
     }
 
+    List<Result> results() {
+        return results;
+    }
+    
     boolean isEmpty() {
         return results.isEmpty();
+    }
+    
+    Classificiation classificiation() {
+        return classificiation;
     }
 
     void add(Result result) {

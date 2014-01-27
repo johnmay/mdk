@@ -35,6 +35,7 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
 import uk.ac.ebi.mdk.domain.entity.reaction.Participant;
+import uk.ac.ebi.mdk.domain.observation.MatchedEntity;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -227,7 +228,19 @@ public class Align2Reference2 extends CommandLineMain {
                 
                 // counter.get(results.classify()).increment();
                 
-                results.write(csv);
+                results = results.filterAndClasify();
+                if (results.classificiation() != Results.Classificiation.None) {
+                    for (Result result : results.results()) {
+                        result.query().addObservation(new MatchedEntity(reference.getIdentifier(), 
+                                                                        result.target().getIdentifier()));
+                    }
+                }
+                
+                String name = query.getContainer().getPath();
+                String base = name.substring(0, name.lastIndexOf('.'));
+                System.out.println("Writing... " + base + "-matched.mr");
+                ReconstructionIOHelper.write(query, new File(base + "-matched.mr"));
+                
 
 //                if (results.hasExactMatch()) {
 //                    results = results.unique().ident();
