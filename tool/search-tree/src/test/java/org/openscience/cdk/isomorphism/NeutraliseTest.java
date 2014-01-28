@@ -91,7 +91,7 @@ public class NeutraliseTest {
 
     private void test(String smi, String exp) throws Exception {
         IAtomContainer input = smipar.parseSmiles(smi);
-        new Neutralise(input);
+        new Neutralise(input).correct();
         assertThat(smigen.create(input), is(exp));
     }
 
