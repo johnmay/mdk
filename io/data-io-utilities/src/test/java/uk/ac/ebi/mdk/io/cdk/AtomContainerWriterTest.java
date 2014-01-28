@@ -44,7 +44,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class AtomContainerWriterTest {
 
-    @Test public void pseudoatoms_roundtrip() throws IOException {
+    @Test public void pseudoatoms_roundtrip() throws IOException, CDKException {
         IAtomContainer benzeneOut = MoleculeFactory.makeBenzene();
 
         IAtom a = benzeneOut.getAtom(0);
@@ -57,6 +57,9 @@ public class AtomContainerWriterTest {
             }
         }
         benzeneOut.setAtom(0, r);
+        AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(benzeneOut);
+        CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance()).addImplicitHydrogens(benzeneOut);
+        r.setImplicitHydrogenCount(0);
 
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
         ByteArrayOutputStream bao2 = new ByteArrayOutputStream();
@@ -68,7 +71,7 @@ public class AtomContainerWriterTest {
         DataInputStream in = new DataInputStream(new ByteArrayInputStream(bao.toByteArray()));
         IAtomContainer benzeneIn = new AtomContainerReader(in).read();
         in.close();
-
+        
         assertAtomContainerEquals(benzeneOut, benzeneIn);
     }
 
@@ -126,8 +129,7 @@ public class AtomContainerWriterTest {
             IAtom aIn = in.getAtom(i);
             assertEquals(aOut.getSymbol(), aIn.getSymbol());
             assertEquals(aOut.getAtomicNumber(), aIn.getAtomicNumber());
-            assertEquals(aOut.getImplicitHydrogenCount(), aIn
-                    .getImplicitHydrogenCount());
+            assertEquals(aOut.getImplicitHydrogenCount(), aIn.getImplicitHydrogenCount());
             assertEquals(aOut.getAtomTypeName(), aIn.getAtomTypeName());
             assertEquals(aOut.getMassNumber(), aIn.getMassNumber());
             assertEquals(aOut.getFormalCharge(), aIn.getFormalCharge());
