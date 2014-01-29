@@ -26,8 +26,9 @@ public class IOConstants {
     @Deprecated
     public static final Version VERSION = new Version(1, 3, 9, 0);
 
+    public static final Version v_1_4_1 = new Version(1, 4, 1, 0);
     public static final Version v_1_4_0 = new Version(1, 4, 0, 0);
     public static final Version v_1_3_9 = new Version(1, 3, 9, 0);
 
-    public static final Version CURRENT = v_1_4_0;
+    public static final Version CURRENT = v_1_4_1;
 }
