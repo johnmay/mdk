@@ -40,6 +40,7 @@ public enum Organelle implements Compartment {
     // organelle's: http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0043226#lineage
 
     // Bacteria
+    
     CYTOPLASM(                  "c", "cytoplasm", 1,             "GO:0005737", "In", "Cytosol", "Cytoplasm Matrix", "Internal_Species", "Cell"),
 
 
@@ -71,7 +72,8 @@ public enum Organelle implements Compartment {
     FLAGELLUM(                  "f", "flagellum", 18,           "GO:0019861"),
 
     // basic
-    UNKNOWN(                    "unk", "Unknown", 0,              "", "");
+    UNKNOWN(                    "unk", "Unknown", 0,              "", ""),
+    BOUNDARY(                   "b",  "boundary", 19,             ""),;
 
     private final String abbreviation;
 
