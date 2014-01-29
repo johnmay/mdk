@@ -43,9 +43,7 @@ public class BasicStoichiometricMatrix
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     protected BasicStoichiometricMatrix(int n, int m) {
         super(n, m);
     }
@@ -137,10 +135,22 @@ public class BasicStoichiometricMatrix
         Double[] values = new Double[substrates.length + products.length];
         String[] molecules = new String[values.length];
         for (int i = 0; i < substrates.length; i++) {
-            values[i] = -1d;
+            if (Character.isDigit(substrates[i].charAt(0))) {
+                values[i] = (double) -(substrates[i].charAt(0) - '0');
+                substrates[i] = substrates[i].substring(1);
+            }
+            else {
+                values[i] = -1d;
+            }
         }
         for (int i = substrates.length; i < values.length; i++) {
-            values[i] = 1d;
+            if (Character.isDigit(products[i - substrates.length].charAt(0))) {
+                values[i] = (double) (products[i - substrates.length].charAt(0) - '0');
+                products[i - substrates.length] = products[i - substrates.length].substring(1);
+            }
+            else {
+                values[i] = 1d;
+            }
         }
         System.arraycopy(substrates, 0, molecules, 0, substrates.length);
         System.arraycopy(products, 0, molecules, substrates.length, products.length);
@@ -154,7 +164,7 @@ public class BasicStoichiometricMatrix
 
 
     public int addReaction(String reaction, boolean reversible) {
-        String[] compounds = reaction.split(" => ");
+        String[] compounds = reaction.split(" [-=]+> ");
         return addReaction(compounds[0], compounds[1], reversible);
     }
 

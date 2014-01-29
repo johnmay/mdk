@@ -21,6 +21,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,13 +68,34 @@ public abstract class StoichiometricMatrixImpl<M, R>
     }
 
 
-    public int addReaction(R reaction, M[] newMolecules, Double[] values, Boolean isReversible) {
+    public int addReaction(R reaction, M[] molecule, Double[] coefs, Boolean isReversible) {
 
+        // fix duplicate entries
+        Map<M,Double> unique = new HashMap<M, Double>();
+        for (int i = 0; i < molecule.length; i++) {
+            Double prev = unique.put(molecule[i], coefs[i]);
+            if (prev != null) {
+                unique.put(molecule[i], prev + coefs[i]);
+            }
+        }
+        
+        int n = 0;
+        for (Map.Entry<M,Double> e : unique.entrySet()) {
+            molecule[n] = e.getKey();
+            coefs[n] = e.getValue();
+            n++;
+        }
+        
+        if (n != molecule.length) {
+            molecule = Arrays.copyOf(molecule, n);
+            coefs = Arrays.copyOf(coefs, n);
+        }
+        
 
         if (isReversible == null) {
-            return this.addReaction(reaction, newMolecules, values);
+            return this.addReaction(reaction, molecule, coefs);
         }
-        int index = super.addReaction(reaction, newMolecules, values);
+        int index = super.addReaction(reaction, molecule, coefs);
 
         reversibilityMap.put(index, isReversible);
 
