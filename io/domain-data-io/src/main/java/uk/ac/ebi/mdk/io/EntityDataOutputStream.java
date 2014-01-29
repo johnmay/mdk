@@ -38,6 +38,7 @@ import uk.ac.ebi.mdk.io.domain.MetaboliteDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataWriter;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ReactionDataWriter_1_3_9;
+import uk.ac.ebi.mdk.io.domain.ReactionDataWriter_1_4_1;
 import uk.ac.ebi.mdk.io.domain.ReconstructionDataWriter_1_3_9;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataWriter;
 import uk.ac.ebi.mdk.io.domain.RibosomalRNADataWriter_1_3_9;
@@ -93,6 +94,7 @@ public class EntityDataOutputStream
         add(Metabolite.class, new MetaboliteDataWriter(out));
         add(Metabolite.class, new MetaboliteDataWriter_1_3_9(out));
         add(MetabolicReaction.class, new ReactionDataWriter_1_3_9(out, this));
+        add(MetabolicReaction.class, new ReactionDataWriter_1_4_1(out, this));
 
         // gene
         add(Gene.class, new GeneDataWriter(out));

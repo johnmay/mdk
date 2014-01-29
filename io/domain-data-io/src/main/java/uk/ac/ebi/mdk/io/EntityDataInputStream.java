@@ -25,6 +25,7 @@ import uk.ac.ebi.mdk.io.domain.MetaboliteDataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataReader_1_3_9;
 import uk.ac.ebi.mdk.io.domain.ReactionDataReader;
 import uk.ac.ebi.mdk.io.domain.ReactionDataReader_1_3_9;
+import uk.ac.ebi.mdk.io.domain.ReactionDataReader_1_4_1;
 import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_0_9;
 import uk.ac.ebi.mdk.io.domain.ProteinProductDataReader;
 import uk.ac.ebi.mdk.io.domain.ReconstructionDataReader_1_3_3;
@@ -90,6 +91,7 @@ public class EntityDataInputStream
         add(Metabolite.class, new MetaboliteDataReader_1_3_9(in, factory));
         add(MetabolicReaction.class, new ReactionDataReader(in, factory, this));
         add(MetabolicReaction.class, new ReactionDataReader_1_3_9(in, factory, this));
+        add(MetabolicReaction.class, new ReactionDataReader_1_4_1(in, factory, this));
 
         // gene
         add(Gene.class, new GeneDataReader(in, factory));
