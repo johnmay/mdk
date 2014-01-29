@@ -60,6 +60,11 @@ public class ReactionDataWriter_1_3_9
 
         out.writeUTF(rxn.uuid().toString());
 
+        if (rxn.getReactantCount() > 128)
+            throw new IOException(rxn.getIdentifier() + " had too many reactants to store in binary");
+        if (rxn.getProductCount() > 128)
+            throw new IOException(rxn.getIdentifier() + " had too many products to store in binary");
+        
         out.writeByte(rxn.getReactantCount());
 
         for (MetabolicParticipant p : rxn.getReactants()) {
