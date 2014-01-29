@@ -20,6 +20,7 @@ package uk.ac.ebi.mdk.io.text.mnxref;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -111,10 +112,15 @@ public final class MnxRefCompound {
         if (line.length != 8) {
             throw new IllegalArgumentException("line should have 8 columns");
         }
-        int charge = line[3].isEmpty() ? 0 : Integer.parseInt(line[3]);
-        double mass = line[4].isEmpty() ? 0d : Double.parseDouble(line[4]);
+        try {
+            int charge = line[3].isEmpty() ? 0 : Integer.parseInt(line[3]);
+            double mass = line[4].isEmpty() || !Character.isDigit(line[4].charAt(0)) ? 0d : Double.parseDouble(line[4]);
 
-        return new MnxRefCompound(line[0], line[1], line[7], line[6], line[5], line[2], charge, mass);
+            return new MnxRefCompound(line[0], line[1], line[7], line[6], line[5], line[2], charge, mass);
+        } catch (Exception e) {
+            System.err.println("Could not parse: " + Arrays.toString(line));
+            return null;
+        }
     }
 
     public static class Xref {

@@ -86,7 +86,9 @@ public class MnxRefCompoundInput {
                 String[] line;
                 while ((line = tsv.readNext()) != null) {
                     if (line[0].charAt(0) != COMMENT) {
-                        compounds.put(line[0], MnxRefCompound.parse(line));
+                        MnxRefCompound compound = MnxRefCompound.parse(line);
+                        if (compound != null)
+                            compounds.put(line[0], compound);
                     }
                 }
             } finally {
