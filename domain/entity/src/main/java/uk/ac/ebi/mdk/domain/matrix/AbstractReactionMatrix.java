@@ -21,7 +21,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import org.apache.commons.lang.mutable.MutableInt;
+import com.google.common.collect.Sets;
 import org.apache.log4j.Logger;
 
 import java.io.FileWriter;
@@ -30,84 +30,73 @@ import java.io.PrintStream;
 import java.io.Writer;
 import java.lang.reflect.Array;
 import java.security.InvalidParameterException;
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
  * Generic reaction matrix class
  *
- * @author johnmay
  * @param <T> Type of the matrix (Integer,Float,String)
  * @param <M> The type for the compound names (uses equals() method) this allows
- * to have the metabolites stored as InChIs,InChIKeys,IMolecules etc..
+ *            to have the metabolites stored as InChIs,InChIKeys,IMolecules
+ *            etc..
  * @param <R> The type of the reactions
+ * @author johnmay
  */
-public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<T,M,R> {
+public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<T, M, R> {
+
+    public static int check = 0;
 
     private static final Logger LOGGER = Logger.getLogger(AbstractReactionMatrix.class);
 
-    /**
-     * Initial size of the matrix (molecules)
-     */
+    /** Initial size of the matrix (molecules) */
     public static final int INTIAL_MOLECULE_CAPACITY = 10;
 
-    /**
-     * Initial size of the matrix (reactions)
-     */
+    /** Initial size of the matrix (reactions) */
     public static final int INTIAL_REACTION_CAPACITY = 10;
 
-    /**
-     * Map for molecule look-up
-     */
+    /** Map for molecule look-up */
     private LinkedHashMap<M, Integer> moleculeMap;
 
-    /**
-     * Multimap of reactions to matrix row index
-     */
+    /** Multimap of reactions to matrix row index */
     private Multimap<R, Integer> reactionMap;
 
-    /**
-     * Reactions define the row indices
-     */
+    /** Reactions define the row indices */
     protected M[] molecules;
 
-    /**
-     * Molecules define the column indices
-     */
+    /** Molecules define the column indices */
     private R[] reactions;
 
-    /**
-     * Value storage
-     */
-    private Map<IndexKey,T> matrix;
+    /** Reaction hashcode. */
+    private long[] reactionHashcode;
 
-    /**
-     * Current molecule capacity
-     */
+    /** Value storage */
+    private Map<IndexKey, T> matrix;
+
+    /** Current molecule capacity */
     protected int moleculeCapacity;
 
-    /**
-     * Current reaction capacity
-     */
+    /** Current reaction capacity */
     protected int reactionCapacity;
 
-    /**
-     * Current molecule count
-     */
+    /** Current molecule count */
     public int moleculeCount = 0;
 
-    /**
-     * Current reaction count
-     */
+    /** Current reaction count */
     public int reactionCount = 0;
 
     private int nonNullCount = 0;
 
 
-    /**
-     * Create a reaction matrix with default capacities
-     */
+    /** Create a reaction matrix with default capacities */
     protected AbstractReactionMatrix() {
         this(INTIAL_MOLECULE_CAPACITY, INTIAL_REACTION_CAPACITY);
     }
@@ -140,13 +129,11 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
 
 
     /**
-     *
      * Initializes reflective data structures
      *
      * @param moleculeClass
      * @param reactionClass
      * @param typeClass
-     *
      */
     @SuppressWarnings("unchecked")
     public void init(Class<? extends M> moleculeClass,
@@ -158,6 +145,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
 
         this.molecules = (M[]) Array.newInstance(moleculeClass, moleculeCapacity);
         this.reactions = (R[]) Array.newInstance(reactionClass, reactionCapacity);
+        this.reactionHashcode = new long[reactionCapacity];
 
     }
 
@@ -169,7 +157,6 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
 
 
     public abstract Class<? extends T> getValueClass();
-
 
 
     public boolean setMolecule(int i, M m) {
@@ -193,26 +180,30 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
         return false;
     }
 
-                                  
-    
+
     public boolean setValue(int i, int j, T value) {
 
         IndexKey key = new IndexKey(i, j);
-        
+
         T prev = matrix.put(key, value);
-        
+
         if (prev == null && value != null)
             nonNullCount++;
         if (prev != null && value == null)
-            nonNullCount--;            
-        
+            nonNullCount--;
+
         return false;
     }
 
-
+    @Override
+    public int addReaction(R reaction,
+                           M[] newMolecules,
+                           T[] values) {
+        return addReaction(reaction, newMolecules, values, true);
+    }
+    
     /**
      * Add a reaction to the matrix
-     *
      *
      * @param reaction
      * @param newMolecules
@@ -222,7 +213,8 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     @Override
     public int addReaction(R reaction,
                            M[] newMolecules,
-                           T[] values) {
+                           T[] values,
+                           boolean reversible) {
 
 //        if (matrix == null) {  // don't want to check this every time
 //            init();
@@ -237,47 +229,60 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
             intersect = !ensure(m) || intersect;
         }
 
+
+        int hash = 7;
+        M[] sorted = Arrays.copyOf(newMolecules, newMolecules.length);
+        Arrays.sort(sorted, new Comparator<M>() {
+            @Override public int compare(M o1, M o2) {
+                return moleculeMap.get(o1).compareTo(moleculeMap.get(o2));
+            }
+        });
+
+        for (M m : sorted) {
+            hash = 31 * hash + moleculeMap.get(m);
+        }
+
         // add the reaction to the fixed matrix
         if (intersect) {
+            for (int j = 0; j < reactionCount; j++) {
+                if (reactionHashcode[j] == hash) {
+                    check++;
+                    if (identical(j, newMolecules, values, reversible)) {
+                        return j;
+                    }
+                }
+            }
             // no new molecules, check for clash
-            Map<Integer, MutableInt> candidateReactions = new HashMap<Integer, MutableInt>(); // reuse
-            for (int i = 0; i < newMolecules.length; i++) {
-                for (Entry<Integer, T> e : getReactions(newMolecules[i]).entrySet()) {
-                    if (values[i].equals(e.getValue())) {
-                        if (!candidateReactions.containsKey(e.getKey())) {
-                            candidateReactions.put(e.getKey(), new MutableInt());
-                        }
-                        candidateReactions.get(e.getKey()).increment();
-                    }
-                }
-            }
-            if (!candidateReactions.isEmpty()) {
-                for (Entry<Integer, MutableInt> e : candidateReactions.entrySet()) {
-                    if (e.getValue().intValue() == values.length
-                        && getReactionValues(e.getKey()).length == values.length) {
-                        LOGGER.debug("Duplicate reaction: " + reactions[e.getKey()] + " and " + reaction);
-                        return e.getKey();
-                    }
-                }
-            }
+//            Map<Integer, MutableInt> candidateReactions = new HashMap<Integer, MutableInt>(); // reuse
+//            for (int i = 0; i < newMolecules.length; i++) {
+//                for (Entry<Integer, T> e : getReactions(newMolecules[i]).entrySet()) {
+//                    if (values[i].equals(e.getValue())) {
+//                        if (!candidateReactions.containsKey(e.getKey())) {
+//                            candidateReactions.put(e.getKey(), new MutableInt());
+//                        }
+//                        candidateReactions.get(e.getKey()).increment();
+//                    }
+//                }
+//            }
+//            if (!candidateReactions.isEmpty()) {
+//                for (Entry<Integer, MutableInt> e : candidateReactions.entrySet()) {
+//                    if (e.getValue().intValue() == values.length
+//                        && getReactionValues(e.getKey()).length == values.length) {
+//                        LOGGER.debug("Duplicate reaction: " + reactions[e.getKey()] + " and " + reaction);
+//                        return e.getKey();
+//                    }
+//                }
+//            }
         }
 
-        
-        
         // set the values to the matrix
-        long hashCode = 7L;
         for (int i = 0; i < newMolecules.length; i++) {
-            nonNullCount += values[i] != null ? 1 : 0;
             int moleculeIndex = moleculeMap.get(newMolecules[i]);
-            hashCode ^= moleculeIndex;
             setValue(moleculeIndex, reactionCount, values[i]);
         }
-
-        System.out.println(hashCode);
-        
-
         // index the reaction
         reactions[reactionCount] = reaction;
+        reactionHashcode[reactionCount] = hash;
         reactionMap.put(reaction, reactionCount);
         reactionCount++;
 
@@ -285,16 +290,35 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
 
     }
 
+    @SuppressWarnings("unchecked")
+    private boolean identical(int j, M[] ms2, T[] vs2, boolean reverisble) {
+        M[] ms1 = getReactionMolecules(j);
+        T[] vs1 = (T[]) Array.newInstance(vs2[0].getClass(), ms1.length);
+
+        for (int i = 0; i < ms1.length; i++) {
+            vs1[i] = _get(moleculeMap.get(ms1[i]), j);
+        }
+
+        return identical(j, ms1, vs1, ms2, vs2, reverisble);
+    }
+
+    boolean identical(int j, M[] ms1, T[] vs1, M[] ms2, T[] vs2, boolean reverisble) {
+        Set<M> ms1Set = Sets.newHashSet(ms1);
+        for (M m : ms2) {
+            if (!ms1Set.contains(m)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
-     *
      * Ensures the matrix has the desired capcity to store the specified n
      * (molecules) and m (reactions). If not the the matrix is resized
      * accordingly.
      *
      * @param n number of molecules
      * @param m number of reactions
-     *
      */
     @SuppressWarnings("unchecked")
     public void ensure(int n, int m) {
@@ -307,22 +331,20 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
             LOGGER.debug("Expanding capacity...");
             reactionCapacity = 1 + Math.max(m, reactionCapacity) * 2;
             reactions = Arrays.copyOf(reactions, reactionCapacity);
-            
+            reactionHashcode = Arrays.copyOf(reactionHashcode, reactionCapacity);
+
             LOGGER.debug("...new capacity:" + moleculeCapacity + "," + reactionCapacity);
         }
     }
 
 
     /**
-     *
      * Ensures the molecule is present, if the molecule is present then no
      * structural changes are made. If the molecule is not found then the
      * molecule is added to the index and the molecule count increased
      *
      * @param molecule A new molecule
-     *
      * @return if the structure was modified
-     *
      */
     private boolean ensure(M molecule) {
         if (!moleculeMap.containsKey(molecule)) {
@@ -333,11 +355,9 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
         }
         return false;
     }
+        
 
-
-    /**
-     * Writes the matrix on System.out PrintStream
-     */
+    /** Writes the matrix on System.out PrintStream */
     public void display() {
         display(System.out, ' ');
     }
@@ -354,7 +374,8 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
 
 
     /**
-     * Writes the matrix to a specified PrintStream with the specified separator
+     * Writes the matrix to a specified PrintStream with the specified
+     * separator
      *
      * @param stream
      * @param separator
@@ -370,7 +391,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      *
      * @param stream
      * @param seperator
-     * @param empty The value to replace null values with
+     * @param empty         The value to replace null values with
      * @param molNameLength Trim molecule names to this length
      * @param rxnNameLength Trim reaction names to this length
      */
@@ -401,7 +422,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
 
             // ...and values
             for (int j = 0; j < reactionCount; j++) {
-               T value = get(i, j);
+                T value = _get(i, j);
                 stream.printf(valueFormat, (value == null
                                             ? empty
                                             : value).toString());
@@ -414,23 +435,35 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
 
 
     /**
-     *
      * Returns a fixed size 2D array of the values. The matrix is trimmed to the
      * correct size
      *
      * @return reaction matrix
-     *
      */
+    @SuppressWarnings("unchecked")
     public T[][] getFixedMatrix() {
-        
+
+
+        Class c = valueType();
+
+        if (c == null)
+            return null;
+
         // truncate the reactions (removes null paddings)
-        T[][] outputMatrix = (T[][]) new Objects[moleculeCount][reactionCount];
+        T[][] outputMatrix = (T[][]) Array.newInstance(c.getClass(), moleculeCount, reactionCount);
         for (int i = 0; i < outputMatrix.length; i++) {
             for (int j = 0; j < reactionCount; j++) {
-                outputMatrix[i][j] = get(i, j);
+                outputMatrix[i][j] = _get(i, j);
             }
         }
         return outputMatrix;
+    }
+
+
+    private Class valueType() {
+        if (matrix.isEmpty())
+            return null;
+        return matrix.values().iterator().next().getClass();
     }
 
 
@@ -442,17 +475,19 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      * @return The value at the requested location
      */
     public T get(int i, int j) {
+        return _get(i, j);
+    }
+
+    public T _get(int i, int j) {
         return matrix.get(new IndexKey(i, j));
     }
 
 
     /**
-     *
      * Assigns the values from the specified 'other' matrix to this one. Note:
      * the values are not deep copied
      *
      * @return reaction indices (of those added)
-     *
      */
     public BiMap<Integer, Integer> assign(AbstractReactionMatrix<T, M, R> other) {
 
@@ -514,9 +549,9 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      */
     @SuppressWarnings("unchecked")
     public T[] getRow(int i) {
-        T[] row = (T[]) new Object[reactionCount];
-        for (int j = 0; j < reactionCount; j++) 
-            row[j] = get(i, j);
+        T[] row = (T[]) Array.newInstance(valueType(), reactionCount);
+        for (int j = 0; j < reactionCount; j++)
+            row[j] = _get(i, j);
         return row;
     }
 
@@ -534,14 +569,12 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     }
 
 
-    /**
-     * Access to the values for a single reaction
-     */
+    /** Access to the values for a single reaction */
     @SuppressWarnings("unchecked")
     public T[] getColumn(int j) {
-        T[] copy = (T[]) new Object[moleculeCount];
+        T[] copy = (T[]) Array.newInstance(valueType(), moleculeCount);
         for (int i = 0; i < moleculeCount; i++) {
-            copy[i] = get(i, j);
+            copy[i] = _get(i, j);
         }
         return copy;
     }
@@ -566,7 +599,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
         for (int i = 0; i < moleculeCount; i++) {
             nulls[i] = 0;
             for (int j = 0; j < reactionCount; j++) {
-                nulls[i] += get(i, j) == null ? 1 : 0;
+                nulls[i] += _get(i, j) == null ? 1 : 0;
             }
         }
         return nulls;
@@ -638,7 +671,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     public T[] getReactionValues(Integer j) {
         List<T> values = new ArrayList<T>();
         for (int i = 0; i < moleculeCount; i++) {
-            T value = get(i, j);
+            T value = _get(i, j);
             if (value != null) {
                 values.add(value);
             }
@@ -651,7 +684,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     public M[] getReactionMolecules(Integer j) {
         List<M> values = new ArrayList<M>();
         for (int i = 0; i < moleculeCount; i++) {
-            if (get(i, j) != null) {
+            if (_get(i, j) != null) {
                 values.add(molecules[i]);
             }
         }
@@ -675,7 +708,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
         Integer i = moleculeMap.get(molecule);
         HashMap<Integer, T> subReactions = new HashMap<Integer, T>();
         for (int j = 0; j < reactionCount; j++) {
-            T value = get(i, j);
+            T value = _get(i, j);
             if (value != null) {
                 subReactions.put(j, value);
             }
@@ -689,7 +722,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      * threshold
      *
      * @param threshold The value above which a molecule is considered highly
-     * connected (0 returns an empty set)
+     *                  connected (0 returns an empty set)
      * @return Set of the high connected Molecules
      */
     @Override
@@ -736,9 +769,10 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      * build a connection file (for cytoscape) with threshold of highly
      * connected molecule specified and all edge values set as "rc"
      *
-     * @param fw file writer to write the text file to
+     * @param fw                     file writer to write the text file to
      * @param connectivityThreshhold the value at which to consider components
-     * highly connected and exempt from the file (-1 = do not remove)
+     *                               highly connected and exempt from the file
+     *                               (-1 = do not remove)
      * @throws java.io.IOException
      */
     public Map<String, M> toTextFile(FileWriter fw,
@@ -755,13 +789,16 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      * If split is true the name of the highly connected molecule is prefixed
      * with a ticker integer and added the returned HashMap.
      *
-     * @param writer writer to write the text format too
+     * @param writer                 writer to write the text format too
      * @param connectivityThreshhold the value at which to consider components
-     * highly connected and exempt from the file (0 = do not remove)
-     * @param edgeValues A list of edge values to use for the reactions this
-     * allows you to provide a connection type i.e. directionality. The toStirng
-     * method is used to print the value. Providing an empty list invokes
-     * default behavior
+     *                               highly connected and exempt from the file
+     *                               (0 = do not remove)
+     * @param edgeValues             A list of edge values to use for the
+     *                               reactions this allows you to provide a
+     *                               connection type i.e. directionality. The
+     *                               toStirng method is used to print the value.
+     *                               Providing an empty list invokes default
+     *                               behavior
      * @throws java.io.IOException
      */
     public Map<String, M> toSIF(Writer writer,
@@ -772,8 +809,8 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
         Map<String, M> highlyConnectedMap = new HashMap<String, M>();
 
         if (edgeValues != null
-            && edgeValues.size() != getReactionCount()
-            && !edgeValues.isEmpty()) {
+                && edgeValues.size() != getReactionCount()
+                && !edgeValues.isEmpty()) {
             LOGGER.error("number of edge values does not equal the number reactions");
             return highlyConnectedMap;
         }
@@ -808,8 +845,11 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
 //       return highlyConnectedMap;
     }
 
+    public Set<Map.Entry<IndexKey, T>> entries() {
+        return matrix.entrySet(); 
+    }
 
-    private final class IndexKey {
+    public static final class IndexKey {
         private final int i, j;
 
         private IndexKey(int i, int j) {
@@ -835,6 +875,10 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
             int result = i;
             result = 31 * result + j;
             return result;
+        }
+
+        @Override public String toString() {
+            return i + ", " + j;
         }
     }
 }

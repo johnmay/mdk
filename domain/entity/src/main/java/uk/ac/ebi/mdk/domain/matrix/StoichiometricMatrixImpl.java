@@ -19,11 +19,14 @@ package uk.ac.ebi.mdk.domain.matrix;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Sets;
 
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -38,20 +41,16 @@ public abstract class StoichiometricMatrixImpl<M, R>
         extends AbstractReactionMatrix<Double, M, R>
         implements StoichiometricMatrix<M, R> {
 
-    private Map<Integer, Boolean> reversibilityMap = new HashMap<Integer, Boolean>();
+    private Set<Integer> reversible = new HashSet<Integer>();
 
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     protected StoichiometricMatrixImpl() {
         super();
     }
 
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     protected StoichiometricMatrixImpl(int n, int m) {
         super(n, m);
     }
@@ -62,54 +61,50 @@ public abstract class StoichiometricMatrixImpl<M, R>
 
 
         int index = super.addReaction(reaction, newMolecules, values);
-        reversibilityMap.put(index, true);
+        reversible.add(index);
         return index;
 
     }
 
-
-    public int addReaction(R reaction, M[] molecule, Double[] coefs, Boolean isReversible) {
+    @Override
+    public int addReaction(R reaction, M[] molecule, Double[] coefs, boolean isReversible) {
 
         // fix duplicate entries
-        Map<M,Double> unique = new HashMap<M, Double>();
+        Map<M, Double> unique = new HashMap<M, Double>();
         for (int i = 0; i < molecule.length; i++) {
             Double prev = unique.put(molecule[i], coefs[i]);
             if (prev != null) {
                 unique.put(molecule[i], prev + coefs[i]);
             }
         }
-        
+
         int n = 0;
-        for (Map.Entry<M,Double> e : unique.entrySet()) {
+        for (Map.Entry<M, Double> e : unique.entrySet()) {
             molecule[n] = e.getKey();
             coefs[n] = e.getValue();
             n++;
         }
-        
+
         if (n != molecule.length) {
             molecule = Arrays.copyOf(molecule, n);
             coefs = Arrays.copyOf(coefs, n);
         }
-        
 
-        if (isReversible == null) {
-            return this.addReaction(reaction, molecule, coefs);
-        }
-        int index = super.addReaction(reaction, molecule, coefs);
+        int index = super.addReaction(reaction, molecule, coefs, isReversible);
 
-        reversibilityMap.put(index, isReversible);
-
+        // now update the value -> note the new value replaces any old reversibility
+        if (isReversible) 
+            reversible.add(index);
+        else 
+            reversible.remove(index);
 
         return index;
     }
 
 
+    @Override
     public Boolean isReversible(Integer j) {
-        return reversibilityMap.get(j);
-    }
-    
-    public Boolean setReversible(Integer j, boolean reversible) {
-        return reversibilityMap.put(j, reversible);
+        return reversible.contains(j);
     }
 
     @Override
@@ -130,7 +125,6 @@ public abstract class StoichiometricMatrixImpl<M, R>
      * in the 'other' matrix
      *
      * @param other
-     *
      * @return
      */
     public BiMap<Integer, Integer> assign(StoichiometricMatrix<? extends M, ? extends R> other) {
@@ -169,7 +163,6 @@ public abstract class StoichiometricMatrixImpl<M, R>
      * Assigns the values and sets all reactions to reversible
      *
      * @param other
-     *
      * @return
      */
     @Override
@@ -184,8 +177,8 @@ public abstract class StoichiometricMatrixImpl<M, R>
 
             Integer key = map.get(j);
 
-            if (!reversibilityMap.containsKey(key)) {
-                reversibilityMap.put(key, true);
+            if (!reversible.contains(key)) {
+                reversible.add(key);
             }
 
         }
@@ -193,9 +186,7 @@ public abstract class StoichiometricMatrixImpl<M, R>
     }
 
 
-    /**
-     * Create a new composite of s1 and s2
-     */
+    /** Create a new composite of s1 and s2 */
     @SuppressWarnings("unchecked")
     public StoichiometricMatrix merge(StoichiometricMatrix<M, R> s1,
                                       StoichiometricMatrix<M, R> s2) {
@@ -211,10 +202,48 @@ public abstract class StoichiometricMatrixImpl<M, R>
             s.addReaction(s2.getReaction(j), s2.getReactionMolecules(j), s2.getReactionValues(j));
         }
 
-
         return s;
 
     }
 
+    @Override boolean identical(int j, M[] ms1, Double[] vs1, M[] ms2, Double[] vs2, boolean reversible) {
 
+        Set<M> ms1_1 = Sets.newHashSetWithExpectedSize(ms1.length);
+        Set<M> ms1_2 = Sets.newHashSetWithExpectedSize(ms1.length);
+
+        Set<M> ms2_1 = Sets.newHashSetWithExpectedSize(ms2.length);
+        Set<M> ms2_2 = Sets.newHashSetWithExpectedSize(ms2.length);
+
+        for (int i = 0; i < ms1.length; i++) {
+            if (vs1[i] < 0)
+                ms1_1.add(ms1[i]);
+            else
+                ms1_2.add(ms1[i]);
+        }
+
+        for (int i = 0; i < ms2.length; i++) {
+            if (vs2[i] < 0)
+                ms2_1.add(ms2[i]);
+            else
+                ms2_2.add(ms2[i]);
+        }
+
+        if (ms1_1.equals(ms2_1) && ms1_2.equals(ms2_2))
+            return true;
+
+        if ((isReversible(j) || reversible) && ms1_1.equals(ms2_2) && ms1_2.equals(ms2_1)) {
+            if (!reversible) {
+                // update coefficients - it's going to be overwritten as an
+                // irreversible reaction. We need to make sure the negative
+                // 'consuming' is on the correct side
+                for (M m : ms1) {
+                    int i = getIndex(m);
+                    setValue(i, j, - _get(i, j));
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
 }

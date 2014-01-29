@@ -46,6 +46,8 @@ public interface ReactionMatrix<T, M, R> {
     public boolean setValue(int I, int J, T value);
 
     public int addReaction(R rxn, M[] molecules, T[] values);
+    
+    public int addReaction(R rxn, M[] molecules, T[] values, boolean reversible);
 
     public T[][] getFixedMatrix();
 

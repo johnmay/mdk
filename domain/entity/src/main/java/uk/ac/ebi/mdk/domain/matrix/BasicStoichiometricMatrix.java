@@ -137,7 +137,7 @@ public class BasicStoichiometricMatrix
         for (int i = 0; i < substrates.length; i++) {
             if (Character.isDigit(substrates[i].charAt(0))) {
                 values[i] = (double) -(substrates[i].charAt(0) - '0');
-                substrates[i] = substrates[i].substring(1);
+                substrates[i] = substrates[i].substring(1).trim();
             }
             else {
                 values[i] = -1d;
@@ -146,7 +146,7 @@ public class BasicStoichiometricMatrix
         for (int i = substrates.length; i < values.length; i++) {
             if (Character.isDigit(products[i - substrates.length].charAt(0))) {
                 values[i] = (double) (products[i - substrates.length].charAt(0) - '0');
-                products[i - substrates.length] = products[i - substrates.length].substring(1);
+                products[i - substrates.length] = products[i - substrates.length].substring(1).trim();
             }
             else {
                 values[i] = 1d;
@@ -154,7 +154,7 @@ public class BasicStoichiometricMatrix
         }
         System.arraycopy(substrates, 0, molecules, 0, substrates.length);
         System.arraycopy(products, 0, molecules, substrates.length, products.length);
-        return addReaction(rxn, molecules, values, revserible);
+        return super.addReaction(rxn, molecules, values, revserible);
     }
 
 
