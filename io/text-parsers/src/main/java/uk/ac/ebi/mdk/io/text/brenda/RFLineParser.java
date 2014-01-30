@@ -80,6 +80,9 @@ public class RFLineParser extends LineParser{
 
             }
 
+			// brenda_download.txt has this.
+			//  771166         Chem. Soc. (1979) 101, 2774-2776. {Pubmed:}
+			// This makes pubmedId to be null and then uk.ac.ebi.mdk.io.text.brenda.Citations.equals()
             Matcher pubmedFieldMatcher = pubmedFieldPattern.matcher(line);
             if(!pubmedFound && pubmedFieldMatcher.find()) {
                 this.pubmedId = pubmedFieldMatcher.group(1);
