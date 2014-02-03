@@ -107,17 +107,17 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
      * this can be used if the final or expected size of the final matrix is
      * known. Specifying the capacity here reduces resize penalty
      *
-     * @param n Initial capacity of molecules
-     * @param m Initial capacity of reactions
+     * @param m Initial capacity of molecules
+     * @param n Initial capacity of reactions
      */
-    protected AbstractReactionMatrix(int n, int m) {
+    protected AbstractReactionMatrix(int m, int n) {
 
         // set the max capacities
-        moleculeCapacity = n;
-        reactionCapacity = m;
+        moleculeCapacity = m;
+        reactionCapacity = n;
 
         this.moleculeMap = new LinkedHashMap<M, Integer>(10);
-        this.reactionMap = HashMultimap.create(m, 1);
+        this.reactionMap = HashMultimap.create(n, 1);
 
     }
 
@@ -160,19 +160,19 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
 
 
     public boolean setMolecule(int i, M m) {
-        if (i < molecules.length) {
-            molecules[i] = m;
-            if (i >= moleculeCount) {
-                moleculeCount = i + 1;
-            }
+        molecules[i] = m;
+        moleculeMap.put(m, i);
+        if (i >= moleculeCount) {
+            moleculeCount = i + 1;
         }
-        return false;
+        return true;
     }
 
 
-    public boolean setReaction(int j, R m) {
+    public boolean setReaction(int j, R r) {
         if (j < reactions.length) {
-            reactions[j] = m;
+            reactions[j] = r;
+            reactionMap.put(r, j);
             if (j >= reactionCount) {
                 reactionCount = j + 1;
             }
@@ -201,7 +201,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
                            T[] values) {
         return addReaction(reaction, newMolecules, values, true);
     }
-    
+
     /**
      * Add a reaction to the matrix
      *
@@ -355,7 +355,7 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
         }
         return false;
     }
-        
+
 
     /** Writes the matrix on System.out PrintStream */
     public void display() {
@@ -846,39 +846,6 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     }
 
     public Set<Map.Entry<IndexKey, T>> entries() {
-        return matrix.entrySet(); 
-    }
-
-    public static final class IndexKey {
-        private final int i, j;
-
-        private IndexKey(int i, int j) {
-            this.i = i;
-            this.j = j;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            IndexKey indexKey = (IndexKey) o;
-
-            if (i != indexKey.i) return false;
-            if (j != indexKey.j) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = i;
-            result = 31 * result + j;
-            return result;
-        }
-
-        @Override public String toString() {
-            return i + ", " + j;
-        }
+        return matrix.entrySet();
     }
 }

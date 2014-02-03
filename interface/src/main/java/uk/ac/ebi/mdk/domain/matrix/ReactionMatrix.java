@@ -69,4 +69,47 @@ public interface ReactionMatrix<T, M, R> {
 
     public ReactionMatrix<T, M, R> newInstance(int moleculeCount, int reactionCount);
 
+    public Set<Map.Entry<IndexKey,T>> entries();
+    
+    public static final class IndexKey {
+        private final int i, j;
+
+        public IndexKey(int i, int j) {
+            this.i = i;
+            this.j = j;
+        }
+        
+        public int i() {
+            return i;
+        }
+        
+        public int j() {
+            return j;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            IndexKey indexKey = (IndexKey) o;
+
+            if (i != indexKey.i) return false;
+            if (j != indexKey.j) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = i;
+            result = 31 * result + j;
+            return result;
+        }
+
+        @Override public String toString() {
+            return i + ", " + j;
+        }
+    }
+    
 }

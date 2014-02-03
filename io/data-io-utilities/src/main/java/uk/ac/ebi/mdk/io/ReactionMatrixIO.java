@@ -35,14 +35,21 @@ package uk.ac.ebi.mdk.io;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
-import com.google.common.base.Joiner;
 import org.apache.commons.lang.mutable.MutableInt;
 import uk.ac.ebi.mdk.domain.identifier.InChI;
+import uk.ac.ebi.mdk.domain.matrix.ReactionMatrix;
 import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +67,11 @@ import java.util.Set;
  * sout.addReaction( "A => B" );
  * sout.addReaction( "B => C" );
  * sout.addReaction( "C => A" );
- * ReactionMatrixIO.writeBasicStoichiometricMatrix( sout , new FileWriter( tmp ) , '\t' );
- * BasicStoichiometricMatrix sin = ReactionMatrixIO.readBasicStoichiometricMatrix( new FileReader( tmp ) , '\t' );
+ * ReactionMatrixIO.writeBasicStoichiometricMatrix( sout , new FileWriter( tmp
+ * )
+ * , '\t' );
+ * BasicStoichiometricMatrix sin = ReactionMatrixIO.readBasicStoichiometricMatrix(
+ * new FileReader( tmp ) , '\t' );
  * sin.display( System.out );
  * }
  * </pre>
@@ -76,7 +86,7 @@ public class ReactionMatrixIO {
 
     private static char quoteCharacter = '\0';
 
-    private static boolean convertDoubles = true;
+    private static boolean convertDoubles = false;
 
 
     /**
@@ -141,14 +151,14 @@ public class ReactionMatrixIO {
 
             // add the reactions
             for (int j = 0; j < reactionNames.length; j++) {
-                
-                List<String> molecules    = new ArrayList<String>();
+
+                List<String> molecules = new ArrayList<String>();
                 List<Double> coefficients = new ArrayList<Double>();
-                
+
                 for (int i = 0; i < molNames.length; i++) {
                     String value = matrix.get(i + 1)[j + 1];
                     // if the value isn't empty
-                    if (value.isEmpty() == false && !value.equals("0.0") &&  !value.equals("0")) {
+                    if (value.isEmpty() == false && !value.equals("0.0") && !value.equals("0")) {
                         molecules.add(molNames[i]);
                         coefficients.add(Double.parseDouble(value));
                     }
@@ -184,6 +194,7 @@ public class ReactionMatrixIO {
 
         for (int j = 0; j < m; j++) {
             s.setReaction(j, in.readUTF());
+            
         }
 
         for (int i = 0; i < n; i++) {
@@ -200,6 +211,14 @@ public class ReactionMatrixIO {
             Object value = convert ? in.readInt() : in.readDouble();
             Double dValue = value instanceof Double ? (Double) value : ((Integer) value).doubleValue();
             s.setValue(i, j, dValue);
+        }
+        
+        try {
+            for (int j = 0; j < m; j++) {
+                s.setReversible(j, in.readBoolean());
+            }
+        } catch (IOException e) {
+                
         }
 
         in.close();
@@ -323,30 +342,20 @@ public class ReactionMatrixIO {
         out.writeBoolean(convertDoubles);
         out.writeInt(s.getNonNullCount());
 
-        for (int i = 0; i < n; i++) {
-
-            for (int j = 0; j < m; j++) {
-
-                // if the value is null
-                if (convertDoubles) {
-                    int value = s.get(i, j).intValue();
-                    if (value != 0) {
-                        out.writeInt(i);
-                        out.writeInt(j);
-                        out.writeInt(value);
-                    }
-                } else {
-                    double value = s.get(i, j);
-                    if (value != 0d) {
-                        out.writeInt(i);
-                        out.writeInt(j);
-                        out.writeDouble(value);
-                    }
-                }
-
-            }
+        for (Map.Entry<ReactionMatrix.IndexKey, Double> e : s.entries()) {
+            ReactionMatrix.IndexKey key = e.getKey();
+            out.writeInt(key.i());
+            out.writeInt(key.j());
+            if (convertDoubles)
+                out.writeInt(e.getValue().intValue());
+            else
+                out.writeDouble(e.getValue());
         }
 
+        for (int j = 0; j < m; j++) {
+            out.writeBoolean(s.isReversible(j));
+        }
+        
         out.close();
     }
 
@@ -420,7 +429,8 @@ public class ReactionMatrixIO {
                                            inchi.getInchi(),
                                            inchi.getInchiKey(),
                                            inchi.getAuxInfo()});
-            } else {
+            }
+            else {
                 logger.error("Object is not of type and does not inherit from InChI in matrix array");
             }
         }

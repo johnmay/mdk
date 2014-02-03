@@ -107,6 +107,14 @@ public abstract class StoichiometricMatrixImpl<M, R>
         return reversible.contains(j);
     }
 
+    @Override public void setReversible(int j, boolean reversible) {
+        if (reversible) {
+            this.reversible.add(j);
+        } else {
+            this.reversible.remove(j);
+        }
+    }
+
     @Override
     public Double get(int i, int j) {
         Double value = super.get(i, j);

@@ -22,6 +22,8 @@ import com.google.common.collect.BiMap;
 public interface StoichiometricMatrix<M, R> extends ReactionMatrix<Double, M, R> {
 
     public Boolean isReversible(Integer j);
+    
+    public void setReversible(int j, boolean reversible);
 
     public BiMap<Integer, Integer> assign(StoichiometricMatrix<? extends M, ? extends R> other);
 
