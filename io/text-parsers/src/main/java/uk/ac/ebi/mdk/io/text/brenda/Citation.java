@@ -87,32 +87,22 @@ public class Citation implements Comparable<Citation>{
 	}
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Citation other = (Citation) obj;
-        if (!this.pubmedId.equals(other.pubmedId)) {
-            return false;
-        }
-        if(this.pubmedId == null) {
-            if ((this.title == null) ? (other.title != null) : !this.title.equals(other.title)) {
-                return false;
-            }
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Citation citation = (Citation) o;
+
+        if (pubmedId != null ? !pubmedId.equals(citation.pubmedId) : citation.pubmedId != null) return false;
+        if (pubmedId == null && title != null ? !title.equals(citation.title) : citation.title != null) return false;
+
         return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 11 * hash + (this.pubmedId !=null ? this.pubmedId.hashCode() : 0);
-        hash = 11 * hash + (this.title != null ? this.title.hashCode() : 0);
-        return hash;
+        int result = pubmedId != null ? pubmedId.hashCode() : 0;
+        result = 31 * result + (pubmedId == null && title != null ? title.hashCode() : 0);
+        return result;
     }
-
-
 }
