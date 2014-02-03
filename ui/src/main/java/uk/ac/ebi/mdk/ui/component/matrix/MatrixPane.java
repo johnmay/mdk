@@ -20,10 +20,15 @@ import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.matrix.AbstractReactionMatrix;
+import uk.ac.ebi.mdk.domain.matrix.StoichiometricMatrix;
 import uk.ac.ebi.mdk.ui.render.table.VerticalTableHeaderCellRenderer;
 
 import javax.swing.*;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -38,15 +43,15 @@ import java.util.List;
  * @version $Rev$ : Last Changed $Date: 2011-12-13 08:59:08 +0000 (Tue, 13 Dec
  *          2011) $
  */
-public class MatrixPane extends JScrollPane {
+public class MatrixPane<M, R> extends JScrollPane {
 
     private static final Logger LOGGER = Logger.getLogger(MatrixPane.class);
 
-    private AbstractReactionMatrix matrix;
+    private StoichiometricMatrix<M, R> matrix;
 
     private JTable table;
 
-    public MatrixPane(final AbstractReactionMatrix matrix) {
+    public MatrixPane(final StoichiometricMatrix<M, R> matrix) {
         this.matrix = matrix;
 
         String[] rxns = new String[matrix.getReactionCount()];
@@ -59,11 +64,30 @@ public class MatrixPane extends JScrollPane {
             }
 
         }
+        
+        final Font defaultFont = ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(8f);
+        final Font boldFont    = defaultFont.deriveFont(Font.BOLD, 10f);
 
         //XXX it should use the matrix is the model
-        table = new JTable(matrix.getFixedMatrix(),
-                           rxns);
-
+        table = new JTable(new SparseMatrixModel<M, R>(matrix));
+        table.setDefaultRenderer(Double.class, new DefaultTableCellRenderer() {
+            @Override public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JLabel component = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                Double coef = (Double) value;
+                if (coef > 0) {
+                    component.setForeground(new Color(0x01A325));
+                    component.setFont(boldFont);
+                } else if (coef < 0) {
+                    component.setForeground(new Color(0xDB000C));
+                    component.setFont(boldFont);
+                } else { 
+                    component.setForeground(Color.LIGHT_GRAY);
+                    component.setFont(defaultFont);
+                }
+                component.setText(String.format("%s%.0f", coef > 0 ? "+" : "", coef));
+                return component;
+            }
+        });
         setViewportView(table);
 
 
@@ -104,6 +128,51 @@ public class MatrixPane extends JScrollPane {
         rh.setCellRenderer(new RowHeaderRenderer(table));
         setRowHeaderView(rh);
 
+    }
+    
+    private static final class SparseMatrixModel<M, R> implements TableModel {
+        
+        private final StoichiometricMatrix<M, R> s;
+        
+        private SparseMatrixModel(StoichiometricMatrix<M, R> s) {
+            this.s = s;
+        }
+
+        @Override public Object getValueAt(int row, int column) {
+            return s.get(row, column);
+        }
+
+        @Override public int getRowCount() {
+            return s.getMoleculeCount();
+        }
+
+        @Override public int getColumnCount() {
+            return s.getMoleculeCount();
+        }
+
+        @Override public String getColumnName(int columnIndex) {
+            return s.getReaction(columnIndex).toString();
+        }
+
+        @Override public Class<?> getColumnClass(int columnIndex) {
+            return Double.class;
+        }
+
+        @Override public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+
+        @Override public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+
+        }
+
+        @Override public void addTableModelListener(TableModelListener l) {
+
+        }
+
+        @Override public void removeTableModelListener(TableModelListener l) {
+
+        }
     }
 
 
