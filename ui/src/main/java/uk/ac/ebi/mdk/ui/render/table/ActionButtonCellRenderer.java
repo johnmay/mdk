@@ -69,10 +69,10 @@ public class ActionButtonCellRenderer
         setBackground(isSelected ? table.getSelectionBackground() : table.getBackground());
         setForeground(isSelected ? table.getSelectionForeground() : table.getForeground());
 
-        if (isVisible()) {
+        if (isVisible() && value != null) {
             if (value != null) setAction((Action) value);
         } else {
-            setAction(null);
+            setIcon(null);
         }
 
         return this;
