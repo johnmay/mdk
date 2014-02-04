@@ -117,12 +117,12 @@ public class DefaultStoichiometricMatrix
 
     @Override
     public StoichiometricMatrixImpl<CompartmentalisedMetabolite, String> newInstance() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return DefaultStoichiometricMatrix.create();
     }
 
 
     @Override
     public StoichiometricMatrixImpl<CompartmentalisedMetabolite, String> newInstance(int n, int m) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return DefaultStoichiometricMatrix.create(n, m);
     }
 }
