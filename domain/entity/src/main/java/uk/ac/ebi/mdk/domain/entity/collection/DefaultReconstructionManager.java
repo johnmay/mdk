@@ -107,7 +107,7 @@ public class DefaultReconstructionManager implements ReconstructionManager {
             if (recent.contains(path)) {
                 recent.remove(path);
             }
-            recent.add(path);
+            recent.addFirst(path);
             RECENT_FILES.put(recent);
 
             if (!reconstructions.containsKey(reconstruction.uuid())) {
@@ -151,7 +151,7 @@ public class DefaultReconstructionManager implements ReconstructionManager {
             if (recent.contains(path)) {
                 recent.remove(path);
             }
-            recent.add(path);
+            recent.addFirst(path);
             RECENT_FILES.put(recent);
 
             UUID uuid = reconstruction.uuid();
