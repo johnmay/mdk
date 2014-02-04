@@ -73,7 +73,7 @@ public enum Organelle implements Compartment {
 
     // basic
     UNKNOWN(                    "unk", "Unknown", 0,              "", ""),
-    BOUNDARY(                   "b",  "boundary", 19,             ""),;
+    BOUNDARY(                   "b",  "boundary", 19,             "", "model boundary"),;
 
     private final String abbreviation;
 
