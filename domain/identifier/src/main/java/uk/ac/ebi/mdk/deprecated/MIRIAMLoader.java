@@ -274,11 +274,13 @@ public class MIRIAMLoader {
 
 
     }
+    
+    int offset = "urn:miriam:".length();
 
     public Identifier getIdentifier(String urn) {
 
-        String prefix = urn.substring(0, urn.lastIndexOf(":"));
-
+        String prefix = urn.substring(0, urn.indexOf(":", offset));
+        
         // build the map if it's empty
         if (resources.isEmpty()) {
             for (Identifier id : DefaultIdentifierFactory.getInstance()

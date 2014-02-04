@@ -77,6 +77,12 @@ public class MIRIAMLoaderTest {
         ChEBIIdentifier chebiId = new ChEBIIdentifier(12);
         assertEquals(chebiId, loader.getIdentifier("urn:miriam:obo.chebi:CHEBI%3A12"));
     }
+    
+    @Test
+    public void testGetIdentifier_deprecated_nonescaped() {
+        ChEBIIdentifier chebiId = new ChEBIIdentifier(12);
+        assertEquals(chebiId, loader.getIdentifier("urn:miriam:obo.chebi:CHEBI:12"));
+    }
 
     @Test
     public void testMain() {
