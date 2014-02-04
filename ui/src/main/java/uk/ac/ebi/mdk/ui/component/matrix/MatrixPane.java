@@ -80,7 +80,7 @@ public class MatrixPane<M, R> extends JScrollPane {
                 } else if (coef < 0) {
                     component.setForeground(new Color(0xDB000C));
                     component.setFont(boldFont);
-                } else { 
+                } else {                                     
                     component.setForeground(Color.LIGHT_GRAY);
                     component.setFont(defaultFont);
                 }
