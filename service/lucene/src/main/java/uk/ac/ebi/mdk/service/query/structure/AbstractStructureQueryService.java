@@ -54,7 +54,6 @@ public abstract class AbstractStructureQueryService<I extends Identifier>
                    StructureSearch<I>,
                    SubstructureSearch<I> {
 
-    private IndexSearcher searcher;
     private IFingerprinter fingerprinter = new Fingerprinter();
     private MDLV2000Reader reader = new MDLV2000Reader();
     private MDLV2000Writer writer = new MDLV2000Writer();

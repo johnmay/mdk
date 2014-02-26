@@ -42,8 +42,6 @@ public abstract class AbstractConnectivityService <I extends Identifier>
     
     
     private static final Logger LOGGER = Logger.getLogger(AbstractConnectivityService.class);
-    
-    IndexSearcher searcher;
 
     public AbstractConnectivityService(LuceneIndex service) {
         super(service);
@@ -88,7 +86,7 @@ public abstract class AbstractConnectivityService <I extends Identifier>
     String searchGetConnectivity(Query query) {
         try {
             TopScoreDocCollector collector = TopScoreDocCollector.create(getMaxResults(), true);
-            searcher.search(query, collector);
+            getSearcher().search(query, collector);
             ScoreDoc[] hits = collector.topDocs().scoreDocs;
             for (ScoreDoc scoreDoc : hits) {
                 return value(scoreDoc, MoleculeCollectionConnectivityLuceneFields.Connectivity.toString());
