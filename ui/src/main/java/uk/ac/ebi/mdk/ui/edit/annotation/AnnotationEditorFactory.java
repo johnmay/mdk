@@ -29,6 +29,7 @@ import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.KEGGCrossReference;
 import uk.ac.ebi.mdk.domain.annotation.primitive.BooleanAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.FloatAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
@@ -93,6 +94,7 @@ public class AnnotationEditorFactory {
             ECNumber.class));
         editors.put(AuthorAnnotation.class, new AuthorAnnotationEditor());
         editors.put(DoubleAnnotation.class, new DoubleAnnotationEditor());
+        editors.put(FloatAnnotation.class, new DoubleAnnotationEditor());
         editors.put(BooleanAnnotation.class, new BooleanAnnotationEditor());
         editors.put(Flag.class, new FlagEditor());
         editors.put(GibbsEnergy.class, new GibbsEnergyEditor());
