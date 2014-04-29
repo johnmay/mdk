@@ -79,6 +79,11 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>mdk-tool-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>mdk-tool-search-tree</artifactId>
             <version>${project.version}</version>
         </dependency>
