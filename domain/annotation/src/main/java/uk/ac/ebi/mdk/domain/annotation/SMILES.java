@@ -79,7 +79,7 @@ public class SMILES
     @Override
     public void setValue(String SMILES){
         super.setValue(SMILES);
-        parseSMILES();
+        // parseSMILES();
     }
 
 

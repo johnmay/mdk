@@ -74,7 +74,7 @@ public class InChI
     @Override
     public void setValue(String value) {
         super.setValue(value);
-        generateStructure();
+        //generateStructure();
     }
 
 
