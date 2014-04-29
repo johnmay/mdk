@@ -56,7 +56,9 @@ public enum Organelle implements Compartment {
     GOLGI(                      "g", "golgi", 4,                 "GO:0005794", "Golgi complex", "Golgi apparatus", "Golgi ribbon"),
     LYSOSOME(                   "l", "lysosome", 5,              "GO:0005764"),
     GLYCOSOME(                  "y", "glycosome", 6,             "GO:0020015"),
+    
     GLYOXYSOME(                 "w", "glyoxysome", 7,            "GO:0009514"),
+//    GLYOXYSOME_2(               "o", "glyoxysome", 14,         ""),             // not sure what this one is
     PEROXISOME(                 "x", "peroxisome", 8,            "GO:0005777", "peroxisomal", "peroxisome vesicle"),
     MITOCHONDRION(              "m", "mitochondrion", 9,         "GO:0005739", "mitochondria", "mitochondrium"),
     NUCLEUS(                    "n", "nucleus", 10,              "GO:0005634", "cell nucleus"),
@@ -64,7 +66,7 @@ public enum Organelle implements Compartment {
     // Plants
     CHLOROPLAST(                "h", "chloroplast", 12,         "GO:0009507"),
     APICOPLAST(                 "a", "apicoplast", 13,          "GO:0020011"),
-    GLYOXYSOMES(                "o", "glyoxysomes", 14,         ""),             // not sure what this one is
+    
     PLASTID(                    "s", "plastid", 15,             "GO:0009536"),
     THYLAKOID(                  "t", "thylakoid", 16,           "GO:0009579", "photosynthetic membrane"),
     VACUOLE(                    "v", "vacuole", 17,             "GO:0005773", "vacuolar carboxypeptidase Y"),
