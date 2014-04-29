@@ -15,12 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openscience.cdk.isomorphism;
+package uk.ac.ebi.mdk.tool;
 
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.isomorphism.Pattern;
 import org.openscience.cdk.isomorphism.matchers.smarts.SmartsMatchers;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.smiles.smarts.parser.SMARTSParser;
@@ -61,6 +62,61 @@ public final class RingClose {
         }
 
         m = fiveMemberRing.match(container);
+        if (m.length > 0) {
+            IAtom a0 = container.getAtom(m[0]);
+            IAtom a4 = container.getAtom(m[4]);
+            IAtom a5 = container.getAtom(m[5]);
+            container.addBond(m[0], m[4], SINGLE);
+            container.getBond(a4, a5)
+                     .setOrder(SINGLE);
+            a5.setImplicitHydrogenCount(1);
+            if (a0.getImplicitHydrogenCount() == 1) {
+                a0.setImplicitHydrogenCount(0);
+            }
+            else {
+                for (IBond bond : container.getConnectedBondsList(a0)) {
+                    if (bond.getConnectedAtom(a0).getAtomicNumber() == 1)
+                        container.removeBond(bond);
+                }
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean closePyranose(IAtomContainer container) {
+
+        SmartsMatchers.prepare(container, true);
+
+        int[] m = sixMemberRing.match(container);
+        if (m.length > 0) {
+            IAtom a0 = container.getAtom(m[0]);
+            IAtom a5 = container.getAtom(m[5]);
+            IAtom a6 = container.getAtom(m[6]);
+            container.addBond(m[0], m[5], SINGLE);
+            container.getBond(a5, a6)
+                     .setOrder(SINGLE);
+            a6.setImplicitHydrogenCount(1);
+            if (a0.getImplicitHydrogenCount() == 1) {
+                a0.setImplicitHydrogenCount(0);
+            }
+            else {
+                for (IBond bond : container.getConnectedBondsList(a0)) {
+                    if (bond.getConnectedAtom(a0).getAtomicNumber() == 1)
+                        container.removeBond(bond);
+                }
+            }
+            return true;
+        }
+        
+        return false;
+    }
+
+    public boolean closeFuranose(IAtomContainer container) {
+
+        SmartsMatchers.prepare(container, true);
+        int[] m = fiveMemberRing.match(container);
         if (m.length > 0) {
             IAtom a0 = container.getAtom(m[0]);
             IAtom a4 = container.getAtom(m[4]);
