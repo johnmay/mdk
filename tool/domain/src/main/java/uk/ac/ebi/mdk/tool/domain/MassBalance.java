@@ -57,6 +57,35 @@ public class MassBalance {
             return description;
         }
     }
+    
+    public static Map<String, Double> deficit(MetabolicReaction reaction) {
+        Map<String, Double> left = getSymbolMap(reaction.getReactants());
+        Map<String, Double> right = getSymbolMap(reaction.getProducts());
+
+        int leftWins = 0;
+        int equal = 0;
+        int rightWins = 0;
+
+        HashSet<String> elementSet = new HashSet<String>();
+        elementSet.addAll(left.keySet());
+        elementSet.addAll(right.keySet());
+
+        Map<String, Double> deficit = new HashMap<String, Double>();
+        
+        // e: element, lc: left count, rc: right count
+        for (String e : elementSet) {
+
+            double lc = left.containsKey(e) ? left.get(e) : 0d;
+            double rc = right.containsKey(e) ? right.get(e) : 0d;
+
+            if (lc != rc) {
+                deficit.put(e, lc - rc);
+            } 
+
+        }
+        
+        return deficit;
+    }
 
     public static BalanceType getBalanceClassification(MetabolicReaction reaction) {
 
