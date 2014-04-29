@@ -160,7 +160,7 @@ public class SBMLIOUtil {
 
         // set id and meta-id
         Identifier id = rxn.getIdentifier();
-        sbmlRxn.setMetaId(nextMetaId());
+        sbmlRxn.setMetaId("r_meta_" + nextMetaId());
         sbmlRxn.setName(rxn.getName());
         if (id == null) {
             sbmlRxn.setId("rxn" + metaIdticker); // maybe need a try/catch to reset valid id
@@ -173,6 +173,7 @@ public class SBMLIOUtil {
                     .replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
             accession = accession
                     .replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
+            accession = "r_" + accession;
             sbmlRxn.setId(accession);
         }
 
@@ -292,10 +293,10 @@ public class SBMLIOUtil {
         Metabolite m = participant.getMolecule();
 
 
-        species.setMetaId(nextMetaId());
+        species.setMetaId("m_meta_" + nextMetaId());
         Identifier id = m.getIdentifier();
         if (id == null) {
-            species.setId("met" + metaIdticker); // maybe need a try/catch to reset valid id
+            species.setId("m_" + metaIdticker); // maybe need a try/catch to reset valid id
         } else {
             String accession = id.getAccession();
             accession = accession.trim();
@@ -303,11 +304,10 @@ public class SBMLIOUtil {
                     .replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
             accession = accession
                     .replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
-            String compartment = ((Compartment) participant.getCompartment())
-                    .getAbbreviation();
+            String compartment = ((Compartment) participant.getCompartment()).getAbbreviation();
             // suffix compartment to id
             if (!id.getAccession().endsWith("_" + compartment))
-                species.setId(accession + "_" + compartment);
+                species.setId("m_" + accession + "_" + compartment);
             else
                 species.setId(accession);
         }
