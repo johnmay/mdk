@@ -24,8 +24,6 @@ import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.RendererModel;
 import org.openscience.cdk.renderer.font.AWTFontManager;
-import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
-import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.HighlightGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
@@ -168,6 +166,15 @@ public class MoleculeRenderer {
 
     }
 
+    public boolean regenerateDiagram(IAtomContainer container) {
+        try {
+            sdg.setMolecule(container, false); // clone or not clone?
+            sdg.generateCoordinates();
+            return true;
+        } catch (CDKException e) {
+            return false;
+        }
+    }
 
     public static void main(String[] args) throws CDKException, IOException {
         MoleculeRenderer MOL_RENDERER = MoleculeRenderer.getInstance();
