@@ -41,21 +41,27 @@ public class ChemicalStructureRenderer
 
     private MoleculeRenderer renderer;
     private final boolean highlight;
+    private final boolean autorowsize;
 
     public ChemicalStructureRenderer() {
-        this(false, MoleculeRenderer.getInstance());
+        this(false, true,  MoleculeRenderer.getInstance());
     }
 
     public ChemicalStructureRenderer(boolean highlight) {
-        this(highlight, MoleculeRenderer.getInstance());
+        this(highlight, true, MoleculeRenderer.getInstance());
+    }
+    
+    public ChemicalStructureRenderer(boolean highlight, boolean autorowsize) {
+        this(highlight, autorowsize, MoleculeRenderer.getInstance());
     }
 
     public ChemicalStructureRenderer(MoleculeRenderer renderer) {
-        this(false, MoleculeRenderer.getInstance());
+        this(false, true, MoleculeRenderer.getInstance());
     }
 
-    public ChemicalStructureRenderer(boolean highlight, MoleculeRenderer renderer) {
+    public ChemicalStructureRenderer(boolean highlight, boolean autorowsize, MoleculeRenderer renderer) {
         this.renderer = renderer;
+        this.autorowsize = autorowsize;
         this.highlight = highlight;
     }
 
