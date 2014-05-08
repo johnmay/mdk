@@ -364,8 +364,7 @@ public class PeptideFactory {
                 this.molecule = SilentChemObjectBuilder.getInstance()
                                                        .newInstance(IAtomContainer.class);
                 reader.read(molecule);
-                AtomContainerManipulator
-                        .percieveAtomTypesAndConfigureUnsetProperties(molecule);
+                AtomContainerManipulator.percieveAtomTypesAndConfigureUnsetProperties(molecule);
             } catch (Exception ex) {
                 LOGGER.error("Could not load amino acid "
                                      + name() + ": " + ex.getMessage());
@@ -445,6 +444,7 @@ public class PeptideFactory {
             IAtom dest = src.getBuilder().newInstance(IAtom.class);
             dest.setSymbol(src.getSymbol());
             dest.setAtomicNumber(src.getAtomicNumber());
+            dest.setImplicitHydrogenCount(src.getImplicitHydrogenCount());
             dest.setFormalCharge(src.getFormalCharge());
             dest.setValency(src.getValency());
             dest.setPoint2d(new Point2d(src.getPoint2d()));
