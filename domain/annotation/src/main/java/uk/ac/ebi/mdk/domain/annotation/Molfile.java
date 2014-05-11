@@ -25,6 +25,12 @@ import org.openscience.cdk.io.MDLV2000Reader;
 import org.openscience.cdk.io.MDLV2000Writer;
 import org.openscience.cdk.silent.AtomContainer;
 import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractStringAnnotation;
+import uk.ac.ebi.mdk.domain.entity.Gene;
+import uk.ac.ebi.mdk.domain.entity.GeneProduct;
+import uk.ac.ebi.mdk.domain.entity.Metabolite;
+import uk.ac.ebi.mdk.lang.annotation.Brief;
+import uk.ac.ebi.mdk.lang.annotation.Context;
+import uk.ac.ebi.mdk.lang.annotation.Description;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -35,6 +41,9 @@ import java.io.StringWriter;
  *
  * @author John May
  */
+@Context({Metabolite.class})
+@Brief("molfile")
+@Description("molfile representation of chemical structure")
 public final class Molfile extends AbstractStringAnnotation
         implements ChemicalStructure {
 
