@@ -43,6 +43,7 @@ import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.xml.XMLNode;
@@ -157,10 +158,10 @@ public class SBMLIOUtil {
     public Reaction addReaction(Model model, MetabolicReaction rxn) {
 
         Reaction sbmlRxn = new Reaction(level, version);
-
+        
         // set id and meta-id
         Identifier id = rxn.getIdentifier();
-        sbmlRxn.setMetaId("r_meta_" + nextMetaId());
+        sbmlRxn.setMetaId("meta_r_" + nextMetaId());
         sbmlRxn.setName(rxn.getName());
         if (id == null) {
             sbmlRxn.setId("rxn" + metaIdticker); // maybe need a try/catch to reset valid id
@@ -215,7 +216,6 @@ public class SBMLIOUtil {
                 .getAnnotationsExtending(CrossReference.class)) {
             term.addResource(xref.getIdentifier().getURN());
         }
-
 
 // causes large slow down in export
 //        if (rxn.getAnnotations().size() > 0) {
@@ -289,11 +289,11 @@ public class SBMLIOUtil {
                               CompartmentalisedParticipant<Metabolite, Double, Compartment> participant) {
 
         Species species = new Species(level, version);
+        species.setSBOTerm(SBO.getSimpleMolecule());
 
         Metabolite m = participant.getMolecule();
 
-
-        species.setMetaId("m_meta_" + nextMetaId());
+        species.setMetaId("meta_m_" + nextMetaId());
         Identifier id = m.getIdentifier();
         if (id == null) {
             species.setId("m_" + metaIdticker); // maybe need a try/catch to reset valid id
