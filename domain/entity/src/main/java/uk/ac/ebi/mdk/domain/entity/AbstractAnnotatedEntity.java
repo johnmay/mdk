@@ -226,6 +226,10 @@ public abstract class AbstractAnnotatedEntity
     }
 
 
+    @Override public void clearObservations() {
+        observations.clear();
+    }
+
     /**
      * Adds an observation to the descriptor
      *

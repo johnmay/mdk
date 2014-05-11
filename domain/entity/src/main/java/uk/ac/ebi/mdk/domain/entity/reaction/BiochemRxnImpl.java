@@ -477,4 +477,7 @@ public final class BiochemRxnImpl implements BiochemicalReaction {
         return new BiochemRxnImpl(new MetabolicReactionImpl(id, abrv, name), new LinkedList<GeneProduct>());
     }
 
+    @Override public void clearObservations() {
+        r.clearObservations();
+    }
 }

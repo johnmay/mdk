@@ -130,7 +130,8 @@ public interface AnnotatedEntity extends Entity {
      * for this entity
      */
     public ObservationManager getObservationManager();
-
+    
+    public void clearObservations();
 
     /**
      * Adds an observation to the descriptor

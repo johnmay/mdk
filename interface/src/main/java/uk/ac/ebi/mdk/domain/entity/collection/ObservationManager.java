@@ -84,4 +84,6 @@ public interface ObservationManager {
      * 
      */
     public Collection<Class<? extends Observation>> getClasses();
+    
+    public void clear();
 }

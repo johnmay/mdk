@@ -103,4 +103,9 @@ public class ObservationCollection
         final ObservationCollection other = (ObservationCollection) obj;
         return !(this.typeMap != other.typeMap && (this.typeMap == null || !this.typeMap.equals(other.typeMap)));
     }
+
+    @Override public void clear() {
+        sourceMap.clear();
+        typeMap.clear();
+    }
 }
