@@ -23,6 +23,7 @@ import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.Charge;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
+import uk.ac.ebi.mdk.domain.annotation.Molfile;
 import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.entity.collection.MetaboliteClassImplementation;
 import uk.ac.ebi.mdk.domain.entity.metabolite.MetaboliteClass;
@@ -140,7 +141,7 @@ public class MetaboliteImpl
      * @inheritDoc
      */
     public boolean hasStructure() {
-        return super.hasAnnotation(AtomContainerAnnotation.class) || super.hasAnnotation(InChI.class) || super.hasAnnotation(SMILES.class);
+        return super.hasAnnotation(AtomContainerAnnotation.class) || super.hasAnnotation(InChI.class) || super.hasAnnotation(SMILES.class) || super.hasAnnotation(Molfile.class);
     }
 
 
