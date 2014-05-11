@@ -39,6 +39,9 @@ import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * AnnotationDataInputStream - 09.03.2012 <br/>
@@ -89,7 +92,12 @@ public class AnnotationDataInputStream
     }
 
     public AnnotationReader getReader(Class c) {
-        return hasMarshaller(c, getVersion()) ? getMarshaller(c, getVersion()) : add(c, createReader(c), getVersion());
+        if (!hasMarshaller(c, getVersion())) {
+            for (AnnotationReader reader : createReaders(c)) {
+                add(c, reader);
+            }
+        }
+        return getMarshaller(c, getVersion());
     }
 
 
@@ -110,22 +118,22 @@ public class AnnotationDataInputStream
     }
 
     @SuppressWarnings("unchecked")
-    public AnnotationReader createReader(Class c) {
+    public Collection<AnnotationReader> createReaders(Class c) {
 
         if (StringAnnotation.class.isAssignableFrom(c)) {
-            return new StringAnnotationReader(c, in);
+            return Arrays.<AnnotationReader>asList(new StringAnnotationReader(c, in), new StringAnnotationReader_1_4_2(c, in));
         } else if (DoubleAnnotation.class.isAssignableFrom(c)) {
-            return new DoubleAnnotationReader(c, in);
+            return Collections.<AnnotationReader>singleton(new DoubleAnnotationReader(c, in));
         } else if (BooleanAnnotation.class.isAssignableFrom(c)) {
-            return new BooleanAnnotationReader(c, in);
+            return Collections.<AnnotationReader>singleton(new BooleanAnnotationReader(c, in));
         } else if (FloatAnnotation.class.isAssignableFrom(c)) {
-            return new FloatAnnotationReader(c, in);
+            return Collections.<AnnotationReader>singleton(new FloatAnnotationReader(c, in));
         } else if (IntegerAnnotation.class.isAssignableFrom(c)) {
-            return new IntegerAnnotationReader(c, in);
+            return Collections.<AnnotationReader>singleton(new IntegerAnnotationReader(c, in));
         } else if (CrossReference.class.isAssignableFrom(c)) {
-            return new CrossReferenceReader(c, identifierInput, observationInput);
+            return Collections.<AnnotationReader>singleton(new CrossReferenceReader(c, identifierInput, observationInput));
         } else if (Flag.class.isAssignableFrom(c)) {
-            return new FlagReader(c);
+            return Collections.<AnnotationReader>singleton(new FlagReader(c));
         }
 
         throw new InvalidParameterException("Could not create writer for " + c.getName());

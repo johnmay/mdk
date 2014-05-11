@@ -76,7 +76,6 @@ public class MarshalManager<T> {
 
 
     public T add(Class c, T marshal, Version v) {
-
         if (marshals.containsKey(c)) {
             marshals.get(c).put(v, marshal);
             return marshal;

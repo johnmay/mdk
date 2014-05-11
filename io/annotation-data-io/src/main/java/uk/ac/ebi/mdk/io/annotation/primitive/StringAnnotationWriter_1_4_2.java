@@ -19,38 +19,39 @@ package uk.ac.ebi.mdk.io.annotation.primitive;
 
 
 import uk.ac.ebi.caf.utility.version.annotation.CompatibleSince;
-import uk.ac.ebi.mdk.io.AnnotationWriter;
 import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
+import uk.ac.ebi.mdk.io.AnnotationWriter;
 
 import java.io.DataOutput;
 import java.io.IOException;
 
-/**
- * StringAnnotationReader - 09.03.2012 <br/>
- * <p/>
- * Read's a string annotation from {@see DataInput}
- *
- * @author johnmay
- * @author $Author$ (this version)
- * @version $Rev$
- */
-@CompatibleSince("0.9")
-public class StringAnnotationWriter
+@CompatibleSince("1.4.2")
+public class StringAnnotationWriter_1_4_2
     implements AnnotationWriter<StringAnnotation> {
 
     private DataOutput out;
     private static final int UTF_LIMIT = 16 * 1024;
 
-    public StringAnnotationWriter(DataOutput out){
+    public StringAnnotationWriter_1_4_2(DataOutput out){
         this.out = out;
     }
 
     public void write(StringAnnotation annotation) throws IOException {
-        if (annotation.getValue().length() >= UTF_LIMIT) {
-            System.err.println("...");
-            out.writeUTF("");
-        } else {
-            out.writeUTF(annotation.getValue());
+        String str = annotation.getValue();
+        
+        if (str == null) str = ""; // there should be no null annotation 
+        
+        int len    = str.length();
+        int chunks = 1 + (len / UTF_LIMIT);
+        
+        if (chunks > 255)
+            throw new IOException("String Annotation is too long");
+        
+        out.writeByte(chunks);
+        for (int i = 0; i < chunks; i++) {
+            int st = i * UTF_LIMIT;
+            int ed = Math.min(str.length(), (i + 1) * UTF_LIMIT);
+            out.writeUTF(str.substring(st, ed));    
         }
     }
 

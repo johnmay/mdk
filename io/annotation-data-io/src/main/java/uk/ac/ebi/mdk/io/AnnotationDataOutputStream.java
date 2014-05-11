@@ -37,6 +37,9 @@ import uk.ac.ebi.mdk.io.annotation.task.ParameterWriter;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * AnnotationDataOutputStream - 09.03.2012 <br/>
@@ -131,25 +134,30 @@ public class AnnotationDataOutputStream
      * @return
      */
     public AnnotationWriter getWriter(Class c) {
-        return hasMarshaller(c, getVersion()) ? getMarshaller(c, getVersion()) : add(c, createWriter(c), getVersion());
+        if (!hasMarshaller(c, getVersion())) {
+            for (AnnotationWriter writer : createWriters(c)) {
+                add(c, writer);
+            }
+        }
+        return getMarshaller(c, getVersion());
     }
 
-    public AnnotationWriter createWriter(Class c) {
+    public Collection<AnnotationWriter> createWriters(Class c) {
 
         if (StringAnnotation.class.isAssignableFrom(c)) {
-            return new StringAnnotationWriter(out);
+            return Arrays.<AnnotationWriter>asList(new StringAnnotationWriter(out), new StringAnnotationWriter_1_4_2(out));
         } else if (DoubleAnnotation.class.isAssignableFrom(c)) {
-            return new DoubleAnnotationWriter(out);
+            return Collections.<AnnotationWriter>singleton(new DoubleAnnotationWriter(out));
         } else if (BooleanAnnotation.class.isAssignableFrom(c)) {
-            return new BooleanAnnotationWriter(out);
+            return Collections.<AnnotationWriter>singleton(new BooleanAnnotationWriter(out));
         } else if (FloatAnnotation.class.isAssignableFrom(c)) {
-            return new FloatAnnotationWriter(out);
+            return Collections.<AnnotationWriter>singleton(new FloatAnnotationWriter(out));
         } else if (IntegerAnnotation.class.isAssignableFrom(c)) {
-            return new IntegerAnnotationWriter(out);
+            return Collections.<AnnotationWriter>singleton(new IntegerAnnotationWriter(out));
         } else if (CrossReference.class.isAssignableFrom(c)) {
-            return new CrossReferenceWriter(identifierOutput, observationOutput);
+            return Collections.<AnnotationWriter>singleton(new CrossReferenceWriter(identifierOutput, observationOutput));
         } else if (Flag.class.isAssignableFrom(c)) {
-            return new FlagWriter();
+            return Collections.<AnnotationWriter>singleton(new FlagWriter());
         }
 
         throw new InvalidParameterException("Could not create writer for " + c.getName());
