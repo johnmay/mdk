@@ -105,6 +105,11 @@
         </dependency>
         <dependency>
             <groupId>org.openscience.cdk</groupId>
+            <artifactId>cdk-sdg</artifactId>
+            <version>${cdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-fingerprint</artifactId>
             <version>${cdk.version}</version>
         </dependency>
