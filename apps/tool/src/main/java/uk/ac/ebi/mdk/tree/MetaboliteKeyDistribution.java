@@ -104,8 +104,11 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
 
         for (Metabolite m : reference.metabolome()) {
             for (ChemicalStructure cs : m.getStructures()) {
-                // if (cs instanceof SMILES)
-                    containers.add(cs.getStructure());
+                IAtomContainer ac = cs.getStructure();
+                //if (cs instanceof SMILES) 
+                    containers.add(ac);
+                ac.setProperty("name", m.getName());
+                
             }
         }
         
@@ -125,7 +128,7 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
                                                   new AtomAndBondCount(),
                                                   new FormulaWithH(),
                                                   new FormulaNoH(),
-                                                  new ExtendConHash1(),
+//                                                  new ExtendConHash1(),
                                                   new ExtendConHash2(),
                                                   new ExtendConHash3(),
                                                   new ExtendConHash4(),
@@ -136,7 +139,6 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
                 int err = 0;
                 List<Long> invs = new ArrayList<Long>();
                 Set<Integer> skip = new HashSet<Integer>();
-                long t0 = System.nanoTime();
                 for (IAtomContainer container : containers) {
                     try {
                         invs.add(generator.compute(container));
@@ -146,7 +148,23 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
                         err++;
                     }
                 }
-                long t1 = System.nanoTime();
+
+                long tAvg = 0;
+                int  reps = 10;
+                for (int r = 0; r < reps; r++) {
+                    long t0 = System.nanoTime();
+                    for (IAtomContainer container : containers) {
+                        try {
+                            long encode = generator.compute(container);
+                        } catch (Exception e) {
+                            
+                        }
+                    }
+                    long t1 = System.nanoTime();
+                    tAvg += t1 - t0;
+                }
+                
+                tAvg /= reps;
 
                 // now build lookup
                 Multimap<Long, IAtomContainer> lookup = HashMultimap.create();
@@ -159,14 +177,20 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
                     lookup.put(inv, container);
                 }
 
-                System.out.println(lookup.size() + " (" + lookup.keySet().size() + " bins)" + " " + (lookup.size() / (double) lookup.keySet().size()) + " " + err + " errors");
-                System.out.println(TimeUnit.NANOSECONDS.toMillis(t1 - t0) + " ms to index ");
-
+                System.out.println(generator.name() + ": " + lookup.size() + " (" + lookup.keySet().size() + " bins)" + " " + (lookup.size() / (double) lookup.keySet().size()) + " " + err + " errors " + TimeUnit.NANOSECONDS.toMillis(tAvg) + " ms to index ");
+                
                 Map<Integer, Integer> freq = new TreeMap<Integer, Integer>();
                 for (Map.Entry<Long, Collection<IAtomContainer>> map : lookup.asMap().entrySet()) {
                     int n = map.getValue().size();
                     Integer cnt;
                     freq.put(n, (cnt = freq.get(n)) == null ? 1 : 1 + cnt);
+                    if (n > 1 && generator.name().equals(new ExtendConHash6().name())) {
+                        System.out.println(Long.toHexString(map.getKey()));
+                        for (IAtomContainer ac : map.getValue()) {
+                            System.out.println(ac.getProperty("name"));
+                        }
+                        System.out.println();
+                    }
                 }
 
                 for (Map.Entry<Integer, Integer> e : freq.entrySet()) {
@@ -174,7 +198,7 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
                             e.getKey().toString(),
                             e.getValue().toString(),
                             generator.name(),
-                            Long.toString(TimeUnit.NANOSECONDS.toMillis(t1 - t0)),
+                            Long.toString(TimeUnit.NANOSECONDS.toMillis(tAvg)),
                             id,
                             Integer.toString(containers.size()),
                             Integer.toString(lookup.size()),                            
@@ -246,24 +270,7 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
             return FormulaHash.WithHydrogens.generate(container);
         }
     }
-
-    private final class ExtendConHash1 implements InvGen {
-
-        private final MoleculeHashGenerator generator = new HashGeneratorMaker().depth(4)
-                                                                                .elemental()
-                                                                                .molecular();
-
-        @Override
-
-        public String name() {
-            return "ec-4EsHp";
-        }
-
-        @Override public long compute(IAtomContainer container) {
-            return generator.generate(container);
-        }
-    }
-
+    
     private final class ExtendConHash2 implements InvGen {
 
         private final MoleculeHashGenerator generator = new HashGeneratorMaker().depth(4)
@@ -274,7 +281,7 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
         @Override
 
         public String name() {
-            return "ec-4Eshp";
+            return "ec-4E";
         }
 
         @Override public long compute(IAtomContainer container) {
@@ -293,7 +300,7 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
         @Override
 
         public String name() {
-            return "ec-4EShp";
+            return "ec-4ES";
         }
 
         @Override public long compute(IAtomContainer container) {
@@ -312,7 +319,7 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
         @Override
 
         public String name() {
-            return "ec-16EShp";
+            return "ec-16ES";
         }
 
         @Override public long compute(IAtomContainer container) {
@@ -332,7 +339,7 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
         @Override
 
         public String name() {
-            return "ec-32-all";
+            return "ec-32ESP";
         }
 
         @Override public long compute(IAtomContainer container) {
@@ -346,16 +353,14 @@ public class MetaboliteKeyDistribution extends CommandLineMain {
                                                                                 .elemental()
                                                                                 .chiral()
                                                                                 .charged()
-                                                                                .radical()
                                                                                 .isotopic()
-                                                                                .orbital()
                                                                                 .perturbed()
                                                                                 .suppressHydrogens()
                                                                                 .molecular();
 
         @Override
         public String name() {
-            return "ec-16EShP";
+            return "ec-16ESCIP";
         }
 
         @Override public long compute(IAtomContainer container) {
