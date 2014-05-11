@@ -49,11 +49,9 @@ import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.Symbol;
 import org.sbml.jsbml.xml.XMLNode;
 import uk.ac.ebi.mdk.deprecated.MIRIAMLoader;
-import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.DefaultAnnotationFactory;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.Note;
-import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
@@ -100,7 +98,7 @@ import java.util.regex.Pattern;
 public class SBMLReactionReader {
 
     private static final Logger LOGGER = Logger.getLogger(
-        SBMLReactionReader.class);
+            SBMLReactionReader.class);
 
     private static final SBMLReader reader = new SBMLReader();
     // web service clients
@@ -133,7 +131,7 @@ public class SBMLReactionReader {
     // pattern for extracting ids
 
     private static final Pattern IDENTIFIERS_DOT_ORG = Pattern.compile(
-        "http://(?:www.)?identifiers.org/([^/]+)/([^/]+)/?");
+            "http://(?:www.)?identifiers.org/([^/]+)/([^/]+)/?");
 
 
     /**
@@ -141,7 +139,6 @@ public class SBMLReactionReader {
      * uses an empty {@see AcceptAllFilter} filter on reaction participants
      *
      * @param stream
-     *
      * @throws XMLStreamException
      */
     public SBMLReactionReader(InputStream stream, EntityFactory factory, CompartmentResolver resolver) throws
@@ -170,52 +167,62 @@ public class SBMLReactionReader {
 
         MetabolicReaction reaction = factory.ofClass(MetabolicReaction.class,
                                                      new BasicReactionIdentifier(
-                                                         sbmlReaction.getId()),
+                                                             sbmlReaction.getId()),
                                                      sbmlReaction.getName(),
-                                                     sbmlReaction.getMetaId());
+                                                     sbmlReaction.getMetaId()
+                                                    );
         LOGGER.debug("Reading SBML reaction " + reaction);
 
         for (int i = 0; i < sbmlReaction.getNumReactants(); i++) {
             reaction.addReactant(getMetaboliteParticipant(
-                sbmlReaction.getReactant(i)));
+                    sbmlReaction.getReactant(i)));
         }
 
         for (int i = 0; i < sbmlReaction.getNumProducts(); i++) {
             reaction.addProduct(getMetaboliteParticipant(
-                sbmlReaction.getProduct(i)));
+                    sbmlReaction.getProduct(i)));
         }
 
         // set the reversibility
         reaction.setDirection(
-            sbmlReaction.isReversible() ? Direction.BIDIRECTIONAL
-                                        : Direction.FORWARD);
+                sbmlReaction.isReversible() ? Direction.BIDIRECTIONAL
+                                            : Direction.FORWARD
+                             );
 
         for (CVTerm term : sbmlReaction.getCVTerms()) {
-            for (String resource : term.getResources()) {
-                //XXX bit of a hack - need a handler class
-                if (resource.startsWith("urn:miriam")) {
-                    Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(
-                        resource);
-                    if (identifier != null) reaction.addAnnotation(
-                        DefaultAnnotationFactory.getInstance().getCrossReference(
-                            identifier));
-                } else if (resource.contains("identifiers.org")) {
-                    Matcher matcher = IDENTIFIERS_DOT_ORG.matcher(resource);
-                    if (matcher.matches()) {
-
-                        // access the namespace/accessions
-                        String namespace = matcher.group(1);
-                        String accession = matcher.group(2);
-
-                        Identifier identifier = MIRIAMLoader.getInstance().ofNamespace(
-                            namespace, accession);
-
-                        if (identifier != null && identifier != IdentifierFactory.EMPTY_IDENTIFIER)
-                            reaction.addAnnotation(
+            // BQM is for model
+            if (CVTerm.Qualifier.BQB_IS.equals(term.getBiologicalQualifierType())) {
+                for (String resource : term.getResources()) {
+                    //XXX bit of a hack - need a handler class
+                    if (resource.startsWith("urn:miriam")) {
+                        Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(
+                                resource);
+                        if (identifier != null) reaction.addAnnotation(
                                 DefaultAnnotationFactory.getInstance().getCrossReference(
-                                    identifier));
+                                        identifier)
+                                                                      );
+                    }
+                    else if (resource.contains("identifiers.org")) {
+                        Matcher matcher = IDENTIFIERS_DOT_ORG.matcher(resource);
+                        if (matcher.matches()) {
+
+                            // access the namespace/accessions
+                            String namespace = matcher.group(1);
+                            String accession = matcher.group(2);
+
+                            Identifier identifier = MIRIAMLoader.getInstance().ofNamespace(
+                                    namespace, accession);
+
+                            if (identifier != null && identifier != IdentifierFactory.EMPTY_IDENTIFIER)
+                                reaction.addAnnotation(
+                                        DefaultAnnotationFactory.getInstance().getCrossReference(
+                                                identifier)
+                                                      );
+                        }
                     }
                 }
+            } else {
+                LOGGER.warn("Unsupported SBML annotation qualifier: " + term.getBiologicalQualifierType());
             }
         }
 
@@ -251,7 +258,7 @@ public class SBMLReactionReader {
             species = new Species();
             species.setId(speciesReference.getSpecies());
             species.setName(
-                speciesReference.getSpecies() + " (not found in SBML)");
+                    speciesReference.getSpecies() + " (not found in SBML)");
             species.setCompartment("x");
 
         }
@@ -298,7 +305,7 @@ public class SBMLReactionReader {
             // check for case conflicts periplasm != Periplasm
             normalise();
             compartment = model.getCompartment(normalise(
-                species.getCompartment()));
+                    species.getCompartment()));
         }
 
         if (compartment == null) return resolver.getCompartment("");
@@ -313,8 +320,8 @@ public class SBMLReactionReader {
 
         // if no compartment name is provided we use the ID or we use the name
         uk.ac.ebi.mdk.domain.entity.reaction.Compartment c =
-            name.isEmpty() ? resolver.getCompartment(id)
-                           : resolver.getCompartment(name);
+                name.isEmpty() ? resolver.getCompartment(id)
+                               : resolver.getCompartment(name);
 
 
         if (c != null) {
@@ -336,7 +343,6 @@ public class SBMLReactionReader {
      * Constructs a reaction participant from a species reference
      *
      * @param speciesReference An instance of SBML {@see SpeciesReference}
-     *
      * @return An MetaboliteParticipant
      */
     public MetabolicParticipant getMetaboliteParticipant(SpeciesReference speciesReference) {
@@ -344,7 +350,7 @@ public class SBMLReactionReader {
         Species species = getSpecies(speciesReference);
 
         uk.ac.ebi.mdk.domain.entity.reaction.Compartment compartment = getCompartment(
-            species);
+                species);
 
         Double coefficient = speciesReference.getStoichiometry();
 
@@ -352,16 +358,19 @@ public class SBMLReactionReader {
 
         if (speciesMap.containsKey(species)) {
             metabolite = speciesMap.get(species);
-        } else if (speciesNameMap.containsKey(species.getName())) {
+        }
+        else if (speciesNameMap.containsKey(species.getName())) {
             LOGGER.debug(
-                "Using existing species with the same name:" + species.getName());
+                    "Using existing species with the same name:" + species.getName());
             metabolite = speciesNameMap.get(species.getName());
-        } else {
+        }
+        else {
             metabolite = factory.newInstance(Metabolite.class,
                                              new BasicChemicalIdentifier(
-                                                 species.getId()),
+                                                     species.getId()),
                                              species.getName(),
-                                             species.getMetaId());
+                                             species.getMetaId()
+                                            );
 
             int charge = species.getCharge();
             metabolite.setCharge(((Integer) charge).doubleValue());
@@ -371,11 +380,13 @@ public class SBMLReactionReader {
                     //XXX bit of a hack - need a handler class
                     if (resource.startsWith("urn:miriam")) {
                         Identifier identifier = MIRIAMLoader.getInstance().getIdentifier(
-                            resource);
+                                resource);
                         if (identifier != null) metabolite.addAnnotation(
-                            DefaultAnnotationFactory.getInstance().getCrossReference(
-                                identifier));
-                    } else if (resource.contains("identifiers.org")) {
+                                DefaultAnnotationFactory.getInstance().getCrossReference(
+                                        identifier)
+                                                                        );
+                    }
+                    else if (resource.contains("identifiers.org")) {
                         Matcher matcher = IDENTIFIERS_DOT_ORG.matcher(resource);
                         if (matcher.matches()) {
 
@@ -384,18 +395,20 @@ public class SBMLReactionReader {
                             String accession = matcher.group(2);
 
                             Identifier identifier = MIRIAMLoader.getInstance().ofNamespace(
-                                namespace, accession);
+                                    namespace, accession);
 
                             if (identifier != null && identifier != IdentifierFactory.EMPTY_IDENTIFIER)
                                 metabolite.addAnnotation(
-                                    DefaultAnnotationFactory.getInstance().getCrossReference(
-                                        identifier));
+                                        DefaultAnnotationFactory.getInstance().getCrossReference(
+                                                identifier)
+                                                        );
                         }
-                    } else if (resource.startsWith(
-                        "http://rdf.openmolecules.net")) {
+                    }
+                    else if (resource.startsWith(
+                            "http://rdf.openmolecules.net")) {
                         // length 30 = the prefix
                         metabolite.addAnnotation(new InChI(resource.substring(
-                            30)));
+                                30)));
                     }
 
                 }
@@ -411,7 +424,7 @@ public class SBMLReactionReader {
         }
 
         MetabolicParticipant participant = factory.newInstance(
-            MetabolicParticipant.class);
+                MetabolicParticipant.class);
         participant.setMolecule(metabolite);
         participant.setCoefficient(coefficient);
         participant.setCompartment(compartment);
@@ -425,7 +438,6 @@ public class SBMLReactionReader {
      * can handle.
      *
      * @param symbol the symbol to access comments from
-     *
      * @return the comment annotations
      */
     private List<Note> strip(Symbol symbol) {
@@ -439,7 +451,6 @@ public class SBMLReactionReader {
      * preserved on the imported model.
      *
      * @param node an XML Node with some comment-like data
-     *
      * @return
      */
     private List<Note> strip(XMLNode node, List<Note> comments) {
