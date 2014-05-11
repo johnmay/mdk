@@ -44,6 +44,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -83,6 +84,34 @@ public class ReconstructionIOHelper {
 
     }
 
+    /**
+     * Store a reconstruction, but back it up first incase something goes wrong.
+     * @param reconstruction
+     * @param file
+     * @throws IOException
+     */
+    public static void writeSafe(Reconstruction reconstruction, File file) throws IOException {
+        String path = file.getPath();
+        File backup = new File(path + ".bak");
+        if (file.renameTo(backup)) {
+            ReconstructionIOHelper.write(reconstruction, new File(path));
+            delete(backup);
+            System.out.println("[INFO] update successful.");
+        } else {
+            System.err.println("[ERROR] could not backup existing save.");
+        }
+    }
+
+    static void delete(File f) throws IOException {
+        if (f == null) return;
+        if (f.isDirectory()) {
+            for (File c : f.listFiles())
+                delete(c);
+        }
+        if (!f.delete())
+            throw new FileNotFoundException("Failed to delete file: " + f);
+    }
+    
     public static void write(Reconstruction reconstruction, File file) throws
                                                                        IOException {
 
