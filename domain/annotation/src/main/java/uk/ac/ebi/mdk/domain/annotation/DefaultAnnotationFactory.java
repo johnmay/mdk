@@ -124,8 +124,10 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
                 new Note(),
                 Lumped.getInstance(),
                 ACPAssociated.getInstance(),
+                ChokePoint.getInstance(),
                 new RExExtract(),
-                new PrimaryName()
+                new PrimaryName(),
+                new Molfile()
             )) {
 
             instances.put(annotation.getClass(), annotation);
