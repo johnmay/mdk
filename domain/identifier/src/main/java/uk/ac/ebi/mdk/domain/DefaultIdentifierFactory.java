@@ -184,8 +184,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
                 if (synonymExclusions.contains(key) == Boolean.FALSE) {
 
                     if (synonyms.containsKey(key)) {
-                        logger.warn(
-                            "Clashing synonym names in map: " + key + " appears more then once");
+                        logger.debug("Clashing synonym names in map: " + key + " appears more then once");
                     }
 
                     synonyms.put(key, identifier);
