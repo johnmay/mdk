@@ -57,13 +57,13 @@ public final class MyHashMaker {
     }
     
     public MoleculeHashGenerator build() {
-        SeedGenerator seedGenerator = new SeedGenerator(new ConjugatedAtomEncoder(encoders));
-        Pseudorandom  pseudorandom  = new Xorshift();
+        SeedGenerator seedGenerator = new SeedGenerator(new ConjugatedAtomEncoder(encoders),  AtomSuppression.anyHydrogens());
+        Pseudorandom  prng          = new Xorshift();
         AtomHashGenerator atomHashGen = new SuppressedAtomHashGenerator(seedGenerator,
-                                                                        new Xorshift(),
+                                                                        prng,
                                                                         stereo ? new MyStereoEncoder(): StereoEncoderFactory.EMPTY,
                                                                         AtomSuppression.anyHydrogens(),
                                                                         depth);
-        return new BasicMoleculeHashGenerator(atomHashGen, new Xorshift());
+        return new BasicMoleculeHashGenerator(atomHashGen, prng);
     }
 }
