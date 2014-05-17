@@ -20,7 +20,7 @@ public class BeamTest {
 
     @Test
     public void read_invalid() throws Exception {
-        IAtomContainer m = Beam.fromSMILES("CCC[ACP]");
+        IAtomContainer m = Beam.fromSMILES("ccc");
         assertThat(m.getAtomCount(), is(0));
     }
 
