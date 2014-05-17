@@ -17,54 +17,45 @@
 
 package uk.ac.ebi.mdk.service.loader.structure;
 
-import au.com.bytecode.opencsv.CSVReader;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.Molecule;
-import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.io.MDLV2000Reader;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
-import uk.ac.ebi.mdk.service.DefaultServiceManager;
 import uk.ac.ebi.mdk.service.index.other.MoleculeCollectionConnectivityIndex;
 import uk.ac.ebi.mdk.service.loader.AbstractSingleIndexResourceLoader;
-import uk.ac.ebi.mdk.service.loader.location.RemoteLocation;
 import uk.ac.ebi.mdk.service.loader.single.MoleculeCollectionConnectivityLoader;
 import uk.ac.ebi.mdk.service.loader.single.MoleculeCollectionConnectivityLoader.MoleculeConnectivity;
 import uk.ac.ebi.mdk.service.location.ResourceDirectoryLocation;
-import uk.ac.ebi.mdk.service.location.ResourceFileLocation;
-import uk.ac.ebi.mdk.service.query.KEGGRestClient;
-import uk.ac.ebi.mdk.service.query.structure.StructureService;
 import uk.ac.ebi.mdk.tool.inchi.InChIConnectivity;
 import uk.ac.ebi.mdk.tool.inchi.InChIProducer;
 import uk.ac.ebi.mdk.tool.inchi.InChIProducerBinary102beta;
 import uk.ac.ebi.mdk.tool.inchi.InChIResult;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 /**
- * @name KEGGCompoundConnectivityLoader
- * @date 2013.03.01
- * @version $Rev$ : Last Changed $Date$
  * @author pmoreno
  * @author $Author$ (this version)
+ * @version $Rev$ : Last Changed $Date$
+ * @name KEGGCompoundConnectivityLoader
+ * @date 2013.03.01
  * @brief ...class description...
  */
 @Deprecated
 public class KEGGCompoundConnectivityLoader extends AbstractSingleIndexResourceLoader {
 
     private static final Logger LOGGER = Logger.getLogger(KEGGCompoundConnectivityLoader.class);
-    
+
     private static final String COLLECTION = "KEGG Compound";
-    
+
 
     /**
-     * Constructor for the connectivity loader, which requires a local path to a directory where the MDL files from
-     * KEGG are located.
+     * Constructor for the connectivity loader, which requires a local path to a
+     * directory where the MDL files from KEGG are located.
      *
-     * @throws IOException 
+     * @throws IOException
      */
     public KEGGCompoundConnectivityLoader() throws IOException {
         super(new MoleculeCollectionConnectivityIndex(COLLECTION));//
@@ -73,12 +64,11 @@ public class KEGGCompoundConnectivityLoader extends AbstractSingleIndexResourceL
 //                ResourceFileLocation.class,
 //                new RemoteLocation("http://rest.kegg.jp/list/compound"));
         addRequiredResource("KEGG Mol files",
-                "a directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/compound/mol/C00009.mol)",
-                ResourceDirectoryLocation.class);
+                            "a directory containing '.mol' files named with KEGG Compound Id (i.e. kegg/compound/mol/C00009.mol)",
+                            ResourceDirectoryLocation.class);
     }
 
-    
-    
+
     @Override
     public void update() throws IOException {
         ResourceDirectoryLocation location = getLocation("KEGG Mol files");
@@ -89,8 +79,8 @@ public class KEGGCompoundConnectivityLoader extends AbstractSingleIndexResourceL
 
         while (location.hasNext() && !isCancelled()) {
 
-            InputStream in   = location.next();
-            String      name = location.getEntryName();
+            InputStream in = location.next();
+            String name = location.getEntryName();
 
             // skip non-mol files
             if (!name.endsWith(".mol"))
@@ -103,9 +93,9 @@ public class KEGGCompoundConnectivityLoader extends AbstractSingleIndexResourceL
                 if (scanner.hasNext()) {
                     mdlMol = scanner.next();
                     InChIResult res = inChIProducer.calculateInChI(mdlMol);
-                    if(res!=null) {
+                    if (res != null) {
                         String con = InChIConnectivity.getInChIConnectivity(res.getInchi());
-                        MoleculeConnectivity connectivity = new MoleculeConnectivity(identifier,con);
+                        MoleculeConnectivity connectivity = new MoleculeConnectivity(identifier, con);
                         connectivities.add(connectivity);
                     }
                 }
@@ -119,5 +109,5 @@ public class KEGGCompoundConnectivityLoader extends AbstractSingleIndexResourceL
         MoleculeCollectionConnectivityLoader loader = new MoleculeCollectionConnectivityLoader(COLLECTION, connectivities.iterator());
         loader.update();
     }
-    
+
 }
