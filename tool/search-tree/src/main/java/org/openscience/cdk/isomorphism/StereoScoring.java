@@ -169,7 +169,7 @@ final class StereoScoring {
                 case Tetrahedral:
 
                     if (targetTypes[v] == null) {
-                        compatibility[u] = StereoCompatibility.UnspecifiedTetrahedralInQuery;
+                        compatibility[u] = StereoCompatibility.UnspecifiedTetrahedralInTarget;
                         continue;
                     }
 

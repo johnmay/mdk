@@ -79,9 +79,9 @@ final class Neutralise {
                     a.setImplicitHydrogenCount(h - q);
                     a.setFormalCharge(0);
                     return true;
-                }
-                break;
-            case 8: // oxygen
+                } break;
+            case 8:  // oxygen
+            case 16: // sulphur
                 if (q < 0 ? valence - q == 2 : h >= q) {
                     a.setImplicitHydrogenCount(h - q);
                     a.setFormalCharge(0);

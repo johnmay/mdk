@@ -54,6 +54,10 @@ public class NeutraliseTest {
         test("[OH-]", "O");
     }
 
+    @Test public void sulphur_anion() throws Exception {
+        test("[SH-]", "S");
+    }
+
     @Test public void carbon_cation() throws Exception {
         test("C[CH+]C", "CCC");
     }

@@ -12,9 +12,9 @@ import uk.ac.ebi.mdk.domain.entity.Metabolite;
 /** @author John May */
 final class Result implements Comparable<Result> {
 
-    private final Metabolite q, t;
-    private final IAtomContainer qAc, tAc;
-    private final Score score;
+    final Metabolite q, t;
+    final IAtomContainer qAc, tAc;
+    final Score score;
 
     Result(Metabolite q, Metabolite t, IAtomContainer qAc, IAtomContainer tAc) {
         this.q = q;
@@ -59,9 +59,10 @@ final class Result implements Comparable<Result> {
         }
         return count == 1;
     }
-    
+
+
     int unspecType() {
-        
+
         StereoCompatibility[] compatibilities = score.compatibilities();
         int count = 0;
         for (int i = 0; i < compatibilities.length; i++) {
@@ -72,7 +73,7 @@ final class Result implements Comparable<Result> {
             if (compatibility == StereoCompatibility.UnspecifiedTetrahedralInQuery)
                 return -1;
             else if (compatibility == StereoCompatibility.UnspecifiedGeometricInTarget)
-                return +1;            
+                return +1;
         }
         return 0;
     }
@@ -130,5 +131,97 @@ final class Result implements Comparable<Result> {
 
     @Override public int compareTo(Result that) {
         return this.score.compareTo(that.score);
+    }
+
+    @Override public String toString() {
+        return query().getAbbreviation() + " " + target().getAbbreviation() + " " + score();
+    }
+
+    SubType stereoType(Score score) {
+        
+        int unTetQuery = 0, unGeomQuery = 0, unTetTarget = 0, unGeomTarget = 0;
+        
+        StereoCompatibility[] compatibilities = score.compatibilities();
+        for (StereoCompatibility compatibility : compatibilities) {
+            if (compatibility == StereoCompatibility.DifferentGeometricConfig || compatibility == StereoCompatibility.DifferentTetrahedralConfig)
+                return SubType.DifferentStereochemistry;
+            if (compatibility == StereoCompatibility.UnspecifiedTetrahedralInQuery)
+                unTetQuery++;
+            if (compatibility == StereoCompatibility.UnspecifiedGeometricInQuery)
+                unGeomQuery++;
+            if (compatibility == StereoCompatibility.UnspecifiedTetrahedralInTarget)
+                unTetTarget++;
+            if (compatibility == StereoCompatibility.UnspecifiedGeometricInTarget)
+                unGeomTarget++;
+        }
+        
+        int unspecQuery  = unTetQuery + unGeomQuery;
+        int unspecTarget = unTetTarget + unGeomTarget;
+        
+        if (unspecQuery > 0 && unspecTarget == 0) {
+            if (unspecQuery == 1) {
+                if (unTetQuery == 1) 
+                    return SubType.LessSpecificStereochemistry_SingleTetrahedral;
+                else if (unGeomQuery == 1)
+                    return SubType.LessSpecificStereochemistry_SingleGeometric;
+                else 
+                    throw new InternalError();
+            } else {
+                return SubType.LessSpecificStereochemistry;
+            }
+        } else if (unspecQuery == 0 && unspecTarget > 0) {
+            return SubType.MoreSpecificStereochemistry;
+        } else {
+            return SubType.UnspecificStereochemistry;    
+        }           
+    }
+    
+    public SubType type() {
+        if (score.toDouble() == 1d) {
+            return SubType.Identical;
+        }
+
+        if (score.connectivityScore() == 1 && score.valenceScore() == 1 && score.stereoMismatchScore() == 0) {
+            return stereoType(score);
+        }
+
+        if (score.connectivityScore() == 1 && score.valenceScore() == 1 && score.stereoMismatchScore() > 0) {
+            return SubType.DifferentStereochemistry;
+        }
+
+        if (score == Score.MIN_VALUE)
+            return SubType.SameHeavyAtomCount;
+
+        return SubType.SameSkeleton;
+    }
+    
+    enum SubType {
+        Identical(SuperType.Identicial),
+        LessSpecificStereochemistry_SingleTetrahedral(SuperType.Stereoisomer),
+        LessSpecificStereochemistry_SingleGeometric(SuperType.Stereoisomer),
+        LessSpecificStereochemistry(SuperType.Stereoisomer),                        
+        MoreSpecificStereochemistry(SuperType.Stereoisomer),
+        UnspecificStereochemistry(SuperType.Stereoisomer),
+        DifferentStereochemistry(SuperType.Stereoisomer),
+        SameSkeleton(SuperType.StructuralIsomer),
+        SameHeavyAtomCount(SuperType.StructuralIsomer),
+        None(SuperType.None);
+
+        private final SuperType type;
+
+        SubType(SuperType type) {
+            this.type = type;
+        }
+
+        SuperType supertype() {
+            return type;
+        }
+    }
+
+    enum SuperType {
+        Identicial,
+        Stereoisomer,
+        StructuralIsomer,
+        None
     }
 }

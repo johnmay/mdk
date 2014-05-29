@@ -56,11 +56,15 @@ public final class Scorer implements Function<int[], Score> {
                                      .matchAll(target);
 
         Score max = Score.MIN_VALUE;
+        int i = 0;
         for (Score score : Iterables.transform(ps, new Scorer(query, target))) {
+            i++;
             if (score.compareTo(max) < 0)
-                max = score;             
+                max = score;
+            if (max.toDouble() == 1)
+                return max;
         }
-
+        
         return max;
     }
 }

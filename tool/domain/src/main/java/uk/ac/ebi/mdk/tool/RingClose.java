@@ -33,8 +33,8 @@ public final class RingClose {
 
     private static final IChemObjectBuilder bldr = SilentChemObjectBuilder.getInstance();
 
-    private final Pattern sixMemberRing  = Pattern.findSubstructure(sma("[O!RH1]-[C!R!$(C=O)]-[C!R]-[C!R]-[C!R]-[C!RH1]=O"));
-    private final Pattern fiveMemberRing = Pattern.findSubstructure(sma("[O!RH1]-[C!R!$(C=O)]-[C!R]-[C!R]-[C!R]=O"));
+    private final Pattern sixMemberRing  = Pattern.findSubstructure(sma("[O!R!H0]-[C!R!$(C=O)]-[C!R]-[C!R]-[C!R]-[C!R!H0]=O"));
+    private final Pattern fiveMemberRing = Pattern.findSubstructure(sma("[O!R!H0]-[C!R!$(C=O)]-[C!R]-[C!R]-[C!R!H0,$(C-C-O)]=O"));
 
     public boolean close(IAtomContainer container) {
 

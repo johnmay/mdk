@@ -96,7 +96,7 @@ public class Score implements Comparable<Score> {
     public int[] mapping() {
         return mapping;
     }
-
+        
     public StereoCompatibility[] compatibilities() {
         if (target == null)
             return new StereoCompatibility[0];
@@ -104,7 +104,7 @@ public class Score implements Comparable<Score> {
     }
 
     @Override public String toString() {
-        return String.format("v=%.2f x=%.2f s=%.2f s'=%.2f", v, x, s, s_prime);
+        return String.format("(%.2f,%.2f,%.2f,%.2f)", v, x, s, s_prime);
     }
 
     public static Score MIN_VALUE = new Score(Double.MIN_VALUE,
