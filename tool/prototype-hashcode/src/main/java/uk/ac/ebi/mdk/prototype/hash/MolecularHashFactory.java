@@ -121,7 +121,9 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
     public MolecularHashFactory(Collection<AtomSeed> seeds,
                                 int depth,
-                                boolean deprotonate, boolean enantiomers, boolean ezIsomerism,
+                                boolean deprotonate,
+                                boolean enantiomers,
+                                boolean ezIsomerism,
                                 boolean debug) {
         this.seedMethods = Collections.unmodifiableCollection(seeds);
         this.depth = depth;
@@ -189,7 +191,6 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         BitSet dbStereoatoms = new BitSet(molecule.getAtomCount());
         int[] groups = getDoubleBondGroups(molecule, dbStereoatoms);
         int[] parities = getDoubleBondParities(molecule, dbStereoatoms, groups);
-
 
         return getHash(table, precursorSeeds, stereoatoms, hydrogens, molecule, true,
                        dbStereoatoms, groups, parities);

@@ -19,12 +19,14 @@ package uk.ac.ebi.mdk.apps.tool;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import com.google.common.base.Joiner;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.commons.cli.Option;
 import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.smiles.SmilesGenerator;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 import uk.ac.ebi.mdk.apps.CommandLineMain;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
@@ -67,6 +69,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 /** @author John May */
@@ -145,19 +148,17 @@ public class Align2Reference extends CommandLineMain {
                                                    StereoSeed.class,
                                                    ConnectedAtomSeed.class,
                                                    ChargeSeed.class));
-//        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
-//                                                   BondOrderSumSeed.class,
-//                                                   ConnectedAtomSeed.class,
-//                                                   StereoSeed.class));
-//        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
-//                                                   BondOrderSumSeed.class,
-//                                                   ConnectedAtomSeed.class,
-//                                                   ChargeSeed.class));
-//        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
-//                                                   BondOrderSumSeed.class,
-//                                                   ConnectedAtomSeed.class));
-//        aligner.push(new NameMatcher<Metabolite>());
-//        aligner.push(new NameMatcher<Metabolite>(true, true));
+        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
+                                                   BondOrderSumSeed.class,
+                                                   ConnectedAtomSeed.class,
+                                                   ChargeSeed.class));
+        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
+                                                   BondOrderSumSeed.class,
+                                                   ConnectedAtomSeed.class));
+        aligner.push(new MetaboliteHashCodeMatcher(AtomicNumberSeed.class,
+                                                   ConnectedAtomSeed.class));
+//      aligner.push(new NameMatcher<Metabolite>());
+//      aligner.push(new NameMatcher<Metabolite>(true, true));
 
         final EntityMatcher<Metabolite, ?> nameMatcher = new NameMatcher<Metabolite>(true, true);
 
@@ -188,14 +189,13 @@ public class Align2Reference extends CommandLineMain {
 
                 Collection<Metabolite> unmatched = new ArrayList<Metabolite>();
                 Collection<Multimap<Metabolite, Metabolite>> mismatched = new ArrayList<Multimap<Metabolite, Metabolite>>();
-
+                Map<Integer,MutableInt> matchDistribution = new TreeMap<Integer, MutableInt>();
+                
                 int matched = 0;
 
                 long start = System.currentTimeMillis();
 
                 for (Metabolite m : query.metabolome()) {
-
-                    System.out.println(m);
 
                     List<Metabolite> matches = aligner.getMatches(m);
                     matched += matches.isEmpty() ? 0 : 1;
@@ -203,6 +203,11 @@ public class Align2Reference extends CommandLineMain {
                     if (matches.isEmpty()) {
                         unmatched.add(m);
                     }
+
+                    MutableInt counter = matchDistribution.get(matches.size());
+                    if (counter == null)
+                        matchDistribution.put(matches.size(), counter = new MutableInt(0));
+                    counter.increment();
 
 //                    for (Metabolite r : matches) {
 //                        if (!nameMatcher.matches(m, r)) {
@@ -215,6 +220,8 @@ public class Align2Reference extends CommandLineMain {
 
 
                 }
+
+                System.out.println(matchDistribution);
 
                 long end = System.currentTimeMillis();
 
@@ -231,7 +238,8 @@ public class Align2Reference extends CommandLineMain {
                                 m.getAccession(),
                                 m.getName(),
                                 m.getAnnotationsExtending(CrossReference.class)
-                                 .toString()
+                                 .toString(),
+                                smi(m)
                         });
                     }
                     writer.close();
@@ -294,22 +302,25 @@ public class Align2Reference extends CommandLineMain {
         } catch (InterruptedException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        
+        if (true)
+            return;
 
 
-        final Map<Metabolite, Integer> countMap = new HashMap<Metabolite, java.lang.Integer>();
-        Reactome reactome = query.reactome();
-        for (Metabolite m : query.metabolome()) {
-            countMap.put(m, reactome.participatesIn(m).size());
-        }
+//        final Map<Metabolite, Integer> countMap = new HashMap<Metabolite, java.lang.Integer>();
+//        Reactome reactome = query.reactome();
+//        for (Metabolite m : query.metabolome()) {
+//            countMap.put(m, reactome.participatesIn(m).size());
+//        }
 
-        System.out.println("Most common metabolites:");
-        for (Map.Entry<Metabolite, Integer> e : entriesSortedByValues(countMap)) {
-            if (e.getValue() > 40) {
-                System.out.println(e.getKey() + ":" + e.getKey()
-                                                       .hashCode() + ":" + e
-                        .getValue());
-            }
-        }
+//        System.out.println("Most common metabolites:");
+//        for (Map.Entry<Metabolite, Integer> e : entriesSortedByValues(countMap)) {
+//            if (e.getValue() > 40) {
+//                System.out.println(e.getKey() + ":" + e.getKey()
+//                                                       .hashCode() + ":" + e
+//                        .getValue());
+//            }
+//        }
 
 
         Set<Metabolite> queryCurrencyMetabolites = new HashSet<Metabolite>();
@@ -365,7 +376,7 @@ public class Align2Reference extends CommandLineMain {
         reactionAligner
                 .push(new ReactionMatcher(aligner, false, referenceCurrencyMetabolites));
 
-        for (MetabolicReaction reaction : reactome) {
+        for (MetabolicReaction reaction : query.reactome()) {
 
             // skip transport reactsions for now
             if (TransportReactionUtil.isTransport(reaction)) {
@@ -517,7 +528,20 @@ public class Align2Reference extends CommandLineMain {
         }
         return participants;
     }
-
+    
+    static String smi(Metabolite mtbl) {
+        StringBuilder sb = new StringBuilder();
+        for (ChemicalStructure cs : mtbl.getStructures()) {
+            if (sb.length() > 0)
+                 sb.append('.');
+            try {
+                sb.append(SmilesGenerator.isomeric().create(cs.getStructure()));
+            } catch (CDKException e) {
+                sb.append('*');
+            }
+        }
+        return sb.toString();
+    }
 
     static <K, V extends Comparable<? super V>> SortedSet<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
         SortedSet<Map.Entry<K, V>> sortedEntries = new TreeSet<Map.Entry<K, V>>(
