@@ -23,11 +23,11 @@
     <parent>
         <artifactId>mdk-domain</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.5.0-SNAPSHOT</version>
+        <version>1.5.0</version>
     </parent>
     <groupId>uk.ac.ebi.mdk</groupId>
     <artifactId>mdk-domain-annotation</artifactId>
-    <version>1.5.0-SNAPSHOT</version>
+    <version>1.5.0</version>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/annotation</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
