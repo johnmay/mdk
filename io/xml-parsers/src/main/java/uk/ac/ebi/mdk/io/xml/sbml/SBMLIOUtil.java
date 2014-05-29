@@ -39,6 +39,8 @@ package uk.ac.ebi.mdk.io.xml.sbml;
 
 import com.google.common.base.Joiner;
 import org.apache.log4j.Logger;
+import org.openscience.cdk.exception.CDKException;
+import org.openscience.cdk.smiles.SmilesGenerator;
 import org.sbml.jsbml.CVTerm;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.Reaction;
@@ -99,8 +101,8 @@ public class SBMLIOUtil {
     private EntityFactory factory;
 
     private SBMLSideCompoundHandler sideCompHandler;
-    private Boolean sideCompoundHandlerAvailable;
-    private RExHandler handler;
+    private Boolean                 sideCompoundHandlerAvailable;
+    private RExHandler              handler;
 
     public SBMLIOUtil(EntityFactory factory, int level, int version) {
         this.level = level;
@@ -158,14 +160,15 @@ public class SBMLIOUtil {
     public Reaction addReaction(Model model, MetabolicReaction rxn) {
 
         Reaction sbmlRxn = new Reaction(level, version);
-        
+
         // set id and meta-id
         Identifier id = rxn.getIdentifier();
         sbmlRxn.setMetaId("meta_r_" + nextMetaId());
         sbmlRxn.setName(rxn.getName());
         if (id == null) {
             sbmlRxn.setId("rxn" + metaIdticker); // maybe need a try/catch to reset valid id
-        } else {
+        }
+        else {
             String accession = id.getAccession();
             accession = accession.trim();
             accession = accession
@@ -229,7 +232,7 @@ public class SBMLIOUtil {
             sbmlRxn.addCVTerm(term);
 
         Collection<RExExtract> extracts = rxn.getAnnotations(RExExtract.class);
-        if(!extracts.isEmpty()) {
+        if (!extracts.isEmpty()) {
             try {
                 sbmlRxn.getAnnotation().appendNoRDFAnnotation(handler.marshal(extracts));
             } catch (JAXBException e) {
@@ -297,7 +300,8 @@ public class SBMLIOUtil {
         Identifier id = m.getIdentifier();
         if (id == null) {
             species.setId("m_" + metaIdticker); // maybe need a try/catch to reset valid id
-        } else {
+        }
+        else {
             String accession = id.getAccession();
             accession = accession.trim();
             accession = accession
@@ -340,11 +344,23 @@ public class SBMLIOUtil {
             }
         }
 
-        if (m.hasAnnotation(Note.class)) {
-            String content = "<notes><html xmlns=\"http://www.w3.org/1999/xhtml\">"
-                    + Joiner.on("\n")
-                            .join(notes(m, Collections
-                                    .<Class>singletonList(Note.class))) + "</html></notes>";
+        if (m.hasAnnotation(Note.class) || m.hasStructure()) {
+            String noteContent = Joiner.on("\n")
+                                       .join(notes(m, Collections
+                                               .<Class>singletonList(Note.class)));
+            StringBuilder sb = new StringBuilder();
+            for (ChemicalStructure cs : m.getStructures()) {
+                try {
+                    String smi = SmilesGenerator.isomeric().create(cs.getStructure());
+                    sb.append("SMILES: ").append(smi);
+                } catch (CDKException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+            
+            noteContent += "\n" + sb.toString();
+
+            String content = "<notes><html xmlns=\"http://www.w3.org/1999/xhtml\">" + noteContent + "</html></notes>";
             // todo the parsing is very slow
             XMLNode notes = XMLNode.convertStringToXMLNode(content);
             species.setNotes(notes);
