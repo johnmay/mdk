@@ -30,7 +30,9 @@ import uk.ac.ebi.mdk.prototype.hash.seed.AtomicNumberSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.ConnectedAtomSeed;
 import uk.ac.ebi.mdk.prototype.hash.seed.SeedFactory;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,12 +58,12 @@ public class MetaboliteHashCodeMatcher
 
     private static final Logger LOGGER = Logger.getLogger(MetaboliteHashCodeMatcher.class);
 
-    private final MolecularHashFactory hashingFunction = new MolecularHashFactory();
+    private final MolecularHashFactory hashingFunction = new MolecularHashFactory(Collections.<AtomSeed>emptyList(), 32, true, false, false, false);
 
     private final Collection<AtomSeed> seeds;
 
     private static final Integer DEFAULT_ATOM_COUNT_THRESHOLD = 150;
-    private int atomCountThreshold = DEFAULT_ATOM_COUNT_THRESHOLD;
+    private              int     atomCountThreshold           = DEFAULT_ATOM_COUNT_THRESHOLD;
 
 
     public MetaboliteHashCodeMatcher() {
@@ -99,8 +101,8 @@ public class MetaboliteHashCodeMatcher
 
     @Override
     public Set<Integer> calculatedMetric(Metabolite entity) {
-        
-        Set <Integer> hashes = new HashSet<Integer>();
+
+        Set<Integer> hashes = new HashSet<Integer>();
 
         for (ChemicalStructure annotation : entity.getStructures()) {
             IAtomContainer structure = annotation.getStructure();
@@ -111,7 +113,7 @@ public class MetaboliteHashCodeMatcher
                 structure = AtomContainerManipulator.removeHydrogens(structure);
 
                 if (structure.getAtomCount() > 0) {
-                    hashes.add(getHash(structure).hash);
+                   hashes.add(getHash(structure).hash);
                 }
 
             }
@@ -122,7 +124,6 @@ public class MetaboliteHashCodeMatcher
     }
 
     public MolecularHash getHash(IAtomContainer structure) {
-
         return hashingFunction.getHash(structure, seeds);
     }
 
