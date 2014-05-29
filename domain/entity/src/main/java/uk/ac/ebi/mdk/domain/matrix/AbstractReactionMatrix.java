@@ -443,14 +443,13 @@ public abstract class AbstractReactionMatrix<T, M, R> implements ReactionMatrix<
     @SuppressWarnings("unchecked")
     public T[][] getFixedMatrix() {
 
-
         Class c = valueType();
-
+       
         if (c == null)
             return null;
 
         // truncate the reactions (removes null paddings)
-        T[][] outputMatrix = (T[][]) Array.newInstance(c.getClass(), moleculeCount, reactionCount);
+        T[][] outputMatrix = (T[][]) Array.newInstance(c, moleculeCount, reactionCount);
         for (int i = 0; i < outputMatrix.length; i++) {
             for (int j = 0; j < reactionCount; j++) {
                 outputMatrix[i][j] = _get(i, j);
