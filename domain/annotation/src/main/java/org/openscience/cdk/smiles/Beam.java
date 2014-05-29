@@ -43,7 +43,7 @@ public final class Beam {
      */
     public static IAtomContainer fromSMILES(String smi) {
         try {
-            Graph g = Graph.fromSmiles(smi);
+            Graph g = Graph.fromSmiles(smi).kekule();
             return fromBeam.toAtomContainer(g);
         } catch (Exception e) {
             return builder.newInstance(IAtomContainer.class, 0, 0, 0, 0);
