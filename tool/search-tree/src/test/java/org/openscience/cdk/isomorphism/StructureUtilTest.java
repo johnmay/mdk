@@ -61,7 +61,7 @@ public class StructureUtilTest {
     @Test public void cbl1Normalise() throws Exception {
         IAtomContainer input = ofSmi("C12=C(C)C3=[N+]4C(=CC5=[N+]6C(=C(C7=[N+]8[C@@]([C@@H]9N1[Co-4]864[N+]=%10C%11=CC(=C(C=C%11N(C%10)[C@@H]%12[C@@H]([C@@H]([C@H](O%12)CO)OP(O[C@@H](CNC(CC[C@@]2([C@H]9CC(=O)N)C)=O)C)(=O)O)O)C)C)([C@]([C@@H]7CCC(N)=O)(CC(=O)N)C)C)C)[C@@]([C@@H]5CCC(=O)N)(C)CC(N)=O)C([C@@H]3CCC(=O)N)(C)C");
         StructureUtil.disconnectMetals(input);
-        assertThat(toSmi(input), is("C[C@]1(C2=CC3=NC(=CC4=NC(=CC5=NC(=CC(=N2)[C@H]1CCC(O)=O)C(=C5CCC(O)=O)CC(O)=O)C(=C4CC(O)=O)CCC(O)=O)[C@]([C@@H]3CCC(O)=O)(CC(O)=O)C)CC(O)=O.[Fe]"));    
+        assertThat(toSmi(input), is("C12=C(C)C3=[NH+]C(=CC4=[NH+]C(=C(C5=[NH+][C@@]([C@H](N1)[C@@H]([C@]2(CCC(NC[C@H](OP(O[C@H]6[C@H]([C@@H](N7C8=CC(=C(C=C8[NH+]=C7)C)C)O[C@@H]6CO)O)(=O)O)C)=O)C)CC(=O)N)([C@]([C@@H]5CCC(N)=O)(CC(=O)N)C)C)C)[C@@]([C@@H]4CCC(=O)N)(C)CC(N)=O)C([C@@H]3CCC(=O)N)(C)C.[Co-4]"));    
     }
 
 
@@ -71,7 +71,7 @@ public class StructureUtilTest {
     @Test public void adocbi() throws Exception {
         IAtomContainer input = ofSmi("C=12C(=C3N=C(C=C4N=C(C(=C5N([C@H]([C@@H]([C@]5(CCC(NC[C@@H](C)O)=O)C)CC(N)=O)[C@](N1)([C@]([C@@H]2CCC(=O)N)(CC(=O)N)C)C)[Co+]C[C@H]6O[C@@H](N7C=8N=CN=C(N)C8N=C7)[C@@H]([C@@H]6O)O)C)[C@H](C4(C)C)CCC(=O)N)[C@H]([C@@]3(CC(=O)N)C)CCC(=O)N)C");
         StructureUtil.disconnectMetals(input);
-        assertThat(toSmi(input), is("C=12C(=C3N=C(C=C4N=C(C(=C5[N][C@H]([C@@H]([C@]5(CCC(NC[C@@H](C)O)=O)C)CC(N)=O)[C@](N1)([C@]([C@@H]2CCC(=O)N)(CC(=O)N)C)C)C)[C@H](C4(C)C)CCC(=O)N)[C@H]([C@@]3(CC(=O)N)C)CCC(=O)N)C.[Co+].[CH2][C@H]6O[C@@H](N7C=8N=CN=C(N)C8N=C7)[C@@H]([C@@H]6O)O"));    
+        assertThat(toSmi(input), is("C=12C(=C3N=C(C=C4N=C(C(=C5N[C@H]([C@@H]([C@]5(CCC(NC[C@@H](C)O)=O)C)CC(N)=O)[C@](N1)([C@]([C@@H]2CCC(=O)N)(CC(=O)N)C)C)C)[C@H](C4(C)C)CCC(=O)N)[C@H]([C@@]3(CC(=O)N)C)CCC(=O)N)C.[Co+].C[C@H]6O[C@@H](N7C=8N=CN=C(N)C8N=C7)[C@@H]([C@@H]6O)O"));    
     }
 
     static IAtomContainer ofSmi(String smi) throws Exception {
