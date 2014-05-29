@@ -236,7 +236,7 @@ public class BioCycConverter {
 
         File reactions = new File(root, "data/reactions.dat");
         BioCycDatReader<ReactionAttribute> reader = new BioCycDatReader<ReactionAttribute>(new FileInputStream(reactions),
-                                                                                           ReactionAttribute.values());
+                                                                           ReactionAttribute.values());
 
 
         while (reader.hasNext()) {
@@ -270,7 +270,7 @@ public class BioCycConverter {
         File[] files = data.listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                if (!pathname.isDirectory())
+                if (!pathname.isDirectory())                                                
                     return false;
                 return pathname.listFiles(molFilter).length != 0;
             }
@@ -302,7 +302,7 @@ public class BioCycConverter {
         // basic info
         m.setIdentifier(new BioCycChemicalIdentifier(bioCycPrefix, entry.getFirst(CompoundAttribute.UNIQUE_ID)));
         m.setName(clean(entry.getFirst(CompoundAttribute.COMMON_NAME, "unnamed entity")));
-        m.setAbbreviation(clean(entry.getFirst(CompoundAttribute.ABBREV_NAME, m.getName())));
+        m.setAbbreviation(clean(entry.getFirst(CompoundAttribute.ABBREV_NAME, entry.getFirst(CompoundAttribute.UNIQUE_ID))));
 
         // resolve annotations
         m.setCharge(getCharge(entry.get(CompoundAttribute.ATOM_CHARGES)).doubleValue());
