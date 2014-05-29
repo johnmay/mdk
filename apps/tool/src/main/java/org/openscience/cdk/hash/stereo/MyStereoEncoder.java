@@ -25,6 +25,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IDoubleBondStereochemistry;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.interfaces.ITetrahedralChirality;
+import org.openscience.cdk.ringsearch.RingSearch;
 
 import javax.vecmath.Point2d;
 import javax.vecmath.Point3d;
@@ -74,6 +75,7 @@ public class MyStereoEncoder implements StereoEncoderFactory {
         // create a new encoding
 
         AtomStereoType ast = new AtomStereoType(ac, graph, bondIndex);
+        RingSearch     rs  = new RingSearch(ac, graph);
 
         for (int i = 0; i < ac.getAtomCount(); i++) {
             if (included[i])
@@ -104,6 +106,10 @@ public class MyStereoEncoder implements StereoEncoderFactory {
                     
                     included[i] = included[j] = true;
 
+                    // don't encode ring double-bond stereochemistry
+                    if (rs.cyclic(i, j))
+                        continue;
+                    
                     StereoEncoder encoder = newDoubleBondEncoder(ac, i, j, j, i, bondIndex, graph);
                     
                     if (encoder != null)
