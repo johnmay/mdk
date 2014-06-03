@@ -24,6 +24,7 @@ package uk.ac.ebi.mdk.io.text.brenda;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -45,6 +46,7 @@ import java.util.regex.Pattern;
 public class BrendaTissueMap {
 
     public static final String NOMAPPING = "NOMAPPING";
+	public static Logger LOGGER = Logger.getLogger(BrendaTissueMap.class);
 
     private BufferedReader reader;
     private Multimap<String,String> name2BrendaTissueOntID;
@@ -91,7 +93,10 @@ public class BrendaTissueMap {
     }
 
     public void load() throws IOException {
-        String line = reader.readLine();
+
+		LOGGER.debug("Brenda tissue Map load starts.");
+
+		String line = reader.readLine();
         while(line!=null) {
             Matcher idTabNameMatcher = idTabNameSimplePattern.matcher(line);
             if(idTabNameMatcher.find()) {
@@ -104,6 +109,8 @@ public class BrendaTissueMap {
             line = reader.readLine();
         }
         reader.close();
+
+		LOGGER.debug("Brenda tissue Map load ends.");
     }
 
     /**
