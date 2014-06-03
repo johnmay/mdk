@@ -19,6 +19,7 @@ package uk.ac.ebi.mdk.domain.identifier.classification;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.deprecated.MIR;
+import uk.ac.ebi.mdk.deprecated.Synonyms;
 
 
 /**
@@ -29,6 +30,7 @@ import uk.ac.ebi.mdk.deprecated.MIR;
  * @author  $Author$ (this version)
  */
 @MIR(value = 116)
+@Synonyms("KO")
 public class KEGGOrthology
         extends ClassificationIdentifier {
 
