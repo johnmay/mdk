@@ -81,7 +81,7 @@ public class Citation implements Comparable<Citation>{
 
 	}
 	public boolean hasPubMedID() {
-		if(this.pubmedId > 0)
+		if(this.pubmedId!=null && this.pubmedId > 0)
 			return true;
 		else return false;
 	}
