@@ -116,6 +116,7 @@ public class DefaultAnnotationFactory implements AnnotationFactory {
                 new FluxUpperBound(),
                 new Source(),
                 new ExactMass(),
+                new NaturalMass(),
                 new SMILES(),
                 new InChI(),
                 new Molfile(),

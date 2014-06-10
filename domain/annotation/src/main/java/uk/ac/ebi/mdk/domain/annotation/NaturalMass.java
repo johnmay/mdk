@@ -17,43 +17,39 @@
 
 package uk.ac.ebi.mdk.domain.annotation;
 
-import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.DefaultLoader;
 import uk.ac.ebi.mdk.domain.MetaInfo;
-import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractFloatAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractDoubleAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 
-
 @Context(Metabolite.class)
-@Brief("Exact Mass")
-@Description("The exact mass is the sum of the masses of the atoms in a molecule using the most abundant isotope for each element")
-public class ExactMass extends AbstractFloatAnnotation {
+@Brief("Natural molecular weight")
+@Description("The average mass of a compound, assuming natural abundance of isotopes.")
+public class NaturalMass extends AbstractDoubleAnnotation {
 
-    private static final Logger LOGGER = Logger.getLogger(ExactMass.class);
+    private static final MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(NaturalMass.class);
 
-    private static MetaInfo metaInfo = DefaultLoader.getInstance().getMetaInfo(
-            ExactMass.class);
-
-
-    public ExactMass() {
+    public NaturalMass() {
     }
 
-
-    public ExactMass(Float exactMass) {
+    public NaturalMass(double exactMass) {
         super.setValue(exactMass);
     }
 
-
-    public Annotation newInstance() {
-        return new ExactMass();
+    public NaturalMass newInstance() {
+        return new NaturalMass();
     }
 
+    @Override public DoubleAnnotation forValue(double v) {
+        return getInstance(v);
+    }
 
-    public Annotation getInstance(Float exactMass) {
-        return new ExactMass(exactMass);
+    public NaturalMass getInstance(double exactMass) {
+        return new NaturalMass(exactMass);
     }
 
 
