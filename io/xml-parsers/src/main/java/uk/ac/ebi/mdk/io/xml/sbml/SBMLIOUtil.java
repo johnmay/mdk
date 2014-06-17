@@ -37,7 +37,9 @@
  */
 package uk.ac.ebi.mdk.io.xml.sbml;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Collections2;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.smiles.SmilesGenerator;
@@ -48,12 +50,14 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.xml.XMLNamespaces;
 import org.sbml.jsbml.xml.XMLNode;
 import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.Note;
+import uk.ac.ebi.mdk.domain.annotation.SMILES;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
@@ -145,8 +149,10 @@ public class SBMLIOUtil {
 
         SBMLDocument doc = new SBMLDocument(level, version);
         Model model = new Model(level, version);
+        doc.addNamespace("html", "xmlns", "http://www.w3.org/1999/xhtml");
+        model.addNamespace("html");
         doc.setModel(model);
-
+        
         for (MetabolicReaction rxn : reconstruction.reactome()) {
             addReaction(model, rxn);
         }
@@ -345,25 +351,31 @@ public class SBMLIOUtil {
         }
 
         if (m.hasAnnotation(Note.class) || m.hasStructure()) {
-            String noteContent = Joiner.on("\n")
-                                       .join(notes(m, Collections
-                                               .<Class>singletonList(Note.class)));
+            Set<String> notes = notes(m, Collections.<Class>singletonList(Note.class));
+
+            String noteContent = !notes.isEmpty() ? "<p>" + Joiner.on("</p>\n<p>")
+                                                                  .join(notes) + "</p>" : "";
+            
             StringBuilder sb = new StringBuilder();
             for (ChemicalStructure cs : m.getStructures()) {
                 try {
                     String smi = SmilesGenerator.isomeric().create(cs.getStructure());
-                    sb.append("SMILES: ").append(smi);
+                    sb.append("<p>SMILES: ").append(smi).append("</p>\n");
                 } catch (CDKException e) {
-                    System.err.println(e.getMessage());
+                    LOGGER.error("Could not generate SMILES for " + m.getAbbreviation());
+                    LOGGER.error(e);
+                } catch (Exception e) {
+                    LOGGER.error("Could not generate SMILES for " + m.getAbbreviation());
+                    LOGGER.error(e);
                 }
             }
             
             noteContent += "\n" + sb.toString();
 
-            String content = "<notes><html xmlns=\"http://www.w3.org/1999/xhtml\">" + noteContent + "</html></notes>";
+            String content = "<notes><body xmlns=\"http://www.w3.org/1999/xhtml\">" + noteContent + "</body></notes>";
             // todo the parsing is very slow
-            XMLNode notes = XMLNode.convertStringToXMLNode(content);
-            species.setNotes(notes);
+            XMLNode node = XMLNode.convertStringToXMLNode(content, dco);
+            species.setNotes(node);
         }
 
         // if we've added annotation
