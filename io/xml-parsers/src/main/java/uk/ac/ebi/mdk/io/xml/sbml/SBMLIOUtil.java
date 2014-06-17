@@ -374,7 +374,7 @@ public class SBMLIOUtil {
 
             String content = "<notes><body xmlns=\"http://www.w3.org/1999/xhtml\">" + noteContent + "</body></notes>";
             // todo the parsing is very slow
-            XMLNode node = XMLNode.convertStringToXMLNode(content, dco);
+            XMLNode node = XMLNode.convertStringToXMLNode(content);
             species.setNotes(node);
         }
 
