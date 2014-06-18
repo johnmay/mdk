@@ -5,12 +5,12 @@
     <parent>
         <artifactId>mdk-io</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.5.0</version>
+        <version>1.5.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mdk-io-data-observation</artifactId>
-    <version>1.5.0</version>
+    <version>1.5.1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>

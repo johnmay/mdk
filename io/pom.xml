@@ -22,7 +22,7 @@
     <parent>
         <artifactId>mdk</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.5.0</version>
+        <version>1.5.1-SNAPSHOT</version>
     </parent>
     <artifactId>mdk-io</artifactId>
     <packaging>pom</packaging>
