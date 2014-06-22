@@ -68,16 +68,26 @@ public class SmoothGenerator implements IGenerator<IAtomContainer> {
 
     private static final FontRenderContext FONT_RENDER_CONTEXT = new FontRenderContext(new AffineTransform(), true, false);
 
-    private static final Color fg    = new Color(0x444444);
+    private static final Color DEFAULT_FG = new Color(0x444444);
+    private final Color fg;
     private static final Color debug = new Color(0xFF6666);
 
     private boolean coloured;
 
-    public SmoothGenerator(boolean coloured) {
+    public SmoothGenerator(boolean coloured, Color fg) {
         this.coloured = coloured;
         String[] symbols = "Se, F, C, As, N, O, H, I, K, –, Cl, P, Co, 2+, S, R, Hg, •, Br, +, 3–, ., 2, Mg, 4–".split(", ");
         for (String text : symbols)
             obtainGlyph(text);
+        this.fg = fg;
+    }
+
+    public SmoothGenerator(boolean coloured) {
+        this(coloured, DEFAULT_FG);
+    }
+
+    public SmoothGenerator(Color fg) {
+        this(false, fg);
     }
 
     public SmoothGenerator() {
@@ -138,7 +148,8 @@ public class SmoothGenerator implements IGenerator<IAtomContainer> {
             AffineTransform at = AffineTransform.getTranslateInstance(x - (bounds.getX() / scale)
                                                                               - ((bounds.getWidth() / scale) / 2),
                                                                       y + ((bounds.getY() + bounds.getHeight()) / scale)
-                                                                              - ((bounds.getHeight() / scale) / 2));
+                                                                              - ((bounds.getHeight() / scale) / 2)
+                                                                     );
             at.scale(1 / scale,
                      1 / -scale);
 
