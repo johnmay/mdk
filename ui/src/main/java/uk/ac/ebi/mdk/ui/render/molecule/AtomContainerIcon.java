@@ -119,7 +119,7 @@ public class AtomContainerIcon extends ImageIcon {
      * @param g2     java 2D graphics
      * @param bounds bounds
      */
-    private void render(Graphics2D g2, Rectangle bounds) {
+    public void render(Graphics2D g2, Rectangle bounds) {
 
         double scale = rendererModel.getParameter(Scale.class).getValue();
 
