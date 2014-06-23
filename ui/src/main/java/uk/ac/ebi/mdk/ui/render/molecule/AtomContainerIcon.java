@@ -59,16 +59,6 @@ public class AtomContainerIcon extends ImageIcon {
     private final ElementGroup                     diagram;
     private final double                           scale;
     
-    public static enum Coloring {
-        /** Elements and lines are drawn black. */
-        BLACK,
-        /** Elements and lines are drawn white. */
-        WHITE,
-        /** Corey, Pauling, and Koltun colouring of different element types. 
-            Lines are drawn black. */
-        CPK
-    }
-
     /**
      * Create an icon for the given container. 
      * 
