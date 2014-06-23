@@ -17,6 +17,9 @@
 
 package uk.ac.ebi.mdk.ui.render.molecule;
 
+import uk.ac.ebi.caf.utility.preference.type.StringPreference;
+import uk.ac.ebi.mdk.domain.DomainPreferences;
+
 import java.awt.Color;
 
 /**
@@ -57,5 +60,27 @@ public enum Coloring {
      */
     public Color bgColor() {
         return bg;
+    }
+
+    /**
+     * Load the preferred color from preferences.
+     * @return coloring
+     */
+    public static Coloring loadPreference() {
+        DomainPreferences preferences = DomainPreferences.getInstance();
+        StringPreference  pref = preferences.getPreference("STRUCT_VIEW_COL");
+        Coloring coloring = Coloring.valueOf(pref.get());
+        if (coloring == null)
+            return BLACK;
+        return coloring;
+    }
+
+    /**
+     * Store this color as the preferred coloring.
+     */
+    public void storePreference() {
+        DomainPreferences preferences = DomainPreferences.getInstance();
+        StringPreference  pref = preferences.getPreference("STRUCT_VIEW_COL");
+        pref.put(name());
     }
 }
