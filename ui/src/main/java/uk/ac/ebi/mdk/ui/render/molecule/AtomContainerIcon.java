@@ -102,8 +102,8 @@ public class AtomContainerIcon extends ImageIcon {
         modelBounds = renderer.getBounds(diagram);
     }
     
-    public Rectangle bounds() {
-        return new Rectangle((int) modelBounds.getWidth(), (int) modelBounds.getHeight());
+    public Rectangle2D bounds() {
+        return new Rectangle2D.Double(0, 0, modelBounds.getWidth(), modelBounds.getHeight());
     }
 
     /**
