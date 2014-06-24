@@ -16,33 +16,49 @@
  */
 package uk.ac.ebi.mdk.ui.edit.crossreference;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.caf.component.factory.ComboBoxFactory;
-import uk.ac.ebi.caf.component.factory.FieldFactory;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
-import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.IdentifierLoader;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
+import javax.swing.plaf.basic.BasicArrowButton;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
  * CrossreferenceEditor 2012.02.03
  *
  * @author johnmay
- * @author $Author$ (this version)
- *         <p/>
- *         Class description
+ * @author $Author$ (this version) <p/> Class description
  * @version $Rev$ : Last Changed $Date$
  */
 public class IdentifierEditor extends JPanel {
@@ -63,6 +79,11 @@ public class IdentifierEditor extends JPanel {
 
     private Identifier identifier;
 
+    private final JComponent component;
+    private final JButton button;
+    private final Color okay  = new Color(0xCBFFC8);
+    private final Color empty = new Color(0xCAF1FF);
+
     public IdentifierEditor() {
         this(new ArrayList<Class<? extends Identifier>>());
     }
@@ -70,14 +91,14 @@ public class IdentifierEditor extends JPanel {
     @SuppressWarnings("unchecked")
     public IdentifierEditor(Collection<Class<? extends Identifier>> identifiers) {
 
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setOpaque(false);
-        setBorder(BorderFactory.createEmptyBorder());
+        component = this;
+        component.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        component.setBorder(BorderFactory.createEmptyBorder());
 
         classes = new TreeSet<Class>(new Comparator<Class>() {
             @Override
             public int compare(Class o1, Class o2) {
-                IdentifierLoader loader =  IdentifierLoader.getInstance();
+                IdentifierLoader loader = IdentifierLoader.getInstance();
                 return loader.getShortDescription(o1).compareTo(loader.getShortDescription(o2));
             }
         });
@@ -87,7 +108,8 @@ public class IdentifierEditor extends JPanel {
 
             if (identifiers.isEmpty()) {
                 classes.add(factoryID.getClass());
-            } else {
+            }
+            else {
                 ACCEPT:
                 for (Class<? extends Identifier> accepted : identifiers) {
                     if (accepted.isInstance(factoryID)) {
@@ -100,39 +122,67 @@ public class IdentifierEditor extends JPanel {
         }
 
         final Font monoSpace = new Font("Courier New", Font.BOLD, 12);
-        
         field = new JTextField();
-        field.setFont(monoSpace);        
-        type  = ComboBoxFactory.newComboBox(classes);
+        field.setFont(monoSpace);
+        type = ComboBoxFactory.newComboBox(classes);
         type.setFont(monoSpace);
+        field.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        type.setBorder(BorderFactory.createEmptyBorder());
         type.setPreferredSize(new Dimension(150, 27));
-        type.setBackground(ThemeManager.getInstance().getTheme().getDialogBackground());
-        type.setRenderer(new ListCellRenderer() {
+        type.setOpaque(false);
 
-            private JLabel label = LabelFactory.newLabel("N/A");
+        final JLabel label = LabelFactory.newLabel("N/A");
+        label.setOpaque(true);
+        label.setFont(monoSpace);
+
+        label.setForeground(new Color(0x444444));
+
+        type.setRenderer(new ListCellRenderer() {
 
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                label.setFont(monoSpace);
-                label.setText(ID_FACTORY.ofClass((Class<Identifier>)value).getShortDescription());
-                label.setToolTipText(ID_FACTORY.ofClass((Class<Identifier>)value).getLongDescription());
-                label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
-                label.setBackground(isSelected ? list.getSelectionForeground() : list.getForeground());
+                label.setBackground(component.getBackground());
+                if (value != null) {
+                    label.setText(ID_FACTORY.ofClass((Class<Identifier>) value).getShortDescription());
+                    label.setToolTipText(ID_FACTORY.ofClass((Class<Identifier>) value).getLongDescription());
+                } else {
+                    label.setText("---");
+                    label.setToolTipText("---");
+                }
                 return label;
             }
         });
         type.setEnabled(false);
 
+        button = new BasicArrowButton(BasicArrowButton.SOUTH);
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setOpaque(true);
+
+        // remove border 
+        // http://bugs.java.com/bugdatabase/view_bug.do?bug_id=4515838
+        type.setUI(new BasicComboBoxUI() {
+            @Override protected JButton createArrowButton() {
+                return button;
+            }
+
+            @Override
+            public void paintCurrentValueBackground(
+                    Graphics g, Rectangle bounds, boolean hasFocus) {
+            }
+        });
+
+        // colouring
+        component.setBackground(okay);
+
         // hide the type selection
-        if(classes.size() == 1){
+        if (classes.size() == 1) {
             type.setVisible(false);
         }
 
-        CellConstraints cc = new CellConstraints();
-
         add(type);
-        add(Box.createHorizontalStrut(15));
+        add(Box.createHorizontalStrut(5));
         add(field);
+        type.resetKeyboardActions();
 
         field.setText(DEFAULT_TEXT);
 
@@ -152,13 +202,15 @@ public class IdentifierEditor extends JPanel {
     }
 
     @Override public void setBackground(Color bg) {
-//        type.setBackground(bg);
+        super.setBackground(bg);
+        if (type != null) type.setBackground(bg);
+        if (field != null) field.setBackground(bg);
+        if (button != null) button.setBackground(bg);
     }
 
     /**
-     * Turns on identifier suggestion. On every update of the field
-     * the combobox model will now change to reflect the content
-     * of the field
+     * Turns on identifier suggestion. On every update of the field the combobox
+     * model will now change to reflect the content of the field
      */
     public final void turnOnSuggestion() {
         field.getDocument().removeDocumentListener(suggestion);
@@ -193,7 +245,7 @@ public class IdentifierEditor extends JPanel {
     @SuppressWarnings("unchecked")
     public Identifier getIdentifier() {
 
-        String accession    = field.getText().trim();
+        String accession = field.getText().trim();
         Class<Identifier> c = (Class<Identifier>) type.getSelectedItem();
 
         // if the idenfier is the same just return the current instance
@@ -202,9 +254,12 @@ public class IdentifierEditor extends JPanel {
                 && c == identifier.getClass()) {
             return identifier;
         }
-
-        identifier = ID_FACTORY.ofClass(c);
         
+        if (c == null)
+            return null;
+        
+        identifier = ID_FACTORY.ofClass(c);
+
         if (!accession.isEmpty())
             identifier.setAccession(accession);
 
@@ -251,26 +306,19 @@ public class IdentifierEditor extends JPanel {
 
         public void suggest() {
 
-            type.setEnabled(isFilled());
-
-            if(!isFilled() || classes.size() == 1){
-                return;
-            }
-
+            component.setBackground(empty);
             String accession = field.getText().trim();
+
+            if (!accession.isEmpty())
+                component.setBackground(okay);
+
             DefaultComboBoxModel model = (DefaultComboBoxModel) type.getModel();
             model.removeAllElements();
             for (Class<? extends Identifier> c : ID_FACTORY.ofPattern(accession)) {
                 model.addElement(c);
             }
-            if (model.getSize() == 0) {
-                for (Class c : classes) {
-                    model.addElement(c);
-                }
-            }
-
+            
             type.repaint();
-
         }
     }
 }
