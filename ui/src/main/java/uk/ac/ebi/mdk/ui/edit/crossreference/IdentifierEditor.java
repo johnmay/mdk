@@ -45,7 +45,7 @@ import java.util.*;
  *         Class description
  * @version $Rev$ : Last Changed $Date$
  */
-public class IdentifierEditor extends JComponent {
+public class IdentifierEditor extends JPanel {
 
     private static final Logger LOGGER = Logger.getLogger(IdentifierEditor.class);
 
@@ -70,7 +70,9 @@ public class IdentifierEditor extends JComponent {
     @SuppressWarnings("unchecked")
     public IdentifierEditor(Collection<Class<? extends Identifier>> identifiers) {
 
-        setLayout(new FormLayout("pref, 4dlu, pref", "p"));
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        setOpaque(false);
+        setBorder(BorderFactory.createEmptyBorder());
 
         classes = new TreeSet<Class>(new Comparator<Class>() {
             @Override
@@ -97,18 +99,21 @@ public class IdentifierEditor extends JComponent {
 
         }
 
-
-        field = FieldFactory.newField(12);
+        final Font monoSpace = new Font("Courier New", Font.BOLD, 12);
+        
+        field = new JTextField();
+        field.setFont(monoSpace);        
         type  = ComboBoxFactory.newComboBox(classes);
+        type.setFont(monoSpace);
         type.setPreferredSize(new Dimension(150, 27));
         type.setBackground(ThemeManager.getInstance().getTheme().getDialogBackground());
         type.setRenderer(new ListCellRenderer() {
 
-            private JLabel label = LabelFactory.newLabel("N/A", LabelFactory.Size.SMALL);
+            private JLabel label = LabelFactory.newLabel("N/A");
 
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                label.setFont(field.getFont().deriveFont(10.0f));
+                label.setFont(monoSpace);
                 label.setText(ID_FACTORY.ofClass((Class<Identifier>)value).getShortDescription());
                 label.setToolTipText(ID_FACTORY.ofClass((Class<Identifier>)value).getLongDescription());
                 label.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
@@ -125,8 +130,9 @@ public class IdentifierEditor extends JComponent {
 
         CellConstraints cc = new CellConstraints();
 
-        add(type, cc.xy(1, 1));
-        add(field, cc.xy(3, 1));
+        add(type);
+        add(Box.createHorizontalStrut(15));
+        add(field);
 
         field.setText(DEFAULT_TEXT);
 
@@ -146,7 +152,7 @@ public class IdentifierEditor extends JComponent {
     }
 
     @Override public void setBackground(Color bg) {
-        type.setBackground(bg);
+//        type.setBackground(bg);
     }
 
     /**
@@ -198,8 +204,9 @@ public class IdentifierEditor extends JComponent {
         }
 
         identifier = ID_FACTORY.ofClass(c);
-
-        identifier.setAccession(accession);
+        
+        if (!accession.isEmpty())
+            identifier.setAccession(accession);
 
         return identifier;
 
