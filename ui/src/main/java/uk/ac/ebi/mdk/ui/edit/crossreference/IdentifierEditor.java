@@ -39,6 +39,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -134,7 +135,6 @@ public class IdentifierEditor extends JPanel {
         final JLabel label = LabelFactory.newLabel("N/A");
         label.setOpaque(true);
         label.setFont(monoSpace);
-
         label.setForeground(new Color(0x444444));
 
         type.setRenderer(new ListCellRenderer() {
@@ -142,6 +142,8 @@ public class IdentifierEditor extends JPanel {
             @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 label.setBackground(component.getBackground());
+                list.setSelectionBackground(component.getBackground());
+                list.setSelectionForeground(label.getForeground());
                 if (value != null) {
                     label.setText(ID_FACTORY.ofClass((Class<Identifier>) value).getShortDescription());
                     label.setToolTipText(ID_FACTORY.ofClass((Class<Identifier>) value).getLongDescription());
@@ -183,6 +185,7 @@ public class IdentifierEditor extends JPanel {
         add(Box.createHorizontalStrut(5));
         add(field);
         type.resetKeyboardActions();
+        
 
         field.setText(DEFAULT_TEXT);
 
