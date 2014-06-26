@@ -210,6 +210,9 @@ public class ReconstructionIOHelper {
         long end = System.currentTimeMillis();
         LOGGER.info("Loaded project data in " + (end - start) + " (ms)");
 
+        // set the file to where were opened from
+        reconstruction.setContainer(file);
+        
         entityStream.close();
         annotationStream.close();
         observationStream.close();
