@@ -52,6 +52,9 @@ public class NaturalMass extends AbstractDoubleAnnotation {
         return new NaturalMass(exactMass);
     }
 
+    @Override public String toString() {
+        return String.format("%.3f", getValue());
+    }
 
     @Override
     public String getShortDescription() {

@@ -22,7 +22,7 @@ package uk.ac.ebi.mdk.domain.annotation;
  *
  * @author John May
  */
-public interface Name {
+public interface Name extends Annotation {
 
     /**
      * Access the name of the entity held by this annotation.
