@@ -62,7 +62,7 @@
                 <annotation>
                     <rex:rex xmlns:rex="http://www.bbk.ac.uk/rex/">
                         <rex:extracts>
-                            <rex:extract source="0000000">
+                            <rex:extract source="0000000" isInCorrectOrganism="true" totalSeedMetabolitesInSource="0">
                                 <rex:sentence>Arginine is converted to agmatine.</rex:sentence>
                                 <rex:tag type="substrate" start="0" length="8" id="mol1" />
                                 <rex:tag type="product" start="25" length="8" id="mol2" />
@@ -72,22 +72,22 @@
                             <rex:reactants>
                                 <rex:compound id="mol1" isInSeed="true" isInBranch="false" extraction="10.0" relevance="5.0">
                                     <rex:alternativePathways>
-                                        <rex:pathway id="META000" />
-                                        <rex:pathway id="META001" />
+                                        <rex:pathway id="META000" name="Pathway 1" />
+                                        <rex:pathway id="META001" name="Pathway 2"  />
                                     </rex:alternativePathways>
                                     <rex:otherPathways>
-                                        <rex:pathway id="META002" />
+                                        <rex:pathway id="META002" name="Pathway 3"  />
                                     </rex:otherPathways>
                                 </rex:compound>
                             </rex:reactants>
                             <rex:products>
                                 <rex:compound id="mol2" isInSeed="true" isInBranch="false" extraction="10.0" relevance="5.0">
                                     <rex:alternativePathways>
-                                        <rex:pathway id="META000" />
-                                        <rex:pathway id="META001" />
+                                        <rex:pathway id="META000" name="Pathway 1"  />
+                                        <rex:pathway id="META001" name="Pathway 2"  />
                                     </rex:alternativePathways>
                                     <rex:otherPathways>
-                                        <rex:pathway id="META002" />
+                                        <rex:pathway id="META002" name="Pathway 3"  />
                                     </rex:otherPathways>
                                 </rex:compound>
                             </rex:products>

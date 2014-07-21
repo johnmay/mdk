@@ -80,11 +80,11 @@
         <xsd:sequence>
             <xsd:element name="alternativePathways" type="pathways" minOccurs="0" maxOccurs="1" />
             <xsd:element name="otherPathways" type="pathways" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="branches" type="branches" minOccurs="0" maxOccurs="1" />
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:string" use="required"/>
         <xsd:attribute name="isInBRENDA" type="xsd:boolean" use="required"/>
         <xsd:attribute name="isInSeed" type="xsd:boolean" use="required"/>
-        <xsd:attribute name="isInBranch" type="xsd:boolean" use="required"/>
         <xsd:attribute name="extraction" type="xsd:double" use="required"/>
         <xsd:attribute name="relevance" type="xsd:double" use="optional"/>
     </xsd:complexType>
@@ -97,6 +97,19 @@
 
     <xsd:complexType name="pathway">
         <xsd:attribute name="id" type="xsd:string" use="required"/>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="branches">
+        <xsd:sequence>
+            <xsd:element name="branch" type="branch" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="branch">
+        <xsd:attribute name="id" type="xsd:string" use="required"/>
+        <xsd:attribute name="length" type="xsd:int" use="required"/>
+        <xsd:attribute name="score" type="xsd:double" use="required"/>
     </xsd:complexType>
 
 </xsd:schema>

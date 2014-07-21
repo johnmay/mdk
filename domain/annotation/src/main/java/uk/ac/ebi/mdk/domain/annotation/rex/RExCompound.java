@@ -7,10 +7,7 @@ import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Context;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 @Context(Reaction.class)
 @Brief("REx Compound")
@@ -19,8 +16,10 @@ public class RExCompound extends AbstractAnnotation
 {
     private final String id;
     private final Type type;
-    private final boolean isInBRENDA, isInSeed, isInBranch;
-    private final List<String> alternativePathways, otherPathways;
+    private final boolean isInBRENDA, isInSeed;
+    private final Map<String, String> alternativePathways, otherPathways;
+    private Map<String, Integer> branchLengths;
+    private Map<String, Double> branchScores;
     private double extraction, relevance;
 
     public static enum Type {
@@ -35,16 +34,17 @@ public class RExCompound extends AbstractAnnotation
 
     public RExCompound()
     {
-        this(null, null, false, false, false, Collections.<String>emptyList(), Collections.<String>emptyList(), 0, 0);
+        this(null, null, false, false, Collections.<String, String>emptyMap(), Collections.<String, String>emptyMap(), Collections.<String, Integer>emptyMap(), Collections.<String, Double>emptyMap(), 0, 0);
     }
 
     public RExCompound(String id,
                        Type type,
                        boolean isInBRENDA,
                        boolean isInSeed,
-                       boolean isInBranch,
-                       List<String> alternativePathways,
-                       List<String> otherPathways,
+                       Map<String, String> alternativePathways,
+                       Map<String, String> otherPathways,
+                       Map<String, Integer> branchLengths,
+                       Map<String, Double> branchScores,
                        double extraction,
                        double relevance)
     {
@@ -52,9 +52,10 @@ public class RExCompound extends AbstractAnnotation
         this.type = type;
         this.isInBRENDA = isInBRENDA;
         this.isInSeed = isInSeed;
-        this.isInBranch = isInBranch;
         this.alternativePathways = alternativePathways;
         this.otherPathways = otherPathways;
+        this.branchLengths = branchLengths;
+        this.branchScores = branchScores;
         this.extraction = extraction;
         this.relevance = relevance;
     }
@@ -79,19 +80,30 @@ public class RExCompound extends AbstractAnnotation
         return isInSeed;
     }
 
-    public boolean isInBranch()
-    {
-        return isInBranch;
-    }
-
-    public List<String> getAlternativePathways()
+    public Map<String, String> getAlternativePathways()
     {
         return alternativePathways;
     }
 
-    public List<String> getOtherPathways()
+    public Map<String, String> getOtherPathways()
     {
         return otherPathways;
+    }
+
+    public Map<String, Integer> getBranchLengths()
+    {
+        return branchLengths;
+    }
+
+    public Map<String, Double> getBranchScores()
+    {
+        return branchScores;
+    }
+
+    public void addBranch(String id, int length, double score)
+    {
+        branchLengths.put(id, length);
+        branchScores.put(id, score);
     }
 
     public void setExtraction(double score)

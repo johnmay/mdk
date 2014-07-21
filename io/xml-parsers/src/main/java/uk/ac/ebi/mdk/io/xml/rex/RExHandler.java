@@ -117,15 +117,17 @@ public class RExHandler {
         }
 
         List<RExCompound> compounds = new ArrayList<RExCompound>();
+
         for(Compound c : rex.getComponents().getReactants().getCompound())
         {
             compounds.add(new RExCompound(c.getId(),
                                           RExCompound.Type.SUBSTRATE,
                                           c.isIsInBRENDA(),
                                           c.isIsInSeed(),
-                                          c.isIsInBranch(),
                                           pathwaysToStrings(c.getAlternativePathways().getPathway()),
                                           pathwaysToStrings(c.getOtherPathways().getPathway()),
+                                          branchLengthsToMap(c.getBranches().getBranch()),
+                                          branchScoresToMap(c.getBranches().getBranch()),
                                           c.getExtraction(),
                                           c.getRelevance()));
         }
@@ -136,9 +138,10 @@ public class RExHandler {
                                           RExCompound.Type.PRODUCT,
                                           c.isIsInBRENDA(),
                                           c.isIsInSeed(),
-                                          c.isIsInBranch(),
                                           pathwaysToStrings(c.getAlternativePathways().getPathway()),
                                           pathwaysToStrings(c.getOtherPathways().getPathway()),
+                                          branchLengthsToMap(c.getBranches().getBranch()),
+                                          branchScoresToMap(c.getBranches().getBranch()),
                                           c.getExtraction(),
                                           c.getRelevance()));
         }
@@ -146,28 +149,66 @@ public class RExHandler {
         return new RExAnnotation(extracts, compounds);
     }
 
-    private List<String> pathwaysToStrings(List<Pathway> pathways)
+    private Map<String, String> pathwaysToStrings(List<Pathway> pathways)
     {
-        List<String> ids = new ArrayList<String>();
+        Map<String, String> ids = new HashMap<String, String>();
         for(Pathway pathway : pathways)
         {
-            ids.add(pathway.getId());
+            ids.put(pathway.getId(), pathway.getName());
         }
 
         return ids;
     }
 
-    private List<Pathway> stringsToPathways(List<String> ids)
+    private List<Pathway> stringsToPathways(Map<String, String> ids)
     {
         List<Pathway> pathways = new ArrayList<Pathway>();
-        for(String id : ids)
+        for(String id : ids.keySet())
         {
             Pathway pathway = new Pathway();
             pathway.setId(id);
+            pathway.setName(ids.get(id));
             pathways.add(pathway);
         }
 
         return pathways;
+    }
+
+    private Map<String, Integer> branchLengthsToMap(List<Branch> branches)
+    {
+        Map<String, Integer> lengths = new HashMap<String, Integer>();
+        for(Branch branch : branches)
+        {
+            lengths.put(branch.getId(), branch.getLength());
+        }
+
+        return lengths;
+    }
+
+    private Map<String, Double> branchScoresToMap(List<Branch> branches)
+    {
+        Map<String, Double> scores = new HashMap<String, Double>();
+        for(Branch branch : branches)
+        {
+            scores.put(branch.getId(), branch.getScore());
+        }
+
+        return scores;
+    }
+
+    private List<Branch> mapsToBranches(Map<String, Integer> lengths, Map<String, Double> scores)
+    {
+        List<Branch> branches = new ArrayList<Branch>();
+        for(String id : lengths.keySet())
+        {
+            Branch branch = new Branch();
+            branch.setId(id);
+            branch.setLength(lengths.get(id));
+            branch.setScore(scores.get(id));
+            branches.add(branch);
+        }
+
+        return branches;
     }
 
     private Compound rexCompoundToCompound(RExCompound rexCompound)
@@ -176,13 +217,15 @@ public class RExHandler {
         compound.setId(rexCompound.getID());
         compound.setIsInBRENDA(rexCompound.isInBRENDA());
         compound.setIsInSeed(rexCompound.isInSeed());
-        compound.setIsInBranch(rexCompound.isInBranch());
 
         compound.setAlternativePathways(new Pathways());
         compound.getAlternativePathways().getPathway().addAll(stringsToPathways(rexCompound.getAlternativePathways()));
 
         compound.setOtherPathways(new Pathways());
         compound.getOtherPathways().getPathway().addAll(stringsToPathways(rexCompound.getOtherPathways()));
+
+        compound.setBranches(new Branches());
+        compound.getBranches().getBranch().addAll(mapsToBranches(rexCompound.getBranchLengths(), rexCompound.getBranchScores()));
 
         compound.setExtraction(rexCompound.getExtraction());
         compound.setRelevance(rexCompound.getRelevance());

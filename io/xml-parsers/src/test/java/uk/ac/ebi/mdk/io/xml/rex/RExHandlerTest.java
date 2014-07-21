@@ -99,7 +99,7 @@ public class RExHandlerTest {
                 "\t\t\t\t<annotation>\n" +
                 "\t\t\t\t\t<rex:rex xmlns:rex=\"http://www.bbk.ac.uk/rex/\">\n" +
                 "\t\t\t\t\t\t<rex:extracts>\n" +
-                "\t\t\t\t\t\t\t<rex:extract source=\"0000000\">\n" +
+                "\t\t\t\t\t\t\t<rex:extract source=\"0000000\" isInCorrectOrganism=\"true\" totalSeedMetabolitesInSource=\"0\">\n" +
                 "\t\t\t\t\t\t\t\t<rex:sentence>Arginine is converted to agmatine.</rex:sentence>\n" +
                 "\t\t\t\t\t\t\t\t<rex:tag type=\"substrate\" start=\"0\" length=\"8\" id=\"mol1\" />\n" +
                 "\t\t\t\t\t\t\t\t<rex:tag type=\"product\" start=\"25\" length=\"8\" id=\"mol2\" />\n" +
@@ -107,24 +107,24 @@ public class RExHandlerTest {
                 "\t\t\t\t\t\t</rex:extracts>\n" +
                 "\t\t\t\t\t\t<rex:components>\n" +
                 "\t\t\t\t\t\t\t<rex:reactants>\n" +
-                "\t\t\t\t\t\t\t\t<rex:compound id=\"mol1\" isInSeed=\"true\" isInBranch=\"false\" extraction=\"10.0\" relevance=\"5.0\">\n" +
+                "\t\t\t\t\t\t\t\t<rex:compound id=\"mol1\" isInSeed=\"true\" isInBranch=\"true\" branchLength=\"2\" extraction=\"10.0\" relevance=\"5.0\">\n" +
                 "\t\t\t\t\t\t\t\t\t<rex:alternativePathways>\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META000\" />\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META001\" />\n" +
+                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META000\" name=\"Pathway 1\" />\n" +
+                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META001\" name=\"Pathway 2\" />\n" +
                 "\t\t\t\t\t\t\t\t\t</rex:alternativePathways>\n" +
                 "\t\t\t\t\t\t\t\t\t<rex:otherPathways>\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META002\" />\n" +
+                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META002\" name=\"Pathway 3\" />\n" +
                 "\t\t\t\t\t\t\t\t\t</rex:otherPathways>\n" +
                 "\t\t\t\t\t\t\t\t</rex:compound>\n" +
                 "\t\t\t\t\t\t\t</rex:reactants>\n" +
                 "\t\t\t\t\t\t\t<rex:products>\n" +
-                "\t\t\t\t\t\t\t\t<rex:compound id=\"mol2\" isInSeed=\"true\" isInBranch=\"false\" extraction=\"10.0\" relevance=\"5.0\">\n" +
+                "\t\t\t\t\t\t\t\t<rex:compound id=\"mol2\" isInSeed=\"true\" isInBranch=\"true\" branchLength=\"2\" extraction=\"10.0\" relevance=\"5.0\">\n" +
                 "\t\t\t\t\t\t\t\t\t<rex:alternativePathways>\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META000\" />\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META001\" />\n" +
+                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META000\" name=\"Pathway 1\" />\n" +
+                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META001\" name=\"Pathway 2\" />\n" +
                 "\t\t\t\t\t\t\t\t\t</rex:alternativePathways>\n" +
                 "\t\t\t\t\t\t\t\t\t<rex:otherPathways>\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META002\" />\n" +
+                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META002\" name=\"Pathway 3\" />\n" +
                 "\t\t\t\t\t\t\t\t\t</rex:otherPathways>\n" +
                 "\t\t\t\t\t\t\t\t</rex:compound>\n" +
                 "\t\t\t\t\t\t\t</rex:products>\n" +
