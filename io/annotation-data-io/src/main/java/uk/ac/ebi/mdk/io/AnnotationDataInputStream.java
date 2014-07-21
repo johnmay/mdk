@@ -22,6 +22,8 @@ import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.mdk.domain.annotation.*;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
 import uk.ac.ebi.mdk.domain.annotation.primitive.*;
+import uk.ac.ebi.mdk.domain.annotation.rex.RExCompound;
+import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
 import uk.ac.ebi.mdk.domain.annotation.task.ExecutableParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.FileParameter;
 import uk.ac.ebi.mdk.domain.annotation.task.Parameter;
@@ -30,6 +32,9 @@ import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationReader_1_3_4;
 import uk.ac.ebi.mdk.io.annotation.AuthorCommentReader;
 import uk.ac.ebi.mdk.io.annotation.CrossReferenceReader;
 import uk.ac.ebi.mdk.io.annotation.GibbsEnergyReader;
+import uk.ac.ebi.mdk.io.annotation.RExCompoundReader;
+import uk.ac.ebi.mdk.io.annotation.RExExtractReader;
+import uk.ac.ebi.mdk.io.annotation.RExExtractWriter;
 import uk.ac.ebi.mdk.io.annotation.primitive.*;
 import uk.ac.ebi.mdk.io.annotation.task.ExecutableParameterReader;
 import uk.ac.ebi.mdk.io.annotation.task.FileParameterReader;
@@ -82,6 +87,8 @@ public class AnnotationDataInputStream
         add(AtomContainerAnnotation.class, new AtomContainerAnnotationReader_0_8_5(in));
         add(AtomContainerAnnotation.class, new AtomContainerAnnotationReader_1_3_4(in));
         add(GibbsEnergy.class, new GibbsEnergyReader(in));
+        add(RExExtract.class, new RExExtractReader(in, identifierInput));
+        add(RExCompound.class, new RExCompoundReader(in));
 
         // special readers for tasks
         add(Parameter.class, new ParameterReader(in));

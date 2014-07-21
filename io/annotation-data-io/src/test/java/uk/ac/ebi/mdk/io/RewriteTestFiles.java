@@ -17,6 +17,8 @@
 
 package uk.ac.ebi.mdk.io;
 
+import uk.ac.ebi.mdk.io.annotation.RExCompoundWriterTest;
+import uk.ac.ebi.mdk.io.annotation.RExExtractWriterTest;
 import uk.ac.ebi.mdk.io.annotation.primitive.DoubleAnnotationWriterTest;
 import uk.ac.ebi.mdk.io.annotation.primitive.StringAnnotationWriterTest;
 import uk.ac.ebi.mdk.io.annotation.AtomContainerAnnotationWriter085Test;
@@ -44,6 +46,8 @@ public class RewriteTestFiles {
         new AtomContainerAnnotationWriter085Test().rewrite();
         new CrossReferenceWriterTest().rewrite();
         new GibbsEnergyWriterTest().rewrite();
+        new RExExtractWriterTest().rewrite();
+        new RExCompoundWriterTest().rewrite();
 
     }
 
