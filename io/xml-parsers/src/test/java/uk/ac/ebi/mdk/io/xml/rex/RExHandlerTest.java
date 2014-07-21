@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.io.xml.rex;
 
+import com.google.common.io.CharStreams;
 import org.junit.Test;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.Reaction;
@@ -47,9 +48,11 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -63,86 +66,15 @@ public class RExHandlerTest {
 
     @Test
     public void marshalUnmarshalTest() throws XMLStreamException, JAXBException, ParserConfigurationException, IOException, SAXException, TransformerException {
-        String sbml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<sbml xmlns=\"http://www.sbml.org/sbml/level2\" level=\"2\" version=\"4\">\n" +
-                "\t<model id=\"model\">\n" +
-                "\t\t<listOfSpecies>\n" +
-                "\t\t\t<species id=\"mol1\" name=\"arginine\" metaid=\"_000000001\">\n" +
-                "\t\t\t\t<annotation>\n" +
-                "\t\t\t\t\t<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\">\n" +
-                "\t\t\t\t\t\t<rdf:Description rdf:about=\"#_000000001\">\n" +
-                "\t\t\t\t\t\t\t<bqbiol:is>\n" +
-                "\t\t\t\t\t\t\t\t<rdf:Bag>\n" +
-                "\t\t\t\t\t\t\t\t\t<rdf:li rdf:resource=\"http://rdf.openmolecules.net/?InChI=1S/C6H14N4O2/c7-4(5(11)12)2-1-3-10-6(8)9/h4H,1-3,7H2,(H,11,12)(H4,8,9,10)\" />\n" +
-                "\t\t\t\t\t\t\t\t</rdf:Bag>\n" +
-                "\t\t\t\t\t\t\t</bqbiol:is>\n" +
-                "\t\t\t\t\t\t</rdf:Description>\n" +
-                "\t\t\t\t\t</rdf:RDF>\n" +
-                "\t\t\t\t</annotation>\n" +
-                "\t\t\t</species>\n" +
-                "\t\t\t<species id=\"mol2\" name=\"agmatine\" metaid=\"_000000002\">\n" +
-                "\t\t\t\t<annotation>\n" +
-                "\t\t\t\t\t<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:bqbiol=\"http://biomodels.net/biology-qualifiers/\" xmlns:bqmodel=\"http://biomodels.net/model-qualifiers/\">\n" +
-                "\t\t\t\t\t\t<rdf:Description rdf:about=\"#_000000002\">\n" +
-                "\t\t\t\t\t\t\t<bqbiol:is>\n" +
-                "\t\t\t\t\t\t\t\t<rdf:Bag>\n" +
-                "\t\t\t\t\t\t\t\t\t<rdf:li rdf:resource=\"http://rdf.openmolecules.net/?InChI=1S/C5H14N4/c6-3-1-2-4-9-5(7)8/h1-4,6H2,(H4,7,8,9)\" />\n" +
-                "\t\t\t\t\t\t\t\t</rdf:Bag>\n" +
-                "\t\t\t\t\t\t\t</bqbiol:is>\n" +
-                "\t\t\t\t\t\t</rdf:Description>\n" +
-                "\t\t\t\t\t</rdf:RDF>\n" +
-                "\t\t\t\t</annotation>\n" +
-                "\t\t\t</species>\n" +
-                "\t\t</listOfSpecies>\n" +
-                "\t\t<listOfReactions>\n" +
-                "\t\t\t<reaction id=\"rxn1\">\n" +
-                "\t\t\t\t<annotation>\n" +
-                "\t\t\t\t\t<rex:rex xmlns:rex=\"http://www.bbk.ac.uk/rex/\">\n" +
-                "\t\t\t\t\t\t<rex:extracts>\n" +
-                "\t\t\t\t\t\t\t<rex:extract source=\"0000000\" isInCorrectOrganism=\"true\" totalSeedMetabolitesInSource=\"0\">\n" +
-                "\t\t\t\t\t\t\t\t<rex:sentence>Arginine is converted to agmatine.</rex:sentence>\n" +
-                "\t\t\t\t\t\t\t\t<rex:tag type=\"substrate\" start=\"0\" length=\"8\" id=\"mol1\" />\n" +
-                "\t\t\t\t\t\t\t\t<rex:tag type=\"product\" start=\"25\" length=\"8\" id=\"mol2\" />\n" +
-                "\t\t\t\t\t\t\t</rex:extract>\n" +
-                "\t\t\t\t\t\t</rex:extracts>\n" +
-                "\t\t\t\t\t\t<rex:components>\n" +
-                "\t\t\t\t\t\t\t<rex:reactants>\n" +
-                "\t\t\t\t\t\t\t\t<rex:compound id=\"mol1\" isInSeed=\"true\" isInBranch=\"true\" branchLength=\"2\" extraction=\"10.0\" relevance=\"5.0\">\n" +
-                "\t\t\t\t\t\t\t\t\t<rex:alternativePathways>\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META000\" name=\"Pathway 1\" />\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META001\" name=\"Pathway 2\" />\n" +
-                "\t\t\t\t\t\t\t\t\t</rex:alternativePathways>\n" +
-                "\t\t\t\t\t\t\t\t\t<rex:otherPathways>\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META002\" name=\"Pathway 3\" />\n" +
-                "\t\t\t\t\t\t\t\t\t</rex:otherPathways>\n" +
-                "\t\t\t\t\t\t\t\t</rex:compound>\n" +
-                "\t\t\t\t\t\t\t</rex:reactants>\n" +
-                "\t\t\t\t\t\t\t<rex:products>\n" +
-                "\t\t\t\t\t\t\t\t<rex:compound id=\"mol2\" isInSeed=\"true\" isInBranch=\"true\" branchLength=\"2\" extraction=\"10.0\" relevance=\"5.0\">\n" +
-                "\t\t\t\t\t\t\t\t\t<rex:alternativePathways>\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META000\" name=\"Pathway 1\" />\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META001\" name=\"Pathway 2\" />\n" +
-                "\t\t\t\t\t\t\t\t\t</rex:alternativePathways>\n" +
-                "\t\t\t\t\t\t\t\t\t<rex:otherPathways>\n" +
-                "\t\t\t\t\t\t\t\t\t\t<rex:pathway id=\"META002\" name=\"Pathway 3\" />\n" +
-                "\t\t\t\t\t\t\t\t\t</rex:otherPathways>\n" +
-                "\t\t\t\t\t\t\t\t</rex:compound>\n" +
-                "\t\t\t\t\t\t\t</rex:products>\n" +
-                "\t\t\t\t\t\t</rex:components>\n" +
-                "\t\t\t\t\t</rex:rex>\n" +
-                "\t\t\t\t</annotation>\n" +
-                "\t\t\t\t<listOfReactants>\n" +
-                "\t\t\t\t\t<speciesReference species=\"mol1\" />\n" +
-                "\t\t\t\t</listOfReactants>\n" +
-                "\t\t\t\t<listOfProducts>\n" +
-                "\t\t\t\t\t<speciesReference species=\"mol2\" />\n" +
-                "\t\t\t\t</listOfProducts>\n" +
-                "\t\t\t</reaction>\n" +
-                "\t\t</listOfReactions>\n" +
-                "\t</model>\n" +
-                "</sbml>";
+        List<String> sbmlFile = CharStreams.readLines(new InputStreamReader(
+                this.getClass().getResourceAsStream("/uk/ac/ebi/mdk/io/xml/sbml/rex.xml")));
+        StringBuilder sbml = new StringBuilder();
+        for(String line : sbmlFile)
+        {
+            sbml.append(line);
+        }
 
-        SBMLDocument sbmlDoc = new SBMLReader().readSBMLFromString(sbml);
+        SBMLDocument sbmlDoc = new SBMLReader().readSBMLFromString(sbml.toString());
         Model model = sbmlDoc.getModel();
         Reaction sbmlReaction = model.getReaction(0);
 

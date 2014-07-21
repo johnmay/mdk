@@ -62,7 +62,7 @@
                 <annotation>
                     <rex:rex xmlns:rex="http://www.bbk.ac.uk/rex/">
                         <rex:extracts>
-                            <rex:extract source="0000000" isInCorrectOrganism="true" totalSeedMetabolitesInSource="0">
+                            <rex:extract source="http://identifiers.org/pubmed/21535474/" isInCorrectOrganism="true" totalSeedMetabolitesInSource="0">
                                 <rex:sentence>Arginine is converted to agmatine.</rex:sentence>
                                 <rex:tag type="substrate" start="0" length="8" id="mol1" />
                                 <rex:tag type="product" start="25" length="8" id="mol2" />
@@ -70,7 +70,7 @@
                         </rex:extracts>
                         <rex:components>
                             <rex:reactants>
-                                <rex:compound id="mol1" isInSeed="true" isInBranch="false" extraction="10.0" relevance="5.0">
+                                <rex:compound id="mol1" isInSeed="true" isInBRENDA="false" extraction="0.9" relevance="0.7">
                                     <rex:alternativePathways>
                                         <rex:pathway id="META000" name="Pathway 1" />
                                         <rex:pathway id="META001" name="Pathway 2"  />
@@ -78,10 +78,13 @@
                                     <rex:otherPathways>
                                         <rex:pathway id="META002" name="Pathway 3"  />
                                     </rex:otherPathways>
+                                    <rex:branches>
+                                        <rex:branch id="29" length="4" score="0.21925628065428887"/>
+                                    </rex:branches>
                                 </rex:compound>
                             </rex:reactants>
                             <rex:products>
-                                <rex:compound id="mol2" isInSeed="true" isInBranch="false" extraction="10.0" relevance="5.0">
+                                <rex:compound id="mol2" isInSeed="true" isInBRENDA="false" extraction="0.9" relevance="0.7">
                                     <rex:alternativePathways>
                                         <rex:pathway id="META000" name="Pathway 1"  />
                                         <rex:pathway id="META001" name="Pathway 2"  />
@@ -89,6 +92,9 @@
                                     <rex:otherPathways>
                                         <rex:pathway id="META002" name="Pathway 3"  />
                                     </rex:otherPathways>
+                                    <rex:branches>
+                                        <rex:branch id="29" length="4" score="0.21925628065428887"/>
+                                    </rex:branches>
                                 </rex:compound>
                             </rex:products>
                         </rex:components>
