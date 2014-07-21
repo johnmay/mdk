@@ -128,7 +128,7 @@ public class SmoothGenerator implements IGenerator<IAtomContainer> {
     @Override public IRenderingElement generate(IAtomContainer container, RendererModel model) {
         ElementGroup group = new ElementGroup();
 
-        double scale = model.get(BasicSceneGenerator.Scale.class);
+        Double scale = model.get(BasicSceneGenerator.Scale.class);
 
         Area[] filled = new Area[container.getAtomCount()];
         Path2D[] symbols = new Path2D[container.getAtomCount()];
