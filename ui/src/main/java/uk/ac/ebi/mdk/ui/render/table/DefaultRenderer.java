@@ -35,7 +35,6 @@ public class DefaultRenderer<O>
         implements TableCellRenderer {
 
     public DefaultRenderer() {
-        setFont(getFont().deriveFont(getFont().getSize() - 2));
     }
 
     public JLabel getComponent(JTable table, O value, int row, int column) {

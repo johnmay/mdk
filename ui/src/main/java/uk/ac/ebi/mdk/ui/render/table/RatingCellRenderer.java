@@ -37,6 +37,7 @@ import java.util.Map;
 public class RatingCellRenderer extends DefaultTableCellRenderer {
 
     private static final Map<StarRating, RatingComponent> components = new HashMap<StarRating, RatingComponent>();
+    private final        JLabel                           label      = new JLabel();
 
     static {
         components.put(StarRating.NO_RATING, new RatingComponent(Rating.NO_RATING));
@@ -58,6 +59,7 @@ public class RatingCellRenderer extends DefaultTableCellRenderer {
         component.setOpaque(isOpaque());
         component.setBackground(new Color(getBackground().getRGB()));
         component.setForeground(new Color(getForeground().getRGB()));
+        component.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
         return component;
     }

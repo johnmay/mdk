@@ -18,24 +18,31 @@ package uk.ac.ebi.mdk.ui.edit.table;
 
 import com.explodingpixels.data.Rating;
 import com.explodingpixels.macwidgets.ITunesRatingTableCellEditor;
+import com.explodingpixels.macwidgets.RatingStarEditorPanel;
+import uk.ac.ebi.mdk.domain.entity.StarRating;
 
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.JTable;
 import java.awt.Component;
 import java.util.EnumMap;
 import java.util.Map;
-import javax.swing.JTable;
-import uk.ac.ebi.mdk.domain.entity.StarRating;
 
 /**
- *          RatingCellEditor - 2011.12.09 <br>
- *          Class wrap MacWidgets rating cell editor
+ * RatingCellEditor - 2011.12.09 <br> Class wrap MacWidgets rating cell editor
+ *
+ * @author johnmay
+ * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
- * @author  johnmay
- * @author  $Author$ (this version)
  */
 public class RatingCellEditor extends ITunesRatingTableCellEditor {
 
-    private static final Map<StarRating, Rating> ratingMap = new EnumMap<StarRating, Rating>(StarRating.class);
+    private static final Map<StarRating, Rating> ratingMap    = new EnumMap<StarRating, Rating>(StarRating.class);
     private static final Map<Rating, StarRating> ratingInvMap = new EnumMap<Rating, StarRating>(Rating.class);
+
+    public RatingCellEditor() {
+    }
 
     static {
         ratingMap.put(StarRating.ONE_STAR, Rating.ONE_STAR);
