@@ -24,12 +24,12 @@
     <parent>
         <artifactId>mdk-domain</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.4.1</version>
+        <version>1.4.2-SNAPSHOT</version>
     </parent>
 
     <groupId>uk.ac.ebi.mdk</groupId>
     <artifactId>mdk-domain-observation</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2-SNAPSHOT</version>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/observation</url>
 
 
