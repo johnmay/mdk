@@ -21,11 +21,11 @@
     <parent>
         <artifactId>mdk</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.4.1-SNAPSHOT</version>
+        <version>1.4.1</version>
     </parent>
     <groupId>uk.ac.ebi.mdk</groupId>
     <artifactId>mdk-ui</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.1</version>
     <packaging>jar</packaging>
 
     <url>http://www.ebi.ac.uk/steinbeck-srv/mdk/ui</url>

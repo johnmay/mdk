@@ -5,12 +5,12 @@
     <parent>
         <artifactId>mdk-service</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.4.1-SNAPSHOT</version>
+        <version>1.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mdk-service-lucene</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.1</version>
     <groupId>uk.ac.ebi.mdk</groupId>
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/service/lucene-service</url>
 
