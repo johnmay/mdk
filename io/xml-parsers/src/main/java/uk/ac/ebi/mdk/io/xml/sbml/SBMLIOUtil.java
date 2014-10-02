@@ -46,11 +46,14 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.xml.XMLNode;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
 import uk.ac.ebi.mdk.domain.annotation.Note;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.rex.RExExtract;
+import uk.ac.ebi.mdk.domain.entity.AnnotatedEntity;
 import uk.ac.ebi.mdk.domain.entity.EntityFactory;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reconstruction;
@@ -60,9 +63,15 @@ import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
+import uk.ac.ebi.mdk.io.xml.rex.RExHandler;
 
+import javax.xml.bind.JAXBException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -87,23 +96,34 @@ public class SBMLIOUtil {
     private Map<Compartment, org.sbml.jsbml.Compartment> compartmentMap = new HashMap<Compartment, org.sbml.jsbml.Compartment>();
 
     private EntityFactory factory;
-    
+
     private SBMLSideCompoundHandler sideCompHandler;
     private Boolean sideCompoundHandlerAvailable;
+    private RExHandler handler;
 
     public SBMLIOUtil(EntityFactory factory, int level, int version) {
         this.level = level;
         this.version = version;
         this.factory = factory;
         this.sideCompoundHandlerAvailable = false;
+        try {
+            this.handler = new RExHandler();
+        } catch (JAXBException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
-    
+
     public SBMLIOUtil(EntityFactory factory, int level, int version, SBMLSideCompoundHandler sideCompHandler) {
         this.level = level;
         this.version = version;
         this.factory = factory;
         this.sideCompHandler = sideCompHandler;
         this.sideCompoundHandlerAvailable = true;
+        try {
+            this.handler = new RExHandler();
+        } catch (JAXBException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
 
@@ -127,7 +147,7 @@ public class SBMLIOUtil {
         for (MetabolicReaction rxn : reconstruction.reactome()) {
             addReaction(model, rxn);
         }
-        if(sideCompoundHandlerAvailable)
+        if (sideCompoundHandlerAvailable)
             sideCompHandler.writeSideCompoundAnnotations(model);
         return doc;
 
@@ -176,14 +196,16 @@ public class SBMLIOUtil {
         for (MetabolicParticipant p : rxn.getReactants()) {
             SpeciesReference ref = getSpeciesReference(model, p, sbmlRxn, index++);
             sbmlRxn.addReactant(ref);
-            if(p.isSideCompound() && sideCompoundHandlerAvailable)
-                sideCompHandler.registerAsSideCompound(new Species(ref.getSpecies()));
+            if (p.isSideCompound() && sideCompoundHandlerAvailable)
+                sideCompHandler
+                        .registerAsSideCompound(new Species(ref.getSpecies()));
         }
         for (MetabolicParticipant p : rxn.getProducts()) {
-            SpeciesReference ref = getSpeciesReference(model, p, sbmlRxn, index++); 
+            SpeciesReference ref = getSpeciesReference(model, p, sbmlRxn, index++);
             sbmlRxn.addProduct(ref);
-            if(p.isSideCompound() && sideCompoundHandlerAvailable)
-                sideCompHandler.registerAsSideCompound(new Species(ref.getSpecies()));
+            if (p.isSideCompound() && sideCompoundHandlerAvailable)
+                sideCompHandler
+                        .registerAsSideCompound(new Species(ref.getSpecies()));
         }
 
 
@@ -193,8 +215,26 @@ public class SBMLIOUtil {
             term.addResource(xref.getIdentifier().getURN());
         }
 
+
+// causes large slow down in export
+//        if (rxn.getAnnotations().size() > 0) {
+//            String content = "<notes><html xmlns=\"http://www.w3.org/1999/xhtml\">"
+//                    + notes(rxn) + "</html></notes>";
+//            XMLNode notes = XMLNode.convertStringToXMLNode(content);
+//            sbmlRxn.setNotes(notes);
+//        }
+
         if (!term.getResources().isEmpty())
             sbmlRxn.addCVTerm(term);
+
+        Collection<RExExtract> extracts = rxn.getAnnotations(RExExtract.class);
+        if(!extracts.isEmpty()) {
+            try {
+                sbmlRxn.getAnnotation().appendNoRDFAnnotation(handler.marshal(extracts));
+            } catch (JAXBException e) {
+                LOGGER.error("Could not convert REx extracts");
+            }
+        }
 
         if (!model.addReaction(sbmlRxn)) {
             // could inform user that the reaction couldn't be added
@@ -259,11 +299,14 @@ public class SBMLIOUtil {
         } else {
             String accession = id.getAccession();
             accession = accession.trim();
-            accession = accession.replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
-            accession = accession.replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
-            String compartment = ((Compartment) participant.getCompartment()).getAbbreviation();
+            accession = accession
+                    .replaceAll("[- ]", "_"); // replace spaces and dashes with underscores
+            accession = accession
+                    .replaceAll("[^_A-z0-9]", ""); // replace anything not a number digit or underscore
+            String compartment = ((Compartment) participant.getCompartment())
+                    .getAbbreviation();
             // suffix compartment to id
-            if(!id.getAccession().endsWith("_" + compartment))
+            if (!id.getAccession().endsWith("_" + compartment))
                 species.setId(accession + "_" + compartment);
             else
                 species.setId(accession);
@@ -298,9 +341,11 @@ public class SBMLIOUtil {
         }
 
         if (m.hasAnnotation(Note.class)) {
-            String content = "<notes><html xmlns=\"http://www.w3.org/1999/xhtml\"><p>" + Joiner
-                    .on("</p><p>")
-                    .join(m.getAnnotations(Note.class)) + "</p></html></notes>";
+            String content = "<notes><html xmlns=\"http://www.w3.org/1999/xhtml\">"
+                    + Joiner.on("\n")
+                            .join(notes(m, Collections
+                                    .<Class>singletonList(Note.class))) + "</html></notes>";
+            // todo the parsing is very slow
             XMLNode notes = XMLNode.convertStringToXMLNode(content);
             species.setNotes(notes);
         }
@@ -314,6 +359,26 @@ public class SBMLIOUtil {
         return species;
     }
 
+    @SuppressWarnings("unchecked")
+    private Set<String> notes(AnnotatedEntity e, Collection<Class> cs) {
+        Set<String> notes = new TreeSet<String>();
+        for (Class c : cs) {
+            if (c != AtomContainerAnnotation.class) {
+                for (Annotation a : e.getAnnotations((Class<Annotation>) c)) {
+                    notes.add(note(a));
+                }
+            }
+        }
+        return notes;
+    }
+
+    private String note(Annotation a) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<p>");
+        sb.append(a.toString());
+        sb.append("</p>");
+        return sb.toString();
+    }
 
     public org.sbml.jsbml.Compartment getCompartment(Model model, CompartmentalisedParticipant<?, ?, Compartment> participant) {
 

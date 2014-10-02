@@ -55,4 +55,8 @@ public class FluxLowerBound extends FluxBound {
     public FluxLowerBound newInstance() {
         return new FluxLowerBound();
     }
+
+    @Override public FluxLowerBound forValue(double value) {
+        return new FluxLowerBound(value);
+    }
 }

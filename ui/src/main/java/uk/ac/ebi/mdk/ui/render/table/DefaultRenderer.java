@@ -55,6 +55,7 @@ public class DefaultRenderer<O>
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public final Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
         // configure super class

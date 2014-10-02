@@ -71,7 +71,8 @@ public class AbstractDataInput<M>
     public boolean hasObject(Integer id){
         return objectMap.containsKey(id);
     }
-    
+
+    @SuppressWarnings("unchecked")
     public <O> O get(Integer id){
         return (O) objectMap.get(id);
     }

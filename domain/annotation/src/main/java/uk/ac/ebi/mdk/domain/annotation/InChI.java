@@ -66,7 +66,7 @@ public class InChI
     }
 
 
-    public Annotation getInstance(String value) {
+    public InChI getInstance(String value) {
         return new InChI(value);
     }
 

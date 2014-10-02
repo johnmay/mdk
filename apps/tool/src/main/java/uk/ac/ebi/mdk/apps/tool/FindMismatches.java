@@ -71,13 +71,14 @@ public class FindMismatches extends CommandLineMain {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process() {
 
 
         Reconstruction query = getReconstruction(getFile("q"));
         Reconstruction reference = getReconstruction(getFile("r"));
 
-        EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.getMetabolome().toList(),
+        EntityAligner<Metabolite> aligner = new MappedEntityAligner<Metabolite>(reference.metabolome().toList(),
                                                                                 true,
                                                                                 true);
 
@@ -112,10 +113,9 @@ public class FindMismatches extends CommandLineMain {
         try {
             summaryWriter = new CSVWriter(new FileWriter("/Users/johnmay/Desktop/hash-evaluation/mismatches.tsv"), '\t', '\0');
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-        for (Metabolite metabolite : query.getMetabolome()) {
+        for (Metabolite metabolite : query.metabolome()) {
 
             List<Metabolite> matches = aligner.getMatches(metabolite);
 
@@ -156,9 +156,7 @@ public class FindMismatches extends CommandLineMain {
                             });
                             writeMDL(cs.getStructure(), metabolite.getAccession() + "-" + (i + 1), molRoot);
                         } catch (IOException e) {
-                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         } catch (CDKException e) {
-                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         }
                     }
 
@@ -167,9 +165,7 @@ public class FindMismatches extends CommandLineMain {
                                  match.getAccession(),
                                  molRoot);
                     } catch (IOException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                     } catch (CDKException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                     }
 
 
@@ -182,7 +178,6 @@ public class FindMismatches extends CommandLineMain {
         try {
             summaryWriter.close();
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
         System.out.println(matched + " matched");
@@ -211,9 +206,7 @@ public class FindMismatches extends CommandLineMain {
         try {
             return ReconstructionIOHelper.read(file);
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         throw new InvalidParameterException("Reconstruction " + file + " was not read!");
     }

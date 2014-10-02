@@ -17,16 +17,15 @@
 
 package uk.ac.ebi.mdk.deprecated;
 
-import com.sun.org.apache.xerces.internal.parsers.BasicParserConfiguration;
 import org.apache.log4j.BasicConfigurator;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.Resource;
-import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import java.io.InputStream;
 import java.security.InvalidParameterException;
@@ -40,10 +39,10 @@ import java.util.Map;
 /**
  * MIRIAMLoader.java – MetabolicDevelopmentKit – Jun 25, 2011
  *
+ * deprecated needs a more flexible solution - no replacement at the moment
+ *
  * @author johnmay <johnmay@ebi.ac.uk, john.wilkinsonmay@gmail.com>
- * @deprecated needs a more flexible solution - no replacement at the moment
  */
-@Deprecated
 public class MIRIAMLoader {
 
     private static final org.apache.log4j.Logger logger =
@@ -61,9 +60,7 @@ public class MIRIAMLoader {
     private Map<Integer, MIRIAMEntry> mirMap = new HashMap<Integer, MIRIAMEntry>(500);
 
 
-    /**
-     * Singleton Accessor
-     */
+    /** Singleton Accessor */
     public static MIRIAMLoader getInstance() {
         return MIRIAMResourcesHolder.INSTANCE;
     }
@@ -85,7 +82,8 @@ public class MIRIAMLoader {
 
     private void load() {
 
-        InputStream stream = getClass().getResourceAsStream("miriam_resources.xml");
+        InputStream stream = getClass()
+                .getResourceAsStream("miriam_resources.xml");
 
         if (stream == null) {
             logger.info("Unable to get stream for miriam.xml");
@@ -120,9 +118,12 @@ public class MIRIAMLoader {
                         definition = null, url = null;
                 String namespace = "unknown";
 
-                String id = datatypeNode.getAttributes().getNamedItem("id").getNodeValue();
+                String id = datatypeNode.getAttributes().getNamedItem("id")
+                                        .getNodeValue();
                 int mir = Integer.parseInt(id.substring(4));
-                String pattern = datatypeNode.getAttributes().getNamedItem("pattern").getNodeValue();
+                String pattern = datatypeNode.getAttributes()
+                                             .getNamedItem("pattern")
+                                             .getNodeValue();
                 List<String> synonyms = new ArrayList<String>();
 
                 List<String> urns = new ArrayList<String>();
@@ -130,31 +131,39 @@ public class MIRIAMLoader {
                 while (datatypeChild != null) {
                     if (datatypeChild.getNodeName().equals("name")) {
                         name = datatypeChild.getTextContent();
-                    } else if (datatypeChild.getNodeName().equals("definition")) {
+                    } else if (datatypeChild.getNodeName()
+                                            .equals("definition")) {
                         definition = datatypeChild.getTextContent();
                     } else if (datatypeChild.getNodeName().equals("uris")) {
                         NodeList uris = datatypeChild.getChildNodes();
-                        for(int i = 0; i < uris.getLength(); i++){
+                        for (int i = 0; i < uris.getLength(); i++) {
                             NamedNodeMap atbs = uris.item(i).getAttributes();
-                            if(atbs != null) {
-                                Node type       = atbs.getNamedItem("type");
-                                Node deprecated = atbs.getNamedItem("deprecated");
-                                if(type != null && type.getNodeValue().equals("URN")){
-                                    if(deprecated == null || deprecated.getTextContent().equals("false")) {
+                            if (atbs != null) {
+                                Node type = atbs.getNamedItem("type");
+                                Node deprecated = atbs
+                                        .getNamedItem("deprecated");
+                                if (type != null && type.getNodeValue()
+                                                        .equals("URN")) {
+                                    if (deprecated == null || deprecated
+                                            .getTextContent().equals("false")) {
                                         urn = uris.item(i).getTextContent();
                                     }
                                     urns.add(uris.item(i).getTextContent());
                                 }
                             }
                         }
-                    } else if (datatypeChild.getNodeName().equals("namespace")) {
+                    } else if (datatypeChild.getNodeName()
+                                            .equals("namespace")) {
                         namespace = datatypeChild.getTextContent();
-                    } else if (datatypeChild.getNodeName().equals("resources")) {
+                    } else if (datatypeChild.getNodeName()
+                                            .equals("resources")) {
                         url = getURL(datatypeChild.getChildNodes().item(1));
                     } else if (datatypeChild.getNodeName().equals("synonyms")) {
                         NodeList synonymNodes = datatypeChild.getChildNodes();
                         for (int i = 0; i < synonymNodes.getLength(); i++) {
-                            String synonym = synonymNodes.item(i).getTextContent().trim();
+                            String synonym = synonymNodes.item(i)
+                                                         .getTextContent()
+                                                         .trim();
                             if (synonym.isEmpty() == Boolean.FALSE) {
                                 synonyms.add(synonym);
                             }
@@ -170,7 +179,7 @@ public class MIRIAMLoader {
                 namespaces.put(namespace, entry);
                 nameEntryMap.put(name.toLowerCase(),
                                  entry);
-                for(String _urn : entry.urns()){
+                for (String _urn : entry.urns()) {
                     urnEntryMap.put(_urn, entry);
                 }
             }
@@ -192,22 +201,24 @@ public class MIRIAMLoader {
     /**
      * Access a MIRIAM resource entry by it's name, such as, 'chebi'.
      *
-     * @param name A Lower case name of resource with any space characters included, 'kegg compound
-     *
+     * @param name A Lower case name of resource with any space characters
+     *             included, 'kegg compound
      * @return The MIRIAM entry associated with that name
      */
     public MIRIAMEntry getEntry(String name) {
         if (nameEntryMap.containsKey(name)) {
             return nameEntryMap.get(name);
         }
-        logger.error("No MIRIAM entry found for name '" + name + "'" + " available: " + nameEntryMap.keySet());
+        logger.error("No MIRIAM entry found for name '" + name + "'" + " available: " + nameEntryMap
+                .keySet());
         return null;
     }
 
 
     public MIRIAMEntry getEntry(int mir) {
         if (!mirMap.containsKey(mir)) {
-            throw new InvalidParameterException("No MIRIAM entry for mir:" + mir + " available: " + resources.keySet());
+            throw new InvalidParameterException("No MIRIAM entry for mir:" + mir + " available: " + resources
+                    .keySet());
         }
         return mirMap.get(mir);
     }
@@ -217,7 +228,6 @@ public class MIRIAMLoader {
      * Converts a provided URN into a string identifier
      *
      * @param urn such as urn:miriam:obo.chebi:CHEBI%3A17196
-     *
      * @return the identifier i.e. "CHEBI:17196" in the above example
      */
     public static String getAccession(String urn) {
@@ -229,35 +239,38 @@ public class MIRIAMLoader {
         if (resources.containsKey(e)) {
             return resources.get(e).newInstance();
         } else {
-            logger.error("No entry found for resource: " + e.getId() + " available: " + resources.keySet());
+            logger.warn("No entry found for resource: " + e
+                    .getId() + " available: " + resources.keySet());
             return null;
         }
     }
 
     public Identifier ofNamespace(String namespace, String accession) {
 
-        if(namespace == null)
+        if (namespace == null)
             throw new IllegalArgumentException("null namespace provided");
 
         // build the map if it's empty
         if (resources.isEmpty()) {
-            for (Identifier id : DefaultIdentifierFactory.getInstance().getSupportedIdentifiers()) {
+            for (Identifier id : DefaultIdentifierFactory.getInstance()
+                                                         .getSupportedIdentifiers()) {
                 resources.put(id.getResource(), id);
             }
         }
 
         if (namespaces.containsKey(namespace)) {
             Identifier id = getIdentifier(namespaces.get(namespace));
-            if(accession != null && !accession.isEmpty()){
+            if (id == null) {
+                logger.error("null namespace: " + namespace);
+            } else if (accession != null && !accession.isEmpty()) {
                 id.setAccession(accession);
             }
             return id;
 
         } else {
-            logger.error("missing namespace: " + namespace);
+            logger.warn("missing namespace: " + namespace);
             return IdentifierFactory.EMPTY_IDENTIFIER;
         }
-
 
 
     }
@@ -268,14 +281,15 @@ public class MIRIAMLoader {
 
         // build the map if it's empty
         if (resources.isEmpty()) {
-            for (Identifier id : DefaultIdentifierFactory.getInstance().getSupportedIdentifiers()) {
+            for (Identifier id : DefaultIdentifierFactory.getInstance()
+                                                         .getSupportedIdentifiers()) {
                 resources.put(id.getResource(), id);
             }
         }
 
         if (urnEntryMap.containsKey(prefix)) {
             Identifier id = getIdentifier(urnEntryMap.get(prefix));
-            if(id != null){
+            if (id != null) {
                 id.setAccession(getAccession(urn));
             }
             return id;
@@ -284,7 +298,6 @@ public class MIRIAMLoader {
             logger.error("No entry for " + prefix);
             return null;
         }
-
 
 
     }

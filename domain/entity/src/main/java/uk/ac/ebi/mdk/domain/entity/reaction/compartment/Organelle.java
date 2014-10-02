@@ -40,10 +40,9 @@ public enum Organelle implements Compartment {
     // organelle's: http://amigo.geneontology.org/cgi-bin/amigo/term_details?term=GO:0043226#lineage
 
     // Bacteria
-    CYTOPLASM(                  "c", "cytoplasm", 1,             "GO:0005737", "In", "Cytosol", "Cytoplasm Matrix", "Internal_Species"),
+    CYTOPLASM(                  "c", "cytoplasm", 1,             "GO:0005737", "In", "Cytosol", "Cytoplasm Matrix", "Internal_Species", "Cell"),
 
 
-    @Deprecated  // periplasm is a general term
     PERIPLASM(                  "p", "periplasm", 2,             "GO:0042597", "periplasmic space"),
 
     OUTER_MEMBRANE_PERIPLASM(   "ombp", "outer membrane-bounded periplasmic space", 19,
@@ -51,28 +50,28 @@ public enum Organelle implements Compartment {
     CELL_WALL_PERIPLASM(        "cwbp", "cell wall-bounded periplasmic space", 20,
                                 "GO:0030287", "cell wall-enclosed periplasmic space"),
 
-    EXTRACELLULAR(              "e", "extracellular", 3,         "GO:0005576", "External", "Out", "Extra_Organism", "External_Species", "Extracellular Space"),
+    EXTRACELLULAR(              "e", "extracellular", 3,         "GO:0005576", "extracellular region", "External", "Out", "Extra_Organism", "External_Species", "Extracellular Space"),
     // Eukaryotes
-    GOLGI(                      "g", "golgi", 4,                 "GO:0005794", "Golgi complex", "Golgi apparatus"),
+    GOLGI(                      "g", "golgi", 4,                 "GO:0005794", "Golgi complex", "Golgi apparatus", "Golgi ribbon"),
     LYSOSOME(                   "l", "lysosome", 5,              "GO:0005764"),
     GLYCOSOME(                  "y", "glycosome", 6,             "GO:0020015"),
     GLYOXYSOME(                 "w", "glyoxysome", 7,            "GO:0009514"),
-    PEROXISOME(                 "x", "peroxisome", 8,            "GO:0005777"),
-    MITOCHONDRION(              "m", "mitochondrion", 9,         "GO:0005739"),
-    NUCLEUS(                    "n", "nucleus", 10,              "GO:0005634"),
-    ENDOPLASMIC_RETICULUM(      "r", "endoplasmic reticulum", 11,"GO:0005783"),  // erm.. membrane?
+    PEROXISOME(                 "x", "peroxisome", 8,            "GO:0005777", "peroxisomal", "peroxisome vesicle"),
+    MITOCHONDRION(              "m", "mitochondrion", 9,         "GO:0005739", "mitochondria", "mitochondrium"),
+    NUCLEUS(                    "n", "nucleus", 10,              "GO:0005634", "cell nucleus"),
+    ENDOPLASMIC_RETICULUM(      "r", "endoplasmic reticulum", 11,"GO:0005783", "er"),  // erm.. membrane?
     // Plants
     CHLOROPLAST(                "h", "chloroplast", 12,         "GO:0009507"),
     APICOPLAST(                 "a", "apicoplast", 13,          "GO:0020011"),
     GLYOXYSOMES(                "o", "glyoxysomes", 14,         ""),             // not sure what this one is
     PLASTID(                    "s", "plastid", 15,             "GO:0009536"),
-    THYLAKOID(                  "t", "thylakoid", 16,           "GO:0009579"),
-    VACUOLE(                    "v", "vacuole", 17,             "GO:0005773"),
+    THYLAKOID(                  "t", "thylakoid", 16,           "GO:0009579", "photosynthetic membrane"),
+    VACUOLE(                    "v", "vacuole", 17,             "GO:0005773", "vacuolar carboxypeptidase Y"),
     // mixed
     FLAGELLUM(                  "f", "flagellum", 18,           "GO:0019861"),
 
     // basic
-    UNKNOWN(                    "unk", "Unknown", 0,              "");
+    UNKNOWN(                    "unk", "Unknown", 0,              "", "");
 
     private final String abbreviation;
 

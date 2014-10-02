@@ -82,16 +82,20 @@ import static org.openscience.cdk.interfaces.IBond.Stereo.UP_OR_DOWN_INVERTED;
  * @author $Author$ (this version)
  * @version $Rev$ : Last Changed $Date$
  */
+@SuppressWarnings("unchecked")
 public class MolecularHashFactory implements HashGenerator<Integer> {
 
-    private static final Logger logger = Logger.getLogger(MolecularHashFactory.class);
-    public static final Collection<AtomSeed> DEFAULT_SEEDS = SeedFactory.getInstance()
-                                                                        .getSeeds(NonNullAtomicNumberSeed.class,
-                                                                                  ConnectedAtomSeed.class);
+    private static final Logger               logger        = Logger
+            .getLogger(MolecularHashFactory.class);
+    public static final  Collection<AtomSeed> DEFAULT_SEEDS = SeedFactory
+            .getInstance()
+            .getSeeds(NonNullAtomicNumberSeed.class,
+                      ConnectedAtomSeed.class);
     private final Collection<AtomSeed> seedMethods;
-    private final static ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory.getInstance();
+    private final static ConnectionMatrixFactory matrixFactory = ConnectionMatrixFactory
+            .getInstance();
 
-    private boolean deprotonate = false;
+    private boolean deprotonate          = false;
     private boolean seedWithMoleculeSize = true;
     private final boolean ezIsomerism;
     private final boolean enantiomers;
@@ -104,6 +108,10 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
     public MolecularHashFactory(int depth) {
         this(DEFAULT_SEEDS, depth, false);
+    }
+    
+    public MolecularHashFactory(int depth, boolean deprotnate) {
+        this(DEFAULT_SEEDS, depth, deprotnate);
     }
 
     public MolecularHashFactory(Class<? extends AtomSeed>... seeds) {
@@ -140,9 +148,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         private static final MolecularHashFactory INSTANCE = new MolecularHashFactory();
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Integer generate(IAtomContainer container) {
         return getHash(container).hash;
@@ -174,8 +180,9 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         if (molecule.getAtomCount() == 0)
             return new MolecularHash(0, new int[0]);
 
-        BitSet hydrogens = deprotonate ? getHydrogenMask(molecule) : new BitSet(molecule.getAtomCount());
-        int[] precursorSeeds = getAtomSeeds(molecule,methods, hydrogens);
+        BitSet hydrogens = deprotonate ? getHydrogenMask(molecule)
+                                       : new BitSet(molecule.getAtomCount());
+        int[] precursorSeeds = getAtomSeeds(molecule, methods, hydrogens);
         byte[][] table = matrixFactory.getConnectionMatrix(molecule);
 
         BitSet stereoatoms = getTetrahedralCentres(molecule);
@@ -302,9 +309,11 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
             for (int i = 0; i < n; i++) {
                 int[] preturbed = Arrays.copyOf(precursorSeeds, n);
                 preturbed[i] = precursorSeeds[i] * 105341;
-                individual[i] = getHash(table, preturbed, (BitSet) stereoatoms.clone(), hydrogens, molecule, false, dbAtoms, dbGroups, dbParities).hash;
+                individual[i] = getHash(table, preturbed, (BitSet) stereoatoms
+                        .clone(), hydrogens, molecule, false, dbAtoms, dbGroups, dbParities).hash;
                 globalCount.register(hash);
-                hash ^= rotate(individual[i], globalCount.register(individual[i]));
+                hash ^= rotate(individual[i], globalCount
+                        .register(individual[i]));
             }
 
             return new MolecularHash(hash, individual, null);
@@ -348,7 +357,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         boolean found = false;
 
         // double bonds
-        for (int i = dbAtoms.nextSetBit(0); i >= 0; i = dbAtoms.nextSetBit(i + 1)) {
+        for (int i = dbAtoms.nextSetBit(0); i >= 0; i = dbAtoms
+                .nextSetBit(i + 1)) {
 
             int j = dbGroups[i];
 
@@ -366,7 +376,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
             // can't set to previous... as this would alter other centres
             if (parity != 0) {
-                current[i] *= (parity == -1 ? 1309093 : 1316717); // bigprimes.net
+                current[i] *= (parity == -1 ? 1309093
+                                            : 1316717); // bigprimes.net
                 current[j] *= (parity == -1 ? 1309093 : 1316717);
                 //System.out.println((i + 1) + " set to " + Integer.toHexString(current[i]));
                 found = true;
@@ -377,7 +388,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         }
 
         // tetrahedral atoms
-        for (int i = stereoatoms.nextSetBit(0); i >= 0; i = stereoatoms.nextSetBit(i + 1)) {
+        for (int i = stereoatoms.nextSetBit(0); i >= 0; i = stereoatoms
+                .nextSetBit(i + 1)) {
 
             Integer storage = molecule.getAtom(i)
                                       .getStereoParity();
@@ -419,8 +431,10 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         int[] parities = new int[container.getAtomCount()];
 
         for (int i = bonds.nextSetBit(0); i >= 0; i = bonds.nextSetBit(i + 1)) {
-            parities[i] = ParityCalculator.getSP2Parity(container.getAtom(i), container);
-            parities[groups[i]] = ParityCalculator.getSP2Parity(container.getAtom(groups[i]), container);
+            parities[i] = ParityCalculator.getSP2Parity(container
+                                                                .getAtom(i), container);
+            parities[groups[i]] = ParityCalculator.getSP2Parity(container
+                                                                        .getAtom(groups[i]), container);
         }
 
         return parities;
@@ -474,7 +488,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
                           .println((first.getFormalNeighbourCount() != null
                                   && first.getFormalNeighbourCount() >= 2)
                                            + " "
-                                           + (second.getFormalNeighbourCount() != null
+                                           + (second
+                                  .getFormalNeighbourCount() != null
                                   && second.getFormalNeighbourCount() >= 2));
 
                 if (first.getFormalNeighbourCount() != null
@@ -484,7 +499,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
 
                     // if one is not in a cycle we can calculate E/Z
-                    boolean isCyclic = cyclic.contains(first) && cyclic.contains(second);
+                    boolean isCyclic = cyclic.contains(first) && cyclic
+                            .contains(second);
 
                     if (debug)
                         System.out
@@ -577,9 +593,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
     /**
      * Returns the hash value xor'd with that of the atom's neighbours. The
      * method is recursive thus the depth indicates the current depth of the
-     * method
-     * <p/>
-     * The max depth is set with the {@see setDepth(int depth)} method.
+     * method <p/> The max depth is set with the {@see setDepth(int depth)}
+     * method.
      *
      * @param index Atom index to add the neighbour values too
      * @param value The current value of the above atom
@@ -723,8 +738,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
         int[] seeds = new int[molecule.getAtomCount()];
         int n = getNonHydrogenAtomCount(molecule, hydrogens);
         int seed = seedWithMoleculeSize & n != 0
-                ? 389 % n // if ignore is not set this is an empty bitset
-                : 389;
+                   ? 389 % n // if ignore is not set this is an empty bitset
+                   : 389;
 
         for (int i = 0; i < seeds.length; i++) {
 
@@ -756,7 +771,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
         BitSet chiralatoms = new BitSet(container.getAtomCount());
 
-        if(!enantiomers)
+        if (!enantiomers)
             return chiralatoms;
 
         for (int i = 0; i < container.getAtomCount(); i++) {
@@ -798,7 +813,8 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
             IBond.Stereo stereo = bond.getStereo();
 
             if (UP.equals(stereo) || DOWN.equals(stereo)
-                    || UP_INVERTED.equals(stereo) || DOWN_INVERTED.equals(stereo)) {
+                    || UP_INVERTED.equals(stereo) || DOWN_INVERTED
+                    .equals(stereo)) {
                 return true;
             }
         }
@@ -855,7 +871,7 @@ public class MolecularHashFactory implements HashGenerator<Integer> {
 
 
     private class HashCounter extends OccurrenceCounter<Integer> {
-        public HashCounter(int size){
+        public HashCounter(int size) {
             super(size);
         }
     }

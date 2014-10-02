@@ -25,9 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.regex.Pattern;
 
-/**
- * @author John May
- */
+/** @author John May */
 public interface IdentifierFactory {
 
     /**
@@ -36,6 +34,7 @@ public interface IdentifierFactory {
      * returned.
      *
      * @param name the resource name e.g. ChEBI
+     *
      * @return an instance of a typed identifier
      */
     public Identifier ofName(String name);
@@ -46,6 +45,7 @@ public interface IdentifierFactory {
      * IdentifierFactory#EMPTY_IDENTIFIER} is returned.
      *
      * @param name the resource name e.g. ChEBI
+     *
      * @return an instance of a typed identifier
      */
     public Identifier ofName(String name, String accession);
@@ -59,6 +59,7 @@ public interface IdentifierFactory {
      * #hasSynonym(String)} is invoked first.
      *
      * @param synonym the resource name e.g. ChEBI
+     *
      * @return an instance of a typed identifier
      */
     public Identifier ofSynonym(String synonym);
@@ -70,6 +71,7 @@ public interface IdentifierFactory {
      * the EMPTY_IDENTIFIER if {@link #hasSynonym(String)} is invoked first.
      *
      * @param synonym the resource name e.g. ChEBI
+     *
      * @return an instance of a typed identifier
      */
     public Identifier ofSynonym(String synonym, String accession);
@@ -78,14 +80,17 @@ public interface IdentifierFactory {
      * A new identifier instance for a given class.
      *
      * @param type class type
-     * @param <I> identifier type
+     * @param <I>  identifier type
+     *
      * @return new identifier
      */
     public <I extends Identifier> I ofClass(Class<I> type);
 
     /**
      * Find identifier classes which match the provided pattern.
+     *
      * @param accession an accession (e.g. 'CHEBI:12', 'C00009')
+     *
      * @return collecition of classes which match
      */
     public Collection<Class<? extends Identifier>> ofPattern(String accession);
@@ -116,6 +121,7 @@ public interface IdentifierFactory {
         }
 
         @Override
+        @Deprecated
         public String getResolvableURL() {
             return null;
         }
@@ -132,7 +138,7 @@ public interface IdentifierFactory {
 
         @Override
         public Collection<String> getSynonyms() {
-            return Collections.EMPTY_SET;
+            return Collections.emptyList();
         }
 
         @Override
@@ -181,4 +187,13 @@ public interface IdentifierFactory {
         }
     };
 
+    /**
+     * Resolves a MIRIAM/identifiers.orf url to an identifier. For example:
+     * {@code http://identifiers.org/kegg.compound/C00009}
+     *
+     * @param url the url
+     *
+     * @return the identifier for the given URL
+     */
+    Identifier ofURL(String url);
 }

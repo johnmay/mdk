@@ -36,7 +36,7 @@ import uk.ac.ebi.mdk.domain.DefaultLoader;
  * @author  $Author$ (this version)
  */
 @Context(Metabolite.class)
-@Brief("ChEBI Cross-reference")
+@Brief("ChEBI")
 @Description("A cross-reference specific to the ChEBI database")
 public class ChEBICrossReference<O extends Observation>
         extends CrossReference<ChEBIIdentifier, O> {

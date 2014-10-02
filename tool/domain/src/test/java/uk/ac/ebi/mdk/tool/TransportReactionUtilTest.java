@@ -34,7 +34,12 @@ import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
 import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
 import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil;
 
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static uk.ac.ebi.mdk.domain.entity.reaction.Direction.BACKWARD;
+import static uk.ac.ebi.mdk.tool.domain.TransportReactionUtil.exchanged;
 
 
 /**
@@ -56,6 +61,39 @@ public class TransportReactionUtilTest {
     public static void tearDownClass() throws Exception {
     }
 
+    @Test public void testExchanged() {
+        Metabolite atp = new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
+        Metabolite alanine = new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
+
+        MetabolicReactionImpl rxn = new MetabolicReactionImpl(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
+
+        rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
+
+        rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.EXTRACELLULAR));
+        rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULAR));
+
+        rxn.setDirection(Direction.FORWARD);
+
+        assertThat(exchanged(rxn), hasItems(atp, alanine));
+    }
+
+    @Test public void testExchanged_None() {
+        Metabolite atp = new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(), "atp", "ATP");
+        Metabolite alanine = new MetaboliteImpl(BasicChemicalIdentifier.nextIdentifier(), "dala", "D-Alanine");
+
+        MetabolicReactionImpl rxn = new MetabolicReactionImpl(BasicReactionIdentifier.nextIdentifier(), "st", "symportTest");
+
+        rxn.addReactant(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
+        rxn.addReactant(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
+
+        rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
+        rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
+
+        rxn.setDirection(Direction.FORWARD);
+
+        assertThat(exchanged(rxn).size(), is(0));
+    }
 
     @Test
     public void testGetClassification_SYMPORT() {
@@ -73,10 +111,7 @@ public class TransportReactionUtilTest {
         rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.EXTRACELLULAR));
         rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.EXTRACELLULAR));
 
-        rxn.setDirection(Direction.BACKWARD.FORWARD);
-
-        System.out.println(rxn + " : " + TransportReactionUtil.getClassification(rxn));
-
+        rxn.setDirection(BACKWARD.FORWARD);
 
         assertEquals(TransportReactionUtil.Classification.SYMPORTER, TransportReactionUtil.getClassification(rxn));
 
@@ -124,7 +159,7 @@ public class TransportReactionUtilTest {
         rxn.addProduct(new MetabolicParticipantImplementation(atp, Organelle.CYTOPLASM));
         rxn.addProduct(new MetabolicParticipantImplementation(alanine, Organelle.CYTOPLASM));
 
-        rxn.setDirection(Direction.BACKWARD);
+        rxn.setDirection(BACKWARD);
 
         System.out.println(rxn + " : " + TransportReactionUtil.getClassification(rxn));
         assertEquals(TransportReactionUtil.Classification.UNIPORTER, TransportReactionUtil.getClassification(rxn));

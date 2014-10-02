@@ -46,6 +46,7 @@ public class DefaultRenderer<O>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public final JLabel getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 
         setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());

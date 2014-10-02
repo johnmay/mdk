@@ -25,7 +25,6 @@ package uk.ac.ebi.mdk.io.text.brenda;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-//import uk.ac.ebi.metabolomes.bioObjects.Reaction;
 
 /**
  *
@@ -136,18 +135,22 @@ public abstract class AbstractReactionLineParser extends LineParser{
                     }
                     line = reader.readLine();
                 }
+            } else if(line.startsWith(" ") && line.length()>2) {
+                // This intended to address the errors seen in the new v1111 BRENDA download
+                // where a line in the middle of RE would start with a space instead of a \t.
+                line = line.replaceFirst(" ","\t");
             }
             if(line.startsWith(this.startingPrefix) || line.length()<2) {
                 if(!leftSideComplete) {
-                        this.parseRxnSide(leftSideBuffer, -1);
-                        leftSideComplete = true;
-                        leftSideBuffer = "";
-                    }
-                    if(!rightSideComplete) {
-                        this.parseRxnSide(rightSideBuffer, 1);
-                        rightSideComplete=true;
-                        rightSideBuffer="";
-                    }
+                    this.parseRxnSide(leftSideBuffer, -1);
+                    leftSideComplete = true;
+                    leftSideBuffer = "";
+                }
+                if(!rightSideComplete) {
+                    this.parseRxnSide(rightSideBuffer, 1);
+                    rightSideComplete=true;
+                    rightSideBuffer="";
+                }
                 return line;
             }
             if(line.startsWith("\t") && rightSideComplete && leftSideComplete)

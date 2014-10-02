@@ -200,7 +200,7 @@ public class BackwardsCompatibility {
         String stringVersion = properties.getProperty("chemet.version");
         in.close();
 
-        Version version = stringVersion == null ? IOConstants.VERSION
+        Version version = stringVersion == null ? IOConstants.CURRENT
                                                 : new Version(stringVersion);
 
         // open data input stream

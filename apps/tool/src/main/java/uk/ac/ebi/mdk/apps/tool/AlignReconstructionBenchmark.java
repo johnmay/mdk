@@ -43,6 +43,7 @@ public class AlignReconstructionBenchmark {
 
     private static final Logger LOGGER = Logger.getLogger(AlignReconstructionBenchmark.class);
 
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
         File queryFile = new File(args[0]);
@@ -52,8 +53,8 @@ public class AlignReconstructionBenchmark {
 
         System.out.println("Aligning query reconstruction " + query.getName() + " to " + reference.getName());
 
-        final List<Metabolite> referenceList = new ArrayList<Metabolite>(reference.getMetabolome().toList());
-        final List<Metabolite> queryList = new ArrayList<Metabolite>(reference.getMetabolome().toList());
+        final List<Metabolite> referenceList = new ArrayList<Metabolite>(reference.metabolome().toList());
+        final List<Metabolite> queryList = new ArrayList<Metabolite>(reference.metabolome().toList());
 
         // break point for starting visual vm
         Scanner scanner = new Scanner(System.in);

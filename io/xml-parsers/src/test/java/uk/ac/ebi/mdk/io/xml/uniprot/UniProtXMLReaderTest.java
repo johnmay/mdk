@@ -19,18 +19,19 @@ package uk.ac.ebi.mdk.io.xml.uniprot;
 
 
 import org.apache.log4j.Logger;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
+import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
+import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.domain.identifier.classification.KEGGOrthology;
 import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtCrossreferenceMarshal;
 import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtHostOrganismMarshal;
 import uk.ac.ebi.mdk.io.xml.uniprot.marshal.UniProtIdentifierMarhsal;
-import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
-import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
-import uk.ac.ebi.mdk.domain.entity.ProteinProduct;
-import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -38,7 +39,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -60,7 +60,8 @@ public class UniProtXMLReaderTest  {
         UniProtXMLReader reader = new UniProtXMLReader(in, DefaultEntityFactory.getInstance());
 
         reader.addMarshal(new UniProtIdentifierMarhsal());
-        reader.addMarshal(new UniProtCrossreferenceMarshal(DefaultIdentifierFactory.getInstance(), ECNumber.class));
+        //reader.addMarshal(new UniProtCrossreferenceMarshal(DefaultIdentifierFactory.getInstance(), Collections.<Class<? extends Identifier>>singleton(ECNumber.class)));
+		reader.addMarshal(new UniProtCrossreferenceMarshal(DefaultIdentifierFactory.getInstance(), ECNumber.class, KEGGOrthology.class));
 
         List<ProteinProduct> productList = new ArrayList<ProteinProduct>();
         
@@ -71,20 +72,30 @@ public class UniProtXMLReaderTest  {
         Assert.assertEquals(24, productList.size());
 
         // this record probably has two additional accessions, which raises the number of cross references
-        // from 1 to 3.
-        Assert.assertEquals(3, productList.get(15).getAnnotations(CrossReference.class).size());
+        // from 1 to 4. Now with a Kegg orthology.
+        Assert.assertEquals(4, productList.get(15).getAnnotations(CrossReference.class).size());
         Assert.assertNotNull(productList.get(15).getAnnotations(CrossReference.class).iterator().next().getIdentifier());
         Iterator<CrossReference> identifiersIt = productList.get(15).getAnnotations(CrossReference.class).iterator();
         identifiersIt.next();
         identifiersIt.next();
+		// Ec number
         Identifier identEC = identifiersIt.next().getIdentifier();
         Assert.assertEquals(ECNumber.class, identEC.getClass());
         Assert.assertEquals(new ECNumber("4.4.1.14"), identEC);
+
+		// Kegg Orthology
+		Identifier identKO = identifiersIt.next().getIdentifier();
+		Assert.assertEquals(KEGGOrthology.class, identKO.getClass());
+		Assert.assertEquals(new KEGGOrthology("K01762"), identKO);
+
 
         Assert.assertEquals(1, productList.get(21).getAnnotations(CrossReference.class).size());
         Assert.assertNotNull(productList.get(21).getAnnotations(CrossReference.class).iterator().next().getIdentifier());
         Assert.assertEquals(ECNumber.class, productList.get(21).getAnnotations(CrossReference.class).iterator().next().getIdentifier().getClass());
         Assert.assertEquals(new ECNumber("3.2.1.153"), productList.get(21).getAnnotations(CrossReference.class).iterator().next().getIdentifier());
+
+
+
         reader.close();
 
     }

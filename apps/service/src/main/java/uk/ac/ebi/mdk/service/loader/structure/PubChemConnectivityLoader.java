@@ -85,7 +85,7 @@ public class PubChemConnectivityLoader extends AbstractSingleIndexResourceLoader
             Long start = System.currentTimeMillis();
             List<MoleculeCollectionConnectivityLoader.MoleculeConnectivity> connectivities = new ArrayList<MoleculeCollectionConnectivityLoader.MoleculeConnectivity>();
             ResourceFileLocation location = getLocation(resource);
-            LinkedList<Document> docs = new LinkedList();
+            LinkedList<Document> docs = new LinkedList<Document>();
             try {
                 SDFFieldReader reader = new SDFFieldReader(new GZIPInputStream(location.open()), new PubChemCompoundSDFFieldExtractor());
                 Iterator<SDFRecord> records = reader.readSDFFields();

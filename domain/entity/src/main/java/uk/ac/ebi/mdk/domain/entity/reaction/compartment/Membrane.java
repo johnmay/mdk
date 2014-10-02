@@ -43,10 +43,10 @@ public enum Membrane implements Compartment {
     GOLGI_MEMBRANE("gm", "Golgi Membrane",  40,                                     "GO:0000139"),
     MITOCHONDRIAL_MEMBRANE("mm", "Mitochondrial Membrane", 41,                      "GO:0031966"),
     NUCLEAR_MEMBRANE("nm", "Nuclear Membrane",  42,                                 "GO:0031965"),
-    PLASMA_MEMBRANE("pm", "Plasma Membrane", 43,                                    "GO:0005886"),
-    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", 44,      "GO:0005789"),
+    PLASMA_MEMBRANE("pm", "Plasma Membrane", 43,                                    "GO:0005886", "plasmalemma", "juxtamembrane", "inner endospore membrane", "cytoplasmic membrane", "cell membrane", "bacterial inner membrane", "plasma membrane lipid bilayer"),
+    ENDOPLASMIC_RETICULUM_MEMBRANE("rm", "Endoplasmic Reticulum Membrane", 44,      "GO:0005789", "ER membrane"),
     VACUOLAR_MEMBRANE("vm", "Vacuolar Membrane", 45,                                "GO:0005774"),
-    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", 46,                          "GO:0005778");
+    PEROXISOMAL_MEMBRANE("xm", "Peroxisomal Membrane", 46,                          "GO:0005778", "peroxisome membrane");
 
     private final String abbreviation;
 

@@ -17,7 +17,7 @@
 
 package uk.ac.ebi.chemet.tools.annotation;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.annotation.Note;
 

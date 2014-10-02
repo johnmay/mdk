@@ -21,7 +21,7 @@
     <parent>
         <artifactId>mdk</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.4.0</version>
+        <version>1.4.1</version>
     </parent>
     <modules>
         <module>lucene</module>

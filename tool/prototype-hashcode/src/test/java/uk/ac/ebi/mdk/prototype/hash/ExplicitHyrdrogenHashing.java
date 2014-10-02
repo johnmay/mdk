@@ -118,6 +118,7 @@ public class ExplicitHyrdrogenHashing {
                 .readSDF(getClass(), "ethenediol-permutations.sdf", -1);
 
         // important make sure we don't use connected atom seed when detonated (this should be in a builder
+        @SuppressWarnings("unchecked")
         MolecularHashFactory generator = new MolecularHashFactory(SeedFactory
                                                                           .getInstance()
                                                                           .getSeeds(NonNullAtomicNumberSeed.class),
@@ -142,33 +143,29 @@ public class ExplicitHyrdrogenHashing {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testTopologicalImplicitExplicitHashing() throws IOException,
                                                                 CDKException {
 
         List<IAtomContainer> containers = readSDF(getClass(), "topological-explicit-implicit-hashing.sdf", -1);
 
-        MolecularHashFactory hasher = new MolecularHashFactory();
+        MolecularHashFactory deproOff = new MolecularHashFactory(4, false);
+        MolecularHashFactory deproOn= new MolecularHashFactory(4, true);
         SeedFactory seedFactory = SeedFactory.getInstance();
 
         Collection<AtomSeed> seeds = seedFactory
                 .getSeeds(NonNullAtomicNumberSeed.class);
 
-        hasher.setDepth(4);
-
         IAtomContainer explicit = containers.get(0);
         IAtomContainer implicit = containers.get(1);
 
-        hasher.setDeprotonate(false);
-
         assertThat("implicit and explicit hashes were equal (ignore not set)",
-                   hasher.getHash(explicit, seeds).hash,
-                   is(not(hasher.getHash(implicit, seeds).hash)));
-
-        hasher.setDeprotonate(true);
+                   deproOff.getHash(explicit, seeds).hash,
+                   is(not(deproOff.getHash(implicit, seeds).hash)));
 
         assertThat("implicit and explicit hashes were not equal (ignore set)",
-                   hasher.getHash(explicit, seeds).hash,
-                   is(hasher.getHash(implicit, seeds).hash));
+                   deproOn.getHash(explicit, seeds).hash,
+                   is(deproOn.getHash(implicit, seeds).hash));
 
 
     }

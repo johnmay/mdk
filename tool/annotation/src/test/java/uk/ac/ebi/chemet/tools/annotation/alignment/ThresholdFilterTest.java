@@ -40,6 +40,7 @@ public class ThresholdFilterTest {
     private static final Logger LOGGER = Logger.getLogger(ThresholdFilterTest.class);
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testFilter() throws Exception {
 
         Collection<Annotation> annotations = Arrays.asList(TopScoreFilterTest.create("1.1.1.1", 500, 550, 900),

@@ -87,15 +87,15 @@ public class SummariseReferences extends CommandLineMain {
         File noneFile = new File(new File(out, "unreferenced"), reconstruction.getAccession() + ".tsv");
 
         // number of reactions/metabolites
-        int n = reconstruction.getMetabolome().size();
-        int m = reconstruction.getReactome().size();
+        int n = reconstruction.metabolome().size();
+        int m = reconstruction.reactome().size();
 
         Multimap<Identifier, Identifier> chebi = HashMultimap.create();
         Multimap<Identifier, Identifier> nonChebi = HashMultimap.create();
         Map<Identifier, String> unreferenced = new HashMap<Identifier, String>();
         Set<String> types = new HashSet<String>();
 
-        for (Metabolite metabolite : reconstruction.getMetabolome()) {
+        for (Metabolite metabolite : reconstruction.metabolome()) {
 
             Collection<CrossReference> xrefs = metabolite.getAnnotationsExtending(CrossReference.class);
 
@@ -177,7 +177,7 @@ public class SummariseReferences extends CommandLineMain {
         for (Map.Entry<Identifier, Identifier> e : nonChebi.entries()) {
             chemicalTSV.writeNext(new String[]{
                     e.getKey().getAccession(),
-                    reconstruction.getMetabolome().ofIdentifier(e.getKey()).iterator().next().getName(),
+                    reconstruction.metabolome().ofIdentifier(e.getKey()).iterator().next().getName(),
                     e.getValue().getAccession(),
                     e.getValue().getResource().getName(),
                     ((MIRIAMEntry) e.getValue().getResource()).getId()

@@ -111,6 +111,7 @@ public class AnnotationDataOutputStream
 
     }
 
+    @SuppressWarnings("unchecked")
     public void writeData(Annotation annotation) throws IOException {
 
         if (writeObjectId(annotation)) {

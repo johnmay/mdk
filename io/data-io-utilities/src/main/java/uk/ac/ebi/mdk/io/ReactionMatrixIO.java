@@ -113,6 +113,7 @@ public class ReactionMatrixIO {
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static StoichiometricMatrix readBasicStoichiometricMatrix(Reader reader, StoichiometricMatrix s) {
         CSVReader csv = new CSVReader(reader, separator, quoteCharacter);
         try {
@@ -164,7 +165,7 @@ public class ReactionMatrixIO {
         return s;
     }
 
-
+    @SuppressWarnings("unchecked")
     public static StoichiometricMatrix readCompressedBasicStoichiometricMatrix(InputStream stream, StoichiometricMatrix s) throws IOException {
 
         DataInputStream in = new DataInputStream(stream);

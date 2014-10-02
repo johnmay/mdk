@@ -777,6 +777,7 @@ public abstract class AbstractLuceneService<I extends Identifier>
      *
      * @return Ranked list of identifiers for the given query
      */
+    @SuppressWarnings("unchecked")
     public Collection<I> getIdentifiers(Query query) {
 
         Collection<I> identifiers = new ArrayList<I>();

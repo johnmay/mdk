@@ -77,7 +77,7 @@ public class ENAXMLReader {
     private List<String> genomeSections = new ArrayList<String>();
     private List<Gene> genes = new ArrayList<Gene>(200);
     private Map<String, Gene> geneMap = new HashMap<String, Gene>(); // mapped by locus
-    private List<GeneProduct> products = new ArrayList();
+    private List<GeneProduct> products = new ArrayList<GeneProduct>();
     private Set<String> warnings = new HashSet<String>();
     private final Reconstruction reconstruction;
 

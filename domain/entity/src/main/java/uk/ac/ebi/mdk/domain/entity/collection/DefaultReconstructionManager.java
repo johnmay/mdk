@@ -57,7 +57,7 @@ public class DefaultReconstructionManager implements ReconstructionManager {
 
     private DefaultReconstructionManager() {
         // get the recently open files, remove entries that don't exists
-        List<String> valid = new ArrayList();
+        List<String> valid = new ArrayList<String>();
         for (String file : RECENT_FILES.get()) {
             File f = new File(file);
             if (f.exists()) {

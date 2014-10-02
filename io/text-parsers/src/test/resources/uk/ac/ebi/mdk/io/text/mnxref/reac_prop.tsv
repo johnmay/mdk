@@ -1,0 +1,145 @@
+### MNXref Version 18/02/2013 ###
+#
+#FILE:	reac_prop.tsv
+#
+#RESOURCE:	Rhea
+#PREFIX:	rhea
+#URL:	http://www.ebi.ac.uk/rhea/
+#VERSION:	38
+#LICENSE:	All data in Rhea is freely accessible and available for anyone to use.
+#	(http://www.ebi.ac.uk/rhea/about.xhtml)
+#
+#RESOURCE:	KEGG
+#PREFIX:	kegg
+#URL:	http://www.kegg.jp
+#VERSION:	11/02/2013
+#LICENSE:	Academic users may freely use the KEGG website and may also freely link
+#	to the KEGG website.
+#	Non-academic users may use the KEGG website as end users for non-commercial purposes,
+#	but any other use requires a license agreement.
+#	Academic users who utilize KEGG for providing academic services are requested
+#	to obtain a KEGG FTP subscription for organizational use, which includes a proper
+#	license agreement.
+#	Non-academic users and Academic users intending to use KEGG for commercial purposes
+#	are requested to obtain a license agreement through KEGG's exclusive licensing
+#	agent, Pathway Solutions.
+#	(http://www.kegg.jp/kegg/legal.html)
+#
+#RESOURCE:	MetaCyc
+#PREFIX:	metacyc
+#URL:	http://metacyc.org
+#VERSION:	Version 16.5
+#LICENSE:	MetaCyc data are free and open for all users.
+#	(http://biocyc.org/download.shtml)
+#
+#RESOURCE:	UniPathway
+#PREFIX:	upa
+#URL:	http://www.unipathway.org
+#VERSION:	UniPathway Release 2012_04
+#LICENSE:	All data in UniPathway is freely accessible and available for anyone to
+#	use.
+#
+#RESOURCE:	The Seed
+#PREFIX:	seed
+#URL:	http://www.theseed.org
+#VERSION:	12/02/2013
+#LICENSE:	All tools and datasets that make up the SEED are in the public domain.
+#	(http://www.theseed.org/wiki/DownloadPage)
+#
+#RESOURCE:	BiGG
+#PREFIX:	bigg
+#URL:	http://bigg.ucsd.edu
+#VERSION:	10/12/2012
+#LICENSE:	Permission to use, copy, modify and distribute any part of this BiGG Database
+#	for educational, research and non-profit purposes, without fee, and without a
+#	written agreement is granted, provided that the above copyright notice, this paragraph
+#	and the following three paragraphs appear in all copies.
+#	Those desiring to incorporate this BiGG database into commercial products or use
+#	for commercial purposes should contact the Technology Transfer & Intellectual
+#	Property Services, University of California, San Diego, 9500 Gilman Drive, Mail
+#	Code 0910, La Jolla, CA 92093-0910, Ph: (858) 534-5815, FAX: (858) 534-7345, e-mail:invent@ucsd.edu.
+#	IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY FOR DIRECT,
+#	INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
+#	ARISING OUT OF THE USE OF THIS BIGG DATABASE, EVEN IF THE UNIVERSITY OF CALIFORNIA
+#	HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#	THE BIGG DATABASE PROVIDED HEREIN IS ON AN "AS IS" BASIS, AND THE UNIVERSITY OF
+#	CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS,
+#	OR MODIFICATIONS. THE UNIVERSITY OF CALIFORNIA MAKES NO REPRESENTATIONS AND EXTENDS
+#	NO WARRANTIES OF ANY KIND, EITHER IMPLIED OR EXPRESS, INCLUDING, BUT NOT LIMITED
+#	TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE,
+#	OR THAT THE USE OF THE BIGG DATABASE WILL NOT INFRINGE ANY PATENT, TRADEMARK OR
+#	OTHER RIGHTS.
+#	(http://bigg.ucsd.edu/)
+#
+#RESOURCE:	BioPath
+#PREFIX:	biopath
+#URL:	http://www.molecular-networks.com/biopath
+#VERSION:	12/02/2013
+#LICENSE:	Academic users may use BioPath without paying any license fee.
+#	Any users intending to use the BioPath database for commercial purposes have to
+#	obtain a license.
+#	(http://www.molecular-networks.com/node/2)
+#
+#RESOURCE:	Reactome
+#PREFIX:	reactome
+#URL:	http://www.reactome.org
+#VERSION:	12/02/2013
+#LICENSE:	Reactome is a free and open-source project, and you are free to download
+#	Reactome software and data.
+#	 The contents of Reactome are copyright (c) 2003-2010 Cold Spring Harbor Laboratory
+#	(CSHL), Ontario Institute for Cancer Research (OICR) and the European Bioinformatics
+#	Institute (EBI).
+#	 The software and information contents are distributed under the terms of the
+#	Creative Commons Attribution 3.0 Unported License, which grants parties the non-exclusive
+#	right to use, distribute and create derivative works based on Reactome, provided
+#	that the software and information is correctly attributed to CSHL, OICR and EBI.
+#	(http://www.reactome.org/static_wordpress/license-agreement/)
+#
+#RESOURCE:	BRENDA
+#PREFIX:	brenda
+#URL:	http://www.brenda-enzymes.org
+#VERSION:	12/02/2013
+#LICENSE:	Access to information contained in BRENDA is granted free of charge.
+#	Any inclusion of BRENDA components into other data bases, or redistribution of
+#	BRENDA requires a license
+#	(http://www.brenda-enzymes.org/information/copy.php4)
+#
+#
+#MNX_ID	Equation	Description	Balance	EC	Source
+MNXR1	1 MNXM3428 = 1 MNXM3428	1 10-formyltetrahydrofolate-[Glu](5) = 1 10-formyltetrahydrofolate-[Glu](5)	true		bigg:10FTHF5GLUtl
+MNXR2	1 MNXM3429 = 1 MNXM3429	1 10-formyltetrahydrofolate-[Glu](6) = 1 10-formyltetrahydrofolate-[Glu](6)	true		bigg:10FTHF6GLUtl
+MNXR3	1 MNXM5422 = 1 MNXM5422	1 10-formyltetrahydrofolate-[Glu](7) = 1 10-formyltetrahydrofolate-[Glu](7)	true		bigg:10FTHF7GLUtl
+MNXR4	1 MNXM237 = 1 MNXM237	1 10-formyltetrahydrofolate(2-) = 1 10-formyltetrahydrofolate(2-)	true		bigg:10FTHFtl
+MNXR5	1 MNXM1399 = 1 MNXM1399	1 11-deoxycortisol = 1 11-deoxycortisol	true		bigg:11DOCRTSLtm
+MNXR6	1 MNXM849 = 1 MNXM849	1 11-deoxycorticosterone = 1 11-deoxycorticosterone	true		bigg:11DOCRTSTRNtm
+MNXR7	1 MNXM4939 = 1 MNXM4939	1 1,2-Diacyl-sn-glycerol (didodecanoyl, n-C12:0) = 1 1,2-Diacyl-sn-glycerol (didodecanoyl, n-C12:0)	true		bigg:12DGR120tipp
+MNXR8	1 MNXM2902 = 1 MNXM2902	1 1,2-Diacyl-sn-glycerol (ditetradecanoyl, n-C14:0) = 1 1,2-Diacyl-sn-glycerol (ditetradecanoyl, n-C14:0)	true		bigg:12DGR140tipp
+MNXR9	1 MNXM4940 = 1 MNXM4940	1 1,2-Diacyl-sn-glycerol (ditetradec-7-enoyl, n-C14:1) = 1 1,2-Diacyl-sn-glycerol (ditetradec-7-enoyl, n-C14:1)	true		bigg:12DGR141tipp
+MNXR10	1 MNXM3132 = 1 MNXM3132	1 1,2-Diacyl-sn-glycerol (dihexadecanoyl, n-C16:0) = 1 1,2-Diacyl-sn-glycerol (dihexadecanoyl, n-C16:0)	true		bigg:12DGR160tipp
+MNXR11	1 MNXM3774 = 1 MNXM3774	1 1,2-Diacyl-sn-glycerol (dihexadec-9-enoyl, n-C16:1) = 1 1,2-Diacyl-sn-glycerol (dihexadec-9-enoyl, n-C16:1)	true		bigg:12DGR161tipp
+MNXR12	1 MNXM4217 = 1 MNXM4217	1 1,2-Diacyl-sn-glycerol (dioctadecanoyl, n-C18:0) = 1 1,2-Diacyl-sn-glycerol (dioctadecanoyl, n-C18:0)	true		bigg:12DGR180tipp
+MNXR13	1 MNXM3775 = 1 MNXM3775	1 1,2-Diacyl-sn-glycerol (dioctadec-11-enoyl, n-C18:1) = 1 1,2-Diacyl-sn-glycerol (dioctadec-11-enoyl, n-C18:1)	true		bigg:12DGR181tipp
+MNXR15	1 MNXM1255 = 1 MNXM1255	1 (S)-propane-1,2-diol = 1 (S)-propane-1,2-diol	true		bigg:12PPDStex
+MNXR17	1 MNXM2 + 1 MNXM350 + 1 MNXM4 = 1 MNXM15 + 1 MNXM22 + 1 MNXM493	1 H2O + 1 propane-1,3-diamine + 1 dioxygen = 1 NH4(+) + 1 hydrogen peroxide + 1 3-ammoniopropanal	true	1.4.3.21;1.4.3.22;1.4.3.6	rhea:30895
+MNXR21	1 MNXM2 + 1 MNXM2172 + 1 MNXM3 = 1 MNXM1 + 1 MNXM2172 + 1 MNXM7 + 1 MNXM9	1 H2O + 1 1-methylnicotinamide + 1 ATP = 1 H(+) + 1 1-methylnicotinamide + 1 ADP + 1 phosphate	true		bigg:1MNCAMti
+MNXR22	2 MNXM1 + 1 MNXM6 + 1 MNXM911 = 1 MNXM5 + 1 MNXM684	2 H(+) + 1 NADPH + 1 1-piperideine-2-carboxylate = 1 NADP(+) + 1 L-pipecolate	true	1.5.1.1;1.5.1.21	rhea:12524
+MNXR23	2 MNXM1 + 1 MNXM10 + 1 MNXM911 = 1 MNXM684 + 1 MNXM8	2 H(+) + 1 NADH(2-) + 1 1-piperideine-2-carboxylate = 1 L-pipecolate + 1 NAD(+)	true	1.5.1.1;1.5.1.21	rhea:30807
+MNXR24	1 MNXM2 + 1 MNXM5 + 1 MNXM9596 = 1 MNXM1 + 1 MNXM4 + 1 MNXM6 + 1 MNXM6764	1 H2O + 1 NADP(+) + 1 1-alpha,24R,25-Trihydroxyvitamin D2 = 1 H(+) + 1 dioxygen + 1 NADPH + 1 24R,25-Dihyoxyvitamin D2	true		bigg:1a,24,25VITD2Hm
+MNXR26	1 MNXM2 + 1 MNXM5 + 1 MNXM9596 = 1 MNXM1 + 1 MNXM4 + 1 MNXM6 + 1 MNXM9598	1 H2O + 1 NADP(+) + 1 1-alpha,24R,25-Trihydroxyvitamin D2 = 1 H(+) + 1 dioxygen + 1 NADPH + 1 1-alpha,25-Dihydroxyvitamin D2	true		bigg:1a,25VITD2Hm
+MNXR28	1 MNXM2598 = 1 MNXM2598	1 2',3'-cyclic AMP = 1 2',3'-cyclic AMP	true		bigg:23CAMPtex
+MNXR29	1 MNXM3148 = 1 MNXM3148	1 2',3'-cyclic CMP = 1 2',3'-cyclic CMP	true		bigg:23CCMPtex
+MNXR30	1 MNXM3149 = 1 MNXM3149	1 2',3'-cyclic GMP = 1 2',3'-cyclic GMP	true		bigg:23CGMPtex
+MNXR31	1 MNXM3150 = 1 MNXM3150	1 2',3'-cyclic UMP = 1 2',3'-cyclic UMP	true		bigg:23CUMPtex
+MNXR32	1 MNXM1 + 1 MNXM1798 = 1 MNXM1 + 1 MNXM1798	1 H(+) + 1 3-amino-L-alanine = 1 H(+) + 1 3-amino-L-alanine	true		bigg:23DAPPAt2pp
+MNXR33	1 MNXM1798 = 1 MNXM1798	1 3-amino-L-alanine = 1 3-amino-L-alanine	true		bigg:23DAPPAtex
+MNXR34	1 MNXM2 + 1 MNXM3150 = 1 MNXM1 + 1 MNXM2184	1 H2O + 1 2',3'-cyclic UMP = 1 H(+) + 1 3'-UMP	true	3.1.4.16	rhea:27878
+MNXR35	1 MNXM2 + 1 MNXM3148 = 1 MNXM1 + 1 MNXM2182	1 H2O + 1 2',3'-cyclic CMP = 1 H(+) + 1 3'-CMP	true	3.1.4.16	rhea:27882
+MNXR36	1 MNXM2 + 1 MNXM2598 = 1 MNXM1 + 1 MNXM1985	1 H2O + 1 2',3'-cyclic AMP = 1 H(+) + 1 3'-AMP	true	3.1.4.16	rhea:27886
+MNXR37	1 MNXM2 + 1 MNXM3149 = 1 MNXM1 + 1 MNXM2183	1 H2O + 1 2',3'-cyclic GMP = 1 H(+) + 1 3'-GMP	true	3.1.4.16	rhea:27858
+MNXR38	1 MNXM6764 = 1 MNXM6764	1 24R,25-Dihyoxyvitamin D2 = 1 24R,25-Dihyoxyvitamin D2	true		bigg:24,25DHVITD2t
+MNXR40	1 MNXM2 + 1 MNXM5 + 1 MNXM6764 = 1 MNXM1 + 1 MNXM4 + 1 MNXM4976 + 1 MNXM6	1 H2O + 1 NADP(+) + 1 24R,25-Dihyoxyvitamin D2 = 1 H(+) + 1 dioxygen + 1 25-Hydroxyvitamin D2 + 1 NADPH	true		bigg:24,25VITD2Hm
+MNXR43	1 MNXM4976 = 1 MNXM4976	1 25-Hydroxyvitamin D2 = 1 25-Hydroxyvitamin D2	true		bigg:25HVITD2t
+MNXR44	1 MNXM812 = 1 MNXM812	1 calcidiol = 1 calcidiol	true		bigg:25HVITD3t
+MNXR45	1 MNXM2 + 1 MNXM5 + 1 MNXM9598 = 1 MNXM1 + 1 MNXM4 + 1 MNXM4976 + 1 MNXM6	1 H2O + 1 NADP(+) + 1 1-alpha,25-Dihydroxyvitamin D2 = 1 H(+) + 1 dioxygen + 1 25-Hydroxyvitamin D2 + 1 NADPH	true		bigg:25VITD2Hm
+MNXR46	1 MNXM2 + 1 MNXM5 + 1 MNXM9599 = 1 MNXM1 + 1 MNXM4 + 1 MNXM6 + 1 MNXM812	1 H2O + 1 NADP(+) + 1 1-alpha,25-Dihydroxyvitamin D3 = 1 H(+) + 1 dioxygen + 1 NADPH + 1 calcidiol	true		bigg:25VITD3Hm
+MNXR47	1 MNXM529 = 1 MNXM529	1 meso-2,6-diaminopimelic acid dizwitterion = 1 meso-2,6-diaminopimelic acid dizwitterion	true		bigg:26DAHtex

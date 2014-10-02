@@ -18,6 +18,7 @@
 package uk.ac.ebi.mdk.domain;
 
 import org.apache.log4j.Logger;
+import uk.ac.ebi.mdk.deprecated.MIRIAMLoader;
 import uk.ac.ebi.mdk.domain.identifier.BRENDAChemicalIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.BRNIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.BioCycChemicalIdentifier;
@@ -39,6 +40,7 @@ import uk.ac.ebi.mdk.domain.identifier.IdentifierSet;
 import uk.ac.ebi.mdk.domain.identifier.InChI;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGDrugIdentifier;
+import uk.ac.ebi.mdk.domain.identifier.KEGGReactionIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KeggGlycanIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.LIPIDMapsIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.MetaCycIdentifier;
@@ -84,6 +86,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -95,76 +98,58 @@ import java.util.regex.Pattern;
  */
 public class DefaultIdentifierFactory implements IdentifierFactory {
 
-    private static final Logger logger = Logger
-            .getLogger(DefaultIdentifierFactory.class);
+    private static final Logger logger = Logger.getLogger(
+        DefaultIdentifierFactory.class);
 
     private static final String IDENTIFIER_MAPPING_FILE = "IdentifierResourceMapping.properties";
 
 
-    private static final Map<Class, Identifier> identifiers = new HashMap<Class, Identifier>(60);
-    private static final Map<String, Identifier> identifierNames = new HashMap<String, Identifier>(60);
+    private static final Map<Class, Identifier>  identifiers     = new HashMap<Class, Identifier>(
+        60);
+    private static final Map<String, Identifier> identifierNames = new HashMap<String, Identifier>(
+        60);
 
-    private List<Identifier> supportedIdentifiers = new ArrayList<Identifier>(Arrays.asList(
-            new ChEBIIdentifier(),
-            new KEGGCompoundIdentifier(),
-            new KEGGDrugIdentifier(),
-            new LIPIDMapsIdentifier(),
-            new TrEMBLIdentifier(),
-            new SwissProtIdentifier(),
-            new Taxonomy(),
-            new ECNumber(),
-            new BasicChemicalIdentifier(),
-            new BasicReactionIdentifier(),
-            new BasicGeneIdentifier(),
-            new BasicRNAIdentifier(),
-            new BasicProteinIdentifier(),
-            new ReconstructionIdentifier(),
-            new ChromosomeNumber(),
-            new TaskIdentifier(),
-            new DrugBankIdentifier(),
-            new HMDBIdentifier(),
-            new InterPro(),
-            new GeneOntologyTerm(),
-            new GeneOntologyAnnotation(),
-            new HSSPIdentifier(),
-            new PDBIdentifier(),
-            new EINECSIdentifier(),
-            new HSDBIdentifier(),
-            new ZINCIdentifier(),
-            new EPAPesticideIdentifier(),
-            new BRNIdentifier(),
-            new BRENDAChemicalIdentifier(),
-            new CASIdentifier(),
-            new GmelinRegistryIdentifier(),
-            new UMBBDIdentifier(),
-            new PDBChemIdentifier(),
-            new CHEMBLIdentifier(),
-            new BioCycChemicalIdentifier(),
-            new MetaCycIdentifier(),
-            new KeggGlycanIdentifier(),
-            new KEGGOrthology(),
-            new ChemSpiderIdentifier(),
-            new PubChemCompoundIdentifier(),
-            new PubChemSubstanceIdentifier(),
-            new PubMedIdentifier(),
-            new ChemIDplusIdentifier(),
-            new InChI(),
-            new ExperimentalFactorOntologyIdentifier(),
-            new CellTypeOntologyIdentifier(),
-            new FoundationalModelOfAnatomyOntologyIdentifier(),
-            new BRENDATissueOntologyIdentifier(),
-            new TransportClassificationNumber()));
+    private List<Identifier> supportedIdentifiers = new ArrayList<Identifier>(
+        Arrays.asList(new ChEBIIdentifier(), new KEGGCompoundIdentifier(),
+                      new KEGGDrugIdentifier(), new LIPIDMapsIdentifier(),
+                      new TrEMBLIdentifier(), new SwissProtIdentifier(),
+                      new Taxonomy(), new ECNumber(),
+                      new BasicChemicalIdentifier(),
+                      new BasicReactionIdentifier(), new BasicGeneIdentifier(),
+                      new BasicRNAIdentifier(), new BasicProteinIdentifier(),
+                      new ReconstructionIdentifier(), new ChromosomeNumber(),
+                      new TaskIdentifier(), new DrugBankIdentifier(),
+                      new HMDBIdentifier(), new InterPro(),
+                      new GeneOntologyTerm(), new GeneOntologyAnnotation(),
+                      new HSSPIdentifier(), new PDBIdentifier(),
+                      new EINECSIdentifier(), new HSDBIdentifier(),
+                      new ZINCIdentifier(), new EPAPesticideIdentifier(),
+                      new BRNIdentifier(), new BRENDAChemicalIdentifier(),
+                      new CASIdentifier(), new GmelinRegistryIdentifier(),
+                      new UMBBDIdentifier(), new PDBChemIdentifier(),
+                      new CHEMBLIdentifier(), new BioCycChemicalIdentifier(),
+                      new MetaCycIdentifier(), new KeggGlycanIdentifier(),
+                      new KEGGOrthology(), new ChemSpiderIdentifier(),
+                      new PubChemCompoundIdentifier(),
+                      new PubChemSubstanceIdentifier(), new PubMedIdentifier(),
+                      new ChemIDplusIdentifier(), new InChI(),
+                      new ExperimentalFactorOntologyIdentifier(),
+                      new CellTypeOntologyIdentifier(),
+                      new FoundationalModelOfAnatomyOntologyIdentifier(),
+                      new BRENDATissueOntologyIdentifier(),
+                      new TransportClassificationNumber(),
+                      new KEGGReactionIdentifier()));
 
-    private Map<String, Identifier> synonyms = new HashMap();
+    private Map<String, Identifier> synonyms = new HashMap<String, Identifier>();
 
-    private List<SequenceIdentifier> proteinIdentifiers = new ArrayList(Arrays.asList(new BasicProteinIdentifier(),
-                                                                                      new TrEMBLIdentifier(),
-                                                                                      new SwissProtIdentifier()));
+    private List<SequenceIdentifier> proteinIdentifiers = new ArrayList<SequenceIdentifier>(
+        Arrays.asList(new BasicProteinIdentifier(), new TrEMBLIdentifier(),
+                      new SwissProtIdentifier()));
 
     private Set<Identifier> unmapped = new HashSet<Identifier>();
-    private Set<Identifier> mapped = new HashSet<Identifier>();
+    private Set<Identifier> mapped   = new HashSet<Identifier>();
 
-    private Map<String, SequenceIdentifier> proteinIdMap = new HashMap();
+    private Map<String, SequenceIdentifier> proteinIdMap = new HashMap<String,SequenceIdentifier>();
 
     private List<String> synonymExclusions = Arrays.asList("uniprotkb");
 
@@ -183,16 +168,15 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
         for (Identifier identifier : supportedIdentifiers) {
 
             identifiers.put(identifier.getClass(), identifier);
-            identifierNames.put(identifier.getShortDescription()
-                                          .toLowerCase(Locale.ENGLISH),
-                                identifier);
+            identifierNames.put(identifier.getShortDescription().toLowerCase(
+                Locale.ENGLISH), identifier);
 
             // add to the mapped/unmapped set
-            Set set = identifier.getResource().isMapped() ? mapped : unmapped;
+            Set<Identifier> set = identifier.getResource().isMapped() ? mapped : unmapped;
             set.add(identifier);
 
-            synonyms.put(identifier.getShortDescription()
-                                   .toLowerCase(Locale.ENGLISH), identifier);
+            synonyms.put(identifier.getShortDescription().toLowerCase(
+                Locale.ENGLISH), identifier);
             for (String synonym : identifier.getSynonyms()) {
 
                 String key = synonym.toLowerCase(Locale.ENGLISH);
@@ -200,7 +184,8 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
                 if (synonymExclusions.contains(key) == Boolean.FALSE) {
 
                     if (synonyms.containsKey(key)) {
-                        logger.warn("Clashing synonym names in map: " + key + " appears more then once");
+                        logger.warn(
+                            "Clashing synonym names in map: " + key + " appears more then once");
                     }
 
                     synonyms.put(key, identifier);
@@ -228,8 +213,8 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
         // sort by resource name
         Collections.sort(supportedIdentifiers, new Comparator<Identifier>() {
             public int compare(Identifier o1, Identifier o2) {
-                return o1.getShortDescription()
-                         .compareTo(o2.getShortDescription());
+                return o1.getShortDescription().compareTo(
+                    o2.getShortDescription());
             }
         });
 
@@ -283,8 +268,10 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
      * Construct an identifier of a given class
      *
      * @param type
+     *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public <I extends Identifier> I ofClass(Class<I> type) {
         return (I) identifiers.get(type).newInstance();
     }
@@ -361,6 +348,7 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
      * specified in the IdentifierMetaInfo properites resource file.
      *
      * @param synonym
+     *
      * @return
      */
     @Override public Identifier ofSynonym(String synonym) {
@@ -383,4 +371,17 @@ public class DefaultIdentifierFactory implements IdentifierFactory {
 
     }
 
+    @Override public Identifier ofURL(String url) {
+        Matcher matcher = IDENTIFIERS_DOT_ORG.matcher(url);
+        if (matcher.matches()) {
+            String namespace = matcher.group(1);
+            String accession = matcher.group(2);
+            return MIRIAMLoader.getInstance().ofNamespace(namespace,
+                                                          accession);
+        }
+        return EMPTY_IDENTIFIER;
+    }
+
+    private static final Pattern IDENTIFIERS_DOT_ORG = Pattern.compile(
+        "http://(?:www.)?identifiers.org/([^/]+)/([^/]+)/?");
 }

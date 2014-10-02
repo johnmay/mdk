@@ -64,7 +64,7 @@ public class DefaultServiceManager implements ServiceManager {
         return DefaultServiceManagerHolder.INSTANCE;
     }
 
-
+    @SuppressWarnings("unchecked")
     private DefaultServiceManager() {
 
         // load services using the JDK's Service Provider Interface
@@ -83,6 +83,7 @@ public class DefaultServiceManager implements ServiceManager {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public <S extends QueryService<I>, I extends Identifier> boolean hasService(I identifier, Class<? extends S> serviceClass) {
         return hasService((Class<? extends I>) identifier.getClass(), serviceClass);
     }
@@ -108,6 +109,7 @@ public class DefaultServiceManager implements ServiceManager {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public <S extends QueryService<I>, I extends Identifier> S getService(I identifier,
                                                                                        Class<? extends S> serviceClass) {
         return getService((Class<? extends I>) identifier.getClass(), serviceClass);
@@ -115,6 +117,7 @@ public class DefaultServiceManager implements ServiceManager {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public Collection<Identifier> getIdentifiers(Class<? extends QueryService> c) {
 
         Set<Identifier> identifiers = new HashSet<Identifier>();
@@ -134,6 +137,7 @@ public class DefaultServiceManager implements ServiceManager {
      * @inheritDoc
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <S extends QueryService<I>, I extends Identifier> S getService(Class<? extends I> identifierClass,
                                                                           Class<? extends S> serviceClass) {
 
@@ -157,6 +161,7 @@ public class DefaultServiceManager implements ServiceManager {
     /**
      * @inheritDOc
      */
+    @SuppressWarnings("unchecked")
     public <I extends Identifier, S extends QueryService> S createService(Class<? extends I> identifierClass,
                                                                           Class<? extends S> serviceClass) {
 
@@ -187,6 +192,7 @@ public class DefaultServiceManager implements ServiceManager {
      *
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Collection<Class<? extends QueryService>> getImplementingInterfaces(Class<?> c) {
 
         if (interfaceMap.containsKey(c)) {

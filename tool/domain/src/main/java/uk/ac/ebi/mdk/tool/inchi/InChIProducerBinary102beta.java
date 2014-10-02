@@ -17,18 +17,14 @@
 package uk.ac.ebi.mdk.tool.inchi;
 
 import com.google.common.io.Files;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
 import net.sf.jniinchi.INCHI_OPTION;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.io.MDLV2000Writer;
 import uk.ac.ebi.mdk.tool.inchi.InChIMoleculeChecker.InChIMoleculeCheckerResult;
+
+import java.io.*;
+import java.util.List;
 
 /**
  *
@@ -60,10 +56,6 @@ public class InChIProducerBinary102beta extends AbstractInChIProducer implements
             return null;
         }
         File tmpDir = Files.createTempDir();
-        if (!tmpDir.mkdir()) {
-            logger.error("Cannot create temporary directory");
-            return null;
-        }
         String tmpMolFile = tmpDir.getAbsolutePath() + File.separator + "fileInChiFromCDKMol";        
         MDLV2000Writer w;
         try {
@@ -136,10 +128,10 @@ public class InChIProducerBinary102beta extends AbstractInChIProducer implements
     @Override
     public InChIResult calculateInChI(String mdlMol) {
         File tmpDir = Files.createTempDir();
-        if (!tmpDir.mkdir()) {
-            logger.error("Cannot create temporary directory");
-            return null;
-        }
+//        if (!tmpDir.mkdir()) {
+//            logger.error("Cannot create temporary directory");
+//            return null;
+//        }
         String tmpMolFile = tmpDir.getAbsolutePath() + File.separator + "fileInChiFromCDKMol";   
         BufferedWriter writer;
         try {

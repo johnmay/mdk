@@ -62,7 +62,7 @@ public class BlastReaderTest {
     @Test
     public void testParseFromTSV() throws Exception {
         System.out.println("parseFromTSV");
-        Map<String, GeneProduct> products = new HashMap();
+        Map<String, GeneProduct> products = new HashMap<String,GeneProduct>();
         Reader reader = new InputStreamReader(getClass().getResourceAsStream("sample.tsv"));
         BlastReader instance = new BlastReader();
         instance.loadFromTSV(products, reader, "2.2.25", null);

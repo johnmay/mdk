@@ -41,6 +41,7 @@ public class NameCandidateFactoryTest {
     private static final Logger LOGGER = Logger.getLogger(NameCandidateFactoryTest.class);
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testGetCandidates() throws Exception {
 
 

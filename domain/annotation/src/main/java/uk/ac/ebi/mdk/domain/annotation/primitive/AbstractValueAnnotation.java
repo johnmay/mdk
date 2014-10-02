@@ -104,6 +104,7 @@ public abstract class AbstractValueAnnotation<T>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
         super.readExternal(in);
         setValue((T) in.readObject());

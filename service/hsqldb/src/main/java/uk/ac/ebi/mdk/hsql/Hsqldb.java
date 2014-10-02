@@ -17,6 +17,7 @@
 
 package uk.ac.ebi.mdk.hsql;
 
+import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.service.ResourceLoader;
 import uk.ac.ebi.mdk.service.connection.HSQLDBLocation;
 
@@ -43,8 +44,10 @@ public final class Hsqldb {
         return new KEGGReactionLoader(keggReactionConnection());
     }
 
-    public static DefaultReactionService reactionService(HSQLDBLocation location) {
-        return new DefaultReactionService(location);
+    public static <I extends Identifier>
+    DefaultReactionService<I> reactionService(I identifier,
+                                              HSQLDBLocation location) {
+        return new DefaultReactionService<I>(location, identifier);
     }
 
     public static void shutdown() {

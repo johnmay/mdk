@@ -99,6 +99,7 @@ public class SubliminalTSV2SDF extends CommandLineMain {
     /**
      * Output the collapsed map to an SDF file
      */
+    @SuppressWarnings("unchecked")
     private void writeSDF(File output, Map<String, Metabolite> map) throws IOException {
 
         ServiceManager manager = DefaultServiceManager.getInstance();

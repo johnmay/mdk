@@ -23,9 +23,11 @@ import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.IdentifierFactory;
 import uk.ac.ebi.mdk.domain.identifier.KEGGDrugIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KeggGlycanIdentifier;
+import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundEntry;
 import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundField;
 import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundParser;
+import uk.ac.ebi.mdk.io.text.kegg.KeggFlatfile;
 import uk.ac.ebi.mdk.service.index.crossreference.KEGGCompoundCrossReferenceIndex;
 import uk.ac.ebi.mdk.service.index.data.KEGGCompoundDataIndex;
 import uk.ac.ebi.mdk.service.index.name.KEGGCompoundNameIndex;
@@ -80,17 +82,15 @@ public class KEGGCompoundLoader
         DefaultCrossReferenceIndexWriter xref = new DefaultCrossReferenceIndexWriter(getIndex("kegg.xref"));
 
         try {
-            KEGGCompoundParser parser = new KEGGCompoundParser(new InputStreamReader(location.open()),
-                                                               KEGGCompoundField.FORMULA, KEGGCompoundField.NAME, KEGGCompoundField.ENTRY,
-                                                               KEGGCompoundField.ENZYME, KEGGCompoundField.REMARK, KEGGCompoundField.DBLINKS);
-
+            Iterable<AttributedEntry<KEGGCompoundField,String>> compounds = KeggFlatfile.compounds(location.open());
 
             IdentifierFactory idFactory = DefaultIdentifierFactory.getInstance();
 
             long start = System.currentTimeMillis();
-            KEGGCompoundEntry entry;
             int count = 0;
-            while (!isCancelled() && (entry = parser.readNext()) != null) {
+            for(AttributedEntry<KEGGCompoundField,String> entry : compounds){
+                if(isCancelled())
+                    break;
 
                 String header = entry.get(KEGGCompoundField.ENTRY).toString();
                 String[] names = Joiner.on("\n").join(entry.get(KEGGCompoundField.NAME)).split(";");

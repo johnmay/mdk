@@ -93,10 +93,12 @@ public class AnnotationDataInputStream
     }
 
 
+    @SuppressWarnings("unchecked")
     public <A extends Annotation> A read() throws IOException, ClassNotFoundException {
         return (A) read(readClass());
     }
 
+    @SuppressWarnings("unchecked")
     public <A extends Annotation> A read(Class<A> c) throws IOException, ClassNotFoundException {
         Integer id = readObjectId();
 
@@ -107,6 +109,7 @@ public class AnnotationDataInputStream
         return (A) put(id, reader.readAnnotation());
     }
 
+    @SuppressWarnings("unchecked")
     public AnnotationReader createReader(Class c) {
 
         if (StringAnnotation.class.isAssignableFrom(c)) {

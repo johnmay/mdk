@@ -53,4 +53,8 @@ public class FluxUpperBound extends FluxBound {
     public FluxUpperBound newInstance() {
         return new FluxUpperBound();
     }
+
+    @Override public FluxLowerBound forValue(double value) {
+        return new FluxLowerBound(value);
+    }
 }

@@ -17,6 +17,10 @@
 
 package uk.ac.ebi.mdk.io.text.kegg;
 
+import com.google.common.collect.ImmutableSet;
+
+import java.util.Set;
+
 /**
  * Enumeration of all possible KEGG Compound fields. These fields can be used in
  * combination with the {@link KEGGCompoundParser} to load specific parts of an
@@ -24,9 +28,10 @@ package uk.ac.ebi.mdk.io.text.kegg;
  *
  * @author John May
  * @see KEGGCompoundParser
+ * @see KeggFlatfile#compound(java.io.File)
  * @see <a href="http://www.kegg.jp/kegg/rest/dbentry.html">DB Entry Format</a>
  */
-public enum KEGGCompoundField {
+public enum KEGGCompoundField implements KEGGField {
     ENTRY,
     NAME,
     REACTION,
@@ -53,5 +58,22 @@ public enum KEGGCompoundField {
     MOL_WEIGHT,
 
     // glycan
-    COMPOSITION, NODE, EDGE, CLASS, ORTHOLOGY
+    COMPOSITION, NODE, EDGE, CLASS, ORTHOLOGY;
+
+    private final Set<String> names;
+
+    private KEGGCompoundField(String... names) {
+        ImmutableSet.Builder<String> ns = new ImmutableSet.Builder<String>();
+        for (String name : names) {
+            ns.add(name);
+        }
+        ns.add(name());
+        this.names = ns.build();
+    }
+
+    /** @inheritDoc */
+    @Override public Set<String> names() {
+        return names;
+    }
+
 }

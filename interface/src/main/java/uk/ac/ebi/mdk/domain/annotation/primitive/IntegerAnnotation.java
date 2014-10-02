@@ -32,6 +32,6 @@ public interface IntegerAnnotation extends Annotation {
 
     public void setValue(Integer value);
 
-    public Annotation getInstance(Integer value);
+    public IntegerAnnotation getInstance(Integer value);
 
 }

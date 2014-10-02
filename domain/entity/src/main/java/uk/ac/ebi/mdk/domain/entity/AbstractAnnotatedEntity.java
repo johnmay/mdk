@@ -149,6 +149,7 @@ public abstract class AbstractAnnotatedEntity
      * @return
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T> Collection<T> getAnnotations(final Class<T> c) {
         return (Collection<T>) annotations.get(c);
     }
@@ -163,6 +164,7 @@ public abstract class AbstractAnnotatedEntity
      * @param base
      * @return
      */
+    @SuppressWarnings("unchecked")
     public <T extends Annotation> Set<T> getAnnotationsExtending(final T base) {
         return (Set<T>) getAnnotationsExtending(base.getClass());
     }
@@ -174,6 +176,7 @@ public abstract class AbstractAnnotatedEntity
      * @param c
      * @return
      */
+    @SuppressWarnings("unchecked")
     public <T extends Annotation> Set<T> getAnnotationsExtending(final Class<T> c) {
 
         Set<T> subset = new HashSet<T>();

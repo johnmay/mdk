@@ -127,12 +127,11 @@ public class MoleculeCollectionConnectivityLoader extends AbstractSingleIndexRes
         IndexWriter writer = new IndexWriter(indexDirectory, new IndexWriterConfig(Version.LUCENE_34, getIndex().getAnalyzer()));        
         writer.deleteDocuments(queryCollection);
         writer.close();
-        indexDirectory.close();
     }
 
     @Override
     public void update() throws IOException {
-        LinkedList<Document> docs = new LinkedList();
+        LinkedList<Document> docs = new LinkedList<Document>();
         MoleculeConnectivity entry;
         int counter=0;
         while (molIterator.hasNext()) {

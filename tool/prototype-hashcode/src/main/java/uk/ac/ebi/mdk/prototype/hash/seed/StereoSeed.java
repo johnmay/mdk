@@ -64,11 +64,10 @@ import uk.ac.ebi.mdk.prototype.hash.cip.ChiralityCalculator;
  *
  * @author johnmay
  * @author $Author$ (this version)
- * @version $Rev$ : Last Changed $Date$
- * @deprecated this method use the CIP rules which are very slow - when hashing we can take a short cut
- *             which is build into the hash code factory
+ * @version $Rev$ : Last Changed $Date$ 
+ * deprecated - this method use the CIP rules which are very slow - when hashing we can take a short cut
+ *              which is build into the hash code factory
  */
-@Deprecated
 public class StereoSeed implements AtomSeed {
 
     private static final Logger LOGGER = Logger.getLogger(StereoSeed.class);

@@ -18,7 +18,15 @@
 package uk.ac.ebi.mdk.domain.entity;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.entity.reaction.*;
+import uk.ac.ebi.mdk.domain.entity.reaction.AbstractReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.BasicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.BiochemRxnImpl;
+import uk.ac.ebi.mdk.domain.entity.reaction.BiochemicalReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.IdentifierReactionImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReactionImpl;
+import uk.ac.ebi.mdk.domain.entity.reaction.ParticipantImplementation;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.domain.identifier.basic.ReconstructionIdentifier;
@@ -33,13 +41,10 @@ import java.util.UUID;
  * DefaultEntityFactory 2012.02.02
  *
  * @author johnmay
- * @author $Author$ (this version)
- *         <p/>
- *         Provides centralised entity creation.
+ * @author $Author$ (this version) <p/> Provides centralised entity creation.
  * @version $Rev$ : Last Changed $Date$
  */
-public class DefaultEntityFactory
-        implements EntityFactory {
+public class DefaultEntityFactory implements EntityFactory {
 
     private static final Logger LOGGER = Logger.getLogger(DefaultEntityFactory.class);
 
@@ -50,19 +55,7 @@ public class DefaultEntityFactory
 
     private DefaultEntityFactory() {
 
-        for (Entity entity : Arrays.asList(new MetaboliteImpl(UUID.randomUUID()),
-                                           new MetabolicReactionImpl(UUID.randomUUID()),
-                                           new ProteinProductImpl(UUID.randomUUID()),
-                                           new RibosomalRNAImpl(UUID.randomUUID()),
-                                           new TransferRNAImpl(UUID.randomUUID()),
-                                           new GeneImpl(UUID.randomUUID()),
-                                           new MultimerImpl(UUID.randomUUID()),
-                                           new IdentifierReactionImplementation(UUID.randomUUID()),
-                                           new BasicParticipant(UUID.randomUUID()),
-                                           new ParticipantImplementation(UUID.randomUUID()),
-                                           new MetabolicParticipantImplementation(),
-                                           new AbstractReaction(UUID.randomUUID()),
-                                           new ReconstructionImpl())) {
+        for (Entity entity : Arrays.asList(new MetaboliteImpl(UUID.randomUUID()), new MetabolicReactionImpl(UUID.randomUUID()), new ProteinProductImpl(UUID.randomUUID()), new RibosomalRNAImpl(UUID.randomUUID()), new TransferRNAImpl(UUID.randomUUID()), new GeneImpl(UUID.randomUUID()), new MultimerImpl(UUID.randomUUID()), new IdentifierReactionImplementation(UUID.randomUUID()), new BasicParticipant(UUID.randomUUID()), new ParticipantImplementation(UUID.randomUUID()), new MetabolicParticipantImplementation(), new AbstractReaction(UUID.randomUUID()), new ReconstructionImpl())) {
 
             entites.put(getEntityClass(entity.getClass()), entity);
 
@@ -86,24 +79,20 @@ public class DefaultEntityFactory
         return new ReconstructionImpl(uuid, new ReconstructionIdentifier(), new Taxonomy());
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
+    @SuppressWarnings("unchecked")
     public <E extends Entity> E newInstance(Class<E> c) {
         return (E) entites.get(c).newInstance();
     }
 
+    @SuppressWarnings("unchecked")
     public <E extends Entity> E ofClass(Class<E> c) {
         return (E) entites.get(c).newInstance();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public <E extends Entity> E newInstance(Class<E> c,
-                                            Identifier identifier,
-                                            String name,
-                                            String abbr) {
+    /** @inheritDoc */
+    @SuppressWarnings("unchecked")
+    public <E extends Entity> E newInstance(Class<E> c, Identifier identifier, String name, String abbr) {
 
         E entity = (E) entites.get(c).newInstance();
 
@@ -115,13 +104,9 @@ public class DefaultEntityFactory
 
     }
 
-    /**
-     * @inheritDoc
-     */
-    public <E extends Entity> E ofClass(Class<E> c,
-                                        Identifier identifier,
-                                        String name,
-                                        String abbr) {
+    /** @inheritDoc */
+    @SuppressWarnings("unchecked")
+    public <E extends Entity> E ofClass(Class<E> c, Identifier identifier, String name, String abbr) {
 
         E entity = (E) entites.get(c).newInstance();
 
@@ -134,13 +119,11 @@ public class DefaultEntityFactory
     }
 
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
+    @SuppressWarnings("unchecked")
     public final Class<? extends Entity> getEntityClass(Class<? extends Entity> c) {
 
-        if (c.isInterface()
-                && Entity.class.isAssignableFrom(c)) {
+        if (c.isInterface() && Entity.class.isAssignableFrom(c)) {
             return c;
         }
 
@@ -162,9 +145,7 @@ public class DefaultEntityFactory
     }
 
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public Class<? extends Entity> getRootClass(Class<? extends Entity> c) {
 
         while (getEntityClass(getSuperClass(c)) != AnnotatedEntity.class) {
@@ -175,14 +156,17 @@ public class DefaultEntityFactory
     }
 
 
+
+    @SuppressWarnings("unchecked")
     private Class<? extends Entity> getSuperClass(Class<? extends Entity> c) {
-        if (c.isInterface()) {
-            return (Class<? extends Entity>) c.getInterfaces()[0]; // can only have one
+        if (c.isInterface()) {            
+            return (Class < ?extends Entity>) c.getInterfaces()[0]; // can only have one            
         }
         return (Class<? extends Entity>) c.getSuperclass();
     }
 
 
+    @SuppressWarnings("unchecked")
     public Class<? extends Entity> getClass(String className) {
 
         for (Class<? extends Entity> entityClass : entites.keySet()) {
@@ -194,86 +178,67 @@ public class DefaultEntityFactory
         return null;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public Metabolite metabolite() {
         return metabolite(UUID.randomUUID());
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public Metabolite metabolite(UUID uuid) {
         return new MetaboliteImpl(uuid);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public ProteinProduct protein() {
         return protein(UUID.randomUUID());
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public ProteinProduct protein(UUID uuid) {
         return new ProteinProductImpl(uuid);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public TransferRNA tRNA() {
         return tRNA(UUID.randomUUID());
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public TransferRNA tRNA(UUID uuid) {
         return new TransferRNAImpl(uuid);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public RibosomalRNA rRNA() {
         return rRNA(UUID.randomUUID());
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public RibosomalRNA rRNA(UUID uuid) {
         return new RibosomalRNAImpl(uuid);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public MetabolicReaction reaction() {
         return reaction(UUID.randomUUID());
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
+    @Override public BiochemicalReaction biochemicalReaction(MetabolicReaction reaction) {
+        return new BiochemRxnImpl(reaction);
+    }
+
+    /** @inheritDoc */
     @Override public MetabolicReaction reaction(UUID uuid) {
         return new MetabolicReactionImpl(uuid);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public Gene gene() {
         return gene(UUID.randomUUID());
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override public Gene gene(UUID uuid) {
         return new GeneImpl(uuid);
     }

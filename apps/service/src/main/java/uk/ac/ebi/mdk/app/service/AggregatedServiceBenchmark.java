@@ -237,11 +237,13 @@ public class AggregatedServiceBenchmark {
 
     }
 
+    @SuppressWarnings("unchecked")
     public static <S extends PreferredNameService & StructureService> boolean printNameAndAtomCount(S service, Identifier identifier) {
         service.getPreferredName(identifier);
         return service.getStructure(identifier).getAtomCount() != 0;
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean printNameAndAtomCount(StructureService ss, PreferredNameService pns, Identifier identifier) {
         pns.getPreferredName(identifier);
         return ss.getStructure(identifier).getAtomCount() != 0;

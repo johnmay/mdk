@@ -51,6 +51,7 @@ public class DefaultLoader implements MetaInfoLoader {
     }
 
 
+    @SuppressWarnings("unchecked")
     public String getShortDescription(Class c) {
 
         if (loaded.containsKey(c)) {
@@ -66,6 +67,7 @@ public class DefaultLoader implements MetaInfoLoader {
 
     }
 
+    @SuppressWarnings("unchecked")
     public String getLongDescription(Class c) {
 
         if (loaded.containsKey(c)) {

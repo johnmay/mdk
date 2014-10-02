@@ -311,7 +311,7 @@ public class ENAFeatureParser {
 
         return null;
     }
-
+    @SuppressWarnings("unchecked")
     private ProteinProduct getCodingSequence() {
 
         ProteinProduct cds = factory

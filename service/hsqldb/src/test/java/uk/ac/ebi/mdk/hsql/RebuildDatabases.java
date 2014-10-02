@@ -28,7 +28,7 @@ public class RebuildDatabases {
     }
 
     private static void rebuildReactionSchema() throws SQLException {
-        Connection connection = DriverManager.getConnection("jdbc:hsqldb:file:service/hsql/src/test/resources/uk/ac/ebi/mdk/hsql/db/reaction;shutdown=true", "sa", "");
+        Connection connection = DriverManager.getConnection("jdbc:hsqldb:file:service/hsqldb/src/test/resources/uk/ac/ebi/mdk/hsql/db/reaction;shutdown=true", "sa", "");
         Hsqldb.createReactionSchema(connection);
         connection.commit();
         connection.close();

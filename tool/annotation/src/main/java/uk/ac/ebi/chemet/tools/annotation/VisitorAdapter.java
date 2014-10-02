@@ -102,6 +102,7 @@ public abstract class VisitorAdapter<A extends Annotation, T>
      * @return the value form the visit
      * @see #_visit(uk.ac.ebi.mdk.domain.annotation.Annotation)
      */
+    @SuppressWarnings("unchecked")
     @Override
     public T visit(Annotation annotation) {
         // we should cache the class mapping

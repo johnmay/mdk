@@ -68,6 +68,7 @@ public class MetaboliteHashCodeMatcher
         this(DEFAULT_ATOM_COUNT_THRESHOLD);
     }
 
+    @SuppressWarnings("unchecked")
     public MetaboliteHashCodeMatcher(Integer threshold) {
         this(SeedFactory.getInstance().getSeeds(AtomicNumberSeed.class, ConnectedAtomSeed.class),
              threshold);

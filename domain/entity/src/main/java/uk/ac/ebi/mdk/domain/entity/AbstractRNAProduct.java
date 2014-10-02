@@ -42,7 +42,7 @@ public abstract class AbstractRNAProduct extends AbstractGeneProduct implements 
 
     private static final Logger LOGGER = Logger.getLogger(AbstractRNAProduct.class);
 
-    private List<RNASequence> sequences = new ArrayList();
+    private List<RNASequence> sequences = new ArrayList<RNASequence>();
 
 
     public AbstractRNAProduct(UUID uuid) {

@@ -111,11 +111,13 @@ public class EntityDataInputStream
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public Entity read(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
         return read(readClass(), reconstruction);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <E extends Entity> E read(Class<E> c, Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         Integer id = readObjectId();

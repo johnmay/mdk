@@ -52,7 +52,7 @@ import java.util.Map;
 public class ParserFactory {
 
     private static final Logger LOGGER = Logger.getLogger(ParserFactory.class);
-    Map<String, BLASTRowParser> blastParsers = new HashMap();
+    Map<String, BLASTRowParser> blastParsers = new HashMap<String, BLASTRowParser>();
 
     private ParserFactory() {
         blastParsers.put("2.2.24", new BLASTRowParser_V2_2_24());

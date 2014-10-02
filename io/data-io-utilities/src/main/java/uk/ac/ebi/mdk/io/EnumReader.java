@@ -52,11 +52,13 @@ public class EnumReader extends AbstractDataInput {
         this.names.put(name, value);
     }
 
+    @SuppressWarnings("unchecked")
     public Enum readEnum() throws IOException, ClassNotFoundException {
         Integer id = readObjectId();
         return hasObject(id) ? (Enum) get(id) : (Enum) put(id, readNewEnum());
     }
 
+    @SuppressWarnings("unchecked")
     public Enum readNewEnum() throws IOException, ClassNotFoundException {
         Class c = readClass();
         String name = getDataInput().readUTF();

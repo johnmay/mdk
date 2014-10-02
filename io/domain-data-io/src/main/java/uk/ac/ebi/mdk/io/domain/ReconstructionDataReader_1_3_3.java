@@ -140,7 +140,7 @@ public class ReconstructionDataReader_1_3_3
             in.readUTF(); // abrv
             identifierInput.read(); // chromosome id -> we lose the number
 
-            Chromosome chromosome = recon.getGenome().createChromosome(i + 1, seq);
+            Chromosome chromosome = recon.genome().createChromosome(i + 1, seq);
             chromosome.addAll(genes);
         }
     }

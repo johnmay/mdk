@@ -75,6 +75,7 @@ public class IdentifierSet
      * @return
      *
      */
+    @SuppressWarnings("unchecked")
     public <T> Collection<T> getIdentifiers(final Class<T> c) {
 
         return (Collection<T>) identifiers.get(c);

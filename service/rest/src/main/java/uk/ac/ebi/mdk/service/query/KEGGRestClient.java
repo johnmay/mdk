@@ -17,7 +17,6 @@
 package uk.ac.ebi.mdk.service.query;
 
 import au.com.bytecode.opencsv.CSVReader;
-import java.io.BufferedReader;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -28,9 +27,11 @@ import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
+import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundEntry;
 import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundField;
 import uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundParser;
+import uk.ac.ebi.mdk.io.text.kegg.KeggFlatfile;
 import uk.ac.ebi.mdk.service.query.data.MolecularFormulaService;
 import uk.ac.ebi.mdk.service.query.name.NameService;
 import uk.ac.ebi.mdk.service.query.name.PreferredNameService;
@@ -46,7 +47,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 
 /**
  * A client for the KEGG REST API.
@@ -56,10 +56,10 @@ import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 public class KEGGRestClient
         extends AbstractRestClient<KEGGCompoundIdentifier>
         implements StructureService<KEGGCompoundIdentifier>,
-        MolecularFormulaService<KEGGCompoundIdentifier>,
-        PreferredNameService<KEGGCompoundIdentifier>,
-        NameService<KEGGCompoundIdentifier>,
-        SynonymService<KEGGCompoundIdentifier> {
+                   MolecularFormulaService<KEGGCompoundIdentifier>,
+                   PreferredNameService<KEGGCompoundIdentifier>,
+                   NameService<KEGGCompoundIdentifier>,
+                   SynonymService<KEGGCompoundIdentifier> {
 
     private final IChemObjectBuilder BUILDER = SilentChemObjectBuilder
             .getInstance();
@@ -91,13 +91,8 @@ public class KEGGRestClient
 
         Collection<String> names = new ArrayList<String>(10);
 
-        InputStream in = null;
-
         try {
-            in = getContent(address);
-
-            KEGGCompoundEntry entry = KEGGCompoundParser
-                    .load(in, KEGGCompoundField.NAME);
+            AttributedEntry<KEGGCompoundField, String> entry = KeggFlatfile.compound(address);
 
             for (String name : entry.get(KEGGCompoundField.NAME)) {
                 names.add(name.replaceAll(";", "").trim());
@@ -108,14 +103,6 @@ public class KEGGRestClient
                   .error("unable to load entry: " + address
                                  + " reason: " + ex
                           .getMessage());
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                // can't do anything
-            }
         }
 
         return names;
@@ -240,13 +227,8 @@ public class KEGGRestClient
         String accession = identifier.getAccession();
         String address = "http://rest.kegg.jp/get/cpd:" + accession;
 
-        InputStream in = null;
-
         try {
-            in = getContent(address);
-
-            KEGGCompoundEntry entry = KEGGCompoundParser
-                    .load(in, KEGGCompoundField.FORMULA);
+            AttributedEntry<KEGGCompoundField, String> entry = KeggFlatfile.compound(address);
 
             return entry.getFirst(KEGGCompoundField.FORMULA, "");
 
@@ -255,14 +237,6 @@ public class KEGGRestClient
                   .error("unable to load entry: " + address
                                  + " reason: " + ex
                           .getMessage());
-        } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                // can't do anything
-            }
         }
 
         return "";
@@ -278,9 +252,9 @@ public class KEGGRestClient
     public IMolecularFormula getIMolecularFormula(KEGGCompoundIdentifier identifier) {
         String formula = getMolecularFormula(identifier);
         return formula.isEmpty()
-                ? BUILDER.newInstance(IMolecularFormula.class)
-                : MolecularFormulaManipulator.getMolecularFormula(formula,
-                BUILDER);
+               ? BUILDER.newInstance(IMolecularFormula.class)
+               : MolecularFormulaManipulator.getMolecularFormula(formula,
+                                                                 BUILDER);
     }
 
     @Override
@@ -320,7 +294,7 @@ public class KEGGRestClient
         try {
             in = getContent(address);
             CSVReader reader = new CSVReader(new InputStreamReader(getContent(address)),
-                    '\t', '\0');
+                                             '\t', '\0');
             String[] row;
 
             while ((row = reader.readNext()) != null) {

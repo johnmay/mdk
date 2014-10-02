@@ -19,6 +19,7 @@ package uk.ac.ebi.mdk.domain.annotation;
 
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.annotation.primitive.AbstractDoubleAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;
 import uk.ac.ebi.mdk.lang.annotation.Brief;
 import uk.ac.ebi.mdk.lang.annotation.Description;
 import uk.ac.ebi.mdk.lang.annotation.Context;
@@ -56,5 +57,9 @@ public class Charge
 
     public Annotation newInstance() {
         return new Charge();
+    }
+
+    @Override public Charge forValue(double v) {
+        return new Charge(v);
     }
 }

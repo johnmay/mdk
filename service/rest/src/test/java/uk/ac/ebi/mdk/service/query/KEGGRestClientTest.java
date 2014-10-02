@@ -22,6 +22,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -33,6 +35,12 @@ public class KEGGRestClientTest {
         KEGGRestClient client = new KEGGRestClient();
         String mol = client.getMDLMol(new KEGGCompoundIdentifier("C00009"));
         assertTrue(mol.contains("V2000"));
+    }
+
+    @Test public void testFormula() {
+        KEGGRestClient client = new KEGGRestClient();
+        String formula = client.getMolecularFormula(new KEGGCompoundIdentifier("C00002"));
+        assertThat(formula, is("C10H16N5O13P3"));
     }
 
     @Test public void testMDLMolFile_BadId() {

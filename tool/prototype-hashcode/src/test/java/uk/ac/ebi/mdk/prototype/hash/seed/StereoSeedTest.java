@@ -65,8 +65,10 @@ public class StereoSeedTest {
         IAtomContainer nadgl6p = TestMoleculeFactory.loadMol(getClass(), "ChEBI_15784.mol", "nadgl6p");
         IAtomContainer nadgu6p = TestMoleculeFactory.loadMol(getClass(), "N-ACETYL-D-GALACTOSAMINE-6-PHOSPHATE.mol", "nadgu6p");
 
+        @SuppressWarnings("unchecked")
         MolecularHashFactory original = new MolecularHashFactory(AtomicNumberSeed.class,
                                                                  ConnectedAtomSeed.class);
+        @SuppressWarnings("unchecked")
         MolecularHashFactory stereo   = new MolecularHashFactory(AtomicNumberSeed.class,
                                                                  ConnectedAtomSeed.class,
                                                                  StereoSeed.class);
@@ -82,9 +84,10 @@ public class StereoSeedTest {
 
     @Ignore("new stereo parity")
     public void testSeed() {
-
+        @SuppressWarnings("unchecked")
         MolecularHashFactory original = new MolecularHashFactory(AtomicNumberSeed.class,
                                                                  ConnectedAtomSeed.class);
+        @SuppressWarnings("unchecked")
         MolecularHashFactory stereo   = new MolecularHashFactory(AtomicNumberSeed.class,
                                                                  ConnectedAtomSeed.class,
                                                                  StereoSeed.class);
@@ -108,7 +111,7 @@ public class StereoSeedTest {
         IAtomContainer lAlaUp = TestMoleculeFactory.loadMol("l-ala-up.mol", "L-Ala", Boolean.FALSE);
         IAtomContainer lAlaDown = TestMoleculeFactory.loadMol("l-ala-down.mol", "L-Ala", Boolean.FALSE);
 
-
+        @SuppressWarnings("unchecked")
         Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class,
                                                                         ConnectedAtomSeed.class,
                                                                         BondOrderSumSeed.class,
@@ -149,6 +152,7 @@ public class StereoSeedTest {
 
 
         MolecularHashFactory factory = MolecularHashFactory.getInstance();
+        @SuppressWarnings("unchecked")
         Collection<AtomSeed> seeds = SeedFactory.getInstance().getSeeds(NonNullAtomicNumberSeed.class,
                                                                         ConnectedAtomSeed.class,
                                                                         BondOrderSumSeed.class);

@@ -39,6 +39,7 @@ public class CachedEntityAligner<E extends Entity> extends AbstractEntityAligner
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<E> getMatching(E entity, EntityMatcher matcher) {
         List<E> matching = new ArrayList<E>();
         for (E reference : references) {
@@ -58,6 +59,7 @@ public class CachedEntityAligner<E extends Entity> extends AbstractEntityAligner
         return getMetric(referenceMetrics, matcher, entity);
     }
 
+    @SuppressWarnings("unchecked")
     public Object getMetric(Map<Identifier, Map<EntityMatcher, Object>> cacheMap, EntityMatcher matcher, E entity) {
 
         Identifier identifier = entity.getIdentifier();

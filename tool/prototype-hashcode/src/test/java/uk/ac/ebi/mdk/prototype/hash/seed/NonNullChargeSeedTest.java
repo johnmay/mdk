@@ -50,6 +50,7 @@ public class NonNullChargeSeedTest {
     public void testSeed() {
 
         MolecularHashFactory basic   = new MolecularHashFactory();
+        @SuppressWarnings("unchecked")
         MolecularHashFactory charged = new MolecularHashFactory(AtomicNumberSeed.class,
                                                                 ConnectedAtomSeed.class,
                                                                 ChargeSeed.class);

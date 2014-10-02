@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.mdk.tool.match;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.annotation.InChI;
@@ -62,6 +62,7 @@ public class MetaboliteInChIMatcherTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testInChIEquality() {
 
         m1.setName("ATP"); // 4-
@@ -95,6 +96,7 @@ public class MetaboliteInChIMatcherTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testInChIEquality_Connectivity() {
 
         m1.setName("ATP"); // 4-

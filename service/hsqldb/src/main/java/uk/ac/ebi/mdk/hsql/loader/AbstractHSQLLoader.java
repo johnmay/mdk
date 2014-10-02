@@ -20,6 +20,8 @@ package uk.ac.ebi.mdk.hsql.loader;
 import uk.ac.ebi.mdk.service.connection.HSQLDBLocation;
 import uk.ac.ebi.mdk.service.loader.AbstractResourceLoader;
 
+import java.util.Date;
+
 /** @author John May */
 public abstract class AbstractHSQLLoader extends AbstractResourceLoader {
 
@@ -56,4 +58,19 @@ public abstract class AbstractHSQLLoader extends AbstractResourceLoader {
     public HSQLDBLocation connection() {
         return connection;
     }
+
+    public boolean loaded() {
+        return connection.isAvailable();
+    }
+
+    /** @inheritDoc */
+    @Override public Date updated() {
+        Date date = new Date();
+        long modified = connection.getLocation().lastModified();
+        date.setTime(modified);
+        if (modified == 0L)
+            throw new IllegalArgumentException("no modified data, ensure with loader.loaded() before loader.updated()");
+        return date;
+    }
 }
+

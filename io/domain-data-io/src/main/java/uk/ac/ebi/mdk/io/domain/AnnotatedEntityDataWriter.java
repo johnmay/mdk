@@ -69,6 +69,7 @@ public class AnnotatedEntityDataWriter
 
     }
 
+    @SuppressWarnings("unchecked")
     public void writeAnnotations(AnnotatedEntity entity) throws IOException {
         Collection<Class> classes = entity.getAnnotationClasses();
         out.writeInt(classes.size());
@@ -86,6 +87,7 @@ public class AnnotatedEntityDataWriter
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void writeObservations(AnnotatedEntity entity) throws IOException {
         Collection<Class<? extends Observation>> classes = entity.getObservationClasses();
         out.writeInt(classes.size());

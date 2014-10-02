@@ -35,12 +35,24 @@ import uk.ac.ebi.mdk.domain.entity.collection.ReconstructionManager;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
-import uk.ac.ebi.mdk.domain.entity.reaction.compartment.*;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.CellType;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Membrane;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organ;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Tissue;
 import uk.ac.ebi.mdk.domain.identifier.basic.BasicChemicalIdentifier;
 import uk.ac.ebi.mdk.ui.render.molecule.MoleculeRenderer;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import java.awt.Component;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -51,14 +63,14 @@ import java.util.List;
  * ParticipantEditor 2012.02.13
  *
  * @author johnmay
- * @author $Author$ (this version)
- *         <p/>
- *         Class defines an editor for reaction participants
+ * @author $Author$ (this version) <p/> Class defines an editor for reaction
+ *         participants
  * @version $Rev$ : Last Changed $Date$
  */
 public class ParticipantEditor extends JPanel {
 
-    private static final Logger LOGGER = Logger.getLogger(ParticipantEditor.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ParticipantEditor.class);
 
     private MetabolicParticipant participant;
 
@@ -71,10 +83,12 @@ public class ParticipantEditor extends JPanel {
 
     private JTextField stoichiometry;
 
-    private static ReconstructionManager MANAGER = DefaultReconstructionManager.getInstance();
+    private static ReconstructionManager MANAGER = DefaultReconstructionManager
+            .getInstance();
 
     // factories
-    private static final MoleculeRenderer RENDERER = MoleculeRenderer.getInstance();
+    private static final MoleculeRenderer RENDERER = MoleculeRenderer
+            .getInstance();
 
 
     public ParticipantEditor() {
@@ -90,7 +104,8 @@ public class ParticipantEditor extends JPanel {
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 String desc = ((Compartment) value).getDescription();
                 this.setText(desc.substring(0, Math.min(desc.length(), 20)));
-                this.setBackground(isSelected ? list.getSelectionBackground() : list.getBackground());
+                this.setBackground(isSelected ? list.getSelectionBackground()
+                                              : list.getBackground());
                 return this;
             }
         });
@@ -111,8 +126,10 @@ public class ParticipantEditor extends JPanel {
         this.participant = participant;
 
         metabolite.setText(participant.getMolecule().getName());
-        compartment.setSelectedItem(((Compartment) participant.getCompartment()));
-        if (!compartment.getSelectedItem().equals(((Compartment) participant.getCompartment()))) {
+        compartment.setSelectedItem(((Compartment) participant
+                .getCompartment()));
+        if (!compartment.getSelectedItem().equals(((Compartment) participant
+                .getCompartment()))) {
             compartment.setSelectedItem(Organelle.UNKNOWN); // fail safe
         }
         stoichiometry.setText(participant.getCoefficient().toString());
@@ -120,7 +137,12 @@ public class ParticipantEditor extends JPanel {
 
         try {
             if (participant.getMolecule().hasStructure()) {
-                structure.setIcon(new ImageIcon(RENDERER.getImage(participant.getMolecule().getStructures().iterator().next().getStructure(),
+                structure.setIcon(new ImageIcon(RENDERER.getImage(participant
+                                                                          .getMolecule()
+                                                                          .getStructures()
+                                                                          .iterator()
+                                                                          .next()
+                                                                          .getStructure(),
                                                                   new Rectangle(128, 128))));
                 structure.setText("");
             } else {
@@ -134,8 +156,8 @@ public class ParticipantEditor extends JPanel {
 
 
     /**
-     * Access the participant with the new edited values.
-     * If the name is empty (i.e. no molecule) null is returned
+     * Access the participant with the new edited values. If the name is empty
+     * (i.e. no molecule) null is returned
      */
     public MetabolicParticipant getParticipant() {
 
@@ -158,16 +180,20 @@ public class ParticipantEditor extends JPanel {
         }
 
         Reconstruction recon = MANAGER.active();
-        Collection<Metabolite> candidates = recon.getMetabolome().ofName(metabolite
-                                                                                 .getText());
+        Collection<Metabolite> candidates = recon.metabolome().ofName(metabolite
+                                                                              .getText());
 
         Metabolite entity;
         if (candidates.iterator().hasNext()) {
             entity = candidates.iterator().next();
         } else {
-            entity = DefaultEntityFactory.getInstance().newInstance(Metabolite.class, BasicChemicalIdentifier.nextIdentifier(),
-                                                                    metabolite.getText().trim(),
-                                                                    metabolite.getText().trim());
+            entity = DefaultEntityFactory.getInstance()
+                                         .newInstance(Metabolite.class, BasicChemicalIdentifier
+                                                 .nextIdentifier(),
+                                                      metabolite.getText()
+                                                                .trim(),
+                                                      metabolite.getText()
+                                                                .trim());
             recon.addMetabolite(entity);
         }
 
@@ -206,8 +232,10 @@ public class ParticipantEditor extends JPanel {
 
         EntityFactory ef = DefaultEntityFactory.getInstance();
 
-        Metabolite m = ef.newInstance(Metabolite.class, BasicChemicalIdentifier.nextIdentifier(), "ATP", "atp");
-        m.addAnnotation(new AtomContainerAnnotation(MoleculeFactory.make123Triazole()));
+        Metabolite m = ef.newInstance(Metabolite.class, BasicChemicalIdentifier
+                .nextIdentifier(), "ATP", "atp");
+        m.addAnnotation(new AtomContainerAnnotation(MoleculeFactory
+                                                            .make123Triazole()));
         MetabolicParticipant mp = new MetabolicParticipantImplementation(m, 2.5d, Organelle.CYTOPLASM);
 
         ParticipantEditor pe = new ParticipantEditor();

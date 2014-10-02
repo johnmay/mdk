@@ -21,7 +21,7 @@
  */
 package uk.ac.ebi.mdk.tool.match;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.annotation.Synonym;
@@ -58,6 +58,7 @@ public class NameMatcherTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testNameEquality() {
 
         EntityMatcher matcher = new NameMatcher();
@@ -74,6 +75,7 @@ public class NameMatcherTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testNameEquality_inequalCase() {
 
         EntityMatcher matcher = new NameMatcher();
@@ -91,6 +93,7 @@ public class NameMatcherTest {
 
 
     @Test
+    @SuppressWarnings("unchecked")
          public void testSynonymEquality() {
 
         EntityMatcher matcher = new NameMatcher(false, true);
@@ -107,6 +110,7 @@ public class NameMatcherTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testNormalisedEquality() {
 
         EntityMatcher matcher = new NameMatcher(false, false);

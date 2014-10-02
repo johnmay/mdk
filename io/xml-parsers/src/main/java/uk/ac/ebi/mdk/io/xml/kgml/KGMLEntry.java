@@ -89,7 +89,7 @@ public class KGMLEntry {
         }
 
 
-        List<KGMLGraphics> graphics = new ArrayList();
+        List<KGMLGraphics> graphics = new ArrayList<KGMLGraphics>();
 
         int event;
         while (xmlr.hasNext()) {

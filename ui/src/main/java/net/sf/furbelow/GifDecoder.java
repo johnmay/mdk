@@ -616,6 +616,7 @@ public class GifDecoder {
     /**
      * Reads next frame image
      */
+    @SuppressWarnings("unchecked")
     protected void readImage() {
         ix = readShort(); // (sub)image position & size
         iy = readShort();

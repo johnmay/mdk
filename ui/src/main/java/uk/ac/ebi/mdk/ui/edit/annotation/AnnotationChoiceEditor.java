@@ -54,6 +54,7 @@ public class AnnotationChoiceEditor extends JComponent {
     // context
     private final Class<? extends AnnotatedEntity> c;
 
+    @SuppressWarnings("unchecked")
     public AnnotationChoiceEditor(final Window window, final Class<? extends AnnotatedEntity> c) {
 
         this.c = c;
@@ -94,6 +95,7 @@ public class AnnotationChoiceEditor extends JComponent {
     }
 
 
+    @SuppressWarnings("unchecked")
     public void setContext(Class<? extends AnnotatedEntity> c) {
         DefaultComboBoxModel model = (DefaultComboBoxModel) type.getModel();
         type.removeItemListener(listener);

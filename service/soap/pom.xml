@@ -5,7 +5,7 @@
     <parent>
         <artifactId>mdk-service</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.4.0</version>
+        <version>1.4.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,6 +13,12 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>axis</groupId>
             <artifactId>axis</artifactId>
@@ -52,6 +58,12 @@
             <groupId>org.openscience.cdk</groupId>
             <artifactId>cdk-inchi</artifactId>
             <version>${cdk.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -114,12 +126,6 @@
                                     <targetPackage>uk.ac.ebi.ws.jdispatcher</targetPackage>
                                 </mapping>
 
-                                <!-- KEGG -->
-                                <mapping>
-                                    <namespace>SOAP/KEGG</namespace>
-                                    <targetPackage>jp.genome.ws.kegg</targetPackage>
-                                </mapping>
-
                                 <!-- NCBI -->
                                 <mapping>
                                     <namespace>http://pubchem.ncbi.nlm.nih.gov/</namespace>
@@ -151,6 +157,14 @@
                         <version>1.1.1</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.14</version>
+                <configuration>
+                    <forkCount>0</forkCount>
+                </configuration>
             </plugin>
         </plugins>
     </build>

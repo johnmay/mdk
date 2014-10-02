@@ -66,6 +66,7 @@ public abstract class AbstractAnnotationEditor<A extends Annotation>
     /**
      * @inheritDoc
      */
+    @SuppressWarnings("unchecked")
     public void setAnnotation(A annotation) {
         this.annotation = annotation;
         setAnnotationClass((Class<A>) annotation.getClass());

@@ -22,6 +22,7 @@ import uk.ac.ebi.caf.component.factory.LabelFactory;
 import uk.ac.ebi.caf.component.factory.PreferencePanelFactory;
 import uk.ac.ebi.mdk.domain.DefaultIdentifierFactory;
 import uk.ac.ebi.mdk.domain.entity.DefaultEntityFactory;
+import uk.ac.ebi.mdk.hsql.Hsqldb;
 import uk.ac.ebi.mdk.service.ServicePreferences;
 import uk.ac.ebi.mdk.service.loader.crossreference.ChEBICrossReferenceLoader;
 import uk.ac.ebi.mdk.service.loader.crossreference.UniProtCrossReferenceLoader;
@@ -77,7 +78,8 @@ public class LuceneLoader extends Box {
                                     new ChEBICrossReferenceLoader()));
             add(factory.createGroup("KEGG",
                                     new KEGGCompoundLoader(),
-                                    new KEGGCompoundStructureLoader()));
+                                    new KEGGCompoundStructureLoader(),
+                                    Hsqldb.keggReactionLoader()));
             add(factory.createGroup("HMDB",
                                     new HMDBMetabocardsLoader(),
                                     new HMDBStructureLoader()));

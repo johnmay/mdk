@@ -60,7 +60,7 @@ import java.util.Map;
 public class BLASTXMLParser_V2_2_24 implements BLASTXMLParser {
 
     private static final Logger LOGGER = Logger.getLogger(BLASTXMLParser_V2_2_24.class);
-    private Map<String, AlignmentSetter> setters = new HashMap();
+    private Map<String, AlignmentSetter> setters = new HashMap<String, AlignmentSetter>();
 
     public BLASTXMLParser_V2_2_24() {
         setters.put("Hit_id", new SubjectSetter());
@@ -81,7 +81,7 @@ public class BLASTXMLParser_V2_2_24 implements BLASTXMLParser {
     public Collection<LocalAlignment> parse(Map<String, ? extends AnnotatedEntity> entities, AnnotatedEntity source, XMLStreamReader2 xmlr) throws XMLStreamException {
 
         // System.out.println("Reading new iteration...");
-        Collection<LocalAlignment> alignments = new ArrayList();
+        Collection<LocalAlignment> alignments = new ArrayList<LocalAlignment>();
         String queryIdentifier = "";
 
         while (xmlr.hasNext()) {

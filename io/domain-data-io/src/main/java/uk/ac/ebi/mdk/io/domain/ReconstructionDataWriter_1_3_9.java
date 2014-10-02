@@ -82,7 +82,7 @@ public class ReconstructionDataWriter_1_3_9
         writeGenome(reconstruction);
 
         // METABOLOME
-        Metabolome metabolome = reconstruction.getMetabolome();
+        Metabolome metabolome = reconstruction.metabolome();
         out.writeInt(metabolome.size());
         for(Metabolite m : metabolome){
             entityOut.writeData(m);
@@ -117,7 +117,7 @@ public class ReconstructionDataWriter_1_3_9
     }
 
     private void writeGenome(Reconstruction reconstruction) throws IOException {
-        Collection<Chromosome> chromosomes = reconstruction.getGenome().chromosomes();
+        Collection<Chromosome> chromosomes = reconstruction.genome().chromosomes();
         out.writeInt(chromosomes.size());
 
         for(Chromosome chromosome : chromosomes){

@@ -45,6 +45,7 @@ public class EntityList<E>
      * @param clazz The class type (see. example)
      * @return List of only that class type
      */
+    @SuppressWarnings("unchecked")
     public <T> List<T> get(Class<T> clazz) {
         List<T> subset = new ArrayList<T>();
 

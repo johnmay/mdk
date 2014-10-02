@@ -21,19 +21,26 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.log4j.Logger;
 import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
-import uk.ac.ebi.mdk.domain.entity.reaction.compartment.*;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.CellType;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Membrane;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organ;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Organelle;
+import uk.ac.ebi.mdk.domain.entity.reaction.compartment.Tissue;
 import uk.ac.ebi.mdk.domain.identifier.Taxonomy;
 import uk.ac.ebi.mdk.tool.CompartmentResolver;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import static uk.ac.ebi.mdk.domain.identifier.Taxonomy.Kingdom.EUKARYOTA;
 
 /**
- * Provides automated resolution of compartments from a given string. This should be used
- * for low-level resolution where you can handle unresolvable cases appropriately.
- * <p/>
- * Example usage:
+ * Provides automated resolution of compartments from a given string. This
+ * should be used for low-level resolution where you can handle unresolvable
+ * cases appropriately. <p/> Example usage:
  * <pre>{@code
  * AutomaticCompartmentResolver resolver = new AutomaticCompartmentResolver();
  * for(String name : Arrays.asList("c", "g", "e", "a")){
@@ -49,13 +56,16 @@ import static uk.ac.ebi.mdk.domain.identifier.Taxonomy.Kingdom.EUKARYOTA;
  */
 public class AutomaticCompartmentResolver implements CompartmentResolver {
 
-    private static final Logger LOGGER = Logger.getLogger(AutomaticCompartmentResolver.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(AutomaticCompartmentResolver.class);
 
-    private ListMultimap<String, Compartment> compartments = ArrayListMultimap.create();
-    private Set<String>                       ambiguous    = new HashSet<String>();
+    private ListMultimap<String, Compartment> compartments = ArrayListMultimap
+            .create();
+    private Set<String> ambiguous = new HashSet<String>();
 
     /**
-     * Default constructor uses several compartment enumerations for the resolver
+     * Default constructor uses several compartment enumerations for the
+     * resolver
      *
      * @see Organelle
      * @see uk.ac.ebi.mdk.domain.entity.reaction.compartment.Membrane
@@ -84,19 +94,18 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
     }
 
     /**
-     * Modest constraint that only include the cell type, tissue and organ compartments
-     * if the kingdom is a eukaryote. By default the organelle and membrance compartments
-     * are always added.
+     * Modest constraint that only include the cell type, tissue and organ
+     * compartments if the kingdom is a eukaryote. By default the organelle and
+     * membrance compartments are always added.
      *
      * @param kingdom kingdom to constrain the compartments
-     *
      * @see CellType
      * @see Organ
      * @see Tissue
      * @see Organelle
      * @see Membrane
      */
-    public AutomaticCompartmentResolver(Taxonomy.Kingdom kingdom){
+    public AutomaticCompartmentResolver(Taxonomy.Kingdom kingdom) {
 
         for (Compartment compartment : Organelle.values()) {
             addCompartment(compartment);
@@ -105,7 +114,7 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
             addCompartment(compartment);
         }
 
-        if(EUKARYOTA.equals(kingdom)){
+        if (EUKARYOTA.equals(kingdom)) {
             for (Compartment compartment : CellType.values()) {
                 addCompartment(compartment);
             }
@@ -121,11 +130,11 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
 
 
     /**
-     * Adds a compartment to the resolver as three possible keys 1) abbreviation,
-     * 2) description and 3) abbreviation surrounded by '[...]'. For example
-     * the compartment Cytoplasm will be added to the resolver with the following
-     * keys: 'c', 'cytoplasm', and '[c]'. The keys are normalised to lower case by
-     * default
+     * Adds a compartment to the resolver as three possible keys 1)
+     * abbreviation, 2) description and 3) abbreviation surrounded by '[...]'.
+     * For example the compartment Cytoplasm will be added to the resolver with
+     * the following keys: 'c', 'cytoplasm', and '[c]'. The keys are normalised
+     * to lower case by default
      *
      * @param compartment the compartment to add
      */
@@ -136,20 +145,20 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
             compartment);
         put("[" + compartment.getAbbreviation() + "]",
             compartment);
-        for(String synonym : compartment.getSynonyms())
+        for (String synonym : compartment.getSynonyms())
             put(synonym, compartment);
     }
 
     /**
-     * Stores the compartment in a map with the given key. If a compartment
-     * with that key already exists then key will stored as ambiguous.
+     * Stores the compartment in a map with the given key. If a compartment with
+     * that key already exists then key will stored as ambiguous.
      *
      * @param key         key to store
      * @param compartment compartment instance
      */
     public void put(String key, Compartment compartment) {
 
-        key = key.toLowerCase(Locale.ENGLISH);
+        key = normalise(key);
 
         if (compartments.containsKey(key)) {
             ambiguous.add(key); // store clash
@@ -158,6 +167,12 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
 
         compartments.put(key, compartment);
 
+    }
+
+    private String normalise(String key){
+        key = key.toLowerCase(Locale.ENGLISH);
+        key = key.replaceAll("[-_ ]+", "");
+        return key;
     }
 
     /**
@@ -175,9 +190,7 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
      * }</pre>
      *
      * @param compartment compartment to attempt resolution for
-     *
      * @return whether the compartment can be resolved
-     *
      * @see #isAmbiguous(String)
      */
     public boolean canResolve(String compartment) {
@@ -185,9 +198,8 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
     }
 
     /**
-     * Determine whether the string notation of the compartment is ambiguous. This
-     * will also check whether the compartment can be resolved.
-     * <p/>
+     * Determine whether the string notation of the compartment is ambiguous.
+     * This will also check whether the compartment can be resolved. <p/>
      * <pre>{@code
      * AutomaticCompartmentResolver resolver = new AutomaticCompartmentResolver();
      * for(String name : Arrays.asList("c", "g", "e", "a")){
@@ -200,29 +212,31 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
      * }</pre>
      *
      * @param compartment compartment to attempt resolution for
-     *
-     * @return whether the provided compartment name is ambiguous or not pressent
+     * @return whether the provided compartment name is ambiguous or not
+     *         pressent
      */
     @Override
     public boolean isAmbiguous(String compartment) {
-        compartment = compartment.toLowerCase(Locale.ENGLISH);
-        return ambiguous.contains(compartment) || !compartments.containsKey(compartment);
+        compartment = normalise(compartment);
+        return ambiguous.contains(compartment) || !compartments
+                .containsKey(compartment);
     }
 
     /**
-     * Access an appropriate instance of a compartment for the given string notation. If
-     * the notation is ambiguous a warning will be logged. If no appropriate instance is
-     * available then an Unknown compartment is returned
+     * Access an appropriate instance of a compartment for the given string
+     * notation. If the notation is ambiguous a warning will be logged. If no
+     * appropriate instance is available then an Unknown compartment is
+     * returned
      *
-     * @param compartment name or abbreviation of a compartment (i.e. 'c', 'e', 'cytoplasm')
-     *
+     * @param compartment name or abbreviation of a compartment (i.e. 'c', 'e',
+     *                    'cytoplasm')
      * @return appropriate instance
      */
     @Override
     public Compartment getCompartment(String compartment) {
 
         // normalise
-        compartment = compartment.toLowerCase(Locale.ENGLISH);
+        compartment = normalise(compartment);
 
         if (ambiguous.contains(compartment)) {
             LOGGER.warn("Ambiguous compartment name provided to resolved: " + compartment);
@@ -242,9 +256,7 @@ public class AutomaticCompartmentResolver implements CompartmentResolver {
         return compartments.get(compartment);
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     @Override
     public Collection<Compartment> getCompartments() {
         return compartments.values();

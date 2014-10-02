@@ -17,16 +17,20 @@
 
 package uk.ac.ebi.mdk.io.text.kegg;
 
+import com.google.common.collect.ImmutableSet;
+
+import java.util.Set;
+
 /**
  * Enumeration of all possible KEGG Reaction fields. These fields can be used in
  * combination with the {@link uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundParser} to
  * load specific parts of an entry and ignore others.
  *
  * @author John May
- * @see uk.ac.ebi.mdk.io.text.kegg.KEGGCompoundParser
+ * @see KeggFlatfile
  * @see <a href="http://www.kegg.jp/kegg/rest/dbentry.html">DB Entry Format</a>
  */
-public enum KEGGReactionField {
+public enum KEGGReactionField implements KEGGField {
     ENTRY,
     NAME,
     DEFINITION,
@@ -37,5 +41,21 @@ public enum KEGGReactionField {
     ENZYME,
     PATHWAY,
     ORTHOLOGY,
-    REFERENCE
+    REFERENCE;
+
+    private final Set<String> names;
+
+    private KEGGReactionField(String... names) {
+        ImmutableSet.Builder<String> ns = new ImmutableSet.Builder<String>();
+        for (String name : names) {
+            ns.add(name);
+        }
+        ns.add(name());
+        this.names = ns.build();
+    }
+
+    /** @inheritDoc */
+    @Override public Set<String> names() {
+        return names;
+    }
 }

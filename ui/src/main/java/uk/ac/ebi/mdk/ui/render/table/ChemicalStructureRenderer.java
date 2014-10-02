@@ -49,6 +49,7 @@ public class ChemicalStructureRenderer
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public JLabel getComponent(JTable table, Object value, int row, int column) {
         Collection<AtomContainerAnnotation> collection =
                 value instanceof Collection ? (Collection) value : Arrays.asList(

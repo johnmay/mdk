@@ -61,6 +61,7 @@ public class InChIParticipant extends ParticipantImplementation<InChI, Double, C
      * @return
      */
     @Override
+    @SuppressWarnings("unchecked")
     public int compareTo(Participant<InChI, Double> o) {
         int coefComparison = ((Comparable) this.coefficient).compareTo(o.getCoefficient());
         if (coefComparison != 0) {

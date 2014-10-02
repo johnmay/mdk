@@ -17,7 +17,6 @@
 
 package uk.ac.ebi.mdk.io.xml.sbml;
 
-import org.biojavax.CrossRef;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
@@ -29,25 +28,57 @@ import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 
-/**
- * @author John May
- */
+import static org.hamcrest.CoreMatchers.is;
+
+/** @author John May */
 public class SBMLReactionReaderTest {
 
     /**
      * Simple text to check
+     *
      * @throws XMLStreamException
      * @throws IOException
      */
     @Test
-    public void testSpeciesAnnotations() throws XMLStreamException, IOException {
-        SBMLReactionReader reader = new SBMLReactionReader(getClass().getResourceAsStream("single-species.xml"),
-                                                           DefaultEntityFactory.getInstance(),
-                                                           new AutomaticCompartmentResolver());
-        while (reader.hasNext()){
+    public void testSpeciesAnnotations() throws XMLStreamException,
+                                                IOException {
+        SBMLReactionReader reader = new SBMLReactionReader(
+            getClass().getResourceAsStream("single-species.xml"),
+            DefaultEntityFactory.getInstance(),
+            new AutomaticCompartmentResolver());
+        while (reader.hasNext()) {
             MetabolicReaction reaction = reader.next();
-            Metabolite metabolite = reaction.getReactants().get(0).getMolecule();
-            Assert.assertFalse(metabolite.getAnnotationsExtending(CrossReference.class).isEmpty());
+            Metabolite metabolite = reaction.getReactants().get(
+                0).getMolecule();
+            Assert.assertFalse(metabolite.getAnnotationsExtending(
+                CrossReference.class).isEmpty());
+        }
+
+        reader.close();
+    }
+
+    @Test
+    public void testCacacetate() throws XMLStreamException, IOException {
+        SBMLReactionReader reader = new SBMLReactionReader(
+            getClass().getResourceAsStream("cacacetate.xml"),
+            DefaultEntityFactory.getInstance(),
+            new AutomaticCompartmentResolver());
+        while (reader.hasNext()) {
+            MetabolicReaction rxn = reader.next();
+        }
+
+        reader.close();
+    }
+
+    @Test
+    public void inputOfREx() throws XMLStreamException, IOException {
+        SBMLReactionReader reader = new SBMLReactionReader(
+            getClass().getResourceAsStream("single-species+REx.xml"),
+            DefaultEntityFactory.getInstance(),
+            new AutomaticCompartmentResolver());
+        while (reader.hasNext()) {
+            MetabolicReaction reaction = reader.next();
+            Assert.assertThat(reaction.getAnnotations().size(), is(1));
         }
 
         reader.close();

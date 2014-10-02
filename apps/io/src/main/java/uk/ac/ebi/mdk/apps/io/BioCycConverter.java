@@ -41,7 +41,6 @@ import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
 import uk.ac.ebi.mdk.domain.tool.AutomaticCompartmentResolver;
 import uk.ac.ebi.mdk.io.text.attribute.AttributedEntry;
 import uk.ac.ebi.mdk.io.text.biocyc.BioCycDatReader;
-import uk.ac.ebi.mdk.io.text.attribute.Attribute;
 import uk.ac.ebi.mdk.io.text.biocyc.CompoundAttribute;
 import uk.ac.ebi.mdk.io.text.biocyc.ReactionAttribute;
 
@@ -61,8 +60,6 @@ import static uk.ac.ebi.mdk.io.text.biocyc.CompoundAttribute.CHEMICAL_FORMULA;
  * @author John May
  */
 public class BioCycConverter {
-
-    private static final Logger LOGGER = Logger.getLogger(BioCycConverter.class);
 
     private Map<String, Metabolite> metaboliteMap = new HashMap<String, Metabolite>();
     // class map may also hold proteins classes etc.
@@ -110,7 +107,7 @@ public class BioCycConverter {
     public void importMetabolites() throws IOException {
 
         File compounds = new File(root, "data/compounds.dat");
-        BioCycDatReader reader = new BioCycDatReader(new FileInputStream(compounds),
+        BioCycDatReader<CompoundAttribute> reader = new BioCycDatReader<CompoundAttribute>(new FileInputStream(compounds),
                                                      CompoundAttribute.values());
 
 
@@ -127,7 +124,7 @@ public class BioCycConverter {
     public void importClasses() throws IOException {
 
         File compounds = new File(root, "data/classes.dat");
-        BioCycDatReader reader = new BioCycDatReader(new FileInputStream(compounds),
+        BioCycDatReader<CompoundAttribute> reader = new BioCycDatReader<CompoundAttribute>(new FileInputStream(compounds),
                                                      CompoundAttribute.values());
 
 
@@ -142,14 +139,14 @@ public class BioCycConverter {
 
     public void importMetaboliteStructures() throws IOException {
 
-        if (reconstruction.getMetabolome().isEmpty())
+        if (reconstruction.metabolome().isEmpty())
             importMetabolites();
 
         Map<String, File> map = getMolFileMap();
 
         MDLV2000Reader reader = new MDLV2000Reader();
 
-        for (Metabolite metabolite : reconstruction.getMetabolome()) {
+        for (Metabolite metabolite : reconstruction.metabolome()) {
 
             String accession = metabolite.getAccession();
             if (map.containsKey(accession)) {
@@ -174,16 +171,16 @@ public class BioCycConverter {
 
     public void importReactions() throws IOException {
 
-        if (reconstruction.getMetabolome().isEmpty()) {
+        if (reconstruction.metabolome().isEmpty()) {
             importMetabolites();
         }
         if (classMap.isEmpty()) {
             importClasses();
         }
 
-        File compounds = new File(root, "data/reactions.dat");
-        BioCycDatReader reader = new BioCycDatReader(new FileInputStream(compounds),
-                                                     ReactionAttribute.values());
+        File reactions = new File(root, "data/reactions.dat");
+        BioCycDatReader<ReactionAttribute> reader = new BioCycDatReader<ReactionAttribute>(new FileInputStream(reactions),
+                                                                        ReactionAttribute.values());
 
 
         while (reader.hasNext()) {
@@ -194,7 +191,7 @@ public class BioCycConverter {
         Map<Identifier,Reaction> idToReaction = new HashMap<Identifier, Reaction>();
 
         System.out.println("Duplicate reaction identifiers:");
-        for (Reaction reaction : reconstruction.getReactome()) {
+        for (Reaction reaction : reconstruction.reactome()) {
             if (idToReaction.containsKey(reaction.getIdentifier())) {
                 System.out.println(reaction.getIdentifier());
             }
@@ -213,7 +210,7 @@ public class BioCycConverter {
             }
         };
 
-        // check if we have a mod directory
+        // check if we have a mol directory
         File[] files = data.listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
@@ -223,10 +220,12 @@ public class BioCycConverter {
             }
         });
 
-        File molRoot = null;
+        File molRoot;
 
         if (files.length == 1) {
             molRoot = files[0];
+        } else {
+            throw new IllegalArgumentException("no directory of molecule '.mol'");
         }
 
         Map<String, File> map = new HashMap<String, File>();
@@ -239,7 +238,7 @@ public class BioCycConverter {
 
     }
 
-    public Metabolite dat2Metabolite(AttributedEntry<Attribute, String> entry) {
+    public Metabolite dat2Metabolite(AttributedEntry<CompoundAttribute, String> entry) {
 
         Metabolite m = DefaultEntityFactory.getInstance().ofClass(Metabolite.class);
 
@@ -272,7 +271,7 @@ public class BioCycConverter {
 
     }
 
-    public MetabolicReaction dat2Reaction(AttributedEntry<Attribute, String> entry) {
+    public MetabolicReaction dat2Reaction(AttributedEntry<ReactionAttribute, String> entry) {
 
         MetabolicReaction rxn = DefaultEntityFactory.getInstance().ofClass(MetabolicReaction.class);
 
@@ -326,7 +325,7 @@ public class BioCycConverter {
         return rxn;
     }
 
-    private MetabolicParticipant getParticipant(AttributedEntry<Attribute, String> entry, Attribute attribute, String uid) {
+    private MetabolicParticipant getParticipant(AttributedEntry<ReactionAttribute, String> entry, ReactionAttribute attribute, String uid) {
 
         Metabolite m = getMetabolite(uid);
         Double coef = 1d;

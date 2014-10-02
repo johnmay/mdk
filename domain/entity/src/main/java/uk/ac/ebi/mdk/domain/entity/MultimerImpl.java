@@ -46,7 +46,7 @@ public class MultimerImpl extends AbstractGeneProduct implements Multimer {
 
     public static final String BASE_TYPE = "Multimer";
 
-    private List<GeneProduct> subunits = new ArrayList();
+    private List<GeneProduct> subunits = new ArrayList<GeneProduct>();
 
 
     public MultimerImpl(UUID uuid) {
@@ -101,7 +101,7 @@ public class MultimerImpl extends AbstractGeneProduct implements Multimer {
 
 
     public List<? extends Sequence> getSequences() {
-        List<Sequence> sequences = new ArrayList();
+        List<Sequence> sequences = new ArrayList<Sequence>();
         for (GeneProduct product : subunits) {
             sequences.addAll(product.getSequences());
         }

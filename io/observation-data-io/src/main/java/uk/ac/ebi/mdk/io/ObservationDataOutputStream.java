@@ -90,6 +90,7 @@ public class ObservationDataOutputStream
      *
      * @throws IOException
      */
+    @SuppressWarnings("unchecked")
     public void writeData(Observation observation) throws IOException {
 
         if (writeObjectId(observation)) {

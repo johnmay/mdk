@@ -80,6 +80,7 @@ public class CrossReferenceReader<X extends CrossReference>
      * @throws ClassNotFoundException thrown if the class of identifier cannot be found
      */
     @Override
+    @SuppressWarnings("unchecked")
     public X readAnnotation() throws IOException, ClassNotFoundException {
 
          Identifier identifier = in.read();

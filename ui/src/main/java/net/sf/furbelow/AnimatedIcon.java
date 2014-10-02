@@ -51,6 +51,7 @@ public class AnimatedIcon implements Icon {
     /**
      * Returns whether the given icon is an animated GIF.
      */
+    @SuppressWarnings("unchecked")
     public static boolean isAnimated(Icon icon) {
         if (icon instanceof ImageIcon) {
             Image image = ((ImageIcon) icon).getImage();
@@ -162,6 +163,7 @@ public class AnimatedIcon implements Icon {
      * Register repaint areas, which get get cleared once the repaint request
      * has been queued.
      */
+    @SuppressWarnings("unchecked")
     protected void registerRepaintArea(Component c, int x, int y, int w, int h) {
         repaints.add(new RepaintArea(c, x, y, w, h));
     }
@@ -242,6 +244,7 @@ public class AnimatedIcon implements Icon {
         private WeakReference ref;
         private ImageIcon     original;
 
+        @SuppressWarnings("unchecked")
         public AnimationObserver(AnimatedIcon animIcon, ImageIcon original) {
             this.original = original;
             this.original.setImageObserver(this);

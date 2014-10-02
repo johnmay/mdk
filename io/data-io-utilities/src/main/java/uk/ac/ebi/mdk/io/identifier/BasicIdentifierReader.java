@@ -51,6 +51,7 @@ public class BasicIdentifierReader implements IdentifierReader<Identifier> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Identifier readIdentifier() throws IOException {
 
         Identifier identifier = FACTORY.ofClass(c);

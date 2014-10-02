@@ -66,8 +66,8 @@ public class CheckSubstructures extends CommandLineMain {
         final Reconstruction reference = getReconstruction("reference");
         System.out.println("done");
 
-        System.out.println("Query metabolome (" + query.getAccession() + ") metabolome size: " + query.getMetabolome().size() + " reactome size: " + query.getReactome().size());
-        System.out.println("Reference metabolome (" + reference.getAccession() + ") metabolome size: " + reference.getMetabolome().size() + " reactome size: " + reference.getReactome().size());
+        System.out.println("Query metabolome (" + query.getAccession() + ") metabolome size: " + query.metabolome().size() + " reactome size: " + query.reactome().size());
+        System.out.println("Reference metabolome (" + reference.getAccession() + ") metabolome size: " + reference.metabolome().size() + " reactome size: " + reference.reactome().size());
 
         File tsvFile = getFile("t", "check-substructure-", ".tsv");
 
@@ -83,7 +83,7 @@ public class CheckSubstructures extends CommandLineMain {
             }
         }
 
-        final EntityAligner<Metabolite> aligner = new CachedEntityAligner<Metabolite>(reference.getMetabolome().toList());
+        final EntityAligner<Metabolite> aligner = new CachedEntityAligner<Metabolite>(reference.metabolome().toList());
 
         aligner.push(new DirectMatcher<Metabolite>());
         aligner.push(new SubstructureMatcher(new Fingerprinter(), Boolean.TRUE));
@@ -99,7 +99,7 @@ public class CheckSubstructures extends CommandLineMain {
 
         long start = System.currentTimeMillis();
 
-        for (Metabolite m : query.getMetabolome()) {
+        for (Metabolite m : query.metabolome()) {
 
             System.out.println("Getting matches for: " + m.getName());
 

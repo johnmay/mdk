@@ -90,6 +90,7 @@ public class IdentifierLoader
      * @param type
      * @return
      */
+    @SuppressWarnings("unchecked")
     public MIRIAMEntry getEntry(Class type) {
         int mir = getMIR(type);
         return MIRIAM_LOADER.getEntry(mir);
@@ -98,6 +99,7 @@ public class IdentifierLoader
 
     /** @inheritDoc */
     @Override
+    @SuppressWarnings("unchecked")
     public String getShortDescription(Class c) {
 
         int mir = getMIR(c);
@@ -116,6 +118,7 @@ public class IdentifierLoader
 
     /** @inheritDoc */
     @Override
+    @SuppressWarnings("unchecked")
     public String getLongDescription(Class c) {
 
         int mir = getMIR(c);
@@ -136,11 +139,12 @@ public class IdentifierLoader
      * @param type
      * @return
      */
+    @SuppressWarnings("unchecked")
     public Collection<String> getDatabaseSynonyms(Class type) {
 
         int mir = getMIR(type);
 
-        Set<String> synonyms = new HashSet();
+        Set<String> synonyms = new HashSet<String>();
         if (mir != 0) {
             synonyms.addAll(MIRIAM_LOADER.getEntry(mir).getSynonyms());
         }
@@ -178,6 +182,7 @@ public class IdentifierLoader
     }
 
     private IdentifierMetaInfo loadMetaInfo(Class c) {
+        @SuppressWarnings("unchecked")
         IdentifierMetaInfo metaInfo = new IdentifierMetaInfo(super.getMetaInfo(c),
                                                              getEntry(c),
                                                              getDatabaseSynonyms(c),

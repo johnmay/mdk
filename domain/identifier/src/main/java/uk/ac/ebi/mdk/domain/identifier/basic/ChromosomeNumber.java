@@ -34,7 +34,6 @@ import uk.ac.ebi.mdk.domain.identifier.AbstractIdentifier;
  */
 @Brief("Chromosome")
 @Description("A number that identifiers a chromosome")
-@Deprecated
 public class ChromosomeNumber extends AbstractIdentifier {
 
     private static final Logger LOGGER = Logger.getLogger(ChromosomeNumber.class);

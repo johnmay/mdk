@@ -65,6 +65,7 @@ public class HybridizationSeedTest {
         AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(x);
         AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(y);
 
+        @SuppressWarnings("unchecked")
         Collection<AtomSeed> fail = seeds.getSeeds(NonNullAtomicNumberSeed.class,
                                                    BondOrderSumSeed.class);
 
@@ -72,7 +73,7 @@ public class HybridizationSeedTest {
         int yFailingHash = hashFactory.getHash(y, fail).hash;
 
         Assert.assertNotSame(xFailingHash, yFailingHash);
-
+        @SuppressWarnings("unchecked")
         Collection<AtomSeed> pass = seeds.getSeeds(NonNullAtomicNumberSeed.class,
                                                    NonNullChargeSeed.class,
                                                    NonNullHybridizationSeed.class);

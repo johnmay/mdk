@@ -32,6 +32,7 @@ import static org.mockito.Mockito.when;
 public class ComparatorConjunctionTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testCompare() throws Exception {
         Comparator left  = mock(Comparator.class);
         Comparator right = mock(Comparator.class);

@@ -17,7 +17,7 @@
 
 package uk.ac.ebi.mdk.tool.match;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.openscience.cdk.fingerprint.Fingerprinter;

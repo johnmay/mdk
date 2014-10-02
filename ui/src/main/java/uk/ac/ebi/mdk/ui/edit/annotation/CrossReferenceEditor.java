@@ -54,6 +54,7 @@ public class CrossReferenceEditor<X extends CrossReference>
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public X newAnnotation() {
         X xref = super.newAnnotation();
         if (identifierEditor.isFilled()) {
@@ -77,6 +78,7 @@ public class CrossReferenceEditor<X extends CrossReference>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public CrossReferenceEditor newInstance() {
         return new CrossReferenceEditor(accept.toArray(new Class[0]));
     }

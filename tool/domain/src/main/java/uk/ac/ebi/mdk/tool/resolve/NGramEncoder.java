@@ -79,7 +79,7 @@ public class NGramEncoder extends AbstractEncoder {
         clean = removeHTMLTags(clean);
         clean = removeGenericBeginning(clean);
 
-        List<String> fragments = new ArrayList();
+        List<String> fragments = new ArrayList<String>();
         int index = 0;
         while( (index + size) < clean.length() ) {
             fragments.add(clean.substring(index, index + size));

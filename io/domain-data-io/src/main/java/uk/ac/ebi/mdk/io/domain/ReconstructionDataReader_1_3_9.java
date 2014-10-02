@@ -137,7 +137,7 @@ public class ReconstructionDataReader_1_3_9
                 // todo, add association for gene to chromosome
             }
 
-            Chromosome chromosome = recon.getGenome().createChromosome(in.readInt(), seq);
+            Chromosome chromosome = recon.genome().createChromosome(in.readInt(), seq);
             chromosome.addAll(genes);
         }
     }

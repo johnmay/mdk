@@ -16,9 +16,9 @@
  */
 package uk.ac.ebi.mdk.domain.entity;
 
+import uk.ac.ebi.mdk.domain.entity.reaction.BiochemicalReaction;
 import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicReaction;
 import uk.ac.ebi.mdk.domain.identifier.Identifier;
-import uk.ac.ebi.mdk.domain.entity.Entity;
 
 import java.util.UUID;
 
@@ -32,13 +32,16 @@ public interface EntityFactory {
 
     /**
      * Create a new reconstruction with a random UUID
+     *
      * @return reconstruction instance
      */
     public Reconstruction newReconstruction();
 
     /**
      * Create a new reconstruction with the specified UUID
+     *
      * @param uuid the UUID to use for the reconstruction
+     *
      * @return reconstruction instance
      */
     public Reconstruction newReconstruction(UUID uuid);
@@ -75,10 +78,7 @@ public interface EntityFactory {
      *
      * @return
      */
-    public <E extends Entity> E newInstance(Class<E> c,
-                                            Identifier identifier,
-                                            String name,
-                                            String abbr);
+    public <E extends Entity> E newInstance(Class<E> c, Identifier identifier, String name, String abbr);
 
     /**
      * Build an entity and set the identifier, name and abbreviation
@@ -91,16 +91,13 @@ public interface EntityFactory {
      *
      * @return
      */
-    public <E extends Entity> E ofClass(Class<E> c,
-                                        Identifier identifier,
-                                        String name,
-                                        String abbr);
+    public <E extends Entity> E ofClass(Class<E> c, Identifier identifier, String name, String abbr);
 
 
     /**
      * Access the entity class of the specified entity. This is used for
-     * internal interface referencing e.g. MetaboliteImplementation
-     * will return Metabolite.
+     * internal interface referencing e.g. MetaboliteImplementation will return
+     * Metabolite.
      *
      * @param c
      *
@@ -124,78 +121,104 @@ public interface EntityFactory {
 
     /**
      * A new metabolite instance
+     *
      * @return a new metabolite
      */
     public Metabolite metabolite();
 
     /**
      * A new metabolite instance with a given UUID
+     *
      * @param uuid the metabolite uuid
+     *
      * @return a new metabolite
      */
     public Metabolite metabolite(UUID uuid);
 
     /**
      * A new protein instance
+     *
      * @return a new protein
      */
     public ProteinProduct protein();
 
     /**
      * A new protein instance with a given UUID
+     *
      * @param uuid the protein uuid
+     *
      * @return a new protein
      */
     public ProteinProduct protein(UUID uuid);
 
     /**
      * A new transfer RNA instance
+     *
      * @return a new transfer RNA
      */
     public TransferRNA tRNA();
 
     /**
      * A new transfer RNA instance
+     *
      * @param uuid the transfer RNA uuid
+     *
      * @return a new transfer RNA
      */
     public TransferRNA tRNA(UUID uuid);
 
     /**
      * A new ribosomal RNA instance
+     *
      * @return a new ribosomal RNA
      */
     public RibosomalRNA rRNA();
 
     /**
      * A new ribosomal RNA instance
+     *
      * @param uuid the ribosomal RNA uuid
+     *
      * @return a new ribosomal RNA
      */
     public RibosomalRNA rRNA(UUID uuid);
 
     /**
      * Create a new reaction.
+     *
      * @return a new reaction instance
      */
     public MetabolicReaction reaction();
 
     /**
      * Create a new reaction.
+     *
      * @param uuid the reaction uuid
+     *
      * @return a new reaction instance
      */
     public MetabolicReaction reaction(UUID uuid);
 
     /**
+     * Create a new biochemical reaction (reaction+modifiers) for a given
+     * reaction.
+     *
+     * @return biochemical reaction
+     */
+    BiochemicalReaction biochemicalReaction(final MetabolicReaction rxn);
+
+    /**
      * Create a new gene
+     *
      * @return new gene instance
      */
     public Gene gene();
 
     /**
      * Create a new gene
-     * @param  uuid the gene uuid
+     *
+     * @param uuid the gene uuid
+     *
      * @return a new gene
      */
     public Gene gene(UUID uuid);

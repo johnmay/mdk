@@ -39,7 +39,7 @@ public class ConservationRenderer extends AlignmentRenderer {
 
     private static final Logger LOGGER = Logger.getLogger(ConservationRenderer.class);
     private ConsensusScorer scorer;
-    private Map<Integer, Color> colorMap = new HashMap();
+    private Map<Integer, Color> colorMap = new HashMap<Integer, Color>();
     private float granularity = 0.1f;
 
     public ConservationRenderer(Rectangle bounds, AbstractAlignmentColor colorer, ConsensusScorer scorer) {

@@ -38,6 +38,7 @@ public class UncachedEntityAligner<E extends Entity> extends AbstractEntityAlign
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<E> getMatching(E query, EntityMatcher matcher) {
         List<E> matching = new ArrayList<E>();
         for (E reference : references) {

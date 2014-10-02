@@ -53,6 +53,7 @@ public class MetaboliteDataReader
         this.enumIn = new EnumReader(in);
     }
 
+    @SuppressWarnings("unchecked")
     public Metabolite readEntity(Reconstruction reconstruction) throws IOException, ClassNotFoundException {
 
         Metabolite m = factory.newInstance(Metabolite.class);

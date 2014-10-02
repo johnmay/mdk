@@ -54,6 +54,7 @@ public class CrossReferenceWriter<X extends CrossReference> implements Annotatio
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void write(X annotation) throws IOException {
 
          out.write(annotation.getIdentifier());

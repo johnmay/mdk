@@ -17,40 +17,52 @@
 package uk.ac.ebi.mdk.ui.edit.annotation;
 
 import org.apache.log4j.Logger;
-import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
-import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
 import uk.ac.ebi.caf.component.factory.LabelFactory;
+import uk.ac.ebi.mdk.domain.annotation.Annotation;
+import uk.ac.ebi.mdk.domain.annotation.AuthorAnnotation;
 import uk.ac.ebi.mdk.domain.annotation.Flag;
+import uk.ac.ebi.mdk.domain.annotation.GibbsEnergy;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.ChEBICrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.Classification;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.CrossReference;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.EnzymeClassification;
+import uk.ac.ebi.mdk.domain.annotation.crossreference.KEGGCrossReference;
+import uk.ac.ebi.mdk.domain.annotation.primitive.BooleanAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;
+import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
 import uk.ac.ebi.mdk.domain.identifier.ChEBIIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.KEGGCompoundIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ClassificationIdentifier;
 import uk.ac.ebi.mdk.domain.identifier.classification.ECNumber;
-import uk.ac.ebi.mdk.domain.annotation.Annotation;
-import uk.ac.ebi.mdk.domain.annotation.crossreference.*;
-import uk.ac.ebi.mdk.domain.annotation.primitive.StringAnnotation;
-import uk.ac.ebi.mdk.domain.annotation.primitive.BooleanAnnotation;
-import uk.ac.ebi.mdk.domain.annotation.primitive.DoubleAnnotation;
 
-import javax.swing.*;
+import javax.swing.AbstractCellEditor;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import java.awt.event.MouseEvent;
 import java.security.InvalidParameterException;
-import java.util.*;
+import java.util.EventObject;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 
 /**
  * AnnotationEditorFactory 2012.02.14
  *
  * @author johnmay
- * @author $Author$ (this version)
- *         <p/>
- *         Class description
+ * @author $Author$ (this version) <p/> Class description
  * @version $Rev$ : Last Changed $Date$
  */
 public class AnnotationEditorFactory {
 
-    private static final Logger LOGGER = Logger.getLogger(AnnotationEditorFactory.class);
+    private static final Logger LOGGER = Logger.getLogger(
+        AnnotationEditorFactory.class);
 
     private Map<Class, AbstractAnnotationEditor> editors = new HashMap<Class, AbstractAnnotationEditor>();
 
@@ -67,13 +79,18 @@ public class AnnotationEditorFactory {
     }
 
 
+    @SuppressWarnings("unchecked")
     private AnnotationEditorFactory() {
         editors.put(StringAnnotation.class, new StringAnnotationEditor());
         editors.put(CrossReference.class, new CrossReferenceEditor());
-        editors.put(ChEBICrossReference.class, new CrossReferenceEditor(ChEBIIdentifier.class));
-        editors.put(KEGGCrossReference.class, new CrossReferenceEditor(KEGGCompoundIdentifier.class));
-        editors.put(Classification.class, new CrossReferenceEditor(ClassificationIdentifier.class));
-        editors.put(EnzymeClassification.class, new CrossReferenceEditor(ECNumber.class));
+        editors.put(ChEBICrossReference.class, new CrossReferenceEditor(
+            ChEBIIdentifier.class));
+        editors.put(KEGGCrossReference.class, new CrossReferenceEditor(
+            KEGGCompoundIdentifier.class));
+        editors.put(Classification.class, new CrossReferenceEditor(
+            ClassificationIdentifier.class));
+        editors.put(EnzymeClassification.class, new CrossReferenceEditor(
+            ECNumber.class));
         editors.put(AuthorAnnotation.class, new AuthorAnnotationEditor());
         editors.put(DoubleAnnotation.class, new DoubleAnnotationEditor());
         editors.put(BooleanAnnotation.class, new BooleanAnnotationEditor());
@@ -88,7 +105,8 @@ public class AnnotationEditorFactory {
         }
 
         if (cachedEditor.get(c) == null) {
-            throw new InvalidParameterException("No editor available");
+            throw new InvalidParameterException(
+                "Annotation can not be editted");
         }
 
         return cachedEditor.get(c).newInstance();
@@ -138,20 +156,21 @@ public class AnnotationEditorFactory {
     }
 
     public TableCellEditor getTableCellEditor() {
-        if (tableeditor == null)
-            tableeditor = new AnnotationTableCellEditor();
+        if (tableeditor == null) tableeditor = new AnnotationTableCellEditor();
         return tableeditor;
     }
 
     private AnnotationTableCellEditor tableeditor;
 
-    private class AnnotationTableCellEditor extends AbstractCellEditor implements TableCellEditor {
+    private class AnnotationTableCellEditor extends AbstractCellEditor
+        implements TableCellEditor {
 
         private AbstractAnnotationEditor editor = new NonEditableAnnotationEditor();
 
         public AnnotationTableCellEditor() {
         }
 
+        @SuppressWarnings("unchecked")
         public JComponent getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
             if (value instanceof Annotation) {
@@ -183,10 +202,10 @@ public class AnnotationEditorFactory {
         }
 
     }
-    
 
 
-    private class NonEditableAnnotationEditor extends AbstractAnnotationEditor<Annotation> {
+    private class NonEditableAnnotationEditor
+        extends AbstractAnnotationEditor<Annotation> {
 
 
         private Annotation annotation;

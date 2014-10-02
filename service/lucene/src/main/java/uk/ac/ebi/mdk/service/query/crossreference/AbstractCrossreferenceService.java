@@ -57,6 +57,7 @@ public abstract class AbstractCrossreferenceService<I extends Identifier>
      * @inheritDoc
      */
     @Override
+    @SuppressWarnings("unchecked")
     public Collection<? extends Identifier> getCrossReferences(I identifier) {
 
         Query query = construct(identifier.getAccession(), IDENTIFIER);
@@ -86,6 +87,7 @@ public abstract class AbstractCrossreferenceService<I extends Identifier>
      * @inheritDoc
      */
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends Identifier> Collection<T> getCrossReferences(I identifier, Class<T> filter) {
 
         // method could be improved by searching for the specified identifier index but this current
