@@ -5,13 +5,13 @@
     <parent>
         <artifactId>mdk-tool</artifactId>
         <groupId>uk.ac.ebi.mdk</groupId>
-        <version>1.5.11</version>
+        <version>1.5.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <url>http://www.ebi.ac.uk/steinbeck-srv/chemet/tools/annotation-tools</url>
     <artifactId>mdk-tool-annotation</artifactId>
-    <version>1.5.11</version>
+    <version>1.5.2</version>
 
     <dependencies>
         <dependency>
