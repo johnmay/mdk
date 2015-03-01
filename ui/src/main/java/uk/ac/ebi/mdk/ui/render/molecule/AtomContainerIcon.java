@@ -17,7 +17,7 @@
 
 package uk.ac.ebi.mdk.ui.render.molecule;
 
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
@@ -84,7 +84,7 @@ public class AtomContainerIcon extends ImageIcon {
         this.rendererModel = renderer.getRenderer2DModel();
 
         if (container.getBondCount() > 0 || container.getAtomCount() == 1) {
-            scale = renderer.calculateScaleForBondLength(GeometryTools.getBondLengthAverage(container));
+            scale = renderer.calculateScaleForBondLength(GeometryUtil.getBondLengthAverage(container));
         }
         else if (container.getAtomCount() > 1) {
             scale = renderer.calculateScaleForBondLength(estimatedBondLength(container));

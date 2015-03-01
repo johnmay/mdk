@@ -19,7 +19,7 @@ package uk.ac.ebi.mdk.ui.render.molecule;
 
 import com.google.common.primitives.Doubles;
 import org.openscience.cdk.config.Isotopes;
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.graph.Cycles;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
@@ -351,8 +351,8 @@ public class SmoothGenerator implements IGenerator<IAtomContainer> {
                 if (aSize < bSize)
                     return -1;
 
-                Point2d p1 = GeometryTools.get2DCenter(a);
-                Point2d p2 = GeometryTools.get2DCenter(b);
+                Point2d p1 = GeometryUtil.get2DCenter(a);
+                Point2d p2 = GeometryUtil.get2DCenter(b);
 
                 if (p1.x > p2.x)
                     return +1;
@@ -741,7 +741,7 @@ public class SmoothGenerator implements IGenerator<IAtomContainer> {
                         group.add(new LineElement(x1, y1, x2, y2, bondWidth, fg));
                         IAtomContainer ring = ringSet.getRings(bond).getAtomContainer(0);
 
-                        Point2d centre = GeometryTools.get2DCenter(ring);
+                        Point2d centre = GeometryUtil.get2DCenter(ring);
 
                         double dcx, dcy;
 

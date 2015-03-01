@@ -19,7 +19,7 @@ package uk.ac.ebi.mdk.tool.domain;
 import com.google.common.collect.MapMaker;
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IBond;
@@ -105,7 +105,7 @@ public class PeptideFactory {
                 Point2d cCoordinate = cTerminal.getPoint2d();
                 Point2d nCoordinate = nTerminal.getPoint2d();
 
-                GeometryTools.translate2D(next,
+                GeometryUtil.translate2D(next,
                                           cCoordinate.x - nCoordinate.x,
                                           cCoordinate.y - nCoordinate.y);
 

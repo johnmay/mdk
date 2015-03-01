@@ -18,7 +18,7 @@ package uk.ac.ebi.mdk.ui.render.molecule;
 
 import org.apache.log4j.Logger;
 import org.openscience.cdk.exception.CDKException;
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.layout.StructureDiagramGenerator;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.openscience.cdk.geometry.GeometryTools.CoordinateCoverage.FULL;
+import static org.openscience.cdk.geometry.GeometryUtil.CoordinateCoverage.FULL;
 
 
 /**
@@ -139,7 +139,7 @@ public class MoleculeRenderer {
         g2.setFont(ThemeManager.getInstance().getTheme().getBodyFont().deriveFont(9.0f));
         g2.setFont(g2.getFont().deriveFont(Font.ITALIC));
 
-        if (GeometryTools.get2DCoordinateCoverage(container) == FULL) {
+        if (GeometryUtil.get2DCoordinateCoverage(container) == FULL) {
             renderer.paint(container, new AWTDrawVisitor(g2), bounds, true);
         }
         else {

@@ -40,7 +40,7 @@ package uk.ac.ebi.mdk.tool.domain;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import org.apache.log4j.Logger;
-import org.openscience.cdk.geometry.GeometryTools;
+import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.hash_mdk.MoleculeHashGenerator;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
@@ -92,7 +92,7 @@ public class ReconstructionComparison {
                 if (m.hasStructure()) {
                     IAtomContainer mol = m.getStructures().iterator().next().getStructure();
                     mol = mol.getAtomCount() > 1 && hydrogen ? mol : AtomContainerManipulator.removeHydrogens(mol);
-                    if(GeometryTools.has2DCoordinates(mol)) {
+                    if(GeometryUtil.has2DCoordinates(mol)) {
                         metaboliteMap.put(recon, generator.generate(mol));
                     }
 
@@ -119,7 +119,7 @@ public class ReconstructionComparison {
             if (m.hasStructure()) {
                 IAtomContainer mol = m.getStructures().iterator().next().getStructure();
                 mol = mol.getAtomCount() > 1 && hydrogen ? mol : AtomContainerManipulator.removeHydrogens(mol);
-                if(GeometryTools.has2DCoordinates(mol)){
+                if(GeometryUtil.has2DCoordinates(mol)){
                     map.put(m, generator.generate(mol));
                 }
             }
