@@ -121,7 +121,9 @@ public class InChI
             InChIGeneratorFactory inchiFactory = InChIGeneratorFactory.getInstance();
             inchiFactory.setIgnoreAromaticBonds(true);
             InChIGenerator inchiGenerator = inchiFactory.getInChIGenerator(structure);
-            setValue(inchiGenerator.getInchi());
+            String inchi = inchiGenerator.getInchi();
+            if (inchi != null)
+                setValue(inchi);
         } catch (CDKException ex) {
             LOGGER.error("Unable to generate InChI from provided structure: " + ex.getMessage());
         }
