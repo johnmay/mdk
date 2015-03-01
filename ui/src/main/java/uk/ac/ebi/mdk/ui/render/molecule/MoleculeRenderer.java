@@ -27,6 +27,7 @@ import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.HighlightGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.standard.StandardGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import org.openscience.cdk.templates.MoleculeFactory;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
@@ -68,7 +69,7 @@ public class MoleculeRenderer {
 
         generators.add(new BasicSceneGenerator());
         generators.add(new HighlightGenerator());
-        generators.add(new SmoothGenerator(true));
+        generators.add(new StandardGenerator(new Font("Verdana", Font.PLAIN, 22)));
 
         renderer = new AtomContainerRenderer(generators, new AWTFontManager());
         model = renderer.getRenderer2DModel();

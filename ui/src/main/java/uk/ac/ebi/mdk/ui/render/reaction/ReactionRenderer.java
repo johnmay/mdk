@@ -22,23 +22,31 @@ import org.openscience.cdk.geometry.GeometryUtil;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.font.AWTFontManager;
-import org.openscience.cdk.renderer.generators.BasicAtomGenerator;
-import org.openscience.cdk.renderer.generators.BasicBondGenerator;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
+import org.openscience.cdk.renderer.generators.standard.StandardGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 import uk.ac.ebi.caf.component.theme.ThemeManager;
 import uk.ac.ebi.caf.utility.ResourceUtility;
 import uk.ac.ebi.mdk.domain.entity.Metabolite;
 import uk.ac.ebi.mdk.domain.entity.Reaction;
-import uk.ac.ebi.mdk.domain.entity.reaction.*;
+import uk.ac.ebi.mdk.domain.entity.reaction.AbstractReaction;
+import uk.ac.ebi.mdk.domain.entity.reaction.Compartment;
+import uk.ac.ebi.mdk.domain.entity.reaction.CompartmentalisedParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.Direction;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipant;
+import uk.ac.ebi.mdk.domain.entity.reaction.MetabolicParticipantImplementation;
 import uk.ac.ebi.mdk.tool.domain.MassBalance;
 import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil;
 import uk.ac.ebi.mdk.tool.domain.TransportReactionUtil.Classification;
-import uk.ac.ebi.mdk.ui.render.molecule.SmoothGenerator;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -66,7 +74,7 @@ public class ReactionRenderer {
     private              AtomContainerRenderer renderer =
             new AtomContainerRenderer(
                     Arrays.asList(new BasicSceneGenerator(),
-                                  new SmoothGenerator(true)),
+                                  new StandardGenerator(new Font("Verdana", Font.PLAIN, 22))),
                     new AWTFontManager());
 
     private Map<TransportReactionUtil.Classification, ImageIcon> tClassMap      = new EnumMap<TransportReactionUtil.Classification, ImageIcon>(

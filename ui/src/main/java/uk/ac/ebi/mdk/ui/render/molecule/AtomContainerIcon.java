@@ -22,16 +22,20 @@ import org.openscience.cdk.interfaces.IAtom;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.renderer.AtomContainerRenderer;
 import org.openscience.cdk.renderer.RendererModel;
+import org.openscience.cdk.renderer.color.CDK2DAtomColors;
+import org.openscience.cdk.renderer.color.UniColor;
 import org.openscience.cdk.renderer.elements.ElementGroup;
 import org.openscience.cdk.renderer.font.AWTFontManager;
 import org.openscience.cdk.renderer.generators.BasicSceneGenerator;
 import org.openscience.cdk.renderer.generators.IGenerator;
+import org.openscience.cdk.renderer.generators.standard.StandardGenerator;
 import org.openscience.cdk.renderer.visitor.AWTDrawVisitor;
 
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -74,14 +78,22 @@ public class AtomContainerIcon extends ImageIcon {
                 throw new IllegalArgumentException("no 2D depiction");
 
         this.generators = Arrays.asList(new BasicSceneGenerator(),
-                                        new SmoothGenerator(coloring == Coloring.CPK,
-                                                            coloring == Coloring.WHITE ? Color.WHITE
-                                                                                       : new Color(0x444444)
-                                        )
+                                        new StandardGenerator(new Font("Verdana", Font.PLAIN, 22))
                                        );
         this.renderer = new AtomContainerRenderer(generators,
                                                   new AWTFontManager());
         this.rendererModel = renderer.getRenderer2DModel();
+        
+        if (coloring == Coloring.CPK) {
+            rendererModel.set(StandardGenerator.AtomColor.class,
+                              new CDK2DAtomColors());
+        } else if (coloring == Coloring.WHITE) {
+            rendererModel.set(StandardGenerator.AtomColor.class,
+                              new UniColor(new Color(0xffffff)));  
+        } else if (coloring == Coloring.BLACK) {
+            rendererModel.set(StandardGenerator.AtomColor.class,
+                              new UniColor(new Color(0x444444)));
+        }
 
         if (container.getBondCount() > 0 || container.getAtomCount() == 1) {
             scale = renderer.calculateScaleForBondLength(GeometryUtil.getBondLengthAverage(container));
