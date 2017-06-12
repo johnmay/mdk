@@ -26,7 +26,7 @@ import org.openscience.cdk.interfaces.IBond;
 import org.openscience.cdk.interfaces.IPseudoAtom;
 import org.openscience.cdk.interfaces.ISingleElectron;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
-import org.openscience.cdk.templates.MoleculeFactory;
+import org.openscience.cdk.templates.TestMoleculeFactory;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.manipulator.AtomContainerManipulator;
 
@@ -45,7 +45,7 @@ import static org.junit.Assert.assertTrue;
 public class AtomContainerWriterTest {
 
     @Test public void pseudoatoms_roundtrip() throws IOException, CDKException {
-        IAtomContainer benzeneOut = MoleculeFactory.makeBenzene();
+        IAtomContainer benzeneOut = TestMoleculeFactory.makeBenzene();
 
         IAtom a = benzeneOut.getAtom(0);
         IAtom r = new PseudoAtom("ARR!");
@@ -77,7 +77,7 @@ public class AtomContainerWriterTest {
 
     @Test public void adenine_roundtrip() throws IOException, CDKException {
 
-        IAtomContainer benzeneOut = MoleculeFactory.makeAdenine();
+        IAtomContainer benzeneOut = TestMoleculeFactory.makeAdenine();
         AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(benzeneOut);
         CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance())
                         .addImplicitHydrogens(benzeneOut);
@@ -100,7 +100,7 @@ public class AtomContainerWriterTest {
     @Test public void adenine_radical_roundtrip() throws IOException,
                                                          CDKException {
 
-        IAtomContainer benzeneOut = MoleculeFactory.makeAdenine();
+        IAtomContainer benzeneOut = TestMoleculeFactory.makeAdenine();
         AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(benzeneOut);
         CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance())
                         .addImplicitHydrogens(benzeneOut);

@@ -22,8 +22,6 @@
  */
 package uk.ac.ebi.mdk.prototype.hash.cip.rules;
 
-import org.openscience.cdk.annotations.TestClass;
-import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.config.IsotopeFactory;
 import org.openscience.cdk.config.Isotopes;
 import org.openscience.cdk.geometry.cip.ILigand;
@@ -40,14 +38,12 @@ import java.io.IOException;
  * @cdk.module cip
  * @cdk.githash
  */
-@TestClass("org.openscience.cdk.geometry.cip.rules.MassNumberRuleTest")
 class MassNumberRule implements ISequenceSubRule<ILigand> {
 
     ILoggingTool logger = LoggingToolFactory.createLoggingTool(MassNumberRule.class);
     IsotopeFactory factory;
 
     /** {@inheritDoc} */
-    @TestMethod("testCompare_Identity,testCompare,testOrder")
     public int compare(ILigand ligand1, ILigand ligand2) {
         ensureFactory(ligand1);
         return getMassNumber(ligand1).compareTo(getMassNumber(ligand2));

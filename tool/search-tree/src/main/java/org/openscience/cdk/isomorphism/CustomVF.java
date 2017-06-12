@@ -1,7 +1,6 @@
 package org.openscience.cdk.isomorphism;
 
 import com.google.common.collect.Iterables;
-import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.graph.GraphUtil;
 import org.openscience.cdk.interfaces.IAtomContainer;
 
@@ -88,7 +87,6 @@ final class CustomVF extends Pattern {
      * @param query the substructure to find
      * @return a pattern for finding the {@code query}
      */
-    @TestMethod("benzeneIdentical")
     public static Pattern findIdentical(IAtomContainer query) {
         return new CustomVF(query,
                             AtomMatcher.forElement(),

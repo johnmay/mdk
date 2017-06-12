@@ -30,7 +30,7 @@ import org.openscience.cdk.interfaces.IDoubleBondStereochemistry;
 import org.openscience.cdk.interfaces.IStereoElement;
 import org.openscience.cdk.isomorphism.StructureUtil;
 import org.openscience.cdk.smiles.SmilesGenerator;
-import org.openscience.cdk.tautomer.TautomerStream;
+//import org.openscience.cdk.tautomer.TautomerStream;
 import uk.ac.ebi.mdk.apps.CommandLineMain;
 import uk.ac.ebi.mdk.apps.io.ReconstructionIOHelper;
 import uk.ac.ebi.mdk.domain.annotation.ChemicalStructure;
@@ -165,7 +165,7 @@ public class Align2Reference3 extends CommandLineMain {
                 
                 queryStructure = StructureUtil.suppressHydrogens(queryStructure);
                 StructureUtil.neutralise(queryStructure);
-                new TautomerStream(queryStructure).next();
+               // new TautomerStream(queryStructure).next();
                 fixStereo(queryStructure);
                 StructureUtil.disconnectMetals(queryStructure);
                 
@@ -182,7 +182,7 @@ public class Align2Reference3 extends CommandLineMain {
                     targetStructure = StructureUtil.suppressHydrogens(targetStructure);
                     StructureUtil.neutralise(targetStructure);
                     StructureUtil.disconnectMetals(targetStructure);
-                    new TautomerStream(targetStructure).next();
+                   // new TautomerStream(targetStructure).next();
                     fixStereo(targetStructure);
 
                     long   rt0 = System.nanoTime();

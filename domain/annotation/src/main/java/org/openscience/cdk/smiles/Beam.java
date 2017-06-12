@@ -17,6 +17,7 @@
 
 package org.openscience.cdk.smiles;
 
+import org.openscience.cdk.exception.InvalidSmilesException;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
@@ -30,38 +31,39 @@ import uk.ac.ebi.beam.Graph;
  */
 public final class Beam {
 
-    private static final IChemObjectBuilder builder  = SilentChemObjectBuilder.getInstance();
-    private static final BeamToCDK          fromBeam = new BeamToCDK(builder);
-    private static final CDKToBeam          toBeam   = new CDKToBeam();
+  private static final IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
+  private static final SmilesParser       smipar  = new SmilesParser(builder);
+  private static final SmilesGenerator    smigen  = new SmilesGenerator(SmiFlavor.Isomeric | SmiFlavor.CxSmiles);
 
-    /**
-     * Read the molecule from the SMILES string - if the string could not be
-     * read (invalid SMILES) and empty molecule is returned.
-     *
-     * @param smi SMILES string
-     * @return a molecule (empty if a parse exception occurred)
-     */
-    public static IAtomContainer fromSMILES(String smi) {
-        try {
-            Graph g = Graph.fromSmiles(smi).kekule();
-            return fromBeam.toAtomContainer(g);
-        } catch (Exception e) {
-            return builder.newInstance(IAtomContainer.class, 0, 0, 0, 0);
-        }
+  /**
+   * Read the molecule from the SMILES string - if the string could not be
+   * read (invalid SMILES) and empty molecule is returned.
+   *
+   * @param smi SMILES string
+   * @return a molecule (empty if a parse exception occurred)
+   */
+  public static IAtomContainer fromSMILES(String smi)
+  {
+    try {
+      return smipar.parseSmiles(smi);
+    } catch (InvalidSmilesException e) {
+      return builder.newAtomContainer();
     }
+  }
 
-    /**
-     * Read the molecule from the SMILES string - if the string could not be
-     * generated an empty string is returned.
-     *
-     * @param m molecule
-     * @return a molecule (empty if a parse exception occurred)
-     */
-    public static String toSMILES(IAtomContainer m) {
-        try {
-            return Functions.collapse(toBeam.toBeamGraph(m)).toSmiles();
-        } catch (Exception e) {
-            return "";
-        }
+  /**
+   * Read the molecule from the SMILES string - if the string could not be
+   * generated an empty string is returned.
+   *
+   * @param m molecule
+   * @return a molecule (empty if a parse exception occurred)
+   */
+  public static String toSMILES(IAtomContainer m)
+  {
+    try {
+      return smigen.create(m);
+    } catch (Exception e) {
+      return "";
     }
+  }
 }

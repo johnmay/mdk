@@ -95,7 +95,7 @@
         <dependency>
             <artifactId>biojava3-core</artifactId>
             <groupId>org.biojava</groupId>
-            <version>3.0.5</version>
+            <version>3.0</version>
         </dependency>
 
         <!-- util libraries -->

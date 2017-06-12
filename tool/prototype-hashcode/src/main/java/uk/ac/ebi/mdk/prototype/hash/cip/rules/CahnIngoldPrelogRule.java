@@ -22,8 +22,6 @@
  */
 package uk.ac.ebi.mdk.prototype.hash.cip.rules;
 
-import org.openscience.cdk.annotations.TestClass;
-import org.openscience.cdk.annotations.TestMethod;
 import org.openscience.cdk.geometry.cip.ILigand;
 import org.openscience.cdk.geometry.cip.rules.ISequenceSubRule;
 import uk.ac.ebi.mdk.prototype.hash.cip.ChiralityCalculator;
@@ -40,13 +38,11 @@ import java.util.Arrays;
  * @cdk.module cip
  * @cdk.githash
  */
-@TestClass("org.openscience.cdk.geometry.cip.rules.CIPLigandRuleTest")
 public class CahnIngoldPrelogRule implements ISequenceSubRule<ILigand> {
 
     CombinedAtomicMassNumberRule numberRule = new CombinedAtomicMassNumberRule();
 
     /** {@inheritDoc} */
-    @TestMethod("testCompare,testCompare_Identity,testOrder")
     public int compare(ILigand ligand1, ILigand ligand2) {
         int numberComp = numberRule.compare(ligand1, ligand2);
         if (numberComp != 0) return numberComp;

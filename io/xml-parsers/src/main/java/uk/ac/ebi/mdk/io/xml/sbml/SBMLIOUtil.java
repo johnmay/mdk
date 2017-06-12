@@ -74,6 +74,7 @@ import uk.ac.ebi.mdk.domain.identifier.Identifier;
 import uk.ac.ebi.mdk.io.xml.rex.RExHandler;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.stream.XMLStreamException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -151,7 +152,7 @@ public class SBMLIOUtil {
         SBMLDocument doc = new SBMLDocument(level, version);
         Model model = new Model(level, version);
         doc.addNamespace("html", "xmlns", "http://www.w3.org/1999/xhtml");
-        model.addNamespace("html");
+        model.setNamespace("html");
         doc.setModel(model);
         
         for (MetabolicReaction rxn : reconstruction.reactome()) {
@@ -243,6 +244,8 @@ public class SBMLIOUtil {
         if(!extracts.isEmpty() && !compounds.isEmpty()) {
             try {
                 sbmlRxn.getAnnotation().appendNoRDFAnnotation(handler.marshal(extracts, compounds));
+            } catch (XMLStreamException e ){
+                LOGGER.error("Could not convert REx extracts and compounds");
             } catch (JAXBException e) {
                 LOGGER.error("Could not convert REx extracts and compounds");
             }
@@ -376,7 +379,12 @@ public class SBMLIOUtil {
 
             String content = "<notes><body xmlns=\"http://www.w3.org/1999/xhtml\">" + noteContent + "</body></notes>";
             // todo the parsing is very slow
-            XMLNode node = XMLNode.convertStringToXMLNode(content);
+            XMLNode node = null;
+            try {
+                node = XMLNode.convertStringToXMLNode(content);
+            } catch (XMLStreamException e) {
+                throw new UnsupportedOperationException("XML string->node conversion failed: " + e.getMessage());
+            }
             species.setNotes(node);
         }
 

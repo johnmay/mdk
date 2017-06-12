@@ -87,7 +87,7 @@
         <dependency>
             <groupId>org.biojava</groupId>
             <artifactId>biojava3-core</artifactId>
-            <version>3.0.5</version>
+            <version>3.0</version>
         </dependency>
 
         <!-- Chemistry Development Kit -->
@@ -161,11 +161,6 @@
             <artifactId>cdk-data</artifactId>
             <version>${cdk.version}</version>
         </dependency>
-        <dependency>
-            <groupId>net.sf.jni-inchi</groupId>
-            <artifactId>jni-inchi</artifactId>
-            <version>0.7</version>
-        </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -200,7 +195,7 @@
         <dependency>
             <groupId>com.explodingpixels</groupId>
             <artifactId>macwidgets</artifactId>
-            <version>0.9.6-SNAPSHOT</version>
+            <version>0.10.0</version>
         </dependency>
 
 

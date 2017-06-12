@@ -228,7 +228,7 @@ public class SBMLReactionReader {
             }
         }
 
-        String nonRDFAnnotation = sbmlReaction.getAnnotation().getNonRDFannotation();
+        String nonRDFAnnotation = sbmlReaction.getAnnotation().getFullAnnotationString();
         if (nonRDFAnnotation != null && nonRDFAnnotation.contains("http://www.bbk.ac.uk/rex")) {
             try {
                 RExAnnotation rex = rExHandler.unmarshal(nonRDFAnnotation);

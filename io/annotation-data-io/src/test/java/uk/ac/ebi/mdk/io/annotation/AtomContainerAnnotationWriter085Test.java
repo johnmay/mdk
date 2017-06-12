@@ -20,7 +20,7 @@ package uk.ac.ebi.mdk.io.annotation;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.openscience.cdk.interfaces.IAtomContainer;
-import org.openscience.cdk.templates.MoleculeFactory;
+import org.openscience.cdk.templates.TestMoleculeFactory;
 import uk.ac.ebi.mdk.domain.annotation.AtomContainerAnnotation;
 import uk.ac.ebi.caf.utility.version.Version;
 import uk.ac.ebi.mdk.io.AnnotationDataOutputStream;
@@ -47,7 +47,7 @@ public class AtomContainerAnnotationWriter085Test {
      */
     public void testWrite() throws IOException{
 
-        AtomContainerAnnotation annotation = new AtomContainerAnnotation(MoleculeFactory.makeAdenine());
+        AtomContainerAnnotation annotation = new AtomContainerAnnotation(TestMoleculeFactory.makeAdenine());
         ByteArrayOutputStream   bytestream = new ByteArrayOutputStream();
         AnnotationOutput out         = new AnnotationDataOutputStream(new DataOutputStream(bytestream), new Version("0.8.5"));
         out.write(annotation);
@@ -67,7 +67,7 @@ public class AtomContainerAnnotationWriter085Test {
     public void rewrite() throws IOException {
         System.err.println("Rewriting test files");
 
-        IAtomContainer molecule  = MoleculeFactory.makeAdenine();
+        IAtomContainer molecule  = TestMoleculeFactory.makeAdenine();
         molecule.setID("Adenine");
         AtomContainerAnnotation    annotation = new AtomContainerAnnotation(molecule);
         FileOutputStream           fos        = new FileOutputStream(getWritePath("atomcontainer-annotation"));

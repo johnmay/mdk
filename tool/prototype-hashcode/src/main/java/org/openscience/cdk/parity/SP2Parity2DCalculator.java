@@ -17,7 +17,6 @@
 
 package org.openscience.cdk.parity;
 
-import Jama.Matrix;
 import org.openscience.cdk.interfaces.IAtom;
 
 import javax.vecmath.Matrix3d;

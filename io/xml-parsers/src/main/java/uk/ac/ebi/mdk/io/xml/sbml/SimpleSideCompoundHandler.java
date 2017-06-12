@@ -29,6 +29,8 @@ import org.sbml.jsbml.xml.XMLNamespaces;
 import org.sbml.jsbml.xml.XMLNode;
 import org.sbml.jsbml.xml.XMLToken;
 
+import javax.xml.stream.XMLStreamException;
+
 /**
  * @name    SimpleSideCompoundHandler
  * @date    2013.04.08
@@ -57,7 +59,11 @@ public class SimpleSideCompoundHandler implements SBMLSideCompoundHandler {
         builder.append("</sidecompounds>\n");
         
         Annotation annot = m.getAnnotation();
-        annot.setNonRDFAnnotation(builder.toString());        
+        try {
+            annot.setNonRDFAnnotation(builder.toString());
+        } catch (XMLStreamException e) {
+            return false;
+        }
         return true;
     }
 
