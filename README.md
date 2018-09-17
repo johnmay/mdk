@@ -26,7 +26,7 @@ The MDK is licensed under [Lesser General Public License 3.0](http://www.gnu.org
 #### Maven
 
 The easiest way to use the library is with the [Apache Maven](http://maven.apache.org/) build automation tool and adding
-a module dependency in the the `pom.xml`. The example below shows adding the lucene service module, any required
+a module dependency in the `pom.xml`. The example below shows adding the lucene service module, any required
 dependencies that the defined module needs will automatically be downloaded by maven.
 
 ```
