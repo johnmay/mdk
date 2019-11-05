@@ -17,6 +17,16 @@ which is one of the major constituent and used throughout the library to handle 
 *    core library used by [Metingear: The Metabolic Development Environment](http://www.ebi.ac.uk/steinbeck-srv/metingear)
      ([GitHub](http://www.github.com/johnmay/metingear) project)
 
+### Extra Dependencies
+
+To build this project you need to install CAF (https://www.github.com/jwmay/caf) and MacWidgets. You need to install MacWidgets manually as follows: 
+
+```
+$ curl https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/macwidgets/mac_widgets-0.10.0.zip -O mac_widgets-0.10.0.zip
+$ unzip mac_widgets-0.10.0.zip
+$ mvn install:install-file -Dfile=MacWidgets.jar -Dpackaging=jar -DartifactId=macwidgets -DgroupId=com.explodingpixels -Dversion=0.10.0 -DgeneratePom=true
+```
+
 ### License
 
 The MDK is licensed under [Lesser General Public License 3.0](http://www.gnu.org/licenses/lgpl.html).
